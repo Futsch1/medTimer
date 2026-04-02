@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
@@ -20,7 +20,7 @@ import java.time.ZoneId
 import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
-    private fun buildSchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
+    private fun buildSchedulingSimulator(medicines: List<FullMedicineEntity>, recentReminders: List<ReminderEventEntity>): SchedulingSimulator {
         val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
@@ -234,7 +234,7 @@ class SchedulingSimulatorTest {
         medicineWithReminders.reminders.add(reminder)
         val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 481, 1)
         outOfStockReminder.outOfStockThreshold = 6.0
-        outOfStockReminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+        outOfStockReminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.DAILY
         medicineWithReminders.reminders.add(outOfStockReminder)
 
         val medicines = listOf(medicineWithReminders)
@@ -252,7 +252,7 @@ class SchedulingSimulatorTest {
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(6.0, amount)
-                assertEquals(scheduledReminder.reminder.reminderType, Reminder.ReminderType.OUT_OF_STOCK)
+                assertEquals(scheduledReminder.reminder.reminderType, ReminderEntity.ReminderType.OUT_OF_STOCK)
             }
             scheduledReminders.size < 3
         }

@@ -1,12 +1,12 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import android.annotation.SuppressLint
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import java.time.LocalDate
 
 object CyclesHelper {
     @SuppressLint("DefaultLocale")
-    fun getCycleCountString(reminder: Reminder): String {
+    fun getCycleCountString(reminder: ReminderEntity): String {
         if (reminder.pauseDays == 0 || reminder.consecutiveDays == 1) {
             return ""
         }

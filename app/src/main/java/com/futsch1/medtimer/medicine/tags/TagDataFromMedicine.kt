@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.helpers.DeleteHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +33,8 @@ class TagDataFromMedicine(
     }, { it: TagWithState ->
         DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
             fragment.lifecycleScope.launch {
-            medicineRepository.deleteTag(it.tag)
-                }
+                medicineRepository.deleteTag(it.tag)
+            }
         }, {})
     })
 
@@ -64,7 +64,7 @@ class TagDataFromMedicine(
 
     override fun addTag(tagName: String) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val tagId = medicineRepository.insertTag(Tag(tagName))
+            val tagId = medicineRepository.insertTag(TagEntity(tagName))
             viewModel.associateTag(medicineId, tagId.toInt())
         }
     }

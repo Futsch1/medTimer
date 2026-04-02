@@ -3,9 +3,9 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
@@ -23,8 +23,8 @@ sealed interface ShowMedicineUiState {
     data object Loading : ShowMedicineUiState
     data object NotFound : ShowMedicineUiState
     data class Loaded(
-        val fullMedicine: FullMedicine,
-        val reminder: Reminder,
+        val fullMedicine: FullMedicineEntity,
+        val reminder: ReminderEntity,
         val reminderSummaryText: String,
         val userPreferences: UserPreferences
     ) : ShowMedicineUiState

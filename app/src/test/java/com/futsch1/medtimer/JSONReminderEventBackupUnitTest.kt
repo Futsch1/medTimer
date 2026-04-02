@@ -2,8 +2,8 @@ package com.futsch1.medtimer
 
 import android.graphics.Color
 import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -12,12 +12,12 @@ internal class JSONReminderEventBackupUnitTest {
     // creates a backup object with a version number and a medicines array
     @Test
     fun testBackup() {
-        val reminderEvents = listOf(ReminderEvent().apply {
+        val reminderEvents = listOf(ReminderEventEntity().apply {
             medicineName = "Medicine A"
             color = Color.RED
             useColor = true
             amount = "1"
-            status = ReminderEvent.ReminderStatus.TAKEN
+            status = ReminderEventEntity.ReminderStatus.TAKEN
             remindedTimestamp = 1
             processedTimestamp = 2
             reminderId = 3
@@ -26,7 +26,7 @@ internal class JSONReminderEventBackupUnitTest {
             tags = listOf("Tag A")
             lastIntervalReminderTimeInMinutes = 12
             notes = "Notes"
-            reminderType = Reminder.ReminderType.LINKED
+            reminderType = ReminderEntity.ReminderType.LINKED
         })
 
         val jsonReminderEventBackup = JSONReminderEventBackup()
@@ -64,8 +64,8 @@ internal class JSONReminderEventBackupUnitTest {
     }
 
     private fun compareListReminderEvents(
-        actual: List<ReminderEvent>,
-        expected: List<ReminderEvent>
+        actual: List<ReminderEventEntity>,
+        expected: List<ReminderEventEntity>
     ) {
         assertEquals(expected.size, actual.size)
         for (i in actual.indices) {
@@ -73,7 +73,7 @@ internal class JSONReminderEventBackupUnitTest {
         }
     }
 
-    private fun compareReminderEvent(reminderEvent1: ReminderEvent, reminderEvent2: ReminderEvent) {
+    private fun compareReminderEvent(reminderEvent1: ReminderEventEntity, reminderEvent2: ReminderEventEntity) {
         assertEquals(reminderEvent1.medicineName, reminderEvent2.medicineName)
         assertEquals(reminderEvent1.color, reminderEvent2.color)
         assertEquals(reminderEvent1.useColor, reminderEvent2.useColor)

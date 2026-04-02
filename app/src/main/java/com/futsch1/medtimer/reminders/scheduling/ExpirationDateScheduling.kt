@@ -1,24 +1,24 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 import kotlin.math.max
 
 class ExpirationDateScheduling(
-    reminder: Reminder,
-    val medicine: Medicine,
-    reminderEventList: List<ReminderEvent>,
+    reminder: ReminderEntity,
+    val medicine: MedicineEntity,
+    reminderEventList: List<ReminderEventEntity>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
         val firstRemindedDay = medicine.expirationDate - reminder.periodStart
 
         if (medicine.expirationDate != 0L) {
-            return if (reminder.expirationReminderType == Reminder.ExpirationReminderType.ONCE) {
+            return if (reminder.expirationReminderType == ReminderEntity.ExpirationReminderType.ONCE) {
                 scheduleOnce(firstRemindedDay)
             } else {
                 val startRemindDay = max(medicine.expirationDate - reminder.periodStart, today())

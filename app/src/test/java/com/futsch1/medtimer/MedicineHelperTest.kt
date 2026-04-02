@@ -1,9 +1,9 @@
 package com.futsch1.medtimer
 
 import android.content.Context
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -85,8 +85,8 @@ class MedicineHelperTest {
             }
 
         // Standard case without stock
-        val medicine = Medicine("test")
-        val fullMedicine = FullMedicine()
+        val medicine = MedicineEntity("test")
+        val fullMedicine = FullMedicineEntity()
         fullMedicine.medicine = medicine
         fullMedicine.reminders = mutableListOf()
         medicine.unit = "pills"
@@ -113,7 +113,7 @@ class MedicineHelperTest {
         // Out of stock case
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
         fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
@@ -133,12 +133,12 @@ class MedicineHelperTest {
         val userPreferences = mock<UserPreferences>()
         Mockito.`when`(userPreferences.hideMedicineName).thenReturn(true)
 
-        val medicine = Medicine("test")
-        val fullMedicine = FullMedicine()
+        val medicine = MedicineEntity("test")
+        val fullMedicine = FullMedicineEntity()
         fullMedicine.medicine = medicine
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 15.0
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
         fullMedicine.reminders = mutableListOf(reminder)
         medicine.amount = 0.0
         assertEquals(

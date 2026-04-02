@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
@@ -27,10 +27,10 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         reminder.intervalEndTimeOfDay = 700
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
@@ -96,9 +96,9 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         reminder.intervalEndTimeOfDay = 700
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: List<FullMedicine> = listOf(fullMedicine)
+        val medicineList: List<FullMedicineEntity> = listOf(fullMedicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 130).epochSecond))
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -124,10 +124,10 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         reminder.intervalEndTimeOfDay = 700
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
@@ -154,10 +154,10 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         reminder.intervalEndTimeOfDay = 200
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = ArrayList()
+        val medicineList: MutableList<FullMedicineEntity> = ArrayList()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = ArrayList()
+        val reminderEventList: MutableList<ReminderEventEntity> = ArrayList()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(

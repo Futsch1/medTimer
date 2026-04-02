@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.medicine.stockSettings
 
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.EntityViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StockMedicineViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository
-) : EntityViewModel<FullMedicine>() {
+) : EntityViewModel<FullMedicineEntity>() {
 
-    override fun getFlow(id: Int): Flow<FullMedicine?> = medicineRepository.getMedicineFlow(id)
+    override fun getFlow(id: Int): Flow<FullMedicineEntity?> = medicineRepository.getMedicineFlow(id)
 }

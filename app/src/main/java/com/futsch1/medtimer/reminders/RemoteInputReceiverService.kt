@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -28,7 +28,7 @@ class RemoteInputReceiverService @Inject constructor(
             reminderNotificationData
         ) ?: return@withContext
 
-        val reminderEvents = mutableListOf<ReminderEvent>()
+        val reminderEvents = mutableListOf<ReminderEventEntity>()
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.variableAmount) {
@@ -45,7 +45,7 @@ class RemoteInputReceiverService @Inject constructor(
         }
 
         notificationProcessor.setReminderEventStatus(
-            ReminderEvent.ReminderStatus.TAKEN,
+            ReminderEventEntity.ReminderStatus.TAKEN,
             reminderEvents,
         )
     }

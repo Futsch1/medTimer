@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
@@ -60,7 +60,7 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryInactive() = runBlocking {
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.active = false
 
         assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder))
@@ -83,7 +83,7 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryLimited() = runBlocking {
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
 
         reminder.days[0] = false
         assertEquals("Limited to some weekdays", formatter.formatReminderSummary(reminder))
@@ -106,7 +106,7 @@ class ReminderSummaryFormatterTest {
         val preferences = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
 
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.consecutiveDays = 4
         reminder.pauseDays = 5
         reminder.cycleStartDay = 19823
@@ -118,7 +118,7 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryInstructions() = runBlocking {
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.active = false
         reminder.instructions = "3"
         assertEquals("Inactive, Every day, 3", formatter.formatReminderSummary(reminder))
@@ -140,8 +140,8 @@ class ReminderSummaryFormatterTest {
 
         val linkedFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
 
-        val sourceReminder = Reminder(1)
-        val sourceSourceReminder = Reminder(1)
+        val sourceReminder = ReminderEntity(1)
+        val sourceSourceReminder = ReminderEntity(1)
         runBlocking {
             Mockito.`when`(mockMedicineRepository.getReminder(2)).thenReturn(sourceReminder)
         }
@@ -149,7 +149,7 @@ class ReminderSummaryFormatterTest {
             Mockito.`when`(mockMedicineRepository.getReminder(3)).thenReturn(sourceSourceReminder)
         }
 
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.linkedReminderId = 2
 
         runBlocking {
@@ -177,9 +177,9 @@ class ReminderSummaryFormatterTest {
 
         val simpleFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
 
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.timeInMinutes = 2
-        val reminder2 = Reminder(2)
+        val reminder2 = ReminderEntity(2)
         reminder2.timeInMinutes = 63
         assertEquals("ok", simpleFormatter.formatRemindersSummary(listOf(reminder2, reminder)))
     }
@@ -204,14 +204,14 @@ class ReminderSummaryFormatterTest {
         Mockito.`when`(mockTimeFormatter.minutesToDurationString(63)).thenReturn("1:03")
         Mockito.`when`(mockTimeFormatter.minutesToDurationString(144)).thenReturn("2:24")
 
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.reminderId = 1
         reminder.timeInMinutes = 2
-        val reminder2 = Reminder(1)
+        val reminder2 = ReminderEntity(1)
         reminder2.linkedReminderId = 1
         reminder2.timeInMinutes = 63
         reminder2.reminderId = 2
-        val reminder3 = Reminder(1)
+        val reminder3 = ReminderEntity(1)
         reminder3.linkedReminderId = 2
         reminder3.timeInMinutes = 144
 
@@ -251,10 +251,10 @@ class ReminderSummaryFormatterTest {
 
         val intervalFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
 
-        val reminder = Reminder(1)
+        val reminder = ReminderEntity(1)
         reminder.timeInMinutes = 2
         reminder.intervalStart = 1
-        val reminder2 = Reminder(2)
+        val reminder2 = ReminderEntity(2)
         reminder2.timeInMinutes = 120
         reminder2.intervalStart = 1
 

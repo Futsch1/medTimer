@@ -3,9 +3,9 @@ package com.futsch1.medtimer.reminders
 import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,16 +22,16 @@ class StockHandlingProcessor @Inject constructor(
         checkForThreshold(fullMedicine, amount, processedInstant)
     }
 
-    private fun checkForThreshold(fullMedicine: FullMedicine, decreaseAmount: Double, processedInstant: Instant) {
+    private fun checkForThreshold(fullMedicine: FullMedicineEntity, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in fullMedicine.reminders) {
-            if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
+            if (reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
                 val showEvent =
                     when (reminder.outOfStockReminderType) {
-                        Reminder.OutOfStockReminderType.ONCE -> {
+                        ReminderEntity.OutOfStockReminderType.ONCE -> {
                             fullMedicine.medicine.amount + decreaseAmount > reminder.outOfStockThreshold
                         }
 
-                        Reminder.OutOfStockReminderType.ALWAYS -> true
+                        ReminderEntity.OutOfStockReminderType.ALWAYS -> true
                         else -> {
                             false
                         }

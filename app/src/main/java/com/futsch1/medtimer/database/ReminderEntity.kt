@@ -9,8 +9,8 @@ import com.futsch1.medtimer.R
 import com.google.gson.annotations.Expose
 import java.util.Objects
 
-@Entity
-class Reminder(var medicineRelId: Int) {
+@Entity(tableName = "Reminder")
+class ReminderEntity(var medicineRelId: Int) {
     @PrimaryKey(autoGenerate = true)
     @Expose
     var reminderId: Int = 0
@@ -149,7 +149,7 @@ class Reminder(var medicineRelId: Int) {
         }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Reminder) return false
+        if (other !is ReminderEntity) return false
         return membersEqual(other)
     }
 
@@ -183,7 +183,7 @@ class Reminder(var medicineRelId: Int) {
         )
     }
 
-    private fun membersEqual(other: Reminder): Boolean {
+    private fun membersEqual(other: ReminderEntity): Boolean {
         return reminderId == other.reminderId && medicineRelId == other.medicineRelId && timeInMinutes == other.timeInMinutes && createdTimestamp == other.createdTimestamp && consecutiveDays == other.consecutiveDays && pauseDays == other.pauseDays &&
                 instructions == other.instructions && cycleStartDay == other.cycleStartDay &&
                 amount == other.amount &&

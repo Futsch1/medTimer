@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
@@ -24,10 +24,10 @@ class ReminderSchedulerIntervalUnitTest {
         reminder.intervalStartsFromProcessed = false
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
@@ -71,10 +71,10 @@ class ReminderSchedulerIntervalUnitTest {
         reminder.intervalStartsFromProcessed = false
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(fullMedicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 600).epochSecond))
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -96,10 +96,10 @@ class ReminderSchedulerIntervalUnitTest {
         reminder.intervalStartsFromProcessed = true
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(fullMedicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 120).epochSecond))
         reminderEventList[0].processedTimestamp = TestHelper.on(5, 130).epochSecond
 

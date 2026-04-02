@@ -16,7 +16,7 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 
 @Database(
-    entities = [Medicine::class, Reminder::class, ReminderEvent::class, Tag::class, MedicineToTag::class],
+    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
     version = 23,
     autoMigrations = [AutoMigration(from = 1, to = 2, spec = AutoMigration1To2::class), AutoMigration(from = 2, to = 3), AutoMigration(
         from = 3,

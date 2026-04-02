@@ -2,9 +2,9 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
@@ -18,7 +18,7 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource
 ) {
 
-    suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
+    suspend fun scheduleNextReminder(processedEvents: List<ReminderEventEntity> = emptyList()) {
         val fullMedicines = medicineRepository.getMedicines()
         val reminderEvents = medicineRepository.getReminderEventsForScheduling(fullMedicines)
         val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }
@@ -27,8 +27,8 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
     }
 
     private fun scheduleNextReminderInternal(
-        fullMedicines: List<FullMedicine>,
-        reminderEvents: List<ReminderEvent>
+        fullMedicines: List<FullMedicineEntity>,
+        reminderEvents: List<ReminderEventEntity>
     ) {
         val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
         val scheduledReminders: List<ScheduledReminder> =

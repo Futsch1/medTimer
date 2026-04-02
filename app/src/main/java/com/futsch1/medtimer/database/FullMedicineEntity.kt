@@ -6,21 +6,21 @@ import androidx.room.Relation
 import com.google.gson.annotations.Expose
 import java.util.Objects
 
-class FullMedicine {
+class FullMedicineEntity {
     @Embedded
     @Expose
-    var medicine: Medicine = Medicine()
+    var medicine: MedicineEntity = MedicineEntity()
 
-    @Relation(parentColumn = "medicineId", entityColumn = "tagId", associateBy = Junction(MedicineToTag::class))
+    @Relation(parentColumn = "medicineId", entityColumn = "tagId", associateBy = Junction(MedicineToTagEntity::class))
     @Expose
-    var tags: List<Tag> = listOf()
+    var tags: List<TagEntity> = listOf()
 
     @Relation(parentColumn = "medicineId", entityColumn = "medicineRelId")
     @Expose
-    var reminders: MutableList<Reminder> = mutableListOf()
+    var reminders: MutableList<ReminderEntity> = mutableListOf()
 
     override fun equals(other: Any?): Boolean {
-        if (other !is FullMedicine) return false
+        if (other !is FullMedicineEntity) return false
         return medicine == other.medicine && reminders == other.reminders && tags == other.tags
     }
 
@@ -29,12 +29,12 @@ class FullMedicine {
     }
 
     val isOutOfStock: Boolean
-        get() = this.isStockManagementActive && reminders.any { reminder -> reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
+        get() = this.isStockManagementActive && reminders.any { reminder -> reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
 
     val isStockManagementActive: Boolean
         get() = (medicine.amount != 0.0 || hasStockReminder())
 
     private fun hasStockReminder(): Boolean {
-        return reminders.any { reminder -> reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK }
+        return reminders.any { reminder -> reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK }
     }
 }

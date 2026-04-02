@@ -13,9 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineIcons
@@ -51,7 +51,7 @@ class MedicineViewHolder @AssistedInject constructor(
     private val remindersSummaryView: TextView = itemView.findViewById(R.id.remindersSummary)
     private val tags: FlexboxLayout = itemView.findViewById(R.id.tags)
 
-    fun bind(medicine: FullMedicine) {
+    fun bind(medicine: FullMedicineEntity) {
         medicineNameView.text = medicineStringFormatter.getMedicineNameWithStockText(medicine)
         setupSummary(medicine)
 
@@ -68,8 +68,8 @@ class MedicineViewHolder @AssistedInject constructor(
         buildTags(medicine.tags)
     }
 
-    private fun setupSummary(medicine: FullMedicine) {
-        val activeReminders: List<Reminder> = getActiveReminders(medicine)
+    private fun setupSummary(medicine: FullMedicineEntity) {
+        val activeReminders: List<ReminderEntity> = getActiveReminders(medicine)
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
                 remindersSummaryView.setText(R.string.no_reminders)
@@ -84,7 +84,7 @@ class MedicineViewHolder @AssistedInject constructor(
         }
     }
 
-    private fun navigateToEditFragment(medicine: FullMedicine) {
+    private fun navigateToEditFragment(medicine: FullMedicineEntity) {
         val navController = findNavController(itemView)
         val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
             medicine.medicine.medicineId
@@ -96,7 +96,7 @@ class MedicineViewHolder @AssistedInject constructor(
         }
     }
 
-    fun buildTags(tagsList: List<Tag>) {
+    fun buildTags(tagsList: List<TagEntity>) {
         tags.removeAllViews()
         for (tag in tagsList) {
             @SuppressLint("InflateParams") val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip

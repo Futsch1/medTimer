@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationData
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import java.time.LocalTime
@@ -13,15 +13,15 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     fun filterAlreadyProcessed(): ReminderNotification {
-        return filter { it.reminderEvent.status == ReminderEvent.ReminderStatus.RAISED }
+        return filter { it.reminderEvent.status == ReminderEventEntity.ReminderStatus.RAISED }
     }
 
     fun isOutOfStockNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.OUT_OF_STOCK
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK
     }
 
     fun isExpirationDateNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.EXPIRATION_DATE
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE
     }
 
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {

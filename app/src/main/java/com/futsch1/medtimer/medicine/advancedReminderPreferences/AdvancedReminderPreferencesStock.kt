@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
@@ -35,7 +35,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
     val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
-    var fullMedicine: FullMedicine? = null
+    var fullMedicine: FullMedicineEntity? = null
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf("edit_medicine_stock_settings" to { _, _ ->
@@ -46,7 +46,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
             )
         })
 
-    override fun onEntityUpdated(entity: Reminder) {
+    override fun onEntityUpdated(entity: ReminderEntity) {
         super.onEntityUpdated(entity)
 
         menuProvider.medicineRepository = medicineRepository
@@ -55,15 +55,15 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(entity.outOfStockThreshold, fullMedicine?.medicine?.unit ?: "")
     }
 
-    override fun customSetup(entity: Reminder) {
+    override fun customSetup(entity: ReminderEntity) {
         setupAmountEdit(findPreference("stock_threshold")!!)
 
-        findPreference<Preference>("stock_threshold")?.isVisible = entity.reminderType == Reminder.ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("stock_reminder")?.isVisible = entity.reminderType == Reminder.ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("medicine_stock")?.isVisible = entity.reminderType == Reminder.ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("expiration_reminder")?.isVisible = entity.reminderType == Reminder.ReminderType.EXPIRATION_DATE
-        findPreference<Preference>("expiration_days_before")?.isVisible = entity.reminderType == Reminder.ReminderType.EXPIRATION_DATE
-        findPreference<Preference>("medicine_expiration_date")?.isVisible = entity.reminderType == Reminder.ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("stock_threshold")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("stock_reminder")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("medicine_stock")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("expiration_reminder")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("expiration_days_before")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("medicine_expiration_date")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE
 
         this.lifecycleScope.launch(ioDispatcher) {
             fullMedicine = medicineRepository.getMedicine(entity.medicineRelId)

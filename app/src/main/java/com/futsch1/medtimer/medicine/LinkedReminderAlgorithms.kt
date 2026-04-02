@@ -1,24 +1,24 @@
 package com.futsch1.medtimer.medicine
 
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LinkedReminderAlgorithms @Inject constructor() {
-    fun sortRemindersList(reminders: List<Reminder>): List<Reminder> {
+    fun sortRemindersList(reminders: List<ReminderEntity>): List<ReminderEntity> {
         return reminders.sortedBy { r -> getTotalTimeInMinutes(r, reminders) }
     }
 
-    private fun getTotalTimeInMinutes(reminder: Reminder, reminders: List<Reminder>): Int {
-        var total = if (reminder.reminderType != Reminder.ReminderType.WINDOWED_INTERVAL) reminder.timeInMinutes else reminder.intervalStartTimeOfDay
+    private fun getTotalTimeInMinutes(reminder: ReminderEntity, reminders: List<ReminderEntity>): Int {
+        var total = if (reminder.reminderType != ReminderEntity.ReminderType.WINDOWED_INTERVAL) reminder.timeInMinutes else reminder.intervalStartTimeOfDay
         for (r in reminders) {
             if (r.reminderId != reminder.linkedReminderId) {
                 continue
             }
 
             total += when (r.reminderType) {
-                Reminder.ReminderType.LINKED -> {
+                ReminderEntity.ReminderType.LINKED -> {
                     getTotalTimeInMinutes(r, reminders)
                 }
 

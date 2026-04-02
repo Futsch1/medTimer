@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.database
 
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.util.LinkedList
@@ -8,55 +8,55 @@ import java.util.LinkedList
 open class MedicineRepository(
     private val medicineDao: MedicineDao
 ) {
-    val medicinesFlow: Flow<List<FullMedicine>>
+    val medicinesFlow: Flow<List<FullMedicineEntity>>
         get() = medicineDao.getMedicinesFlow()
 
-    suspend fun getOnlyMedicine(medicineId: Int): Medicine? {
+    suspend fun getOnlyMedicine(medicineId: Int): MedicineEntity? {
         return medicineDao.getOnlyMedicine(medicineId)
     }
 
-    fun getMedicineFlow(medicineId: Int): Flow<FullMedicine?> {
+    fun getMedicineFlow(medicineId: Int): Flow<FullMedicineEntity?> {
         return medicineDao.getMedicineFlow(medicineId)
     }
 
-    suspend fun getMedicine(medicineId: Int): FullMedicine? {
+    suspend fun getMedicine(medicineId: Int): FullMedicineEntity? {
         return medicineDao.getMedicine(medicineId)
     }
 
-    fun getRemindersFlow(medicineId: Int): Flow<List<Reminder>> {
+    fun getRemindersFlow(medicineId: Int): Flow<List<ReminderEntity>> {
         return medicineDao.getRemindersFlow(medicineId)
     }
 
-    suspend fun getReminders(medicineId: Int): List<Reminder> {
+    suspend fun getReminders(medicineId: Int): List<ReminderEntity> {
         return medicineDao.getReminders(medicineId)
     }
 
-    suspend fun getReminder(reminderId: Int): Reminder? {
+    suspend fun getReminder(reminderId: Int): ReminderEntity? {
         return medicineDao.getReminder(reminderId)
     }
 
-    fun getReminderFlow(reminderId: Int): Flow<Reminder?> {
+    fun getReminderFlow(reminderId: Int): Flow<ReminderEntity?> {
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEvent>> {
+    fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEventEntity>> {
         return medicineDao.getReminderEventsFlowStartingFrom(timeStamp, statusValues)
     }
 
-    suspend fun getAllReminderEventsWithoutDeleted(): List<ReminderEvent> {
+    suspend fun getAllReminderEventsWithoutDeleted(): List<ReminderEventEntity> {
         return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
     }
 
-    suspend fun getAllReminderEventsWithoutDeletedAndAcknowledged(): List<ReminderEvent> {
+    suspend fun getAllReminderEventsWithoutDeletedAndAcknowledged(): List<ReminderEventEntity> {
         return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDeletedAndAcknowledged)
     }
 
-    suspend fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
+    suspend fun getLastDaysReminderEvents(days: Int): List<ReminderEventEntity> {
         return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)
     }
 
-    suspend fun getReminderEventsForScheduling(medicines: List<FullMedicine>): List<ReminderEvent> {
-        val reminderEvents: MutableList<ReminderEvent> = LinkedList<ReminderEvent>()
+    suspend fun getReminderEventsForScheduling(medicines: List<FullMedicineEntity>): List<ReminderEventEntity> {
+        val reminderEvents: MutableList<ReminderEventEntity> = LinkedList<ReminderEventEntity>()
         for (medicine in medicines) {
             for (reminder in medicine.reminders) {
                 if (reminder.active) {
@@ -67,7 +67,7 @@ open class MedicineRepository(
         return reminderEvents
     }
 
-    private suspend fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEvent> {
+    private suspend fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEventEntity> {
         var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2)
         if (lastReminderEvents.isNotEmpty() && lastReminderEvents
                 .all { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
@@ -77,11 +77,11 @@ open class MedicineRepository(
         return lastReminderEvents
     }
 
-    suspend fun getLastReminderEvent(reminderId: Int): ReminderEvent? {
+    suspend fun getLastReminderEvent(reminderId: Int): ReminderEventEntity? {
         return medicineDao.getLastReminderEvent(reminderId)
     }
 
-    suspend fun insertMedicine(medicine: Medicine): Long {
+    suspend fun insertMedicine(medicine: MedicineEntity): Long {
         return medicineDao.insertMedicine(medicine)
     }
 
@@ -90,15 +90,15 @@ open class MedicineRepository(
         medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
     }
 
-    suspend fun insertReminder(reminder: Reminder): Long {
+    suspend fun insertReminder(reminder: ReminderEntity): Long {
         return medicineDao.insertReminder(reminder)
     }
 
-    suspend fun updateReminder(reminder: Reminder) {
+    suspend fun updateReminder(reminder: ReminderEntity) {
         medicineDao.updateReminder(reminder)
     }
 
-    suspend fun updateReminders(reminder: List<Reminder>) {
+    suspend fun updateReminders(reminder: List<ReminderEntity>) {
         medicineDao.updateReminders(reminder)
     }
 
@@ -106,27 +106,27 @@ open class MedicineRepository(
         medicineDao.getReminder(reminderId)?.let { medicineDao.deleteReminder(it) }
     }
 
-    suspend fun insertReminderEvent(reminderEvent: ReminderEvent): Long {
+    suspend fun insertReminderEvent(reminderEvent: ReminderEventEntity): Long {
         return medicineDao.insertReminderEvent(reminderEvent)
     }
 
-    suspend fun getReminderEvent(reminderEventId: Int): ReminderEvent? {
+    suspend fun getReminderEvent(reminderEventId: Int): ReminderEventEntity? {
         return medicineDao.getReminderEvent(reminderEventId)
     }
 
-    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?> {
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEventEntity?> {
         return medicineDao.getReminderEventFlow(reminderEventId)
     }
 
-    suspend fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
+    suspend fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity? {
         return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
     }
 
-    suspend fun updateReminderEvent(reminderEvent: ReminderEvent) {
+    suspend fun updateReminderEvent(reminderEvent: ReminderEventEntity) {
         medicineDao.updateReminderEvent(reminderEvent)
     }
 
-    suspend fun updateReminderEvents(reminderEvents: List<ReminderEvent>) {
+    suspend fun updateReminderEvents(reminderEvents: List<ReminderEventEntity>) {
         medicineDao.updateReminderEvents(reminderEvents)
     }
 
@@ -154,41 +154,41 @@ open class MedicineRepository(
         medicineDao.deleteMedicineToTags()
     }
 
-    suspend fun deleteReminderEvent(reminderEvent: ReminderEvent) {
+    suspend fun deleteReminderEvent(reminderEvent: ReminderEventEntity) {
         medicineDao.deleteReminderEvent(reminderEvent)
     }
 
-    suspend fun getLinkedReminders(reminderId: Int): List<Reminder> {
+    suspend fun getLinkedReminders(reminderId: Int): List<ReminderEntity> {
         return medicineDao.getLinkedReminders(reminderId)
     }
 
-    val tagsFlow: Flow<List<Tag>>
+    val tagsFlow: Flow<List<TagEntity>>
         get() = medicineDao.getTagsFlow()
 
-    suspend fun insertTag(tag: Tag): Long {
+    suspend fun insertTag(tag: TagEntity): Long {
         val existingTagId = getTagByName(tag.name)?.tagId?.toLong()
 
         return existingTagId ?: medicineDao.insertTag(tag)
     }
 
-    suspend fun getTagByName(name: String): Tag? {
+    suspend fun getTagByName(name: String): TagEntity? {
         return medicineDao.getTagByName(name)
     }
 
-    suspend fun deleteTag(tag: Tag) {
+    suspend fun deleteTag(tag: TagEntity) {
         medicineDao.deleteMedicineToTagForTag(tag.tagId)
         medicineDao.deleteTag(tag)
     }
 
     suspend fun insertMedicineToTag(medicineId: Int, tagId: Int) {
-        medicineDao.insertMedicineToTag(MedicineToTag(medicineId, tagId))
+        medicineDao.insertMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
     suspend fun deleteMedicineToTag(medicineId: Int, tagId: Int) {
-        medicineDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId))
+        medicineDao.deleteMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
-    fun getMedicineToTagsFlow(): Flow<List<MedicineToTag>> {
+    fun getMedicineToTagsFlow(): Flow<List<MedicineToTagEntity>> {
         return medicineDao.getMedicineToTagsFlow()
     }
 
@@ -212,27 +212,27 @@ open class MedicineRepository(
         }
     }
 
-    suspend fun getMedicines(): List<FullMedicine> {
+    suspend fun getMedicines(): List<FullMedicineEntity> {
         return medicineDao.getMedicines()
     }
 
-    suspend fun updateMedicine(medicine: Medicine) {
+    suspend fun updateMedicine(medicine: MedicineEntity) {
         medicineDao.updateMedicine(medicine)
     }
 
-    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicine? {
+    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicineEntity? {
         return medicineDao.decreaseStock(medicineId, decreaseAmount)
     }
 
-    suspend fun updateMedicines(medicines: List<Medicine>) {
+    suspend fun updateMedicines(medicines: List<MedicineEntity>) {
         medicineDao.updateMedicines(medicines)
     }
 
-    suspend fun insertReminderEvents(reminderEvents: List<ReminderEvent>) {
+    suspend fun insertReminderEvents(reminderEvents: List<ReminderEventEntity>) {
         medicineDao.insertReminderEvents(reminderEvents)
     }
 
-    suspend fun insertReminders(reminders: List<Reminder>) {
+    suspend fun insertReminders(reminders: List<ReminderEntity>) {
         medicineDao.insertReminders(reminders)
     }
 }

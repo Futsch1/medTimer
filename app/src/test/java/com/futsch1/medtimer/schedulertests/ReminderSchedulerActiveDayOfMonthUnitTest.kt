@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
@@ -26,10 +26,10 @@ internal class ReminderSchedulerActiveDayOfMonthUnitTest {
         reminder.activeDaysOfMonth = 7
         medicineWithReminders.reminders.add(reminder)
 
-        val medicineList = mutableListOf<FullMedicine>()
+        val medicineList = mutableListOf<FullMedicineEntity>()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList = emptyList<ReminderEvent>()
+        val reminderEventList = emptyList<ReminderEventEntity>()
 
         var scheduledReminders =
             scheduler.schedule(medicineList, reminderEventList)

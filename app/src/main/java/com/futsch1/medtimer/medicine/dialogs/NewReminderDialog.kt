@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
@@ -30,8 +30,8 @@ import java.time.Instant
 
 class NewReminderDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
-    @Assisted private val fullMedicine: FullMedicine,
-    @Assisted private val reminder: Reminder,
+    @Assisted private val fullMedicine: FullMedicineEntity,
+    @Assisted private val reminder: ReminderEntity,
     private val medicineRepository: MedicineRepository,
     private val timeEditorFactory: TimeEditor.Factory,
     private val dateTimeEditorFactory: DateTimeEditor.Factory,
@@ -39,7 +39,7 @@ class NewReminderDialog @AssistedInject constructor(
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(activity: FragmentActivity, fullMedicine: FullMedicine, reminder: Reminder): NewReminderDialog
+        fun create(activity: FragmentActivity, fullMedicine: FullMedicineEntity, reminder: ReminderEntity): NewReminderDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -80,13 +80,13 @@ class NewReminderDialog @AssistedInject constructor(
 
     private fun setupVisibilities() {
         val timeBasedVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderEntity.ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
         val intervalBasedVisibility =
             if (reminder.isInterval) ViewGroup.VISIBLE else ViewGroup.GONE
         val continuousIntervalVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderEntity.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
         val windowedIntervalVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
 
         dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
             intervalBasedVisibility
@@ -118,7 +118,7 @@ class NewReminderDialog @AssistedInject constructor(
             dialog.findViewById(R.id.editIntervalTime),
             dialog.findViewById(R.id.editIntervalTimeLayout),
             dialog.findViewById(R.id.intervalUnit), 12 * 60,
-            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
+            if (reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )
 
         val intervalStartDateTimeEditor = dateTimeEditorFactory.create(
@@ -164,23 +164,23 @@ class NewReminderDialog @AssistedInject constructor(
                 reminder.amount =
                     dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
 
-                val minutes = if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
+                val minutes = if (reminder.reminderType == ReminderEntity.ReminderType.TIME_BASED) {
                     timeEditor.getMinutes()
                 } else {
                     intervalEditor.getMinutes()
                 }
                 reminder.timeInMinutes = minutes
-                if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
+                if (reminder.reminderType == ReminderEntity.ReminderType.CONTINUOUS_INTERVAL) {
                     reminder.intervalStart =
                         intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
                     reminder.intervalStartsFromProcessed =
                         dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
                 }
-                if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) {
+                if (reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) {
                     reminder.intervalStartTimeOfDay = dailyStartTimeEditor.getMinutes()
                     reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
                 }
-                if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
+                if (minutes >= 0 && (reminder.reminderType == ReminderEntity.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
                     medicineRepository.insertReminder(reminder)
                     Toast.makeText(
                         activity,

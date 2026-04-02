@@ -4,10 +4,10 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -38,9 +38,9 @@ class CalendarEventsViewModel @Inject constructor(
     private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private var reminderEvents: List<ReminderEvent> = listOf()
-    private var allMedicines: List<FullMedicine> = listOf()
-    private var medicine: Medicine? = null
+    private var reminderEvents: List<ReminderEventEntity> = listOf()
+    private var allMedicines: List<FullMedicineEntity> = listOf()
+    private var medicine: MedicineEntity? = null
     private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
 
@@ -123,8 +123,8 @@ class CalendarEventsViewModel @Inject constructor(
 
     private fun addPastEvents(pastDays: Long) {
         val startDay = LocalDate.now().minusDays(pastDays)
-        for (reminderEvent: ReminderEvent in reminderEvents) {
-            if (reminderEvent.status == ReminderEvent.ReminderStatus.DELETED) {
+        for (reminderEvent: ReminderEventEntity in reminderEvents) {
+            if (reminderEvent.status == ReminderEventEntity.ReminderStatus.DELETED) {
                 continue
             }
 
@@ -142,7 +142,7 @@ class CalendarEventsViewModel @Inject constructor(
         }
     }
 
-    private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
+    private fun reminderEventToString(reminderEvent: ReminderEventEntity): Spanned {
         return reminderEventFactory.create(reminderEvent).text
     }
 }

@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -10,8 +10,8 @@ import java.util.BitSet
 import kotlin.math.abs
 
 class StandardScheduling(
-    reminder: Reminder,
-    reminderEventList: List<ReminderEvent>,
+    reminder: ReminderEntity,
+    reminderEventList: List<ReminderEventEntity>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     private val raisedToday: Boolean = isRaisedOn(today())

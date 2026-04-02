@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.medicine.stockSettings
 
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.EntityDataStore
@@ -13,15 +13,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class MedicineDataStore @AssistedInject constructor(
-    @Assisted override var entity: FullMedicine,
+    @Assisted override var entity: FullMedicineEntity,
     private val medicineRepository: MedicineRepository,
     private val timeFormatter: TimeFormatter,
     @param:ApplicationScope private val coroutineScope: CoroutineScope
-) : EntityDataStore<FullMedicine>() {
+) : EntityDataStore<FullMedicineEntity>() {
 
     @AssistedFactory
     interface Factory {
-        fun create(entity: FullMedicine): MedicineDataStore
+        fun create(entity: FullMedicineEntity): MedicineDataStore
     }
 
     override val entityId: Int get() = entity.medicine.medicineId

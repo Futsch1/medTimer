@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
@@ -14,8 +14,8 @@ fun interface Scheduling {
 }
 
 abstract class SchedulingBase(
-    protected val reminder: Reminder,
-    protected val reminderEvents: List<ReminderEvent>,
+    protected val reminder: ReminderEntity,
+    protected val reminderEvents: List<ReminderEventEntity>,
     protected val timeAccess: TimeAccess
 ) : Scheduling {
     protected val systemZone = timeAccess.systemZone()
@@ -24,16 +24,16 @@ abstract class SchedulingBase(
 
     abstract override fun getNextScheduledTime(): Instant?
 
-    protected fun findLastReminderEvent(): ReminderEvent? {
+    protected fun findLastReminderEvent(): ReminderEventEntity? {
         return findLastReminderEvent(filteredReminderEvents, reminder.reminderId)
     }
 
-    protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEvent? {
+    protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEventEntity? {
         return findLastReminderEvent(reminderEvents, linkedReminderId)
     }
 
-    protected fun findLastReminderEvent(reminderEvents: List<ReminderEvent>, reminderId: Int): ReminderEvent? {
-        var foundReminderEvent: ReminderEvent? = null
+    protected fun findLastReminderEvent(reminderEvents: List<ReminderEventEntity>, reminderId: Int): ReminderEventEntity? {
+        var foundReminderEvent: ReminderEventEntity? = null
         for (reminderEvent in reminderEvents) {
             if ((reminderEvent.reminderId == reminderId) && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
             ) {
@@ -79,10 +79,10 @@ abstract class SchedulingBase(
     }
 
     private fun filterEvents(
-        reminderEvents: List<ReminderEvent>
-    ): List<ReminderEvent> {
+        reminderEvents: List<ReminderEventEntity>
+    ): List<ReminderEventEntity> {
         return reminderEvents.stream()
-            .filter { event: ReminderEvent -> event.reminderId == reminder.reminderId }.collect(
+            .filter { event: ReminderEventEntity -> event.reminderId == reminder.reminderId }.collect(
                 Collectors.toList()
             )
     }

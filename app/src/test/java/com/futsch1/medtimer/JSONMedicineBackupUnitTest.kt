@@ -1,11 +1,11 @@
 package com.futsch1.medtimer
 
 import android.graphics.Color
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.JSONMedicineBackup
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.TagEntity
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -19,8 +19,8 @@ internal class JSONMedicineBackupUnitTest {
     fun testCreatesBackupWithVersionAndMedicinesArray() {
         val jsonMedicineBackup = JSONMedicineBackup()
 
-        val medicinesWithReminders = listOf(FullMedicine().apply {
-            reminders = mutableListOf(Reminder(0).apply {
+        val medicinesWithReminders = listOf(FullMedicineEntity().apply {
+            reminders = mutableListOf(ReminderEntity(0).apply {
                 reminderId = 14
                 timeInMinutes = 60
                 amount = "1"
@@ -36,10 +36,10 @@ internal class JSONMedicineBackupUnitTest {
                 intervalStartTimeOfDay = 1
                 intervalEndTimeOfDay = 2
                 outOfStockThreshold = 1.0
-                outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-                expirationReminderType = Reminder.ExpirationReminderType.DAILY
+                outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
+                expirationReminderType = ReminderEntity.ExpirationReminderType.DAILY
             })
-            medicine = Medicine("Medicine A").apply {
+            medicine = MedicineEntity("Medicine A").apply {
                 useColor = true
                 color = Color.RED
                 iconId = 5
@@ -50,7 +50,7 @@ internal class JSONMedicineBackupUnitTest {
                 productionDate = 1
                 expirationDate = 2
             }
-            tags = listOf(Tag("Tag A"))
+            tags = listOf(TagEntity("Tag A"))
         })
 
         val result = assertNotNull(jsonMedicineBackup.createBackupAsString(5, medicinesWithReminders))
@@ -127,8 +127,8 @@ internal class JSONMedicineBackupUnitTest {
     }
 
     private fun compareListFullMedicine(
-        actual: List<FullMedicine>,
-        expected: List<FullMedicine>
+        actual: List<FullMedicineEntity>,
+        expected: List<FullMedicineEntity>
     ) {
         assertEquals(expected.size, actual.size)
         for (i in actual.indices) {
@@ -137,8 +137,8 @@ internal class JSONMedicineBackupUnitTest {
     }
 
     private fun compareFullMedicine(
-        medicineWithReminders: FullMedicine,
-        medicineWithReminders1: FullMedicine
+        medicineWithReminders: FullMedicineEntity,
+        medicineWithReminders1: FullMedicineEntity
     ) {
         assertEquals(
             medicineWithReminders.reminders.size,
@@ -164,7 +164,7 @@ internal class JSONMedicineBackupUnitTest {
         )
     }
 
-    private fun compareReminder(reminder: Reminder, reminder1: Reminder) {
+    private fun compareReminder(reminder: ReminderEntity, reminder1: ReminderEntity) {
         assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes)
         assertEquals(reminder.consecutiveDays, reminder1.consecutiveDays)
         assertEquals(reminder.instructions, reminder1.instructions)
@@ -174,7 +174,7 @@ internal class JSONMedicineBackupUnitTest {
     // iterates over the list of FullMedicine and adds each one to the medicines array as a JSONObject
     @Test
     fun testIteratesOverMedicinesWithRemindersAndAddsToMedicinesArray() {
-        val reminder1 = Reminder(0).apply {
+        val reminder1 = ReminderEntity(0).apply {
             reminderId = 1
             timeInMinutes = 60
             amount = "1"
@@ -185,7 +185,7 @@ internal class JSONMedicineBackupUnitTest {
             activeDaysOfMonth = -1
         }
 
-        val reminder2 = Reminder(0).apply {
+        val reminder2 = ReminderEntity(0).apply {
             reminderId = 2
             timeInMinutes = 120
             amount = "2"
@@ -202,16 +202,16 @@ internal class JSONMedicineBackupUnitTest {
         }
 
         val medicinesWithReminders = mutableListOf(
-            FullMedicine().apply {
+            FullMedicineEntity().apply {
                 reminders = mutableListOf(reminder1)
-                medicine = Medicine("Medicine A")
+                medicine = MedicineEntity("Medicine A")
                 medicine.useColor = true
                 medicine.color = Color.RED
                 medicine.notificationImportance = 4
                 medicine.sortOrder = 3.44
-            }, FullMedicine().apply {
+            }, FullMedicineEntity().apply {
                 reminders = mutableListOf(reminder1, reminder2)
-                medicine = Medicine("Medicine B")
+                medicine = MedicineEntity("Medicine B")
                 medicine.useColor = false
                 medicine.color = Color.BLUE
                 medicine.notificationImportance = 5

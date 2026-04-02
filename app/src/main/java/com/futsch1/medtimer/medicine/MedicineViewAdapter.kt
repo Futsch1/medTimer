@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -24,7 +24,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     private val medicineViewHolderFactory: MedicineViewHolder.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) :
-    IdlingListAdapter<FullMedicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
+    IdlingListAdapter<FullMedicineEntity, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 
     @AssistedFactory
     interface Factory {
@@ -67,12 +67,12 @@ class MedicineViewAdapter @AssistedInject constructor(
         }
     }
 
-    class MedicineDiff : DiffUtil.ItemCallback<FullMedicine>() {
-        override fun areItemsTheSame(oldItem: FullMedicine, newItem: FullMedicine): Boolean {
+    class MedicineDiff : DiffUtil.ItemCallback<FullMedicineEntity>() {
+        override fun areItemsTheSame(oldItem: FullMedicineEntity, newItem: FullMedicineEntity): Boolean {
             return oldItem.medicine.medicineId == newItem.medicine.medicineId
         }
 
-        override fun areContentsTheSame(oldItem: FullMedicine, newItem: FullMedicine): Boolean {
+        override fun areContentsTheSame(oldItem: FullMedicineEntity, newItem: FullMedicineEntity): Boolean {
             return oldItem == newItem
         }
     }

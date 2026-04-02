@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import org.junit.Test
@@ -20,8 +20,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         reminder.active = false
         medicineWithReminders.reminders.add(reminder)
 
-        val medicineList: List<FullMedicine> = listOf(medicineWithReminders)
-        val reminderEventList: List<ReminderEvent> = listOf()
+        val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
+        val reminderEventList: List<ReminderEventEntity> = listOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(0, scheduledReminders.size)
@@ -40,8 +40,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         reminder.periodEnd = 4
         medicineWithReminders.reminders.add(reminder)
 
-        val medicineList: List<FullMedicine> = listOf(medicineWithReminders)
-        val reminderEventList: List<ReminderEvent> = listOf()
+        val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
+        val reminderEventList: List<ReminderEventEntity> = listOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(TestHelper.on(4, 480), scheduledReminders[0].timestamp)
@@ -71,8 +71,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         reminder.periodEnd = 4
         medicineWithReminders.reminders.add(reminder)
 
-        val medicineList: List<FullMedicine> = listOf(medicineWithReminders)
-        val reminderEventList: List<ReminderEvent> = listOf()
+        val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
+        val reminderEventList: List<ReminderEventEntity> = listOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(TestHelper.on(4, 1), scheduledReminders[0].timestamp)
@@ -106,8 +106,8 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         reminder.periodEnd = 4
         medicineWithReminders.reminders.add(reminder)
 
-        val medicineList: List<FullMedicine> = listOf(medicineWithReminders)
-        val reminderEventList: List<ReminderEvent> = listOf()
+        val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
+        val reminderEventList: List<ReminderEventEntity> = listOf()
 
         var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(TestHelper.on(4, 120), scheduledReminders[0].timestamp)

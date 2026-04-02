@@ -6,7 +6,7 @@ import android.os.Looper
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
@@ -23,7 +23,7 @@ import java.time.Instant
 import java.time.LocalDate
 
 class LinkedReminderHandling @AssistedInject constructor(
-    @Assisted val reminder: Reminder,
+    @Assisted val reminder: ReminderEntity,
     private val medicineRepository: MedicineRepository,
     @Assisted private val coroutineScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
@@ -31,7 +31,7 @@ class LinkedReminderHandling @AssistedInject constructor(
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(reminder: Reminder, coroutineScope: CoroutineScope): LinkedReminderHandling
+        fun create(reminder: ReminderEntity, coroutineScope: CoroutineScope): LinkedReminderHandling
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
@@ -45,7 +45,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     private fun createReminder(fragmentActivity: FragmentActivity, amount: String) {
-        val linkedReminder = Reminder(reminder.medicineRelId).apply {
+        val linkedReminder = ReminderEntity(reminder.medicineRelId).apply {
             this.amount = amount
             createdTimestamp = Instant.now().toEpochMilli() / 1000
             cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
@@ -72,9 +72,9 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     private suspend fun internalDelete(
-        reminder: Reminder
+        reminder: ReminderEntity
     ) {
-        val reminders: List<Reminder> =
+        val reminders: List<ReminderEntity> =
             medicineRepository.getLinkedReminders(reminder.reminderId)
         for (r in reminders) {
             internalDelete(r)

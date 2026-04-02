@@ -10,7 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.OptionsMenu.Companion.enableOptionalIcons
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -22,14 +22,14 @@ class AdvancedReminderSettingsMenuProvider(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuProvider {
 
-    lateinit var reminder: Reminder
+    lateinit var reminder: ReminderEntity
     lateinit var medicineRepository: MedicineRepository
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.advanced_reminder_settings, menu)
         menu.setGroupDividerEnabled(true)
         enableOptionalIcons(menu)
-        
+
         menu.findItem(R.id.duplicate).setOnMenuItemClickListener { _: MenuItem? ->
             if (this::reminder.isInitialized) {
                 fragment.lifecycleScope.launch(ioDispatcher) {

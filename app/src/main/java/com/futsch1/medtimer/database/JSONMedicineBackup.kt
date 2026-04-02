@@ -4,8 +4,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import java.time.Instant
 
-class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
-    override fun createBackup(databaseVersion: Int, list: List<FullMedicine>): JsonElement {
+class JSONMedicineBackup : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
+    override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
         // Correct the medicines where the reminder's instructions are null in this loop
         for (fullMedicine in list) {
             fullMedicine.reminders.filter { reminder -> reminder.instructions == null }
@@ -16,16 +16,16 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
 
     override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
         return builder
-            .registerTypeAdapter(Medicine::class.java, FullDeserialize<Medicine?>())
-            .registerTypeAdapter(Tag::class.java, FullDeserialize<Any?>())
-            .registerTypeAdapter(Reminder::class.java, FullDeserialize<Reminder?>())
+            .registerTypeAdapter(MedicineEntity::class.java, FullDeserialize<MedicineEntity?>())
+            .registerTypeAdapter(TagEntity::class.java, FullDeserialize<Any?>())
+            .registerTypeAdapter(ReminderEntity::class.java, FullDeserialize<ReminderEntity?>())
     }
 
-    override fun isInvalid(item: FullMedicine?): Boolean {
+    override fun isInvalid(item: FullMedicineEntity?): Boolean {
         return item == null
     }
 
-    override suspend fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
+    override suspend fun applyBackup(list: List<FullMedicineEntity>, medicineRepository: MedicineRepository) {
         medicineRepository.deleteReminders()
         medicineRepository.deleteMedicines()
         medicineRepository.deleteTags()
@@ -42,7 +42,7 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
         }
     }
 
-    private suspend fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+    private suspend fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicineEntity, medicineId: Int) {
         for (tag in fullMedicine.tags) {
             val tagId = medicineRepository.insertTag(tag).toInt()
             medicineRepository.insertMedicineToTag(medicineId, tagId)
@@ -50,8 +50,8 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     }
 
     companion object {
-        private suspend fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
-            val reminders: MutableList<Reminder> = mutableListOf()
+        private suspend fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicineEntity, medicineId: Int) {
+            val reminders: MutableList<ReminderEntity> = mutableListOf()
             for (reminder in fullMedicine.reminders) {
                 reminder.medicineRelId = medicineId
                 reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000

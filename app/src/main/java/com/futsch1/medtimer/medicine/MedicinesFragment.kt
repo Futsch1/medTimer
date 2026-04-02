@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -113,7 +113,7 @@ class MedicinesFragment : Fragment() {
 
         // Connect view model to recycler view adapter
         viewLifecycleOwner.lifecycleScope.launch {
-            medicineViewModel.medicines.collect { l: List<FullMedicine> ->
+            medicineViewModel.medicines.collect { l: List<FullMedicineEntity> ->
                 adapter.submitList(l)
                 medicinesMenu.medicines = l
                 startPostponedEnterTransition()
@@ -169,7 +169,7 @@ class MedicinesFragment : Fragment() {
 
                 lifecycleScope.launch(dispatcher) {
                     val highestSortOrder = medicineRepository.getHighestMedicineSortOrder()
-                    val medicine = Medicine(text.toString().trim())
+                    val medicine = MedicineEntity(text.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
                     val medicineId = medicineRepository.insertMedicine(medicine).toInt()
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }

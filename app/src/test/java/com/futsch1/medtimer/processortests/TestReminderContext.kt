@@ -10,11 +10,11 @@ import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -31,9 +31,9 @@ import java.time.Instant
 import java.time.LocalDate
 
 class MedicineRepositoryFake {
-    val medicines = mutableListOf<Medicine>()
-    val reminderEvents = mutableListOf<ReminderEvent>()
-    val reminders = mutableListOf<Reminder>()
+    val medicines = mutableListOf<MedicineEntity>()
+    val reminderEvents = mutableListOf<ReminderEventEntity>()
+    val reminders = mutableListOf<ReminderEntity>()
 
     val mock: MedicineRepository = mock()
 
@@ -42,7 +42,7 @@ class MedicineRepositoryFake {
         `when`(runBlocking { mock.getReminderEventsForScheduling(anyList()) }).thenAnswer { reminderEvents }
         `when`(runBlocking { mock.getReminderEvent(anyInt()) }).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
         `when`(runBlocking { mock.insertReminderEvent(any()) }).thenAnswer {
-            val reminderEvent = it.arguments[0] as ReminderEvent
+            val reminderEvent = it.arguments[0] as ReminderEventEntity
             reminderEvent.reminderEventId = reminderEvents.size + 1
             reminderEvents.add(reminderEvent)
             reminderEvent.reminderEventId.toLong()
@@ -53,17 +53,17 @@ class MedicineRepositoryFake {
 
         ).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
         `when`(runBlocking { mock.updateMedicine(any()) }).thenAnswer {
-            val medicine = it.arguments[0] as Medicine
+            val medicine = it.arguments[0] as MedicineEntity
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
             medicines[index] = medicine
         }
     }
 
-    fun buildFullMedicines(): List<FullMedicine> {
-        val fullMedicines = mutableListOf<FullMedicine>()
+    fun buildFullMedicines(): List<FullMedicineEntity> {
+        val fullMedicines = mutableListOf<FullMedicineEntity>()
         for (medicine in medicines) {
             val reminders = this.reminders.stream().filter { r -> r.medicineRelId == medicine.medicineId }
-            val fullMedicine = FullMedicine()
+            val fullMedicine = FullMedicineEntity()
             fullMedicine.medicine = medicine
             fullMedicine.reminders = reminders.toList()
             fullMedicine.tags = listOf()

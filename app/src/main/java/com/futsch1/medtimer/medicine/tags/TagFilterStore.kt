@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.medicine.tags
 
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.stream.Collectors
@@ -18,7 +18,7 @@ class TagFilterStore(
             validTagIds.value = value
         }
 
-    fun filterForDeletedTags(allTags: List<Tag>) {
+    fun filterForDeletedTags(allTags: List<TagEntity>) {
         val validTagsIdsValue = validTagIds.value
         if (validTagsIdsValue != null) {
             selectedTags = validTagsIdsValue

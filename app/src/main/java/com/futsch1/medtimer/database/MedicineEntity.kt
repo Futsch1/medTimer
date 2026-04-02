@@ -10,8 +10,8 @@ import com.google.gson.annotations.Expose
 import java.time.LocalDate
 import java.util.Objects
 
-@Entity
-class Medicine() {
+@Entity(tableName = "Medicine")
+class MedicineEntity() {
     @ColumnInfo(name = "medicineName")
     @Expose
     var name: String = ""
@@ -83,7 +83,7 @@ class Medicine() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Medicine) return false
+        if (other !is MedicineEntity) return false
         return membersEqual(other)
     }
 
@@ -91,7 +91,7 @@ class Medicine() {
         return Objects.hash(medicineId, name, useColor, color, notificationImportance, iconId, amount, refillSizes, unit, notes, showNotificationAsAlarm)
     }
 
-    private fun membersEqual(other: Medicine): Boolean {
+    private fun membersEqual(other: MedicineEntity): Boolean {
         return medicineId == other.medicineId &&
                 name == other.name && useColor == other.useColor && color == other.color && notificationImportance == other.notificationImportance && iconId == other.iconId && amount == other.amount &&
                 refillSizes == other.refillSizes &&

@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
@@ -75,7 +75,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
 
     val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
 
-    override fun onEntityUpdated(entity: Reminder) {
+    override fun onEntityUpdated(entity: ReminderEntity) {
         super.onEntityUpdated(entity)
 
         menuProvider.medicineRepository = medicineRepository
@@ -92,7 +92,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         findPreference<Preference>("cyclic_reminder")?.summary = reminderSummaryFormatter.getCyclicReminderString(entity)
     }
 
-    private fun getDaysSummary(reminder: Reminder): String {
+    private fun getDaysSummary(reminder: ReminderEntity): String {
         return if ((reminder.activeDaysOfMonth and 0x7FFF_FFFF) == 0x7FFF_FFFF) {
             requireContext().getString(R.string.every_day_of_month)
         } else {
@@ -106,7 +106,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         }
     }
 
-    private fun getWeekdaysSummary(reminder: Reminder): String {
+    private fun getWeekdaysSummary(reminder: ReminderEntity): String {
         return if (reminder.days.none { it }) {
             requireContext().getString(R.string.never)
         } else if (reminder.days.all { it }) {
@@ -122,13 +122,13 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         }
     }
 
-    override fun customSetup(entity: Reminder) {
+    override fun customSetup(entity: ReminderEntity) {
         findPreference<Preference>("add_linked_reminder")?.isVisible = !entity.isInterval
         findPreference<Preference>("interval_category")?.isVisible = entity.isInterval
-        findPreference<Preference>("interval_start_time")?.isVisible = entity.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL
-        findPreference<Preference>("interval_daily_start_time")?.isVisible = entity.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
-        findPreference<Preference>("interval_daily_end_time")?.isVisible = entity.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
-        findPreference<Preference>("time_based_category")?.isVisible = entity.reminderType == Reminder.ReminderType.TIME_BASED
+        findPreference<Preference>("interval_start_time")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
+        findPreference<Preference>("interval_daily_start_time")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("interval_daily_end_time")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("time_based_category")?.isVisible = entity.reminderType == ReminderEntity.ReminderType.TIME_BASED
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
             EditIntervalDialog(requireContext(), entity) { newIntervalMinutes ->

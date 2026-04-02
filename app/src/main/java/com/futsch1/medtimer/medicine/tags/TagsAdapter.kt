@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 
 typealias TagCallback = ((TagWithState) -> Unit)
 
 data class TagWithState(
-    val tag: Tag,
+    val tag: TagEntity,
     var isSelected: Boolean
 )
 

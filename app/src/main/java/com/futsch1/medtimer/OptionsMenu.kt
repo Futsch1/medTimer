@@ -18,9 +18,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.exporters.CSVEventExport
@@ -262,7 +262,7 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val reminderEvents: List<ReminderEvent> =
+        val reminderEvents: List<ReminderEventEntity> =
             medicineViewModel.filterEvents(medicineRepository.getAllReminderEventsWithoutDeletedAndAcknowledged())
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
@@ -277,7 +277,7 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineRepository.getMedicines())
+        val medicines: List<FullMedicineEntity> = medicineViewModel.filterMedicines(medicineRepository.getMedicines())
         val exporter = if (isCSV) csvMedicineExportFactory.create(medicines, fragment.getParentFragmentManager()) else pdfMedicineExportFactory.create(
             medicines,
             fragment.getParentFragmentManager()

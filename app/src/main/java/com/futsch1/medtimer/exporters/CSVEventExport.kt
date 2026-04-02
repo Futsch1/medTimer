@@ -2,7 +2,7 @@ package com.futsch1.medtimer.exporters
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper.getTableHeadersForEventExport
@@ -19,7 +19,7 @@ import java.io.FileWriter
 import java.io.IOException
 
 class CSVEventExport @AssistedInject constructor(
-    @Assisted private val reminderEvents: List<ReminderEvent>,
+    @Assisted private val reminderEvents: List<ReminderEventEntity>,
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext private val context: Context,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
@@ -28,7 +28,7 @@ class CSVEventExport @AssistedInject constructor(
 
     @AssistedFactory
     fun interface Factory {
-        fun create(reminderEvents: List<ReminderEvent>, fragmentManager: FragmentManager): CSVEventExport
+        fun create(reminderEvents: List<ReminderEventEntity>, fragmentManager: FragmentManager): CSVEventExport
     }
 
     @Throws(ExporterException::class)  // Unencrypted file is intended here and not a mistake. We need the \n linebreak explicitly
@@ -46,14 +46,14 @@ class CSVEventExport @AssistedInject constructor(
                             ),
                             reminderEvent.medicineName,
                             reminderEvent.amount,
-                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
+                            if (reminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
                                 reminderEvent.processedTimestamp
                             ) else "",
                             reminderEvent.tags.joinToString(", "),
                             timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
                             reminderEvent.notes,
                             secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
-                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(
+                            if (reminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(
                                 reminderEvent.processedTimestamp
                             ) else ""
                         )

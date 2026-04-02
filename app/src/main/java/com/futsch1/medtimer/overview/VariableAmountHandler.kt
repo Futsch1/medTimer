@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
@@ -31,7 +31,7 @@ class VariableAmountHandler @Inject constructor(
             reminderNotificationFactory.create(reminderNotificationData)
         } ?: return
 
-        val reminderEvents = mutableListOf<ReminderEvent>()
+        val reminderEvents = mutableListOf<ReminderEventEntity>()
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
@@ -48,7 +48,7 @@ class VariableAmountHandler @Inject constructor(
                         reminderNotificationPart.reminderEvent.amount = it
                         activity.lifecycleScope.launch(ioDispatcher) {
                             notificationProcessor.setReminderEventStatus(
-                                ReminderEvent.ReminderStatus.TAKEN,
+                                ReminderEventEntity.ReminderStatus.TAKEN,
                                 listOf(reminderNotificationPart.reminderEvent)
                             )
                         }
@@ -64,13 +64,13 @@ class VariableAmountHandler @Inject constructor(
 
         withContext(ioDispatcher) {
             notificationProcessor.setReminderEventStatus(
-                ReminderEvent.ReminderStatus.TAKEN,
+                ReminderEventEntity.ReminderStatus.TAKEN,
                 reminderEvents,
             )
         }
     }
 
-    private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {
+    private suspend fun touchReminderEvent(reminderEvent: ReminderEventEntity) {
         reminderEvent.processedTimestamp = Instant.now().epochSecond
         medicineRepository.updateReminderEvent(reminderEvent)
     }

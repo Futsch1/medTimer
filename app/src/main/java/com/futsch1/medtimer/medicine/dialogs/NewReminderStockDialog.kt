@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
@@ -27,14 +27,14 @@ import java.text.DecimalFormatSymbols
 
 class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
-    @Assisted private val medicine: Medicine,
-    @Assisted private val reminder: Reminder,
+    @Assisted private val medicine: MedicineEntity,
+    @Assisted private val reminder: ReminderEntity,
     private val medicineRepository: MedicineRepository,
     private val timeEditorFactory: TimeEditor.Factory
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderStockDialog
+        fun create(activity: FragmentActivity, medicine: MedicineEntity, reminder: ReminderEntity): NewReminderStockDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -88,12 +88,12 @@ class NewReminderStockDialog @AssistedInject constructor(
     }
 
     private fun setupVisibilities() {
-        val outOfStockVisibility = if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
+        val outOfStockVisibility = if (reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK) {
             View.VISIBLE
         } else {
             View.GONE
         }
-        val expirationDateVisibility = if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+        val expirationDateVisibility = if (reminder.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE) {
             View.VISIBLE
         } else {
             View.GONE
@@ -130,10 +130,10 @@ class NewReminderStockDialog @AssistedInject constructor(
                 var canCreate = true
                 reminder.timeInMinutes = timeEditor.getMinutes()
 
-                if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
+                if (reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK) {
                     canCreate = fillOutOfStockReminder()
                 }
-                if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+                if (reminder.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE) {
                     canCreate = fillExpirationReminder()
                 }
 
@@ -156,9 +156,9 @@ class NewReminderStockDialog @AssistedInject constructor(
         var canCreate = true
         try {
             reminder.expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
-                R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
-                R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
-                else -> Reminder.ExpirationReminderType.OFF
+                R.id.onceExpiration -> ReminderEntity.ExpirationReminderType.ONCE
+                R.id.dailyExpiration -> ReminderEntity.ExpirationReminderType.DAILY
+                else -> ReminderEntity.ExpirationReminderType.OFF
             }
             reminder.periodStart = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
         } catch (_: NumberFormatException) {
@@ -175,10 +175,10 @@ class NewReminderStockDialog @AssistedInject constructor(
             canCreate = false
         }
         reminder.outOfStockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-            R.id.once -> Reminder.OutOfStockReminderType.ONCE
-            R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
-            R.id.daily -> Reminder.OutOfStockReminderType.DAILY
-            else -> Reminder.OutOfStockReminderType.OFF
+            R.id.once -> ReminderEntity.OutOfStockReminderType.ONCE
+            R.id.always -> ReminderEntity.OutOfStockReminderType.ALWAYS
+            R.id.daily -> ReminderEntity.OutOfStockReminderType.DAILY
+            else -> ReminderEntity.OutOfStockReminderType.OFF
         }
         return canCreate
     }

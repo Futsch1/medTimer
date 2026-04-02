@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
@@ -81,7 +81,7 @@ class ReminderEventActions @AssistedInject constructor(
         }
     }
 
-    private fun processPostponeReminder(reminderEvent: ReminderEvent) {
+    private fun processPostponeReminder(reminderEvent: ReminderEventEntity) {
         val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminderEvent.remindedTimestamp), ZoneId.systemDefault())
         timePickerDialogFactory
             .create(localDateTime.hour, localDateTime.minute) { minutes ->
@@ -97,11 +97,11 @@ class ReminderEventActions @AssistedInject constructor(
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
-    private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
+    private fun processTakenOrSkipped(reminderEvent: ReminderEventEntity, taken: Boolean) {
         ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent, taken)
     }
 
-    private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
+    private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEventEntity) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 medicineRepository.deleteReminderEvent(reminderEvent)
@@ -110,10 +110,10 @@ class ReminderEventActions @AssistedInject constructor(
         }, {})
     }
 
-    private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
+    private fun processDeleteReminderEvent(reminderEvent: ReminderEventEntity) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
-                reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
+                reminderEvent.status = ReminderEventEntity.ReminderStatus.DELETED
                 medicineRepository.updateReminderEvent(reminderEvent)
             }
         }, {})

@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
 import kotlin.test.assertTrue
@@ -16,14 +16,14 @@ class ReminderSchedulerOutOfStockTest {
         medicine.medicine.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 10.0
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
@@ -32,7 +32,7 @@ class ReminderSchedulerOutOfStockTest {
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
 
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ALWAYS
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
     }
@@ -45,14 +45,14 @@ class ReminderSchedulerOutOfStockTest {
         medicine.medicine.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
         reminder.outOfStockThreshold = 10.0
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.DAILY
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())

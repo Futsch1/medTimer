@@ -2,7 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -118,12 +118,12 @@ class NotificationProcessorTest {
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
                 processedNotificationData,
-                ReminderEvent.ReminderStatus.TAKEN
+                ReminderEventEntity.ReminderStatus.TAKEN
             )
         }
 
         // Reminder marked as taken
-        assertEquals(ReminderEvent.ReminderStatus.TAKEN, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderStatus.TAKEN, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
         // Processed time stamp set
         assertEquals(10, testReminderContext.medicineRepositoryFake.reminderEvents[0].processedTimestamp)
         // Notification removed
@@ -146,11 +146,11 @@ class NotificationProcessorTest {
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
                 processedNotificationData,
-                ReminderEvent.ReminderStatus.SKIPPED
+                ReminderEventEntity.ReminderStatus.SKIPPED
             )
         }
         // Reminder marked as taken
-        assertEquals(ReminderEvent.ReminderStatus.SKIPPED, testReminderContext.medicineRepositoryFake.reminderEvents[1].status)
+        assertEquals(ReminderEventEntity.ReminderStatus.SKIPPED, testReminderContext.medicineRepositoryFake.reminderEvents[1].status)
         // Processed time stamp set
         assertEquals(10, testReminderContext.medicineRepositoryFake.reminderEvents[1].processedTimestamp)
         // Notification not removed
@@ -158,6 +158,6 @@ class NotificationProcessorTest {
         // But notification updated
         verify(testReminderContext.notificationManagerFake.mock, times(1)).notify(eq(1), any())
         // First reminder still raised
-        assertEquals(ReminderEvent.ReminderStatus.RAISED, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderStatus.RAISED, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
     }
 }

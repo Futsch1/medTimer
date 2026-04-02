@@ -4,7 +4,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 
 import com.futsch1.medtimer.reminders.getReminderAction
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -116,7 +116,7 @@ class ReminderNotificationData(
             )
         }
 
-        fun fromReminderEvent(reminderEvent: ReminderEvent): ReminderNotificationData {
+        fun fromReminderEvent(reminderEvent: ReminderEventEntity): ReminderNotificationData {
             val reminderIds = intArrayOf(reminderEvent.reminderId)
             val reminderEventIds = intArrayOf(reminderEvent.reminderEventId)
             val remindInstant = Instant.ofEpochSecond(reminderEvent.remindedTimestamp)

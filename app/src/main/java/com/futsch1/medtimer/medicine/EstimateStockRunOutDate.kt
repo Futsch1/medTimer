@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.medicine
 
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
@@ -21,7 +21,7 @@ suspend fun estimateStockRunOutDate(
         fullMedicine.medicine.amount = currentAmount
     }
     val recentReminders =
-        medicineRepository.getReminderEventsForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+        medicineRepository.getReminderEventsForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEventEntity.ReminderStatus.RAISED }
     // TODO: extract the time access into a re-usable class/object
     val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, object : TimeAccess {
         override fun systemZone(): ZoneId = ZoneId.systemDefault()

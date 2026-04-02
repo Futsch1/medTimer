@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.database.Reminder.ReminderType
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEntity.ReminderType
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.google.gson.annotations.Expose
 import java.util.Objects
 
@@ -14,8 +14,8 @@ val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.fil
 val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
     ReminderStatus.entries.filterNot { it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED }
 
-@Entity(indices = [Index("reminderId"), Index("remindedTimestamp")])
-class ReminderEvent {
+@Entity(tableName = "ReminderEvent", indices = [Index("reminderId"), Index("remindedTimestamp")])
+class ReminderEventEntity {
     @PrimaryKey(autoGenerate = true)
     var reminderEventId: Int = 0
 
@@ -81,7 +81,7 @@ class ReminderEvent {
         get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE || reminderType == ReminderType.REFILL
 
     override fun equals(other: Any?): Boolean {
-        if (other !is ReminderEvent) return false
+        if (other !is ReminderEventEntity) return false
         return membersEqual(other)
     }
 
@@ -108,7 +108,7 @@ class ReminderEvent {
         )
     }
 
-    private fun membersEqual(other: ReminderEvent): Boolean {
+    private fun membersEqual(other: ReminderEventEntity): Boolean {
         return reminderEventId == other.reminderEventId &&
                 medicineName == other.medicineName &&
                 amount == other.amount && color == other.color && useColor == other.useColor && status == other.status && remindedTimestamp == other.remindedTimestamp && processedTimestamp == other.processedTimestamp && reminderId == other.reminderId && notificationId == other.notificationId && iconId == other.iconId && remainingRepeats == other.remainingRepeats && stockHandled == other.stockHandled && askForAmount == other.askForAmount &&

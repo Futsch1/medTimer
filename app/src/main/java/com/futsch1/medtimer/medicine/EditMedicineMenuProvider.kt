@@ -7,9 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.medicine.tags.TagsFragment
@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class EditMedicineMenuProvider(
-    private val medicine: Medicine,
+    private val medicine: MedicineEntity,
     private val fragment: EditMedicineFragment,
     private val medicineRepository: MedicineRepository,
     private val navController: NavController,
@@ -114,7 +114,7 @@ class EditMedicineMenuProvider(
 
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val reminders: List<Reminder> =
+            val reminders: List<ReminderEntity> =
                 medicineRepository.getReminders(medicine.medicineId)
             com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineRepository, active)
         }

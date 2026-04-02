@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.helpers.MedicineIcons
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -23,7 +23,7 @@ abstract class NotificationFactory(
     private val medicineIcons: MedicineIcons,
     private val context: Context,
     protected val notificationId: Int,
-    medicines: List<Medicine>,
+    medicines: List<MedicineEntity>,
     notificationManager: NotificationManager
 ) {
     val builder: NotificationCompat.Builder
@@ -46,12 +46,12 @@ abstract class NotificationFactory(
         builder.setSilent(shouldBeSilent())
     }
 
-    private fun getIcon(medicines: List<Medicine>): Bitmap? {
+    private fun getIcon(medicines: List<MedicineEntity>): Bitmap? {
         val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.toList()
         return medicineIcons.getIconsBitmap(iconIds)
     }
 
-    private fun getHighestImportance(medicines: List<Medicine>): Importance {
+    private fun getHighestImportance(medicines: List<MedicineEntity>): Importance {
         for (medicine in medicines) {
             if (medicine.notificationImportance == Importance.HIGH.value)
                 return Importance.HIGH
@@ -59,7 +59,7 @@ abstract class NotificationFactory(
         return Importance.DEFAULT
     }
 
-    private fun getColor(medicines: List<Medicine>): Color? {
+    private fun getColor(medicines: List<MedicineEntity>): Color? {
         var color: Color? = null
         for (medicine in medicines) {
             if (medicine.useColor) {

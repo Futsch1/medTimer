@@ -2,8 +2,8 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
@@ -24,7 +24,11 @@ import kotlin.test.assertEquals
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
-@dagger.hilt.android.testing.UninstallModules(com.futsch1.medtimer.di.DatabaseModule::class, com.futsch1.medtimer.di.DatastoreModule::class, com.futsch1.medtimer.di.TimeAccessModule::class)
+@dagger.hilt.android.testing.UninstallModules(
+    com.futsch1.medtimer.di.DatabaseModule::class,
+    com.futsch1.medtimer.di.DatastoreModule::class,
+    com.futsch1.medtimer.di.TimeAccessModule::class
+)
 class RefillProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -91,7 +95,7 @@ class RefillProcessorTest {
         assertEquals(10, reminderContext.medicineRepositoryFake.reminderEvents[0].processedTimestamp)
         assertEquals(10, reminderContext.medicineRepositoryFake.reminderEvents[0].remindedTimestamp)
         assertEquals("100 ➡ 110", reminderContext.medicineRepositoryFake.reminderEvents[0].amount)
-        assertEquals(Reminder.ReminderType.REFILL, reminderContext.medicineRepositoryFake.reminderEvents[0].reminderType)
+        assertEquals(ReminderEntity.ReminderType.REFILL, reminderContext.medicineRepositoryFake.reminderEvents[0].reminderType)
     }
 
     @Test
@@ -107,6 +111,6 @@ class RefillProcessorTest {
         }
 
         assertEquals(110.0, reminderContext.medicineRepositoryFake.medicines[0].amount)
-        assertEquals(ReminderEvent.ReminderStatus.ACKNOWLEDGED, reminderContext.medicineRepositoryFake.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderStatus.ACKNOWLEDGED, reminderContext.medicineRepositoryFake.reminderEvents[0].status)
     }
 }

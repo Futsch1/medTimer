@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import org.junit.Test
@@ -19,10 +19,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: List<ReminderEvent> = mutableListOf()
+        val reminderEventList: List<ReminderEventEntity> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(1, scheduledReminders.size)
@@ -40,10 +40,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked.linkedReminderId = 1
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
         // Reminder 1 only raised, but not processed
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
@@ -109,10 +109,10 @@ class ReminderSchedulerLinkedUnitTest {
         reminderLinked2.linkedReminderId = 2
         medicineWithReminders.reminders.add(reminderLinked2)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
             scheduledReminders,

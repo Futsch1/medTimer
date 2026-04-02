@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -39,16 +39,16 @@ class EditEventViewModel @Inject constructor(
 
     private val reminderEventId: Int = checkNotNull(savedStateHandle[ARG_REMINDER_EVENT_ID])
     private val zoneId = ZoneId.systemDefault()
-    private var storedEvent: ReminderEvent? = null
+    private var storedEvent: ReminderEventEntity? = null
 
     val medicineName = MutableStateFlow("")
     val amount = MutableStateFlow("")
     val notes = MutableStateFlow("")
 
-    var status: ReminderEvent.ReminderStatus? = null
+    var status: ReminderEventEntity.ReminderStatus? = null
 
-    private val _reminderStatus = MutableStateFlow<ReminderEvent.ReminderStatus?>(null)
-    val reminderStatus: StateFlow<ReminderEvent.ReminderStatus?> = _reminderStatus.asStateFlow()
+    private val _reminderStatus = MutableStateFlow<ReminderEventEntity.ReminderStatus?>(null)
+    val reminderStatus: StateFlow<ReminderEventEntity.ReminderStatus?> = _reminderStatus.asStateFlow()
 
     private val _remindedMinutes = MutableStateFlow(0)
     var remindedMinutes: Int
@@ -101,8 +101,8 @@ class EditEventViewModel @Inject constructor(
                     amount.value = event.amount
                     notes.value = event.notes
                     status = when (event.status) {
-                        ReminderEvent.ReminderStatus.TAKEN -> ReminderEvent.ReminderStatus.TAKEN
-                        ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> ReminderEvent.ReminderStatus.SKIPPED
+                        ReminderEventEntity.ReminderStatus.TAKEN -> ReminderEventEntity.ReminderStatus.TAKEN
+                        ReminderEventEntity.ReminderStatus.SKIPPED, ReminderEventEntity.ReminderStatus.RAISED -> ReminderEventEntity.ReminderStatus.SKIPPED
                         else -> null
                     }
                     _remindedMinutes.value = timestampToMinutes(event.remindedTimestamp)

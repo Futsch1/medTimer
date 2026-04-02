@@ -4,8 +4,8 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,11 +18,11 @@ class MedicineStringFormatter @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val timeFormatter: TimeFormatter
 ) {
-    fun getMedicineNameWithStockText(fullMedicine: FullMedicine): SpannableStringBuilder {
+    fun getMedicineNameWithStockText(fullMedicine: FullMedicineEntity): SpannableStringBuilder {
         return getMedicineNameWithStockText(preferencesDataSource.preferences.value, fullMedicine)
     }
 
-    fun getMedicineNameWithStockText(userPreferences: UserPreferences, fullMedicine: FullMedicine): SpannableStringBuilder {
+    fun getMedicineNameWithStockText(userPreferences: UserPreferences, fullMedicine: FullMedicineEntity): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 MedicineHelper.getMedicineName(
@@ -36,7 +36,7 @@ class MedicineStringFormatter @Inject constructor(
         return builder
     }
 
-    private fun getStockTextWithIcons(fullMedicine: FullMedicine): SpannableStringBuilder {
+    private fun getStockTextWithIcons(fullMedicine: FullMedicineEntity): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
 
         val stockIconText = MedicineHelper.getStockIcons(fullMedicine)
@@ -53,7 +53,7 @@ class MedicineStringFormatter @Inject constructor(
         return builder
     }
 
-    fun getDatesText(fullMedicine: FullMedicine): SpannableStringBuilder {
+    fun getDatesText(fullMedicine: FullMedicineEntity): SpannableStringBuilder {
         val s = SpannableStringBuilder()
         val medicine = fullMedicine.medicine
 
@@ -78,7 +78,7 @@ class MedicineStringFormatter @Inject constructor(
         return s
     }
 
-    fun getStockText(medicine: Medicine): String {
+    fun getStockText(medicine: MedicineEntity): String {
         return context.getString(
             R.string.medicine_stock_string,
             MedicineHelper.formatAmount(medicine.amount, medicine.unit)

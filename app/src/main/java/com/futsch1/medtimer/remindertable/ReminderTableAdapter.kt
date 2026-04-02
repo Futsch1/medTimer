@@ -8,8 +8,8 @@ import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
@@ -80,7 +80,7 @@ class ReminderTableAdapter(
         return View(viewGroup.context)
     }
 
-    fun submitList(reminderEvents: List<ReminderEvent>) {
+    fun submitList(reminderEvents: List<ReminderEventEntity>) {
         val cells = mutableListOf<List<ReminderTableCellModel?>>()
         val rows = mutableListOf<ReminderTableCellModel?>()
         val formatter = timeFormatter
@@ -129,7 +129,7 @@ class ReminderTableAdapter(
     }
 
     private fun getStatusString(
-        reminderEvent: ReminderEvent,
+        reminderEvent: ReminderEventEntity,
         formatter: TimeFormatter
     ): String {
         return when (reminderEvent.status) {

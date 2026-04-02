@@ -1,15 +1,15 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 import kotlin.math.ceil
 
 open class IntervalScheduling(
-    reminder: Reminder,
-    reminderEventList: List<ReminderEvent>,
+    reminder: ReminderEntity,
+    reminderEventList: List<ReminderEventEntity>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
 
@@ -18,7 +18,7 @@ open class IntervalScheduling(
     }
 
     private fun getNextScheduledTimeInternal(): Instant? {
-        val lastReminderEvent: ReminderEvent? =
+        val lastReminderEvent: ReminderEventEntity? =
             findLastReminderEvent()
         return if (lastReminderEvent != null) {
             getNextIntervalTimeFromReminderEvent(lastReminderEvent)
@@ -27,7 +27,7 @@ open class IntervalScheduling(
         }
     }
 
-    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
+    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEventEntity): Instant? {
         val instant =
             if (reminder.intervalStartsFromProcessed) {
                 if (lastReminderEvent.processedTimestamp != 0L)

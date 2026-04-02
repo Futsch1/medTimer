@@ -2,10 +2,10 @@ package com.futsch1.medtimer
 
 import android.content.Context
 import android.text.format.DateFormat
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
@@ -58,12 +58,12 @@ class ReminderHelperTest {
         instantMock.`when`<Any> { Instant.now() }.thenReturn(instant)
 
         // Standard case
-        val medicine = FullMedicine()
-        medicine.medicine = Medicine("Test")
-        val reminder = Reminder(1)
+        val medicine = FullMedicineEntity()
+        medicine.medicine = MedicineEntity("Test")
+        val reminder = ReminderEntity(1)
         reminder.amount = "5"
         var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
-        val reminderEvent = ReminderEvent()
+        val reminderEvent = ReminderEventEntity()
         reminderEvent.remindedTimestamp = instant.toEpochMilli() / 1000
         reminderEvent.medicineName = "Test"
         reminderEvent.amount = "5"
@@ -113,10 +113,10 @@ class ReminderHelperTest {
         // Widget status
         Mockito.`when`(contextMock.getString(R.string.taken)).thenReturn("Taken")
         Mockito.`when`(contextMock.getString(R.string.skipped)).thenReturn("Skipped")
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (Taken)", resultReminder.toString())
-        reminderEvent.status = ReminderEvent.ReminderStatus.SKIPPED
+        reminderEvent.status = ReminderEventEntity.ReminderStatus.SKIPPED
         reminderEvent.amount = "6"
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (6 Skipped)", resultReminder.toString())
@@ -124,7 +124,7 @@ class ReminderHelperTest {
         // Test show taken time in overview
         Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(showTakenTimeInOverview = true)))
 
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
         reminderEvent.remindedTimestamp = instantZero.toEpochMilli() / 1000
         reminderEvent.processedTimestamp = instantLater.toEpochMilli() / 1000
         resultReminder = formatter.formatReminderEvent(reminderEvent)

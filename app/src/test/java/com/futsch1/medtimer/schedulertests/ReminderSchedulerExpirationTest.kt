@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
@@ -19,15 +19,15 @@ class ReminderSchedulerExpirationTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = 0
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
+        reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.ONCE
         reminder.periodStart = 3
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
@@ -43,15 +43,15 @@ class ReminderSchedulerExpirationTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
+        reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.ONCE
         reminder.periodStart = 1
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertTrue(scheduledReminders.isEmpty())
@@ -98,15 +98,15 @@ class ReminderSchedulerExpirationTest {
         val medicine = TestHelper.buildFullMedicine(1, "Test")
         medicine.medicine.expirationDate = TestHelper.on(3).toEpochDay()
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.expirationReminderType = Reminder.ExpirationReminderType.DAILY
+        reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.DAILY
         reminder.periodStart = 1
 
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
+        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicine)
 
-        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
 
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(

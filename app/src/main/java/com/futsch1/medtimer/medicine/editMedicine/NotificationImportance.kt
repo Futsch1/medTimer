@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.medicine.editMedicine
 
 import com.futsch1.medtimer.ReminderNotificationChannelManager
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineEntity
 
-fun importanceValueToIndex(medicine: Medicine): Int {
+fun importanceValueToIndex(medicine: MedicineEntity): Int {
     if (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.DEFAULT.value) {
         return 0
     }
@@ -13,7 +13,7 @@ fun importanceValueToIndex(medicine: Medicine): Int {
     return 0
 }
 
-fun importanceIndexToMedicine(index: Int, medicine: Medicine) {
+fun importanceIndexToMedicine(index: Int, medicine: MedicineEntity) {
     when (index) {
         0 -> {
             medicine.notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT.value

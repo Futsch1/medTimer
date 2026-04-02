@@ -2,12 +2,12 @@ package com.futsch1.medtimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineToTag
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.MedicineToTagEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -34,14 +34,14 @@ class MedicineViewModel @Inject constructor(
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
-    private var medicineToTags: List<MedicineToTag> = emptyList()
-    private val liveTags: StateFlow<List<Tag>> = medicineRepository.tagsFlow.stateIn(
+    private var medicineToTags: List<MedicineToTagEntity> = emptyList()
+    private val liveTags: StateFlow<List<TagEntity>> = medicineRepository.tagsFlow.stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
     )
 
     private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
 
-    val medicines: StateFlow<List<FullMedicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
+    val medicines: StateFlow<List<FullMedicineEntity>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
         getFiltered(medicines, tagIds ?: emptySet())
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
@@ -80,11 +80,11 @@ class MedicineViewModel @Inject constructor(
             .collect(Collectors.toList())
     }
 
-    fun filterEvents(events: List<ReminderEvent>): List<ReminderEvent> {
+    fun filterEvents(events: List<ReminderEventEntity>): List<ReminderEventEntity> {
         return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value)
     }
 
-    fun filterMedicines(medicines: List<FullMedicine>): List<FullMedicine> {
+    fun filterMedicines(medicines: List<FullMedicineEntity>): List<FullMedicineEntity> {
         return getFiltered(medicines, validTagIds.value ?: emptySet())
     }
 
@@ -93,10 +93,10 @@ class MedicineViewModel @Inject constructor(
     }
 
     private fun getFilteredEvents(
-        liveData: List<ReminderEvent>,
+        liveData: List<ReminderEventEntity>,
         validTagIds: Set<Int>,
-        liveTags: List<Tag>
-    ): List<ReminderEvent> {
+        liveTags: List<TagEntity>
+    ): List<ReminderEventEntity> {
         if (validTagIds.isEmpty()) {
             return liveData
         }
@@ -112,7 +112,7 @@ class MedicineViewModel @Inject constructor(
     }
 
     private fun getId(medicineWithReminder: Any): Int {
-        return if (medicineWithReminder is FullMedicine) {
+        return if (medicineWithReminder is FullMedicineEntity) {
             medicineWithReminder.medicine.medicineId
         } else {
             (medicineWithReminder as ScheduledReminder).medicine.medicine.medicineId
@@ -138,7 +138,7 @@ class MedicineViewModel @Inject constructor(
     fun getLiveReminderEvents(
         timeStamp: Long,
         statusValues: List<ReminderStatus> = allStatusValues
-    ): Flow<List<ReminderEvent>> {
+    ): Flow<List<ReminderEventEntity>> {
         return combine(
             medicineRepository.getReminderEventsFlow(timeStamp, statusValues),
             validTagIds,

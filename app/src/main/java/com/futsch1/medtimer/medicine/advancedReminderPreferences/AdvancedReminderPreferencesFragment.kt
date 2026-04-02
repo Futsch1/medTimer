@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
@@ -17,7 +17,7 @@ abstract class AdvancedReminderPreferencesFragment(
     links: Map<String, (Int) -> NavDirections>,
     customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
     simpleSummaryKeys: List<String>
-) : EntityPreferencesFragment<Reminder>(preferencesResId, links, customOnClick, simpleSummaryKeys) {
+) : EntityPreferencesFragment<ReminderEntity>(preferencesResId, links, customOnClick, simpleSummaryKeys) {
     @Inject
     lateinit var reminderDataStoreFactory: ReminderDataStore.Factory
 
@@ -26,7 +26,7 @@ abstract class AdvancedReminderPreferencesFragment(
 
     override suspend fun getEntityDataStore(
         requireArguments: Bundle
-    ): EntityDataStore<Reminder> {
+    ): EntityDataStore<ReminderEntity> {
         val entityId = requireArguments.getInt("reminderId")
         val entity = medicineRepository.getReminder(entityId)!!
 
@@ -35,9 +35,9 @@ abstract class AdvancedReminderPreferencesFragment(
 
     private val reminderViewModel: ReminderViewModel by viewModels()
 
-    override fun getEntityViewModel(): EntityViewModel<Reminder> = reminderViewModel
+    override fun getEntityViewModel(): EntityViewModel<ReminderEntity> = reminderViewModel
 
-    override fun customSetup(entity: Reminder) {
+    override fun customSetup(entity: ReminderEntity) {
         // Intentionally empty
     }
 }

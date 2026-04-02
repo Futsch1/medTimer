@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
@@ -34,7 +34,7 @@ internal class ReminderSchedulerWeekendModeTest {
         val reminder1 = buildReminder(1, 1, "1", 16, 1)
         medicineWithReminders1.reminders.add(reminder1)
 
-        val medicineList = mutableListOf<FullMedicine>()
+        val medicineList = mutableListOf<FullMedicineEntity>()
         medicineList.add(medicineWithReminders1)
         val scheduledReminders = scheduler.schedule(medicineList, emptyList())
         assertReminded(scheduledReminders, on(1, 16), medicineWithReminders1.medicine, reminder1)
@@ -63,7 +63,7 @@ internal class ReminderSchedulerWeekendModeTest {
             buildFullMedicine(1, ReminderSchedulerUnitTest.TEST_1)
         val reminder1 = buildReminder(1, 1, "1", 16, 1)
         medicineWithReminders1.reminders.add(reminder1)
-        val medicineList = mutableListOf<FullMedicine>()
+        val medicineList = mutableListOf<FullMedicineEntity>()
         medicineList.add(medicineWithReminders1)
 
         var scheduledReminders = scheduler.schedule(medicineList, emptyList())

@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
@@ -10,13 +10,13 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-data class SchedulingItem(val medicine: FullMedicine, val reminder: Reminder)
+data class SchedulingItem(val medicine: FullMedicineEntity, val reminder: ReminderEntity)
 
 typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double) -> Boolean
 
 class SchedulingSimulator(
-    medicines: List<FullMedicine>,
-    recentReminders: List<ReminderEvent>,
+    medicines: List<FullMedicineEntity>,
+    recentReminders: List<ReminderEventEntity>,
     timeAccess: TimeAccess,
     private val dataSource: PreferencesDataSource
 ) {
@@ -80,7 +80,7 @@ class SchedulingSimulator(
         return continueSimulating
     }
 
-    private fun doStockHandling(medicine: FullMedicine, reminder: Reminder) {
+    private fun doStockHandling(medicine: FullMedicineEntity, reminder: ReminderEntity) {
         val amount: Double? = MedicineHelper.parseAmount(reminder.amount)
         if (amount != null) {
             medicine.medicine.amount -= amount
@@ -91,14 +91,14 @@ class SchedulingSimulator(
     }
 
     private fun createReminderEvent(
-        reminder: Reminder,
+        reminder: ReminderEntity,
         nextScheduledTime: Instant
-    ): ReminderEvent {
-        val reminderEvent = ReminderEvent()
+    ): ReminderEventEntity {
+        val reminderEvent = ReminderEventEntity()
         reminderEvent.remindedTimestamp = nextScheduledTime.toEpochMilli() / 1000
         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
         reminderEvent.reminderId = reminder.reminderId
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
         return reminderEvent
     }
 

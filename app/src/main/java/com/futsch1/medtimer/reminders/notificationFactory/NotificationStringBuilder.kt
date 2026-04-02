@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -53,10 +53,12 @@ class NotificationStringBuilder(
         val fullMedicine = reminderNotificationPart.medicine
         if (fullMedicine.isStockManagementActive) {
             builder.append(separatorChar)
-            builder.append(context.getString(
-                R.string.medicine_stock_string,
-                MedicineHelper.formatAmount(fullMedicine.medicine.amount, fullMedicine.medicine.unit)
-            ))
+            builder.append(
+                context.getString(
+                    R.string.medicine_stock_string,
+                    MedicineHelper.formatAmount(fullMedicine.medicine.amount, fullMedicine.medicine.unit)
+                )
+            )
             if (showStockIcons) {
                 builder.append(MedicineHelper.getStockIcons(fullMedicine))
             }
@@ -76,8 +78,8 @@ class NotificationStringBuilder(
             .append(if (reminderNotificationPart.reminder.amount.isNotEmpty()) " (${reminderNotificationPart.reminder.amount})" else "")
     }
 
-    private fun getTagNames(tags: List<Tag>): String {
-        val tagNames = tags.stream().map { t: Tag? -> t!!.name }.collect(Collectors.toList())
+    private fun getTagNames(tags: List<TagEntity>): String {
+        val tagNames = tags.stream().map { t: TagEntity? -> t!!.name }.collect(Collectors.toList())
         return "\n" + java.lang.String.join(", ", tagNames)
     }
 }

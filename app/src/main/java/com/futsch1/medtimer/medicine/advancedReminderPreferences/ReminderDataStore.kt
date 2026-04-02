@@ -3,7 +3,7 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 import android.content.Context
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -17,16 +17,16 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ReminderDataStore @AssistedInject constructor(
-    @Assisted override var entity: Reminder,
+    @Assisted override var entity: ReminderEntity,
     @param:ApplicationContext private val context: Context,
     private val medicineRepository: MedicineRepository,
     private val timeFormatter: TimeFormatter,
     @param:ApplicationScope private val coroutineScope: CoroutineScope
-) : EntityDataStore<Reminder>() {
+) : EntityDataStore<ReminderEntity>() {
 
     @AssistedFactory
     interface Factory {
-        fun create(entity: Reminder): ReminderDataStore
+        fun create(entity: ReminderEntity): ReminderDataStore
     }
 
     override val entityId: Int get() = entity.reminderId
@@ -105,9 +105,9 @@ class ReminderDataStore @AssistedInject constructor(
             "interval_daily_start_time" -> entity.intervalStartTimeOfDay = timeFormatter.timeStringToMinutes(value!!)
             "interval_daily_end_time" -> entity.intervalEndTimeOfDay = timeFormatter.timeStringToMinutes(value!!)
             "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.outOfStockThreshold = it }
-            "stock_reminder" -> entity.outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()]
+            "stock_reminder" -> entity.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.entries[value!!.toInt()]
             "expiration_reminder" -> entity.expirationReminderType =
-                Reminder.ExpirationReminderType.entries[value!!.toInt()]
+                ReminderEntity.ExpirationReminderType.entries[value!!.toInt()]
 
             "expiration_days_before" -> value?.toLongOrNull()?.let { entity.periodStart = it }
         }
@@ -187,7 +187,7 @@ class ReminderDataStore @AssistedInject constructor(
         updateReminder(entity)
     }
 
-    private fun updateReminder(reminder: Reminder) {
+    private fun updateReminder(reminder: ReminderEntity) {
         coroutineScope.launch {
             medicineRepository.updateReminder(reminder)
         }

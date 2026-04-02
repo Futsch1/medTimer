@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import android.text.Spanned
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -33,7 +33,7 @@ class OverviewScheduledReminderEvent @AssistedInject constructor(
         get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
     override val state: OverviewState
         get() = OverviewState.PENDING
-    override val reminderType: Reminder.ReminderType
+    override val reminderType: ReminderEntity.ReminderType
         get() = scheduledReminder.reminder.reminderType
     override val reminderId: Int
         get() = scheduledReminder.reminder.reminderId

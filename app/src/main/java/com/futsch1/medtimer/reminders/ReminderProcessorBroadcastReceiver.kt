@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.ProcessorCode
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -62,17 +62,17 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
                 when (intentAction) {
                     ProcessorCode.Dismissed -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.SKIPPED
+                        ReminderEventEntity.ReminderStatus.SKIPPED
                     )
 
                     ProcessorCode.Taken -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.TAKEN
+                        ReminderEventEntity.ReminderStatus.TAKEN
                     )
 
                     ProcessorCode.Acknowledged -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.ACKNOWLEDGED
+                        ReminderEventEntity.ReminderStatus.ACKNOWLEDGED
                     )
 
                     ProcessorCode.Snooze -> processSnooze(intent)
@@ -143,7 +143,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
-        fun requestReminderAction(context: Context, reminder: Reminder?, reminderEvent: ReminderEvent, taken: Boolean) {
+        fun requestReminderAction(context: Context, reminder: ReminderEntity?, reminderEvent: ReminderEventEntity, taken: Boolean) {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
 
             if (taken) {
@@ -157,7 +157,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        fun requestStockReminderAcknowledged(context: Context, reminderEvent: ReminderEvent) {
+        fun requestStockReminderAcknowledged(context: Context, reminderEvent: ReminderEventEntity) {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
             context.sendBroadcast(getAcknowledgedActionIntent(context, processedNotificationData), RECEIVER_PERMISSION)
         }

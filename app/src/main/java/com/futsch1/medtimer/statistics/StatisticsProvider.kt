@@ -2,8 +2,8 @@ package com.futsch1.medtimer.statistics
 
 import com.androidplot.xy.SimpleXYSeries
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
 import java.time.Instant
 import java.time.LocalDate
@@ -39,7 +39,7 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
     }
 
     private fun eventStatusDaysFilter(
-        event: ReminderEvent,
+        event: ReminderEventEntity,
         days: Int,
         status: ReminderStatus
     ): Boolean {

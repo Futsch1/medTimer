@@ -2,10 +2,10 @@ package com.futsch1.medtimer
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
@@ -31,24 +31,24 @@ internal class CSVExportUnitTest {
     @Test
     fun testCreateCsvFileWithCorrectHeadersAndData() {
         val reminderEvents = mutableListOf(
-            ReminderEvent().apply {
+            ReminderEventEntity().apply {
                 // Set remindedTimestamp to a specific value
                 remindedTimestamp = 1620000000
                 processedTimestamp = 1620000120
                 medicineName = "Medicine 1"
                 amount = "10mg"
-                status = ReminderEvent.ReminderStatus.TAKEN
+                status = ReminderEventEntity.ReminderStatus.TAKEN
                 lastIntervalReminderTimeInMinutes = 134
                 tags = mutableListOf("Tag1", "Tag2")
                 notes = "Notes"
             },
-            ReminderEvent().apply {
+            ReminderEventEntity().apply {
                 // Set remindedTimestamp to a specific value
                 remindedTimestamp = 1620001800
                 processedTimestamp = 1620001980
                 medicineName = "Medicine 2"
                 amount = "20mg"
-                status = ReminderEvent.ReminderStatus.SKIPPED
+                status = ReminderEventEntity.ReminderStatus.SKIPPED
                 tags = emptyList()
             }
         )
@@ -79,7 +79,16 @@ internal class CSVExportUnitTest {
 
         // Create the CSVCreator object
         val csvEventExport =
-            CSVEventExport(reminderEvents, fragmentManager, context, Dispatchers.Unconfined, TimeFormatter(context, Mockito.mock<PreferencesDataSource>(), Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }))
+            CSVEventExport(
+                reminderEvents,
+                fragmentManager,
+                context,
+                Dispatchers.Unconfined,
+                TimeFormatter(
+                    context,
+                    Mockito.mock<PreferencesDataSource>(),
+                    Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+            )
 
         Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
             Mockito.mockStatic(android.text.format.DateFormat::class.java)
@@ -121,27 +130,27 @@ internal class CSVExportUnitTest {
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     fun testCreateMedicineCsvFileWithCorrectHeadersAndData() {
-        val thirdReminder = Reminder(2).apply {
+        val thirdReminder = ReminderEntity(2).apply {
             timeInMinutes = 62
             amount = "three"
         }
 
         // Create a list of Medicines
         val medicines = listOf(
-            FullMedicine().apply {
-                medicine = Medicine("Medicine 1")
+            FullMedicineEntity().apply {
+                medicine = MedicineEntity("Medicine 1")
                 reminders = mutableListOf(
-                    Reminder(1).apply {
+                    ReminderEntity(1).apply {
                         timeInMinutes = 60
                         amount = "1"
                     },
                     thirdReminder
                 )
             },
-            FullMedicine().apply {
-                medicine = Medicine("Medicine 2")
+            FullMedicineEntity().apply {
+                medicine = MedicineEntity("Medicine 2")
                 reminders = mutableListOf(
-                    Reminder(2).apply {
+                    ReminderEntity(2).apply {
                         timeInMinutes = 61
                         amount = "2"
                     },
@@ -237,7 +246,17 @@ internal class CSVExportUnitTest {
             .use { fileWriterMockedConstruction ->
                 val fragmentManager = Mockito.mock<FragmentManager>()
                 // Create the CSVCreator object
-                val csvEventExport = CSVEventExport(emptyList(), fragmentManager, context, Dispatchers.Unconfined, TimeFormatter(context, Mockito.mock<PreferencesDataSource>(), Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }))
+                val csvEventExport = CSVEventExport(
+                    emptyList(),
+                    fragmentManager,
+                    context,
+                    Dispatchers.Unconfined,
+                    TimeFormatter(
+                        context,
+                        Mockito.mock<PreferencesDataSource>(),
+                        Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>()
+                            .also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+                )
                 try {
                     // Call the create method
                     runBlocking { csvEventExport.exportInternal(file) }

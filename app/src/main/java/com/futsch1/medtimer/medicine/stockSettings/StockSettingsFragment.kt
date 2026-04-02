@@ -14,9 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
@@ -35,7 +35,7 @@ import java.text.DecimalFormatSymbols
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
+class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
     R.xml.stock_settings,
     mapOf(
     ),
@@ -82,22 +82,22 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
             }
         )
 
-    override suspend fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicine> {
+    override suspend fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicineEntity> {
         val entityId = requireArguments.getInt("medicineId")
         val entity = medicineRepository.getMedicine(entityId)!!
         return medicineDataStoreFactory.create(entity)
     }
 
-    override fun getEntityViewModel(): EntityViewModel<FullMedicine> = stockMedicineViewModel
+    override fun getEntityViewModel(): EntityViewModel<FullMedicineEntity> = stockMedicineViewModel
 
-    override fun customSetup(entity: FullMedicine) {
+    override fun customSetup(entity: FullMedicineEntity) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
 
         calculateRunOutDate(entity)
     }
 
-    override fun onEntityUpdated(entity: FullMedicine) {
+    override fun onEntityUpdated(entity: FullMedicineEntity) {
         super.onEntityUpdated(entity)
 
         calculateRunOutDate(entity)
@@ -126,7 +126,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
         }
     }
 
-    private fun calculateRunOutDate(entity: FullMedicine) {
+    private fun calculateRunOutDate(entity: FullMedicineEntity) {
         this.lifecycleScope.launch(ioDispatcher) {
             val runOutDate = estimateStockRunOutDate(medicineRepository, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource)
 
@@ -155,15 +155,15 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicine>(
     }
 
     private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {
-        val reminder = Reminder(dataStore.entity.medicine.medicineId)
+        val reminder = ReminderEntity(dataStore.entity.medicine.medicineId)
         reminder.outOfStockThreshold = if (dataStore.entity.medicine.amount > 0.0) dataStore.entity.medicine.amount else 1.0
-        reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
         newReminderStockDialogFactory.create(activity, dataStore.entity.medicine, reminder)
     }
 
     private fun showCreateNewReminderExpirationDateDialog(activity: FragmentActivity) {
-        val reminder = Reminder(dataStore.entity.medicine.medicineId)
-        reminder.expirationReminderType = Reminder.ExpirationReminderType.ONCE
+        val reminder = ReminderEntity(dataStore.entity.medicine.medicineId)
+        reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.ONCE
         newReminderStockDialogFactory.create(activity, dataStore.entity.medicine, reminder)
     }
 }

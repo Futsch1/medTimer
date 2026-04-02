@@ -12,9 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.Reminder.ReminderType
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEntity.ReminderType
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.AmountTextWatcher
@@ -53,11 +53,11 @@ class ReminderViewHolder @AssistedInject constructor(
     private val editTimeLayout: TextInputLayout = itemView.findViewById(R.id.editReminderTimeLayout)
     private val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
 
-    private lateinit var reminder: Reminder
+    private lateinit var reminder: ReminderEntity
     private var timeEditor: TimeEditor? = null
 
     @SuppressLint("SetTextI18n")
-    fun bind(reminder: Reminder, fullMedicine: FullMedicine) {
+    fun bind(reminder: ReminderEntity, fullMedicine: FullMedicineEntity) {
         this.reminder = reminder
 
         setupTimeEditor()
@@ -114,7 +114,7 @@ class ReminderViewHolder @AssistedInject constructor(
         }
     }
 
-    private fun onClickAdvancedSettings(reminder: Reminder) {
+    private fun onClickAdvancedSettings(reminder: ReminderEntity) {
         val navController = findNavController(itemView)
         val action =
             if (reminder.isOutOfStockOrExpirationReminder) {
@@ -189,7 +189,7 @@ class ReminderViewHolder @AssistedInject constructor(
         reminderTypeIcon.setOnClickListener { _: View? -> builder.create().show() }
     }
 
-    fun getUpdatedReminder(): Reminder {
+    fun getUpdatedReminder(): ReminderEntity {
         reminder.amount = editAmount.getText().toString().trim()
         if (timeEditor != null) {
             val minutes = timeEditor!!.getMinutes()

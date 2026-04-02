@@ -3,8 +3,8 @@ package com.futsch1.medtimer.medicine
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,19 +14,19 @@ import dagger.assisted.AssistedInject
 class ReminderViewAdapter @AssistedInject constructor(
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderViewHolderFactory: ReminderViewHolder.Factory
-) : IdlingListAdapter<Reminder, ReminderViewHolder>(ReminderDiff()) {
+) : IdlingListAdapter<ReminderEntity, ReminderViewHolder>(ReminderDiff()) {
     @AssistedFactory
     interface Factory {
         fun create(fragmentActivity: FragmentActivity): ReminderViewAdapter
     }
 
-    private var fullMedicine: FullMedicine? = null
+    private var fullMedicine: FullMedicineEntity? = null
 
     init {
         setHasStableIds(true)
     }
 
-    fun setMedicine(fullMedicine: FullMedicine) {
+    fun setMedicine(fullMedicine: FullMedicineEntity) {
         this.fullMedicine = fullMedicine
     }
 
@@ -46,12 +46,12 @@ class ReminderViewAdapter @AssistedInject constructor(
         return getItem(position).reminderId.toLong()
     }
 
-    class ReminderDiff : DiffUtil.ItemCallback<Reminder>() {
-        override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+    class ReminderDiff : DiffUtil.ItemCallback<ReminderEntity>() {
+        override fun areItemsTheSame(oldItem: ReminderEntity, newItem: ReminderEntity): Boolean {
             return oldItem.reminderId == newItem.reminderId
         }
 
-        override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+        override fun areContentsTheSame(oldItem: ReminderEntity, newItem: ReminderEntity): Boolean {
             return oldItem == newItem
         }
     }

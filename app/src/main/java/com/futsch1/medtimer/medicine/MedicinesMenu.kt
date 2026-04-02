@@ -5,7 +5,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
@@ -21,7 +21,7 @@ class MedicinesMenu @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
 
-    lateinit var medicines: List<FullMedicine>
+    lateinit var medicines: List<FullMedicineEntity>
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines_settings, menu)
@@ -44,7 +44,7 @@ class MedicinesMenu @Inject constructor(
         }
     }
 
-    private fun sortBy(sortFunction: (List<FullMedicine>) -> List<FullMedicine>) {
+    private fun sortBy(sortFunction: (List<FullMedicineEntity>) -> List<FullMedicineEntity>) {
         applicationScope.launch(dispatcher) {
             val medicines = sortFunction(medicines)
             medicines.stream().forEach { it.medicine.sortOrder = 1.0 + medicines.indexOf(it) }

@@ -1,19 +1,19 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
 class OutOfStockScheduling(
-    reminder: Reminder,
-    val medicine: Medicine,
-    reminderEventList: List<ReminderEvent>,
+    reminder: ReminderEntity,
+    val medicine: MedicineEntity,
+    reminderEventList: List<ReminderEventEntity>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
-        if (reminder.outOfStockReminderType == Reminder.OutOfStockReminderType.DAILY && medicine.amount <= reminder.outOfStockThreshold) {
+        if (reminder.outOfStockReminderType == ReminderEntity.OutOfStockReminderType.DAILY && medicine.amount <= reminder.outOfStockThreshold) {
             return getNextNotRemindedDay()
         }
         return null

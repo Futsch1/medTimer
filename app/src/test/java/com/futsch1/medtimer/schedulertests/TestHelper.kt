@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
@@ -19,8 +19,8 @@ object TestHelper {
         amount: String,
         timeInMinutes: Int,
         daysBetweenReminders: Int
-    ): Reminder {
-        val reminder = Reminder(medicineId)
+    ): ReminderEntity {
+        val reminder = ReminderEntity(medicineId)
         reminder.reminderId = reminderId
         reminder.amount = amount
         reminder.timeInMinutes = timeInMinutes
@@ -32,9 +32,9 @@ object TestHelper {
         return reminder
     }
 
-    fun buildFullMedicine(medicineId: Int, medicineName: String): FullMedicine {
-        val medicineWithReminders = FullMedicine()
-        medicineWithReminders.medicine = Medicine(medicineName)
+    fun buildFullMedicine(medicineId: Int, medicineName: String): FullMedicineEntity {
+        val medicineWithReminders = FullMedicineEntity()
+        medicineWithReminders.medicine = MedicineEntity(medicineName)
         medicineWithReminders.medicine.medicineId = medicineId
         medicineWithReminders.reminders = mutableListOf()
         return medicineWithReminders
@@ -56,8 +56,8 @@ object TestHelper {
         )
     }
 
-    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEvent {
-        val reminderEvent = ReminderEvent()
+    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity {
+        val reminderEvent = ReminderEventEntity()
         reminderEvent.reminderId = reminderId
         reminderEvent.remindedTimestamp = remindedTimestamp
         return reminderEvent
@@ -67,8 +67,8 @@ object TestHelper {
         reminderId: Int,
         remindedTimestamp: Long,
         reminderEventId: Int
-    ): ReminderEvent {
-        val reminderEvent = ReminderEvent()
+    ): ReminderEventEntity {
+        val reminderEvent = ReminderEventEntity()
         reminderEvent.reminderId = reminderId
         reminderEvent.remindedTimestamp = remindedTimestamp
         reminderEvent.reminderEventId = reminderEventId
@@ -78,8 +78,8 @@ object TestHelper {
     fun assertReminded(
         scheduledReminders: List<ScheduledReminder>,
         timestamp: Instant,
-        medicine: Medicine,
-        reminder: Reminder
+        medicine: MedicineEntity,
+        reminder: ReminderEntity
     ) {
         assertRemindedAtIndex(scheduledReminders, timestamp, medicine, reminder, 0)
     }
@@ -87,8 +87,8 @@ object TestHelper {
     fun assertRemindedAtIndex(
         scheduledReminders: List<ScheduledReminder>,
         timestamp: Instant,
-        medicine: Medicine,
-        reminder: Reminder,
+        medicine: MedicineEntity,
+        reminder: ReminderEntity,
         index: Int
     ) {
         assertTrue(scheduledReminders.size > index)

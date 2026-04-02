@@ -13,8 +13,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
@@ -96,7 +96,8 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editEventNotes.doAfterTextChanged { viewModel.notes.value = it?.toString() ?: "" }
 
         // Time/date display strings: reactive to picker changes
-        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }.launchIn(lifecycleScope)
+        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }
+            .launchIn(lifecycleScope)
         setupTimePicker(editEventRemindedTimestamp, { viewModel.remindedMinutes }, { viewModel.remindedMinutes = it })
 
         viewModel.remindedDateString.onEach { if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
@@ -105,8 +106,9 @@ class EditEventSheetDialogFragment : DialogFragment() {
         // Status-dependent UI: runs once when actual status arrives
         viewModel.reminderStatus.filterNotNull().take(1).onEach { status ->
             configureTakenText(editEventSheetDialog, status)
-            if (status != ReminderEvent.ReminderStatus.RAISED) {
-                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }.launchIn(lifecycleScope)
+            if (status != ReminderEventEntity.ReminderStatus.RAISED) {
+                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }
+                    .launchIn(lifecycleScope)
                 setupTimePicker(editEventTakenTimestamp, { viewModel.processedMinutes }, { viewModel.processedMinutes = it })
 
                 viewModel.processedDateString.onEach { if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
@@ -121,9 +123,9 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editEventToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 viewModel.status = if (checkedId == R.id.takenToggleButton)
-                    ReminderEvent.ReminderStatus.TAKEN
+                    ReminderEventEntity.ReminderStatus.TAKEN
                 else
-                    ReminderEvent.ReminderStatus.SKIPPED
+                    ReminderEventEntity.ReminderStatus.SKIPPED
             }
         }
 
@@ -141,10 +143,10 @@ class EditEventSheetDialogFragment : DialogFragment() {
         super.onDismiss(dialog)
     }
 
-    private fun setupToggleGroup(status: ReminderEvent.ReminderStatus) {
+    private fun setupToggleGroup(status: ReminderEventEntity.ReminderStatus) {
         when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> editEventToggleGroup.check(R.id.takenToggleButton)
-            ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> editEventToggleGroup.check(R.id.skippedToggleButton)
+            ReminderEventEntity.ReminderStatus.TAKEN -> editEventToggleGroup.check(R.id.takenToggleButton)
+            ReminderEventEntity.ReminderStatus.SKIPPED, ReminderEventEntity.ReminderStatus.RAISED -> editEventToggleGroup.check(R.id.skippedToggleButton)
             else -> editEventToggleGroup.visibility = View.GONE
         }
     }
@@ -152,7 +154,7 @@ class EditEventSheetDialogFragment : DialogFragment() {
     private fun setupTimePicker(editText: EditText, getMinutes: () -> Int, onTimePicked: (Int) -> Unit) {
         editText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) return@OnFocusChangeListener
-            val startMinutes = getMinutes().takeIf { it >= 0 } ?: Reminder.DEFAULT_TIME
+            val startMinutes = getMinutes().takeIf { it >= 0 } ?: ReminderEntity.DEFAULT_TIME
             timePickerDialogFactory.create(startMinutes / 60, startMinutes % 60) { minutes ->
                 try {
                     onTimePicked(minutes)
@@ -183,15 +185,16 @@ class EditEventSheetDialogFragment : DialogFragment() {
         }
     }
 
-    private fun configureTakenText(dialog: AppCompatDialog, status: ReminderEvent.ReminderStatus) {
+    private fun configureTakenText(dialog: AppCompatDialog, status: ReminderEventEntity.ReminderStatus) {
         val takenText = dialog.requireViewById<TextView>(R.id.takenText)
         when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> takenText.setText(R.string.taken)
-            ReminderEvent.ReminderStatus.SKIPPED -> takenText.setText(R.string.skipped)
-            ReminderEvent.ReminderStatus.ACKNOWLEDGED -> {
+            ReminderEventEntity.ReminderStatus.TAKEN -> takenText.setText(R.string.taken)
+            ReminderEventEntity.ReminderStatus.SKIPPED -> takenText.setText(R.string.skipped)
+            ReminderEventEntity.ReminderStatus.ACKNOWLEDGED -> {
                 takenText.setText(R.string.acknowledged)
                 dialog.findViewById<TextInputLayout>(R.id.editEventAmountLayout)?.hint = ""
             }
+
             else -> takenText.visibility = View.GONE
         }
     }

@@ -1,45 +1,45 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
 class SchedulingFactory {
     fun create(
-        reminder: Reminder,
-        medicine: Medicine,
-        reminderEvents: List<ReminderEvent>,
+        reminder: ReminderEntity,
+        medicine: MedicineEntity,
+        reminderEvents: List<ReminderEventEntity>,
         timeAccess: TimeAccess,
         dataSource: PreferencesDataSource
     ): Scheduling {
         val scheduler = when (reminder.reminderType) {
-            Reminder.ReminderType.LINKED -> {
+            ReminderEntity.ReminderType.LINKED -> {
                 LinkedScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
+            ReminderEntity.ReminderType.CONTINUOUS_INTERVAL -> {
                 IntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.WINDOWED_INTERVAL -> {
+            ReminderEntity.ReminderType.WINDOWED_INTERVAL -> {
                 WindowedIntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.TIME_BASED -> {
+            ReminderEntity.ReminderType.TIME_BASED -> {
                 StandardScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.OUT_OF_STOCK -> {
+            ReminderEntity.ReminderType.OUT_OF_STOCK -> {
                 OutOfStockScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.EXPIRATION_DATE -> {
+            ReminderEntity.ReminderType.EXPIRATION_DATE -> {
                 ExpirationDateScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.REFILL -> {
+            ReminderEntity.ReminderType.REFILL -> {
                 error("Refill reminder cannot be scheduled.")
             }
         }
