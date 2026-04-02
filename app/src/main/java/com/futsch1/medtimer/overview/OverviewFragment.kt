@@ -94,7 +94,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     override fun onResume() {
         super.onResume()
-        // Check if the day selector is still matching the present day, potentially resetting the day selection
         daySelector.updateWeekRange()
     }
 

@@ -138,7 +138,8 @@ class DaySelector(
     }
 
     fun updateWeekRange() {
-        if (startDay != LocalDate.now()) {
+        // Check if the day selector is still matching the present day, potentially resetting the day selection if a day has passed since
+        if (rangeStartDay != LocalDate.now().minusDays(5)) {
             startDay = LocalDate.now()
             rangeStartDay = startDay.minusDays(5)
             rangeEndDay = startDay.plusDays(1)
