@@ -20,7 +20,6 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import junit.framework.TestCase
@@ -39,7 +38,6 @@ import java.util.concurrent.atomic.AtomicReference
 class ReminderTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
-
     fun activeReminderTest() {
         val futureTime = Calendar.getInstance()
         val year = futureTime.get(Calendar.YEAR)
@@ -233,12 +231,12 @@ class ReminderTest : BaseTestHelper() {
             matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
         )
 
-        expectedString = TimeHelper.minutesToTimeString(context, (reminder1Time.toSecondOfDay() / 60).toLong())
+        expectedString = timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
         assertDisplayedAtPosition(R.id.reminderList, 1, R.id.editReminderTime, expectedString)
 
         expectedString = context.getString(
             R.string.linked_reminder_summary,
-            TimeHelper.minutesToTimeString(context, (reminder1Time.toSecondOfDay() / 60).toLong())
+            timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
         )
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString)
 
@@ -266,7 +264,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
         assertContains(R.id.reminderText, "Test (1)")
-        expectedString = TimeHelper.minutesToTimeString(context, (reminder1Time.toSecondOfDay() / 60).toLong())
+        expectedString = timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
         assertContains(R.id.reminderText, expectedString)
 
         assertContains(R.id.reminderText, "Test (3)")
@@ -283,8 +281,6 @@ class ReminderTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun editReminderTest() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         AndroidTestHelper.createMedicine("Test")
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
@@ -301,10 +297,10 @@ class ReminderTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
         assertContains(R.id.editEventName, "Test")
         assertContains(R.id.editEventAmount, "12")
-        assertContains(R.id.editEventRemindedTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, now))
-        assertContains(R.id.editEventRemindedDate, TimeHelper.secondSinceEpochToDateString(context, now))
-        assertContains(R.id.editEventTakenTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, now))
-        assertContains(R.id.editEventTakenDate, TimeHelper.secondSinceEpochToDateString(context, now))
+        assertContains(R.id.editEventRemindedTimestamp, timeFormatter().secondsSinceEpochToTimeString(now))
+        assertContains(R.id.editEventRemindedDate, timeFormatter().secondSinceEpochToDateString(now))
+        assertContains(R.id.editEventTakenTimestamp, timeFormatter().secondsSinceEpochToTimeString(now))
+        assertContains(R.id.editEventTakenDate, timeFormatter().secondSinceEpochToDateString(now))
         assertContains(R.id.editEventNotes, "")
 
         clickOn(R.string.skipped)
@@ -322,12 +318,12 @@ class ReminderTest : BaseTestHelper() {
         assertContains(R.id.editEventNotes, "Test notes")
 
         val newReminded = now + 60 * 60 * 24 + 120
-        writeTo(R.id.editEventRemindedTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, newReminded))
-        writeTo(R.id.editEventRemindedDate, TimeHelper.secondSinceEpochToDateString(context, newReminded))
+        writeTo(R.id.editEventRemindedTimestamp, timeFormatter().secondsSinceEpochToTimeString(newReminded))
+        writeTo(R.id.editEventRemindedDate, timeFormatter().secondSinceEpochToDateString(newReminded))
 
         val newTaken = now + 60 * 60 * 48 + 180
-        writeTo(R.id.editEventTakenTimestamp, TimeHelper.secondsSinceEpochToTimeString(context, newTaken))
-        writeTo(R.id.editEventTakenDate, TimeHelper.secondSinceEpochToDateString(context, newTaken))
+        writeTo(R.id.editEventTakenTimestamp, timeFormatter().secondsSinceEpochToTimeString(newTaken))
+        writeTo(R.id.editEventTakenDate, timeFormatter().secondSinceEpochToDateString(newTaken))
 
         Espresso.pressBack()
 
@@ -339,9 +335,9 @@ class ReminderTest : BaseTestHelper() {
         tableView.set(baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table))
 
         var view = tableView.get()!!.cellRecyclerView.findViewWithTag<TextView>("time")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newReminded), view.getText())
+        TestCase.assertEquals(timeFormatter().secondsSinceEpochToDateTimeString(newReminded), view.getText())
         view = tableView.get()!!.cellRecyclerView.findViewWithTag("taken")
-        TestCase.assertEquals(TimeHelper.secondsSinceEpochToDateTimeString(context, newTaken), view.getText())
+        TestCase.assertEquals(timeFormatter().secondsSinceEpochToDateTimeString(newTaken), view.getText())
     }
 
     @Test
@@ -468,7 +464,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 21 * 60))
+        assertContains(timeFormatter().minutesToTimeString(21 * 60))
     }
 
     @Test
@@ -484,7 +480,7 @@ class ReminderTest : BaseTestHelper() {
         clickOn(R.id.rescheduleButton)
         AndroidTestHelper.setTime(19, 0, false)
 
-        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 19 * 60))
+        assertContains(timeFormatter().minutesToTimeString(19 * 60))
         assertCustomAssertionAtPosition(
             R.id.reminders,
             0,
@@ -499,7 +495,7 @@ class ReminderTest : BaseTestHelper() {
         clickOn(R.id.rescheduleButton)
         AndroidTestHelper.setTime(23, 0, false)
 
-        assertContains(TimeHelper.minutesToTimeString(InstrumentationRegistry.getInstrumentation().targetContext, 23 * 60))
+        assertContains(timeFormatter().minutesToTimeString(23 * 60))
         assertCustomAssertionAtPosition(
             R.id.reminders,
             0,

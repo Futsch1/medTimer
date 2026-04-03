@@ -4,18 +4,21 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
-import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.helpers.setAllRemindersActive
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MedicinesMenu(
-    private val medicineViewModel: MedicineViewModel,
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+class MedicinesMenu @Inject constructor(
+    private val medicineRepository: MedicineRepository,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
 
     lateinit var medicines: List<FullMedicine>
@@ -42,27 +45,25 @@ class MedicinesMenu(
     }
 
     private fun sortBy(sortFunction: (List<FullMedicine>) -> List<FullMedicine>) {
-        medicineViewModel.viewModelScope.launch(dispatcher) {
+        applicationScope.launch(dispatcher) {
             val medicines = sortFunction(medicines)
             medicines.stream().forEach { it.medicine.sortOrder = 1.0 + medicines.indexOf(it) }
-            medicineViewModel.medicineRepository.updateMedicines(medicines.stream().map { it.medicine }.toList())
+            medicineRepository.updateMedicines(medicines.stream().map { it.medicine }.toList())
         }
     }
 
     private fun setRemindersActive(active: Boolean) {
-        medicineViewModel.viewModelScope.launch(dispatcher) {
+        applicationScope.launch(dispatcher) {
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (fullMedicine in medicines) {
-                    val localMedicine = medicineViewModel.medicineRepository.getMedicine(fullMedicine.medicine.medicineId)
-                    setAllRemindersActive(localMedicine!!, medicineViewModel.medicineRepository, active)
+                    val localMedicine = medicineRepository.getMedicine(fullMedicine.medicine.medicineId)
+                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, medicineRepository, active)
                 }
             }
         }
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return false
-    }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
 
     companion object {
         fun setupMenu(

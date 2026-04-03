@@ -6,8 +6,8 @@ import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
 class WeekendModeSchedulingDecorator(
-    val scheduler: Scheduling,
-    val timeAccess: TimeAccess,
+    private val scheduler: Scheduling,
+    private val timeAccess: TimeAccess,
     private val dataSource: PreferencesDataSource
 ) :
     Scheduling {

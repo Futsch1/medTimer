@@ -9,7 +9,7 @@ import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.ActivityCodes.EXTRA_SNOOZE_TIME
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.model.DismissNotificationAction
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
@@ -24,8 +24,8 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class NotificationIntentBuilder @AssistedInject constructor(
-    val reminderContext: ReminderContext,
     @param:ApplicationContext private val context: Context,
+    private val preferencesDataSource: PreferencesDataSource,
     @Assisted val reminderNotification: ReminderNotification
 ) {
     @AssistedFactory
@@ -42,20 +42,11 @@ class NotificationIntentBuilder @AssistedInject constructor(
 
     val pendingDismiss = getDismissPendingIntent()
 
-    /**
-     * Creates a [PendingIntent] for the "taken" action of a reminder notification.
-     *
-     * If any reminder requires manual amount entry (askForAmount), it returns
-     * an activity intent to open the main activity to ask for the amount. Otherwise, it returns
-     * a broadcast intent to immediately mark the reminder as taken.
-     *
-     * @return The [PendingIntent] to be triggered when the user marks the reminder as taken.
-     */
     private fun getTakenPendingIntent(): PendingIntent {
         val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getVariableAmountActivityIntent(reminderContext.context, reminderNotification.reminderNotificationData)
+            val notifyTaken = getVariableAmountActivityIntent(context, reminderNotification.reminderNotificationData)
             PendingIntent.getActivity(
                 context,
                 reminderNotification.reminderNotificationData.notificationId,
@@ -63,8 +54,9 @@ class NotificationIntentBuilder @AssistedInject constructor(
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         } else {
-            val notifyTaken = getTakenActionIntent(reminderContext.context, processedNotificationData)
-            reminderContext.getPendingIntentBroadcast(
+            val notifyTaken = getTakenActionIntent(context, processedNotificationData)
+            PendingIntent.getBroadcast(
+                context,
                 reminderNotification.reminderNotificationData.notificationId,
                 notifyTaken,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -73,8 +65,9 @@ class NotificationIntentBuilder @AssistedInject constructor(
     }
 
     private fun getSkippedPendingIntent(): PendingIntent {
-        val notifySkipped = getSkippedActionIntent(reminderContext.context, processedNotificationData)
-        return reminderContext.getPendingIntentBroadcast(
+        val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
+        return PendingIntent.getBroadcast(
+            context,
             reminderNotification.reminderNotificationData.notificationId,
             notifySkipped,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -82,25 +75,26 @@ class NotificationIntentBuilder @AssistedInject constructor(
     }
 
     private fun getSnoozePendingIntent(): PendingIntent {
-        val snoozeDuration = reminderContext.preferencesDataSource.preferences.value.snoozeDuration
+        val snoozeDuration = preferencesDataSource.preferences.value.snoozeDuration
 
         return if (snoozeDuration.inWholeMinutes < 0) {
             val snooze = getCustomSnoozeActionIntent(
-                reminderContext.context, reminderNotification.reminderNotificationData
+                context, reminderNotification.reminderNotificationData
             )
             PendingIntent.getActivity(context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE)
         } else {
             val snooze = getSnoozeIntent(
-                reminderContext.context, reminderNotification.reminderNotificationData, snoozeDuration
+                context, reminderNotification.reminderNotificationData, snoozeDuration
             )
-            reminderContext.getPendingIntentBroadcast(
+            PendingIntent.getBroadcast(
+                context,
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {
-        if (reminderContext.preferencesDataSource.preferences.value.snoozeDuration.inWholeSeconds > 0) {
+        if (preferencesDataSource.preferences.value.snoozeDuration.inWholeSeconds > 0) {
             return null
         }
         val resultIntent = Intent(context, RemoteInputReceiver::class.java).apply {
@@ -109,14 +103,15 @@ class NotificationIntentBuilder @AssistedInject constructor(
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
         val resultPendingIntent =
-            reminderContext.getPendingIntentBroadcast(
+            PendingIntent.getBroadcast(
+                context,
                 reminderNotification.reminderNotificationData.notificationId,
                 resultIntent,
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-        val remoteInput = RemoteInput.Builder(EXTRA_SNOOZE_TIME).setLabel(reminderContext.getString(R.string.snooze_duration)).build()
+        val remoteInput = RemoteInput.Builder(EXTRA_SNOOZE_TIME).setLabel(context.getString(R.string.snooze_duration)).build()
         val action = NotificationCompat.Action.Builder(
-            R.drawable.hourglass_split, reminderContext.getString(R.string.snooze), resultPendingIntent
+            R.drawable.hourglass_split, context.getString(R.string.snooze), resultPendingIntent
         ).addRemoteInput(remoteInput).build()
 
         return action
@@ -131,14 +126,15 @@ class NotificationIntentBuilder @AssistedInject constructor(
         }
         reminderNotification.reminderNotificationData.toIntent(resultIntent)
 
-        val resultPendingIntent = reminderContext.getPendingIntentBroadcast(
+        val resultPendingIntent = PendingIntent.getBroadcast(
+            context,
             reminderNotification.reminderNotificationData.notificationId + 1000,
             resultIntent,
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val action = NotificationCompat.Action.Builder(
-            R.drawable.check2_circle, reminderContext.getString(R.string.taken), resultPendingIntent
+            R.drawable.check2_circle, context.getString(R.string.taken), resultPendingIntent
         )
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
@@ -147,7 +143,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
             }
             val remoteInput =
                 RemoteInput.Builder("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
-                    .setLabel("${reminderContext.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
+                    .setLabel("${context.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
             action.addRemoteInput(remoteInput)
         }
 
@@ -155,7 +151,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
-        return when (reminderContext.preferencesDataSource.preferences.value.dismissNotificationAction) {
+        return when (preferencesDataSource.preferences.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
                 pendingSkipped
             }

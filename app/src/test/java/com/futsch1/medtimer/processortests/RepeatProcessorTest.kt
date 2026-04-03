@@ -2,11 +2,14 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.di.DatabaseModule
+import com.futsch1.medtimer.di.DatastoreModule
+import com.futsch1.medtimer.di.TimeAccessModule
 import com.futsch1.medtimer.reminders.RepeatProcessor
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -26,6 +29,11 @@ import kotlin.time.Duration.Companion.seconds
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
+@UninstallModules(
+    DatabaseModule::class,
+    DatastoreModule::class,
+    TimeAccessModule::class
+)
 class RepeatProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -38,13 +46,40 @@ class RepeatProcessorTest {
     val reminderContext = TestReminderContext()
 
     @BindValue
-    val boundReminderContext: ReminderContext = reminderContext.mock
-
-    @BindValue
     val boundAlarmManager: AlarmManager = reminderContext.alarmManagerMock
 
     @BindValue
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
+
+    @BindValue
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.medicineRepositoryFake.mock
+
+    @BindValue
+    val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
+
+    @BindValue
+    val boundPersistentDataDataSource: com.futsch1.medtimer.preferences.PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
+
+    @BindValue
+    val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
+        override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
+        override fun localDate(): java.time.LocalDate = reminderContext.localDate
+        override fun now(): java.time.Instant = reminderContext.instant
+    }
+
+    @BindValue
+    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.DefaultPreferences
+    val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.MedTimerPreferencess
+    val boundMedTimerSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
 
     @Inject
     lateinit var repeatProcessor: RepeatProcessor

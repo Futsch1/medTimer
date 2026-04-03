@@ -4,7 +4,7 @@ import android.content.Context
 import com.futsch1.medtimer.R
 import javax.inject.Inject
 
-class NextRemindersWidgetProvider @Inject constructor(val nextRemindersLineProvider: NextRemindersLineProvider) : WidgetProvider() {
+class NextRemindersWidgetProvider @Inject constructor(private val nextRemindersLineProvider: NextRemindersLineProvider) : WidgetProvider() {
     override fun getWidgetImpl(context: Context): WidgetImpl {
         return WidgetImpl(
             context,

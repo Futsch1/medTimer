@@ -2,7 +2,6 @@ package com.futsch1.medtimer
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -37,6 +37,7 @@ import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -56,6 +57,8 @@ class OptionsMenu @AssistedInject constructor(
     private val csvMedicineExportFactory: CSVMedicineExport.Factory,
     private val pdfEventExportFactory: PDFEventExport.Factory,
     private val csvEventExportFactory: CSVEventExport.Factory,
+    private val medicineRepository: MedicineRepository,
+    private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
     val tagsFragmentFactory: TagsFragment.Factory
@@ -114,7 +117,6 @@ class OptionsMenu @AssistedInject constructor(
             fragment.requireContext(),
             fragment,
             menu,
-            medicineViewModel,
             openFileLauncher,
             openDirectoryLauncher,
             fragment.parentFragmentManager
@@ -160,13 +162,13 @@ class OptionsMenu @AssistedInject constructor(
     private fun setupClearEvents() {
         val item = menu.findItem(R.id.clear_events)
         item.setOnMenuItemClickListener { _ ->
-            val builder = AlertDialog.Builder(context)
+            val builder = MaterialAlertDialogBuilder(context)
             builder.setTitle(R.string.confirm)
             builder.setMessage(R.string.are_you_sure_delete_events)
             builder.setCancelable(false)
             builder.setPositiveButton(R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
-                    medicineViewModel.medicineRepository.deleteReminderEvents()
+                    medicineRepository.deleteReminderEvents()
                     requestScheduleNextNotification(context)
                 }
             }
@@ -208,9 +210,8 @@ class OptionsMenu @AssistedInject constructor(
             val menuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem: MenuItem? ->
                 idlingResource.setBusy()
                 fragment.lifecycleScope.launch(ioDispatcher) {
-                    medicineViewModel.medicineRepository.deleteAll()
-                    val generateTestData = GenerateTestData(medicineViewModel, menuItem === itemWithEvents)
-                    generateTestData.generateTestMedicine()
+                    medicineRepository.deleteAll()
+                    generateTestDataFactory.create(menuItem === itemWithEvents).generateTestMedicine()
                     requestScheduleNextNotification(context)
                     idlingResource.setIdle()
                 }
@@ -240,7 +241,7 @@ class OptionsMenu @AssistedInject constructor(
     private fun handleTagFilter() {
         if (!hideFilter) {
             fragment.lifecycleScope.launch(ioDispatcher) {
-                if (medicineViewModel.medicineRepository.hasTags()) {
+                if (medicineRepository.hasTags()) {
                     try {
                         withContext(mainDispatcher) {
                             setupTagFilter()
@@ -262,7 +263,7 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val reminderEvents: List<ReminderEvent> =
-            medicineViewModel.filterEvents(medicineViewModel.medicineRepository.allReminderEventsWithoutDeletedAndAcknowledged)
+            medicineViewModel.filterEvents(medicineRepository.getAllReminderEventsWithoutDeletedAndAcknowledged())
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
             fragment.getParentFragmentManager()
@@ -276,7 +277,7 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineViewModel.medicineRepository.medicines)
+        val medicines: List<FullMedicine> = medicineViewModel.filterMedicines(medicineRepository.getMedicines())
         val exporter = if (isCSV) csvMedicineExportFactory.create(medicines, fragment.getParentFragmentManager()) else pdfMedicineExportFactory.create(
             medicines,
             fragment.getParentFragmentManager()

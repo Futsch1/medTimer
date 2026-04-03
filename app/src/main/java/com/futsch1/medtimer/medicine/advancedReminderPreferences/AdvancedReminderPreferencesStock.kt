@@ -10,10 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +29,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     listOf("stock_threshold", "expiration_days_before")
 ) {
     @Inject
-    override lateinit var medicineRepository: MedicineRepository
+    lateinit var timeFormatter: TimeFormatter
 
     @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
@@ -74,7 +73,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
                         MedicineHelper.formatAmount(fullMedicine!!.medicine.amount, fullMedicine!!.medicine.unit)
                     findPreference<Preference>("medicine_expiration_date")?.summary = if (fullMedicine!!.medicine.expirationDate != 0L) {
 
-                        TimeHelper.daysSinceEpochToDateString(requireContext(), fullMedicine!!.medicine.expirationDate)
+                        timeFormatter.daysSinceEpochToDateString(fullMedicine!!.medicine.expirationDate)
                     } else {
                         context?.getString(R.string.never)
                     }

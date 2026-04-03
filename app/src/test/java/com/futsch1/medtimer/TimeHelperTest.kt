@@ -3,7 +3,8 @@ package com.futsch1.medtimer
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.os.LocaleList
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.LocaleContextAccessor
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
@@ -48,7 +49,6 @@ class TimeHelperTest {
     @Before
     fun setUp() {
         hiltRule.inject()
-        TimeHelper.onChangedUseSystemLocale()
     }
 
     @Test
@@ -58,15 +58,15 @@ class TimeHelperTest {
         val preferences = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
 
-        assertEquals(englishDataSecondOfJan2023, TimeHelper.localDateToString(context, LocalDate.of(2023, 1, 2)))
-        assertEquals(englishDataSecondOfJan2023, TimeHelper.secondSinceEpochToDateString(context, Instant.parse("2023-01-02T12:00:00Z").epochSecond))
-        assertEquals(englishDataSecondOfJan2023, TimeHelper.daysSinceEpochToDateString(context, LocalDate.of(2023, 1, 2).toEpochDay()))
+        val timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
 
-        TimeHelper.onChangedUseSystemLocale()
+        assertEquals(englishDataSecondOfJan2023, timeFormatter.localDateToString(LocalDate.of(2023, 1, 2)))
+        assertEquals(englishDataSecondOfJan2023, timeFormatter.secondSinceEpochToDateString(Instant.parse("2023-01-02T12:00:00Z").epochSecond))
+        assertEquals(englishDataSecondOfJan2023, timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay()))
+
         preferences.value = preferences.value.copy(systemLocale = true)
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        assertEquals(germanDateSecondOfJan2023, TimeHelper.localDateToString(context, LocalDate.of(2023, 1, 2)))
-        assertEquals(germanDateSecondOfJan2023, TimeHelper.secondSinceEpochToDateString(context, Instant.parse("2023-01-02T12:00:00Z").epochSecond))
-        assertEquals(germanDateSecondOfJan2023, TimeHelper.daysSinceEpochToDateString(context, LocalDate.of(2023, 1, 2).toEpochDay()))
+        assertEquals(germanDateSecondOfJan2023, timeFormatter.localDateToString(LocalDate.of(2023, 1, 2)))
+        assertEquals(germanDateSecondOfJan2023, timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay()))
     }
 }

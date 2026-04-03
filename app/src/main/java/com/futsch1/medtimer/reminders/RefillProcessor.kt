@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
@@ -11,9 +12,11 @@ import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.util.stream.Collectors
 import javax.inject.Inject
 
-class RefillProcessor @Inject constructor(val reminderContext: ReminderContext, val notificationProcessor: NotificationProcessor) {
-    private val medicineRepository = reminderContext.medicineRepository
-
+class RefillProcessor @Inject constructor(
+    private val notificationProcessor: NotificationProcessor,
+    private val medicineRepository: MedicineRepository,
+    private val timeAccess: TimeAccess
+) {
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
         val reminderEvent = medicineRepository.getReminderEvent(processedNotificationData.reminderEventIds[0])!!
         val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
@@ -40,14 +43,13 @@ class RefillProcessor @Inject constructor(val reminderContext: ReminderContext, 
         medicine.medicine.amount += medicine.medicine.refillSize
         Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.medicine.name} with ${medicine.medicine.refillSize} to amount ${medicine.medicine.amount}")
 
-        // Create refill reminder event
         return buildReminderEvent(medicine)
     }
 
     fun buildReminderEvent(medicine: FullMedicine): ReminderEvent {
         val reminderEvent = ReminderEvent()
         reminderEvent.reminderId = -1
-        reminderEvent.remindedTimestamp = reminderContext.timeAccess.now().toEpochMilli() / 1000
+        reminderEvent.remindedTimestamp = timeAccess.now().toEpochMilli() / 1000
         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
         reminderEvent.medicineName = medicine.medicine.name
         reminderEvent.color = medicine.medicine.color

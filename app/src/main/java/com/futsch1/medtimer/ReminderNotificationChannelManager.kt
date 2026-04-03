@@ -1,12 +1,11 @@
 package com.futsch1.medtimer
 
 import android.app.NotificationManager
-import com.futsch1.medtimer.reminders.ReminderContext
+import android.content.Context
 
 class ReminderNotificationChannelManager {
     companion object {
-        fun initialize(reminderContext: ReminderContext, notificationManager: NotificationManager) {
-            // Clean up previous notification settings
+        fun initialize(context: Context, notificationManager: NotificationManager) {
             var channelId = 1
             while (true) {
                 val channel = notificationManager.getNotificationChannel(
@@ -21,30 +20,29 @@ class ReminderNotificationChannelManager {
                 channelId++
             }
 
-            createChannel(reminderContext, notificationManager, Importance.DEFAULT)
-            createChannel(reminderContext, notificationManager, Importance.HIGH)
+            createChannel(context, notificationManager, Importance.DEFAULT)
+            createChannel(context, notificationManager, Importance.HIGH)
         }
 
         fun getNotificationChannel(
-            reminderContext: ReminderContext,
+            context: Context,
             notificationManager: NotificationManager,
             importance: Importance
         ): ReminderNotificationChannel {
-            return createChannel(reminderContext, notificationManager, importance)
+            return createChannel(context, notificationManager, importance)
         }
 
         private fun createChannel(
-            reminderContext: ReminderContext,
+            context: Context,
             notificationManager: NotificationManager,
             importance: Importance
         ): ReminderNotificationChannel {
-            val channel = ReminderNotificationChannel(
-                reminderContext,
+            return ReminderNotificationChannel(
+                context,
                 notificationManager,
                 importance.value,
                 if (importance == Importance.HIGH) R.string.high else R.string.default_
             )
-            return channel
         }
     }
 

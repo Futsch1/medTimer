@@ -8,26 +8,24 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.di.DataSourcesEntryPoint
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack
 import com.maltaisn.icondialog.pack.IconPackLoader
-import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.ceil
 
 
-class MedicineIcons(context: Context) {
+@Singleton
+class MedicineIcons @Inject constructor(@ApplicationContext context: Context, persistentDataDataSource: PersistentDataDataSource) {
     private val defaultDrawable = AppCompatResources.getDrawable(context, R.drawable.capsule)!!
     private var iconColor =
         context.getMaterialColor(
             com.google.android.material.R.attr.colorOnSurface,
             0
         )
-    private val persistentDataDataSource: PersistentDataDataSource by lazy {
-        // Bridge from non-Hilt to Hilt code
-        EntryPointAccessors.fromApplication(context, DataSourcesEntryPoint::class.java).getPersistentDataDataSource()
-    }
 
     init {
         IconPackLoader(context).load(R.xml.icon_pack)

@@ -23,7 +23,6 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.futsch1.medtimer.utilities.openNotification
@@ -34,7 +33,6 @@ import java.time.LocalTime
 import java.util.Calendar
 
 class MedicineStockTest : BaseTestHelper() {
-
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineStockTest() {
@@ -246,19 +244,17 @@ class MedicineStockTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun runOutDate() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("3", LocalTime.of(1, 0))
 
         clickOn(R.id.openStockTracking)
         clickOn(R.string.amount)
         setValue("10")
-        assertDisplayed(TimeHelper.localDateToString(context, LocalDate.now().plusDays(4)))
+        assertDisplayed(timeFormatter().localDateToString(LocalDate.now().plusDays(4)))
 
         clickOn(R.string.amount)
         setValue("13")
-        assertDisplayed(TimeHelper.localDateToString(context, LocalDate.now().plusDays(5)))
+        assertDisplayed(timeFormatter().localDateToString(LocalDate.now().plusDays(5)))
     }
 
     @Test

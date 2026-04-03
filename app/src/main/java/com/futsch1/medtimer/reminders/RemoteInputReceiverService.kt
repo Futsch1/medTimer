@@ -6,8 +6,8 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,15 +17,14 @@ import javax.inject.Singleton
 class RemoteInputReceiverService @Inject constructor(
     private val notificationProcessor: NotificationProcessor,
     private val medicineRepository: MedicineRepository,
-    private val reminderContext: ReminderContext,
+    private val reminderNotificationFactory: ReminderNotificationFactory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun handleVariableAmount(
         amountsByReminderEventId: Map<Int, String>,
         reminderNotificationData: ReminderNotificationData
     ) = withContext(ioDispatcher) {
-        val reminderNotification = ReminderNotification.fromReminderNotificationData(
-            reminderContext,
+        val reminderNotification = reminderNotificationFactory.create(
             reminderNotificationData
         ) ?: return@withContext
 

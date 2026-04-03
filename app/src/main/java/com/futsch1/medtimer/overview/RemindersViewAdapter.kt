@@ -4,15 +4,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.overview.actions.ActionsFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class RemindersViewAdapter(
-    diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
-    val fragmentActivity: FragmentActivity,
-    private val actionsFactory: ActionsFactory
+class RemindersViewAdapter @AssistedInject constructor(
+    @Assisted diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
+    @Assisted val fragmentActivity: FragmentActivity,
+    private val actionsFactory: ActionsFactory,
+    private val medicineIcons: MedicineIcons
 ) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder>(diffCallback),
     ReminderViewHolder.ClickDelegate {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, fragmentActivity: FragmentActivity): RemindersViewAdapter
+    }
 
     var selectionMode: Boolean = false
         set(value) {
@@ -30,7 +40,7 @@ class RemindersViewAdapter(
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        val holder = ReminderViewHolder.create(parent, fragmentActivity, this, actionsFactory)
+        val holder = ReminderViewHolder.create(parent, fragmentActivity, this, actionsFactory, medicineIcons)
         holder.contentContainer.setOnLongClickListener {
             clickListener?.onItemLongClick(holder.layoutPosition)
             true

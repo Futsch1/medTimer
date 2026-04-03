@@ -2,7 +2,6 @@ package com.futsch1.medtimer.preferences
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
-import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Build
@@ -19,6 +18,7 @@ import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -75,7 +75,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         preference =
             preferenceScreen.findPreference(OVERRIDE_DND)
         preference?.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, value: Any? ->
+            Preference.OnPreferenceChangeListener { _, value ->
                 if (true == value) {
                     showDndPermissions()
                 }
@@ -103,7 +103,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             preferenceScreen.findPreference<Preference?>(EXACT_REMINDERS) ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             preference.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _, newValue: Any? ->
+                Preference.OnPreferenceChangeListener { _, newValue ->
                     if (true == newValue) {
                         showExactReminderDialog()
                     }
@@ -134,7 +134,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     @RequiresApi(api = Build.VERSION_CODES.S)
     private fun showExactReminderDialog() {
         if (!alarmManager.canScheduleExactAlarms()) {
-            val builder = AlertDialog.Builder(activity)
+            val builder = MaterialAlertDialogBuilder(requireActivity())
             builder.setMessage(R.string.enable_alarm_dialog)
             builder.setPositiveButton(R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
@@ -168,7 +168,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun showDndPermissions() {
         if (!notificationManager.isNotificationPolicyAccessGranted) {
-            val builder = AlertDialog.Builder(activity)
+            val builder = MaterialAlertDialogBuilder(requireActivity())
             builder.setMessage(R.string.enable_dnd_dialog)
             builder.setPositiveButton(R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)

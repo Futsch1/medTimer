@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StockMedicineViewModel @Inject constructor(
-    override val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository
 ) : EntityViewModel<FullMedicine>() {
 
     override fun getFlow(id: Int): Flow<FullMedicine?> = medicineRepository.getMedicineFlow(id)

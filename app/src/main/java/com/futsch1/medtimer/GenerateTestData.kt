@@ -1,15 +1,28 @@
 package com.futsch1.medtimer
 
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.Tag
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.Instant
 import java.time.LocalDate
 import java.time.Period
 import java.util.LinkedList
 
-class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents: Boolean) {
+class GenerateTestData @AssistedInject constructor(
+    private val medicineRepository: MedicineRepository,
+    @Assisted val withEvents: Boolean
+) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(withEvents: Boolean): GenerateTestData
+    }
+
     suspend fun generateTestMedicine() {
         val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
@@ -43,15 +56,15 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine()
             medicine.sortOrder = sortOrder++
-            val medicineId = viewModel.medicineRepository.insertMedicine(medicine).toInt()
+            val medicineId = medicineRepository.insertMedicine(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
-                    viewModel.medicineRepository.insertReminder(testReminder.toReminder(medicineId))
+                    medicineRepository.insertReminder(testReminder.toReminder(medicineId))
                         .toInt()
             }
             for (tag in testMedicine.tags) {
-                val tagId = viewModel.medicineRepository.insertTag(Tag(tag))
-                viewModel.medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
+                val tagId = medicineRepository.insertTag(Tag(tag))
+                medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
             }
             if (withEvents) {
                 // Insert reminder events for every day back from today
@@ -73,7 +86,7 @@ class GenerateTestData(private val viewModel: MedicineViewModel, val withEvents:
                     }
                 }
 
-                viewModel.medicineRepository.insertReminderEvents(reminderEvents)
+                medicineRepository.insertReminderEvents(reminderEvents)
             }
         }
     }

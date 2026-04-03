@@ -1,16 +1,17 @@
 package com.futsch1.medtimer.overview
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,23 +22,29 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
-import javax.inject.Inject
 
-data class FilterState(val activeFilters: Set<OverviewFilter>, val day: LocalDate, val tick: Long)
-
-class OverviewViewModel @Inject constructor(
-    @param:ApplicationContext private val applicationContext: Context,
-    private val preferencesDataSource: PreferencesDataSource,
-    medicineViewModel: MedicineViewModel
+@HiltViewModel(assistedFactory = OverviewViewModel.Factory::class)
+class OverviewViewModel @AssistedInject constructor(
+    preferencesDataSource: PreferencesDataSource,
+    private val reminderEventFactory: OverviewReminderEvent.Factory,
+    private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
+    @Assisted private val reminderEvents: Flow<List<ReminderEvent>>,
+    @Assisted private val scheduledReminders: SharedFlow<List<ScheduledReminder>>
 ) : ViewModel() {
+    private data class FilterState(val activeFilters: Set<OverviewFilter>, val day: LocalDate, val tick: Long)
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            reminderEvents: Flow<List<ReminderEvent>>,
+            scheduledReminders: SharedFlow<List<ScheduledReminder>>
+        ): OverviewViewModel
+    }
+
     private var _initialized = false
     val initialized get() = _initialized
 
     private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
-
-    private val reminderEvents =
-        medicineViewModel.getLiveReminderEvents(Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60), statusValuesWithoutDelete)
-    private val scheduledReminders = medicineViewModel.scheduledReminders
 
     var day: LocalDate
         get() = filterState.value.day
@@ -82,13 +89,13 @@ class OverviewViewModel @Inject constructor(
 
         for (reminderEvent in events) {
             if (isReminderEventVisible(reminderEvent, filterState)) {
-                filteredOverviewEvents.add(create(applicationContext, preferencesDataSource, reminderEvent))
+                filteredOverviewEvents.add(reminderEventFactory.create(reminderEvent))
             }
         }
 
         for (scheduledReminder in reminders) {
             if (isScheduledReminderVisible(scheduledReminder, filterState)) {
-                filteredOverviewEvents.add(create(applicationContext, preferencesDataSource, scheduledReminder))
+                filteredOverviewEvents.add(scheduledReminderEventFactory.create(scheduledReminder))
             }
         }
 

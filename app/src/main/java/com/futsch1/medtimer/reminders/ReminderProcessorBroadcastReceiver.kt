@@ -116,14 +116,11 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val RECEIVER_PERMISSION = "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
 
-        @JvmStatic
         fun requestScheduleNextNotification(context: Context) {
             val intent = getRequestScheduleIntent(context)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
-        @JvmStatic
-        @JvmOverloads
         fun requestScheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
             AlarmProcessor.delay = delay
             AlarmProcessor.repeats = repeats

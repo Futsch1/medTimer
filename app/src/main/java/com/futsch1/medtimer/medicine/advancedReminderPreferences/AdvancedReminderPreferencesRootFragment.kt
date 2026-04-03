@@ -8,12 +8,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
@@ -25,21 +24,6 @@ import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
 
-
-fun showDateEdit(activity: FragmentActivity, preference: Preference, datePickerDialogFactory: DatePickerDialogFactory) {
-    val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
-
-    val currentDate = if (currentDateString != TimeHelper.daysSinceEpochToDateString(activity, 0)) {
-        TimeHelper.stringToLocalDate(activity, currentDateString)
-    } else {
-        LocalDate.now()
-    }
-
-    datePickerDialogFactory.create(currentDate) { daysSinceEpoch: Long ->
-        val newDateString = TimeHelper.daysSinceEpochToDateString(activity, daysSinceEpoch)
-        preference.preferenceDataStore?.putString(preference.key, newDateString)
-    }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
-}
 
 @AndroidEntryPoint
 class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragment(
@@ -65,9 +49,6 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
     @Inject
-    override lateinit var medicineRepository: MedicineRepository
-
-    @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
     @Inject
@@ -78,6 +59,9 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
 
     @Inject
     lateinit var reminderSummaryFormatter: ReminderSummaryFormatter
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
@@ -173,9 +157,9 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     private fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
         val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)
         if (currentTimeString != null) {
-            val currentTime = TimeHelper.timeStringToMinutes(activity, currentTimeString)
+            val currentTime = timeFormatter.timeStringToMinutes(currentTimeString)
             timePickerDialogFactory.create(currentTime / 60, currentTime % 60) { minutes: Int ->
-                val newTimeString = TimeHelper.minutesToTimeString(activity, minutes.toLong())
+                val newTimeString = timeFormatter.minutesToTimeString(minutes)
                 preference.preferenceDataStore?.putString(preference.key, newTimeString)
             }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
         }
@@ -184,7 +168,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     private fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
         val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
         if (currentDateString != null) {
-            val currentDateTime = TimeHelper.stringToSecondsSinceEpoch(activity, currentDateString)
+            val currentDateTime = timeFormatter.stringToSecondsSinceEpoch(currentDateString)
             val startInstant = Instant.ofEpochSecond(currentDateTime)
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
             datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
@@ -193,7 +177,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
                         LocalDate.ofEpochDay(daysSinceEpoch),
                         LocalTime.of(minutes / 60, minutes % 60)
                     )
-                    val timeString = TimeHelper.localeDateTimeToDateTimeString(activity, selectedLocalDateTime)
+                    val timeString = timeFormatter.localeDateTimeToDateTimeString(selectedLocalDateTime)
                     preference.preferenceDataStore?.putString(preference.key, timeString)
                 }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
             }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)

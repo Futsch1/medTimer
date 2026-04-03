@@ -3,6 +3,7 @@ package com.futsch1.medtimer.medicine.editors
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.textfield.TextInputEditText
@@ -19,7 +20,8 @@ class TimeEditor @AssistedInject constructor(
     @Assisted initialTimeMinutesOfDay: Int,
     @Assisted val timeChangedCallback: (minutes: Int) -> Unit,
     @Assisted private val durationHintText: Int?,
-    private val timePickerDialogFactory: TimePickerDialogFactory
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val timeFormatter: TimeFormatter
 ) {
     @AssistedFactory
     interface Factory {
@@ -34,12 +36,9 @@ class TimeEditor @AssistedInject constructor(
 
     init {
         timeEdit.setText(
-            if (durationHintText == null)
-                TimeHelper.minutesToTimeString(
-                    timeEdit.context,
-                    initialTimeMinutesOfDay.toLong()
-                ) else
-                TimeHelper.minutesToDurationString(initialTimeMinutesOfDay.toLong())
+            if (durationHintText == null) timeFormatter.minutesToTimeString(initialTimeMinutesOfDay) else TimeHelper.minutesToDurationString(
+                initialTimeMinutesOfDay
+            )
         )
 
         timeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
@@ -62,7 +61,7 @@ class TimeEditor @AssistedInject constructor(
         }
         timePickerDialogFactory
             .create(startMinutes / 60, startMinutes % 60, durationHintText!!, TimeFormat.CLOCK_24H) { minutes: Int ->
-                val selectedTime = TimeHelper.minutesToDurationString(minutes.toLong())
+                val selectedTime = TimeHelper.minutesToDurationString(minutes)
                 timeEdit.setText(selectedTime)
                 timeChangedCallback(minutes)
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -70,7 +69,7 @@ class TimeEditor @AssistedInject constructor(
 
     private fun editTime() {
         var startMinutes =
-            TimeHelper.timeStringToMinutes(timeEdit.context, timeEdit.getText().toString())
+            timeFormatter.timeStringToMinutes(timeEdit.getText().toString())
         if (startMinutes < 0) {
             startMinutes = Reminder.DEFAULT_TIME
         }
@@ -78,7 +77,7 @@ class TimeEditor @AssistedInject constructor(
             startMinutes / 60, startMinutes % 60
         ) { minutes: Int ->
             val selectedTime =
-                TimeHelper.minutesToTimeString(timeEdit.context, minutes.toLong())
+                timeFormatter.minutesToTimeString(minutes)
             timeEdit.setText(selectedTime)
             timeChangedCallback(minutes)
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -88,7 +87,7 @@ class TimeEditor @AssistedInject constructor(
         if (durationHintText != null) {
             return TimeHelper.durationStringToMinutes(timeEdit.getText().toString())
         }
-        return TimeHelper.timeStringToMinutes(timeEdit.context, timeEdit.getText().toString())
+        return timeFormatter.timeStringToMinutes(timeEdit.getText().toString())
     }
 
 }

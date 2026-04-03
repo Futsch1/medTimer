@@ -1,16 +1,21 @@
 package com.futsch1.medtimer.reminders.notificationFactory
 
+import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderContext
+import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationPart
 import java.util.stream.Collectors
 
 class NotificationStringBuilder(
-    val reminderContext: ReminderContext,
+    private val context: Context,
+    private val preferencesDataSource: PreferencesDataSource,
+    private val timeFormatter: TimeFormatter,
     val reminderNotification: ReminderNotification,
     val showStockIcons: Boolean = true
 ) {
@@ -32,7 +37,7 @@ class NotificationStringBuilder(
             builder.append(buildSingleNotificationString(reminderNotificationPart, reminderNotificationParts.size > 3))
             builder.append("\n")
         }
-        builder.append(reminderNotification.getRemindTime(reminderContext))
+        builder.append(reminderNotification.getRemindTime(timeFormatter))
         return builder
     }
 
@@ -45,16 +50,20 @@ class NotificationStringBuilder(
             builder.append("$separatorChar$instructions")
         }
 
-        if (reminderNotificationPart.medicine.isStockManagementActive) {
+        val fullMedicine = reminderNotificationPart.medicine
+        if (fullMedicine.isStockManagementActive) {
             builder.append(separatorChar)
-            builder.append(MedicineHelper.getStockText(reminderContext, reminderNotificationPart.medicine.medicine))
+            builder.append(context.getString(
+                R.string.medicine_stock_string,
+                MedicineHelper.formatAmount(fullMedicine.medicine.amount, fullMedicine.medicine.unit)
+            ))
             if (showStockIcons) {
-                builder.append(MedicineHelper.getStockIcons(reminderNotificationPart.medicine))
+                builder.append(MedicineHelper.getStockIcons(fullMedicine))
             }
         }
 
         if (!concise) {
-            builder.append(getTagNames(reminderNotificationPart.medicine.tags))
+            builder.append(getTagNames(fullMedicine.tags))
         }
 
         return builder
@@ -62,7 +71,7 @@ class NotificationStringBuilder(
 
     private fun buildSingleBaseString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
         val medicineNameString =
-            MedicineHelper.getMedicineName(reminderNotificationPart.medicine.medicine, true, reminderContext.preferencesDataSource.preferences.value)
+            MedicineHelper.getMedicineName(reminderNotificationPart.medicine.medicine, true, preferencesDataSource.preferences.value)
         return SpannableStringBuilder().bold { append(medicineNameString) }
             .append(if (reminderNotificationPart.reminder.amount.isNotEmpty()) " (${reminderNotificationPart.reminder.amount})" else "")
     }

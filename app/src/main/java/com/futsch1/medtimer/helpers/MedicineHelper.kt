@@ -1,19 +1,11 @@
 package com.futsch1.medtimer.helpers
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.model.UserPreferences
-import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
-import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.regex.Pattern
@@ -21,93 +13,23 @@ import java.util.regex.Pattern
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
 
-
     fun normalizeMedicineName(medicineName: String): String {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
     }
 
-    @SuppressLint("DefaultLocale")
-    fun getMedicineNameWithStockTextInternal(
-        context: Context,
-        userPreferences: UserPreferences,
-        fullMedicine: FullMedicine
-    ): SpannableStringBuilder {
-        val builder = SpannableStringBuilder().bold {
-            append(
-                getMedicineName(
-                    fullMedicine.medicine,
-                    false,
-                    userPreferences
-                )
-            )
+    fun getMedicineName(
+        medicine: Medicine,
+        notification: Boolean,
+        userPreferences: UserPreferences
+    ): String {
+        return if (userPreferences.hideMedicineName && notification) {
+            medicine.name[0] + "*".repeat(medicine.name.length - 1)
+        } else {
+            medicine.name
         }
-        builder.append(getStockTextWithIcons(context, fullMedicine))
-
-        return builder
     }
 
-    private fun getStockTextWithIcons(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
-        val builder = SpannableStringBuilder()
-
-        val stockIconText = getStockIcons(fullMedicine)
-        val stockText = if (fullMedicine.isStockManagementActive) getStockText(context, fullMedicine.medicine) else ""
-
-        if (stockIconText.isNotEmpty() || stockText.isNotEmpty()) {
-            builder.append(" (")
-            builder.append(stockText)
-            if (stockText.isNotEmpty() && stockIconText.isNotEmpty())
-                builder.append(" ")
-            builder.append(stockIconText)
-            builder.append(")")
-        }
-        return builder
-    }
-
-    fun getDatesText(context: Context, fullMedicine: FullMedicine): SpannableStringBuilder {
-        val s = SpannableStringBuilder()
-        val medicine = fullMedicine.medicine
-
-        if (medicine.productionDate != 0L) {
-            s.append(context.getString(R.string.production_date))
-            s.append(": ")
-            s.append(TimeHelper.daysSinceEpochToDateString(context, medicine.productionDate))
-        }
-        if (medicine.expirationDate != 0L) {
-            if (s.isNotEmpty()) {
-                s.append(", ")
-            }
-            s.append(context.getString(R.string.expiration_date))
-            s.append(": ")
-            s.append(TimeHelper.daysSinceEpochToDateString(context, medicine.expirationDate))
-            val expiredIcon = getExpiredIcon(fullMedicine)
-            if (expiredIcon.isNotEmpty()) {
-                s.append(" ")
-                s.append(expiredIcon)
-            }
-        }
-        return s
-    }
-
-
-    fun getStockText(reminderContext: ReminderContext, medicine: Medicine): String {
-        return reminderContext.getString(
-            R.string.medicine_stock_string,
-            formatAmount(medicine.amount, medicine.unit)
-        )
-    }
-
-
-    fun getStockText(context: Context, medicine: Medicine): String {
-        return context.getString(
-            R.string.medicine_stock_string,
-            formatAmount(medicine.amount, medicine.unit)
-        )
-    }
-
-
-    fun getStockIcons(
-        fullMedicine: FullMedicine
-    ): SpannableStringBuilder {
+    fun getStockIcons(fullMedicine: FullMedicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.isOutOfStock) {
             builder.color(0xffcc0000.toInt()) { bold { append("⚠") } }
@@ -122,38 +44,13 @@ object MedicineHelper {
         return builder
     }
 
-    fun getExpiredIcon(
-        fullMedicine: FullMedicine
-    ): SpannableStringBuilder {
+    fun getExpiredIcon(fullMedicine: FullMedicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         if (fullMedicine.medicine.hasExpired()) {
             builder.color(0xffcc0000.toInt()) { bold { append("\uD83D\uDEAB") } }
         }
         return builder
     }
-
-
-    fun getMedicineNameWithStockText(
-        context: Context,
-        preferencesDataSource: PreferencesDataSource,
-        fullMedicine: FullMedicine
-    ): SpannableStringBuilder {
-        return getMedicineNameWithStockTextInternal(context, preferencesDataSource.preferences.value, fullMedicine)
-    }
-
-    fun getMedicineName(
-        medicine: Medicine,
-        notification: Boolean,
-        userPreferences: UserPreferences
-    ): String {
-        return if (userPreferences.hideMedicineName && notification
-        ) {
-            medicine.name[0] + "*".repeat(medicine.name.length - 1)
-        } else {
-            medicine.name
-        }
-    }
-
 
     fun formatAmount(amount: Double, unit: String): String {
         val numberFormat = NumberFormat.getNumberInstance()
@@ -177,32 +74,4 @@ object MedicineHelper {
             null
         }
     }
-}
-
-class AmountTextWatcher(val textEditInputEditText: TextInputEditText) : TextWatcher {
-    override fun beforeTextChanged(
-        s: CharSequence?,
-        start: Int,
-        count: Int,
-        after: Int
-    ) {
-        // Intentionally empty
-    }
-
-    override fun onTextChanged(
-        s: CharSequence?,
-        start: Int,
-        before: Int,
-        count: Int
-    ) {
-        // Intentionally empty
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        if (MedicineHelper.parseAmount(s.toString()) == null) {
-            textEditInputEditText.error =
-                textEditInputEditText.context.getString(R.string.invalid_amount)
-        }
-    }
-
 }

@@ -18,7 +18,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -32,12 +31,11 @@ import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.hasBiometrics
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderContext
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -49,8 +47,6 @@ import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val medicineViewModel: MedicineViewModel by viewModels()
-
     @Inject
     lateinit var autostartService: AutostartService
     private var appBarConfiguration: AppBarConfiguration? = null
@@ -67,10 +63,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var backupManagerFactory: BackupManager.Factory
 
     @Inject
-    lateinit var reminderContext: ReminderContext
+    lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
-    lateinit var variableAmountHandler: VariableAmountHandler
+    lateinit var biometricsFactory: Biometrics.Factory
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -99,9 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         this.enableEdgeToEdge()
 
-        initialize(reminderContext, notificationManager)
-
-        TimeHelper.onChangedUseSystemLocale()
+        initialize(this, notificationManager)
 
         lifecycleScope.launch {
             authenticate(preferencesDataSource)
@@ -119,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun authenticate(preferencesDataSource: PreferencesDataSource) {
-        val biometrics = Biometrics(
+        val biometrics = biometricsFactory.create(
             this,
             {
                 lifecycleScope.launch {
@@ -128,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             }, {
                 this.finish()
             })
-        if (preferencesDataSource.preferences.value.appAuthentication && biometrics.hasBiometrics()) {
+        if (preferencesDataSource.preferences.value.appAuthentication && this.hasBiometrics()) {
             Log.d(LogTags.MAIN, "Start biometric authentication")
             biometrics.authenticate()
         } else {
@@ -235,7 +229,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        backupManagerFactory.create(this, this, null, medicineViewModel, null, null, supportFragmentManager).autoBackup()
+        backupManagerFactory.create(this, this, null, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
     }

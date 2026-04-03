@@ -29,13 +29,13 @@ import java.time.Instant
 
 
 class NewReminderDialog @AssistedInject constructor(
-    @Assisted val activity: FragmentActivity,
-    @Assisted val fullMedicine: FullMedicine,
-    @Assisted val reminder: Reminder,
-    val medicineRepository: MedicineRepository,
-    val timeEditorFactory: TimeEditor.Factory,
-    val dateTimeEditorFactory: DateTimeEditor.Factory,
-    val inputMethodManager: InputMethodManager
+    @Assisted private val activity: FragmentActivity,
+    @Assisted private val fullMedicine: FullMedicine,
+    @Assisted private val reminder: Reminder,
+    private val medicineRepository: MedicineRepository,
+    private val timeEditorFactory: TimeEditor.Factory,
+    private val dateTimeEditorFactory: DateTimeEditor.Factory,
+    private val inputMethodManager: InputMethodManager
 ) {
     @AssistedFactory
     interface Factory {

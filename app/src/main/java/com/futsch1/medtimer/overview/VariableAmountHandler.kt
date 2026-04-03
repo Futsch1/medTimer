@@ -10,9 +10,8 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.reminders.NotificationProcessor
-import com.futsch1.medtimer.reminders.ReminderContext
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,17 +21,14 @@ import javax.inject.Inject
 class VariableAmountHandler @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val notificationProcessor: NotificationProcessor,
-    private val reminderContext: ReminderContext,
+    private val reminderNotificationFactory: ReminderNotificationFactory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun show(activity: AppCompatActivity, intent: Intent) {
         val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
         val reminderNotification = withContext(ioDispatcher) {
-            ReminderNotification.fromReminderNotificationData(
-                reminderContext,
-                reminderNotificationData
-            )
+            reminderNotificationFactory.create(reminderNotificationData)
         } ?: return
 
         val reminderEvents = mutableListOf<ReminderEvent>()

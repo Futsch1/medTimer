@@ -2,7 +2,7 @@ package com.futsch1.medtimer.overview.actions
 
 import android.view.Menu
 
-class ActionsMenu(val menu: Menu, val actions: Actions) {
+class ActionsMenu(menu: Menu, val actions: Actions) {
 
     init {
         for (button in Button.entries) {

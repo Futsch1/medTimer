@@ -14,7 +14,6 @@ import com.evrencoskun.tableview.filter.Filter
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
-import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
@@ -47,7 +46,16 @@ class ReminderTableFragment : Fragment() {
         val adapter = ReminderTableAdapter(tableView, requireActivity().supportFragmentManager, timeFormatter)
 
         tableView.setAdapter(adapter)
-        adapter.setColumnHeaderItems(TableHelper.getTableHeadersForAnalysis(requireContext()))
+
+        val context = requireContext()
+        adapter.setColumnHeaderItems(
+            listOf(
+                context.getString(R.string.taken),
+                context.getString(R.string.name),
+                context.getString(R.string.dosage),
+                context.getString(R.string.reminded)
+            )
+        )
         viewLifecycleOwner.lifecycleScope.launch {
             medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
                 .collect { reminderEvents ->

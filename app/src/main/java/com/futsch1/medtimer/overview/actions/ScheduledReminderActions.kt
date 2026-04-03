@@ -2,56 +2,82 @@ package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 
-open class ScheduledReminderActions(
-    val event: OverviewScheduledReminderEvent,
-    medicineRepository: MedicineRepository,
-    private val fragmentActivity: FragmentActivity,
-    timePickerDialogFactory: TimePickerDialogFactory
-) : ActionsBase(fragmentActivity, medicineRepository, timePickerDialogFactory) {
-    init {
-        visibleButtons.add(Button.TAKEN)
-        visibleButtons.add(Button.SKIPPED)
-        visibleButtons.add(Button.RESCHEDULE)
+class ScheduledReminderActions @AssistedInject constructor(
+    @Assisted val event: OverviewScheduledReminderEvent,
+    @Assisted private val fragmentActivity: FragmentActivity,
+    private val reminderEventCreator: ReminderEventCreator,
+    private val timePickerDialogFactory: TimePickerDialogFactory
+) : Actions {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(event: OverviewScheduledReminderEvent, fragmentActivity: FragmentActivity): ScheduledReminderActions
     }
 
-    override suspend fun buttonClicked(button: Button) {
-        when (button) {
-            Button.TAKEN -> processFutureReminder(event.scheduledReminder, true)
-            Button.SKIPPED -> processFutureReminder(event.scheduledReminder, false)
-            Button.RESCHEDULE -> scheduleReminder(event.scheduledReminder)
-            Button.DELETE -> Unit
-            Button.RERAISE -> Unit
-            Button.ACKNOWLEDGED -> Unit
+    private val isStockEvent = event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder
+
+    override val visibleButtons: MutableList<Button> = mutableListOf()
+
+    init {
+        if (isStockEvent) {
+            visibleButtons.add(Button.ACKNOWLEDGED)
+            visibleButtons.add(Button.RESCHEDULE)
+        } else {
+            visibleButtons.add(Button.TAKEN)
+            visibleButtons.add(Button.SKIPPED)
+            visibleButtons.add(Button.RESCHEDULE)
         }
     }
 
-    protected fun scheduleReminder(scheduledReminder: ScheduledReminder) {
+    override suspend fun buttonClicked(button: Button) {
+        if (isStockEvent) {
+            when (button) {
+                Button.ACKNOWLEDGED -> processStockAcknowledged(event.scheduledReminder)
+                Button.RESCHEDULE -> scheduleReminder(event.scheduledReminder)
+                else -> Unit
+            }
+        } else {
+            when (button) {
+                Button.TAKEN -> processFutureReminder(event.scheduledReminder, true)
+                Button.SKIPPED -> processFutureReminder(event.scheduledReminder, false)
+                Button.RESCHEDULE -> scheduleReminder(event.scheduledReminder)
+                else -> Unit
+            }
+        }
+    }
+
+    private fun scheduleReminder(scheduledReminder: ScheduledReminder) {
         timePickerDialogFactory
             .create(scheduledReminder.reminder.timeInMinutes / 60, scheduledReminder.reminder.timeInMinutes % 60) { minutes ->
                 val reminderTimeStamp =
                     TimeHelper.instantFromDateAndMinutes(minutes, scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).epochSecond
-                fragmentActivity.lifecycleScope.launch(ioCoroutineDispatcher) {
-                    val reminderEvent = createReminderEvent(scheduledReminder, reminderTimeStamp)
-
+                fragmentActivity.lifecycleScope.launch {
+                    val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, reminderTimeStamp)
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
-    // Mark as suspend function as it performs async work and calls other suspend functions (withContext)
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
-        val reminderEvent = createReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestReminderAction(context, scheduledReminder.reminder, reminderEvent, taken)
+        val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, scheduledReminder.reminder, reminderEvent, taken)
+    }
+
+    private suspend fun processStockAcknowledged(scheduledReminder: ScheduledReminder) {
+        val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
+        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, reminderEvent)
     }
 }

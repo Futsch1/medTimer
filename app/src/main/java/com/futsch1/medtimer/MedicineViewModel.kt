@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
@@ -28,14 +27,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
-    database: MedicineRoomDatabase,
     persistentDataDataSource: PersistentDataDataSource,
-    // TODO: view model should not expose the repository to the view; the repository should be private
-    val medicineRepository: MedicineRepository,
+    private val medicineRepository: MedicineRepository,
 ) : ViewModel() {
     private val liveMedicines = medicineRepository.medicinesFlow
-
-    val databaseVersion: Int = database.version
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
@@ -56,7 +51,7 @@ class MedicineViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            medicineRepository.medicineToTagsFlow.collect {
+            medicineRepository.getMedicineToTagsFlow().collect {
                 medicineToTags = it
             }
         }

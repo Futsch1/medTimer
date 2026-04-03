@@ -25,7 +25,8 @@ class PDFMedicineExport @AssistedInject constructor(
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext val context: Context,
     private val timeFormatter: TimeFormatter,
-    private val reminderSummaryFormatter: ReminderSummaryFormatter
+    private val reminderSummaryFormatter: ReminderSummaryFormatter,
+    private val linkedReminderAlgorithms: LinkedReminderAlgorithms
 ) : Export(fragmentManager) {
 
     @AssistedFactory
@@ -55,7 +56,7 @@ class PDFMedicineExport @AssistedInject constructor(
     }
 
     private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
-        val reminders = LinkedReminderAlgorithms().sortRemindersList(activeReminders)
+        val reminders = linkedReminderAlgorithms.sortRemindersList(activeReminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {
                 continue

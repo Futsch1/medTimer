@@ -7,7 +7,6 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
@@ -53,10 +52,9 @@ class ReminderSummaryFormatterTest {
     @Before
     fun setUp() {
         hiltRule.inject()
-        TimeHelper.onChangedUseSystemLocale()
         mockMedicineRepository = mock()
         val app = RuntimeEnvironment.getApplication()
-        timeFormatter = TimeFormatter(app, mockPreferenceDataSource)
+        timeFormatter = TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.helpers.LocaleContextAccessor(app))
         formatter = ReminderSummaryFormatter(app, mockMedicineRepository, timeFormatter)
     }
 
@@ -127,16 +125,16 @@ class ReminderSummaryFormatterTest {
     }
 
     @Test
-    fun testFormatReminderSummaryLinked() = runBlocking {
+    fun testFormatReminderSummaryLinked() {
         val mockContext = mock<Context>()
         Mockito.`when`(mockContext.getString(Mockito.eq(R.string.linked_reminder_summary), Mockito.anyString()))
             .thenReturn("1")
 
         val mockTimeFormatter = mock<TimeFormatter>()
-        Mockito.`when`(mockTimeFormatter.minutesToTimeString(Mockito.anyLong())).thenReturn("0:02")
-        Mockito.`when`(mockTimeFormatter.minutesToDurationString(Mockito.anyLong()))
+        Mockito.`when`(mockTimeFormatter.minutesToTimeString(Mockito.anyInt())).thenReturn("0:02")
+        Mockito.`when`(mockTimeFormatter.minutesToDurationString(Mockito.anyInt()))
             .thenAnswer { invocation ->
-                val minutes = invocation.getArgument<Long>(0)
+                val minutes = invocation.getArgument<Int>(0)
                 "${minutes / 60}:${String.format("%02d", minutes % 60)}"
             }
 
@@ -144,17 +142,25 @@ class ReminderSummaryFormatterTest {
 
         val sourceReminder = Reminder(1)
         val sourceSourceReminder = Reminder(1)
-        Mockito.`when`(mockMedicineRepository.getReminder(2)).thenReturn(sourceReminder)
-        Mockito.`when`(mockMedicineRepository.getReminder(3)).thenReturn(sourceSourceReminder)
+        runBlocking {
+            Mockito.`when`(mockMedicineRepository.getReminder(2)).thenReturn(sourceReminder)
+        }
+        runBlocking {
+            Mockito.`when`(mockMedicineRepository.getReminder(3)).thenReturn(sourceSourceReminder)
+        }
 
         val reminder = Reminder(1)
         reminder.linkedReminderId = 2
 
-        assertEquals("1", linkedFormatter.formatReminderSummary(reminder))
+        runBlocking {
+            assertEquals("1", linkedFormatter.formatReminderSummary(reminder))
+        }
 
         sourceReminder.linkedReminderId = 3
         sourceReminder.timeInMinutes = 3
-        assertEquals("1 + 0:03", linkedFormatter.formatReminderSummary(reminder))
+        runBlocking {
+            assertEquals("1 + 0:03", linkedFormatter.formatReminderSummary(reminder))
+        }
     }
 
     @Test
@@ -166,8 +172,8 @@ class ReminderSummaryFormatterTest {
             .thenReturn("ok")
 
         val mockTimeFormatter = mock<TimeFormatter>()
-        Mockito.`when`(mockTimeFormatter.minutesToTimeString(2L)).thenReturn("0:02")
-        Mockito.`when`(mockTimeFormatter.minutesToTimeString(63L)).thenReturn("1:03")
+        Mockito.`when`(mockTimeFormatter.minutesToTimeString(2)).thenReturn("0:02")
+        Mockito.`when`(mockTimeFormatter.minutesToTimeString(63)).thenReturn("1:03")
 
         val simpleFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
 
@@ -194,9 +200,9 @@ class ReminderSummaryFormatterTest {
             .thenReturn("ok")
 
         val mockTimeFormatter = mock<TimeFormatter>()
-        Mockito.`when`(mockTimeFormatter.minutesToTimeString(2L)).thenReturn("0:02")
-        Mockito.`when`(mockTimeFormatter.minutesToDurationString(63L)).thenReturn("1:03")
-        Mockito.`when`(mockTimeFormatter.minutesToDurationString(144L)).thenReturn("2:24")
+        Mockito.`when`(mockTimeFormatter.minutesToTimeString(2)).thenReturn("0:02")
+        Mockito.`when`(mockTimeFormatter.minutesToDurationString(63)).thenReturn("1:03")
+        Mockito.`when`(mockTimeFormatter.minutesToDurationString(144)).thenReturn("2:24")
 
         val reminder = Reminder(1)
         reminder.reminderId = 1

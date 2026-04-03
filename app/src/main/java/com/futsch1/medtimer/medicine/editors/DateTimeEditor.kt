@@ -3,7 +3,7 @@ package com.futsch1.medtimer.medicine.editors
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
-import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.textfield.TextInputEditText
 import dagger.assisted.Assisted
@@ -20,7 +20,8 @@ class DateTimeEditor @AssistedInject constructor(
     @Assisted private val dateTimeEdit: TextInputEditText,
     @Assisted initialDateTimeSecondsSinceEpoch: Long,
     private val timePickerDialogFactory: TimePickerDialogFactory,
-    private val datePickerDialogFactory: DatePickerDialogFactory
+    private val datePickerDialogFactory: DatePickerDialogFactory,
+    private val timeFormatter: TimeFormatter
 ) {
     @AssistedFactory
     interface Factory {
@@ -33,8 +34,7 @@ class DateTimeEditor @AssistedInject constructor(
 
     init {
         dateTimeEdit.setText(
-            TimeHelper.secondsSinceEpochToDateTimeString(
-                fragmentActivity.baseContext,
+            timeFormatter.secondsSinceEpochToDateTimeString(
                 initialDateTimeSecondsSinceEpoch
             )
         )
@@ -58,8 +58,7 @@ class DateTimeEditor @AssistedInject constructor(
                             LocalTime.of(selectedTime / 60, selectedTime % 60)
                         )
                         dateTimeEdit.setText(
-                            TimeHelper.secondsSinceEpochToDateTimeString(
-                                fragmentActivity.baseContext,
+                            timeFormatter.secondsSinceEpochToDateTimeString(
                                 selectedLocalDateTime.toEpochSecond(
                                     ZoneId.systemDefault().rules.getOffset(
                                         selectedLocalDateTime
@@ -73,8 +72,7 @@ class DateTimeEditor @AssistedInject constructor(
     }
 
     fun getDateTimeSecondsSinceEpoch(): Long {
-        return TimeHelper.stringToSecondsSinceEpoch(
-            fragmentActivity.baseContext,
+        return timeFormatter.stringToSecondsSinceEpoch(
             dateTimeEdit.getText().toString()
         )
     }

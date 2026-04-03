@@ -1,32 +1,27 @@
 package com.futsch1.medtimer.medicine
 
-import com.futsch1.medtimer.MedicineViewModel
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
-fun estimateStockRunOutDate(
-    medicineViewModel: MedicineViewModel,
+suspend fun estimateStockRunOutDate(
+    medicineRepository: MedicineRepository,
     medicineId: Int,
     currentAmount: Double? = null,
-    preferencesDataSource: PreferencesDataSource
+    preferencesDataSource: PreferencesDataSource,
+    timeAccess: TimeAccess
 ): LocalDate? {
-    val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicineId) ?: return null
+    val fullMedicine = medicineRepository.getMedicine(medicineId) ?: return null
 
     if (currentAmount != null) {
         fullMedicine.medicine.amount = currentAmount
     }
     val recentReminders =
-        medicineViewModel.medicineRepository.getReminderEventsForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
-    val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, object : TimeAccess {
-        override fun systemZone(): ZoneId = ZoneId.systemDefault()
-        override fun localDate(): LocalDate = LocalDate.now()
-        override fun now(): Instant = Instant.now()
-    }, preferencesDataSource)
+        medicineRepository.getReminderEventsForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+    val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, timeAccess, preferencesDataSource)
     val endDate = LocalDate.now().plusDays(365 * 2)
     var runOutDate: LocalDate? = null
 

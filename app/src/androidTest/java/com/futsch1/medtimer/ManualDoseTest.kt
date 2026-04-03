@@ -1,6 +1,10 @@
 package com.futsch1.medtimer
 
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
@@ -11,6 +15,7 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import org.hamcrest.Matchers.hasToString
 import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
@@ -65,8 +70,8 @@ class ManualDoseTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
         clickOn(R.id.logManualDose)
-        assertContains(R.id.entry_text, "Selen (200 µg) (1)")
-        clickOn("Selen (200 µg) (1)")
+        onData(hasToString("Selen (200 µg) (1)")).check(matches(isDisplayed()))
+        onData(hasToString("Selen (200 µg) (1)")).perform(click())
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
     }
 

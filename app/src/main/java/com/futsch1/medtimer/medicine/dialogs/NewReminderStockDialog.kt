@@ -26,11 +26,11 @@ import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
 
 class NewReminderStockDialog @AssistedInject constructor(
-    @Assisted val activity: FragmentActivity,
-    @Assisted val medicine: Medicine,
-    @Assisted val reminder: Reminder,
-    val medicineRepository: MedicineRepository,
-    val timeEditorFactory: TimeEditor.Factory
+    @Assisted private val activity: FragmentActivity,
+    @Assisted private val medicine: Medicine,
+    @Assisted private val reminder: Reminder,
+    private val medicineRepository: MedicineRepository,
+    private val timeEditorFactory: TimeEditor.Factory
 ) {
     @AssistedFactory
     interface Factory {

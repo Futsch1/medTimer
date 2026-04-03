@@ -5,10 +5,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class EditMedicineMenuProvider(
     private val medicine: Medicine,
     private val fragment: EditMedicineFragment,
-    private val medicineViewModel: MedicineViewModel,
+    private val medicineRepository: MedicineRepository,
     private val navController: NavController,
     private val tagsFragmentFactory: TagsFragment.Factory,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -41,7 +41,7 @@ class EditMedicineMenuProvider(
             fragment.lifecycleScope.launch(dispatcher) {
                 val oldMedicineId = medicine.medicineId
                 medicine.medicineId = 0
-                val newMedicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+                val newMedicineId = medicineRepository.insertMedicine(medicine).toInt()
                 assignTags(oldMedicineId, newMedicineId)
             }
             navController.navigateUp()
@@ -57,21 +57,21 @@ class EditMedicineMenuProvider(
     }
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineViewModel.medicineRepository.getMedicine(oldMedicineId)!!
+        val oldFullMedicine = medicineRepository.getMedicine(oldMedicineId)!!
         for (oldTag in oldFullMedicine.tags) {
-            medicineViewModel.medicineRepository.insertMedicineToTag(newMedicineId, oldTag.tagId)
+            medicineRepository.insertMedicineToTag(newMedicineId, oldTag.tagId)
         }
     }
 
     private suspend fun duplicateIncludingReminders() {
-        val fullMedicine = medicineViewModel.medicineRepository.getMedicine(medicine.medicineId)!!
+        val fullMedicine = medicineRepository.getMedicine(medicine.medicineId)!!
         val oldMedicineId = medicine.medicineId
         medicine.medicineId = 0
-        val newMedicineId = medicineViewModel.medicineRepository.insertMedicine(medicine).toInt()
+        val newMedicineId = medicineRepository.insertMedicine(medicine).toInt()
         for (reminder in fullMedicine.reminders) {
             reminder.reminderId = 0
             reminder.medicineRelId = newMedicineId
-            medicineViewModel.medicineRepository.insertReminder(reminder)
+            medicineRepository.insertReminder(reminder)
         }
         assignTags(oldMedicineId, newMedicineId)
     }
@@ -84,7 +84,7 @@ class EditMedicineMenuProvider(
                 {
                     fragment.lifecycleScope.launch {
 
-                        medicineViewModel.medicineRepository.deleteMedicine(medicine.medicineId)
+                        medicineRepository.deleteMedicine(medicine.medicineId)
                         navController.navigateUp()
                     }
                 },
@@ -96,7 +96,7 @@ class EditMedicineMenuProvider(
     }
 
     private fun setupLinksMenu(menu: Menu) {
-        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineViewModel.medicineRepository, tagsFragmentFactory)
+        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineRepository, tagsFragmentFactory)
         val idToSubmenu: Map<Int, EditMedicineSubmenus.Submenu> = mapOf(
             R.id.openCalendar to EditMedicineSubmenus.Submenu.CALENDAR,
             R.id.openStockTracking to EditMedicineSubmenus.Submenu.STOCK_TRACKING,
@@ -115,8 +115,8 @@ class EditMedicineMenuProvider(
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch(dispatcher) {
             val reminders: List<Reminder> =
-                medicineViewModel.medicineRepository.getReminders(medicine.medicineId)
-            com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineViewModel.medicineRepository, active)
+                medicineRepository.getReminders(medicine.medicineId)
+            com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineRepository, active)
         }
     }
 

@@ -14,10 +14,9 @@ import javax.inject.Inject
  * the actual notification scheduling to [AlarmProcessor].
  */
 class ShowReminderNotificationProcessor @Inject constructor(
-    val reminderContext: ReminderContext,
-    val alarmProcessor: AlarmProcessor,
-    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
-    val notificationProcessor: NotificationProcessor,
+    private val alarmProcessor: AlarmProcessor,
+    private val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
+    private val notificationProcessor: NotificationProcessor,
     private val notificationManager: NotificationManager
 ) {
     suspend fun showReminder(reminderNotificationData: ReminderNotificationData) {

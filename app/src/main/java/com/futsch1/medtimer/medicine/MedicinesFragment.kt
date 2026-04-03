@@ -51,6 +51,9 @@ class MedicinesFragment : Fragment() {
     @Inject
     lateinit var medicineRepository: MedicineRepository
 
+    @Inject
+    lateinit var medicinesMenu: MedicinesMenu
+
     private lateinit var idlingResource: SimpleIdlingResource
     private val medicineViewModel: MedicineViewModel by viewModels()
     private lateinit var adapter: MedicineViewAdapter
@@ -106,7 +109,6 @@ class MedicinesFragment : Fragment() {
 
         setupAddMedicineButton(fragmentView)
 
-        val medicinesMenu = MedicinesMenu(medicineViewModel)
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
 
         // Connect view model to recycler view adapter
@@ -134,7 +136,7 @@ class MedicinesFragment : Fragment() {
         DeleteHelper.deleteItem(
             context,
             R.string.are_you_sure_delete_medicine,
-            { lifecycleScope.launch { medicineViewModel.medicineRepository.deleteMedicine(itemId.toInt()) } },
+            { lifecycleScope.launch { medicineRepository.deleteMedicine(itemId.toInt()) } },
             { adapter.notifyItemChanged(adapterPosition) })
     }
 
@@ -166,7 +168,7 @@ class MedicinesFragment : Fragment() {
                 val text = editText.getText() ?: return@setPositiveButton
 
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineRepository.highestMedicineSortOrder
+                    val highestSortOrder = medicineRepository.getHighestMedicineSortOrder()
                     val medicine = Medicine(text.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
                     val medicineId = medicineRepository.insertMedicine(medicine).toInt()

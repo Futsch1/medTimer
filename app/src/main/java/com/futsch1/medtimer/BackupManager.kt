@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -16,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.FileHelper
@@ -43,12 +44,13 @@ class BackupManager @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val lifecycleOwner: LifecycleOwner,
     @Assisted private val menu: Menu?,
-    @Assisted private val medicineViewModel: MedicineViewModel,
     @Assisted("openFile") private val openFileLauncher: ActivityResultLauncher<Intent>?,
     @Assisted("openDirectory") private val openDirectoryLauncher: ActivityResultLauncher<Intent>?,
     @Assisted private val fragmentManager: FragmentManager? = null,
     private val preferencesDataSource: PreferencesDataSource,
     private val persistentDataDataSource: PersistentDataDataSource,
+    private val medicineRepository: MedicineRepository,
+    private val database: MedicineRoomDatabase,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
@@ -59,7 +61,6 @@ class BackupManager @AssistedInject constructor(
             context: Context,
             lifecycleOwner: LifecycleOwner,
             menu: Menu?,
-            medicineViewModel: MedicineViewModel,
             @Assisted("openFile") openFileLauncher: ActivityResultLauncher<Intent>?,
             @Assisted("openDirectory") openDirectoryLauncher: ActivityResultLauncher<Intent>?,
             fragmentManager: FragmentManager?
@@ -80,7 +81,7 @@ class BackupManager @AssistedInject constructor(
 
             item = menu.findItem(R.id.restore_backup)
             item.setOnMenuItemClickListener { _ ->
-                AlertDialog.Builder(context)
+                MaterialAlertDialogBuilder(context)
                     .setTitle(R.string.restore)
                     .setMessage(R.string.restore_start)
                     .setCancelable(true)
@@ -150,7 +151,7 @@ class BackupManager @AssistedInject constructor(
         openFileLauncher?.launch(intent)
     }
 
-    private fun performBackup(checkedItems: BooleanArray) {
+    private suspend fun performBackup(checkedItems: BooleanArray) {
         val progressDialogFragment = ProgressDialogFragment()
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
             fragmentManager?.let { progressDialogFragment.show(it, "backup") }
@@ -162,7 +163,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
                     JSONMedicineBackup(),
-                    medicineViewModel.medicineRepository.medicines
+                    medicineRepository.getMedicines()
                 )
             )
         }
@@ -170,7 +171,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 EVENT_KEY, createBackup(
                     JSONReminderEventBackup(),
-                    medicineViewModel.medicineRepository.allReminderEventsWithoutDeleted
+                    medicineRepository.getAllReminderEventsWithoutDeleted()
                 )
             )
         }
@@ -186,7 +187,7 @@ class BackupManager @AssistedInject constructor(
 
     private fun <T> createBackup(jsonBackup: JSONBackup<T>, backupData: List<T>): JsonElement {
         return jsonBackup.createBackup(
-            medicineViewModel.databaseVersion,
+            database.version,
             backupData
         )
     }
@@ -226,7 +227,7 @@ class BackupManager @AssistedInject constructor(
                     progressDialogFragment.dismiss()
                 }
 
-                AlertDialog.Builder(context)
+                MaterialAlertDialogBuilder(context)
                     .setMessage(if (restoreSuccessful) R.string.restore_successful else R.string.restore_failed)
                     .setPositiveButton(R.string.ok) { _, _ -> }
                     .show()
@@ -259,7 +260,7 @@ class BackupManager @AssistedInject constructor(
     private suspend fun <T> restoreBackup(json: String, backup: JSONBackup<T>): Boolean {
         val backupData: List<T>? = backup.parseBackup(json)
         if (backupData != null) {
-            backup.applyBackup(backupData, medicineViewModel.medicineRepository)
+            backup.applyBackup(backupData, medicineRepository)
             return true
         }
         return false
@@ -289,19 +290,19 @@ class BackupManager @AssistedInject constructor(
         }
     }
 
-    private fun performAutoBackup(directoryUri: Uri) {
+    private suspend fun performAutoBackup(directoryUri: Uri) {
         val gson = GsonBuilder().setPrettyPrinting().create()
         val jsonObject = JsonObject()
         jsonObject.add(
             MEDICINE_KEY, createBackup(
                 JSONMedicineBackup(),
-                medicineViewModel.medicineRepository.medicines
+                medicineRepository.getMedicines()
             )
         )
         jsonObject.add(
             EVENT_KEY, createBackup(
                 JSONReminderEventBackup(),
-                medicineViewModel.medicineRepository.allReminderEventsWithoutDeleted
+                medicineRepository.getAllReminderEventsWithoutDeleted()
             )
         )
 

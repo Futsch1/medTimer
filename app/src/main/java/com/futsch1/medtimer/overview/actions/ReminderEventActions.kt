@@ -12,46 +12,72 @@ import com.futsch1.medtimer.overview.OverviewReminderEvent
 import com.futsch1.medtimer.overview.OverviewState
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-open class ReminderEventActions(
-    val event: OverviewReminderEvent,
-    medicineRepository: MedicineRepository,
-    private val fragmentActivity: FragmentActivity,
-    timePickerDialogFactory: TimePickerDialogFactory
-) :
-    ActionsBase(fragmentActivity, medicineRepository, timePickerDialogFactory) {
+class ReminderEventActions @AssistedInject constructor(
+    @Assisted val event: OverviewReminderEvent,
+    @Assisted private val fragmentActivity: FragmentActivity,
+    private val medicineRepository: MedicineRepository,
+    private val timePickerDialogFactory: TimePickerDialogFactory
+) : Actions {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(event: OverviewReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
+    }
+
+    private val isStockEvent = event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder
+
+    override val visibleButtons: MutableList<Button> = mutableListOf()
 
     init {
-        if (event.state != OverviewState.TAKEN) {
-            visibleButtons.add(Button.TAKEN)
-        }
-        if (event.state != OverviewState.SKIPPED) {
-            visibleButtons.add(Button.SKIPPED)
-        }
-
-        if (event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
-            visibleButtons.add(Button.RERAISE)
-            visibleButtons.add(Button.DELETE)
+        if (isStockEvent) {
+            if (event.state != OverviewState.RAISED) {
+                visibleButtons.add(Button.DELETE)
+            } else {
+                visibleButtons.add(Button.ACKNOWLEDGED)
+            }
         } else {
-            visibleButtons.add(Button.RESCHEDULE)
-        }
-        if (event.reminderEvent.reminderId == -1) {
-            visibleButtons.remove(Button.RERAISE)
+            if (event.state != OverviewState.TAKEN) {
+                visibleButtons.add(Button.TAKEN)
+            }
+            if (event.state != OverviewState.SKIPPED) {
+                visibleButtons.add(Button.SKIPPED)
+            }
+            if (event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
+                visibleButtons.add(Button.RERAISE)
+                visibleButtons.add(Button.DELETE)
+            } else {
+                visibleButtons.add(Button.RESCHEDULE)
+            }
+            if (event.reminderEvent.reminderId == -1) {
+                visibleButtons.remove(Button.RERAISE)
+            }
         }
     }
 
     override suspend fun buttonClicked(button: Button) {
-        when (button) {
-            Button.TAKEN -> processTakenOrSkipped(event.reminderEvent, true)
-            Button.SKIPPED -> processTakenOrSkipped(event.reminderEvent, false)
-            Button.RERAISE -> processDeleteReRaiseReminderEvent(event.reminderEvent)
-            Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
-            Button.RESCHEDULE -> processPostponeReminder(event.reminderEvent)
-            Button.ACKNOWLEDGED -> Unit
+        if (isStockEvent) {
+            when (button) {
+                Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
+                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent)
+                else -> Unit
+            }
+        } else {
+            when (button) {
+                Button.TAKEN -> processTakenOrSkipped(event.reminderEvent, true)
+                Button.SKIPPED -> processTakenOrSkipped(event.reminderEvent, false)
+                Button.RERAISE -> processDeleteReRaiseReminderEvent(event.reminderEvent)
+                Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
+                Button.RESCHEDULE -> processPostponeReminder(event.reminderEvent)
+                Button.ACKNOWLEDGED -> Unit
+            }
         }
     }
 
@@ -60,32 +86,32 @@ open class ReminderEventActions(
         timePickerDialogFactory
             .create(localDateTime.hour, localDateTime.minute) { minutes ->
                 val newReminderTime = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes)
-                fragmentActivity.lifecycleScope.launch(ioCoroutineDispatcher) {
+                fragmentActivity.lifecycleScope.launch {
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
                     reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                     reminderEvent.remindedTimestamp = newReminderTime
                     medicineRepository.updateReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(context, null, reminderEvent, taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper.deleteItem(context, R.string.delete_re_raise_event, {
+        DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 medicineRepository.deleteReminderEvent(reminderEvent)
-                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
+                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
             }
         }, {})
     }
 
-    protected fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper.deleteItem(context, R.string.are_you_sure_delete_reminder_event, {
+    private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
+        DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
                 reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
                 medicineRepository.updateReminderEvent(reminderEvent)

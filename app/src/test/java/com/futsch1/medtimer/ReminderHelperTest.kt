@@ -6,10 +6,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.helpers.formatReminderEventString
-import com.futsch1.medtimer.helpers.formatReminderStringForWidget
-import com.futsch1.medtimer.helpers.formatScheduledReminderString
-import com.futsch1.medtimer.helpers.formatScheduledReminderStringForWidget
+import com.futsch1.medtimer.helpers.ReminderStringFormatter
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
@@ -36,6 +34,11 @@ class ReminderHelperTest {
         val contextMock = mock<Context>()
         val preferencesDataSourceMock = mock<PreferencesDataSource>()
         Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
+        val localeContextAccessor = mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>()
+        Mockito.`when`(localeContextAccessor.getLocaleAwareContext()).thenReturn(contextMock)
+        val timeFormatter = TimeFormatter(contextMock, preferencesDataSourceMock, localeContextAccessor)
+
+        val formatter = ReminderStringFormatter(contextMock, preferencesDataSourceMock, timeFormatter)
 
         val utc = TimeZone.getTimeZone("WET")
         val usDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, Locale.US)
@@ -65,30 +68,28 @@ class ReminderHelperTest {
         reminderEvent.medicineName = "Test"
         reminderEvent.amount = "5"
 
-        var result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesDataSourceMock)
-        var resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesDataSourceMock)
+        var result = formatter.formatScheduledReminder(scheduledReminder)
+        var resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("1:00\u202FAM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result =
-            formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesDataSourceMock, false)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, false)
+        result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("1/1/70 1:00\u202FAM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result =
-            formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesDataSourceMock, true)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, true)
+        result = formatter.formatScheduledReminderForWidget(scheduledReminder, true)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
         assertEquals("1:00\u202FAM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
         // Empty amount
         reminder.amount = ""
         reminderEvent.amount = ""
-        result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesDataSourceMock)
-        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesDataSourceMock)
+        result = formatter.formatScheduledReminder(scheduledReminder)
+        resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("1:00\u202FAM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesDataSourceMock, false)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, false)
+        result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("1/1/70 1:00\u202FAM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
@@ -96,16 +97,16 @@ class ReminderHelperTest {
         Mockito.`when`(preferencesDataSourceMock.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(useRelativeDateTime = true)))
         scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
         reminderEvent.remindedTimestamp = instantLater.toEpochMilli() / 1000
-        result = formatScheduledReminderString(contextMock, scheduledReminder, preferencesDataSourceMock)
-        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesDataSourceMock)
+        result = formatter.formatScheduledReminder(scheduledReminder)
+        resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("In 1 hour, 2:00\u202FAM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesDataSourceMock, false)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, false)
+        result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatScheduledReminderStringForWidget(contextMock, scheduledReminder, preferencesDataSourceMock, true)
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, true)
+        result = formatter.formatScheduledReminderForWidget(scheduledReminder, true)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
         assertEquals("In 1 hour: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
@@ -113,11 +114,11 @@ class ReminderHelperTest {
         Mockito.`when`(contextMock.getString(R.string.taken)).thenReturn("Taken")
         Mockito.`when`(contextMock.getString(R.string.skipped)).thenReturn("Skipped")
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (Taken)", resultReminder.toString())
         reminderEvent.status = ReminderEvent.ReminderStatus.SKIPPED
         reminderEvent.amount = "6"
-        resultReminder = formatReminderStringForWidget(contextMock, reminderEvent, preferencesDataSourceMock, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (6 Skipped)", resultReminder.toString())
 
         // Test show taken time in overview
@@ -126,11 +127,11 @@ class ReminderHelperTest {
         reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
         reminderEvent.remindedTimestamp = instantZero.toEpochMilli() / 1000
         reminderEvent.processedTimestamp = instantLater.toEpochMilli() / 1000
-        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesDataSourceMock)
+        resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("1:00\u202FAM ➡ 2:00\u202FAM\nTest (6)", resultReminder.toString())
 
         reminderEvent.processedTimestamp = instantOneDayLater.toEpochMilli() / 1000
-        resultReminder = formatReminderEventString(contextMock, reminderEvent, preferencesDataSourceMock)
+        resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("1:00\u202FAM ➡ 1/2/70 1:00\u202FAM\nTest (6)", resultReminder.toString())
 
         // Cleanup

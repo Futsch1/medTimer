@@ -1,11 +1,12 @@
 package com.futsch1.medtimer.reminders.notificationData
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.reminders.ReminderContext
+
 import com.futsch1.medtimer.reminders.getReminderAction
 import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import java.time.Instant
@@ -46,11 +47,10 @@ class ReminderNotificationData(
         )
     }
 
-    fun getPendingIntent(reminderContext: ReminderContext): PendingIntent {
-        val reminderIntent = getReminderAction(reminderContext.context)
+    fun getPendingIntent(context: Context): PendingIntent {
+        val reminderIntent = getReminderAction(context)
         toIntent(reminderIntent)
-        // Use the reminderEventId as request code to ensure unique PendingIntent for each reminder event
-        return reminderContext.getPendingIntentBroadcast(reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(context, reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     fun toIntent(intent: Intent) {

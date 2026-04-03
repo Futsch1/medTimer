@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
@@ -20,9 +19,9 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
-import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.assisted.Assisted
@@ -36,7 +35,7 @@ class ReminderViewHolder @AssistedInject constructor(
     @Assisted parent: ViewGroup,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
-    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val timeEditorFactory: TimeEditor.Factory,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
@@ -107,9 +106,9 @@ class ReminderViewHolder @AssistedInject constructor(
         if (reminder.usesTimeInMinutes) {
             @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay
             editTimeLayout.setHint(textId)
-            timeEditor = TimeEditor(fragmentActivity, editTime, reminder.timeInMinutes, { minutes: Int? ->
+            timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.timeInMinutes, { minutes: Int? ->
                 reminder.timeInMinutes = minutes!!
-            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null, timePickerDialogFactory)
+            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
         } else {
             editTimeLayout.visibility = View.GONE
         }
@@ -183,7 +182,7 @@ class ReminderViewHolder @AssistedInject constructor(
                 assert(false)
             }
         }
-        val builder = AlertDialog.Builder(itemView.context)
+        val builder = MaterialAlertDialogBuilder(itemView.context)
             .setTitle(titleText)
             .setMessage(helpText).setIcon(iconId).setPositiveButton(R.string.ok, null)
         reminderTypeIcon.setImageResource(iconId)

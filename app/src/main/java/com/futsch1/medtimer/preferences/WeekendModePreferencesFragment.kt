@@ -10,7 +10,7 @@ import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.TimeHelper.minutesToTimeString
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
@@ -30,6 +30,9 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
     @Inject
     lateinit var timePickerDialogFactory: TimePickerDialogFactory
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
 
     private var currentSettings: UserPreferences? = null
 
@@ -65,7 +68,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateTimePicker(settings: UserPreferences) {
         val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
-        preference?.setSummary(minutesToTimeString(requireContext(), settings.weekendTime.hour * 60 + settings.weekendTime.minute.toLong()))
+        preference?.setSummary(timeFormatter.minutesToTimeString(settings.weekendTime.hour * 60 + settings.weekendTime.minute))
     }
 
     private fun setupTimePicker() {
@@ -75,7 +78,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
                 val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
                 timePickerDialogFactory.create(weekendTime.hour, weekendTime.minute) { minutes: Int ->
                     preferencesDataSource.setWeekendTime(LocalTime.of(minutes / 60, minutes % 60))
-                    preference1!!.setSummary(minutesToTimeString(requireContext(), minutes.toLong()))
+                    preference1!!.setSummary(timeFormatter.minutesToTimeString(minutes))
                     requestReschedule()
                 }.show(parentFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
                 true
