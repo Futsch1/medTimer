@@ -2,7 +2,9 @@ package com.futsch1.medtimer.database
 
 import com.google.gson.GsonBuilder
 
-class JSONReminderEventBackup : JSONBackup<ReminderEvent>(ReminderEvent::class.java) {
+class JSONReminderEventBackup(
+    private val reminderEventRepository: ReminderEventRepository
+) : JSONBackup<ReminderEvent>(ReminderEvent::class.java) {
     override fun isInvalid(item: ReminderEvent?): Boolean {
         return item == null
     }
@@ -12,9 +14,9 @@ class JSONReminderEventBackup : JSONBackup<ReminderEvent>(ReminderEvent::class.j
             .registerTypeAdapter(ReminderEvent::class.java, FullDeserialize<ReminderEvent>())
     }
 
-    override suspend fun applyBackup(list: List<ReminderEvent>, medicineRepository: MedicineRepository) {
-        medicineRepository.deleteReminderEvents()
+    override suspend fun applyBackup(list: List<ReminderEvent>) {
+        reminderEventRepository.deleteAll()
 
-        medicineRepository.insertReminderEvents(list)
+        reminderEventRepository.createAll(list)
     }
 }

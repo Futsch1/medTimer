@@ -3,17 +3,27 @@ package com.futsch1.medtimer.medicine
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.medicine.tags.TagsFragment
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class EditMedicineSubmenus(
-    private val editMedicineFragment: EditMedicineFragment,
-    private val medicine: Medicine,
-    private val medicineRepository: MedicineRepository,
+class EditMedicineSubmenus @AssistedInject constructor(
+    @Assisted private val editMedicineFragment: EditMedicineFragment,
+    @Assisted private val medicine: Medicine,
+    private val tagDataFromMedicineFactory: TagDataFromMedicine.Factory,
     private val tagsFragmentFactory: TagsFragment.Factory
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            editMedicineFragment: EditMedicineFragment,
+            medicine: Medicine
+        ): EditMedicineSubmenus
+    }
+
     enum class Submenu {
         NOTES,
         TAGS,
@@ -25,7 +35,7 @@ class EditMedicineSubmenus(
         when (submenu) {
             Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
-                val tagDataFromMedicine = TagDataFromMedicine(editMedicineFragment, medicine.medicineId, medicineRepository)
+                val tagDataFromMedicine = tagDataFromMedicineFactory.create(editMedicineFragment, medicine.medicineId)
                 val dialog: DialogFragment = tagsFragmentFactory.create(tagDataFromMedicine)
                 dialog.show(editMedicineFragment.getParentFragmentManager(), "tags")
             }

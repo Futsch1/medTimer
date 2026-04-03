@@ -6,6 +6,8 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -15,21 +17,23 @@ import javax.inject.Inject
 class RefillProcessor @Inject constructor(
     private val notificationProcessor: NotificationProcessor,
     private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess
 ) {
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
-        val reminderEvent = medicineRepository.getReminderEvent(processedNotificationData.reminderEventIds[0])!!
-        val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
+        val reminderEvent = reminderEventRepository.get(processedNotificationData.reminderEventIds[0])!!
+        val reminder = reminderRepository.get(reminderEvent.reminderId)
         val medicineId = reminder!!.medicineRelId
         processRefill(medicineId, reminderEvent)
     }
 
     suspend fun processRefill(medicineId: Int, reminderEvent: ReminderEvent? = null) {
-        val medicine = medicineRepository.getMedicine(medicineId)!!
+        val medicine = medicineRepository.getFull(medicineId)!!
 
         val refillEvent = processRefillInternal(medicine)
-        medicineRepository.updateMedicine(medicine.medicine)
-        medicineRepository.insertReminderEvent(refillEvent)
+        medicineRepository.update(medicine.medicine)
+        reminderEventRepository.create(refillEvent)
 
         if (reminderEvent != null) {
             notificationProcessor.processReminderEventsInNotification(

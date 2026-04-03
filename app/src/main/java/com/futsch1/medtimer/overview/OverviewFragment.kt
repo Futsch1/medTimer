@@ -20,6 +20,7 @@ import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -74,6 +75,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     @Inject
     lateinit var medicineRepository: MedicineRepository
 
+    @Inject
+    lateinit var reminderEventRepository: ReminderEventRepository
+
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
     private val medicineViewModel: MedicineViewModel by viewModels()
@@ -121,7 +125,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        NextReminders(this, medicineViewModel, preferencesDataSource, medicineRepository)
+        NextReminders(this, medicineViewModel, preferencesDataSource, medicineRepository, reminderEventRepository)
 
         fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
 

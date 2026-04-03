@@ -10,21 +10,37 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
-import com.futsch1.medtimer.medicine.tags.TagsFragment
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EditMedicineMenuProvider(
-    private val medicine: Medicine,
-    private val fragment: EditMedicineFragment,
+class EditMedicineMenuProvider @AssistedInject constructor(
+    @Assisted private val medicine: Medicine,
+    @Assisted private val fragment: EditMedicineFragment,
+    @Assisted private val navController: NavController,
     private val medicineRepository: MedicineRepository,
-    private val navController: NavController,
-    private val tagsFragmentFactory: TagsFragment.Factory,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val reminderRepository: ReminderRepository,
+    private val tagRepository: TagRepository,
+    private val editMedicineSubmenusFactory: EditMedicineSubmenus.Factory,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : EntityEditOptionsMenu {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            medicine: Medicine,
+            fragment: EditMedicineFragment,
+            navController: NavController
+        ): EditMedicineMenuProvider
+    }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.edit_medicine_settings, menu)
@@ -41,7 +57,7 @@ class EditMedicineMenuProvider(
             fragment.lifecycleScope.launch(dispatcher) {
                 val oldMedicineId = medicine.medicineId
                 medicine.medicineId = 0
-                val newMedicineId = medicineRepository.insertMedicine(medicine).toInt()
+                val newMedicineId = medicineRepository.create(medicine).toInt()
                 assignTags(oldMedicineId, newMedicineId)
             }
             navController.navigateUp()
@@ -57,21 +73,21 @@ class EditMedicineMenuProvider(
     }
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.getMedicine(oldMedicineId)!!
+        val oldFullMedicine = medicineRepository.getFull(oldMedicineId)!!
         for (oldTag in oldFullMedicine.tags) {
-            medicineRepository.insertMedicineToTag(newMedicineId, oldTag.tagId)
+            tagRepository.addMedicineTag(newMedicineId, oldTag.tagId)
         }
     }
 
     private suspend fun duplicateIncludingReminders() {
-        val fullMedicine = medicineRepository.getMedicine(medicine.medicineId)!!
+        val fullMedicine = medicineRepository.getFull(medicine.medicineId)!!
         val oldMedicineId = medicine.medicineId
         medicine.medicineId = 0
-        val newMedicineId = medicineRepository.insertMedicine(medicine).toInt()
+        val newMedicineId = medicineRepository.create(medicine).toInt()
         for (reminder in fullMedicine.reminders) {
             reminder.reminderId = 0
             reminder.medicineRelId = newMedicineId
-            medicineRepository.insertReminder(reminder)
+            reminderRepository.create(reminder)
         }
         assignTags(oldMedicineId, newMedicineId)
     }
@@ -84,7 +100,7 @@ class EditMedicineMenuProvider(
                 {
                     fragment.lifecycleScope.launch {
 
-                        medicineRepository.deleteMedicine(medicine.medicineId)
+                        medicineRepository.delete(medicine.medicineId)
                         navController.navigateUp()
                     }
                 },
@@ -96,7 +112,7 @@ class EditMedicineMenuProvider(
     }
 
     private fun setupLinksMenu(menu: Menu) {
-        val subMenus = EditMedicineSubmenus(fragment, medicine, medicineRepository, tagsFragmentFactory)
+        val subMenus = editMedicineSubmenusFactory.create(fragment, medicine)
         val idToSubmenu: Map<Int, EditMedicineSubmenus.Submenu> = mapOf(
             R.id.openCalendar to EditMedicineSubmenus.Submenu.CALENDAR,
             R.id.openStockTracking to EditMedicineSubmenus.Submenu.STOCK_TRACKING,
@@ -115,8 +131,8 @@ class EditMedicineMenuProvider(
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch(dispatcher) {
             val reminders: List<Reminder> =
-                medicineRepository.getReminders(medicine.medicineId)
-            com.futsch1.medtimer.helpers.setRemindersActive(reminders, medicineRepository, active)
+                reminderRepository.getAll(medicine.medicineId)
+            com.futsch1.medtimer.helpers.setRemindersActive(reminders, reminderRepository, active)
         }
     }
 

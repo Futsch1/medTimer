@@ -7,8 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -37,7 +37,7 @@ class ManualDose @AssistedInject constructor(
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timePickerDialogFactory: TimePickerDialogFactory,
     private val manualDoseListEntryAdapterFactory: ManualDoseListEntryAdapter.Factory,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
     @AssistedFactory
@@ -152,7 +152,7 @@ class ManualDose @AssistedInject constructor(
                 TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
             reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
             activity.lifecycleScope.launch {
-                medicineRepository.insertReminderEvent(reminderEvent)
+                reminderEventRepository.create(reminderEvent)
             }
 
             if (medicineId == -1) {

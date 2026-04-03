@@ -29,6 +29,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -42,7 +43,6 @@ import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
-import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -90,7 +90,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var notificationManager: NotificationManager
 
     @Inject
-    lateinit var tagsFragmentFactory: TagsFragment.Factory
+    lateinit var editMedicineSubmenusFactory: EditMedicineSubmenus.Factory
+
+    @Inject
+    lateinit var editMedicineMenuProviderFactory: EditMedicineMenuProvider.Factory
 
     @Inject
     lateinit var medicineIcons: MedicineIcons
@@ -100,6 +103,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     @Inject
     lateinit var medicineRepository: MedicineRepository
+
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
 
     private var entity: FullMedicine? = null
     private lateinit var fragmentView: View
@@ -138,7 +144,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupSwiping(recyclerView)
 
         lifecycleScope.launch(ioDispatcher) {
-            val entity = medicineRepository.getMedicine(getEntityId())
+            val entity = medicineRepository.getFull(getEntityId())
             this@EditMedicineFragment.entity = entity
 
             if (entity == null) {
@@ -169,7 +175,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun setupMenu(navController: NavController, entity: FullMedicine) {
-        optionsMenu = EditMedicineMenuProvider(entity.medicine, this, medicineRepository, navController, tagsFragmentFactory)
+        optionsMenu = editMedicineMenuProviderFactory.create(entity.medicine, this, navController)
     }
 
     override fun onDestroy() {
@@ -190,7 +196,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
                 val entityAfter = Gson().toJson(entity)
                 if (entityBefore != entityAfter) {
-                    medicineRepository.updateMedicine(entity.medicine)
+                    medicineRepository.update(entity.medicine)
                 }
             }
         }
@@ -208,7 +214,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             setText(medicine.name)
         }
 
-        val subMenus = EditMedicineSubmenus(this, medicine, medicineRepository, tagsFragmentFactory)
+        val subMenus = editMedicineSubmenusFactory.create(this, medicine)
 
         selectIconButton.setIcon(medicineIcons.getIconDrawable(iconId))
         setupEnableColor(medicine.useColor)
@@ -225,7 +231,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         adapter.setMedicine(entity)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            medicineRepository.getRemindersFlow(getEntityId()).collect {
+            reminderRepository.getAllFlow(getEntityId()).collect {
                 sortAndSubmitList(it)
                 setFragmentReady()
             }
@@ -342,7 +348,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun deleteItem(itemId: Long, adapterPosition: Int) {
         lifecycleScope.launch(ioDispatcher) {
-            val reminder = medicineRepository.getReminder(itemId.toInt())
+            val reminder = reminderRepository.get(itemId.toInt())
             if (reminder != null) {
                 withContext(mainDispatcher) {
                     linkedReminderHandlingFactory.create(reminder, lifecycleScope).deleteReminder(requireContext(), { }, {
@@ -370,7 +376,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         for (i in 0..<recyclerView.size) {
             val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder
 
-            this.medicineRepository.updateReminder(viewHolder.getUpdatedReminder())
+            this.reminderRepository.update(viewHolder.getUpdatedReminder())
         }
     }
 

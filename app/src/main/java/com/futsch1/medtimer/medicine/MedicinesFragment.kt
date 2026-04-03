@@ -136,7 +136,7 @@ class MedicinesFragment : Fragment() {
         DeleteHelper.deleteItem(
             context,
             R.string.are_you_sure_delete_medicine,
-            { lifecycleScope.launch { medicineRepository.deleteMedicine(itemId.toInt()) } },
+            { lifecycleScope.launch { medicineRepository.delete(itemId.toInt()) } },
             { adapter.notifyItemChanged(adapterPosition) })
     }
 
@@ -168,10 +168,10 @@ class MedicinesFragment : Fragment() {
                 val text = editText.getText() ?: return@setPositiveButton
 
                 lifecycleScope.launch(dispatcher) {
-                    val highestSortOrder = medicineRepository.getHighestMedicineSortOrder()
+                    val highestSortOrder = medicineRepository.getHighestSortOrder()
                     val medicine = Medicine(text.toString().trim())
                     medicine.sortOrder = highestSortOrder + 1
-                    val medicineId = medicineRepository.insertMedicine(medicine).toInt()
+                    val medicineId = medicineRepository.create(medicine).toInt()
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }

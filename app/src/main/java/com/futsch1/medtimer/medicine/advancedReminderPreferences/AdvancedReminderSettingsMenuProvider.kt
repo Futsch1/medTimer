@@ -9,32 +9,41 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.OptionsMenu.Companion.enableOptionalIcons
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AdvancedReminderSettingsMenuProvider(
-    private val fragment: Fragment,
+class AdvancedReminderSettingsMenuProvider @AssistedInject constructor(
+    @Assisted private val fragment: Fragment,
     private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val reminderRepository: ReminderRepository,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : MenuProvider {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(fragment: Fragment): AdvancedReminderSettingsMenuProvider
+    }
+
     lateinit var reminder: Reminder
-    lateinit var medicineRepository: MedicineRepository
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.advanced_reminder_settings, menu)
         menu.setGroupDividerEnabled(true)
         enableOptionalIcons(menu)
-        
+
         menu.findItem(R.id.duplicate).setOnMenuItemClickListener { _: MenuItem? ->
             if (this::reminder.isInitialized) {
                 fragment.lifecycleScope.launch(ioDispatcher) {
                     reminder.reminderId = 0
-                    medicineRepository.insertReminder(reminder)
+                    reminderRepository.create(reminder)
                 }
                 NavHostFragment.findNavController(fragment).navigateUp()
             }

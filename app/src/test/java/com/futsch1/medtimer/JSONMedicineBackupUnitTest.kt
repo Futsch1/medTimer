@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.Tag
 import org.junit.Test
+import org.mockito.kotlin.mock
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -17,7 +18,7 @@ internal class JSONMedicineBackupUnitTest {
     // creates a backup object with a version number and a medicines array
     @Test
     fun testCreatesBackupWithVersionAndMedicinesArray() {
-        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonMedicineBackup = JSONMedicineBackup(mock(), mock(), mock())
 
         val medicinesWithReminders = listOf(FullMedicine().apply {
             reminders = mutableListOf(Reminder(0).apply {
@@ -220,7 +221,7 @@ internal class JSONMedicineBackupUnitTest {
             }
         )
 
-        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonMedicineBackup = JSONMedicineBackup(mock(), mock(), mock())
         val result = assertNotNull(jsonMedicineBackup.createBackupAsString(4, medicinesWithReminders))
 
         // @formatter:off
@@ -379,7 +380,7 @@ internal class JSONMedicineBackupUnitTest {
     @Test
     fun testParseJsonBackupMissingFields() {
         // Arrange
-        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonMedicineBackup = JSONMedicineBackup(mock(), mock(), mock())
         val validJsonBackup =
             "{\"version\": 1, \"medicinesWithReminders\": [{\"reminders\": [], \"medicine\": {}}]}"
 
@@ -393,7 +394,7 @@ internal class JSONMedicineBackupUnitTest {
     @Test
     fun testParseInvalidJsonBackup() {
         // Arrange
-        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonMedicineBackup = JSONMedicineBackup(mock(), mock(), mock())
         val invalidJsonBackup = "invalid_json"
 
         // Act
@@ -406,7 +407,7 @@ internal class JSONMedicineBackupUnitTest {
     @Test
     fun testParseJsonBackupWithMissingFields() {
         // Arrange
-        val jsonMedicineBackup = JSONMedicineBackup()
+        val jsonMedicineBackup = JSONMedicineBackup(mock(), mock(), mock())
         val jsonBackupWithMissingFields = "{\"version\": 1}"
 
         // Act

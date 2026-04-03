@@ -60,7 +60,13 @@ class NotificationProcessorTest {
     val boundNotificationManager: NotificationManager = testReminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = testReminderContext.medicineRepositoryFake.mock
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = testReminderContext.repositoryFakes.medicineRepositoryMock
+
+    @BindValue
+    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = testReminderContext.repositoryFakes.reminderRepositoryMock
+
+    @BindValue
+    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = testReminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = testReminderContext.preferencesDataSourceMock
@@ -82,6 +88,21 @@ class NotificationProcessorTest {
     val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = mock()
 
     @BindValue
+    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = mock()
+
+    @BindValue
+    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = mock()
+
+    @BindValue
+    val boundTagDao: com.futsch1.medtimer.database.TagDao = mock()
+
+    @BindValue
+    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = mock()
+
+    @BindValue
+    val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = mock()
+
+    @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
 
@@ -90,17 +111,17 @@ class NotificationProcessorTest {
     val boundMedTimerSharedPreferences: android.content.SharedPreferences = mock()
 
     @BindValue
-    val boundReminderNotificationFactory: ReminderNotificationFactory = object : ReminderNotificationFactory(mock(), mock(), mock()) {
+    val boundReminderNotificationFactory: ReminderNotificationFactory = object : ReminderNotificationFactory(mock(), mock(), mock(), mock(), mock()) {
         override suspend fun create(reminderNotificationData: ReminderNotificationData): ReminderNotification? {
             if (!reminderNotificationData.valid) return null
 
             val parts = mutableListOf<ReminderNotificationPart>()
             for (i in reminderNotificationData.reminderIds.indices) {
-                val reminder = testReminderContext.medicineRepositoryFake.mock.getReminder(reminderNotificationData.reminderIds[i])
+                val reminder = testReminderContext.repositoryFakes.reminderRepositoryMock.get(reminderNotificationData.reminderIds[i])
                     ?: return null
-                val medicine = testReminderContext.medicineRepositoryFake.mock.getMedicine(reminder.medicineRelId)
+                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.getFull(reminder.medicineRelId)
                     ?: return null
-                val event = testReminderContext.medicineRepositoryFake.mock.getReminderEvent(reminderNotificationData.reminderEventIds[i])
+                val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.get(reminderNotificationData.reminderEventIds[i])
                     ?: return null
                 parts.add(ReminderNotificationPart(reminder, event, medicine))
             }
@@ -116,7 +137,7 @@ class NotificationProcessorTest {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         val reminderNotificationData = fillWithOneReminder(testReminderContext)
         val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotificationData)
-        testReminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
         testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
 
         runBlocking {
@@ -127,9 +148,9 @@ class NotificationProcessorTest {
         }
 
         // Reminder marked as taken
-        assertEquals(ReminderEvent.ReminderStatus.TAKEN, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
+        assertEquals(ReminderEvent.ReminderStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
         // Processed time stamp set
-        assertEquals(10, testReminderContext.medicineRepositoryFake.reminderEvents[0].processedTimestamp)
+        assertEquals(10, testReminderContext.repositoryFakes.reminderEvents[0].processedTimestamp)
         // Notification removed
         verify(testReminderContext.notificationManagerFake.mock, times(1)).cancel(1)
         // No new notification raised
@@ -141,8 +162,8 @@ class NotificationProcessorTest {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         testReminderContext.notificationId = 2
         fillWithTwoReminders(testReminderContext)
-        testReminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
-        testReminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
         testReminderContext.notificationManagerFake.add(1, intArrayOf(1, 2), intArrayOf(1, 2))
 
         val processedNotificationData = ProcessedNotificationData(listOf(2))
@@ -154,14 +175,14 @@ class NotificationProcessorTest {
             )
         }
         // Reminder marked as taken
-        assertEquals(ReminderEvent.ReminderStatus.SKIPPED, testReminderContext.medicineRepositoryFake.reminderEvents[1].status)
+        assertEquals(ReminderEvent.ReminderStatus.SKIPPED, testReminderContext.repositoryFakes.reminderEvents[1].status)
         // Processed time stamp set
-        assertEquals(10, testReminderContext.medicineRepositoryFake.reminderEvents[1].processedTimestamp)
+        assertEquals(10, testReminderContext.repositoryFakes.reminderEvents[1].processedTimestamp)
         // Notification not removed
         verify(testReminderContext.notificationManagerFake.mock, never()).cancel(1)
         // But notification updated
         verify(testReminderContext.notificationManagerFake.mock, times(1)).notify(eq(1), any())
         // First reminder still raised
-        assertEquals(ReminderEvent.ReminderStatus.RAISED, testReminderContext.medicineRepositoryFake.reminderEvents[0].status)
+        assertEquals(ReminderEvent.ReminderStatus.RAISED, testReminderContext.repositoryFakes.reminderEvents[0].status)
     }
 }

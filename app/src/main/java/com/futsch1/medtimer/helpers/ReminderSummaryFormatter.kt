@@ -2,8 +2,8 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class ReminderSummaryFormatter @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter
 ) {
     suspend fun formatExportReminderSummary(reminder: Reminder): String {
@@ -119,11 +119,11 @@ class ReminderSummaryFormatter @Inject constructor(
 
     private suspend fun linkedReminderString(reminder: Reminder): String {
         val delays = mutableListOf<String>()
-        var current = medicineRepository.getReminder(reminder.linkedReminderId) ?: return "?"
+        var current = reminderRepository.get(reminder.linkedReminderId) ?: return "?"
 
         while (current.reminderType == Reminder.ReminderType.LINKED) {
             delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
-            current = medicineRepository.getReminder(current.linkedReminderId) ?: return "?"
+            current = reminderRepository.get(current.linkedReminderId) ?: return "?"
         }
 
         val base = context.getString(
@@ -140,7 +140,7 @@ class ReminderSummaryFormatter @Inject constructor(
 
         while (current.reminderType == Reminder.ReminderType.LINKED) {
             delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
-            val source = medicineRepository.getReminder(current.linkedReminderId) ?: return "?"
+            val source = reminderRepository.get(current.linkedReminderId) ?: return "?"
             current = source
         }
 

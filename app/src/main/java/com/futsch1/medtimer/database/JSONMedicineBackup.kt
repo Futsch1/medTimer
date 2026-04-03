@@ -4,7 +4,11 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import java.time.Instant
 
-class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
+class JSONMedicineBackup(
+    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val tagRepository: TagRepository
+) : JSONBackup<FullMedicine>(FullMedicine::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicine>): JsonElement {
         // Correct the medicines where the reminder's instructions are null in this loop
         for (fullMedicine in list) {
@@ -25,10 +29,10 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
         return item == null
     }
 
-    override suspend fun applyBackup(list: List<FullMedicine>, medicineRepository: MedicineRepository) {
-        medicineRepository.deleteReminders()
-        medicineRepository.deleteMedicines()
-        medicineRepository.deleteTags()
+    override suspend fun applyBackup(list: List<FullMedicine>) {
+        reminderRepository.deleteAll()
+        medicineRepository.deleteAll()
+        tagRepository.deleteAll()
 
         var sortOrder = 1.0
 
@@ -36,28 +40,26 @@ class JSONMedicineBackup : JSONBackup<FullMedicine>(FullMedicine::class.java) {
             if (fullMedicine.medicine.sortOrder == 0.0) {
                 fullMedicine.medicine.sortOrder = sortOrder++
             }
-            val medicineId = medicineRepository.insertMedicine(fullMedicine.medicine)
-            processReminders(medicineRepository, fullMedicine, medicineId.toInt())
-            processTags(medicineRepository, fullMedicine, medicineId.toInt())
+            val medicineId = medicineRepository.create(fullMedicine.medicine)
+            processReminders(fullMedicine, medicineId.toInt())
+            processTags(tagRepository, fullMedicine, medicineId.toInt())
         }
     }
 
-    private suspend fun processTags(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
+    private suspend fun processTags(tagRepository: TagRepository, fullMedicine: FullMedicine, medicineId: Int) {
         for (tag in fullMedicine.tags) {
-            val tagId = medicineRepository.insertTag(tag).toInt()
-            medicineRepository.insertMedicineToTag(medicineId, tagId)
+            val tagId = tagRepository.create(tag).toInt()
+            tagRepository.addMedicineTag(medicineId, tagId)
         }
     }
 
-    companion object {
-        private suspend fun processReminders(medicineRepository: MedicineRepository, fullMedicine: FullMedicine, medicineId: Int) {
-            val reminders: MutableList<Reminder> = mutableListOf()
-            for (reminder in fullMedicine.reminders) {
-                reminder.medicineRelId = medicineId
-                reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-                reminders.add(reminder)
-            }
-            medicineRepository.insertReminders(reminders)
+    private suspend fun processReminders(fullMedicine: FullMedicine, medicineId: Int) {
+        val reminders: MutableList<Reminder> = mutableListOf()
+        for (reminder in fullMedicine.reminders) {
+            reminder.medicineRelId = medicineId
+            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+            reminders.add(reminder)
         }
+        reminderRepository.createAll(reminders)
     }
 }

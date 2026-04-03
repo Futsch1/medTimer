@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
@@ -29,7 +29,7 @@ class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     @Assisted private val medicine: Medicine,
     @Assisted private val reminder: Reminder,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val timeEditorFactory: TimeEditor.Factory
 ) {
     @AssistedFactory
@@ -140,7 +140,7 @@ class NewReminderStockDialog @AssistedInject constructor(
                 if (!canCreate) {
                     Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
                 } else {
-                    medicineRepository.insertReminder(reminder)
+                    reminderRepository.create(reminder)
                     Toast.makeText(
                         activity,
                         R.string.successfully_created_reminder,
