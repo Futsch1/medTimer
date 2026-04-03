@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditEventSheetDialogFragment : DialogFragment() {
@@ -44,13 +45,13 @@ class EditEventSheetDialogFragment : DialogFragment() {
 
     private val viewModel: EditEventViewModel by viewModels()
 
-    @javax.inject.Inject
+    @Inject
     lateinit var timePickerDialogFactory: TimePickerDialogFactory
 
-    @javax.inject.Inject
+    @Inject
     lateinit var datePickerDialogFactory: DatePickerDialogFactory
 
-    @javax.inject.Inject
+    @Inject
     lateinit var timeFormatter: TimeFormatter
 
     companion object {

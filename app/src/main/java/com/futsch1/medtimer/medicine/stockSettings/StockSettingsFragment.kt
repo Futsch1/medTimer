@@ -28,6 +28,7 @@ import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.reminders.SystemTimeAccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,6 +61,9 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
 
     @Inject
     lateinit var medicineDataStoreFactory: MedicineDataStore.Factory
+
+    @Inject
+    lateinit var timeAccess: SystemTimeAccess
 
     private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
 
@@ -128,7 +132,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
 
     private fun calculateRunOutDate(entity: FullMedicineEntity) {
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(medicineRepository, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource)
+            val runOutDate = estimateStockRunOutDate(medicineRepository, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource, timeAccess)
 
             val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
 

@@ -13,7 +13,10 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import com.futsch1.medtimer.di.TimeFormatterEntryPoint
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.utilities.grantAppPermission
+import dagger.hilt.android.EntryPointAccessors
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -47,6 +50,11 @@ abstract class BaseTestHelper {
         this.javaClass.getName(), testName,
         InstrumentationRegistry.getInstrumentation().targetContext
     )
+
+    protected fun timeFormatter(): TimeFormatter {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
+        return EntryPointAccessors.fromApplication(context, TimeFormatterEntryPoint::class.java).timeFormatter()
+    }
 
     @Before
     fun setup() {

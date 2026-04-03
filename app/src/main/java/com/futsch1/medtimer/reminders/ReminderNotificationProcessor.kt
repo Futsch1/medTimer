@@ -6,13 +6,13 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.TagEntity
-import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -47,7 +47,7 @@ class ReminderNotificationProcessor @Inject constructor(
             notificationAction(nonTakenReminderNotification)
         }
 
-        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent.toModel() }
+        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
         scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
 
         return true
@@ -57,7 +57,7 @@ class ReminderNotificationProcessor @Inject constructor(
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.automaticallyTaken) {
                 notificationProcessor.setReminderEventStatus(
-                    ReminderEventEntity.ReminderStatus.TAKEN,
+                    ReminderEvent.ReminderStatus.TAKEN,
                     listOf(reminderNotificationPart.reminderEvent)
                 )
                 Log.i(
@@ -112,29 +112,29 @@ class ReminderNotificationProcessor @Inject constructor(
     companion object {
         suspend fun buildReminderEvent(
             remindedTimeStamp: Long,
-            medicine: FullMedicineEntity,
-            reminder: ReminderEntity,
+            medicine: FullMedicine,
+            reminder: Reminder,
             medicineRepository: MedicineRepository,
-            timeFormatter: com.futsch1.medtimer.helpers.TimeFormatter
-        ): ReminderEventEntity {
-            val reminderEvent = ReminderEventEntity()
+            timeFormatter: TimeFormatter
+        ): ReminderEvent {
+            val reminderEvent = ReminderEvent()
             reminderEvent.reminderId = reminder.reminderId
             reminderEvent.remindedTimestamp = remindedTimeStamp
             reminderEvent.medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder)
             reminderEvent.color = medicine.medicine.color
             reminderEvent.useColor = medicine.medicine.useColor
-            reminderEvent.status = ReminderEventEntity.ReminderStatus.RAISED
+            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED
             reminderEvent.iconId = medicine.medicine.iconId
             reminderEvent.askForAmount = reminder.variableAmount
-            reminderEvent.tags = medicine.tags.stream().map { t: TagEntity? -> t!!.name }.collect((Collectors.toList()))
+            reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))
             reminderEvent.reminderType = reminder.reminderType
 
             when (reminder.reminderType) {
-                ReminderEntity.ReminderType.OUT_OF_STOCK -> {
+                Reminder.ReminderType.OUT_OF_STOCK -> {
                     reminderEvent.amount = MedicineHelper.formatAmount(medicine.medicine.amount, medicine.medicine.unit)
                 }
 
-                ReminderEntity.ReminderType.EXPIRATION_DATE -> {
+                Reminder.ReminderType.EXPIRATION_DATE -> {
                     reminderEvent.amount =
                         timeFormatter.daysSinceEpochToDateString(medicine.medicine.expirationDate)
                 }
@@ -147,7 +147,7 @@ class ReminderNotificationProcessor @Inject constructor(
                 reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(
                     medicineRepository,
                     reminderEvent,
-                    reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL
+                    reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
                 )
             } else {
                 reminderEvent.lastIntervalReminderTimeInMinutes = 0
@@ -158,11 +158,11 @@ class ReminderNotificationProcessor @Inject constructor(
 
         private suspend fun getLastReminderEventTimeInMinutes(
             medicineRepository: MedicineRepository,
-            reminderEvent: ReminderEventEntity,
+            reminderEvent: ReminderEvent,
             isWindowedInterval: Boolean
         ): Int {
             val lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId)
-            return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN) {
+            return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
                 if (isWindowedInterval && TimeHelper.secondsSinceEpochToLocalDate(
                         lastReminderEvent.remindedTimestamp,
                         ZoneId.systemDefault()
