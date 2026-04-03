@@ -3,9 +3,11 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.overview.model.EventPosition
 import com.futsch1.medtimer.overview.model.OverviewEvent
 import com.futsch1.medtimer.overview.model.PastReminderEvent
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
@@ -57,7 +60,7 @@ class OverviewViewModel @AssistedInject constructor(
         }
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
+        combine(reminderEvents.map { it.map { entity -> entity.toModel() } }, scheduledReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
@@ -88,7 +91,7 @@ class OverviewViewModel @AssistedInject constructor(
         filterState.update { it.copy(activeFilters = filters) }
     }
 
-    private fun getFiltered(events: List<ReminderEventEntity>, reminders: List<ScheduledReminder>, filterState: FilterState): List<OverviewEvent> {
+    private fun getFiltered(events: List<ReminderEvent>, reminders: List<ScheduledReminder>, filterState: FilterState): List<OverviewEvent> {
         val filteredOverviewEvents = mutableListOf<OverviewEvent>()
 
         for (reminderEvent in events) {
@@ -122,12 +125,12 @@ class OverviewViewModel @AssistedInject constructor(
         return isSameDay(scheduledReminder.timestamp.epochSecond, filterState.day) && scheduledRemindersVisible
     }
 
-    private fun isReminderEventVisible(reminderEvent: ReminderEventEntity, filterState: FilterState): Boolean {
+    private fun isReminderEventVisible(reminderEvent: ReminderEvent, filterState: FilterState): Boolean {
         val reminderEventVisible = filterState.activeFilters.isEmpty() ||
-                (reminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilter.TAKEN)) ||
-                (reminderEvent.status == ReminderEventEntity.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilter.SKIPPED)) ||
-                (reminderEvent.status == ReminderEventEntity.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilter.RAISED))
-        return isSameDay(reminderEvent.remindedTimestamp, filterState.day) && reminderEventVisible
+                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilter.TAKEN)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilter.SKIPPED)) ||
+                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilter.RAISED))
+        return isSameDay(reminderEvent.remindedTimestamp.epochSecond, filterState.day) && reminderEventVisible
     }
 
     private fun isSameDay(timestamp: Long, day: LocalDate): Boolean {

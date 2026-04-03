@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -143,6 +144,6 @@ class CalendarEventsViewModel @Inject constructor(
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEventEntity): Spanned {
-        return reminderEventFactory.create(reminderEvent).text
+        return reminderEventFactory.create(reminderEvent.toModel()).text
     }
 }

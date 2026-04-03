@@ -5,9 +5,12 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
 import com.futsch1.medtimer.overview.model.OverviewState
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -32,7 +35,7 @@ class ReminderEventActions @AssistedInject constructor(
         fun create(event: PastReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
     }
 
-    private val isStockEvent = event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder
+    private val isStockEvent = event.reminderEvent is StockReminderEvent
 
     override val visibleButtons: MutableList<Button> = mutableListOf()
 
@@ -66,7 +69,7 @@ class ReminderEventActions @AssistedInject constructor(
         if (isStockEvent) {
             when (button) {
                 Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
-                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent)
+                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent.toEntity())
                 else -> Unit
             }
         } else {
@@ -81,40 +84,42 @@ class ReminderEventActions @AssistedInject constructor(
         }
     }
 
-    private fun processPostponeReminder(reminderEvent: ReminderEventEntity) {
-        val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminderEvent.remindedTimestamp), ZoneId.systemDefault())
+    private fun processPostponeReminder(reminderEvent: ReminderEvent) {
+        val localDateTime = LocalDateTime.ofInstant(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
         timePickerDialogFactory
             .create(localDateTime.hour, localDateTime.minute) { minutes ->
-                val newReminderTime = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes)
+                val entity = reminderEvent.toEntity()
+                val newReminderTime = TimeHelper.changeTimeStampMinutes(entity.remindedTimestamp, minutes)
                 fragmentActivity.lifecycleScope.launch {
-                    val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                    val reminderNotificationData = ReminderNotificationData.fromReminderEvent(entity)
                     reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
-                    reminderNotificationData.notificationId = reminderEvent.notificationId
-                    reminderEvent.remindedTimestamp = newReminderTime
-                    medicineRepository.updateReminderEvent(reminderEvent)
+                    reminderNotificationData.notificationId = entity.notificationId
+                    entity.remindedTimestamp = newReminderTime
+                    medicineRepository.updateReminderEvent(entity)
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
-    private fun processTakenOrSkipped(reminderEvent: ReminderEventEntity, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent, taken)
+    private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
+        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent.toEntity(), taken)
     }
 
-    private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEventEntity) {
+    private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
-                medicineRepository.deleteReminderEvent(reminderEvent)
+                medicineRepository.deleteReminderEvent(reminderEvent.toEntity())
                 ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
             }
         }, {})
     }
 
-    private fun processDeleteReminderEvent(reminderEvent: ReminderEventEntity) {
+    private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
-                reminderEvent.status = ReminderEventEntity.ReminderStatus.DELETED
-                medicineRepository.updateReminderEvent(reminderEvent)
+                val entity = reminderEvent.toEntity()
+                entity.status = ReminderEventEntity.ReminderStatus.DELETED
+                medicineRepository.updateReminderEvent(entity)
             }
         }, {})
     }

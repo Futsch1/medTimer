@@ -3,6 +3,11 @@ package com.futsch1.medtimer.model.reminderevent
 import com.futsch1.medtimer.model.Reminder
 import java.time.Instant
 
+enum class IntervalType {
+    CONTINUOUS,
+    WINDOWED
+}
+
 data class IntervalReminderEvent(
     override val reminderEventId: Int,
     override val reminderId: Int,
@@ -21,7 +26,8 @@ data class IntervalReminderEvent(
     override val notes: String,
     val stockHandled: Boolean,
     val askForAmount: Boolean,
-    val lastIntervalReminderTimeInMinutes: Int
+    val lastIntervalReminderTimeInMinutes: Int,
+    val intervalType: IntervalType
 ) : ReminderEvent() {
     companion object {
         fun default(): IntervalReminderEvent = IntervalReminderEvent(
@@ -42,7 +48,8 @@ data class IntervalReminderEvent(
             notes = "",
             stockHandled = false,
             askForAmount = false,
-            lastIntervalReminderTimeInMinutes = 0
+            lastIntervalReminderTimeInMinutes = 0,
+            intervalType = IntervalType.CONTINUOUS
         )
     }
 }

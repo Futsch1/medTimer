@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 
 abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataSource) {
@@ -11,7 +10,6 @@ abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataS
     abstract val icon: Int
     abstract val color: Int?
     abstract val state: OverviewState
-    abstract val reminderType: ReminderEntity.ReminderType
     abstract val reminderId: Int
     val updateValue: Long
         get() = if (preferencesDataSource.preferences.value.useRelativeDateTime) System.currentTimeMillis() / 60_000 else 0

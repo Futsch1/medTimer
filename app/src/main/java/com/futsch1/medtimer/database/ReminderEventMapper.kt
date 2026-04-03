@@ -2,7 +2,9 @@ package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.reminderevent.DoseReminderEvent
+import com.futsch1.medtimer.model.reminderevent.DoseType
 import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
+import com.futsch1.medtimer.model.reminderevent.IntervalType
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
 import com.futsch1.medtimer.model.reminderevent.StockReminderType
@@ -45,7 +47,8 @@ fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
             remainingRepeats = commonArgs.remainingRepeats,
             notes = commonArgs.notes,
             stockHandled = stockHandled,
-            askForAmount = askForAmount
+            askForAmount = askForAmount,
+            doseType = if (reminderType == ReminderEntity.ReminderType.LINKED) DoseType.LINKED else DoseType.TIME_BASED
         )
 
         ReminderEntity.ReminderType.CONTINUOUS_INTERVAL,
@@ -67,7 +70,8 @@ fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
             notes = commonArgs.notes,
             stockHandled = stockHandled,
             askForAmount = askForAmount,
-            lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+            lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
+            intervalType = if (reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) IntervalType.WINDOWED else IntervalType.CONTINUOUS
         )
 
         ReminderEntity.ReminderType.OUT_OF_STOCK,
@@ -111,13 +115,19 @@ fun ReminderEvent.toEntity(): ReminderEventEntity {
     entity.notes = notes
     when (this) {
         is DoseReminderEvent -> {
-            entity.reminderType = ReminderEntity.ReminderType.TIME_BASED
+            entity.reminderType = when (doseType) {
+                DoseType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
+                DoseType.LINKED -> ReminderEntity.ReminderType.LINKED
+            }
             entity.stockHandled = stockHandled
             entity.askForAmount = askForAmount
         }
 
         is IntervalReminderEvent -> {
-            entity.reminderType = ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
+            entity.reminderType = when (intervalType) {
+                IntervalType.CONTINUOUS -> ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
+                IntervalType.WINDOWED -> ReminderEntity.ReminderType.WINDOWED_INTERVAL
+            }
             entity.stockHandled = stockHandled
             entity.askForAmount = askForAmount
             entity.lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
