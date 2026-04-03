@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit
 
 class WindowedIntervalScheduling(
     reminder: ReminderEntity,
-    reminderEventList: List<ReminderEventEntity>,
+    reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
 ) : IntervalScheduling(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
@@ -40,7 +40,7 @@ class WindowedIntervalScheduling(
     }
 
     fun getNextScheduledTimeInternal(): Instant? {
-        val lastReminderEvent: ReminderEventEntity? =
+        val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent()
         return if (lastReminderEvent != null) {
             getNextIntervalTimeFromReminderEvent(lastReminderEvent)
@@ -59,14 +59,13 @@ class WindowedIntervalScheduling(
         }
     }
 
-    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEventEntity): Instant? {
-        val lastRemindedInstant = Instant.ofEpochSecond(
-            lastReminderEvent.remindedTimestamp
-        )
+    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
+        val lastRemindedInstant = lastReminderEvent.remindedTimestamp
+
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                if (lastReminderEvent.processedTimestamp != 0L)
-                    Instant.ofEpochSecond(lastReminderEvent.processedTimestamp)
+                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
+                    lastReminderEvent.processedTimestamp
                 else null
             } else
                 lastRemindedInstant

@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -15,7 +15,7 @@ fun interface Scheduling {
 
 abstract class SchedulingBase(
     protected val reminder: ReminderEntity,
-    protected val reminderEvents: List<ReminderEventEntity>,
+    protected val reminderEvents: List<ReminderEvent>,
     protected val timeAccess: TimeAccess
 ) : Scheduling {
     protected val systemZone = timeAccess.systemZone()
@@ -24,16 +24,16 @@ abstract class SchedulingBase(
 
     abstract override fun getNextScheduledTime(): Instant?
 
-    protected fun findLastReminderEvent(): ReminderEventEntity? {
+    protected fun findLastReminderEvent(): ReminderEvent? {
         return findLastReminderEvent(filteredReminderEvents, reminder.reminderId)
     }
 
-    protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEventEntity? {
+    protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEvent? {
         return findLastReminderEvent(reminderEvents, linkedReminderId)
     }
 
-    protected fun findLastReminderEvent(reminderEvents: List<ReminderEventEntity>, reminderId: Int): ReminderEventEntity? {
-        var foundReminderEvent: ReminderEventEntity? = null
+    protected fun findLastReminderEvent(reminderEvents: List<ReminderEvent>, reminderId: Int): ReminderEvent? {
+        var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEvents) {
             if ((reminderEvent.reminderId == reminderId) && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
             ) {
@@ -46,7 +46,7 @@ abstract class SchedulingBase(
 
     protected fun isRaisedOn(epochDay: Long): Boolean {
         for (reminderEvent in filteredReminderEvents) {
-            if (isOnDay(reminderEvent.remindedTimestamp, epochDay)) {
+            if (isOnDay(reminderEvent.remindedTimestamp.epochSecond, epochDay)) {
                 return true
             }
         }
@@ -79,10 +79,10 @@ abstract class SchedulingBase(
     }
 
     private fun filterEvents(
-        reminderEvents: List<ReminderEventEntity>
-    ): List<ReminderEventEntity> {
+        reminderEvents: List<ReminderEvent>
+    ): List<ReminderEvent> {
         return reminderEvents.stream()
-            .filter { event: ReminderEventEntity -> event.reminderId == reminder.reminderId }.collect(
+            .filter { event: ReminderEvent -> event.reminderId == reminder.reminderId }.collect(
                 Collectors.toList()
             )
     }

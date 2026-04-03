@@ -11,6 +11,7 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -46,7 +47,7 @@ class ReminderNotificationProcessor @Inject constructor(
             notificationAction(nonTakenReminderNotification)
         }
 
-        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
+        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent.toModel() }
         scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
 
         return true

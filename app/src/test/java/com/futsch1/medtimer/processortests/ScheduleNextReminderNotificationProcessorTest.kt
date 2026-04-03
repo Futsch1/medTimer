@@ -27,7 +27,11 @@ import javax.inject.Inject
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
-@dagger.hilt.android.testing.UninstallModules(com.futsch1.medtimer.di.DatabaseModule::class, com.futsch1.medtimer.di.DatastoreModule::class, com.futsch1.medtimer.di.TimeAccessModule::class)
+@dagger.hilt.android.testing.UninstallModules(
+    com.futsch1.medtimer.di.DatabaseModule::class,
+    com.futsch1.medtimer.di.DatastoreModule::class,
+    com.futsch1.medtimer.di.TimeAccessModule::class
+)
 class ScheduleNextReminderNotificationProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)

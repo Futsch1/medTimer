@@ -14,6 +14,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
@@ -25,7 +26,11 @@ import kotlin.time.Duration.Companion.seconds
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
-@dagger.hilt.android.testing.UninstallModules(com.futsch1.medtimer.di.DatabaseModule::class, com.futsch1.medtimer.di.DatastoreModule::class, com.futsch1.medtimer.di.TimeAccessModule::class)
+@dagger.hilt.android.testing.UninstallModules(
+    com.futsch1.medtimer.di.DatabaseModule::class,
+    com.futsch1.medtimer.di.DatastoreModule::class,
+    com.futsch1.medtimer.di.TimeAccessModule::class
+)
 class RepeatProcessorTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -60,18 +65,18 @@ class RepeatProcessorTest {
     }
 
     @BindValue
-    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = org.mockito.Mockito.mock()
+    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = mock()
 
     @BindValue
-    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
+    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = mock()
 
     @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
-    val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
+    val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
 
     @BindValue
     @com.futsch1.medtimer.di.MedTimerPreferencess
-    val boundMedTimerSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
+    val boundMedTimerSharedPreferences: android.content.SharedPreferences = mock()
 
     @Inject
     lateinit var repeatProcessor: RepeatProcessor

@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.exporters.CSVEventExport
@@ -263,7 +264,8 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val reminderEvents: List<ReminderEventEntity> =
-            medicineViewModel.filterEvents(medicineRepository.getAllReminderEventsWithoutDeletedAndAcknowledged())
+            medicineViewModel.filterEvents(medicineRepository.getAllReminderEventEntitiesWithoutDeletedAndAcknowledged())
+                .map { it.toEntity() }
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
             fragment.getParentFragmentManager()

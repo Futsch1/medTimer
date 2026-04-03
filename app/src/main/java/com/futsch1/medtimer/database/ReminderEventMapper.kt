@@ -1,13 +1,13 @@
 package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.reminderevent.DoseReminderEvent
 import com.futsch1.medtimer.model.reminderevent.DoseType
 import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
 import com.futsch1.medtimer.model.reminderevent.IntervalType
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
 import com.futsch1.medtimer.model.reminderevent.StockReminderType
+import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import java.time.Instant
 
 fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
@@ -30,7 +30,7 @@ fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
     )
     return when (reminderType) {
         ReminderEntity.ReminderType.TIME_BASED,
-        ReminderEntity.ReminderType.LINKED -> DoseReminderEvent(
+        ReminderEntity.ReminderType.LINKED -> TimeBasedReminderEvent(
             reminderEventId = commonArgs.reminderEventId,
             reminderId = commonArgs.reminderId,
             reminder = commonArgs.reminder,
@@ -114,7 +114,7 @@ fun ReminderEvent.toEntity(): ReminderEventEntity {
     entity.remainingRepeats = remainingRepeats
     entity.notes = notes
     when (this) {
-        is DoseReminderEvent -> {
+        is TimeBasedReminderEvent -> {
             entity.reminderType = when (doseType) {
                 DoseType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
                 DoseType.LINKED -> ReminderEntity.ReminderType.LINKED

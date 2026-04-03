@@ -5,13 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTagEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.database.TagEntity
-import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,7 +78,7 @@ class MedicineViewModel @Inject constructor(
             .collect(Collectors.toList())
     }
 
-    fun filterEvents(events: List<ReminderEventEntity>): List<ReminderEventEntity> {
+    fun filterEvents(events: List<ReminderEvent>): List<ReminderEvent> {
         return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value)
     }
 
@@ -93,10 +91,10 @@ class MedicineViewModel @Inject constructor(
     }
 
     private fun getFilteredEvents(
-        liveData: List<ReminderEventEntity>,
+        liveData: List<ReminderEvent>,
         validTagIds: Set<Int>,
         liveTags: List<TagEntity>
-    ): List<ReminderEventEntity> {
+    ): List<ReminderEvent> {
         if (validTagIds.isEmpty()) {
             return liveData
         }
@@ -108,7 +106,6 @@ class MedicineViewModel @Inject constructor(
         return liveData.stream().filter { reminderEvent ->
             validTagNames.stream().filter { reminderEvent.tags.contains(it) }.count() > 0
         }.collect(Collectors.toList())
-
     }
 
     private fun getId(medicineWithReminder: Any): Int {
@@ -137,8 +134,8 @@ class MedicineViewModel @Inject constructor(
 
     fun getLiveReminderEvents(
         timeStamp: Long,
-        statusValues: List<ReminderStatus> = allStatusValues
-    ): Flow<List<ReminderEventEntity>> {
+        statusValues: List<ReminderEvent.ReminderStatus> = ReminderEvent.allStatusValues
+    ): Flow<List<ReminderEvent>> {
         return combine(
             medicineRepository.getReminderEventsFlow(timeStamp, statusValues),
             validTagIds,

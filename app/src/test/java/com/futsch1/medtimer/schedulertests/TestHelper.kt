@@ -3,8 +3,8 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -56,23 +56,17 @@ object TestHelper {
         )
     }
 
-    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity {
-        val reminderEvent = ReminderEventEntity()
-        reminderEvent.reminderId = reminderId
-        reminderEvent.remindedTimestamp = remindedTimestamp
-        return reminderEvent
+    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Instant): TimeBasedReminderEvent {
+        return TimeBasedReminderEvent.default().copy(reminderId = reminderId, remindedTimestamp = remindedTimestamp)
     }
 
     fun buildReminderEvent(
         reminderId: Int,
         remindedTimestamp: Long,
         reminderEventId: Int
-    ): ReminderEventEntity {
-        val reminderEvent = ReminderEventEntity()
-        reminderEvent.reminderId = reminderId
-        reminderEvent.remindedTimestamp = remindedTimestamp
-        reminderEvent.reminderEventId = reminderEventId
-        return reminderEvent
+    ): TimeBasedReminderEvent {
+        return TimeBasedReminderEvent.default()
+            .copy(reminderId = reminderId, remindedTimestamp = Instant.ofEpochSecond(remindedTimestamp), reminderEventId = reminderEventId)
     }
 
     fun assertReminded(

@@ -2,16 +2,14 @@ package com.futsch1.medtimer.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.OverviewFilter
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.overview.model.EventPosition
 import com.futsch1.medtimer.overview.model.OverviewEvent
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -22,7 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
@@ -35,7 +32,7 @@ class OverviewViewModel @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
     private val reminderEventFactory: PastReminderEvent.Factory,
     private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
-    @Assisted private val reminderEvents: Flow<List<ReminderEventEntity>>,
+    @Assisted private val reminderEvents: Flow<List<ReminderEvent>>,
     @Assisted private val scheduledReminders: SharedFlow<List<ScheduledReminder>>
 ) : ViewModel() {
     private data class FilterState(val activeFilters: Set<OverviewFilter>, val day: LocalDate, val tick: Long)
@@ -43,7 +40,7 @@ class OverviewViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            reminderEvents: Flow<List<ReminderEventEntity>>,
+            reminderEvents: Flow<List<ReminderEvent>>,
             scheduledReminders: SharedFlow<List<ScheduledReminder>>
         ): OverviewViewModel
     }
@@ -60,7 +57,7 @@ class OverviewViewModel @AssistedInject constructor(
         }
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEvents.map { it.map { entity -> entity.toModel() } }, scheduledReminders, filterState) { events, reminders, fs ->
+        combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 

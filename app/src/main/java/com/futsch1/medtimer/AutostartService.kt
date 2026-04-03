@@ -3,9 +3,9 @@ package com.futsch1.medtimer
 import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,9 +24,9 @@ class AutostartService @Inject constructor(
     suspend fun restoreNotifications() = withContext(backgroundDispatcher) {
         Log.i(LogTags.AUTOSTART, "Restore notifications")
 
-        val reminderEventList: List<ReminderEventEntity> = medicineRepository.getLastDaysReminderEvents(1)
-            .filter { it.status == ReminderEventEntity.ReminderStatus.RAISED }
-        val notificationsMap: Map<Long, List<ReminderEventEntity>> = reminderEventList.groupBy { it.remindedTimestamp }
+        val reminderEventList: List<ReminderEvent> = medicineRepository.getLastDaysReminderEvents(1)
+            .filter { it.status == ReminderEvent.ReminderStatus.RAISED }
+        val notificationsMap: Map<Long, List<ReminderEvent>> = reminderEventList.groupBy { it.remindedTimestamp.epochSecond }
         for (notificationEntry in notificationsMap) {
             val reminderIds = notificationEntry.value.map { it.reminderId }.toIntArray()
             val reminderEventIds = notificationEntry.value.map { it.reminderEventId }.toIntArray()

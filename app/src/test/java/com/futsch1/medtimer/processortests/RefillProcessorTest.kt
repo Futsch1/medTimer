@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
@@ -59,7 +60,7 @@ class RefillProcessorTest {
     val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
         override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
         override fun localDate(): java.time.LocalDate = reminderContext.localDate
-        override fun now(): java.time.Instant = reminderContext.instant
+        override fun now(): Instant = reminderContext.instant
     }
 
     @BindValue
@@ -104,7 +105,7 @@ class RefillProcessorTest {
         reminderContext.medicineRepositoryFake.medicines[0].refillSizes.add(10.0)
         reminderContext.medicineRepositoryFake.medicines[0].amount = 100.0
         reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1))
-        reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
+        reminderContext.medicineRepositoryFake.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1).toEntity())
 
         runBlocking {
             refillProcessor.processRefill(ProcessedNotificationData(listOf(1)))

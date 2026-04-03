@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
 import org.junit.Test
 import org.mockito.Mockito
@@ -19,7 +19,7 @@ internal class ReminderSchedulerTimezoneUnitTest {
         val reminder1 = TestHelper.buildReminder(1, 1, "1", 1, 1)
         medicineWithReminders1.reminders.add(reminder1)
         val medicineWithReminders = listOf(medicineWithReminders1)
-        val reminderEvents = listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 1).epochSecond))
+        val reminderEvents = listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 1)))
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("CET"))
         var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicineWithReminders, reminderEvents)
         TestHelper.assertReminded(scheduledReminders, TestHelper.onTZ(2, 1, "CET"), medicineWithReminders1.medicine, reminder1)

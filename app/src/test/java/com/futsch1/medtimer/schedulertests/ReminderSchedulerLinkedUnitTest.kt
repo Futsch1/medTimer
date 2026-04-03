@@ -1,7 +1,8 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import org.junit.Test
@@ -22,7 +23,7 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: List<ReminderEventEntity> = mutableListOf()
+        val reminderEventList: List<ReminderEvent> = mutableListOf()
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(1, scheduledReminders.size)
@@ -43,8 +44,8 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480)))
         // Reminder 1 only raised, but not processed
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
@@ -55,7 +56,7 @@ class ReminderSchedulerLinkedUnitTest {
         )
 
         // Now it was also processed
-        reminderEventList[0].processedTimestamp = TestHelper.on(1, 481).epochSecond
+        reminderEventList[0] = (reminderEventList[0] as TimeBasedReminderEvent).copy(processedTimestamp = TestHelper.on(1, 481))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
@@ -72,8 +73,7 @@ class ReminderSchedulerLinkedUnitTest {
             1
         )
 
-        val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541).epochSecond)
-        reminderEvent.processedTimestamp = TestHelper.on(1, 542).epochSecond
+        val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541)).copy(processedTimestamp = TestHelper.on(1, 542))
         reminderEventList.add(reminderEvent)
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
@@ -83,8 +83,7 @@ class ReminderSchedulerLinkedUnitTest {
             reminderSource
         )
 
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 480).epochSecond))
-        reminderEventList[2].processedTimestamp = TestHelper.on(2, 484).epochSecond
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 480)).copy(processedTimestamp = TestHelper.on(2, 484)))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
@@ -112,7 +111,7 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList: MutableList<ReminderEventEntity> = mutableListOf()
+        val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
         var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
             scheduledReminders,
@@ -122,8 +121,7 @@ class ReminderSchedulerLinkedUnitTest {
         )
         assertEquals(1, scheduledReminders.size)
 
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480).epochSecond))
-        reminderEventList[0].processedTimestamp = TestHelper.on(1, 481).epochSecond
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480)).copy(processedTimestamp = TestHelper.on(1, 481)))
 
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(
@@ -142,8 +140,8 @@ class ReminderSchedulerLinkedUnitTest {
         )
         assertEquals(2, scheduledReminders.size)
 
-        val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541).epochSecond)
-        reminderEvent.processedTimestamp = TestHelper.on(1, 542).epochSecond
+        var reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541))
+        reminderEvent = reminderEvent.copy(processedTimestamp = TestHelper.on(1, 542))
         reminderEventList.add(reminderEvent)
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(

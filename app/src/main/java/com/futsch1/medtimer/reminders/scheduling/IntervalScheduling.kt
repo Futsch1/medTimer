@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -9,7 +9,7 @@ import kotlin.math.ceil
 
 open class IntervalScheduling(
     reminder: ReminderEntity,
-    reminderEventList: List<ReminderEventEntity>,
+    reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
 
@@ -18,7 +18,7 @@ open class IntervalScheduling(
     }
 
     private fun getNextScheduledTimeInternal(): Instant? {
-        val lastReminderEvent: ReminderEventEntity? =
+        val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent()
         return if (lastReminderEvent != null) {
             getNextIntervalTimeFromReminderEvent(lastReminderEvent)
@@ -27,16 +27,14 @@ open class IntervalScheduling(
         }
     }
 
-    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEventEntity): Instant? {
+    private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                if (lastReminderEvent.processedTimestamp != 0L)
-                    Instant.ofEpochSecond(lastReminderEvent.processedTimestamp)
+                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
+                    lastReminderEvent.processedTimestamp
                 else null
             } else
-                Instant.ofEpochSecond(
-                    lastReminderEvent.remindedTimestamp
-                )
+                lastReminderEvent.remindedTimestamp
         return instant?.plusSeconds(reminder.timeInMinutes * 60L)
     }
 

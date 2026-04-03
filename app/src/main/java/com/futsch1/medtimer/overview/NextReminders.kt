@@ -6,12 +6,11 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.allStatusValues
+import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.model.ScheduledReminder
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -23,7 +22,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private val dataSource: PreferencesDataSource,
     private val medicineRepository: MedicineRepository
 ) {
-    private var reminderEvents: List<ReminderEventEntity>? = null
+    private var reminderEvents: List<ReminderEvent>? = null
     private var fullMedicines: List<FullMedicineEntity>? = null
 
     init {
@@ -34,7 +33,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         parentFragment.viewLifecycleOwner.lifecycleScope.launch {
             medicineRepository.getReminderEventsFlow(
                 Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
-                allStatusValues
+                ReminderEvent.allStatusValues
             ).collect { reminderEvents ->
                 changedReminderEvents(reminderEvents)
             }
@@ -46,7 +45,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         }
     }
 
-    private fun changedReminderEvents(reminderEvents: List<ReminderEventEntity>) {
+    private fun changedReminderEvents(reminderEvents: List<ReminderEvent>) {
         this.reminderEvents = reminderEvents
         calculateSchedule()
     }

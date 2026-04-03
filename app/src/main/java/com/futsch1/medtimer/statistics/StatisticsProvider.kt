@@ -2,9 +2,8 @@ package com.futsch1.medtimer.statistics
 
 import com.androidplot.xy.SimpleXYSeries
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -32,16 +31,16 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
 
     suspend fun getTakenSkippedData(days: Int): TakenSkipped {
         val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
-        val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.TAKEN) }
+        val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.TAKEN) }
         val skipped =
-            reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.SKIPPED) }
+            reminderEvents.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.SKIPPED) }
         return TakenSkipped(taken.toLong(), skipped.toLong())
     }
 
     private fun eventStatusDaysFilter(
-        event: ReminderEventEntity,
+        event: ReminderEvent,
         days: Int,
-        status: ReminderStatus
+        status: ReminderEvent.ReminderStatus
     ): Boolean {
         if (event.status != status) {
             return false
@@ -53,8 +52,7 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
         )
     }
 
-    private fun wasAfter(secondsSinceEpoch: Long, date: LocalDate): Boolean {
-        val instant = Instant.ofEpochSecond(secondsSinceEpoch)
+    private fun wasAfter(instant: Instant, date: LocalDate): Boolean {
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date)
     }
 
@@ -69,7 +67,7 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
         val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
         return reminderEvents
             .filter {
-                it.status == ReminderStatus.TAKEN && wasAfter(
+                it.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(
                     it.remindedTimestamp,
                     earliestDate
                 )
@@ -87,8 +85,8 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
             }
     }
 
-    private fun getDaysInThePast(secondsSinceEpoch: Long): Int {
-        val eventDate = Instant.ofEpochSecond(secondsSinceEpoch)
+    private fun getDaysInThePast(instant: Instant): Int {
+        val eventDate = instant
             .atZone(ZoneId.systemDefault())
             .toLocalDate()
         val today = LocalDate.now()

@@ -15,6 +15,7 @@ import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -39,19 +40,15 @@ class MedicineRepositoryFake {
 
     init {
         `when`(runBlocking { mock.getMedicines() }).thenAnswer { buildFullMedicines() }
-        `when`(runBlocking { mock.getReminderEventsForScheduling(anyList()) }).thenAnswer { reminderEvents }
+        `when`(runBlocking { mock.getReminderEventsForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
         `when`(runBlocking { mock.getReminderEvent(anyInt()) }).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
         `when`(runBlocking { mock.insertReminderEvent(any()) }).thenAnswer {
             val reminderEvent = it.arguments[0] as ReminderEventEntity
-            reminderEvent.reminderEventId = reminderEvents.size + 1
             reminderEvents.add(reminderEvent)
-            reminderEvent.reminderEventId.toLong()
+            reminderEvents.size + 1
         }
         `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
-        `when`(runBlocking { mock.getMedicine(anyInt()) }
-
-
-        ).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(runBlocking { mock.getMedicine(anyInt()) }).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
         `when`(runBlocking { mock.updateMedicine(any()) }).thenAnswer {
             val medicine = it.arguments[0] as MedicineEntity
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }

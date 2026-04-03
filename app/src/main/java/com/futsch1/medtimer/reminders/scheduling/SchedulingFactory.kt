@@ -2,7 +2,7 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
@@ -10,7 +10,7 @@ class SchedulingFactory {
     fun create(
         reminder: ReminderEntity,
         medicine: MedicineEntity,
-        reminderEvents: List<ReminderEventEntity>,
+        reminderEvents: List<ReminderEvent>,
         timeAccess: TimeAccess,
         dataSource: PreferencesDataSource
     ): Scheduling {

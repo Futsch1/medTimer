@@ -18,7 +18,7 @@ data class IntervalReminderEvent(
     override val useColor: Boolean,
     override val iconId: Int,
     override val tags: List<String>,
-    override val status: ReminderEvent.ReminderStatus,
+    override val status: ReminderStatus,
     override val remindedTimestamp: Instant,
     override val processedTimestamp: Instant,
     override val notificationId: Int,

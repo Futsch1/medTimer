@@ -6,6 +6,7 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
@@ -73,11 +74,11 @@ class ReminderHelperTest {
         assertEquals("1:00\u202FAM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), false)
         assertEquals("1/1/70 1:00\u202FAM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatter.formatScheduledReminderForWidget(scheduledReminder, true)
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), true)
         assertEquals("1:00\u202FAM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
@@ -89,7 +90,7 @@ class ReminderHelperTest {
         assertEquals("1:00\u202FAM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), false)
         assertEquals("1/1/70 1:00\u202FAM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
@@ -102,11 +103,11 @@ class ReminderHelperTest {
         assertEquals("In 1 hour, 2:00\u202FAM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatter.formatScheduledReminderForWidget(scheduledReminder, false)
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
         result = formatter.formatScheduledReminderForWidget(scheduledReminder, true)
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), true)
         assertEquals("In 1 hour: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
 
@@ -114,11 +115,11 @@ class ReminderHelperTest {
         Mockito.`when`(contextMock.getString(R.string.taken)).thenReturn("Taken")
         Mockito.`when`(contextMock.getString(R.string.skipped)).thenReturn("Skipped")
         reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (Taken)", resultReminder.toString())
         reminderEvent.status = ReminderEventEntity.ReminderStatus.SKIPPED
         reminderEvent.amount = "6"
-        resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
+        resultReminder = formatter.formatReminderForWidget(reminderEvent.toModel(), false)
         assertEquals("In 1 hour, 2:00\u202FAM: Test (6 Skipped)", resultReminder.toString())
 
         // Test show taken time in overview

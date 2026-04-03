@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 internal class ReminderSchedulerActiveDayOfMonthUnitTest {
     @Test
     fun scheduleDayOfMonth() {
-        val mockTimeAccess: TimeAccess = Mockito.mock<TimeAccess>()
+        val mockTimeAccess: TimeAccess = Mockito.mock()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
         val scheduler = getScheduler(mockTimeAccess)
@@ -29,7 +29,7 @@ internal class ReminderSchedulerActiveDayOfMonthUnitTest {
         val medicineList = mutableListOf<FullMedicineEntity>()
         medicineList.add(medicineWithReminders)
 
-        val reminderEventList = emptyList<ReminderEventEntity>()
+        val reminderEventList = emptyList<ReminderEvent>()
 
         var scheduledReminders =
             scheduler.schedule(medicineList, reminderEventList)

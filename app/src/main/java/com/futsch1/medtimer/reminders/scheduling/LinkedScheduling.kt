@@ -1,26 +1,26 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
 class LinkedScheduling(
     reminder: ReminderEntity,
-    reminderEventList: List<ReminderEventEntity>,
+    reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
-        val lastSourceReminderEvent: ReminderEventEntity? =
+        val lastSourceReminderEvent: ReminderEvent? =
             findLastReminderEvent(reminder.linkedReminderId)
-        val lastReminderEvent: ReminderEventEntity? =
+        val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent()
         if (lastSourceReminderEvent != null &&
-            lastSourceReminderEvent.processedTimestamp != 0L &&
+            lastSourceReminderEvent.processedTimestamp != Instant.EPOCH &&
             (lastReminderEvent == null
                     || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)
         ) {
-            return Instant.ofEpochSecond(lastSourceReminderEvent.processedTimestamp).plusSeconds(
+            return lastSourceReminderEvent.processedTimestamp.plusSeconds(
                 reminder.timeInMinutes * 60L
             )
         }

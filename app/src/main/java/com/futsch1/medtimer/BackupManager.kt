@@ -17,6 +17,7 @@ import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.FileHelper
@@ -171,7 +172,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 EVENT_KEY, createBackup(
                     JSONReminderEventBackup(),
-                    medicineRepository.getAllReminderEventsWithoutDeleted()
+                    medicineRepository.getAllReminderEventEntitiesWithoutDeleted().map { it.toEntity() }
                 )
             )
         }
@@ -302,7 +303,7 @@ class BackupManager @AssistedInject constructor(
         jsonObject.add(
             EVENT_KEY, createBackup(
                 JSONReminderEventBackup(),
-                medicineRepository.getAllReminderEventsWithoutDeleted()
+                medicineRepository.getAllReminderEventEntitiesWithoutDeleted().map { it.toEntity() }
             )
         )
 

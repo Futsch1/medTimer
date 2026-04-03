@@ -8,7 +8,7 @@ enum class DoseType {
     LINKED
 }
 
-data class DoseReminderEvent(
+data class TimeBasedReminderEvent(
     override val reminderEventId: Int,
     override val reminderId: Int,
     override val reminder: Reminder?,
@@ -18,7 +18,7 @@ data class DoseReminderEvent(
     override val useColor: Boolean,
     override val iconId: Int,
     override val tags: List<String>,
-    override val status: ReminderEvent.ReminderStatus,
+    override val status: ReminderStatus,
     override val remindedTimestamp: Instant,
     override val processedTimestamp: Instant,
     override val notificationId: Int,
@@ -29,7 +29,7 @@ data class DoseReminderEvent(
     val doseType: DoseType
 ) : ReminderEvent() {
     companion object {
-        fun default(): DoseReminderEvent = DoseReminderEvent(
+        fun default(): TimeBasedReminderEvent = TimeBasedReminderEvent(
             reminderEventId = 0,
             reminderId = 0,
             reminder = null,

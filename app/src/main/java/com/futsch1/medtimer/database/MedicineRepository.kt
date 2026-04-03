@@ -1,7 +1,8 @@
 package com.futsch1.medtimer.database
 
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.Instant
 import java.util.LinkedList
 
@@ -39,24 +40,31 @@ open class MedicineRepository(
         return medicineDao.getReminderFlow(reminderId)
     }
 
-    fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEventEntity>> {
-        return medicineDao.getReminderEventsFlowStartingFrom(timeStamp, statusValues)
+    fun getReminderEventsFlow(timeStamp: Long, statusValues: List<ReminderEvent.ReminderStatus>): Flow<List<ReminderEvent>> {
+        val entityStatusValues = statusValues.map { it.toEntity() }
+        return medicineDao.getReminderEventsFlowStartingFrom(timeStamp, entityStatusValues).map { reminderEvents ->
+            reminderEvents.map { it.toModel() }
+        }
     }
 
-    suspend fun getAllReminderEventsWithoutDeleted(): List<ReminderEventEntity> {
-        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete)
+    suspend fun getAllReminderEventsWithoutDeleted(): List<ReminderEvent> {
+        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete).map { it.toModel() }
     }
 
-    suspend fun getAllReminderEventsWithoutDeletedAndAcknowledged(): List<ReminderEventEntity> {
-        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDeletedAndAcknowledged)
+    suspend fun getAllReminderEventEntitiesWithoutDeleted(): List<ReminderEvent> {
+        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDelete).map { it.toModel() }
     }
 
-    suspend fun getLastDaysReminderEvents(days: Int): List<ReminderEventEntity> {
-        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues)
+    suspend fun getAllReminderEventEntitiesWithoutDeletedAndAcknowledged(): List<ReminderEvent> {
+        return medicineDao.getLimitedReminderEvents(0L, statusValuesWithoutDeletedAndAcknowledged).map { it.toModel() }
     }
 
-    suspend fun getReminderEventsForScheduling(medicines: List<FullMedicineEntity>): List<ReminderEventEntity> {
-        val reminderEvents: MutableList<ReminderEventEntity> = LinkedList<ReminderEventEntity>()
+    suspend fun getLastDaysReminderEvents(days: Int): List<ReminderEvent> {
+        return medicineDao.getLimitedReminderEvents(Instant.now().toEpochMilli() / 1000 - (days.toLong() * 24 * 60 * 60), allStatusValues).map { it.toModel() }
+    }
+
+    suspend fun getReminderEventsForScheduling(medicines: List<FullMedicineEntity>): List<ReminderEvent> {
+        val reminderEvents: MutableList<ReminderEvent> = LinkedList<ReminderEvent>()
         for (medicine in medicines) {
             for (reminder in medicine.reminders) {
                 if (reminder.active) {
@@ -67,12 +75,12 @@ open class MedicineRepository(
         return reminderEvents
     }
 
-    private suspend fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEventEntity> {
-        var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2)
+    private suspend fun getLastReminderEventsForScheduling(reminderId: Int): List<ReminderEvent> {
+        var lastReminderEvents = medicineDao.getLastReminderEvents(reminderId, 2).map { it.toModel() }
         if (lastReminderEvents.isNotEmpty() && lastReminderEvents
-                .all { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now().toEpochMilli() / 1000 }
+                .all { reminderEvent -> reminderEvent.remindedTimestamp > Instant.now() }
         ) {
-            lastReminderEvents = medicineDao.getReminderEvents(reminderId)
+            lastReminderEvents = medicineDao.getReminderEvents(reminderId).map { it.toModel() }
         }
         return lastReminderEvents
     }
@@ -114,12 +122,16 @@ open class MedicineRepository(
         return medicineDao.getReminderEvent(reminderEventId)
     }
 
-    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEventEntity?> {
-        return medicineDao.getReminderEventFlow(reminderEventId)
+    fun getReminderEventFlow(reminderEventId: Int): Flow<ReminderEvent?> {
+        return medicineDao.getReminderEventFlow(reminderEventId).map { it?.toModel() }
     }
 
     suspend fun getReminderEvent(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity? {
         return medicineDao.getReminderEvent(reminderId, remindedTimestamp)
+    }
+
+    suspend fun updateReminderEvent(reminderEvent: ReminderEvent) {
+        medicineDao.updateReminderEvent(reminderEvent.toEntity())
     }
 
     suspend fun updateReminderEvent(reminderEvent: ReminderEventEntity) {

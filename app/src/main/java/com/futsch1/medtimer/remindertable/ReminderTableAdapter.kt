@@ -8,9 +8,8 @@ import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
 
@@ -80,7 +79,7 @@ class ReminderTableAdapter(
         return View(viewGroup.context)
     }
 
-    fun submitList(reminderEvents: List<ReminderEventEntity>) {
+    fun submitList(reminderEvents: List<ReminderEvent>) {
         val cells = mutableListOf<List<ReminderTableCellModel?>>()
         val rows = mutableListOf<ReminderTableCellModel?>()
         val formatter = timeFormatter
@@ -106,7 +105,7 @@ class ReminderTableAdapter(
                 ),
                 ReminderTableCellModel(
                     reminderEvent.remindedTimestamp,
-                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp),
+                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp.epochSecond),
                     reminderEvent.reminderEventId,
                     "time"
                 )
@@ -129,12 +128,12 @@ class ReminderTableAdapter(
     }
 
     private fun getStatusString(
-        reminderEvent: ReminderEventEntity,
+        reminderEvent: ReminderEvent,
         formatter: TimeFormatter
     ): String {
         return when (reminderEvent.status) {
-            ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp)
-            ReminderStatus.RAISED -> " "
+            ReminderEvent.ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp.epochSecond)
+            ReminderEvent.ReminderStatus.RAISED -> " "
             else -> "-"
         }
     }

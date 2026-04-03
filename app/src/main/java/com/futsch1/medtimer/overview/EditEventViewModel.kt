@@ -4,11 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
+import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +24,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
@@ -39,16 +43,16 @@ class EditEventViewModel @Inject constructor(
 
     private val reminderEventId: Int = checkNotNull(savedStateHandle[ARG_REMINDER_EVENT_ID])
     private val zoneId = ZoneId.systemDefault()
-    private var storedEvent: ReminderEventEntity? = null
+    private var storedEvent: ReminderEvent? = null
 
     val medicineName = MutableStateFlow("")
     val amount = MutableStateFlow("")
     val notes = MutableStateFlow("")
 
-    var status: ReminderEventEntity.ReminderStatus? = null
+    var status: ReminderEvent.ReminderStatus? = null
 
-    private val _reminderStatus = MutableStateFlow<ReminderEventEntity.ReminderStatus?>(null)
-    val reminderStatus: StateFlow<ReminderEventEntity.ReminderStatus?> = _reminderStatus.asStateFlow()
+    private val _reminderStatus = MutableStateFlow<ReminderEvent.ReminderStatus?>(null)
+    val reminderStatus: StateFlow<ReminderEvent.ReminderStatus?> = _reminderStatus.asStateFlow()
 
     private val _remindedMinutes = MutableStateFlow(0)
     var remindedMinutes: Int
@@ -101,14 +105,14 @@ class EditEventViewModel @Inject constructor(
                     amount.value = event.amount
                     notes.value = event.notes
                     status = when (event.status) {
-                        ReminderEventEntity.ReminderStatus.TAKEN -> ReminderEventEntity.ReminderStatus.TAKEN
-                        ReminderEventEntity.ReminderStatus.SKIPPED, ReminderEventEntity.ReminderStatus.RAISED -> ReminderEventEntity.ReminderStatus.SKIPPED
+                        ReminderEvent.ReminderStatus.TAKEN -> ReminderEvent.ReminderStatus.TAKEN
+                        ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> ReminderEvent.ReminderStatus.SKIPPED
                         else -> null
                     }
                     _remindedMinutes.value = timestampToMinutes(event.remindedTimestamp)
-                    _remindedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.remindedTimestamp, zoneId)
+                    _remindedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.remindedTimestamp.epochSecond, zoneId)
                     _processedMinutes.value = timestampToMinutes(event.processedTimestamp)
-                    _processedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.processedTimestamp, zoneId)
+                    _processedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.processedTimestamp.epochSecond, zoneId)
                     _reminderStatus.value = event.status
                 }
         }
@@ -116,25 +120,50 @@ class EditEventViewModel @Inject constructor(
 
     suspend fun updateEvent() {
         val event = storedEvent ?: return
-        event.medicineName = medicineName.value
-        event.amount = amount.value
-        event.notes = notes.value
-        event.remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
-        event.processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
-        status?.let { event.status = it }
+        val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
+        val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
+
+        val updatedEvent = when (event) {
+            is StockReminderEvent -> event.copy(
+                medicineName = medicineName.value,
+                amount = amount.value,
+                notes = notes.value,
+                remindedTimestamp = remindedTimestamp,
+                processedTimestamp = processedTimestamp,
+                status = status ?: event.status
+            )
+
+            is IntervalReminderEvent -> event.copy(
+                medicineName = medicineName.value,
+                amount = amount.value,
+                notes = notes.value,
+                remindedTimestamp = remindedTimestamp,
+                processedTimestamp = processedTimestamp,
+                status = status ?: event.status
+            )
+
+            is TimeBasedReminderEvent -> event.copy(
+                medicineName = medicineName.value,
+                amount = amount.value,
+                notes = notes.value,
+                remindedTimestamp = remindedTimestamp,
+                processedTimestamp = processedTimestamp,
+                status = status ?: event.status
+            )
+        }
 
         withContext(ioDispatcher) {
-            medicineRepository.updateReminderEvent(event)
+            medicineRepository.updateReminderEvent(updatedEvent)
         }
     }
 
-    private fun computeTimestamp(original: Long, minutes: Int, date: LocalDate): Long {
-        val withTime = TimeHelper.changeTimeStampMinutes(original, minutes)
-        return TimeHelper.changeTimeStampDate(withTime, date)
+    private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {
+        val withTime = TimeHelper.changeTimeStampMinutes(original.epochSecond, minutes)
+        return Instant.ofEpochSecond(TimeHelper.changeTimeStampDate(withTime, date))
     }
 
-    private fun timestampToMinutes(timestamp: Long): Int {
-        val localTime = TimeHelper.secondsSinceEpochToLocalTime(timestamp, zoneId)
+    private fun timestampToMinutes(timestamp: Instant): Int {
+        val localTime = TimeHelper.secondsSinceEpochToLocalTime(timestamp.epochSecond, zoneId)
         return localTime.hour * 60 + localTime.minute
     }
 }

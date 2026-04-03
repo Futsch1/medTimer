@@ -2,11 +2,11 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
@@ -20,7 +20,7 @@ import java.time.ZoneId
 import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
-    private fun buildSchedulingSimulator(medicines: List<FullMedicineEntity>, recentReminders: List<ReminderEventEntity>): SchedulingSimulator {
+    private fun buildSchedulingSimulator(medicines: List<FullMedicineEntity>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
         val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)

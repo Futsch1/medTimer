@@ -83,7 +83,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
                 factory.create(
                     medicineViewModel.getLiveReminderEvents(
                         Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60),
-                        com.futsch1.medtimer.database.statusValuesWithoutDelete
+                        com.futsch1.medtimer.model.reminderevent.ReminderEvent.statusValuesWithoutDelete
                     ),
                     medicineViewModel.scheduledReminders
                 )

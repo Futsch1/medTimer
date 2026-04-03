@@ -2,9 +2,10 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
@@ -17,14 +18,14 @@ typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double)
 
 class SchedulingSimulator(
     medicines: List<FullMedicineEntity>,
-    recentReminders: List<ReminderEventEntity>,
+    recentReminders: List<ReminderEvent>,
     timeAccess: TimeAccess,
     private val dataSource: PreferencesDataSource
 ) {
     val maxSimulationDays = 400
 
     var totalEvents = mutableListOf(*recentReminders.toTypedArray())
-    var schedulingItems = medicines.map { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.flatten().filter { it.reminder.active }
+    var schedulingItems = medicines.flatMap { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.filter { it.reminder.active }
     val schedulingFactory = SchedulingFactory()
     var currentDay: LocalDate = timeAccess.localDate()
     val timeAccess = object : TimeAccess {
@@ -94,12 +95,13 @@ class SchedulingSimulator(
     private fun createReminderEvent(
         reminder: ReminderEntity,
         nextScheduledTime: Instant
-    ): ReminderEventEntity {
-        val reminderEvent = ReminderEventEntity()
-        reminderEvent.remindedTimestamp = nextScheduledTime.toEpochMilli() / 1000
-        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-        reminderEvent.reminderId = reminder.reminderId
-        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
+    ): ReminderEvent {
+        val reminderEvent = TimeBasedReminderEvent.default().copy(
+            remindedTimestamp = nextScheduledTime,
+            processedTimestamp = nextScheduledTime,
+            reminderId = reminder.reminderId,
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
         return reminderEvent
     }
 
