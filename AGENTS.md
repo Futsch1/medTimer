@@ -1,0 +1,71 @@
+# medTimer — Agent Guide
+
+## Project Overview
+
+medTimer is an Android medication reminder app (Kotlin, minSdk 28, targetSdk 36).
+Package: `com.futsch1.medtimer`
+
+## Repository Layout
+
+```
+app/src/main/java/com/futsch1/medtimer/
+  database/          Room entities, DAOs, repository, mapper functions
+  model/             Clean domain model classes (in-progress refactor)
+    reminderevent/   Sealed ReminderEvent hierarchy + subclasses
+  overview/          Overview fragment, ViewModel, actions, model wrappers
+  reminders/         Scheduling, notification processing, alarm management
+  medicine/          Medicine editing UI, stock management
+  statistics/        Statistics fragment and calendar view
+  remindertable/     Sortable/filterable reminder table
+  exporters/         CSV and PDF export
+  helpers/           Utility classes (time formatting, string formatting)
+  preferences/       Persistent preferences and data sources
+  widgets/           Home-screen widgets
+  di/                Hilt dependency injection modules
+
+app/src/test/        JVM unit tests (Robolectric, Mockito, JUnit 4)
+app/src/androidTest/ Instrumented UI tests (Espresso, Barista, UIAutomator)
+app/schemas/         Room database migration schemas
+```
+
+## Build Commands
+
+```bash
+# Standard verification — run this after every code change
+./gradlew assembleDebug
+
+# Run JVM unit tests only (fast, no device needed)
+./gradlew testDebugUnitTest
+
+# Lint (enforced on CI; abortOnError = true, warningsAsErrors = true)
+./gradlew lint
+
+# Full coverage report (requires connected device/emulator — very slow)
+./gradlew JacocoDebugCodeCoverage
+```
+
+**Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally** — instrumented tests require an emulator and take a very long time. CI handles them.
+
+## CI / GitHub Actions
+
+- **`build.yml`** — runs on every push and PR to `main`; executes `assembleRelease` + `bundleRelease`, signs artifacts, creates GitHub releases on version tags.
+- **`test.yml`** — runs on every push and PR to `main`; runs fuzzing unit tests (`testDebug -Dfuzzing=true`), instrumented tests on an API 36 emulator (
+  `JacocoDebugCodeCoverage`), and lint.
+- Other workflows: `compatibilityTest`, `monkeyTest`, `firebaseTest`, `codeql`, `scorecard`, `storeListing`.
+
+The build must pass `assembleDebug` and `lint` before merging.
+
+## Architecture
+
+- **Database layer**: Room (`MedicineDao`, `MedicineRepository`). Entity classes are suffixed `Entity` (e.g. `ReminderEventEntity`, `MedicineEntity`).
+- **Domain model layer** (`model/`): Clean Kotlin data/sealed classes, no Room annotations.
+- **DI**: Hilt throughout. ViewModels use `@HiltViewModel`. Singletons use `@Singleton`.
+- **Reactive data**: Kotlin `Flow` / `StateFlow` / `SharedFlow`. No LiveData.
+- **Navigation**: Jetpack Navigation component with Safe Args.
+
+## Code Style
+
+- Kotlin only; no new Java files
+- Lint is strict: fix warnings, do not suppress without justification
+- Uses SonarQube as additional static code analysis
+- Standard Kotlin Code Style with line length set to 160 characters
