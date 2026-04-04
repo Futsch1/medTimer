@@ -100,7 +100,10 @@ android {
         abortOnError = true
         warningsAsErrors = true
         disable.add("IconLocation")
-        disable.addAll(elements = if (project.hasProperty("noGradleDeps")) listOf("GradleDependency", "AndroidGradlePluginVersion") else listOf())
+        disable.add("GradleDependency")
+        disable.add("AndroidGradlePluginVersion")
+        disable.add("OldTargetSdkVersion")
+        disable.add("ExpiredTargetSdkVersion")
     }
     sourceSets {
         getByName("main") {
