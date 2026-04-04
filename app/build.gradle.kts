@@ -102,7 +102,7 @@ android {
         disable.add("IconLocation")
         disable.add("GradleDependency")
         disable.add("AndroidGradlePluginVersion")
-        disable.add("ExpiredTargetSdkVersion")
+        disable.add("OldTargetApi")
     }
     sourceSets {
         getByName("main") {
