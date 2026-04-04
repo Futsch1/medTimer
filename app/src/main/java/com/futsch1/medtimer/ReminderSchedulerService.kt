@@ -20,7 +20,7 @@ class ReminderSchedulerService : LifecycleService() {
         super.onCreate()
 
         lifecycleScope.launch {
-            medicineRepository.medicinesFlow.collect { updateMedicine() }
+            medicineRepository.getFullAllFlow().collect { updateMedicine() }
         }
 
         Log.i(LogTags.SCHEDULER, "Scheduler service created")

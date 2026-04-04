@@ -12,5 +12,5 @@ class StockMedicineViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository
 ) : EntityViewModel<FullMedicine>() {
 
-    override fun getFlow(id: Int): Flow<FullMedicine?> = medicineRepository.getMedicineFlow(id)
+    override fun getFlow(id: Int): Flow<FullMedicine?> = medicineRepository.getFullFlow(id)
 }

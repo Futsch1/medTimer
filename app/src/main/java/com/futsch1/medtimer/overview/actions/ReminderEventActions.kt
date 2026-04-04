@@ -3,8 +3,8 @@ package com.futsch1.medtimer.overview.actions
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
@@ -23,7 +23,7 @@ import java.time.ZoneId
 class ReminderEventActions @AssistedInject constructor(
     @Assisted val event: OverviewReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timePickerDialogFactory: TimePickerDialogFactory
 ) : Actions {
 
@@ -91,7 +91,7 @@ class ReminderEventActions @AssistedInject constructor(
                     reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                     reminderEvent.remindedTimestamp = newReminderTime
-                    medicineRepository.updateReminderEvent(reminderEvent)
+                    reminderEventRepository.update(reminderEvent)
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -104,7 +104,7 @@ class ReminderEventActions @AssistedInject constructor(
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
-                medicineRepository.deleteReminderEvent(reminderEvent)
+                reminderEventRepository.delete(reminderEvent)
                 ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
             }
         }, {})
@@ -114,7 +114,7 @@ class ReminderEventActions @AssistedInject constructor(
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
                 reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
-                medicineRepository.updateReminderEvent(reminderEvent)
+                reminderEventRepository.update(reminderEvent)
             }
         }, {})
     }

@@ -3,6 +3,7 @@ package com.futsch1.medtimer.widgets
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -15,14 +16,15 @@ import javax.inject.Inject
 
 class NextRemindersLineProvider @Inject constructor(
     private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
     private val timeAccess: TimeAccess,
     private val reminderStringFormatter: ReminderStringFormatter,
     @param:ApplicationScope private val scope: CoroutineScope
 ) : WidgetLineProvider {
     private val scheduledReminders = scope.async {
-        val medicinesWithReminders = medicineRepository.getMedicines()
-        val reminderEvents = medicineRepository.getReminderEventsForScheduling(medicinesWithReminders)
+        val medicinesWithReminders = medicineRepository.getFullAll()
+        val reminderEvents = reminderEventRepository.getForScheduling(medicinesWithReminders)
         val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
 
         reminderScheduler.schedule(medicinesWithReminders, reminderEvents)

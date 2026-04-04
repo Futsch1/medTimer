@@ -7,7 +7,9 @@ import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTag
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.Tag
+import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -28,14 +30,16 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
     persistentDataDataSource: PersistentDataDataSource,
-    private val medicineRepository: MedicineRepository,
+    medicineRepository: MedicineRepository,
+    private val tagRepository: TagRepository,
+    private val reminderEventRepository: ReminderEventRepository,
 ) : ViewModel() {
-    private val liveMedicines = medicineRepository.medicinesFlow
+    private val liveMedicines = medicineRepository.getFullAllFlow()
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
     private var medicineToTags: List<MedicineToTag> = emptyList()
-    private val liveTags: StateFlow<List<Tag>> = medicineRepository.tagsFlow.stateIn(
+    private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
     )
 
@@ -51,13 +55,13 @@ class MedicineViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            medicineRepository.getMedicineToTagsFlow().collect {
+            tagRepository.getMedicineTagsFlow().collect {
                 medicineToTags = it
             }
         }
 
         viewModelScope.launch {
-            medicineRepository.tagsFlow.collect {
+            tagRepository.getAllFlow().collect {
                 tagFilterStore.filterForDeletedTags(it)
             }
         }
@@ -140,7 +144,7 @@ class MedicineViewModel @Inject constructor(
         statusValues: List<ReminderStatus> = allStatusValues
     ): Flow<List<ReminderEvent>> {
         return combine(
-            medicineRepository.getReminderEventsFlow(timeStamp, statusValues),
+            reminderEventRepository.getAllFlow(timeStamp, statusValues),
             validTagIds,
             liveTags
         ) { events, tagIds, tags ->

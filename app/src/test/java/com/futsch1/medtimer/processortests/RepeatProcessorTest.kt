@@ -15,11 +15,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
@@ -52,7 +52,13 @@ class RepeatProcessorTest {
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.medicineRepositoryFake.mock
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.repositoryFakes.medicineRepositoryMock
+
+    @BindValue
+    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
+
+    @BindValue
+    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
@@ -74,6 +80,21 @@ class RepeatProcessorTest {
     val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
 
     @BindValue
+    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundTagDao: com.futsch1.medtimer.database.TagDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = org.mockito.Mockito.mock()
+
+    @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
 
@@ -92,8 +113,8 @@ class RepeatProcessorTest {
             repeatProcessor.processRepeat(reminderNotificationData, 10.seconds)
         }
 
-        assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[0].remainingRepeats, -1)
-        assertEquals(reminderContext.medicineRepositoryFake.reminderEvents[1].remainingRepeats, -1)
+        assertEquals(reminderContext.repositoryFakes.reminderEvents[0].remainingRepeats, -1)
+        assertEquals(reminderContext.repositoryFakes.reminderEvents[1].remainingRepeats, -1)
         verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
     }
 }

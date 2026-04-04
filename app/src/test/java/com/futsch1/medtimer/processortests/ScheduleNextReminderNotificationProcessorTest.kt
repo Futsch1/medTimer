@@ -54,7 +54,13 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.medicineRepositoryFake.mock
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.repositoryFakes.medicineRepositoryMock
+
+    @BindValue
+    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
+
+    @BindValue
+    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
@@ -74,6 +80,21 @@ class ScheduleNextReminderNotificationProcessorTest {
 
     @BindValue
     val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundTagDao: com.futsch1.medtimer.database.TagDao = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = org.mockito.Mockito.mock()
+
+    @BindValue
+    val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = org.mockito.Mockito.mock()
 
     @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
@@ -98,8 +119,8 @@ class ScheduleNextReminderNotificationProcessorTest {
 
     @Test
     fun scheduleReminder() {
-        reminderContext.medicineRepositoryFake.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
-        reminderContext.medicineRepositoryFake.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
+        reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
 
         runBlocking {
             scheduleNextReminderNotificationProcessor.scheduleNextReminder()

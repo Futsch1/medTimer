@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
@@ -19,7 +19,7 @@ import java.time.Instant
 import javax.inject.Inject
 
 class VariableAmountHandler @Inject constructor(
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val notificationProcessor: NotificationProcessor,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
@@ -72,6 +72,6 @@ class VariableAmountHandler @Inject constructor(
 
     private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {
         reminderEvent.processedTimestamp = Instant.now().epochSecond
-        medicineRepository.updateReminderEvent(reminderEvent)
+        reminderEventRepository.update(reminderEvent)
     }
 }

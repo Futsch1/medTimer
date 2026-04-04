@@ -55,7 +55,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
 
     protected abstract fun isInvalid(item: T?): Boolean
 
-    abstract suspend fun applyBackup(list: List<T>, medicineRepository: MedicineRepository)
+    abstract suspend fun applyBackup(list: List<T>)
 
     protected data class DatabaseContentWithVersion<T>(
         @field:Expose val version: Int,

@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -33,6 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
     private val reminderEventFactory: OverviewReminderEvent.Factory,
     private val scheduledReminderEventFactory: OverviewScheduledReminderEvent.Factory,
@@ -59,10 +61,10 @@ class CalendarEventsViewModel @Inject constructor(
         else 0
 
         viewModelScope.launch(ioDispatcher) {
-            reminderEvents = medicineRepository.getLastDaysReminderEvents(pastDays.toInt())
-            allMedicines = medicineRepository.getMedicines()
+            reminderEvents = reminderEventRepository.getLastDays(pastDays.toInt())
+            allMedicines = medicineRepository.getFullAll()
             if (medicineId > 0) {
-                medicine = medicineRepository.getOnlyMedicine(medicineId)
+                medicine = medicineRepository.get(medicineId)
                 allMedicines =
                     allMedicines.filter { medicine -> medicine.medicine.medicineId == medicineId }
             }

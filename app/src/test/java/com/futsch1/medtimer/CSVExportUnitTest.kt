@@ -6,9 +6,11 @@ import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
+import com.futsch1.medtimer.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
@@ -18,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
+import org.mockito.kotlin.mock
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -54,7 +57,7 @@ internal class CSVExportUnitTest {
         )
 
         // Create a mock Context
-        val context = Mockito.mock<Context>().apply {
+        val context = mock<Context>().apply {
             Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
             Mockito.`when`(getString(R.string.name)).thenReturn("Name")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
@@ -65,7 +68,7 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock<File>()
+        val file = mock<File>()
         val utc = TimeZone.getTimeZone("WET")
 
         val usDateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US)
@@ -75,11 +78,20 @@ internal class CSVExportUnitTest {
         usTimeFormat.timeZone = utc
 
         val fragmentManager =
-            Mockito.mock<FragmentManager>()
+            mock<FragmentManager>()
 
         // Create the CSVCreator object
         val csvEventExport =
-            CSVEventExport(reminderEvents, fragmentManager, context, Dispatchers.Unconfined, TimeFormatter(context, Mockito.mock<PreferencesDataSource>(), Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }))
+            CSVEventExport(
+                reminderEvents,
+                fragmentManager,
+                context,
+                Dispatchers.Unconfined,
+                TimeFormatter(
+                    context,
+                    mock<PreferencesDataSource>(),
+                    mock<LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+            )
 
         Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
             Mockito.mockStatic(android.text.format.DateFormat::class.java)
@@ -151,7 +163,7 @@ internal class CSVExportUnitTest {
         )
 
         // Create a mock Context
-        val context = Mockito.mock<Context>().apply {
+        val context = mock<Context>().apply {
             Mockito.`when`(getString(R.string.tab_medicine)).thenReturn("Medicine")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
             Mockito.`when`(getString(R.string.time)).thenReturn("Time")
@@ -159,7 +171,7 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock<File>()
+        val file = mock<File>()
         val utc = TimeZone.getTimeZone("UTC")
         val usTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US)
         usTimeFormat.timeZone = utc
@@ -171,7 +183,7 @@ internal class CSVExportUnitTest {
                         TimeZone::class.java
                     ).use { timeZoneMockedStatic ->
                         val fragmentManager =
-                            Mockito.mock<FragmentManager>()
+                            mock<FragmentManager>()
                         dateAccessMockedStatic.`when`<Any> {
                             android.text.format.DateFormat.getTimeFormat(
                                 ArgumentMatchers.any()
@@ -181,12 +193,12 @@ internal class CSVExportUnitTest {
                             .thenReturn(utc)
 
                         // Create the CSVCreator object
-                        val mockPreferencesDataSource = Mockito.mock<PreferencesDataSource>()
-                        val mockLocaleContextAccessor = Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>()
+                        val mockPreferencesDataSource = mock<PreferencesDataSource>()
+                        val mockLocaleContextAccessor = mock<LocaleContextAccessor>()
                             .also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }
                         val timeFormatter = TimeFormatter(context, mockPreferencesDataSource, mockLocaleContextAccessor)
-                        val mockMedicineRepository = Mockito.mock<com.futsch1.medtimer.database.MedicineRepository>()
-                        val reminderSummaryFormatter = ReminderSummaryFormatter(context, mockMedicineRepository, timeFormatter)
+                        val mockReminderRepository = mock<ReminderRepository>()
+                        val reminderSummaryFormatter = ReminderSummaryFormatter(context, mockReminderRepository, timeFormatter)
                         val csvExport =
                             CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined, LinkedReminderAlgorithms())
                         try {
@@ -220,7 +232,7 @@ internal class CSVExportUnitTest {
     @Test
     fun testHandleEmptyListOfReminderEvents() {
         // Create a mock Context
-        val context = Mockito.mock<Context>().apply {
+        val context = mock<Context>().apply {
             Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
             Mockito.`when`(getString(R.string.name)).thenReturn("Name")
             Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
@@ -231,13 +243,22 @@ internal class CSVExportUnitTest {
         }
 
         // Create a mock File
-        val file = Mockito.mock<File>()
+        val file = mock<File>()
 
         Mockito.mockConstruction(FileWriter::class.java)
             .use { fileWriterMockedConstruction ->
-                val fragmentManager = Mockito.mock<FragmentManager>()
+                val fragmentManager = mock<FragmentManager>()
                 // Create the CSVCreator object
-                val csvEventExport = CSVEventExport(emptyList(), fragmentManager, context, Dispatchers.Unconfined, TimeFormatter(context, Mockito.mock<PreferencesDataSource>(), Mockito.mock<com.futsch1.medtimer.helpers.LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }))
+                val csvEventExport = CSVEventExport(
+                    emptyList(),
+                    fragmentManager,
+                    context,
+                    Dispatchers.Unconfined,
+                    TimeFormatter(
+                        context,
+                        mock<PreferencesDataSource>(),
+                        mock<LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+                )
                 try {
                     // Call the create method
                     runBlocking { csvEventExport.exportInternal(file) }

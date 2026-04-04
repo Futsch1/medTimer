@@ -1,16 +1,16 @@
 package com.futsch1.medtimer.statistics
 
 import com.androidplot.xy.SimpleXYSeries
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-class StatisticsProvider @Inject constructor(private val medicineRepository: MedicineRepository) {
+class StatisticsProvider @Inject constructor(private val reminderEventRepository: ReminderEventRepository) {
     companion object {
         private fun calculateDataEntries(
             days: Int,
@@ -31,7 +31,7 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
     }
 
     suspend fun getTakenSkippedData(days: Int): TakenSkipped {
-        val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
+        val reminderEvents = reminderEventRepository.getAllWithoutDeleted()
         val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.TAKEN) }
         val skipped =
             reminderEvents.count { eventStatusDaysFilter(it, days, ReminderStatus.SKIPPED) }
@@ -66,7 +66,7 @@ class StatisticsProvider @Inject constructor(private val medicineRepository: Med
     private suspend fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {
         val earliestDate = LocalDate.now().minusDays(days.toLong())
 
-        val reminderEvents = medicineRepository.getAllReminderEventsWithoutDeleted()
+        val reminderEvents = reminderEventRepository.getAllWithoutDeleted()
         return reminderEvents
             .filter {
                 it.status == ReminderStatus.TAKEN && wasAfter(

@@ -45,6 +45,9 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
         get() = openHelper.readableDatabase.version
 
     abstract fun medicineDao(): MedicineDao
+    abstract fun reminderDao(): ReminderDao
+    abstract fun reminderEventDao(): ReminderEventDao
+    abstract fun tagDao(): TagDao
 
     @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")
     internal class AutoMigration1To2 : AutoMigrationSpec

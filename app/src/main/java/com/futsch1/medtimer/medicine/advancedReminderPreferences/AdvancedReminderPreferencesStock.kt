@@ -10,10 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicine
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,12 +29,15 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     listOf("stock_threshold", "expiration_days_before")
 ) {
     @Inject
+    lateinit var medicineRepository: MedicineRepository
+
+    @Inject
     lateinit var timeFormatter: TimeFormatter
 
     @Inject
-    lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
+    lateinit var menuProviderFactory: AdvancedReminderSettingsMenuProvider.Factory
 
-    val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
+    val menuProvider by lazy { menuProviderFactory.create(this) }
     var fullMedicine: FullMedicine? = null
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
@@ -49,7 +52,6 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     override fun onEntityUpdated(entity: Reminder) {
         super.onEntityUpdated(entity)
 
-        menuProvider.medicineRepository = medicineRepository
         menuProvider.reminder = entity
 
         findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(entity.outOfStockThreshold, fullMedicine?.medicine?.unit ?: "")
@@ -66,7 +68,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         findPreference<Preference>("medicine_expiration_date")?.isVisible = entity.reminderType == Reminder.ReminderType.EXPIRATION_DATE
 
         this.lifecycleScope.launch(ioDispatcher) {
-            fullMedicine = medicineRepository.getMedicine(entity.medicineRelId)
+            fullMedicine = medicineRepository.getFull(entity.medicineRelId)
             this.launch(mainDispatcher) {
                 if (fullMedicine != null) {
                     findPreference<Preference>("medicine_stock")?.summary =

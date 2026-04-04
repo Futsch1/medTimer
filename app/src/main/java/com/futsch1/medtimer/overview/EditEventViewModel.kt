@@ -3,8 +3,8 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timeFormatter: TimeFormatter,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -92,7 +92,7 @@ class EditEventViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            medicineRepository.getReminderEventFlow(reminderEventId)
+            reminderEventRepository.getFlow(reminderEventId)
                 .filterNotNull()
                 .first()
                 .let { event ->
@@ -124,7 +124,7 @@ class EditEventViewModel @Inject constructor(
         status?.let { event.status = it }
 
         withContext(ioDispatcher) {
-            medicineRepository.updateReminderEvent(event)
+            reminderEventRepository.update(event)
         }
     }
 

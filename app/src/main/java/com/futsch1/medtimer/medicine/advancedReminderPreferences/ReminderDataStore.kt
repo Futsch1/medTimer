@@ -2,8 +2,8 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -19,7 +19,7 @@ import java.time.LocalDate
 class ReminderDataStore @AssistedInject constructor(
     @Assisted override var entity: Reminder,
     @param:ApplicationContext private val context: Context,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter,
     @param:ApplicationScope private val coroutineScope: CoroutineScope
 ) : EntityDataStore<Reminder>() {
@@ -189,7 +189,7 @@ class ReminderDataStore @AssistedInject constructor(
 
     private fun updateReminder(reminder: Reminder) {
         coroutineScope.launch {
-            medicineRepository.updateReminder(reminder)
+            reminderRepository.update(reminder)
         }
     }
 }

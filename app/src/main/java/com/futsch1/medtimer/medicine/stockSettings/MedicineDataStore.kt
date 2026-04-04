@@ -46,7 +46,7 @@ class MedicineDataStore @AssistedInject constructor(
             "expiration_date" -> entity.medicine.expirationDate = timeFormatter.stringToLocalDate(value!!)!!.toEpochDay()
         }
         coroutineScope.launch {
-            medicineRepository.updateMedicine(entity.medicine)
+            medicineRepository.update(entity.medicine)
         }
     }
 
@@ -56,7 +56,7 @@ class MedicineDataStore @AssistedInject constructor(
             "expiration_date" -> entity.medicine.expirationDate = value
         }
         coroutineScope.launch {
-            medicineRepository.updateMedicine(entity.medicine)
+            medicineRepository.update(entity.medicine)
         }
     }
 }

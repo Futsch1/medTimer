@@ -2,8 +2,8 @@ package com.futsch1.medtimer
 
 import android.content.Context
 import android.util.Log
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
@@ -18,13 +18,13 @@ import javax.inject.Singleton
 @Singleton
 class AutostartService @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     @param:Dispatcher(MedTimerDispatchers.Default) private val backgroundDispatcher: CoroutineDispatcher
 ) {
     suspend fun restoreNotifications() = withContext(backgroundDispatcher) {
         Log.i(LogTags.AUTOSTART, "Restore notifications")
 
-        val reminderEventList: List<ReminderEvent> = medicineRepository.getLastDaysReminderEvents(1)
+        val reminderEventList: List<ReminderEvent> = reminderEventRepository.getLastDays(1)
             .filter { it.status == ReminderEvent.ReminderStatus.RAISED }
         val notificationsMap: Map<Long, List<ReminderEvent>> = reminderEventList.groupBy { it.remindedTimestamp }
         for (notificationEntry in notificationsMap) {
