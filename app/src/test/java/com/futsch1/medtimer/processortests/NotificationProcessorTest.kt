@@ -3,10 +3,10 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.NotificationManager
 import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -124,7 +124,7 @@ class NotificationProcessorTest {
                     ?: return null
                 val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.get(reminderNotificationData.reminderEventIds[i])
                     ?: return null
-                parts.add(ReminderNotificationPart(reminder, event.toEntity(), medicine))
+                parts.add(ReminderNotificationPart(reminder, event, medicine))
             }
             return ReminderNotification(parts, reminderNotificationData)
         }
@@ -144,7 +144,7 @@ class NotificationProcessorTest {
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
                 processedNotificationData,
-                ReminderEventEntity.ReminderStatus.TAKEN
+                ReminderEvent.ReminderStatus.TAKEN
             )
         }
 
@@ -172,7 +172,7 @@ class NotificationProcessorTest {
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
                 processedNotificationData,
-                ReminderEventEntity.ReminderStatus.SKIPPED
+                ReminderEvent.ReminderStatus.SKIPPED
             )
         }
         // Reminder marked as taken

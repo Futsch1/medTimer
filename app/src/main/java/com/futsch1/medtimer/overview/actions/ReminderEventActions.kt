@@ -20,7 +20,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -72,7 +71,7 @@ class ReminderEventActions @AssistedInject constructor(
         if (isStockEvent) {
             when (button) {
                 Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
-                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent.toEntity())
+                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent)
                 else -> Unit
             }
         } else {
@@ -91,21 +90,19 @@ class ReminderEventActions @AssistedInject constructor(
         val localDateTime = LocalDateTime.ofInstant(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
         timePickerDialogFactory
             .create(localDateTime.hour, localDateTime.minute) { minutes ->
-                val entity = reminderEvent.toEntity()
-                val newReminderTime = TimeHelper.changeTimeStampMinutes(entity.remindedTimestamp, minutes)
+                val newReminderTime = TimeHelper.changeTimeMinutes(reminderEvent.remindedTimestamp, minutes)
                 fragmentActivity.lifecycleScope.launch {
-                    val reminderNotificationData = ReminderNotificationData.fromReminderEvent(entity)
-                    reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
-                    reminderNotificationData.notificationId = entity.notificationId
-                    entity.remindedTimestamp = newReminderTime
-                    reminderEventRepository.update(entity.toModel())
+                    val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
+                    reminderNotificationData.remindInstant = newReminderTime
+                    reminderNotificationData.notificationId = reminderEvent.notificationId
+                    reminderEventRepository.update(reminderEvent.copy(remindedTimestamp = newReminderTime))
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent.toEntity(), taken)
+        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent, taken)
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {

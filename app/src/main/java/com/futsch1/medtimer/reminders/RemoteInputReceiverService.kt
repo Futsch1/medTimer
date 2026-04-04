@@ -2,11 +2,10 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,7 +28,7 @@ class RemoteInputReceiverService @Inject constructor(
             reminderNotificationData
         ) ?: return@withContext
 
-        val reminderEvents = mutableListOf<ReminderEventEntity>()
+        val reminderEvents = mutableListOf<ReminderEvent>()
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts) {
             if (reminderNotificationPart.reminder.variableAmount) {
@@ -37,8 +36,7 @@ class RemoteInputReceiverService @Inject constructor(
                 Log.d(LogTags.REMINDER, "Setting variable amount to $amount of reID ${reminderNotificationPart.reminderEvent.reminderEventId}")
 
                 reminderEvents.add(reminderNotificationPart.reminderEvent)
-                reminderNotificationPart.reminderEvent.amount = amount
-                reminderEventRepository.update(reminderNotificationPart.reminderEvent.toModel())
+                reminderEventRepository.update(reminderNotificationPart.reminderEvent.copy(amount = amount))
                 continue
             }
 
@@ -46,7 +44,7 @@ class RemoteInputReceiverService @Inject constructor(
         }
 
         notificationProcessor.setReminderEventStatus(
-            ReminderEventEntity.ReminderStatus.TAKEN,
+            ReminderEvent.ReminderStatus.TAKEN,
             reminderEvents,
         )
     }

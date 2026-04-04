@@ -51,8 +51,9 @@ open class ReminderEventRepository(
         return reminderEventDao.getLast(reminderId)?.toModel()
     }
 
-    suspend fun create(reminderEvent: ReminderEvent): Long {
-        return reminderEventDao.create(reminderEvent.toEntity())
+    suspend fun create(reminderEvent: ReminderEvent): ReminderEvent {
+        val reminderEventId = reminderEventDao.create(reminderEvent.toEntity())
+        return reminderEvent.copy(reminderEventId = reminderEventId.toInt())
     }
 
     suspend fun createAll(reminderEvents: List<ReminderEvent>) {

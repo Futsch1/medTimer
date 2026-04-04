@@ -4,12 +4,10 @@ import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.toEntity
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -41,11 +39,11 @@ class NotificationProcessor @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val timeAccess: TimeAccess
 ) {
-    suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderStatus) {
+    suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderEvent.ReminderStatus) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
-        val reminderEventsToUpdate = mutableListOf<ReminderEventEntity>()
+        val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
-            val reminderEvent = reminderEventRepository.get(reminderEventId)?.toEntity()
+            val reminderEvent = reminderEventRepository.get(reminderEventId)
 
             if (reminderEvent != null) {
                 reminderEventsToUpdate.add(reminderEvent)
@@ -65,7 +63,7 @@ class NotificationProcessor @Inject constructor(
         notificationManager.cancel(notificationId)
     }
 
-    suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEventEntity>) {
+    suspend fun removeRemindersFromNotification(reminderEvents: List<ReminderEvent>) {
         val notificationId = reminderEvents.firstOrNull()?.notificationId ?: return
         if (notificationId != -1) {
             removeRemindersFromNotification(notificationId, reminderEvents.map { it.reminderEventId })
@@ -116,11 +114,10 @@ class NotificationProcessor @Inject constructor(
         }
     }
 
-    suspend fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEventEntity>) {
-        for (reminderEvent in reminderEvents) {
-            reminderEvent.status = status
-            reminderEvent.processedTimestamp = timeAccess.now().epochSecond
-            doStockHandling(reminderEvent)
+    suspend fun setReminderEventStatus(status: ReminderEvent.ReminderStatus, reminderEvents: List<ReminderEvent>) {
+        val processedTime = timeAccess.now()
+
+        val reminderEvents = reminderEvents.map { reminderEvent ->
             Log.i(
                 LogTags.REMINDER, String.format(
                     "%s reminder reID %d for %s (%s)",
@@ -131,27 +128,29 @@ class NotificationProcessor @Inject constructor(
                 )
             )
             alarmProcessor.cancelPendingReminderNotifications(reminderEvent.reminderEventId)
+            reminderEvent.copy(status = status, processedTimestamp = processedTime, stockHandled = doStockHandling(status, reminderEvent, processedTime))
         }
 
-        reminderEventRepository.updateAll(reminderEvents.map { it.toModel() })
+        reminderEventRepository.updateAll(reminderEvents)
         removeRemindersFromNotification(reminderEvents)
     }
 
-    private suspend fun doStockHandling(reminderEvent: ReminderEventEntity) {
-        if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
-            reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
+    private suspend fun doStockHandling(status: ReminderEvent.ReminderStatus, reminderEvent: ReminderEvent, processedTime: Instant): Boolean {
+        if (reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN ||
+            !reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
         ) {
-            val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return
-            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
-            if (reminderEvent.status == ReminderStatus.SKIPPED) {
-                amount = -amount
-            }
-            reminderEvent.stockHandled = reminderEvent.status == ReminderStatus.TAKEN
-            stockHandlingProcessor.processStock(
-                amount,
-                reminder.medicineRelId,
-                Instant.ofEpochSecond(reminderEvent.processedTimestamp)
-            )
+            return false
         }
+        val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return false
+        var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return false
+        if (status == ReminderEvent.ReminderStatus.SKIPPED) {
+            amount = -amount
+        }
+        stockHandlingProcessor.processStock(
+            amount,
+            reminder.medicineRelId,
+            processedTime
+        )
+        return status == ReminderEvent.ReminderStatus.TAKEN
     }
 }

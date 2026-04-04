@@ -12,6 +12,7 @@ import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.util.stream.Collectors
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class RefillProcessor @Inject constructor(
         if (reminderEvent != null) {
             notificationProcessor.processReminderEventsInNotification(
                 ProcessedNotificationData.fromReminderEvents(listOf(reminderEvent)),
-                ReminderEventEntity.ReminderStatus.ACKNOWLEDGED
+                ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )
         }
     }

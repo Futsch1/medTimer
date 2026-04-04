@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.database.ReminderEventEntity
-
-import com.futsch1.medtimer.reminders.getReminderAction
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.reminders.getReminderAction
 import java.time.Instant
 
 class ReminderNotificationData(
@@ -117,12 +116,11 @@ class ReminderNotificationData(
             )
         }
 
-        fun fromReminderEvent(reminderEvent: ReminderEventEntity): ReminderNotificationData {
+        fun fromReminderEvent(reminderEvent: ReminderEvent): ReminderNotificationData {
             val reminderIds = intArrayOf(reminderEvent.reminderId)
             val reminderEventIds = intArrayOf(reminderEvent.reminderEventId)
-            val remindInstant = Instant.ofEpochSecond(reminderEvent.remindedTimestamp)
             return ReminderNotificationData(
-                remindInstant, reminderIds, reminderEventIds
+                reminderEvent.remindedTimestamp, reminderIds, reminderEventIds
             )
         }
     }

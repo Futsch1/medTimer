@@ -4,12 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
@@ -32,7 +31,7 @@ class VariableAmountHandler @Inject constructor(
             reminderNotificationFactory.create(reminderNotificationData)
         } ?: return
 
-        val reminderEvents = mutableListOf<ReminderEventEntity>()
+        val reminderEvents = mutableListOf<ReminderEvent>()
 
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
@@ -46,11 +45,10 @@ class VariableAmountHandler @Inject constructor(
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {
-                        reminderNotificationPart.reminderEvent.amount = it
                         activity.lifecycleScope.launch(ioDispatcher) {
                             notificationProcessor.setReminderEventStatus(
-                                ReminderEventEntity.ReminderStatus.TAKEN,
-                                listOf(reminderNotificationPart.reminderEvent)
+                                ReminderEvent.ReminderStatus.TAKEN,
+                                listOf(reminderNotificationPart.reminderEvent.copy(amount = it))
                             )
                         }
                     }
@@ -65,14 +63,13 @@ class VariableAmountHandler @Inject constructor(
 
         withContext(ioDispatcher) {
             notificationProcessor.setReminderEventStatus(
-                ReminderEventEntity.ReminderStatus.TAKEN,
+                ReminderEvent.ReminderStatus.TAKEN,
                 reminderEvents,
             )
         }
     }
 
-    private suspend fun touchReminderEvent(reminderEvent: ReminderEventEntity) {
-        reminderEvent.processedTimestamp = Instant.now().epochSecond
-        reminderEventRepository.update(reminderEvent.toModel())
+    private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {
+        reminderEventRepository.update(reminderEvent.copy(processedTimestamp = Instant.now()))
     }
 }

@@ -82,6 +82,12 @@ object TimeHelper {
         return localDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(localDateTime))
     }
 
+    fun changeTimeMinutes(time: Instant, localMinutes: Int): Instant {
+        val zonedDateTime = time.atZone(ZoneId.systemDefault())
+        val localDateTime = zonedDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60)
+        return localDateTime.toInstant()
+    }
+
     fun secondsSinceEpochToISO8601DatetimeString(remindedTimestamp: Long): Any {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }
