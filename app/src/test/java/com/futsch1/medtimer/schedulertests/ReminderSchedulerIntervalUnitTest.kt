@@ -2,7 +2,6 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
@@ -52,7 +51,7 @@ class ReminderSchedulerIntervalUnitTest {
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(0, scheduledReminders.size)
 
-        reminderEventList[0] = (reminderEventList[0] as TimeBasedReminderEvent).copy(processedTimestamp = TestHelper.on(2, 121))
+        reminderEventList[0] = reminderEventList[0].copy(processedTimestamp = TestHelper.on(2, 121))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertReminded(
             scheduledReminders,

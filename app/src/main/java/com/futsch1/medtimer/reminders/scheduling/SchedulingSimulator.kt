@@ -5,7 +5,6 @@ import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
@@ -96,7 +95,7 @@ class SchedulingSimulator(
         reminder: ReminderEntity,
         nextScheduledTime: Instant
     ): ReminderEvent {
-        val reminderEvent = TimeBasedReminderEvent.default().copy(
+        val reminderEvent = ReminderEvent.default().copy(
             remindedTimestamp = nextScheduledTime,
             processedTimestamp = nextScheduledTime,
             reminderId = reminder.reminderId,

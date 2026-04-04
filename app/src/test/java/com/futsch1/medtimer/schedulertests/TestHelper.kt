@@ -4,7 +4,7 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -56,16 +56,16 @@ object TestHelper {
         )
     }
 
-    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Instant): TimeBasedReminderEvent {
-        return TimeBasedReminderEvent.default().copy(reminderId = reminderId, remindedTimestamp = remindedTimestamp)
+    fun buildReminderEvent(reminderId: Int, remindedTimestamp: Instant): ReminderEvent {
+        return ReminderEvent.default().copy(reminderId = reminderId, remindedTimestamp = remindedTimestamp)
     }
 
     fun buildReminderEvent(
         reminderId: Int,
         remindedTimestamp: Long,
         reminderEventId: Int
-    ): TimeBasedReminderEvent {
-        return TimeBasedReminderEvent.default()
+    ): ReminderEvent {
+        return ReminderEvent.default()
             .copy(reminderId = reminderId, remindedTimestamp = Instant.ofEpochSecond(remindedTimestamp), reminderEventId = reminderEventId)
     }
 

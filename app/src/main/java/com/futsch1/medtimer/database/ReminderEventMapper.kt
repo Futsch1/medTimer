@@ -1,17 +1,12 @@
 package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.reminderevent.DoseType
-import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
-import com.futsch1.medtimer.model.reminderevent.IntervalType
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
-import com.futsch1.medtimer.model.reminderevent.StockReminderType
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
+import com.futsch1.medtimer.model.reminderevent.ReminderEventType
 import java.time.Instant
 
-fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
-    val commonArgs = CommonArgs(
+fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent =
+    ReminderEvent(
         reminderEventId = reminderEventId,
         reminderId = reminderId,
         reminder = reminder,
@@ -26,76 +21,12 @@ fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent {
         processedTimestamp = Instant.ofEpochSecond(processedTimestamp),
         notificationId = notificationId,
         remainingRepeats = remainingRepeats,
-        notes = notes
+        notes = notes,
+        reminderType = reminderType.toModelReminderEventType(),
+        stockHandled = stockHandled,
+        askForAmount = askForAmount,
+        lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
     )
-    return when (reminderType) {
-        ReminderEntity.ReminderType.TIME_BASED,
-        ReminderEntity.ReminderType.LINKED -> TimeBasedReminderEvent(
-            reminderEventId = commonArgs.reminderEventId,
-            reminderId = commonArgs.reminderId,
-            reminder = commonArgs.reminder,
-            medicineName = commonArgs.medicineName,
-            amount = commonArgs.amount,
-            color = commonArgs.color,
-            useColor = commonArgs.useColor,
-            iconId = commonArgs.iconId,
-            tags = commonArgs.tags,
-            status = commonArgs.status,
-            remindedTimestamp = commonArgs.remindedTimestamp,
-            processedTimestamp = commonArgs.processedTimestamp,
-            notificationId = commonArgs.notificationId,
-            remainingRepeats = commonArgs.remainingRepeats,
-            notes = commonArgs.notes,
-            stockHandled = stockHandled,
-            askForAmount = askForAmount,
-            doseType = if (reminderType == ReminderEntity.ReminderType.LINKED) DoseType.LINKED else DoseType.TIME_BASED
-        )
-
-        ReminderEntity.ReminderType.CONTINUOUS_INTERVAL,
-        ReminderEntity.ReminderType.WINDOWED_INTERVAL -> IntervalReminderEvent(
-            reminderEventId = commonArgs.reminderEventId,
-            reminderId = commonArgs.reminderId,
-            reminder = commonArgs.reminder,
-            medicineName = commonArgs.medicineName,
-            amount = commonArgs.amount,
-            color = commonArgs.color,
-            useColor = commonArgs.useColor,
-            iconId = commonArgs.iconId,
-            tags = commonArgs.tags,
-            status = commonArgs.status,
-            remindedTimestamp = commonArgs.remindedTimestamp,
-            processedTimestamp = commonArgs.processedTimestamp,
-            notificationId = commonArgs.notificationId,
-            remainingRepeats = commonArgs.remainingRepeats,
-            notes = commonArgs.notes,
-            stockHandled = stockHandled,
-            askForAmount = askForAmount,
-            lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
-            intervalType = if (reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) IntervalType.WINDOWED else IntervalType.CONTINUOUS
-        )
-
-        ReminderEntity.ReminderType.OUT_OF_STOCK,
-        ReminderEntity.ReminderType.EXPIRATION_DATE,
-        ReminderEntity.ReminderType.REFILL -> StockReminderEvent(
-            reminderEventId = commonArgs.reminderEventId,
-            reminderId = commonArgs.reminderId,
-            reminder = commonArgs.reminder,
-            medicineName = commonArgs.medicineName,
-            amount = commonArgs.amount,
-            color = commonArgs.color,
-            useColor = commonArgs.useColor,
-            iconId = commonArgs.iconId,
-            tags = commonArgs.tags,
-            status = commonArgs.status,
-            remindedTimestamp = commonArgs.remindedTimestamp,
-            processedTimestamp = commonArgs.processedTimestamp,
-            notificationId = commonArgs.notificationId,
-            remainingRepeats = commonArgs.remainingRepeats,
-            notes = commonArgs.notes,
-            reminderType = reminderType.toStockReminderType()
-        )
-    }
-}
 
 fun ReminderEvent.toEntity(): ReminderEventEntity {
     val entity = ReminderEventEntity()
@@ -113,30 +44,10 @@ fun ReminderEvent.toEntity(): ReminderEventEntity {
     entity.notificationId = notificationId
     entity.remainingRepeats = remainingRepeats
     entity.notes = notes
-    when (this) {
-        is TimeBasedReminderEvent -> {
-            entity.reminderType = when (doseType) {
-                DoseType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
-                DoseType.LINKED -> ReminderEntity.ReminderType.LINKED
-            }
-            entity.stockHandled = stockHandled
-            entity.askForAmount = askForAmount
-        }
-
-        is IntervalReminderEvent -> {
-            entity.reminderType = when (intervalType) {
-                IntervalType.CONTINUOUS -> ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
-                IntervalType.WINDOWED -> ReminderEntity.ReminderType.WINDOWED_INTERVAL
-            }
-            entity.stockHandled = stockHandled
-            entity.askForAmount = askForAmount
-            entity.lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
-        }
-
-        is StockReminderEvent -> {
-            entity.reminderType = reminderType.toEntityReminderType()
-        }
-    }
+    entity.reminderType = reminderType.toEntityReminderType()
+    entity.stockHandled = stockHandled
+    entity.askForAmount = askForAmount
+    entity.lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
     return entity
 }
 
@@ -158,35 +69,24 @@ fun ReminderEvent.ReminderStatus.toEntity(): ReminderEventEntity.ReminderStatus 
         ReminderEvent.ReminderStatus.ACKNOWLEDGED -> ReminderEventEntity.ReminderStatus.ACKNOWLEDGED
     }
 
-fun ReminderEntity.ReminderType.toStockReminderType(): StockReminderType =
+fun ReminderEntity.ReminderType.toModelReminderEventType(): ReminderEventType =
     when (this) {
-        ReminderEntity.ReminderType.OUT_OF_STOCK -> StockReminderType.OUT_OF_STOCK
-        ReminderEntity.ReminderType.EXPIRATION_DATE -> StockReminderType.EXPIRATION_DATE
-        ReminderEntity.ReminderType.REFILL -> StockReminderType.REFILL
-        else -> throw IllegalArgumentException("Cannot convert $this to StockReminderType")
+        ReminderEntity.ReminderType.TIME_BASED -> ReminderEventType.TIME_BASED
+        ReminderEntity.ReminderType.LINKED -> ReminderEventType.LINKED
+        ReminderEntity.ReminderType.CONTINUOUS_INTERVAL -> ReminderEventType.CONTINUOUS_INTERVAL
+        ReminderEntity.ReminderType.WINDOWED_INTERVAL -> ReminderEventType.WINDOWED_INTERVAL
+        ReminderEntity.ReminderType.OUT_OF_STOCK -> ReminderEventType.OUT_OF_STOCK
+        ReminderEntity.ReminderType.EXPIRATION_DATE -> ReminderEventType.EXPIRATION_DATE
+        ReminderEntity.ReminderType.REFILL -> ReminderEventType.REFILL
     }
 
-fun StockReminderType.toEntityReminderType(): ReminderEntity.ReminderType =
+fun ReminderEventType.toEntityReminderType(): ReminderEntity.ReminderType =
     when (this) {
-        StockReminderType.OUT_OF_STOCK -> ReminderEntity.ReminderType.OUT_OF_STOCK
-        StockReminderType.EXPIRATION_DATE -> ReminderEntity.ReminderType.EXPIRATION_DATE
-        StockReminderType.REFILL -> ReminderEntity.ReminderType.REFILL
+        ReminderEventType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
+        ReminderEventType.LINKED -> ReminderEntity.ReminderType.LINKED
+        ReminderEventType.CONTINUOUS_INTERVAL -> ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
+        ReminderEventType.WINDOWED_INTERVAL -> ReminderEntity.ReminderType.WINDOWED_INTERVAL
+        ReminderEventType.OUT_OF_STOCK -> ReminderEntity.ReminderType.OUT_OF_STOCK
+        ReminderEventType.EXPIRATION_DATE -> ReminderEntity.ReminderType.EXPIRATION_DATE
+        ReminderEventType.REFILL -> ReminderEntity.ReminderType.REFILL
     }
-
-private data class CommonArgs(
-    val reminderEventId: Int,
-    val reminderId: Int,
-    val reminder: Reminder?,
-    val medicineName: String,
-    val amount: String,
-    val color: Int,
-    val useColor: Boolean,
-    val iconId: Int,
-    val tags: List<String>,
-    val status: ReminderEvent.ReminderStatus,
-    val remindedTimestamp: Instant,
-    val processedTimestamp: Instant,
-    val notificationId: Int,
-    val remainingRepeats: Int,
-    val notes: String
-)

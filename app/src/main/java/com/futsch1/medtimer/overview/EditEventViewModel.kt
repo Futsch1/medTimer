@@ -8,10 +8,7 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -123,34 +120,14 @@ class EditEventViewModel @Inject constructor(
         val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
         val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
 
-        val updatedEvent = when (event) {
-            is StockReminderEvent -> event.copy(
-                medicineName = medicineName.value,
-                amount = amount.value,
-                notes = notes.value,
-                remindedTimestamp = remindedTimestamp,
-                processedTimestamp = processedTimestamp,
-                status = status ?: event.status
-            )
-
-            is IntervalReminderEvent -> event.copy(
-                medicineName = medicineName.value,
-                amount = amount.value,
-                notes = notes.value,
-                remindedTimestamp = remindedTimestamp,
-                processedTimestamp = processedTimestamp,
-                status = status ?: event.status
-            )
-
-            is TimeBasedReminderEvent -> event.copy(
-                medicineName = medicineName.value,
-                amount = amount.value,
-                notes = notes.value,
-                remindedTimestamp = remindedTimestamp,
-                processedTimestamp = processedTimestamp,
-                status = status ?: event.status
-            )
-        }
+        val updatedEvent = event.copy(
+            medicineName = medicineName.value,
+            amount = amount.value,
+            notes = notes.value,
+            remindedTimestamp = remindedTimestamp,
+            processedTimestamp = processedTimestamp,
+            status = status ?: event.status
+        )
 
         withContext(ioDispatcher) {
             medicineRepository.updateReminderEvent(updatedEvent)

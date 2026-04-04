@@ -2,7 +2,6 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import org.junit.Test
@@ -56,7 +55,7 @@ class ReminderSchedulerLinkedUnitTest {
         )
 
         // Now it was also processed
-        reminderEventList[0] = (reminderEventList[0] as TimeBasedReminderEvent).copy(processedTimestamp = TestHelper.on(1, 481))
+        reminderEventList[0] = reminderEventList[0].copy(processedTimestamp = TestHelper.on(1, 481))
         scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,

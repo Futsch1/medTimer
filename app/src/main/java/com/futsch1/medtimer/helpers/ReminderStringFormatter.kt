@@ -14,12 +14,7 @@ import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.toEntityReminderType
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.DoseType
-import com.futsch1.medtimer.model.reminderevent.IntervalReminderEvent
-import com.futsch1.medtimer.model.reminderevent.IntervalType
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.StockReminderEvent
-import com.futsch1.medtimer.model.reminderevent.TimeBasedReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -176,25 +171,10 @@ class ReminderStringFormatter @Inject constructor(
         reminderEvent.processedTimestamp * 1000L - reminderEvent.lastIntervalReminderTimeInMinutes * 60_000L
 
     private fun getReminderTypeSpan(reminderEvent: ReminderEvent): Spanned =
-        getReminderTypeSpan(
-            when (reminderEvent) {
-                is TimeBasedReminderEvent -> when (reminderEvent.doseType) {
-                    DoseType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
-                    DoseType.LINKED -> ReminderEntity.ReminderType.LINKED
-                }
-
-                is IntervalReminderEvent -> when (reminderEvent.intervalType) {
-                    IntervalType.CONTINUOUS -> ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
-                    IntervalType.WINDOWED -> ReminderEntity.ReminderType.WINDOWED_INTERVAL
-                }
-
-                is StockReminderEvent -> reminderEvent.reminderType.toEntityReminderType()
-            }
-        )
+        getReminderTypeSpan(reminderEvent.reminderType.toEntityReminderType())
 
     private fun getLastIntervalTime(reminderEvent: ReminderEvent): String {
-        val intervalEvent = reminderEvent as? IntervalReminderEvent ?: return ""
-        val lastIntervalTime = intervalEvent.lastIntervalReminderTimeInMinutes
+        val lastIntervalTime = reminderEvent.lastIntervalReminderTimeInMinutes
         val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
         val durationMillis = processedTimestamp * 1000L - lastIntervalTime * 60_000L
         return if (lastIntervalTime > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && durationMillis >= 0) {
