@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="GradleDependency" severity="ignore" />
-    <issue id="OldTargetSdkVersion" severity="ignore" />
     <issue id="ExpiredTargetSdkVersion" severity="ignore" />
+    <issue id="IconLocation" severity="ignore" />
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
 </lint>
