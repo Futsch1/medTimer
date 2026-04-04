@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.overview
 
 import android.text.Spanned
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 
