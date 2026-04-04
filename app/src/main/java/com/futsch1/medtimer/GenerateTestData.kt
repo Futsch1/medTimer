@@ -4,7 +4,11 @@ import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.toModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,6 +19,9 @@ import java.util.LinkedList
 
 class GenerateTestData @AssistedInject constructor(
     private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
+    private val tagRepository: TagRepository,
     @Assisted val withEvents: Boolean
 ) {
 
@@ -56,15 +63,15 @@ class GenerateTestData @AssistedInject constructor(
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine()
             medicine.sortOrder = sortOrder++
-            val medicineId = medicineRepository.insertMedicine(medicine).toInt()
+            val medicineId = medicineRepository.create(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
-                    medicineRepository.insertReminder(testReminder.toReminder(medicineId))
+                    reminderRepository.create(testReminder.toReminder(medicineId))
                         .toInt()
             }
             for (tag in testMedicine.tags) {
-                val tagId = medicineRepository.insertTag(TagEntity(tag))
-                medicineRepository.insertMedicineToTag(medicineId, tagId.toInt())
+                val tagId = tagRepository.create(TagEntity(tag))
+                tagRepository.addMedicineTag(medicineId, tagId.toInt())
             }
             if (withEvents) {
                 // Insert reminder events for every day back from today
@@ -86,7 +93,7 @@ class GenerateTestData @AssistedInject constructor(
                     }
                 }
 
-                medicineRepository.insertReminderEvents(reminderEvents)
+                reminderEventRepository.createAll(reminderEvents.map { it.toModel() })
             }
         }
     }

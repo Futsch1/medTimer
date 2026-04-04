@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
@@ -35,6 +36,7 @@ sealed interface ShowMedicineUiState {
 class ShowMedicineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     preferencesDataSource: PreferencesDataSource,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
@@ -52,12 +54,12 @@ class ShowMedicineViewModel @Inject constructor(
     init {
         val userPreferences = preferencesDataSource.preferences.value
         viewModelScope.launch(ioDispatcher) {
-            val reminder = medicineRepository.getReminder(reminderId)
+            val reminder = reminderRepository.get(reminderId)
             if (reminder == null) {
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
-            val fullMedicine = medicineRepository.getMedicine(reminder.medicineRelId)
+            val fullMedicine = medicineRepository.getFull(reminder.medicineRelId)
             if (fullMedicine == null) {
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch

@@ -3,11 +3,25 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationManager
+import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.database.DatabaseManager
+import com.futsch1.medtimer.database.MedicineDao
+import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.MedicineRoomDatabase
+import com.futsch1.medtimer.database.ReminderDao
+import com.futsch1.medtimer.database.ReminderEventDao
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.TagDao
+import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ShowReminderNotificationProcessor
+import com.futsch1.medtimer.reminders.TimeAccess
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -24,9 +38,13 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -55,34 +73,55 @@ class ShowReminderNotificationProcessorTest {
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.medicineRepositoryFake.mock
+    val boundMedicineRepository: MedicineRepository = reminderContext.repositoryFakes.medicineRepositoryMock
 
     @BindValue
-    val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
+    val boundReminderRepository: ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
 
     @BindValue
-    val boundPersistentDataDataSource: com.futsch1.medtimer.preferences.PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
+    val boundReminderEventRepository: ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
-    val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
-        override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
-        override fun localDate(): java.time.LocalDate = reminderContext.localDate
-        override fun now(): java.time.Instant = reminderContext.instant
+    val boundPreferencesDataSource: PreferencesDataSource = reminderContext.preferencesDataSourceMock
+
+    @BindValue
+    val boundPersistentDataDataSource: PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
+
+    @BindValue
+    val boundTimeAccess: TimeAccess = object : TimeAccess {
+        override fun systemZone(): ZoneId = ZoneId.of("UTC")
+        override fun localDate(): LocalDate = reminderContext.localDate
+        override fun now(): Instant = reminderContext.instant
     }
 
     @BindValue
-    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = org.mockito.Mockito.mock()
+    val boundMedicineRoomDatabase: MedicineRoomDatabase = mock()
 
     @BindValue
-    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
+    val boundMedicineDao: MedicineDao = mock()
+
+    @BindValue
+    val boundReminderDao: ReminderDao = mock()
+
+    @BindValue
+    val boundReminderEventDao: ReminderEventDao = mock()
+
+    @BindValue
+    val boundTagDao: TagDao = mock()
+
+    @BindValue
+    val boundTagRepository: TagRepository = mock()
+
+    @BindValue
+    val boundDatabaseManager: DatabaseManager = mock()
 
     @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
-    val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
+    val boundDefaultSharedPreferences: SharedPreferences = mock()
 
     @BindValue
     @com.futsch1.medtimer.di.MedTimerPreferencess
-    val boundMedTimerSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
+    val boundMedTimerSharedPreferences: SharedPreferences = mock()
 
     @Inject
     lateinit var showReminderNotificationProcessor: ShowReminderNotificationProcessor
@@ -130,8 +169,8 @@ class ShowReminderNotificationProcessorTest {
     @Test
     fun reminderNotificationPartlyActive() {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
-        reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
-        reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
+        reminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        reminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
         reminderContext.persistentData = reminderContext.persistentData.copy(notificationId = 2)
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(2))
 
@@ -153,8 +192,8 @@ class ShowReminderNotificationProcessorTest {
     @Test
     fun rescheduleReminderEvent() {
         val reminderNotificationData = fillWithTwoReminders(reminderContext)
-        reminderContext.medicineRepositoryFake.reminderEvents[0].notificationId = 1
-        reminderContext.medicineRepositoryFake.reminderEvents[1].notificationId = 1
+        reminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        reminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
 
         reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
         reminderNotificationData.notificationId = 1

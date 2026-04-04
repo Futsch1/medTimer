@@ -49,6 +49,9 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     listOf("instructions", "interval_start_time", "interval_daily_start_time", "interval_daily_end_time")
 ) {
     @Inject
+    lateinit var menuProviderFactory: AdvancedReminderSettingsMenuProvider.Factory
+
+    @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
     @Inject
@@ -74,12 +77,11 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
             "interval_daily_end_time" to { activity, preference -> showTimeEdit(activity, preference) }
         )
 
-    val menuProvider by lazy { AdvancedReminderSettingsMenuProvider(this, linkedReminderHandlingFactory) }
+    val menuProvider by lazy { menuProviderFactory.create(this) }
 
     override fun onEntityUpdated(entity: ReminderEntity) {
         super.onEntityUpdated(entity)
 
-        menuProvider.medicineRepository = medicineRepository
         menuProvider.reminder = entity
 
         findPreference<Preference>("reminder_status")?.summary =

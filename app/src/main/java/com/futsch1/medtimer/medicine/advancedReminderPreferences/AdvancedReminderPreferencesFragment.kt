@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
@@ -22,13 +22,13 @@ abstract class AdvancedReminderPreferencesFragment(
     lateinit var reminderDataStoreFactory: ReminderDataStore.Factory
 
     @Inject
-    lateinit var medicineRepository: MedicineRepository
+    lateinit var reminderRepository: ReminderRepository
 
     override suspend fun getEntityDataStore(
         requireArguments: Bundle
     ): EntityDataStore<ReminderEntity> {
         val entityId = requireArguments.getInt("reminderId")
-        val entity = medicineRepository.getReminder(entityId)!!
+        val entity = reminderRepository.get(entityId)!!
 
         return reminderDataStoreFactory.create(entity)
     }

@@ -3,9 +3,12 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -33,7 +36,8 @@ class NotificationProcessor @Inject constructor(
     private val repeatProcessor: RepeatProcessor,
     private val notificationManager: NotificationManager,
     private val reminderNotificationFactory: ReminderNotificationFactory,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
     private val timeAccess: TimeAccess
 ) {
@@ -41,7 +45,7 @@ class NotificationProcessor @Inject constructor(
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
         val reminderEventsToUpdate = mutableListOf<ReminderEventEntity>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
-            val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
+            val reminderEvent = reminderEventRepository.get(reminderEventId)?.toEntity()
 
             if (reminderEvent != null) {
                 reminderEventsToUpdate.add(reminderEvent)
@@ -100,8 +104,8 @@ class NotificationProcessor @Inject constructor(
             return
         }
 
-        val remainingRepeats = medicineRepository
-            .getReminderEvent(reminderNotificationData.reminderEventIds[0])
+        val remainingRepeats = reminderEventRepository
+            .get(reminderNotificationData.reminderEventIds[0])
             ?.remainingRepeats ?: return
 
         if (remainingRepeats > 0) {
@@ -129,7 +133,7 @@ class NotificationProcessor @Inject constructor(
             alarmProcessor.cancelPendingReminderNotifications(reminderEvent.reminderEventId)
         }
 
-        medicineRepository.updateReminderEvents(reminderEvents)
+        reminderEventRepository.updateAll(reminderEvents.map { it.toModel() })
         removeRemindersFromNotification(reminderEvents)
     }
 
@@ -137,7 +141,7 @@ class NotificationProcessor @Inject constructor(
         if (!reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && reminderEvent.status == ReminderStatus.SKIPPED
         ) {
-            val reminder = medicineRepository.getReminder(reminderEvent.reminderId) ?: return
+            val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return
             var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
             if (reminderEvent.status == ReminderStatus.SKIPPED) {
                 amount = -amount

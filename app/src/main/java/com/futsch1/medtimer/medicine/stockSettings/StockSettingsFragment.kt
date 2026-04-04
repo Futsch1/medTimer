@@ -17,6 +17,8 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.EntityPreferencesFragment
 import com.futsch1.medtimer.helpers.EntityViewModel
@@ -25,14 +27,15 @@ import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
-import com.futsch1.medtimer.medicine.estimateStockRunOutDate
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.SystemTimeAccess
+import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,6 +49,9 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
 ) {
     @Inject
     lateinit var medicineRepository: MedicineRepository
+
+    @Inject
+    lateinit var reminderEventRepository: ReminderEventRepository
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -88,7 +94,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
 
     override suspend fun getEntityDataStore(requireArguments: Bundle): EntityDataStore<FullMedicineEntity> {
         val entityId = requireArguments.getInt("medicineId")
-        val entity = medicineRepository.getMedicine(entityId)!!
+        val entity = medicineRepository.getFull(entityId)!!
         return medicineDataStoreFactory.create(entity)
     }
 
@@ -132,7 +138,7 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
 
     private fun calculateRunOutDate(entity: FullMedicineEntity) {
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(medicineRepository, entity.medicine.medicineId, entity.medicine.amount, preferencesDataSource, timeAccess)
+            val runOutDate = estimateStockRunOutDate(entity.medicine.medicineId, entity.medicine.amount)
 
             val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
 
@@ -140,6 +146,31 @@ class StockSettingsFragment : EntityPreferencesFragment<FullMedicineEntity>(
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
             }
         }
+    }
+
+    private suspend fun estimateStockRunOutDate(
+        medicineId: Int,
+        currentAmount: Double? = null
+    ): LocalDate? {
+        val fullMedicine = medicineRepository.getFull(medicineId) ?: return null
+
+        if (currentAmount != null) {
+            fullMedicine.medicine.amount = currentAmount
+        }
+        val recentReminders =
+            reminderEventRepository.getForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+        val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, timeAccess, preferencesDataSource)
+        val endDate = LocalDate.now().plusDays(365 * 2)
+        var runOutDate: LocalDate? = null
+
+        schedulingSimulator.simulate { _, scheduledDate: LocalDate, amount: Double ->
+            if (amount == 0.0) {
+                runOutDate = scheduledDate
+            }
+            scheduledDate <= endDate && amount != 0.0
+        }
+
+        return runOutDate
     }
 
     private fun addToCalendar() {

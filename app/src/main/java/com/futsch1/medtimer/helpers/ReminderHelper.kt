@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.helpers
 
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import java.time.LocalDate
 
 
@@ -21,7 +21,7 @@ fun getActiveReminders(medicine: FullMedicineEntity): List<ReminderEntity> {
     return medicine.reminders.filter { isReminderActive(it) }
 }
 
-suspend fun setRemindersActive(reminders: List<ReminderEntity>, medicineRepository: MedicineRepository, active: Boolean) {
+suspend fun setRemindersActive(reminders: List<ReminderEntity>, reminderRepository: ReminderRepository, active: Boolean) {
     for (reminder in reminders) {
         if (!reminder.active && active && reminder.reminderType == ReminderEntity.ReminderType.CONTINUOUS_INTERVAL) {
             // If reminder is activated again and an interval reminder, reset the interval start date to the current day in seconds since epoch
@@ -29,5 +29,5 @@ suspend fun setRemindersActive(reminders: List<ReminderEntity>, medicineReposito
         }
         reminder.active = active
     }
-    medicineRepository.updateReminders(reminders)
+    reminderRepository.updateAll(reminders)
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -20,7 +21,8 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     parentFragment: Fragment,
     private val medicineViewModel: MedicineViewModel,
     private val dataSource: PreferencesDataSource,
-    private val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository
 ) {
     private var reminderEvents: List<ReminderEvent>? = null
     private var fullMedicines: List<FullMedicineEntity>? = null
@@ -31,7 +33,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
 
     private fun setupScheduleObservers(parentFragment: Fragment) {
         parentFragment.viewLifecycleOwner.lifecycleScope.launch {
-            medicineRepository.getReminderEventsFlow(
+            reminderEventRepository.getAllFlow(
                 Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
                 ReminderEvent.allStatusValues
             ).collect { reminderEvents ->
@@ -39,7 +41,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
             }
         }
         parentFragment.viewLifecycleOwner.lifecycleScope.launch {
-            medicineRepository.medicinesFlow.collect { fullMedicines ->
+            medicineRepository.getFullAllFlow().collect { fullMedicines ->
                 changedMedicines(fullMedicines)
             }
         }

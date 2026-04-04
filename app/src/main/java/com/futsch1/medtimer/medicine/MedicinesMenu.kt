@@ -7,6 +7,7 @@ import androidx.core.view.MenuProvider
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 class MedicinesMenu @Inject constructor(
     private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     @param:ApplicationScope private val applicationScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
@@ -48,7 +50,7 @@ class MedicinesMenu @Inject constructor(
         applicationScope.launch(dispatcher) {
             val medicines = sortFunction(medicines)
             medicines.stream().forEach { it.medicine.sortOrder = 1.0 + medicines.indexOf(it) }
-            medicineRepository.updateMedicines(medicines.stream().map { it.medicine }.toList())
+            medicineRepository.updateAll(medicines.stream().map { it.medicine }.toList())
         }
     }
 
@@ -56,8 +58,8 @@ class MedicinesMenu @Inject constructor(
         applicationScope.launch(dispatcher) {
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (fullMedicine in medicines) {
-                    val localMedicine = medicineRepository.getMedicine(fullMedicine.medicine.medicineId)
-                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, medicineRepository, active)
+                    val localMedicine = medicineRepository.getFull(fullMedicine.medicine.medicineId)
+                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, reminderRepository, active)
                 }
             }
         }

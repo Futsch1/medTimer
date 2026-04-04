@@ -7,10 +7,11 @@ import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -32,7 +33,7 @@ class ReminderNotificationProcessor @Inject constructor(
     val repeatProcessor: RepeatProcessor,
     val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val reminderNotificationFactory: ReminderNotificationFactory,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource
 ) {
     suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
@@ -101,7 +102,7 @@ class ReminderNotificationProcessor @Inject constructor(
 
             for (notificationReminderEvent in reminderNotification.reminderNotificationParts) {
                 notificationReminderEvent.reminderEvent.notificationId = notificationId
-                medicineRepository.updateReminderEvent(notificationReminderEvent.reminderEvent)
+                reminderEventRepository.update(notificationReminderEvent.reminderEvent.toModel())
             }
         }
     }
@@ -115,7 +116,7 @@ class ReminderNotificationProcessor @Inject constructor(
             remindedTimeStamp: Long,
             medicine: FullMedicineEntity,
             reminder: ReminderEntity,
-            medicineRepository: MedicineRepository,
+            reminderEventRepository: ReminderEventRepository,
             timeFormatter: TimeFormatter
         ): ReminderEventEntity {
             val reminderEvent = ReminderEventEntity()
@@ -146,7 +147,7 @@ class ReminderNotificationProcessor @Inject constructor(
             }
             if (reminder.isInterval) {
                 reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(
-                    medicineRepository,
+                    reminderEventRepository,
                     reminderEvent,
                     reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL
                 )
@@ -158,11 +159,11 @@ class ReminderNotificationProcessor @Inject constructor(
         }
 
         private suspend fun getLastReminderEventTimeInMinutes(
-            medicineRepository: MedicineRepository,
+            reminderEventRepository: ReminderEventRepository,
             reminderEvent: ReminderEventEntity,
             isWindowedInterval: Boolean
         ): Int {
-            val lastReminderEvent = medicineRepository.getLastReminderEvent(reminderEvent.reminderId)
+            val lastReminderEvent = reminderEventRepository.getLast(reminderEvent.reminderId)?.toEntity()
             return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN) {
                 if (isWindowedInterval && TimeHelper.secondsSinceEpochToLocalDate(
                         lastReminderEvent.remindedTimestamp,

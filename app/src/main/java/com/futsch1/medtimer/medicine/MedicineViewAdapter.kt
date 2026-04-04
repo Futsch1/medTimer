@@ -62,7 +62,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     override fun onMoveCompleted(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
             activity.lifecycleScope.launch(dispatcher) {
-                medicineRepository.moveMedicine(fromPosition, toPosition)
+                medicineRepository.move(fromPosition, toPosition)
             }
         }
     }

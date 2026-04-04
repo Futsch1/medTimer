@@ -6,7 +6,6 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.google.android.material.button.MaterialButton
 import dagger.assisted.Assisted
@@ -18,7 +17,6 @@ import java.time.LocalDate
 class NewReminderTypeDialog @AssistedInject constructor(
     @Assisted val activity: FragmentActivity,
     @Assisted val fullMedicine: FullMedicineEntity,
-    val medicineRepository: MedicineRepository,
     val newReminderDialogFactory: NewReminderDialog.Factory,
     val newReminderStockDialogFactory: NewReminderStockDialog.Factory
 ) {

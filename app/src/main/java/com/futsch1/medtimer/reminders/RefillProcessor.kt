@@ -6,7 +6,11 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.toEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.util.stream.Collectors
@@ -15,21 +19,23 @@ import javax.inject.Inject
 class RefillProcessor @Inject constructor(
     private val notificationProcessor: NotificationProcessor,
     private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess
 ) {
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
-        val reminderEvent = medicineRepository.getReminderEvent(processedNotificationData.reminderEventIds[0])!!
-        val reminder = medicineRepository.getReminder(reminderEvent.reminderId)
+        val reminderEvent = reminderEventRepository.get(processedNotificationData.reminderEventIds[0])!!.toEntity()
+        val reminder = reminderRepository.get(reminderEvent.reminderId)
         val medicineId = reminder!!.medicineRelId
         processRefill(medicineId, reminderEvent)
     }
 
     suspend fun processRefill(medicineId: Int, reminderEvent: ReminderEventEntity? = null) {
-        val medicine = medicineRepository.getMedicine(medicineId)!!
+        val medicine = medicineRepository.getFull(medicineId)!!
 
         val refillEvent = processRefillInternal(medicine)
-        medicineRepository.updateMedicine(medicine.medicine)
-        medicineRepository.insertReminderEvent(refillEvent)
+        medicineRepository.update(medicine.medicine)
+        reminderEventRepository.create(refillEvent.toModel())
 
         if (reminderEvent != null) {
             notificationProcessor.processReminderEventsInNotification(

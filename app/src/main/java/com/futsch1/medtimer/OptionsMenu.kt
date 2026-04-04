@@ -18,9 +18,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -59,6 +62,9 @@ class OptionsMenu @AssistedInject constructor(
     private val pdfEventExportFactory: PDFEventExport.Factory,
     private val csvEventExportFactory: CSVEventExport.Factory,
     private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
+    private val tagRepository: TagRepository,
+    private val databaseManager: DatabaseManager,
     private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
@@ -169,7 +175,7 @@ class OptionsMenu @AssistedInject constructor(
             builder.setCancelable(false)
             builder.setPositiveButton(R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
-                    medicineRepository.deleteReminderEvents()
+                    reminderEventRepository.deleteAll()
                     requestScheduleNextNotification(context)
                 }
             }
@@ -211,7 +217,7 @@ class OptionsMenu @AssistedInject constructor(
             val menuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem: MenuItem? ->
                 idlingResource.setBusy()
                 fragment.lifecycleScope.launch(ioDispatcher) {
-                    medicineRepository.deleteAll()
+                    databaseManager.deleteAll()
                     generateTestDataFactory.create(menuItem === itemWithEvents).generateTestMedicine()
                     requestScheduleNextNotification(context)
                     idlingResource.setIdle()
@@ -242,7 +248,7 @@ class OptionsMenu @AssistedInject constructor(
     private fun handleTagFilter() {
         if (!hideFilter) {
             fragment.lifecycleScope.launch(ioDispatcher) {
-                if (medicineRepository.hasTags()) {
+                if (tagRepository.hasAny()) {
                     try {
                         withContext(mainDispatcher) {
                             setupTagFilter()
@@ -264,7 +270,7 @@ class OptionsMenu @AssistedInject constructor(
             }
         }
         val reminderEvents: List<ReminderEventEntity> =
-            medicineViewModel.filterEvents(medicineRepository.getAllReminderEventEntitiesWithoutDeletedAndAcknowledged())
+            medicineViewModel.filterEvents(reminderEventRepository.getAllWithoutDeletedAndAcknowledged())
                 .map { it.toEntity() }
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
@@ -279,7 +285,7 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val medicines: List<FullMedicineEntity> = medicineViewModel.filterMedicines(medicineRepository.getMedicines())
+        val medicines: List<FullMedicineEntity> = medicineViewModel.filterMedicines(medicineRepository.getFullAll())
         val exporter = if (isCSV) csvMedicineExportFactory.create(medicines, fragment.getParentFragmentManager()) else pdfMedicineExportFactory.create(
             medicines,
             fragment.getParentFragmentManager()

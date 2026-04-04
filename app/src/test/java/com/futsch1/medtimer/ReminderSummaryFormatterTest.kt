@@ -3,8 +3,8 @@ package com.futsch1.medtimer
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.UserPreferences
@@ -21,8 +21,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.MockedStatic
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -45,17 +45,17 @@ class ReminderSummaryFormatterTest {
     @BindValue
     val boundNotificationManager: NotificationManager = mock()
 
-    private lateinit var mockMedicineRepository: MedicineRepository
+    private lateinit var mockReminderRepository: ReminderRepository
     private lateinit var formatter: ReminderSummaryFormatter
     private lateinit var timeFormatter: TimeFormatter
 
     @Before
     fun setUp() {
         hiltRule.inject()
-        mockMedicineRepository = mock()
+        mockReminderRepository = mock()
         val app = RuntimeEnvironment.getApplication()
         timeFormatter = TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.helpers.LocaleContextAccessor(app))
-        formatter = ReminderSummaryFormatter(app, mockMedicineRepository, timeFormatter)
+        formatter = ReminderSummaryFormatter(app, mockReminderRepository, timeFormatter)
     }
 
     @Test
@@ -138,15 +138,15 @@ class ReminderSummaryFormatterTest {
                 "${minutes / 60}:${String.format("%02d", minutes % 60)}"
             }
 
-        val linkedFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
+        val linkedFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
         val sourceReminder = ReminderEntity(1)
         val sourceSourceReminder = ReminderEntity(1)
         runBlocking {
-            Mockito.`when`(mockMedicineRepository.getReminder(2)).thenReturn(sourceReminder)
+            Mockito.`when`(mockReminderRepository.get(2)).thenReturn(sourceReminder)
         }
         runBlocking {
-            Mockito.`when`(mockMedicineRepository.getReminder(3)).thenReturn(sourceSourceReminder)
+            Mockito.`when`(mockReminderRepository.get(3)).thenReturn(sourceSourceReminder)
         }
 
         val reminder = ReminderEntity(1)
@@ -175,7 +175,7 @@ class ReminderSummaryFormatterTest {
         Mockito.`when`(mockTimeFormatter.minutesToTimeString(2)).thenReturn("0:02")
         Mockito.`when`(mockTimeFormatter.minutesToTimeString(63)).thenReturn("1:03")
 
-        val simpleFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
+        val simpleFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
         val reminder = ReminderEntity(1)
         reminder.timeInMinutes = 2
@@ -215,10 +215,10 @@ class ReminderSummaryFormatterTest {
         reminder3.linkedReminderId = 2
         reminder3.timeInMinutes = 144
 
-        Mockito.`when`(mockMedicineRepository.getReminder(2)).thenReturn(reminder2)
-        Mockito.`when`(mockMedicineRepository.getReminder(1)).thenReturn(reminder)
+        Mockito.`when`(mockReminderRepository.get(2)).thenReturn(reminder2)
+        Mockito.`when`(mockReminderRepository.get(1)).thenReturn(reminder)
 
-        val linkedFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
+        val linkedFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
         assertEquals("ok", linkedFormatter.formatRemindersSummary(listOf(reminder2, reminder, reminder3)))
     }
@@ -249,7 +249,7 @@ class ReminderSummaryFormatterTest {
         val mockTimeFormatter = mock<TimeFormatter>()
         Mockito.`when`(mockTimeFormatter.secondsSinceEpochToDateTimeString(1L)).thenReturn("0 1")
 
-        val intervalFormatter = ReminderSummaryFormatter(mockContext, mockMedicineRepository, mockTimeFormatter)
+        val intervalFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
         val reminder = ReminderEntity(1)
         reminder.timeInMinutes = 2

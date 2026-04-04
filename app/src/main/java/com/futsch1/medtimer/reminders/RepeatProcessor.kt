@@ -2,14 +2,14 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import javax.inject.Inject
 import kotlin.time.Duration
 
 class RepeatProcessor @Inject constructor(
     private val alarmProcessor: AlarmProcessor,
-    private val medicineRepository: MedicineRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess
 ) {
     suspend fun processRepeat(reminderNotificationData: ReminderNotificationData, repeatDelay: Duration) {
@@ -24,10 +24,8 @@ class RepeatProcessor @Inject constructor(
     }
 
     private suspend fun decreaseRemainingRepeats(reminderEventId: Int) {
-        val reminderEvent = medicineRepository.getReminderEvent(reminderEventId)
-        if (reminderEvent != null) {
-            reminderEvent.remainingRepeats = reminderEvent.remainingRepeats - 1
-            medicineRepository.updateReminderEvent(reminderEvent)
-        }
+        val reminderEvent = reminderEventRepository.get(reminderEventId) ?: return
+        reminderEvent.remainingRepeats -= 1
+        reminderEventRepository.update(reminderEvent)
     }
 }

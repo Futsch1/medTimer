@@ -15,7 +15,11 @@ import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.model.reminderevent.ReminderEvent
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -24,35 +28,51 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyList
-import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
 import java.time.Instant
 import java.time.LocalDate
 
-class MedicineRepositoryFake {
+class RepositoryFakes {
     val medicines = mutableListOf<MedicineEntity>()
     val reminderEvents = mutableListOf<ReminderEventEntity>()
     val reminders = mutableListOf<ReminderEntity>()
 
-    val mock: MedicineRepository = mock()
+    val medicineRepositoryMock: MedicineRepository = mock()
+    val reminderRepositoryMock: ReminderRepository = mock()
+    val reminderEventRepositoryMock: ReminderEventRepository = mock()
 
     init {
-        `when`(runBlocking { mock.getMedicines() }).thenAnswer { buildFullMedicines() }
-        `when`(runBlocking { mock.getReminderEventsForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
-        `when`(runBlocking { mock.getReminderEvent(anyInt()) }).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
-        `when`(runBlocking { mock.insertReminderEvent(any()) }).thenAnswer {
-            val reminderEvent = it.arguments[0] as ReminderEventEntity
-            reminderEvents.add(reminderEvent)
-            reminderEvents.size + 1
-        }
-        `when`(runBlocking { mock.getReminder(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
-        `when`(runBlocking { mock.getMedicine(anyInt()) }).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
-        `when`(runBlocking { mock.updateMedicine(any()) }).thenAnswer {
+        // MedicineRepository mocks
+        `when`(runBlocking { medicineRepositoryMock.getFullAll() }).thenAnswer { buildFullMedicines() }
+        `when`(runBlocking { medicineRepositoryMock.getFull(anyInt()) }).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(runBlocking { medicineRepositoryMock.update(any()) }).thenAnswer {
             val medicine = it.arguments[0] as MedicineEntity
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
             medicines[index] = medicine
+        }
+
+        // ReminderRepository mocks
+        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
+
+        // ReminderEventRepository mocks
+        `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
+        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer { reminderEvents.firstOrNull { r -> r.reminderEventId == it.arguments[0] }?.toModel() }
+        `when`(runBlocking { reminderEventRepositoryMock.create(any()) }).thenAnswer {
+            val reminderEvent = (it.arguments[0] as ReminderEvent).toEntity()
+            reminderEvent.reminderEventId = reminderEvents.size + 1
+            reminderEvents.add(reminderEvent)
+            reminderEvents.size.toLong()
+        }
+        `when`(runBlocking { reminderEventRepositoryMock.updateAll(anyList()) }).thenAnswer {
+            @Suppress("UNCHECKED_CAST")
+            val domainEvents = it.arguments[0] as List<ReminderEvent>
+            domainEvents.forEach { domainEvent ->
+                val index = reminderEvents.indexOfFirst { e -> e.reminderEventId == domainEvent.reminderEventId }
+                if (index >= 0) reminderEvents[index] = domainEvent.toEntity()
+            }
         }
     }
 
@@ -107,7 +127,7 @@ class TestReminderContext {
     val notificationManagerFake = NotificationManagerFake()
     val notificationChannelMock: NotificationChannel = mock()
     val contextMock: Context = mock()
-    val medicineRepositoryFake = MedicineRepositoryFake()
+    val repositoryFakes = RepositoryFakes()
     val localPreferencesMock: SharedPreferences = mock()
     val preferencesDataSourceMock: PreferencesDataSource = mock()
     val persistentDataDataSourceMock: PersistentDataDataSource = mock()

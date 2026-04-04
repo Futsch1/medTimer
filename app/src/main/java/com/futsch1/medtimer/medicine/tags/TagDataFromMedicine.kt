@@ -5,19 +5,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.di.Dispatcher
+import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TagDataFromMedicine(
-    private val fragment: Fragment,
-    private val medicineId: Int,
-    private val medicineRepository: MedicineRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+class TagDataFromMedicine @AssistedInject constructor(
+    @Assisted private val fragment: Fragment,
+    @Assisted private val medicineId: Int,
+    private val tagRepository: TagRepository,
+    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : TagDataProvider() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(fragment: Fragment, medicineId: Int): TagDataFromMedicine
+    }
 
     private var viewModel: MedicineWithTagsViewModel = ViewModelProvider(
         fragment,
@@ -33,7 +42,7 @@ class TagDataFromMedicine(
     }, { it: TagWithState ->
         DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
             fragment.lifecycleScope.launch {
-                medicineRepository.deleteTag(it.tag)
+                tagRepository.delete(it.tag)
             }
         }, {})
     })
@@ -64,7 +73,7 @@ class TagDataFromMedicine(
 
     override fun addTag(tagName: String) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val tagId = medicineRepository.insertTag(TagEntity(tagName))
+            val tagId = tagRepository.create(TagEntity(tagName))
             viewModel.associateTag(medicineId, tagId.toInt())
         }
     }

@@ -5,8 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 class LinkedReminderHandling @AssistedInject constructor(
     @Assisted val reminder: ReminderEntity,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     @Assisted private val coroutineScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val timePickerDialogFactory: TimePickerDialogFactory
@@ -56,7 +56,7 @@ class LinkedReminderHandling @AssistedInject constructor(
         timePickerDialogFactory.create(0, 0, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H) { minutes: Int ->
             coroutineScope.launch {
                 linkedReminder.timeInMinutes = minutes
-                medicineRepository.insertReminder(linkedReminder)
+                reminderRepository.create(linkedReminder)
                 fragmentActivity.supportFragmentManager.popBackStack()
             }
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -75,12 +75,12 @@ class LinkedReminderHandling @AssistedInject constructor(
         reminder: ReminderEntity
     ) {
         val reminders: List<ReminderEntity> =
-            medicineRepository.getLinkedReminders(reminder.reminderId)
+            reminderRepository.getLinked(reminder.reminderId)
         for (r in reminders) {
             internalDelete(r)
         }
 
-        medicineRepository.deleteReminder(reminder.reminderId)
+        reminderRepository.delete(reminder.reminderId)
     }
 }
 

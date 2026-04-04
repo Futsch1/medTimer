@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.LocalDate
@@ -75,11 +75,11 @@ class MedicineHelperTest {
         val contextMock = mock<Context>()
         val preferencesDataSource = mock<PreferencesDataSource>()
         val timeFormatterMock = mock<TimeFormatter>()
-        Mockito.`when`(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
+        `when`(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
         val formatter = MedicineStringFormatter(contextMock, preferencesDataSource, timeFormatterMock)
 
-        Mockito.`when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
+        `when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->
                 "${invocation.getArgument(1, String::class.java)} left"
             }
@@ -131,7 +131,7 @@ class MedicineHelperTest {
     @Test
     fun testGetMedicineName() {
         val userPreferences = mock<UserPreferences>()
-        Mockito.`when`(userPreferences.hideMedicineName).thenReturn(true)
+        `when`(userPreferences.hideMedicineName).thenReturn(true)
 
         val medicine = MedicineEntity("test")
         val fullMedicine = FullMedicineEntity()

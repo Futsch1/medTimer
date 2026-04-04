@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
@@ -32,7 +32,7 @@ class NewReminderDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     @Assisted private val fullMedicine: FullMedicineEntity,
     @Assisted private val reminder: ReminderEntity,
-    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val timeEditorFactory: TimeEditor.Factory,
     private val dateTimeEditorFactory: DateTimeEditor.Factory,
     private val inputMethodManager: InputMethodManager
@@ -181,7 +181,7 @@ class NewReminderDialog @AssistedInject constructor(
                     reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
                 }
                 if (minutes >= 0 && (reminder.reminderType == ReminderEntity.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
-                    medicineRepository.insertReminder(reminder)
+                    reminderRepository.create(reminder)
                     Toast.makeText(
                         activity,
                         R.string.successfully_created_reminder,
