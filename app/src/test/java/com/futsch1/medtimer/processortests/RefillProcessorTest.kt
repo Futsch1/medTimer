@@ -15,6 +15,7 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagDao
 import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule

@@ -5,6 +5,8 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
@@ -51,13 +53,13 @@ open class ReminderNotificationFactory @Inject constructor(
                     reminderNotificationData.remindInstant.epochSecond, medicine, reminder, reminderEventRepository, timeFormatter
                 )
                 newEvent.remainingRepeats = numberOfRepeats
-                newEvent.reminderEventId = reminderEventRepository.create(newEvent).toInt()
-                reminderEvent = newEvent
+                newEvent.reminderEventId = reminderEventRepository.create(newEvent.toModel()).toInt()
+                reminderEvent = newEvent.toModel()
             } else {
                 reminderNotificationData.notificationId = reminderEvent.notificationId
             }
             reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
-            result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
+            result.add(ReminderNotificationPart(reminder, reminderEvent.toEntity(), medicine))
         }
 
         return ReminderNotification(result, reminderNotificationData)

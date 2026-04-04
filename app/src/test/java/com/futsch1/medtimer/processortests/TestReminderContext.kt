@@ -66,6 +66,11 @@ class RepositoryFakes {
             reminderEvents.add(reminderEvent)
             reminderEvents.size.toLong()
         }
+        `when`(runBlocking { reminderEventRepositoryMock.update(any()) }).thenAnswer {
+            val domainEvent = it.arguments[0] as ReminderEvent
+            val index = reminderEvents.indexOfFirst { e -> e.reminderEventId == domainEvent.reminderEventId }
+            if (index >= 0) reminderEvents[index] = domainEvent.toEntity()
+        }
         `when`(runBlocking { reminderEventRepositoryMock.updateAll(anyList()) }).thenAnswer {
             @Suppress("UNCHECKED_CAST")
             val domainEvents = it.arguments[0] as List<ReminderEvent>

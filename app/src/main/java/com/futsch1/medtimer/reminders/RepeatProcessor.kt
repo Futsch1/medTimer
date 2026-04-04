@@ -25,7 +25,6 @@ class RepeatProcessor @Inject constructor(
 
     private suspend fun decreaseRemainingRepeats(reminderEventId: Int) {
         val reminderEvent = reminderEventRepository.get(reminderEventId) ?: return
-        reminderEvent.remainingRepeats -= 1
-        reminderEventRepository.update(reminderEvent)
+        reminderEventRepository.update(reminderEvent.copy(remainingRepeats = reminderEvent.remainingRepeats - 1))
     }
 }
