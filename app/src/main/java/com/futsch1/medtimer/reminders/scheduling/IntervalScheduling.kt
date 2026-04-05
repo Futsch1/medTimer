@@ -48,7 +48,7 @@ open class IntervalScheduling(
             if (instant.isBefore(todayInstant)) {
                 // First interval that is triggered today
                 val deltaMinutes: Long = (todayInstant.epochSecond - instant.epochSecond) / 60L
-                val numIntervals = ceil(deltaMinutes.toDouble() / reminder.time.toSecondOfDay() / 60).toLong()
+                val numIntervals = ceil(deltaMinutes.toDouble() / (reminder.time.toSecondOfDay() / 60)).toLong()
                 adjustedInstant = instant.plusSeconds(numIntervals * reminder.time.toSecondOfDay())
             }
         }

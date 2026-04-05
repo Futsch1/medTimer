@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.MedicineDao
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.ReminderDao
@@ -126,7 +127,7 @@ class RefillProcessorTest {
     fun directRefill() {
         reminderContext.instant = Instant.ofEpochSecond(10)
 
-        reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
         reminderContext.repositoryFakes.medicines[0].refillSizes.add(10.0)
         reminderContext.repositoryFakes.medicines[0].amount = 100.0
 
@@ -143,7 +144,7 @@ class RefillProcessorTest {
 
     @Test
     fun refillViaEvent() {
-        reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
         reminderContext.repositoryFakes.medicines[0].refillSizes.add(10.0)
         reminderContext.repositoryFakes.medicines[0].amount = 100.0
         reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1).toEntity())

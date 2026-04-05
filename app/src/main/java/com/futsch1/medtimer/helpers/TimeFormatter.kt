@@ -47,7 +47,9 @@ class TimeFormatter @Inject constructor(
     }
 
     fun toTimeString(localTime: LocalTime): String {
-        return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(localTime)
+        val dateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+            .withLocale(getLocale())
+        return localTime.format(dateTimeFormatter)
     }
 
     /**

@@ -3,8 +3,8 @@ package com.futsch1.medtimer
 import android.graphics.Color
 import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.ReminderEntityType
+import com.futsch1.medtimer.database.ReminderEventDao
 import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventRepository
 import org.junit.Test
 import org.mockito.kotlin.mock
 import kotlin.test.assertEquals
@@ -31,7 +31,7 @@ internal class JSONReminderEventBackupUnitTest {
             reminderType = ReminderEntityType.LINKED
         })
 
-        val jsonReminderEventBackup = JSONReminderEventBackup(mock<ReminderEventRepository>())
+        val jsonReminderEventBackup = JSONReminderEventBackup(mock<ReminderEventDao>())
         val result = assertNotNull(jsonReminderEventBackup.createBackupAsString(1, reminderEvents))
 
         // @formatter:off

@@ -89,7 +89,7 @@ class StandardScheduling(
         }
         var startDate = localDate
         for (i in possibleDays.indices) {
-            possibleDays[i] = possibleDays[i] and reminder.activeDaysOfMonth.contains(startDate.dayOfMonth - 1)
+            possibleDays[i] = possibleDays[i] and reminder.activeDaysOfMonth.contains(startDate.dayOfMonth)
             startDate = startDate.plusDays(1)
         }
     }

@@ -55,7 +55,7 @@ class ReminderStringFormatter @Inject constructor(
         )
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(scheduledTime).append("\n").append(reminderTypeSpan).bold {
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
             append(scheduledReminder.medicine.name)
         }.append(getAmountOrStockString(scheduledReminder))
     }

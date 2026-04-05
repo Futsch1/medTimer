@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
@@ -12,7 +11,7 @@ class ReminderSchedulerLinkedUnitTest {
     fun sourceReminderNotRemindedYet() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(
@@ -20,12 +19,11 @@ class ReminderSchedulerLinkedUnitTest {
         )
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
-        medicineList.add(medicineWithReminders)
+        val medicineList = mutableListOf(medicineWithReminders)
 
         val reminderEventList: List<ReminderEvent> = mutableListOf()
 
-        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        val scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertEquals(1, scheduledReminders.size)
         assertEquals(1, scheduledReminders[0].reminder.id)
     }
@@ -34,60 +32,59 @@ class ReminderSchedulerLinkedUnitTest {
     fun scheduleLinkedReminder() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(linkedReminderId = 1)
         medicineWithReminders.reminders.add(reminderLinked)
 
-        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
-        medicineList.add(medicineWithReminders)
+        val medicineList = mutableListOf(medicineWithReminders)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480)))
         // Reminder 1 only raised, but not processed
-        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        var scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource
         )
 
         // Now it was also processed
         reminderEventList[0] = reminderEventList[0].copy(processedTimestamp = TestHelper.on(1, 481))
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(1, 541),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderLinked,
             0
         )
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource,
             1
         )
 
         val reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541)).copy(processedTimestamp = TestHelper.on(1, 542))
         reminderEventList.add(reminderEvent)
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource
         )
 
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 480)).copy(processedTimestamp = TestHelper.on(2, 484)))
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(2, 544),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderLinked,
             0
         )
@@ -97,7 +94,7 @@ class ReminderSchedulerLinkedUnitTest {
     fun scheduleTwoLinkedReminders() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
         val reminderLinked1 = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(linkedReminderId = 1)
@@ -105,33 +102,32 @@ class ReminderSchedulerLinkedUnitTest {
         val reminderLinked2 = TestHelper.buildReminder(1, 3, "2", 60, 1).copy(linkedReminderId = 2)
         medicineWithReminders.reminders.add(reminderLinked2)
 
-        val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
-        medicineList.add(medicineWithReminders)
+        val medicineList = mutableListOf(medicineWithReminders)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
-        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        var scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource
         )
         assertEquals(1, scheduledReminders.size)
 
         reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 480)).copy(processedTimestamp = TestHelper.on(1, 481)))
 
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(1, 541),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderLinked1,
             0
         )
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource,
             1
         )
@@ -140,18 +136,18 @@ class ReminderSchedulerLinkedUnitTest {
         var reminderEvent = TestHelper.buildReminderEvent(2, TestHelper.on(1, 541))
         reminderEvent = reminderEvent.copy(processedTimestamp = TestHelper.on(1, 542))
         reminderEventList.add(reminderEvent)
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(1, 602),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderLinked2,
             0
         )
         assertRemindedAtIndex(
             scheduledReminders,
             TestHelper.on(2, 480),
-            medicineWithReminders.medicine,
+            medicineWithReminders.toMedicine(),
             reminderSource,
             1
         )

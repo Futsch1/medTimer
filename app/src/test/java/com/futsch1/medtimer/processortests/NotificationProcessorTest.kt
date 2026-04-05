@@ -120,7 +120,7 @@ class NotificationProcessorTest {
             for (i in reminderNotificationData.reminderIds.indices) {
                 val reminder = testReminderContext.repositoryFakes.reminderRepositoryMock.get(reminderNotificationData.reminderIds[i])
                     ?: return null
-                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.getFull(reminder.medicineRelId)
+                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.get(reminder.medicineRelId)
                     ?: return null
                 val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.get(reminderNotificationData.reminderEventIds[i])
                     ?: return null

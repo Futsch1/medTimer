@@ -6,6 +6,7 @@ import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.lang.String.join
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -62,7 +63,7 @@ class ReminderSummaryFormatter @Inject constructor(
         }
         strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
-        return java.lang.String.join(", ", strings)
+        return join(", ", strings)
     }
 
     suspend fun formatRemindersSummary(reminders: List<Reminder>): String {
@@ -79,7 +80,7 @@ class ReminderSummaryFormatter @Inject constructor(
             R.plurals.sum_reminders,
             len,
             len,
-            java.lang.String.join("; ", reminderTimes)
+            join("; ", reminderTimes)
         )
     }
 
@@ -154,20 +155,14 @@ class ReminderSummaryFormatter @Inject constructor(
         reminder: Reminder,
         strings: MutableList<String>
     ) {
-        val never = reminder.days.isEmpty() && reminder.activeDaysOfMonth.isEmpty()
+        val dayOfMonthLimited = reminder.activeDaysOfMonth.isNotEmpty()
+        val hasWeekdayRestriction = reminder.days.isNotEmpty()
 
-        if (never) {
-            strings.add(context.getString(R.string.never))
-        } else {
-            val dayOfMonthLimited = reminder.activeDaysOfMonth.isNotEmpty()
-            val hasWeekdayRestriction = reminder.days.isNotEmpty()
-
-            buildReminderStrings(
-                strings,
-                reminder,
-                ReminderProperties(hasWeekdayRestriction, dayOfMonthLimited)
-            )
-        }
+        buildReminderStrings(
+            strings,
+            reminder,
+            ReminderProperties(hasWeekdayRestriction, dayOfMonthLimited)
+        )
     }
 
     private fun buildReminderStrings(

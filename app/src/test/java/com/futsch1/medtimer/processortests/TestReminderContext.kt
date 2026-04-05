@@ -46,16 +46,16 @@ class RepositoryFakes {
 
     init {
         // MedicineRepository mocks
-        `when`(runBlocking { medicineRepositoryMock.getFullAll() }).thenAnswer { buildFullMedicines() }
-        `when`(runBlocking { medicineRepositoryMock.getFull(anyInt()) }).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(runBlocking { medicineRepositoryMock.getAll() }).thenAnswer { buildMedicines() }
+        `when`(runBlocking { medicineRepositoryMock.get(anyInt()) }).thenAnswer { buildMedicines().firstOrNull { m -> m.id == it.arguments[0] } }
         `when`(runBlocking { medicineRepositoryMock.update(any()) }).thenAnswer {
-            val medicine = it.arguments[0] as MedicineEntity
-            val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
-            medicines[index] = medicine
+            val medicine = it.arguments[0] as com.futsch1.medtimer.model.Medicine
+            val index = medicines.indexOfFirst { m -> m.medicineId == medicine.id }
+            if (index >= 0) medicines[index] = medicine.toEntity()
         }
 
         // ReminderRepository mocks
-        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
+        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel() }
 
         // ReminderEventRepository mocks
         `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
@@ -83,17 +83,14 @@ class RepositoryFakes {
         }
     }
 
-    fun buildFullMedicines(): List<FullMedicineEntity> {
-        val fullMedicines = mutableListOf<FullMedicineEntity>()
-        for (medicine in medicines) {
-            val reminders = this.reminders.stream().filter { r -> r.medicineRelId == medicine.medicineId }
+    fun buildMedicines(): List<com.futsch1.medtimer.model.Medicine> {
+        return medicines.map { medicineEntity ->
             val fullMedicine = FullMedicineEntity()
-            fullMedicine.medicine = medicine
-            fullMedicine.reminders = reminders.toList()
+            fullMedicine.medicine = medicineEntity
+            fullMedicine.reminders = this.reminders.filter { r -> r.medicineRelId == medicineEntity.medicineId }.toMutableList()
             fullMedicine.tags = listOf()
-            fullMedicines.add(fullMedicine)
+            fullMedicine.toModel()
         }
-        return fullMedicines
     }
 }
 

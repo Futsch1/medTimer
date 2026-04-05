@@ -1,9 +1,8 @@
 package com.futsch1.medtimer
 
 import android.content.Context
-import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.Reminder
@@ -84,48 +83,40 @@ class MedicineHelperTest {
                 "${invocation.getArgument(1, String::class.java)} left"
             }
 
-        // Standard case without stock
-        val medicine = MedicineEntity("test")
-        val fullMedicine = FullMedicineEntity()
-        fullMedicine.medicine = medicine
-        fullMedicine.reminders = mutableListOf()
-        medicine.unit = "pills"
-        assertEquals(
-            "test",
-            formatter.getMedicineNameWithStockText(fullMedicine).toString()
-        )
-
-        // Expired case
-        medicine.expirationDate = LocalDate.now().toEpochDay() - 1
-        assertEquals(
-            "test (\uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(fullMedicine).toString()
-        )
-        medicine.expirationDate = 0
-
-        // Standard case with stock
-        medicine.amount = 12.0
-        assertEquals(
-            "test (12 pills left)",
-            formatter.getMedicineNameWithStockText(fullMedicine).toString()
-        )
-
-        // Out of stock case
         val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
             outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
             outOfStockThreshold = 15.0
         )
-        fullMedicine.reminders = mutableListOf(reminder)
+        val baseMedicine = Medicine.default().copy(name = "test", unit = "pills")
+
+        // Standard case without stock
+        assertEquals(
+            "test",
+            formatter.getMedicineNameWithStockText(baseMedicine).toString()
+        )
+
+        // Expired case
+        assertEquals(
+            "test (\uD83D\uDEAB)",
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(expirationDate = LocalDate.now().minusDays(1))).toString()
+        )
+
+        // Standard case with stock
+        assertEquals(
+            "test (12 pills left)",
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0)).toString()
+        )
+
+        // Out of stock case
         assertEquals(
             "test (12 pills left ⚠)",
-            formatter.getMedicineNameWithStockText(fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder))).toString()
         )
 
         // Out of stock and expired case
-        medicine.expirationDate = LocalDate.now().toEpochDay() - 1
         assertEquals(
             "test (12 pills left ⚠ \uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(fullMedicine).toString()
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder), expirationDate = LocalDate.now().minusDays(1))).toString()
         )
     }
 
@@ -134,15 +125,7 @@ class MedicineHelperTest {
         val userPreferences = mock<UserPreferences>()
         `when`(userPreferences.hideMedicineName).thenReturn(true)
 
-        val medicine = MedicineEntity("test")
-        val fullMedicine = FullMedicineEntity()
-        fullMedicine.medicine = medicine
-        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
-            outOfStockThreshold = 15.0
-        )
-        fullMedicine.reminders = mutableListOf(reminder)
-        medicine.amount = 0.0
+        val medicine = Medicine.default().copy(name = "test")
         assertEquals(
             "t***",
             MedicineHelper.getMedicineName(medicine, true, userPreferences)
