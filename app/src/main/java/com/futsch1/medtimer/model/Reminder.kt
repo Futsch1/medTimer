@@ -1,31 +1,36 @@
 package com.futsch1.medtimer.model
 
+import java.time.DayOfWeek
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+
 data class Reminder(
-    val id: Int = 0,
+    val id: Int,
     val medicineRelId: Int,
-    val timeInMinutes: Int = 480,
-    val createdTimestamp: Long = 0,
-    val consecutiveDays: Int = 1,
-    val pauseDays: Int = 0,
-    val instructions: String? = "",
-    val cycleStartDay: Long = 0,
-    val amount: String = "?",
-    val days: List<Boolean> = listOf(true, true, true, true, true, true, true),
-    val active: Boolean = true,
-    val periodStart: Long = 0,
-    val periodEnd: Long = 0,
-    val activeDaysOfMonth: Int = -0x1,
-    val linkedReminderId: Int = 0,
-    val intervalStart: Long = 0,
-    val intervalStartsFromProcessed: Boolean = false,
-    val variableAmount: Boolean = false,
-    val automaticallyTaken: Boolean = false,
-    val intervalStartTimeOfDay: Int = 480,
-    val intervalEndTimeOfDay: Int = 1320,
-    val windowedInterval: Boolean = false,
-    val outOfStockThreshold: Double = 0.0,
-    val outOfStockReminderType: OutOfStockReminderType = OutOfStockReminderType.OFF,
-    val expirationReminderType: ExpirationReminderType = ExpirationReminderType.OFF
+    val time: LocalTime,
+    val createdTime: Instant,
+    val consecutiveDays: Int,
+    val pauseDays: Int,
+    val instructions: String?,
+    val cycleStartDay: LocalDate,
+    val amount: String,
+    val days: List<DayOfWeek>,
+    val active: Boolean,
+    val periodStart: Long,
+    val periodEnd: Long,
+    val activeDaysOfMonth: List<Int>,
+    val linkedReminderId: Int,
+    val intervalStart: LocalDate,
+    val intervalStartsFromProcessed: Boolean,
+    val variableAmount: Boolean,
+    val automaticallyTaken: Boolean,
+    val intervalStartTimeOfDay: LocalTime,
+    val intervalEndTimeOfDay: LocalTime,
+    val windowedInterval: Boolean,
+    val outOfStockThreshold: Double,
+    val outOfStockReminderType: OutOfStockReminderType,
+    val expirationReminderType: ExpirationReminderType
 ) {
     enum class OutOfStockReminderType {
         ONCE,
@@ -38,5 +43,35 @@ data class Reminder(
         ONCE,
         DAILY,
         OFF
+    }
+
+    companion object {
+        fun default(): Reminder = Reminder(
+            id = 0,
+            medicineRelId = 0,
+            time = LocalTime.of(8, 0),
+            createdTime = Instant.EPOCH,
+            consecutiveDays = 1,
+            pauseDays = 0,
+            instructions = "",
+            cycleStartDay = LocalDate.EPOCH,
+            amount = "?",
+            days = DayOfWeek.entries,
+            active = true,
+            periodStart = 0,
+            periodEnd = 0,
+            activeDaysOfMonth = (1..31).toList(),
+            linkedReminderId = 0,
+            intervalStart = LocalDate.EPOCH,
+            intervalStartsFromProcessed = false,
+            variableAmount = false,
+            automaticallyTaken = false,
+            intervalStartTimeOfDay = LocalTime.of(8, 0),
+            intervalEndTimeOfDay = LocalTime.of(23, 0),
+            windowedInterval = false,
+            outOfStockThreshold = 0.0,
+            outOfStockReminderType = OutOfStockReminderType.OFF,
+            expirationReminderType = ExpirationReminderType.OFF
+        )
     }
 }
