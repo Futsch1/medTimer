@@ -8,7 +8,7 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -16,6 +16,7 @@ import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,10 +26,10 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
-import java.time.Instant
 
 class ManualDose @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -238,7 +239,7 @@ class ManualDose @AssistedInject constructor(
         ) {
             for (reminder in medicine.reminders) {
                 val entry = ManualDoseEntry(medicine, reminder.amount)
-                if (!isReminderActive(reminder) && !entries.contains(entry)) {
+                if (!isReminderActive(reminder.toModel()) && !entries.contains(entry)) {
                     entries.add(entry)
                 }
             }

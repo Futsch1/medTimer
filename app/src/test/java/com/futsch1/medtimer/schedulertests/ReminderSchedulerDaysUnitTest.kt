@@ -8,6 +8,7 @@ import com.futsch1.medtimer.schedulertests.TestHelper.buildFullMedicine
 import com.futsch1.medtimer.schedulertests.TestHelper.buildReminder
 import com.futsch1.medtimer.schedulertests.TestHelper.on
 import org.junit.Test
+import java.time.DayOfWeek
 import kotlin.test.assertEquals
 
 internal class ReminderSchedulerDaysUnitTest {
@@ -16,10 +17,10 @@ internal class ReminderSchedulerDaysUnitTest {
         val scheduler = getScheduler(1)
 
         val medicineWithReminders = buildFullMedicine(1, "Test")
-        val reminder = buildReminder(1, 1, "1", 480, 1)
         // 1.1.1970 was a Thursday, so skip the Friday and Saturday
-        reminder.days[4] = false
-        reminder.days[5] = false
+        val reminder = buildReminder(1, 1, "1", 480, 1).copy(
+            days = DayOfWeek.entries - DayOfWeek.FRIDAY - DayOfWeek.SATURDAY
+        )
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList = mutableListOf<FullMedicineEntity>()
@@ -43,14 +44,8 @@ internal class ReminderSchedulerDaysUnitTest {
         val scheduler = scheduler
 
         val medicineWithReminders = buildFullMedicine(1, "Test")
-        val reminder = buildReminder(1, 1, "1", 480, 6)
         // Allow only on Mondays and only every 6 days. The start of the cycle will be on the 1.1.1970.
-        reminder.days[1] = false
-        reminder.days[2] = false
-        reminder.days[3] = false
-        reminder.days[4] = false
-        reminder.days[5] = false
-        reminder.days[6] = false
+        val reminder = buildReminder(1, 1, "1", 480, 6).copy(days = listOf(DayOfWeek.MONDAY))
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList = mutableListOf<FullMedicineEntity>()

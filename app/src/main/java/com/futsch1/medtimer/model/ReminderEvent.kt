@@ -2,10 +2,6 @@ package com.futsch1.medtimer.model
 
 import java.time.Instant
 
-enum class ReminderEventType {
-    TIME_BASED, LINKED, CONTINUOUS_INTERVAL, WINDOWED_INTERVAL, OUT_OF_STOCK, EXPIRATION_DATE, REFILL
-}
-
 data class ReminderEvent(
     val reminderEventId: Int,
     val reminderId: Int,
@@ -21,7 +17,7 @@ data class ReminderEvent(
     val notificationId: Int,
     val remainingRepeats: Int,
     val notes: String,
-    val reminderType: ReminderEventType,
+    val reminderType: ReminderType,
     val stockHandled: Boolean,
     val askForAmount: Boolean,
     val lastIntervalReminderTimeInMinutes: Int
@@ -52,7 +48,7 @@ data class ReminderEvent(
             notificationId = 0,
             remainingRepeats = 0,
             notes = "",
-            reminderType = ReminderEventType.TIME_BASED,
+            reminderType = ReminderType.TIME_BASED,
             stockHandled = false,
             askForAmount = false,
             lastIntervalReminderTimeInMinutes = 0

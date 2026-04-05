@@ -14,7 +14,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -69,7 +69,7 @@ class MedicineViewHolder @AssistedInject constructor(
     }
 
     private fun setupSummary(medicine: FullMedicineEntity) {
-        val activeReminders: List<ReminderEntity> = getActiveReminders(medicine)
+        val activeReminders: List<Reminder> = getActiveReminders(medicine)
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
                 remindersSummaryView.setText(R.string.no_reminders)

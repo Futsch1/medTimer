@@ -9,8 +9,8 @@ import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -85,9 +85,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         medicine.medicineId = 0
         val newMedicineId = medicineRepository.create(medicine).toInt()
         for (reminder in fullMedicine.reminders) {
-            reminder.reminderId = 0
-            reminder.medicineRelId = newMedicineId
-            reminderRepository.create(reminder)
+            reminderRepository.create(reminder.toModel().copy(id = 0, medicineRelId = newMedicineId))
         }
         assignTags(oldMedicineId, newMedicineId)
     }
@@ -130,8 +128,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
 
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val reminders: List<ReminderEntity> =
-                reminderRepository.getAll(medicine.medicineId)
+            val reminders = reminderRepository.getAll(medicine.medicineId)
             com.futsch1.medtimer.helpers.setRemindersActive(reminders, reminderRepository, active)
         }
     }

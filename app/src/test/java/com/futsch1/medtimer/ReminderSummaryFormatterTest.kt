@@ -3,10 +3,10 @@ package com.futsch1.medtimer
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
@@ -26,7 +26,10 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import java.time.DayOfWeek
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
@@ -60,14 +63,11 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryInactive() = runBlocking {
-        val reminder = ReminderEntity(1)
-        reminder.active = false
+        var reminder = Reminder.default().copy(medicineRelId = 1, active = false)
 
         assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder))
 
-        reminder.active = true
-        reminder.periodStart = LocalDate.of(2023, 1, 2).toEpochDay()
-        reminder.periodEnd = LocalDate.of(2023, 1, 4).toEpochDay()
+        reminder = reminder.copy(active = true, periodStart = LocalDate.of(2023, 1, 2), periodEnd = LocalDate.of(2023, 1, 4))
         val dateBefore = LocalDate.of(2023, 1, 1)
         val dateIn = LocalDate.of(2023, 1, 2)
         val mockedLocalDate: MockedStatic<LocalDate> = mockStatic(LocalDate::class.java)
@@ -83,18 +83,17 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryLimited() = runBlocking {
-        val reminder = ReminderEntity(1)
+        var reminder = Reminder.default().copy(days = listOf(DayOfWeek.SUNDAY))
 
-        reminder.days[0] = false
         assertEquals("Limited to some weekdays", formatter.formatReminderSummary(reminder))
 
-        reminder.activeDaysOfMonth = 42
+        reminder = reminder.copy(activeDaysOfMonth = listOf(1))
         assertEquals(
             "Limited to some weekdays, Limited to some days of the month",
             formatter.formatReminderSummary(reminder)
         )
 
-        reminder.days[0] = true
+        reminder = reminder.copy(days = emptyList())
         assertEquals(
             "Limited to some days of the month, Every day",
             formatter.formatReminderSummary(reminder)
@@ -106,10 +105,7 @@ class ReminderSummaryFormatterTest {
         val preferences = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
 
-        val reminder = ReminderEntity(1)
-        reminder.consecutiveDays = 4
-        reminder.pauseDays = 5
-        reminder.cycleStartDay = 19823
+        val reminder = Reminder.default().copy(consecutiveDays = 4, pauseDays = 5, cycleStartDay = LocalDate.of(2024, 10, 4))
         assertEquals(
             "Cyclic reminder 4/5, first cycle start 4/10/24",
             formatter.formatReminderSummary(reminder)
@@ -118,9 +114,7 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryInstructions() = runBlocking {
-        val reminder = ReminderEntity(1)
-        reminder.active = false
-        reminder.instructions = "3"
+        val reminder = Reminder.default().copy(active = false, instructions = "3")
         assertEquals("Inactive, Every day, 3", formatter.formatReminderSummary(reminder))
     }
 
@@ -140,8 +134,8 @@ class ReminderSummaryFormatterTest {
 
         val linkedFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
-        val sourceReminder = ReminderEntity(1)
-        val sourceSourceReminder = ReminderEntity(1)
+        var sourceReminder = Reminder.default()
+        val sourceSourceReminder = Reminder.default()
         runBlocking {
             Mockito.`when`(mockReminderRepository.get(2)).thenReturn(sourceReminder)
         }
@@ -149,15 +143,16 @@ class ReminderSummaryFormatterTest {
             Mockito.`when`(mockReminderRepository.get(3)).thenReturn(sourceSourceReminder)
         }
 
-        val reminder = ReminderEntity(1)
-        reminder.linkedReminderId = 2
+        val reminder = Reminder.default().copy(linkedReminderId = 2)
 
         runBlocking {
             assertEquals("1", linkedFormatter.formatReminderSummary(reminder))
         }
 
-        sourceReminder.linkedReminderId = 3
-        sourceReminder.timeInMinutes = 3
+        sourceReminder = sourceReminder.copy(linkedReminderId = 3, time = LocalTime.of(0, 3))
+        runBlocking {
+            Mockito.`when`(mockReminderRepository.get(2)).thenReturn(sourceReminder)
+        }
         runBlocking {
             assertEquals("1 + 0:03", linkedFormatter.formatReminderSummary(reminder))
         }
@@ -177,10 +172,8 @@ class ReminderSummaryFormatterTest {
 
         val simpleFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
-        val reminder = ReminderEntity(1)
-        reminder.timeInMinutes = 2
-        val reminder2 = ReminderEntity(2)
-        reminder2.timeInMinutes = 63
+        val reminder = Reminder.default().copy(time = LocalTime.of(0, 2))
+        val reminder2 = Reminder.default().copy(time = LocalTime.of(1, 3))
         assertEquals("ok", simpleFormatter.formatRemindersSummary(listOf(reminder2, reminder)))
     }
 
@@ -204,16 +197,9 @@ class ReminderSummaryFormatterTest {
         Mockito.`when`(mockTimeFormatter.minutesToDurationString(63)).thenReturn("1:03")
         Mockito.`when`(mockTimeFormatter.minutesToDurationString(144)).thenReturn("2:24")
 
-        val reminder = ReminderEntity(1)
-        reminder.reminderId = 1
-        reminder.timeInMinutes = 2
-        val reminder2 = ReminderEntity(1)
-        reminder2.linkedReminderId = 1
-        reminder2.timeInMinutes = 63
-        reminder2.reminderId = 2
-        val reminder3 = ReminderEntity(1)
-        reminder3.linkedReminderId = 2
-        reminder3.timeInMinutes = 144
+        val reminder = Reminder.default().copy(id = 1, time = LocalTime.of(0, 2))
+        val reminder2 = Reminder.default().copy(id = 2, time = LocalTime.of(1, 3), linkedReminderId = 1)
+        val reminder3 = Reminder.default().copy(id = 3, time = LocalTime.of(2, 24), linkedReminderId = 2)
 
         Mockito.`when`(mockReminderRepository.get(2)).thenReturn(reminder2)
         Mockito.`when`(mockReminderRepository.get(1)).thenReturn(reminder)
@@ -251,12 +237,8 @@ class ReminderSummaryFormatterTest {
 
         val intervalFormatter = ReminderSummaryFormatter(mockContext, mockReminderRepository, mockTimeFormatter)
 
-        val reminder = ReminderEntity(1)
-        reminder.timeInMinutes = 2
-        reminder.intervalStart = 1
-        val reminder2 = ReminderEntity(2)
-        reminder2.timeInMinutes = 120
-        reminder2.intervalStart = 1
+        val reminder = Reminder.default().copy(time = LocalTime.of(0, 2), intervalStart = Instant.ofEpochSecond(60))
+        val reminder2 = Reminder.default().copy(time = LocalTime.of(2, 0), intervalStart = Instant.ofEpochSecond(60))
 
         assertEquals("ok, start time", intervalFormatter.formatReminderSummary(reminder))
         assertEquals("ok", intervalFormatter.formatRemindersSummary(listOf(reminder2, reminder)))

@@ -7,13 +7,13 @@ import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toModelReminderEventType
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -112,17 +112,17 @@ class ReminderNotificationProcessor @Inject constructor(
         suspend fun buildReminderEvent(
             remindedTimeStamp: Long,
             medicine: FullMedicineEntity,
-            reminder: ReminderEntity,
+            reminder: Reminder,
             reminderEventRepository: ReminderEventRepository,
             timeFormatter: TimeFormatter
         ): ReminderEvent {
             val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
             val amount = when (reminder.reminderType) {
-                ReminderEntity.ReminderType.OUT_OF_STOCK -> {
+                ReminderType.OUT_OF_STOCK -> {
                     MedicineHelper.formatAmount(medicine.medicine.amount, medicine.medicine.unit)
                 }
 
-                ReminderEntity.ReminderType.EXPIRATION_DATE -> {
+                ReminderType.EXPIRATION_DATE -> {
                     timeFormatter.daysSinceEpochToDateString(medicine.medicine.expirationDate)
                 }
 
@@ -134,9 +134,9 @@ class ReminderNotificationProcessor @Inject constructor(
             val lastIntervalReminderTimeInMinutes = if (reminder.isInterval) {
                 getLastReminderEventTimeInMinutes(
                     reminderEventRepository,
-                    reminder.reminderId,
+                    reminder.id,
                     remindedInstant,
-                    reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL
+                    reminder.reminderType == ReminderType.WINDOWED_INTERVAL
                 )
             } else {
                 0
@@ -144,7 +144,7 @@ class ReminderNotificationProcessor @Inject constructor(
 
             return ReminderEvent(
                 reminderEventId = 0,
-                reminderId = reminder.reminderId,
+                reminderId = reminder.id,
                 medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder),
                 amount = amount,
                 color = medicine.medicine.color,
@@ -156,7 +156,7 @@ class ReminderNotificationProcessor @Inject constructor(
                 iconId = medicine.medicine.iconId,
                 remainingRepeats = 0,
                 notes = "",
-                reminderType = reminder.reminderType.toModelReminderEventType(),
+                reminderType = reminder.reminderType,
                 stockHandled = false,
                 askForAmount = reminder.variableAmount,
                 tags = medicine.tags.map { it.name },

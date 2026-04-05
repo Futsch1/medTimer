@@ -22,7 +22,7 @@ class ScheduledReminderEvent @AssistedInject constructor(
 
     override val text: Spanned = reminderStringFormatter.formatScheduledReminder(scheduledReminder)
     override val id: Int
-        get() = scheduledReminder.reminder.reminderId + 1_000_000
+        get() = scheduledReminder.reminder.id + 1_000_000
 
     override val timestamp: Long
         get() = scheduledReminder.timestamp.epochSecond
@@ -33,5 +33,5 @@ class ScheduledReminderEvent @AssistedInject constructor(
     override val state: OverviewState
         get() = OverviewState.PENDING
     override val reminderId: Int
-        get() = scheduledReminder.reminder.reminderId
+        get() = scheduledReminder.reminder.id
 }

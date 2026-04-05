@@ -3,8 +3,9 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,11 +26,11 @@ class AdvancedReminderPreferencesStatusFragment : AdvancedReminderPreferencesFra
             "period_end_date" to { activity, preference -> dateEditHandler.show(activity, preference) }
         )
 
-    override fun onEntityUpdated(entity: ReminderEntity) {
-        super.onEntityUpdated(entity)
+    override fun onModelDataUpdated(modelData: Reminder) {
+        super.onModelDataUpdated(modelData)
 
-        findPreference<Preference>("period_start_date")?.isVisible = entity.periodStart != 0L
-        findPreference<Preference>("period_end_date")?.isVisible = entity.periodEnd != 0L
+        findPreference<Preference>("period_start_date")?.isVisible = modelData.periodStart != LocalDate.EPOCH
+        findPreference<Preference>("period_end_date")?.isVisible = modelData.periodEnd != LocalDate.EPOCH
     }
 
 }

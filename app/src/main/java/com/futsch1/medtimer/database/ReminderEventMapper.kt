@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderEventType
+import com.futsch1.medtimer.model.ReminderType
 import java.time.Instant
 
 fun ReminderEventEntity.toModel(): ReminderEvent =
@@ -49,42 +49,42 @@ fun ReminderEvent.toEntity(): ReminderEventEntity {
     return entity
 }
 
-fun ReminderEventEntity.ReminderStatus.toModel(): ReminderEvent.ReminderStatus =
+fun ReminderEventEntity.ReminderEntityStatus.toModel(): ReminderEvent.ReminderStatus =
     when (this) {
-        ReminderEventEntity.ReminderStatus.RAISED -> ReminderEvent.ReminderStatus.RAISED
-        ReminderEventEntity.ReminderStatus.TAKEN -> ReminderEvent.ReminderStatus.TAKEN
-        ReminderEventEntity.ReminderStatus.SKIPPED -> ReminderEvent.ReminderStatus.SKIPPED
-        ReminderEventEntity.ReminderStatus.DELETED -> ReminderEvent.ReminderStatus.DELETED
-        ReminderEventEntity.ReminderStatus.ACKNOWLEDGED -> ReminderEvent.ReminderStatus.ACKNOWLEDGED
+        ReminderEventEntity.ReminderEntityStatus.RAISED -> ReminderEvent.ReminderStatus.RAISED
+        ReminderEventEntity.ReminderEntityStatus.TAKEN -> ReminderEvent.ReminderStatus.TAKEN
+        ReminderEventEntity.ReminderEntityStatus.SKIPPED -> ReminderEvent.ReminderStatus.SKIPPED
+        ReminderEventEntity.ReminderEntityStatus.DELETED -> ReminderEvent.ReminderStatus.DELETED
+        ReminderEventEntity.ReminderEntityStatus.ACKNOWLEDGED -> ReminderEvent.ReminderStatus.ACKNOWLEDGED
     }
 
-fun ReminderEvent.ReminderStatus.toEntity(): ReminderEventEntity.ReminderStatus =
+fun ReminderEvent.ReminderStatus.toEntity(): ReminderEventEntity.ReminderEntityStatus =
     when (this) {
-        ReminderEvent.ReminderStatus.RAISED -> ReminderEventEntity.ReminderStatus.RAISED
-        ReminderEvent.ReminderStatus.TAKEN -> ReminderEventEntity.ReminderStatus.TAKEN
-        ReminderEvent.ReminderStatus.SKIPPED -> ReminderEventEntity.ReminderStatus.SKIPPED
-        ReminderEvent.ReminderStatus.DELETED -> ReminderEventEntity.ReminderStatus.DELETED
-        ReminderEvent.ReminderStatus.ACKNOWLEDGED -> ReminderEventEntity.ReminderStatus.ACKNOWLEDGED
+        ReminderEvent.ReminderStatus.RAISED -> ReminderEventEntity.ReminderEntityStatus.RAISED
+        ReminderEvent.ReminderStatus.TAKEN -> ReminderEventEntity.ReminderEntityStatus.TAKEN
+        ReminderEvent.ReminderStatus.SKIPPED -> ReminderEventEntity.ReminderEntityStatus.SKIPPED
+        ReminderEvent.ReminderStatus.DELETED -> ReminderEventEntity.ReminderEntityStatus.DELETED
+        ReminderEvent.ReminderStatus.ACKNOWLEDGED -> ReminderEventEntity.ReminderEntityStatus.ACKNOWLEDGED
     }
 
-fun ReminderEntity.ReminderType.toModelReminderEventType(): ReminderEventType =
+fun ReminderEntityType.toModelReminderEventType(): ReminderType =
     when (this) {
-        ReminderEntity.ReminderType.TIME_BASED -> ReminderEventType.TIME_BASED
-        ReminderEntity.ReminderType.LINKED -> ReminderEventType.LINKED
-        ReminderEntity.ReminderType.CONTINUOUS_INTERVAL -> ReminderEventType.CONTINUOUS_INTERVAL
-        ReminderEntity.ReminderType.WINDOWED_INTERVAL -> ReminderEventType.WINDOWED_INTERVAL
-        ReminderEntity.ReminderType.OUT_OF_STOCK -> ReminderEventType.OUT_OF_STOCK
-        ReminderEntity.ReminderType.EXPIRATION_DATE -> ReminderEventType.EXPIRATION_DATE
-        ReminderEntity.ReminderType.REFILL -> ReminderEventType.REFILL
+        ReminderEntityType.TIME_BASED -> ReminderType.TIME_BASED
+        ReminderEntityType.LINKED -> ReminderType.LINKED
+        ReminderEntityType.CONTINUOUS_INTERVAL -> ReminderType.CONTINUOUS_INTERVAL
+        ReminderEntityType.WINDOWED_INTERVAL -> ReminderType.WINDOWED_INTERVAL
+        ReminderEntityType.OUT_OF_STOCK -> ReminderType.OUT_OF_STOCK
+        ReminderEntityType.EXPIRATION_DATE -> ReminderType.EXPIRATION_DATE
+        ReminderEntityType.REFILL -> ReminderType.REFILL
     }
 
-fun ReminderEventType.toEntityReminderType(): ReminderEntity.ReminderType =
+fun ReminderType.toEntityReminderType(): ReminderEntityType =
     when (this) {
-        ReminderEventType.TIME_BASED -> ReminderEntity.ReminderType.TIME_BASED
-        ReminderEventType.LINKED -> ReminderEntity.ReminderType.LINKED
-        ReminderEventType.CONTINUOUS_INTERVAL -> ReminderEntity.ReminderType.CONTINUOUS_INTERVAL
-        ReminderEventType.WINDOWED_INTERVAL -> ReminderEntity.ReminderType.WINDOWED_INTERVAL
-        ReminderEventType.OUT_OF_STOCK -> ReminderEntity.ReminderType.OUT_OF_STOCK
-        ReminderEventType.EXPIRATION_DATE -> ReminderEntity.ReminderType.EXPIRATION_DATE
-        ReminderEventType.REFILL -> ReminderEntity.ReminderType.REFILL
+        ReminderType.TIME_BASED -> ReminderEntityType.TIME_BASED
+        ReminderType.LINKED -> ReminderEntityType.LINKED
+        ReminderType.CONTINUOUS_INTERVAL -> ReminderEntityType.CONTINUOUS_INTERVAL
+        ReminderType.WINDOWED_INTERVAL -> ReminderEntityType.WINDOWED_INTERVAL
+        ReminderType.OUT_OF_STOCK -> ReminderEntityType.OUT_OF_STOCK
+        ReminderType.EXPIRATION_DATE -> ReminderEntityType.EXPIRATION_DATE
+        ReminderType.REFILL -> ReminderEntityType.REFILL
     }

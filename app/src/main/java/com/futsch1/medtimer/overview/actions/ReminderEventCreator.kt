@@ -4,8 +4,8 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -19,7 +19,7 @@ class ReminderEventCreator @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent = withContext(ioDispatcher) {
-        val existingReminderEvent = reminderEventRepository.get(scheduledReminder.reminder.reminderId, scheduledReminder.timestamp.epochSecond)
+        val existingReminderEvent = reminderEventRepository.get(scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond)
         if (existingReminderEvent != null) {
             return@withContext existingReminderEvent
         }

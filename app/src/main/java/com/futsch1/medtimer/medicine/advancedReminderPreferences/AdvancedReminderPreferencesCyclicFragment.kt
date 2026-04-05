@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class AdvancedReminderPreferencesCyclicFragment : AdvancedReminderPreferencesFra
             "cycle_start_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
         )
 
-    override fun customSetup(entity: ReminderEntity) {
+    override fun customSetup(modelData: Reminder) {
         findPreference<EditTextPreference>("cycle_consecutive_days")?.setOnBindEditTextListener { editText ->
             editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
         }

@@ -2,7 +2,9 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
@@ -14,32 +16,32 @@ class SchedulingFactory {
         timeAccess: TimeAccess,
         dataSource: PreferencesDataSource
     ): Scheduling {
-        val scheduler = when (reminder.reminderType) {
-            ReminderEntity.ReminderType.LINKED -> {
+        val scheduler = when (reminder.toModel().reminderType) {
+            ReminderType.LINKED -> {
                 LinkedScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.CONTINUOUS_INTERVAL -> {
+            ReminderType.CONTINUOUS_INTERVAL -> {
                 IntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.WINDOWED_INTERVAL -> {
+            ReminderType.WINDOWED_INTERVAL -> {
                 WindowedIntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.TIME_BASED -> {
+            ReminderType.TIME_BASED -> {
                 StandardScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.OUT_OF_STOCK -> {
+            ReminderType.OUT_OF_STOCK -> {
                 OutOfStockScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.EXPIRATION_DATE -> {
+            ReminderType.EXPIRATION_DATE -> {
                 ExpirationDateScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            ReminderEntity.ReminderType.REFILL -> {
+            ReminderType.REFILL -> {
                 error("Refill reminder cannot be scheduled.")
             }
         }

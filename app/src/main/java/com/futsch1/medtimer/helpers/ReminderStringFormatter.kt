@@ -10,10 +10,9 @@ import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.toEntityReminderType
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -94,9 +93,9 @@ class ReminderStringFormatter @Inject constructor(
         )
     }
 
-    fun getReminderTypeSpan(reminderType: ReminderEntity.ReminderType): Spanned {
+    fun getReminderTypeSpan(reminderType: ReminderType): Spanned {
         val span = SpannableStringBuilder()
-        val drawable = ContextCompat.getDrawable(context, reminderType.icon)
+        val drawable = ContextCompat.getDrawable(context, reminderType.getIcon())
 
         if (drawable != null) {
             val imageSpan = TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
@@ -111,11 +110,11 @@ class ReminderStringFormatter @Inject constructor(
     private fun getAmountOrStockString(scheduledReminder: ScheduledReminder): String {
         val amount =
             when (scheduledReminder.reminder.reminderType) {
-                ReminderEntity.ReminderType.OUT_OF_STOCK -> {
+                ReminderType.OUT_OF_STOCK -> {
                     MedicineHelper.formatAmount(scheduledReminder.medicine.medicine.amount, scheduledReminder.medicine.medicine.unit)
                 }
 
-                ReminderEntity.ReminderType.EXPIRATION_DATE -> {
+                ReminderType.EXPIRATION_DATE -> {
                     timeFormatter.daysSinceEpochToDateString(scheduledReminder.medicine.medicine.expirationDate)
                 }
 
@@ -128,7 +127,7 @@ class ReminderStringFormatter @Inject constructor(
 
 
     private fun getReminderTypeSpan(reminderEvent: ReminderEvent): Spanned =
-        getReminderTypeSpan(reminderEvent.reminderType.toEntityReminderType())
+        getReminderTypeSpan(reminderEvent.reminderType)
 
     private fun getLastIntervalTime(reminderEvent: ReminderEvent): String {
         val lastIntervalTime = reminderEvent.lastIntervalReminderTimeInMinutes

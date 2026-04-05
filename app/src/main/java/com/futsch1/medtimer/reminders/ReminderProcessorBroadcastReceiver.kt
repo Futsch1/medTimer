@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.ProcessorCode
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -143,7 +143,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
-        fun requestReminderAction(context: Context, reminder: ReminderEntity?, reminderEvent: ReminderEvent, taken: Boolean) {
+        fun requestReminderAction(context: Context, reminder: Reminder?, reminderEvent: ReminderEvent, taken: Boolean) {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
 
             if (taken) {

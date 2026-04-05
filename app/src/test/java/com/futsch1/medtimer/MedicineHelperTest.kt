@@ -3,10 +3,10 @@ package com.futsch1.medtimer
 import android.content.Context
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.schedulertests.TestHelper
@@ -111,9 +111,10 @@ class MedicineHelperTest {
         )
 
         // Out of stock case
-        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.outOfStockThreshold = 15.0
-        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
+        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
+            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
+            outOfStockThreshold = 15.0
+        )
         fullMedicine.reminders = mutableListOf(reminder)
         assertEquals(
             "test (12 pills left ⚠)",
@@ -136,9 +137,10 @@ class MedicineHelperTest {
         val medicine = MedicineEntity("test")
         val fullMedicine = FullMedicineEntity()
         fullMedicine.medicine = medicine
-        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1)
-        reminder.outOfStockThreshold = 15.0
-        reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
+        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
+            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
+            outOfStockThreshold = 15.0
+        )
         fullMedicine.reminders = mutableListOf(reminder)
         medicine.amount = 0.0
         assertEquals(

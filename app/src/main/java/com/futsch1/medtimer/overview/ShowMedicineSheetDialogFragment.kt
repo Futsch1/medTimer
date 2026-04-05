@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.helpers.getIcon
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,8 +64,6 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         dialog: AppCompatDialog,
         state: ShowMedicineUiState.Loaded
     ) {
-        val context = requireContext()
-
         dialog.requireViewById<TextView>(R.id.medicineName).text =
             medicineStringFormatter.getMedicineNameWithStockText(state.userPreferences, state.fullMedicine)
 
@@ -79,7 +78,7 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         val reminderTextView = dialog.requireViewById<TextView>(R.id.reminderText)
         reminderTextView.text = state.reminderSummaryText
         reminderTextView.setCompoundDrawablesWithIntrinsicBounds(
-            state.reminder.reminderType.icon, 0, 0, 0
+            state.reminder.reminderType.getIcon(), 0, 0, 0
         )
     }
 

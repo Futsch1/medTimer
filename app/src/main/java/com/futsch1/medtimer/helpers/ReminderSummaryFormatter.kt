@@ -2,8 +2,9 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -15,62 +16,62 @@ class ReminderSummaryFormatter @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter
 ) {
-    suspend fun formatExportReminderSummary(reminder: ReminderEntity): String {
+    suspend fun formatExportReminderSummary(reminder: Reminder): String {
         val reminderSummary = formatReminderSummary(reminder)
         if (!reminder.usesTimeInMinutes) {
             return reminderSummary
         }
 
-        val time: String = timeFormatter.minutesToTimeString(reminder.timeInMinutes)
+        val time: String = timeFormatter.toTimeString(reminder.time)
         return "$time, $reminderSummary"
     }
 
-    suspend fun formatReminderSummary(reminder: ReminderEntity): String {
+    suspend fun formatReminderSummary(reminder: Reminder): String {
         var strings: MutableList<String> = mutableListOf()
 
         if (!isReminderActive(reminder)) {
             strings.add(context.getString(R.string.inactive))
         }
         when (reminder.reminderType) {
-            ReminderEntity.ReminderType.LINKED -> {
+            ReminderType.LINKED -> {
                 strings.add(linkedReminderString(reminder))
             }
 
-            ReminderEntity.ReminderType.CONTINUOUS_INTERVAL, ReminderEntity.ReminderType.WINDOWED_INTERVAL -> {
+            ReminderType.CONTINUOUS_INTERVAL, ReminderType.WINDOWED_INTERVAL -> {
                 strings.add(intervalBasedReminderString(reminder))
             }
 
-            ReminderEntity.ReminderType.TIME_BASED -> {
+            ReminderType.TIME_BASED -> {
                 timeBasedReminderString(reminder, strings)
             }
 
-            ReminderEntity.ReminderType.OUT_OF_STOCK -> {
+            ReminderType.OUT_OF_STOCK -> {
                 strings.add(outOfStockReminderString(reminder))
             }
 
-            ReminderEntity.ReminderType.EXPIRATION_DATE -> {
+            ReminderType.EXPIRATION_DATE -> {
                 strings.add(expirationDateReminderString(reminder))
             }
 
-            ReminderEntity.ReminderType.REFILL -> {
+            ReminderType.REFILL -> {
                 strings.add(context.getString(R.string.refill))
             }
         }
         if (reminder.instructions?.isNotEmpty() == true) {
-            strings.add(reminder.instructions!!)
+            strings.add(reminder.instructions)
         }
         strings = strings.filter { it.isNotEmpty() }.toMutableList()
 
         return java.lang.String.join(", ", strings)
     }
 
-    suspend fun formatRemindersSummary(reminders: List<ReminderEntity>): String {
+    suspend fun formatRemindersSummary(reminders: List<Reminder>): String {
         val reminderTimes = buildList {
-            addAll(timeBasedRemindersSummary(reminders.filter { it.reminderType == ReminderEntity.ReminderType.TIME_BASED }))
-            addAll(reminders.filter { it.reminderType == ReminderEntity.ReminderType.LINKED }.map { linkedReminderSummaryString(it) })
+            addAll(timeBasedRemindersSummary(reminders.filter { it.reminderType == ReminderType.TIME_BASED }))
+            addAll(reminders.filter { it.reminderType == ReminderType.LINKED }.map { linkedReminderSummaryString(it) })
             addAll(reminders.filter { it.isInterval }.map { intervalBasedReminderString(it) })
-            addAll(reminders.filter { it.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK }.map { outOfStockReminderString(it) })
-            addAll(reminders.filter { it.reminderType == ReminderEntity.ReminderType.EXPIRATION_DATE }.map { context.getString(R.string.expiration_date) })
+            addAll(reminders.filter { it.reminderType == ReminderType.OUT_OF_STOCK }.map { outOfStockReminderString(it) })
+            addAll(reminders.filter { it.reminderType == ReminderType.EXPIRATION_DATE }.map { context.getString(R.string.expiration_date) })
         }
 
         val len = reminderTimes.size
@@ -82,83 +83,84 @@ class ReminderSummaryFormatter @Inject constructor(
         )
     }
 
-    private fun expirationDateReminderString(reminder: ReminderEntity): String {
+    private fun expirationDateReminderString(reminder: Reminder): String {
         return context.getString(R.string.expiration_date) + ", " +
                 context.resources.getStringArray(R.array.expiration_reminder)[reminder.expirationReminderType.ordinal]
     }
 
-    private fun outOfStockReminderString(reminder: ReminderEntity): String {
+    private fun outOfStockReminderString(reminder: Reminder): String {
         return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
             reminder.outOfStockThreshold,
             ""
         )
     }
 
-    private fun intervalBasedReminderString(reminder: ReminderEntity): String {
-        val interval = Interval(reminder.timeInMinutes)
+    private fun intervalBasedReminderString(reminder: Reminder): String {
+        val interval = Interval(reminder.time)
         return context.getString(
             R.string.every_interval,
             interval.toTranslatedString(context)
         ) + ", " + getIntervalTypeSummary(reminder)
     }
 
-    fun getIntervalTypeSummary(reminder: ReminderEntity): String {
+    fun getIntervalTypeSummary(reminder: Reminder): String {
         return if (reminder.windowedInterval) {
             context.getString(
                 R.string.daily_from_to,
-                timeFormatter.minutesToTimeString(reminder.intervalStartTimeOfDay),
-                timeFormatter.minutesToTimeString(reminder.intervalEndTimeOfDay)
+                timeFormatter.toTimeString(reminder.intervalStartTimeOfDay),
+                timeFormatter.toTimeString(reminder.intervalEndTimeOfDay)
             )
         } else {
             context.getString(
                 R.string.continuous_from,
-                timeFormatter.secondsSinceEpochToDateTimeString(reminder.intervalStart)
+                timeFormatter.secondsSinceEpochToDateTimeString(reminder.intervalStart.epochSecond)
             )
         }
     }
 
-    private suspend fun linkedReminderString(reminder: ReminderEntity): String {
+    private suspend fun linkedReminderString(reminder: Reminder): String {
         val delays = mutableListOf<String>()
         var current = reminderRepository.get(reminder.linkedReminderId) ?: return "?"
 
-        while (current.reminderType == ReminderEntity.ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
+        while (current.reminderType == ReminderType.LINKED) {
+            delays.add(timeFormatter.minutesToDurationString(current.time.toSecondOfDay() / 60))
             current = reminderRepository.get(current.linkedReminderId) ?: return "?"
         }
 
         val base = context.getString(
             R.string.linked_reminder_summary,
-            timeFormatter.minutesToTimeString(current.timeInMinutes)
+            timeFormatter.toTimeString(current.time)
         )
         return if (delays.isEmpty()) base
         else "$base + ${delays.reversed().joinToString(" + ")}"
     }
 
-    private suspend fun linkedReminderSummaryString(reminder: ReminderEntity): String {
+    private suspend fun linkedReminderSummaryString(reminder: Reminder): String {
         val delays = mutableListOf<String>()
         var current = reminder
 
-        while (current.reminderType == ReminderEntity.ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.timeInMinutes))
+        while (current.reminderType == ReminderType.LINKED) {
+            delays.add(timeFormatter.minutesToDurationString(current.time.toSecondOfDay() / 60))
             val source = reminderRepository.get(current.linkedReminderId) ?: return "?"
             current = source
         }
 
-        val base = timeFormatter.minutesToTimeString(current.timeInMinutes)
+        val base = timeFormatter.toTimeString(current.time)
         return if (delays.isEmpty()) base
         else "$base + ${delays.reversed().joinToString(" + ")}"
     }
 
     private fun timeBasedReminderString(
-        reminder: ReminderEntity,
+        reminder: Reminder,
         strings: MutableList<String>
     ) {
-        val never = reminder.days.none { it } || (reminder.activeDaysOfMonth and 0x7FFFFFFF) == 0
+        val never = reminder.days.isEmpty() && reminder.activeDaysOfMonth.isEmpty()
+
         if (never) {
             strings.add(context.getString(R.string.never))
         } else {
-            val dayOfMonthLimited = (reminder.activeDaysOfMonth and 0x7FFFFFFF) != 0x7FFFFFFF
-            val hasWeekdayRestriction = reminder.days.any { !it }
+            val dayOfMonthLimited = reminder.activeDaysOfMonth.isNotEmpty()
+            val hasWeekdayRestriction = reminder.days.isNotEmpty()
 
             buildReminderStrings(
                 strings,
@@ -170,7 +172,7 @@ class ReminderSummaryFormatter @Inject constructor(
 
     private fun buildReminderStrings(
         strings: MutableList<String>,
-        reminder: ReminderEntity,
+        reminder: Reminder,
         properties: ReminderProperties
     ) {
         if (properties.weekdayLimited) {
@@ -185,7 +187,7 @@ class ReminderSummaryFormatter @Inject constructor(
         }
     }
 
-    fun getCyclicReminderString(reminder: ReminderEntity): String {
+    fun getCyclicReminderString(reminder: Reminder): String {
         return if (reminder.pauseDays > 0) context.getString(R.string.cycle_reminder) +
                 " " +
                 reminder.consecutiveDays +
@@ -194,13 +196,13 @@ class ReminderSummaryFormatter @Inject constructor(
                 ", " +
                 firstToLower(context.getString(R.string.cycle_start_date)) +
                 " " +
-                timeFormatter.daysSinceEpochToDateString(reminder.cycleStartDay)
+                timeFormatter.daysSinceEpochToDateString(reminder.cycleStartDay.toEpochDay())
         else ""
     }
 
-    private fun timeBasedRemindersSummary(reminders: List<ReminderEntity>): List<String> {
-        return reminders.map { r -> r.timeInMinutes }.sorted()
-            .map { timeFormatter.minutesToTimeString(it) }
+    private fun timeBasedRemindersSummary(reminders: List<Reminder>): List<String> {
+        return reminders.map { r -> r.time }.sorted()
+            .map { timeFormatter.toTimeString(it) }
     }
 
     private fun firstToLower(string: String): String {

@@ -5,11 +5,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.helpers.EntityDataStore
-import com.futsch1.medtimer.helpers.EntityPreferencesFragment
-import com.futsch1.medtimer.helpers.EntityViewModel
+import com.futsch1.medtimer.helpers.ModelDataPreferencesFragment
+import com.futsch1.medtimer.helpers.ModelDataStore
+import com.futsch1.medtimer.helpers.ModelDataViewModel
+import com.futsch1.medtimer.model.Reminder
 import javax.inject.Inject
 
 abstract class AdvancedReminderPreferencesFragment(
@@ -17,27 +17,27 @@ abstract class AdvancedReminderPreferencesFragment(
     links: Map<String, (Int) -> NavDirections>,
     customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
     simpleSummaryKeys: List<String>
-) : EntityPreferencesFragment<ReminderEntity>(preferencesResId, links, customOnClick, simpleSummaryKeys) {
+) : ModelDataPreferencesFragment<Reminder>(preferencesResId, links, customOnClick, simpleSummaryKeys) {
     @Inject
     lateinit var reminderDataStoreFactory: ReminderDataStore.Factory
 
     @Inject
     lateinit var reminderRepository: ReminderRepository
 
-    override suspend fun getEntityDataStore(
+    override suspend fun getDataStore(
         requireArguments: Bundle
-    ): EntityDataStore<ReminderEntity> {
-        val entityId = requireArguments.getInt("reminderId")
-        val entity = reminderRepository.get(entityId)!!
+    ): ModelDataStore<Reminder> {
+        val modelDataId = requireArguments.getInt("reminderId")
+        val modelData = reminderRepository.get(modelDataId)!!
 
-        return reminderDataStoreFactory.create(entity)
+        return reminderDataStoreFactory.create(modelData)
     }
 
     private val reminderViewModel: ReminderViewModel by viewModels()
 
-    override fun getEntityViewModel(): EntityViewModel<ReminderEntity> = reminderViewModel
+    override fun getEntityViewModel(): ModelDataViewModel<Reminder> = reminderViewModel
 
-    override fun customSetup(entity: ReminderEntity) {
+    override fun customSetup(modelData: Reminder) {
         // Intentionally empty
     }
 }

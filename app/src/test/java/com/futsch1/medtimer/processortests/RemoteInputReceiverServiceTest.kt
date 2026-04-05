@@ -143,6 +143,6 @@ class RemoteInputReceiverServiceTest {
         // The user-entered amount "5" must be persisted, not reverted to "1"
         assertEquals("5", testReminderContext.repositoryFakes.reminderEvents[0].amount)
         // Status must be TAKEN
-        assertEquals(ReminderEventEntity.ReminderStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
     }
 }

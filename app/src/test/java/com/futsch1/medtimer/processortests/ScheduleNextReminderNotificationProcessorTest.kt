@@ -3,6 +3,7 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
+import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
@@ -120,7 +121,7 @@ class ScheduleNextReminderNotificationProcessorTest {
     @Test
     fun scheduleReminder() {
         reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
-        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1))
+        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 600, 1).toEntity())
 
         runBlocking {
             scheduleNextReminderNotificationProcessor.scheduleNextReminder()

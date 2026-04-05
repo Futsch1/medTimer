@@ -5,13 +5,13 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.model.Reminder
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -21,9 +21,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 
 class LinkedReminderHandling @AssistedInject constructor(
-    @Assisted val reminder: ReminderEntity,
+    @Assisted val reminder: Reminder,
     private val reminderRepository: ReminderRepository,
     @Assisted private val coroutineScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
@@ -31,7 +32,7 @@ class LinkedReminderHandling @AssistedInject constructor(
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(reminder: ReminderEntity, coroutineScope: CoroutineScope): LinkedReminderHandling
+        fun create(reminder: Reminder, coroutineScope: CoroutineScope): LinkedReminderHandling
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
@@ -45,18 +46,18 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     private fun createReminder(fragmentActivity: FragmentActivity, amount: String) {
-        val linkedReminder = ReminderEntity(reminder.medicineRelId).apply {
-            this.amount = amount
-            createdTimestamp = Instant.now().toEpochMilli() / 1000
-            cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-            instructions = ""
-            linkedReminderId = reminder.reminderId
-        }
+        val linkedReminder = Reminder.default().copy(
+            medicineRelId = reminder.medicineRelId,
+            amount = amount,
+            createdTime = Instant.now(),
+            cycleStartDay = LocalDate.now().plusDays(1),
+            instructions = "",
+            linkedReminderId = reminder.id
+        )
 
         timePickerDialogFactory.create(0, 0, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H) { minutes: Int ->
             coroutineScope.launch {
-                linkedReminder.timeInMinutes = minutes
-                reminderRepository.create(linkedReminder)
+                reminderRepository.create(linkedReminder.copy(time = LocalTime.ofSecondOfDay(minutes * 60L)))
                 fragmentActivity.supportFragmentManager.popBackStack()
             }
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -72,15 +73,15 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     private suspend fun internalDelete(
-        reminder: ReminderEntity
+        reminder: Reminder
     ) {
-        val reminders: List<ReminderEntity> =
-            reminderRepository.getLinked(reminder.reminderId)
+        val reminders: List<Reminder> =
+            reminderRepository.getLinked(reminder.id)
         for (r in reminders) {
             internalDelete(r)
         }
 
-        reminderRepository.delete(reminder.reminderId)
+        reminderRepository.delete(reminder.id)
     }
 }
 

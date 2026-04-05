@@ -2,158 +2,139 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.helpers.EntityDataStore
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.helpers.ModelDataStore
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.Reminder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 
 class ReminderDataStore @AssistedInject constructor(
-    @Assisted override var entity: ReminderEntity,
+    @Assisted override var modelData: Reminder,
     @param:ApplicationContext private val context: Context,
     private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter,
     @param:ApplicationScope private val coroutineScope: CoroutineScope
-) : EntityDataStore<ReminderEntity>() {
+) : ModelDataStore<Reminder>() {
 
     @AssistedFactory
     interface Factory {
-        fun create(entity: ReminderEntity): ReminderDataStore
+        fun create(reminder: Reminder): ReminderDataStore
     }
 
-    override val entityId: Int get() = entity.reminderId
+    override val modelDataId: Int get() = modelData.id
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {
-            "automatically_taken" -> entity.automaticallyTaken
-            "variable_amount" -> entity.variableAmount
-            "reminder_active" -> entity.active
-            "period_start_switch" -> entity.periodStart != 0L
-            "period_end_switch" -> entity.periodEnd != 0L
-            "daily_interval" -> entity.windowedInterval
+            "automatically_taken" -> modelData.automaticallyTaken
+            "variable_amount" -> modelData.variableAmount
+            "reminder_active" -> modelData.active
+            "period_start_switch" -> modelData.periodStart != LocalDate.EPOCH
+            "period_end_switch" -> modelData.periodEnd != LocalDate.EPOCH
+            "daily_interval" -> modelData.windowedInterval
             else -> defValue
         }
     }
 
     override fun putBoolean(key: String?, value: Boolean) {
         when (key) {
-            "automatically_taken" -> entity.automaticallyTaken = value
-            "variable_amount" -> entity.variableAmount = value
-            "reminder_active" -> entity.active = value
-
-            "period_start_switch" -> {
-                if (value) {
-                    entity.periodStart = LocalDate.now().toEpochDay()
-                } else {
-                    entity.periodStart = 0
-                }
-            }
-
-            "period_end_switch" -> {
-                if (value) {
-                    entity.periodEnd = LocalDate.now().toEpochDay()
-                } else {
-                    entity.periodEnd = 0
-                }
-            }
-
-            "daily_interval" -> entity.windowedInterval = value
+            "automatically_taken" -> modelData = modelData.copy(automaticallyTaken = value)
+            "variable_amount" -> modelData = modelData.copy(variableAmount = value)
+            "reminder_active" -> modelData = modelData.copy(active = value)
+            "period_start_switch" -> modelData = modelData.copy(periodStart = if (value) LocalDate.now() else LocalDate.EPOCH)
+            "period_end_switch" -> modelData = modelData.copy(periodEnd = if (value) LocalDate.now() else LocalDate.EPOCH)
+            "daily_interval" -> modelData = modelData.copy(windowedInterval = value)
         }
 
-        updateReminder(entity)
+        updateReminder(modelData)
     }
 
     override fun getString(key: String?, defValue: String?): String? {
         return when (key) {
-            "instructions" -> entity.instructions
-            "cycle_start_date" -> timeFormatter.daysSinceEpochToDateString(entity.cycleStartDay)
-            "cycle_consecutive_days" -> entity.consecutiveDays.toString()
-            "cycle_pause_days" -> entity.pauseDays.toString()
-            "period_start_date" -> timeFormatter.daysSinceEpochToDateString(entity.periodStart)
-            "period_end_date" -> timeFormatter.daysSinceEpochToDateString(entity.periodEnd)
-            "interval_start" -> if (entity.intervalStartsFromProcessed) "1" else "0"
-            "interval_start_time" -> timeFormatter.secondsSinceEpochToDateTimeString(entity.intervalStart)
-            "interval_daily_start_time" -> timeFormatter.minutesToTimeString(entity.intervalStartTimeOfDay)
-            "interval_daily_end_time" -> timeFormatter.minutesToTimeString(entity.intervalEndTimeOfDay)
-            "stock_threshold" -> MedicineHelper.formatAmount(entity.outOfStockThreshold, "")
-            "stock_reminder" -> entity.outOfStockReminderType.ordinal.toString()
-            "expiration_reminder" -> entity.expirationReminderType.ordinal.toString()
-            "expiration_days_before" -> entity.periodStart.toString()
+            "instructions" -> modelData.instructions
+            "cycle_start_date" -> timeFormatter.daysSinceEpochToDateString(modelData.cycleStartDay.toEpochDay())
+            "cycle_consecutive_days" -> modelData.consecutiveDays.toString()
+            "cycle_pause_days" -> modelData.pauseDays.toString()
+            "period_start_date" -> timeFormatter.daysSinceEpochToDateString(modelData.periodStart.toEpochDay())
+            "period_end_date" -> timeFormatter.daysSinceEpochToDateString(modelData.periodEnd.toEpochDay())
+            "interval_start" -> if (modelData.intervalStartsFromProcessed) "1" else "0"
+            "interval_start_time" -> timeFormatter.secondsSinceEpochToDateTimeString(modelData.intervalStart.epochSecond)
+            "interval_daily_start_time" -> timeFormatter.minutesToTimeString(modelData.intervalStartTimeOfDay.toSecondOfDay() / 60)
+            "interval_daily_end_time" -> timeFormatter.minutesToTimeString(modelData.intervalEndTimeOfDay.toSecondOfDay() / 60)
+            "stock_threshold" -> MedicineHelper.formatAmount(modelData.outOfStockThreshold, "")
+            "stock_reminder" -> modelData.outOfStockReminderType.ordinal.toString()
+            "expiration_reminder" -> modelData.expirationReminderType.ordinal.toString()
+            "expiration_days_before" -> modelData.periodStart.toEpochDay().toString()
             else -> defValue
         }
     }
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            "instructions" -> entity.instructions = value!!
-            "sample_instructions" -> entity.instructions = value!!
-            "cycle_start_date" -> entity.cycleStartDay = timeFormatter.stringToLocalDate(value!!)!!.toEpochDay()
-            "cycle_consecutive_days" -> value?.toIntOrNull()?.let { entity.consecutiveDays = it }
-            "cycle_pause_days" -> value?.toIntOrNull()?.let { entity.pauseDays = it }
-            "period_start_date" -> entity.periodStart = timeFormatter.stringToLocalDate(value!!)!!.toEpochDay()
-            "period_end_date" -> entity.periodEnd = timeFormatter.stringToLocalDate(value!!)!!.toEpochDay()
-            "interval_start" -> entity.intervalStartsFromProcessed = value == "1"
-            "interval_start_time" -> entity.intervalStart = timeFormatter.stringToSecondsSinceEpoch(value!!)
-            "interval_daily_start_time" -> entity.intervalStartTimeOfDay = timeFormatter.timeStringToMinutes(value!!)
-            "interval_daily_end_time" -> entity.intervalEndTimeOfDay = timeFormatter.timeStringToMinutes(value!!)
-            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { entity.outOfStockThreshold = it }
-            "stock_reminder" -> entity.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.entries[value!!.toInt()]
-            "expiration_reminder" -> entity.expirationReminderType =
-                ReminderEntity.ExpirationReminderType.entries[value!!.toInt()]
-
-            "expiration_days_before" -> value?.toLongOrNull()?.let { entity.periodStart = it }
+            "instructions" -> modelData = modelData.copy(instructions = value)
+            "sample_instructions" -> modelData = modelData.copy(instructions = value)
+            "cycle_start_date" -> modelData = modelData.copy(cycleStartDay = timeFormatter.stringToLocalDate(value!!)!!)
+            "cycle_consecutive_days" -> value?.toIntOrNull()?.let { modelData = modelData.copy(consecutiveDays = it) }
+            "cycle_pause_days" -> value?.toIntOrNull()?.let { modelData = modelData.copy(pauseDays = it) }
+            "period_start_date" -> modelData = modelData.copy(periodStart = timeFormatter.stringToLocalDate(value!!)!!)
+            "period_end_date" -> modelData = modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
+            "interval_start" -> modelData = modelData.copy(intervalStartsFromProcessed = value == "1")
+            "interval_start_time" -> modelData = modelData.copy(intervalStart = Instant.ofEpochSecond(timeFormatter.stringToSecondsSinceEpoch(value!!)))
+            "interval_daily_start_time" -> modelData = modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+            "interval_daily_end_time" -> modelData = modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(outOfStockThreshold = it) }
+            "stock_reminder" -> modelData = modelData.copy(outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()])
+            "expiration_reminder" -> modelData = modelData.copy(expirationReminderType = Reminder.ExpirationReminderType.entries[value!!.toInt()])
+            "expiration_days_before" -> value?.toLongOrNull()?.let { modelData = modelData.copy(periodStart = LocalDate.ofEpochDay(it)) }
         }
 
-        updateReminder(entity)
+        updateReminder(modelData)
     }
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {
-            "interval" -> entity.timeInMinutes
+            "interval" -> modelData.time.toSecondOfDay() / 60
             else -> defValue
         }
     }
 
     override fun putInt(key: String?, value: Int) {
         when (key) {
-            "interval" -> entity.timeInMinutes = value
+            "interval" -> modelData = modelData.copy(time = LocalTime.ofSecondOfDay(value * 60L))
         }
 
-        updateReminder(entity)
+        updateReminder(modelData)
     }
 
     override fun getStringSet(key: String?, defValues: Set<String?>?): Set<String?>? {
         return when (key) {
             "remind_on_weekdays" -> {
-                val values: MutableSet<String> = mutableSetOf()
-                val days = context.resources.getStringArray(R.array.one_to_seven)
-                for (i in entity.days.indices) {
-                    if (entity.days[i]) {
-                        values += days[i]
-                    }
-                }
-                values
+                val dayStrings = context.resources.getStringArray(R.array.one_to_seven)
+                DayOfWeek.entries.mapIndexedNotNull { i, dow ->
+                    if (dow in modelData.days) dayStrings[i] else null
+                }.toSet()
             }
 
             "remind_on_days" -> {
-                val values: MutableSet<String> = mutableSetOf()
-                val days = context.resources.getStringArray(R.array.days_of_month)
-                if ((entity.activeDaysOfMonth and 0x7FFF_FFFF) != 0x7FFF_FFFF) {
-                    for (i in days.indices) {
-                        if ((entity.activeDaysOfMonth and (1 shl i)) > 0) {
-                            values += days[i]
-                        }
-                    }
+                val dayStrings = context.resources.getStringArray(R.array.days_of_month)
+                if (modelData.activeDaysOfMonth.size < 31) {
+                    dayStrings.indices
+                        .filter { i -> (i + 1) in modelData.activeDaysOfMonth }
+                        .map { i -> dayStrings[i] }
+                        .toSet()
+                } else {
+                    emptySet()
                 }
-                values
             }
 
             else -> defValues
@@ -163,31 +144,33 @@ class ReminderDataStore @AssistedInject constructor(
     override fun putStringSet(key: String?, values: Set<String?>?) {
         when (key) {
             "remind_on_weekdays" -> {
-                val days = context.resources.getStringArray(R.array.one_to_seven)
-                for (i in entity.days.indices) {
-                    entity.days[i] = values?.contains(days[i]) == true || values?.isEmpty() == true
-                }
+                val dayStrings = context.resources.getStringArray(R.array.one_to_seven)
+                val allDays = values?.isEmpty() == true
+                modelData = modelData.copy(
+                    days = DayOfWeek.entries.filterIndexed { i, _ ->
+                        allDays || values?.contains(dayStrings[i]) == true
+                    }
+                )
             }
 
             "remind_on_days" -> {
-                val days = context.resources.getStringArray(R.array.days_of_month)
-                if (values?.isEmpty() == true) {
-                    entity.activeDaysOfMonth = 0x7FFF_FFFF
-                } else {
-                    entity.activeDaysOfMonth = 0
-                    for (i in days.indices) {
-                        if (values?.contains(days[i]) == true) {
-                            entity.activeDaysOfMonth = entity.activeDaysOfMonth or (1 shl i)
-                        }
+                val dayStrings = context.resources.getStringArray(R.array.days_of_month)
+                modelData = modelData.copy(
+                    activeDaysOfMonth = if (values?.isEmpty() == true) {
+                        (1..31).toList()
+                    } else {
+                        dayStrings.indices
+                            .filter { i -> values?.contains(dayStrings[i]) == true }
+                            .map { i -> i + 1 }
                     }
-                }
+                )
             }
         }
 
-        updateReminder(entity)
+        updateReminder(modelData)
     }
 
-    private fun updateReminder(reminder: ReminderEntity) {
+    private fun updateReminder(reminder: Reminder) {
         coroutineScope.launch {
             reminderRepository.update(reminder)
         }

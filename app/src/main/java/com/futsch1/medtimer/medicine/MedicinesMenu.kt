@@ -8,6 +8,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -59,7 +60,7 @@ class MedicinesMenu @Inject constructor(
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (fullMedicine in medicines) {
                     val localMedicine = medicineRepository.getFull(fullMedicine.medicine.medicineId)
-                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, reminderRepository, active)
+                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders.map { it.toModel() }, reminderRepository, active)
                 }
             }
         }

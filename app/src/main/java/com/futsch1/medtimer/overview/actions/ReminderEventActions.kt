@@ -8,7 +8,7 @@ import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderEventType
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.overview.model.OverviewState
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -33,7 +33,7 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private val isStockEvent = event.reminderEvent.reminderType in setOf(
-        ReminderEventType.OUT_OF_STOCK, ReminderEventType.EXPIRATION_DATE, ReminderEventType.REFILL
+        ReminderType.OUT_OF_STOCK, ReminderType.EXPIRATION_DATE, ReminderType.REFILL
     )
 
     override val visibleButtons: MutableList<Button> = mutableListOf()

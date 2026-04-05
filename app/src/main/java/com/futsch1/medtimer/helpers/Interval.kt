@@ -2,6 +2,7 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
+import java.time.LocalTime
 
 enum class IntervalUnit {
     MINUTES, HOURS, DAYS
@@ -18,6 +19,8 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
     constructor(value: Int, unit: IntervalUnit) : this(
         getMinutes(unit, value)
     )
+
+    constructor(value: LocalTime, maxMinutesValue: Int = MAX_INTERVAL_MINUTES) : this(value.toSecondOfDay() / 60, maxMinutesValue)
 
     fun getUnit(): IntervalUnit {
         return when {

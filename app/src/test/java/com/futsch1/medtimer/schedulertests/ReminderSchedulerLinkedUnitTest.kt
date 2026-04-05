@@ -15,8 +15,9 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
-        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1)
-        reminderLinked.linkedReminderId = 1
+        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(
+            linkedReminderId = 1
+        )
         medicineWithReminders.reminders.add(reminderLinked)
 
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
@@ -26,7 +27,7 @@ class ReminderSchedulerLinkedUnitTest {
 
         val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
         assertEquals(1, scheduledReminders.size)
-        assertEquals(1, scheduledReminders[0].reminder.reminderId)
+        assertEquals(1, scheduledReminders[0].reminder.id)
     }
 
     @Test
@@ -36,8 +37,7 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
-        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1)
-        reminderLinked.linkedReminderId = 1
+        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(linkedReminderId = 1)
         medicineWithReminders.reminders.add(reminderLinked)
 
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()
@@ -100,11 +100,9 @@ class ReminderSchedulerLinkedUnitTest {
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
-        val reminderLinked1 = TestHelper.buildReminder(1, 2, "2", 60, 1)
-        reminderLinked1.linkedReminderId = 1
+        val reminderLinked1 = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(linkedReminderId = 1)
         medicineWithReminders.reminders.add(reminderLinked1)
-        val reminderLinked2 = TestHelper.buildReminder(1, 3, "2", 60, 1)
-        reminderLinked2.linkedReminderId = 2
+        val reminderLinked2 = TestHelper.buildReminder(1, 3, "2", 60, 1).copy(linkedReminderId = 2)
         medicineWithReminders.reminders.add(reminderLinked2)
 
         val medicineList: MutableList<FullMedicineEntity> = mutableListOf()

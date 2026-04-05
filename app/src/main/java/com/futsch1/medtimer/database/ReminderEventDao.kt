@@ -5,17 +5,17 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ReminderEventDao {
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    abstract fun getAllFlowStartingFrom(fromTimestamp: Long, statusValues: List<ReminderStatus>): Flow<List<ReminderEventEntity>>
+    abstract fun getAllFlowStartingFrom(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): Flow<List<ReminderEventEntity>>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
-    abstract suspend fun getAllLimited(fromTimestamp: Long, statusValues: List<ReminderStatus>): List<ReminderEventEntity>
+    abstract suspend fun getAllLimited(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId = :reminderEventId")
     abstract suspend fun get(reminderEventId: Int): ReminderEventEntity?

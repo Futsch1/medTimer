@@ -6,7 +6,8 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,30 +28,36 @@ class NewReminderTypeDialog @AssistedInject constructor(
 
     private val dialog: Dialog = Dialog(activity)
 
-    private fun continueCreate(reminderType: ReminderEntity.ReminderType) {
-        val reminder = ReminderEntity(fullMedicine.medicine.medicineId)
-        setDefaults(reminder)
+    private fun continueCreate(reminderType: ReminderType) {
+        var reminder = Reminder.default().copy(
+            medicineRelId = fullMedicine.medicine.medicineId,
+            createdTime = Instant.now(),
+            cycleStartDay = LocalDate.now().plusDays(1),
+            instructions = ""
+        )
         when (reminderType) {
-            ReminderEntity.ReminderType.CONTINUOUS_INTERVAL -> {
-                reminder.intervalStart = Instant.now().epochSecond
+            ReminderType.CONTINUOUS_INTERVAL -> {
+                reminder = reminder.copy(intervalStart = Instant.now())
             }
 
-            ReminderEntity.ReminderType.WINDOWED_INTERVAL -> {
-                reminder.windowedInterval = true
+            ReminderType.WINDOWED_INTERVAL -> {
+                reminder = reminder.copy(windowedInterval = true)
             }
 
-            ReminderEntity.ReminderType.OUT_OF_STOCK -> {
-                reminder.outOfStockThreshold = if (fullMedicine.medicine.amount > 0.0) fullMedicine.medicine.amount else 1.0
-                reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.ONCE
+            ReminderType.OUT_OF_STOCK -> {
+                reminder = reminder.copy(
+                    outOfStockThreshold = if (fullMedicine.medicine.amount > 0.0) fullMedicine.medicine.amount else 1.0,
+                    outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+                )
             }
 
-            ReminderEntity.ReminderType.EXPIRATION_DATE -> {
-                reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.ONCE
+            ReminderType.EXPIRATION_DATE -> {
+                reminder = reminder.copy(expirationReminderType = Reminder.ExpirationReminderType.ONCE)
             }
 
-            ReminderEntity.ReminderType.TIME_BASED -> Unit
+            ReminderType.TIME_BASED -> Unit
 
-            ReminderEntity.ReminderType.LINKED, ReminderEntity.ReminderType.REFILL -> {
+            ReminderType.LINKED, ReminderType.REFILL -> {
                 // May never happen
                 assert(false)
             }
@@ -72,19 +79,19 @@ class NewReminderTypeDialog @AssistedInject constructor(
         )
 
         dialog.findViewById<CardView>(R.id.timeBasedCard).setOnClickListener {
-            continueCreate(ReminderEntity.ReminderType.TIME_BASED)
+            continueCreate(ReminderType.TIME_BASED)
         }
         dialog.findViewById<CardView>(R.id.continuousIntervalCard).setOnClickListener {
-            continueCreate(ReminderEntity.ReminderType.CONTINUOUS_INTERVAL)
+            continueCreate(ReminderType.CONTINUOUS_INTERVAL)
         }
         dialog.findViewById<CardView>(R.id.windowedIntervalCard).setOnClickListener {
-            continueCreate(ReminderEntity.ReminderType.WINDOWED_INTERVAL)
+            continueCreate(ReminderType.WINDOWED_INTERVAL)
         }
         dialog.findViewById<CardView>(R.id.stockReminderCard).setOnClickListener {
-            continueCreate(ReminderEntity.ReminderType.OUT_OF_STOCK)
+            continueCreate(ReminderType.OUT_OF_STOCK)
         }
         dialog.findViewById<CardView>(R.id.expirationDateReminderCard).setOnClickListener {
-            continueCreate(ReminderEntity.ReminderType.EXPIRATION_DATE)
+            continueCreate(ReminderType.EXPIRATION_DATE)
         }
 
         dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {
@@ -92,11 +99,5 @@ class NewReminderTypeDialog @AssistedInject constructor(
         }
 
         dialog.show()
-    }
-
-    private fun setDefaults(reminder: ReminderEntity) {
-        reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-        reminder.cycleStartDay = LocalDate.now().plusDays(1).toEpochDay()
-        reminder.instructions = ""
     }
 }

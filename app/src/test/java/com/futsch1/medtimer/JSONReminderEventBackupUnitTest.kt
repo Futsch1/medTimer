@@ -2,7 +2,7 @@ package com.futsch1.medtimer
 
 import android.graphics.Color
 import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEntityType
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import org.junit.Test
@@ -19,7 +19,7 @@ internal class JSONReminderEventBackupUnitTest {
             color = Color.RED
             useColor = true
             amount = "1"
-            status = ReminderEventEntity.ReminderStatus.TAKEN
+            status = ReminderEventEntity.ReminderEntityStatus.TAKEN
             remindedTimestamp = 1
             processedTimestamp = 2
             reminderId = 3
@@ -28,7 +28,7 @@ internal class JSONReminderEventBackupUnitTest {
             tags = listOf("Tag A")
             lastIntervalReminderTimeInMinutes = 12
             notes = "Notes"
-            reminderType = ReminderEntity.ReminderType.LINKED
+            reminderType = ReminderEntityType.LINKED
         })
 
         val jsonReminderEventBackup = JSONReminderEventBackup(mock<ReminderEventRepository>())

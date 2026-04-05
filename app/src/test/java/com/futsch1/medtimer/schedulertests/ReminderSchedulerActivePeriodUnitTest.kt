@@ -1,12 +1,14 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.reminders.TimeAccess
 import org.junit.Test
 import org.mockito.Mockito
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.test.assertEquals
 
@@ -16,8 +18,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(1)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.active = false
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(active = false)
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
@@ -35,9 +36,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.periodStart = 3
-        reminder.periodEnd = 4
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(periodStart = LocalDate.ofEpochDay(3), periodEnd = LocalDate.ofEpochDay(4))
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
@@ -65,10 +64,10 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.intervalStart = 60
-        reminder.periodStart = 3
-        reminder.periodEnd = 4
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
+            intervalStart = Instant.ofEpochSecond(60 * 60),
+            periodStart = LocalDate.ofEpochDay(3), periodEnd = LocalDate.ofEpochDay(4)
+        )
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)
@@ -96,14 +95,15 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
         val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.intervalStart = 1
-        reminder.windowedInterval = true
-        reminder.intervalStartsFromProcessed = false
-        reminder.intervalStartTimeOfDay = 120
-        reminder.intervalEndTimeOfDay = 700
-        reminder.periodStart = 3
-        reminder.periodEnd = 4
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
+            intervalStart = Instant.ofEpochSecond(60 * 60),
+            periodStart = LocalDate.ofEpochDay(3),
+            periodEnd = LocalDate.ofEpochDay(4),
+            windowedInterval = true,
+            intervalStartsFromProcessed = false,
+            intervalStartTimeOfDay = LocalTime.of(2, 0),
+            intervalEndTimeOfDay = LocalTime.of(11, 40)
+        )
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList: List<FullMedicineEntity> = listOf(medicineWithReminders)

@@ -17,11 +17,11 @@ data class Reminder(
     val amount: String,
     val days: List<DayOfWeek>,
     val active: Boolean,
-    val periodStart: Long,
-    val periodEnd: Long,
+    val periodStart: LocalDate,
+    val periodEnd: LocalDate,
     val activeDaysOfMonth: List<Int>,
     val linkedReminderId: Int,
-    val intervalStart: LocalDate,
+    val intervalStart: Instant,
     val intervalStartsFromProcessed: Boolean,
     val variableAmount: Boolean,
     val automaticallyTaken: Boolean,
@@ -32,6 +32,16 @@ data class Reminder(
     val outOfStockReminderType: OutOfStockReminderType,
     val expirationReminderType: ExpirationReminderType
 ) {
+    val reminderType: ReminderType
+        get() = when {
+            linkedReminderId != 0 -> ReminderType.LINKED
+            intervalStart != Instant.EPOCH && !windowedInterval -> ReminderType.CONTINUOUS_INTERVAL
+            windowedInterval -> ReminderType.WINDOWED_INTERVAL
+            outOfStockReminderType != OutOfStockReminderType.OFF -> ReminderType.OUT_OF_STOCK
+            expirationReminderType != ExpirationReminderType.OFF -> ReminderType.EXPIRATION_DATE
+            else -> ReminderType.TIME_BASED
+        }
+
     enum class OutOfStockReminderType {
         ONCE,
         ALWAYS,
@@ -45,6 +55,18 @@ data class Reminder(
         OFF
     }
 
+    val isInterval: Boolean
+        get() = this.reminderType == ReminderType.CONTINUOUS_INTERVAL || this.reminderType == ReminderType.WINDOWED_INTERVAL
+
+    val isLinkedOrTimeBased: Boolean
+        get() = this.reminderType == ReminderType.LINKED || this.reminderType == ReminderType.TIME_BASED
+
+    val isOutOfStockOrExpirationReminder: Boolean
+        get() = this.reminderType == ReminderType.OUT_OF_STOCK || this.reminderType == ReminderType.EXPIRATION_DATE
+
+    val usesTimeInMinutes: Boolean
+        get() = isLinkedOrTimeBased || this.reminderType == ReminderType.EXPIRATION_DATE || this.outOfStockReminderType == OutOfStockReminderType.DAILY
+
     companion object {
         fun default(): Reminder = Reminder(
             id = 0,
@@ -56,13 +78,13 @@ data class Reminder(
             instructions = "",
             cycleStartDay = LocalDate.EPOCH,
             amount = "?",
-            days = DayOfWeek.entries,
+            days = emptyList(),
             active = true,
-            periodStart = 0,
-            periodEnd = 0,
-            activeDaysOfMonth = (1..31).toList(),
+            periodStart = LocalDate.EPOCH,
+            periodEnd = LocalDate.EPOCH,
+            activeDaysOfMonth = emptyList(),
             linkedReminderId = 0,
-            intervalStart = LocalDate.EPOCH,
+            intervalStart = Instant.EPOCH,
             intervalStartsFromProcessed = false,
             variableAmount = false,
             automaticallyTaken = false,

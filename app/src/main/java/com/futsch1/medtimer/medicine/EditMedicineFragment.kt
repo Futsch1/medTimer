@@ -28,7 +28,6 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
@@ -43,6 +42,7 @@ import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
 import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
+import com.futsch1.medtimer.model.Reminder
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -342,7 +342,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), fullMedicine) }
     }
 
-    private fun sortAndSubmitList(reminders: List<ReminderEntity>) {
+    private fun sortAndSubmitList(reminders: List<Reminder>) {
         adapter.submitList(linkedReminderAlgorithms.sortRemindersList(reminders))
     }
 

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getActiveReminders
@@ -56,7 +55,7 @@ class PDFMedicineExport @AssistedInject constructor(
         }
     }
 
-    private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<ReminderEntity>) {
+    private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<com.futsch1.medtimer.model.Reminder>) {
         val reminders = linkedReminderAlgorithms.sortRemindersList(activeReminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {

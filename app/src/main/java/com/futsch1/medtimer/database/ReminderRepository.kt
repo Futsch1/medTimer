@@ -1,44 +1,48 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.model.Reminder
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 open class ReminderRepository(
     private val reminderDao: ReminderDao
 ) {
-    fun getAllFlow(medicineId: Int): Flow<List<ReminderEntity>> {
-        return reminderDao.getAllFlow(medicineId)
+    fun getAllFlow(medicineId: Int): Flow<List<Reminder>> {
+        return reminderDao.getAllFlow(medicineId).map { list ->
+            list.map { it.toModel() }
+        }
     }
 
-    suspend fun getAll(medicineId: Int): List<ReminderEntity> {
-        return reminderDao.getAll(medicineId)
+    suspend fun getAll(medicineId: Int): List<Reminder> {
+        return reminderDao.getAll(medicineId).map { it.toModel() }
     }
 
-    suspend fun get(reminderId: Int): ReminderEntity? {
-        return reminderDao.get(reminderId)
+    suspend fun get(reminderId: Int): Reminder? {
+        return reminderDao.get(reminderId)?.toModel()
     }
 
-    fun getFlow(reminderId: Int): Flow<ReminderEntity?> {
-        return reminderDao.getFlow(reminderId)
+    fun getFlow(reminderId: Int): Flow<Reminder?> {
+        return reminderDao.getFlow(reminderId).map { it?.toModel() }
     }
 
-    suspend fun getLinked(reminderId: Int): List<ReminderEntity> {
-        return reminderDao.getLinked(reminderId)
+    suspend fun getLinked(reminderId: Int): List<Reminder> {
+        return reminderDao.getLinked(reminderId).map { it.toModel() }
     }
 
-    suspend fun create(reminder: ReminderEntity): Long {
-        return reminderDao.create(reminder)
+    suspend fun create(reminder: Reminder): Long {
+        return reminderDao.create(reminder.toEntity())
     }
 
-    suspend fun createAll(reminders: List<ReminderEntity>) {
-        reminderDao.createAll(reminders)
+    suspend fun createAll(reminders: List<Reminder>) {
+        reminderDao.createAll(reminders.map { it.toEntity() })
     }
 
-    suspend fun update(reminder: ReminderEntity) {
-        reminderDao.update(reminder)
+    suspend fun update(reminder: Reminder) {
+        reminderDao.update(reminder.toEntity())
     }
 
-    suspend fun updateAll(reminders: List<ReminderEntity>) {
-        reminderDao.updateAll(reminders)
+    suspend fun updateAll(reminders: List<Reminder>) {
+        reminderDao.updateAll(reminders.map { it.toEntity() })
     }
 
     suspend fun delete(reminderId: Int) {

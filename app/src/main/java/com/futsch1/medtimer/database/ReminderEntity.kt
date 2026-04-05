@@ -1,11 +1,9 @@
 package com.futsch1.medtimer.database
 
-import androidx.annotation.DrawableRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.R
 import com.google.gson.annotations.Expose
 import java.util.Objects
 
@@ -107,47 +105,6 @@ class ReminderEntity(var medicineRelId: Int) {
     @Ignore
     constructor() : this(0)
 
-    val isInterval: Boolean
-        get() = this.reminderType == ReminderType.CONTINUOUS_INTERVAL || this.reminderType == ReminderType.WINDOWED_INTERVAL
-
-    val isLinkedOrTimeBased: Boolean
-        get() = this.reminderType == ReminderType.LINKED || this.reminderType == ReminderType.TIME_BASED
-
-    val isOutOfStockOrExpirationReminder: Boolean
-        get() = this.reminderType == ReminderType.OUT_OF_STOCK || this.reminderType == ReminderType.EXPIRATION_DATE
-
-    val usesTimeInMinutes: Boolean
-        get() = isLinkedOrTimeBased || this.reminderType == ReminderType.EXPIRATION_DATE || this.outOfStockReminderType == OutOfStockReminderType.DAILY
-
-    val reminderType: ReminderType
-        get() {
-            return when {
-                linkedReminderId != 0 -> {
-                    ReminderType.LINKED
-                }
-
-                intervalStart != 0L && !windowedInterval -> {
-                    ReminderType.CONTINUOUS_INTERVAL
-                }
-
-                windowedInterval -> {
-                    ReminderType.WINDOWED_INTERVAL
-                }
-
-                outOfStockReminderType != OutOfStockReminderType.OFF -> {
-                    ReminderType.OUT_OF_STOCK
-                }
-
-                expirationReminderType != ExpirationReminderType.OFF -> {
-                    ReminderType.EXPIRATION_DATE
-                }
-
-                else -> {
-                    ReminderType.TIME_BASED
-                }
-            }
-        }
-
     override fun equals(other: Any?): Boolean {
         if (other !is ReminderEntity) return false
         return membersEqual(other)
@@ -190,17 +147,6 @@ class ReminderEntity(var medicineRelId: Int) {
                 days == other.days && active == other.active && periodStart == other.periodStart && periodEnd == other.periodEnd && activeDaysOfMonth == other.activeDaysOfMonth && linkedReminderId == other.linkedReminderId && intervalStart == other.intervalStart && intervalStartsFromProcessed == other.intervalStartsFromProcessed && variableAmount == other.variableAmount && intervalStartTimeOfDay == other.intervalStartTimeOfDay && intervalEndTimeOfDay == other.intervalEndTimeOfDay && windowedInterval == other.windowedInterval &&
                 outOfStockThreshold == other.outOfStockThreshold && outOfStockReminderType == other.outOfStockReminderType && expirationReminderType == other.expirationReminderType
     }
-
-    enum class ReminderType(@param:DrawableRes val icon: Int) {
-        TIME_BASED(R.drawable.calendar_event),
-        CONTINUOUS_INTERVAL(R.drawable.repeat),
-        LINKED(R.drawable.link),
-        WINDOWED_INTERVAL(R.drawable.interval),
-        OUT_OF_STOCK(R.drawable.box_seam),
-        EXPIRATION_DATE(R.drawable.ban),
-        REFILL(R.drawable.cart2)
-    }
-
 
     enum class OutOfStockReminderType {
         ONCE,

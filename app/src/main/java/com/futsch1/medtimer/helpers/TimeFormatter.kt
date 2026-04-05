@@ -11,6 +11,7 @@ import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -43,6 +44,10 @@ class TimeFormatter @Inject constructor(
         } catch (_: DateTimeException) {
             return minutesToDurationString(minutes)
         }
+    }
+
+    fun toTimeString(localTime: LocalTime): String {
+        return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(localTime)
     }
 
     /**

@@ -66,7 +66,7 @@ class GenerateTestData @AssistedInject constructor(
             val medicineId = medicineRepository.create(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
-                    reminderRepository.create(testReminder.toReminder(medicineId))
+                    reminderRepository.create(testReminder.toReminder(medicineId).toModel())
                         .toInt()
             }
             for (tag in testMedicine.tags) {
@@ -84,7 +84,7 @@ class GenerateTestData @AssistedInject constructor(
                         reminderEvent.reminderId = testReminder.id
                         reminderEvent.remindedTimestamp = today.minus(Period.ofDays(i)).epochSecond
                         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-                        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
+                        reminderEvent.status = ReminderEventEntity.ReminderEntityStatus.TAKEN
                         reminderEvent.medicineName = testMedicine.name
                         reminderEvent.amount = testReminder.toReminder(0).amount
                         reminderEvent.notes = ""

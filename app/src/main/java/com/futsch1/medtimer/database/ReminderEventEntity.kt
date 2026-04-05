@@ -4,15 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.database.ReminderEntity.ReminderType
-import com.futsch1.medtimer.database.ReminderEventEntity.ReminderStatus
+import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
 import com.google.gson.annotations.Expose
-import java.util.Objects
 
-val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
-val statusValuesWithoutDelete: List<ReminderStatus> = ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
-val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
-    ReminderStatus.entries.filterNot { it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED }
+val allStatusValues: List<ReminderEntityStatus> = ReminderEntityStatus.entries
+val statusValuesWithoutDelete: List<ReminderEntityStatus> = ReminderEntityStatus.entries.filterNot { it == ReminderEntityStatus.DELETED }
+val statusValuesWithoutDeletedAndAcknowledged: List<ReminderEntityStatus> =
+    ReminderEntityStatus.entries.filterNot { it == ReminderEntityStatus.ACKNOWLEDGED || it == ReminderEntityStatus.DELETED }
+
 
 @Entity(tableName = "ReminderEvent", indices = [Index("reminderId"), Index("remindedTimestamp")])
 class ReminderEventEntity {
@@ -34,7 +33,7 @@ class ReminderEventEntity {
     var useColor: Boolean = false
 
     @Expose
-    var status: ReminderStatus = ReminderStatus.RAISED
+    var status: ReminderEntityStatus = ReminderEntityStatus.RAISED
 
     @Expose
     var remindedTimestamp: Long = 0
@@ -75,48 +74,9 @@ class ReminderEventEntity {
 
     @ColumnInfo(defaultValue = "TIME_BASED")
     @Expose
-    var reminderType: ReminderType = ReminderType.TIME_BASED
+    var reminderType: ReminderEntityType = ReminderEntityType.TIME_BASED
 
-    val isOutOfStockOrExpirationOrRefillReminder: Boolean
-        get() = reminderType == ReminderType.OUT_OF_STOCK || reminderType == ReminderType.EXPIRATION_DATE || reminderType == ReminderType.REFILL
-
-    override fun equals(other: Any?): Boolean {
-        if (other !is ReminderEventEntity) return false
-        return membersEqual(other)
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(
-            reminderEventId,
-            medicineName,
-            amount,
-            color,
-            useColor,
-            status,
-            remindedTimestamp,
-            processedTimestamp,
-            reminderId,
-            notificationId,
-            iconId,
-            remainingRepeats,
-            stockHandled,
-            askForAmount,
-            tags,
-            lastIntervalReminderTimeInMinutes,
-            notes,
-            reminderType
-        )
-    }
-
-    private fun membersEqual(other: ReminderEventEntity): Boolean {
-        return reminderEventId == other.reminderEventId &&
-                medicineName == other.medicineName &&
-                amount == other.amount && color == other.color && useColor == other.useColor && status == other.status && remindedTimestamp == other.remindedTimestamp && processedTimestamp == other.processedTimestamp && reminderId == other.reminderId && notificationId == other.notificationId && iconId == other.iconId && remainingRepeats == other.remainingRepeats && stockHandled == other.stockHandled && askForAmount == other.askForAmount &&
-                tags == other.tags && lastIntervalReminderTimeInMinutes == other.lastIntervalReminderTimeInMinutes &&
-                notes == other.notes && reminderType == other.reminderType
-    }
-
-    enum class ReminderStatus {
+    enum class ReminderEntityStatus {
         RAISED,
         TAKEN,
         SKIPPED,

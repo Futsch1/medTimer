@@ -2,9 +2,9 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -19,16 +19,14 @@ object TestHelper {
         amount: String,
         timeInMinutes: Int,
         daysBetweenReminders: Int
-    ): ReminderEntity {
-        val reminder = ReminderEntity(medicineId)
-        reminder.reminderId = reminderId
-        reminder.amount = amount
-        reminder.timeInMinutes = timeInMinutes
-        reminder.pauseDays = daysBetweenReminders - 1
-        reminder.consecutiveDays = 1
-        reminder.createdTimestamp = 0
-        reminder.cycleStartDay = 0
-        reminder.days = mutableListOf(true, true, true, true, true, true, true)
+    ): Reminder {
+        val reminder = Reminder.default().copy(
+            id = reminderId,
+            medicineRelId = medicineId,
+            amount = amount,
+            time = LocalTime.of(timeInMinutes / 60, timeInMinutes % 60),
+            pauseDays = daysBetweenReminders - 1
+        )
         return reminder
     }
 
@@ -73,7 +71,7 @@ object TestHelper {
         scheduledReminders: List<ScheduledReminder>,
         timestamp: Instant,
         medicine: MedicineEntity,
-        reminder: ReminderEntity
+        reminder: Reminder
     ) {
         assertRemindedAtIndex(scheduledReminders, timestamp, medicine, reminder, 0)
     }
@@ -82,7 +80,7 @@ object TestHelper {
         scheduledReminders: List<ScheduledReminder>,
         timestamp: Instant,
         medicine: MedicineEntity,
-        reminder: ReminderEntity,
+        reminder: Reminder,
         index: Int
     ) {
         assertTrue(scheduledReminders.size > index)

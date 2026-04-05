@@ -9,7 +9,7 @@ import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderEventType
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import java.util.stream.Collectors
 import javax.inject.Inject
@@ -70,7 +70,7 @@ class RefillProcessor @Inject constructor(
             remindedTimestamp = timeAccess.now(),
             processedTimestamp = timeAccess.now(),
             reminderId = -1,
-            reminderType = ReminderEventType.REFILL
+            reminderType = ReminderType.REFILL
         )
 
         return reminderEvent

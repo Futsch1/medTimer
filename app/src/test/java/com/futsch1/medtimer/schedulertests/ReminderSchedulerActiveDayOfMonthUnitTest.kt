@@ -22,8 +22,9 @@ internal class ReminderSchedulerActiveDayOfMonthUnitTest {
         val scheduler = getScheduler(mockTimeAccess)
 
         val medicineWithReminders = buildFullMedicine(1, "Test")
-        val reminder = buildReminder(1, 1, "1", 480, 1)
-        reminder.activeDaysOfMonth = 7
+        val reminder = buildReminder(1, 1, "1", 480, 1).copy(
+            activeDaysOfMonth = listOf(7)
+        )
         medicineWithReminders.reminders.add(reminder)
 
         val medicineList = mutableListOf<FullMedicineEntity>()

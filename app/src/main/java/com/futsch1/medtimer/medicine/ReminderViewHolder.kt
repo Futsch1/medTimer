@@ -13,13 +13,16 @@ import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEntity.ReminderType
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.helpers.getHelp
+import com.futsch1.medtimer.helpers.getIcon
+import com.futsch1.medtimer.helpers.getTitle
 import com.futsch1.medtimer.medicine.editors.TimeEditor
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -30,6 +33,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalTime
 
 class ReminderViewHolder @AssistedInject constructor(
     @Assisted parent: ViewGroup,
@@ -53,11 +57,11 @@ class ReminderViewHolder @AssistedInject constructor(
     private val editTimeLayout: TextInputLayout = itemView.findViewById(R.id.editReminderTimeLayout)
     private val reminderTypeIcon: ImageView = itemView.findViewById(R.id.reminderTypeIcon)
 
-    private lateinit var reminder: ReminderEntity
+    private lateinit var reminder: Reminder
     private var timeEditor: TimeEditor? = null
 
     @SuppressLint("SetTextI18n")
-    fun bind(reminder: ReminderEntity, fullMedicine: FullMedicineEntity) {
+    fun bind(reminder: Reminder, fullMedicine: FullMedicineEntity) {
         this.reminder = reminder
 
         setupTimeEditor()
@@ -106,24 +110,24 @@ class ReminderViewHolder @AssistedInject constructor(
         if (reminder.usesTimeInMinutes) {
             @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay
             editTimeLayout.setHint(textId)
-            timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.timeInMinutes, { minutes: Int? ->
-                reminder.timeInMinutes = minutes!!
+            timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.time.toSecondOfDay() / 60, { _ ->
+
             }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
         } else {
             editTimeLayout.visibility = View.GONE
         }
     }
 
-    private fun onClickAdvancedSettings(reminder: ReminderEntity) {
+    private fun onClickAdvancedSettings(reminder: Reminder) {
         val navController = findNavController(itemView)
         val action =
             if (reminder.isOutOfStockOrExpirationReminder) {
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesStockExpirationFragment(
-                    reminder.reminderId
+                    reminder.id
                 )
             } else {
                 EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesRootFragment(
-                    reminder.reminderId
+                    reminder.id
                 )
             }
         try {
@@ -134,69 +138,17 @@ class ReminderViewHolder @AssistedInject constructor(
     }
 
     private fun setupTypeIcon() {
-        var titleText: Int
-        var helpText: Int
-        var iconId: Int
-        when (reminder.reminderType) {
-            ReminderType.TIME_BASED -> {
-                iconId = R.drawable.calendar_event
-                titleText = R.string.time_based_reminder
-                helpText = R.string.time_based_reminder_help
-            }
-
-            ReminderType.LINKED -> {
-                iconId = R.drawable.link
-                titleText = R.string.linked_reminder
-                helpText = R.string.linked_reminder_help
-            }
-
-            ReminderType.CONTINUOUS_INTERVAL -> {
-                iconId = R.drawable.repeat
-                titleText = R.string.continuous_interval_reminder
-                helpText = R.string.continuous_interval_reminder_help
-            }
-
-            ReminderType.WINDOWED_INTERVAL -> {
-                iconId = R.drawable.interval
-                titleText = R.string.windowed_interval_reminder
-                helpText = R.string.windowed_interval_reminder_help
-            }
-
-            ReminderType.OUT_OF_STOCK -> {
-                iconId = R.drawable.box_seam
-                titleText = R.string.out_of_stock_reminder
-                helpText = R.string.out_of_stock_reminder_help
-            }
-
-            ReminderType.EXPIRATION_DATE -> {
-                iconId = R.drawable.ban
-                titleText = R.string.expiration_date
-                helpText = R.string.expiration_date_reminder_help
-            }
-
-            ReminderType.REFILL -> {
-                // Never created here, so keep empty
-                iconId = 0
-                titleText = 0
-                helpText = 0
-                assert(false)
-            }
-        }
         val builder = MaterialAlertDialogBuilder(itemView.context)
-            .setTitle(titleText)
-            .setMessage(helpText).setIcon(iconId).setPositiveButton(R.string.ok, null)
-        reminderTypeIcon.setImageResource(iconId)
+            .setTitle(reminder.reminderType.getTitle())
+            .setMessage(reminder.reminderType.getHelp()).setIcon(reminder.reminderType.getIcon()).setPositiveButton(R.string.ok, null)
+        reminderTypeIcon.setImageResource(reminder.reminderType.getIcon())
         reminderTypeIcon.setOnClickListener { _: View? -> builder.create().show() }
     }
 
-    fun getUpdatedReminder(): ReminderEntity {
-        reminder.amount = editAmount.getText().toString().trim()
-        if (timeEditor != null) {
-            val minutes = timeEditor!!.getMinutes()
-            if (minutes >= 0) {
-                reminder.timeInMinutes = minutes
-            }
-        }
-        return reminder
+    fun getUpdatedReminder(): Reminder {
+        val minutes = timeEditor?.getMinutes() ?: -1
+        val newTime = if (minutes >= 0) LocalTime.ofSecondOfDay(minutes * 60L) else reminder.time
+
+        return reminder.copy(time = newTime, amount = editAmount.text.toString())
     }
 }

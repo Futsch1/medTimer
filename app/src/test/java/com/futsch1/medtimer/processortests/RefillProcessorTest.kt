@@ -8,7 +8,7 @@ import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.ReminderDao
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEntityType
 import com.futsch1.medtimer.database.ReminderEventDao
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
@@ -138,7 +138,7 @@ class RefillProcessorTest {
         assertEquals(10, reminderContext.repositoryFakes.reminderEvents[0].processedTimestamp)
         assertEquals(10, reminderContext.repositoryFakes.reminderEvents[0].remindedTimestamp)
         assertEquals("100 ➡ 110", reminderContext.repositoryFakes.reminderEvents[0].amount)
-        assertEquals(ReminderEntity.ReminderType.REFILL, reminderContext.repositoryFakes.reminderEvents[0].reminderType)
+        assertEquals(ReminderEntityType.REFILL, reminderContext.repositoryFakes.reminderEvents[0].reminderType)
     }
 
     @Test
@@ -146,7 +146,7 @@ class RefillProcessorTest {
         reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
         reminderContext.repositoryFakes.medicines[0].refillSizes.add(10.0)
         reminderContext.repositoryFakes.medicines[0].amount = 100.0
-        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1))
+        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1).toEntity())
         reminderContext.repositoryFakes.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1).toEntity())
 
         runBlocking {
@@ -154,6 +154,6 @@ class RefillProcessorTest {
         }
 
         assertEquals(110.0, reminderContext.repositoryFakes.medicines[0].amount)
-        assertEquals(ReminderEventEntity.ReminderStatus.ACKNOWLEDGED, reminderContext.repositoryFakes.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.ACKNOWLEDGED, reminderContext.repositoryFakes.reminderEvents[0].status)
     }
 }

@@ -2,12 +2,13 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class EditIntervalDialog(context: Context, reminder: ReminderEntity, private val intervalUpdatedCallback: (Int) -> Unit) {
+class EditIntervalDialog(context: Context, reminder: Reminder, private val intervalUpdatedCallback: (Int) -> Unit) {
     private val dialog = MaterialAlertDialogBuilder(context)
         .setTitle(R.string.interval)
         .setPositiveButton(android.R.string.ok) { _, _ -> intervalUpdatedCallback(intervalEditor.getMinutes()) }
@@ -22,7 +23,7 @@ class EditIntervalDialog(context: Context, reminder: ReminderEntity, private val
     private val intervalEditor: IntervalEditor = IntervalEditor(
         dialog.requireViewById(R.id.editIntervalTime),
         dialog.requireViewById(R.id.editIntervalTimeLayout),
-        dialog.requireViewById(R.id.intervalUnit), reminder.timeInMinutes,
-        if (reminder.reminderType == ReminderEntity.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
+        dialog.requireViewById(R.id.intervalUnit), reminder.time.toSecondOfDay() / 60,
+        if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
     )
 }

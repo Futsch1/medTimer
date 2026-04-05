@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders.notificationData
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderEventType
+import com.futsch1.medtimer.model.ReminderType
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -17,11 +17,11 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     fun isOutOfStockNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderEventType.OUT_OF_STOCK
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderType.OUT_OF_STOCK
     }
 
     fun isExpirationDateNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderEventType.EXPIRATION_DATE
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderType.EXPIRATION_DATE
     }
 
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {

@@ -1,29 +1,30 @@
 package com.futsch1.medtimer.medicine
 
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LinkedReminderAlgorithms @Inject constructor() {
-    fun sortRemindersList(reminders: List<ReminderEntity>): List<ReminderEntity> {
-        return reminders.sortedBy { r -> getTotalTimeInMinutes(r, reminders) }
+    fun sortRemindersList(reminders: List<Reminder>): List<Reminder> {
+        return reminders.sortedBy { r -> getTotalTimeInSeconds(r, reminders) }
     }
 
-    private fun getTotalTimeInMinutes(reminder: ReminderEntity, reminders: List<ReminderEntity>): Int {
-        var total = if (reminder.reminderType != ReminderEntity.ReminderType.WINDOWED_INTERVAL) reminder.timeInMinutes else reminder.intervalStartTimeOfDay
+    private fun getTotalTimeInSeconds(reminder: Reminder, reminders: List<Reminder>): Int {
+        var total = (if (reminder.reminderType != ReminderType.WINDOWED_INTERVAL) reminder.time else reminder.intervalStartTimeOfDay).toSecondOfDay()
         for (r in reminders) {
-            if (r.reminderId != reminder.linkedReminderId) {
+            if (r.id != reminder.linkedReminderId) {
                 continue
             }
 
             total += when (r.reminderType) {
-                ReminderEntity.ReminderType.LINKED -> {
-                    getTotalTimeInMinutes(r, reminders)
+                ReminderType.LINKED -> {
+                    getTotalTimeInSeconds(r, reminders)
                 }
 
                 else -> {
-                    r.timeInMinutes
+                    r.time.toSecondOfDay()
                 }
             }
         }

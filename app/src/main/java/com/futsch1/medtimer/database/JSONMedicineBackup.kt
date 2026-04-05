@@ -54,11 +54,8 @@ class JSONMedicineBackup(
     }
 
     private suspend fun processReminders(fullMedicine: FullMedicineEntity, medicineId: Int) {
-        val reminders: MutableList<ReminderEntity> = mutableListOf()
-        for (reminder in fullMedicine.reminders) {
-            reminder.medicineRelId = medicineId
-            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-            reminders.add(reminder)
+        val reminders = fullMedicine.reminders.map { entity ->
+            entity.toModel().copy(medicineRelId = medicineId, createdTime = Instant.now())
         }
         reminderRepository.createAll(reminders)
     }

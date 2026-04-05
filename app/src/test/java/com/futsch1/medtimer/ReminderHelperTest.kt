@@ -4,12 +4,12 @@ import android.content.Context
 import android.text.format.DateFormat
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.UserPreferences
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
@@ -60,8 +60,7 @@ class ReminderHelperTest {
         // Standard case
         val medicine = FullMedicineEntity()
         medicine.medicine = MedicineEntity("Test")
-        val reminder = ReminderEntity(1)
-        reminder.amount = "5"
+        var reminder = Reminder.default().copy(medicineRelId = 1, amount = "5")
         var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
         var reminderEvent = ReminderEvent.default().copy(remindedTimestamp = instant, medicineName = "Test", amount = "5")
 
@@ -79,7 +78,7 @@ class ReminderHelperTest {
         assertEquals(result.toString(), resultReminder.toString())
 
         // Empty amount
-        reminder.amount = ""
+        reminder = reminder.copy(amount = "")
         reminderEvent = reminderEvent.copy(amount = "")
         result = formatter.formatScheduledReminder(scheduledReminder)
         resultReminder = formatter.formatReminderEvent(reminderEvent)

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
@@ -54,7 +55,7 @@ class CSVMedicineExport @AssistedInject constructor(
     }
 
     private suspend fun exportMedicine(csvFile: FileWriter, medicine: FullMedicineEntity) {
-        val reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders)
+        val reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders.map { it.toModel() })
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {
                 continue

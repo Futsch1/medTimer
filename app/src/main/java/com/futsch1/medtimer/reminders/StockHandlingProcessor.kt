@@ -6,8 +6,9 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class StockHandlingProcessor @Inject constructor(
 
     private fun checkForThreshold(fullMedicine: FullMedicineEntity, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in fullMedicine.reminders) {
-            if (reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
+            if (reminder.outOfStockReminderType != ReminderEntity.OutOfStockReminderType.OFF && fullMedicine.medicine.amount <= reminder.outOfStockThreshold) {
                 val showEvent =
                     when (reminder.outOfStockReminderType) {
                         ReminderEntity.OutOfStockReminderType.ONCE -> {
@@ -39,7 +40,7 @@ class StockHandlingProcessor @Inject constructor(
 
                 if (showEvent) {
                     Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.reminderId}")
-                    val scheduledReminder = ScheduledReminder(fullMedicine, reminder, processedInstant)
+                    val scheduledReminder = ScheduledReminder(fullMedicine, reminder.toModel(), processedInstant)
                     val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
                 }

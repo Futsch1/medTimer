@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders.scheduling
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.ReminderEvent
@@ -71,9 +72,9 @@ class SchedulingSimulator(
         nextScheduledTime: Instant,
         scheduledReminderConsumer: scheduledReminderConsumerType
     ): Boolean {
-        val scheduledReminder = ScheduledReminder(schedulingItem.medicine, schedulingItem.reminder, nextScheduledTime)
+        val scheduledReminder = ScheduledReminder(schedulingItem.medicine, schedulingItem.reminder.toModel(), nextScheduledTime)
         // Process stock
-        doStockHandling(schedulingItem.medicine, scheduledReminder.reminder)
+        doStockHandling(schedulingItem.medicine, schedulingItem.reminder)
         // Notify consumer
         val continueSimulating = scheduledReminderConsumer(scheduledReminder, currentDay, schedulingItem.medicine.medicine.amount)
         // Add the simulated event to make sure it is considered in the next scheduling call

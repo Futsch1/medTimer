@@ -43,7 +43,7 @@ open class ReminderNotificationFactory @Inject constructor(
             var reminderEvent = if (reminderNotificationData.reminderEventIds[i] != 0) {
                 reminderEventRepository.get(reminderNotificationData.reminderEventIds[i])
             } else {
-                reminderEventRepository.get(reminder.reminderId, reminderNotificationData.remindInstant.epochSecond)
+                reminderEventRepository.get(reminder.id, reminderNotificationData.remindInstant.epochSecond)
             }
 
             if (reminderEvent == null) {

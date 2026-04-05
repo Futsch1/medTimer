@@ -149,7 +149,7 @@ class NotificationProcessorTest {
         }
 
         // Reminder marked as taken
-        assertEquals(ReminderEventEntity.ReminderStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
         // Processed time stamp set
         assertEquals(10, testReminderContext.repositoryFakes.reminderEvents[0].processedTimestamp)
         // Notification removed
@@ -176,7 +176,7 @@ class NotificationProcessorTest {
             )
         }
         // Reminder marked as taken
-        assertEquals(ReminderEventEntity.ReminderStatus.SKIPPED, testReminderContext.repositoryFakes.reminderEvents[1].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.SKIPPED, testReminderContext.repositoryFakes.reminderEvents[1].status)
         // Processed time stamp set
         assertEquals(10, testReminderContext.repositoryFakes.reminderEvents[1].processedTimestamp)
         // Notification not removed
@@ -184,6 +184,6 @@ class NotificationProcessorTest {
         // But notification updated
         verify(testReminderContext.notificationManagerFake.mock, times(1)).notify(eq(1), any())
         // First reminder still raised
-        assertEquals(ReminderEventEntity.ReminderStatus.RAISED, testReminderContext.repositoryFakes.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.RAISED, testReminderContext.repositoryFakes.reminderEvents[0].status)
     }
 }

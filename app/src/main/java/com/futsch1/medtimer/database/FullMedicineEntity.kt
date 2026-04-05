@@ -29,12 +29,12 @@ class FullMedicineEntity {
     }
 
     val isOutOfStock: Boolean
-        get() = this.isStockManagementActive && reminders.any { reminder -> reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK && reminder.outOfStockThreshold >= medicine.amount }
+        get() = this.isStockManagementActive && reminders.any { reminder -> reminder.outOfStockReminderType != ReminderEntity.OutOfStockReminderType.OFF && reminder.outOfStockThreshold >= medicine.amount }
 
     val isStockManagementActive: Boolean
         get() = (medicine.amount != 0.0 || hasStockReminder())
 
     private fun hasStockReminder(): Boolean {
-        return reminders.any { reminder -> reminder.reminderType == ReminderEntity.ReminderType.OUT_OF_STOCK }
+        return reminders.any { reminder -> reminder.outOfStockReminderType != ReminderEntity.OutOfStockReminderType.OFF }
     }
 }
