@@ -286,11 +286,11 @@ class SchedulingSimulatorTest {
         simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
-                assertEquals(LocalDate.EPOCH.plusDays(5), localDate)
+                assertEquals(LocalDate.EPOCH.plusDays(4), localDate)
                 assertEquals(0.0, amount)
             }
             if (scheduledReminders.size == 2) {
-                assertEquals(LocalDate.EPOCH.plusDays(8), localDate)
+                assertEquals(LocalDate.EPOCH.plusDays(7), localDate)
             }
             scheduledReminders.size < 2
         }

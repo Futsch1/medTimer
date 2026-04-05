@@ -91,7 +91,7 @@ class ReminderSchedulerIntervalUnitTest {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
         val fullMedicine = TestHelper.buildTestMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 24 * 60 * 3, 1).copy(
+        val reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60, 1).copy(
             intervalStart = TestHelper.on(1, 120),
             intervalStartsFromProcessed = true
         )
@@ -100,12 +100,12 @@ class ReminderSchedulerIntervalUnitTest {
         val medicineList = mutableListOf(fullMedicine)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 120)).copy(processedTimestamp = TestHelper.on(5, 130)))
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 60)).copy(processedTimestamp = TestHelper.on(2, 60)))
 
         val scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
-            TestHelper.on(8, 130),
+            TestHelper.on(3, 0),
             fullMedicine.toMedicine(),
             reminder
         )

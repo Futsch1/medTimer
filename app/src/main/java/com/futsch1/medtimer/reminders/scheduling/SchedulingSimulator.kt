@@ -11,7 +11,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-data class SchedulingItem(var medicine: Medicine, val reminder: Reminder)
+data class SchedulingItem(val medicine: Medicine, val reminder: Reminder)
 
 typealias scheduledReminderConsumerType = (ScheduledReminder, LocalDate, Double) -> Boolean
 
@@ -25,6 +25,7 @@ class SchedulingSimulator(
 
     var totalEvents = mutableListOf(*recentReminders.toTypedArray())
     var schedulingItems = medicines.flatMap { it.reminders.map { reminder -> SchedulingItem(it, reminder) } }.filter { it.reminder.active }
+    private val medicineAmounts: MutableMap<Int, Double> = medicines.associate { it.id to it.amount }.toMutableMap()
     val schedulingFactory = SchedulingFactory()
     var currentDay: LocalDate = timeAccess.localDate()
     val timeAccess = object : TimeAccess {
@@ -56,8 +57,11 @@ class SchedulingSimulator(
         return continueSimulating
     }
 
+    private fun currentMedicine(schedulingItem: SchedulingItem): Medicine =
+        schedulingItem.medicine.copy(amount = medicineAmounts[schedulingItem.medicine.id] ?: schedulingItem.medicine.amount)
+
     private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(schedulingItem.reminder, schedulingItem.medicine, totalEvents, timeAccess, dataSource)
+        val scheduler = schedulingFactory.create(schedulingItem.reminder, currentMedicine(schedulingItem), totalEvents, timeAccess, dataSource)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if (nextScheduledTime?.atZone(timeAccess.systemZone())?.toLocalDate() != currentDay) {
@@ -71,11 +75,13 @@ class SchedulingSimulator(
         nextScheduledTime: Instant,
         scheduledReminderConsumer: scheduledReminderConsumerType
     ): Boolean {
-        val scheduledReminder = ScheduledReminder(schedulingItem.medicine, schedulingItem.reminder, nextScheduledTime)
+        val medicine = currentMedicine(schedulingItem)
+        val scheduledReminder = ScheduledReminder(medicine, schedulingItem.reminder, nextScheduledTime)
         // Process stock
-        schedulingItem.medicine = doStockHandling(schedulingItem.medicine, schedulingItem.reminder)
+        val updatedMedicine = doStockHandling(medicine, schedulingItem.reminder)
+        medicineAmounts[schedulingItem.medicine.id] = updatedMedicine.amount
         // Notify consumer
-        val continueSimulating = scheduledReminderConsumer(scheduledReminder, currentDay, schedulingItem.medicine.amount)
+        val continueSimulating = scheduledReminderConsumer(scheduledReminder, currentDay, updatedMedicine.amount)
         // Add the simulated event to make sure it is considered in the next scheduling call
         totalEvents.add(createReminderEvent(schedulingItem.reminder, nextScheduledTime))
         return continueSimulating
