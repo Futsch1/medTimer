@@ -5,8 +5,8 @@ import com.google.gson.JsonElement
 import java.time.Instant
 
 class JSONMedicineBackup(
-    private val medicineRepository: MedicineRepository,
-    private val reminderRepository: ReminderRepository,
+    private val medicineDao: MedicineDao,
+    private val reminderDao: ReminderDao,
     private val tagRepository: TagRepository
 ) : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
@@ -30,8 +30,8 @@ class JSONMedicineBackup(
     }
 
     override suspend fun applyBackup(list: List<FullMedicineEntity>) {
-        reminderRepository.deleteAll()
-        medicineRepository.deleteAll()
+        reminderDao.deleteAll()
+        medicineDao.deleteAll()
         tagRepository.deleteAll()
 
         var sortOrder = 1.0
@@ -40,7 +40,7 @@ class JSONMedicineBackup(
             if (fullMedicine.medicine.sortOrder == 0.0) {
                 fullMedicine.medicine.sortOrder = sortOrder++
             }
-            val medicineId = medicineRepository.create(fullMedicine.medicine)
+            val medicineId = medicineDao.insertMedicine(fullMedicine.medicine)
             processReminders(fullMedicine, medicineId.toInt())
             processTags(fullMedicine, medicineId.toInt())
         }
@@ -54,9 +54,12 @@ class JSONMedicineBackup(
     }
 
     private suspend fun processReminders(fullMedicine: FullMedicineEntity, medicineId: Int) {
-        val reminders = fullMedicine.reminders.map { entity ->
-            entity.toModel().copy(medicineRelId = medicineId, createdTime = Instant.now())
+        val reminders: MutableList<ReminderEntity> = mutableListOf()
+        for (reminder in fullMedicine.reminders) {
+            reminder.medicineRelId = medicineId
+            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+            reminders.add(reminder)
         }
-        reminderRepository.createAll(reminders)
+        reminderDao.createAll(reminders)
     }
 }

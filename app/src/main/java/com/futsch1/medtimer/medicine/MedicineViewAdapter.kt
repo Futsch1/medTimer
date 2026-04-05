@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
+import com.futsch1.medtimer.model.Medicine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -24,7 +24,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     private val medicineViewHolderFactory: MedicineViewHolder.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) :
-    IdlingListAdapter<FullMedicineEntity, MedicineViewHolder>(MedicineDiff()), MovedCallback {
+    IdlingListAdapter<Medicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 
     @AssistedFactory
     interface Factory {
@@ -47,7 +47,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).medicine.medicineId.toLong()
+        return getItem(position).id.toLong()
     }
 
     override fun onMoved(fromPosition: Int, toPosition: Int) {
@@ -67,12 +67,12 @@ class MedicineViewAdapter @AssistedInject constructor(
         }
     }
 
-    class MedicineDiff : DiffUtil.ItemCallback<FullMedicineEntity>() {
-        override fun areItemsTheSame(oldItem: FullMedicineEntity, newItem: FullMedicineEntity): Boolean {
-            return oldItem.medicine.medicineId == newItem.medicine.medicineId
+    class MedicineDiff : DiffUtil.ItemCallback<Medicine>() {
+        override fun areItemsTheSame(oldItem: Medicine, newItem: Medicine): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: FullMedicineEntity, newItem: FullMedicineEntity): Boolean {
+        override fun areContentsTheSame(oldItem: Medicine, newItem: Medicine): Boolean {
             return oldItem == newItem
         }
     }

@@ -1,12 +1,12 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
 class LinkedScheduling(
-    reminder: ReminderEntity,
+    reminder: Reminder,
     reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
@@ -21,7 +21,7 @@ class LinkedScheduling(
                     || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)
         ) {
             return lastSourceReminderEvent.processedTimestamp.plusSeconds(
-                reminder.timeInMinutes * 60L
+                reminder.time.toSecondOfDay().toLong()
             )
         }
         return null

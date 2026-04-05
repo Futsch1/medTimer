@@ -1,46 +1,48 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.model.Medicine
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 open class MedicineRepository(
     private val medicineDao: MedicineDao
 ) {
     fun getFullAllFlow(): Flow<List<FullMedicineEntity>> = medicineDao.getMedicinesFlow()
 
-    suspend fun get(medicineId: Int): MedicineEntity? {
-        return medicineDao.getOnlyMedicine(medicineId)
+    suspend fun get(medicineId: Int): Medicine? {
+        return medicineDao.getMedicine(medicineId)?.toModel()
     }
 
-    fun getFullFlow(medicineId: Int): Flow<FullMedicineEntity?> {
-        return medicineDao.getMedicineFlow(medicineId)
+    fun getFlow(medicineId: Int): Flow<Medicine?> {
+        return medicineDao.getMedicineFlow(medicineId).map { it?.toModel() }
     }
 
-    suspend fun getFull(medicineId: Int): FullMedicineEntity? {
-        return medicineDao.getMedicine(medicineId)
+    suspend fun getAll(): List<Medicine> {
+        return medicineDao.getMedicines().map { it.toModel() }
     }
 
-    suspend fun getFullAll(): List<FullMedicineEntity> {
-        return medicineDao.getMedicines()
+    fun getAllFlow(): Flow<List<Medicine>> {
+        return medicineDao.getMedicinesFlow().map { medicines -> medicines.map { it.toModel() } }
     }
 
-    suspend fun create(medicine: MedicineEntity): Long {
-        return medicineDao.insertMedicine(medicine)
+    suspend fun create(medicine: Medicine): Long {
+        return medicineDao.insertMedicine(medicine.toEntity())
     }
 
     suspend fun delete(medicineId: Int) {
         medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
     }
 
-    suspend fun update(medicine: MedicineEntity) {
-        medicineDao.updateMedicine(medicine)
+    suspend fun update(medicine: Medicine) {
+        medicineDao.updateMedicine(medicine.toEntity())
     }
 
-    suspend fun updateAll(medicines: List<MedicineEntity>) {
-        medicineDao.updateMedicines(medicines)
+    suspend fun updateAll(medicines: List<Medicine>) {
+        medicineDao.updateMedicines(medicines.map { it.toEntity() })
     }
 
-    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicineEntity? {
-        return medicineDao.decreaseStock(medicineId, decreaseAmount)
+    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): Medicine? {
+        return medicineDao.decreaseStock(medicineId, decreaseAmount)?.toModel()
     }
 
     suspend fun getHighestSortOrder(): Double {
@@ -53,7 +55,7 @@ open class MedicineRepository(
             val moveMedicine = medicines.removeAt(fromPosition)
             medicines.add(toPosition, moveMedicine)
             moveMedicine.medicine.sortOrder = (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2
-            update(moveMedicine.medicine)
+            medicineDao.updateMedicine(moveMedicine.medicine)
         } catch (_: IndexOutOfBoundsException) {
             // Intentionally left blank
         }

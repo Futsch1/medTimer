@@ -2,15 +2,15 @@ package com.futsch1.medtimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.Tag
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -32,18 +32,18 @@ class MedicineViewModel @Inject constructor(
     private val tagRepository: TagRepository,
     private val reminderEventRepository: ReminderEventRepository,
 ) : ViewModel() {
-    private val liveMedicines = medicineRepository.getFullAllFlow()
+    private val liveMedicines = medicineRepository.getAllFlow()
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
     private var medicineToTags: List<MedicineToTagEntity> = emptyList()
-    private val liveTags: StateFlow<List<TagEntity>> = tagRepository.getAllFlow().stateIn(
+    private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
     )
 
     private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
 
-    val medicines: StateFlow<List<FullMedicineEntity>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
+    val medicines: StateFlow<List<Medicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
         getFiltered(medicines, tagIds ?: emptySet())
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
@@ -86,7 +86,7 @@ class MedicineViewModel @Inject constructor(
         return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value)
     }
 
-    fun filterMedicines(medicines: List<FullMedicineEntity>): List<FullMedicineEntity> {
+    fun filterMedicines(medicines: List<Medicine>): List<Medicine> {
         return getFiltered(medicines, validTagIds.value ?: emptySet())
     }
 
@@ -97,14 +97,14 @@ class MedicineViewModel @Inject constructor(
     private fun getFilteredEvents(
         liveData: List<ReminderEvent>,
         validTagIds: Set<Int>,
-        liveTags: List<TagEntity>
+        liveTags: List<Tag>
     ): List<ReminderEvent> {
         if (validTagIds.isEmpty()) {
             return liveData
         }
         // Get all valid tag names from the list of valid IDs
         val validTagNames =
-            liveTags.stream().filter { tag -> validTagIds.contains(tag.tagId) }
+            liveTags.stream().filter { tag -> validTagIds.contains(tag.id) }
                 .map { tag -> tag.name }.collect(Collectors.toSet())
         // Now filter all reminder events and check if they contain any of the valid tags
         return liveData.stream().filter { reminderEvent ->
@@ -113,10 +113,10 @@ class MedicineViewModel @Inject constructor(
     }
 
     private fun getId(medicineWithReminder: Any): Int {
-        return if (medicineWithReminder is FullMedicineEntity) {
-            medicineWithReminder.medicine.medicineId
+        return if (medicineWithReminder is Medicine) {
+            medicineWithReminder.id
         } else {
-            (medicineWithReminder as ScheduledReminder).medicine.medicine.medicineId
+            (medicineWithReminder as ScheduledReminder).medicine.id
         }
     }
 

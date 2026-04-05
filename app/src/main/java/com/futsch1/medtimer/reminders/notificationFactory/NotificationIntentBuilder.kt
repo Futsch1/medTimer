@@ -32,6 +32,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
     fun interface Factory {
         fun create(reminderNotification: ReminderNotification): NotificationIntentBuilder
     }
+
     val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
@@ -143,7 +144,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
             }
             val remoteInput =
                 RemoteInput.Builder("amount_${reminderNotificationPart.reminderEvent.reminderEventId}")
-                    .setLabel("${context.getString(R.string.dosage)} ${reminderNotificationPart.medicine.medicine.name}").build()
+                    .setLabel("${context.getString(R.string.dosage)} ${reminderNotificationPart.medicine.name}").build()
             action.addRemoteInput(remoteInput)
         }
 

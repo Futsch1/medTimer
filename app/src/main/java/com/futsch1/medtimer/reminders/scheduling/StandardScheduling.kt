@@ -1,16 +1,15 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 import java.util.Arrays
-import java.util.BitSet
 import kotlin.math.abs
 
 class StandardScheduling(
-    reminder: ReminderEntity,
+    reminder: Reminder,
     reminderEventList: List<ReminderEvent>,
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
@@ -39,7 +38,7 @@ class StandardScheduling(
         get() = reminder.pauseDays != 0
 
     private fun setPossibleDaysByCycle() {
-        val cycleStartDay = reminder.cycleStartDay
+        val cycleStartDay = reminder.cycleStartDay.toEpochDay()
         var dayInCycle = today() - cycleStartDay
         val cycleLength = reminder.consecutiveDays + reminder.pauseDays
         for (x in possibleDays.indices) {
@@ -60,9 +59,12 @@ class StandardScheduling(
     }
 
     private fun clearPossibleDaysByWeekday() {
+        if (reminder.days.isEmpty()) {
+            return
+        }
         var dayOfWeek = localDate.dayOfWeek
         for (i in possibleDays.indices) {
-            if (java.lang.Boolean.FALSE == reminder.days[dayOfWeek.value - 1]) {
+            if (!reminder.days.contains(dayOfWeek)) {
                 possibleDays[i] = false
             }
             dayOfWeek = dayOfWeek.plus(1)
@@ -72,20 +74,22 @@ class StandardScheduling(
     private fun clearPossibleDaysByActivePeriod() {
         val today = localDate.toEpochDay()
         for (i in possibleDays.indices) {
-            if (reminder.periodStart != 0L && today + i < reminder.periodStart) {
+            if (reminder.periodStart != LocalDate.EPOCH && today + i < reminder.periodStart.toEpochDay()) {
                 possibleDays[i] = false
             }
-            if (reminder.periodEnd != 0L && today + i > reminder.periodEnd) {
+            if (reminder.periodEnd != LocalDate.EPOCH && today + i > reminder.periodEnd.toEpochDay()) {
                 possibleDays[i] = false
             }
         }
     }
 
     private fun clearPossibleDaysByActiveDayOfMonth() {
+        if (reminder.activeDaysOfMonth.isEmpty()) {
+            return
+        }
         var startDate = localDate
-        val bitSet = BitSet.valueOf(longArrayOf(reminder.activeDaysOfMonth.toLong()))
         for (i in possibleDays.indices) {
-            possibleDays[i] = possibleDays[i] and bitSet[startDate.dayOfMonth - 1]
+            possibleDays[i] = possibleDays[i] and reminder.activeDaysOfMonth.contains(startDate.dayOfMonth - 1)
             startDate = startDate.plusDays(1)
         }
     }
@@ -101,7 +105,7 @@ class StandardScheduling(
         }
 
     private fun reminderBeforeCreation(): Boolean {
-        return reminder.createdTimestamp < localDateToReminderInstant(localDate).epochSecond
+        return reminder.createdTime < localDateToReminderInstant(localDate)
     }
 
     override fun getNextScheduledTime(): Instant? {

@@ -40,7 +40,7 @@ class VariableAmountHandler @Inject constructor(
             }
 
             TextInputDialogBuilder(activity)
-                .title(reminderNotificationPart.medicine.medicine.name)
+                .title(reminderNotificationPart.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->

@@ -13,9 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineIcons
@@ -23,6 +20,9 @@ import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.Tag
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.assisted.Assisted
@@ -51,24 +51,24 @@ class MedicineViewHolder @AssistedInject constructor(
     private val remindersSummaryView: TextView = itemView.findViewById(R.id.remindersSummary)
     private val tags: FlexboxLayout = itemView.findViewById(R.id.tags)
 
-    fun bind(medicine: FullMedicineEntity) {
+    fun bind(medicine: Medicine) {
         medicineNameView.text = medicineStringFormatter.getMedicineNameWithStockText(medicine)
         setupSummary(medicine)
 
         itemView.setOnClickListener { _: View? -> navigateToEditFragment(medicine) }
 
-        if (medicine.medicine.useColor) {
-            ViewColorHelper.setViewBackground(itemView, listOf(medicineNameView, remindersSummaryView), medicine.medicine.color)
+        if (medicine.useColor) {
+            ViewColorHelper.setViewBackground(itemView, listOf(medicineNameView, remindersSummaryView), medicine.color)
         } else {
             ViewColorHelper.setDefaultColors(itemView, listOf(medicineNameView, remindersSummaryView))
         }
 
-        ViewColorHelper.setIconToImageView(medicineIcons, itemView, itemView.findViewById(R.id.medicineIcon), medicine.medicine.iconId)
+        ViewColorHelper.setIconToImageView(medicineIcons, itemView, itemView.findViewById(R.id.medicineIcon), medicine.iconId)
 
         buildTags(medicine.tags)
     }
 
-    private fun setupSummary(medicine: FullMedicineEntity) {
+    private fun setupSummary(medicine: Medicine) {
         val activeReminders: List<Reminder> = getActiveReminders(medicine)
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
@@ -84,10 +84,10 @@ class MedicineViewHolder @AssistedInject constructor(
         }
     }
 
-    private fun navigateToEditFragment(medicine: FullMedicineEntity) {
+    private fun navigateToEditFragment(medicine: Medicine) {
         val navController = findNavController(itemView)
         val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-            medicine.medicine.medicineId
+            medicine.id
         )
         try {
             navController.navigate(action)
@@ -96,7 +96,7 @@ class MedicineViewHolder @AssistedInject constructor(
         }
     }
 
-    fun buildTags(tagsList: List<TagEntity>) {
+    fun buildTags(tagsList: List<Tag>) {
         tags.removeAllViews()
         for (tag in tagsList) {
             @SuppressLint("InflateParams") val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip

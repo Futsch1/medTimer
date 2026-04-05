@@ -27,7 +27,7 @@ abstract class ReminderNotificationFactory(
     medicineIcons,
     context,
     reminderNotification.reminderNotificationData.notificationId,
-    reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
+    reminderNotification.reminderNotificationParts.map { it.medicine },
     notificationManager
 ) {
 
@@ -59,7 +59,7 @@ abstract class ReminderNotificationFactory(
         ) {
             builder.setOngoing(true)
         }
-        if (reminderNotification.reminderNotificationParts.any { it.medicine.medicine.showNotificationAsAlarm }) {
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.showNotificationAsAlarm }) {
             addFullScreenIntent()
         }
     }

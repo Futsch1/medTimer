@@ -23,7 +23,7 @@ class NextRemindersLineProvider @Inject constructor(
     @param:ApplicationScope private val scope: CoroutineScope
 ) : WidgetLineProvider {
     private val scheduledReminders = scope.async {
-        val medicinesWithReminders = medicineRepository.getFullAll()
+        val medicinesWithReminders = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicinesWithReminders)
         val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
 

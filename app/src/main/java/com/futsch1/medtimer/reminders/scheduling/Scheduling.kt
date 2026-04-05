@@ -1,12 +1,11 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.stream.Collectors
 
 fun interface Scheduling {
@@ -14,7 +13,7 @@ fun interface Scheduling {
 }
 
 abstract class SchedulingBase(
-    protected val reminder: ReminderEntity,
+    protected val reminder: Reminder,
     protected val reminderEvents: List<ReminderEvent>,
     protected val timeAccess: TimeAccess
 ) : Scheduling {
@@ -25,7 +24,7 @@ abstract class SchedulingBase(
     abstract override fun getNextScheduledTime(): Instant?
 
     protected fun findLastReminderEvent(): ReminderEvent? {
-        return findLastReminderEvent(filteredReminderEvents, reminder.reminderId)
+        return findLastReminderEvent(filteredReminderEvents, reminder.id)
     }
 
     protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEvent? {
@@ -63,7 +62,7 @@ abstract class SchedulingBase(
     }
 
     protected fun localDateToReminderInstant(localDate: LocalDate): Instant {
-        return localDate.atTime(LocalTime.ofSecondOfDay(reminder.timeInMinutes * 60L)).atZone(
+        return localDate.atTime(reminder.time).atZone(
             systemZone
         ).toInstant()
     }
@@ -82,7 +81,7 @@ abstract class SchedulingBase(
         reminderEvents: List<ReminderEvent>
     ): List<ReminderEvent> {
         return reminderEvents.stream()
-            .filter { event: ReminderEvent -> event.reminderId == reminder.reminderId }.collect(
+            .filter { event: ReminderEvent -> event.reminderId == reminder.id }.collect(
                 Collectors.toList()
             )
     }

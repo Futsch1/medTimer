@@ -65,14 +65,14 @@ class ShowMedicineSheetDialogFragment : DialogFragment() {
         state: ShowMedicineUiState.Loaded
     ) {
         dialog.requireViewById<TextView>(R.id.medicineName).text =
-            medicineStringFormatter.getMedicineNameWithStockText(state.userPreferences, state.fullMedicine)
+            medicineStringFormatter.getMedicineNameWithStockText(state.userPreferences, state.medicine)
 
         val datesTextView = dialog.requireViewById<TextView>(R.id.medicineDates)
-        datesTextView.text = medicineStringFormatter.getDatesText(state.fullMedicine)
+        datesTextView.text = medicineStringFormatter.getDatesText(state.medicine)
         checkIfTextElseGone(datesTextView)
 
         val notesTextView = dialog.requireViewById<TextView>(R.id.medicineNotes)
-        notesTextView.text = state.fullMedicine.medicine.notes
+        notesTextView.text = state.medicine.notes
         checkIfTextElseGone(notesTextView)
 
         val reminderTextView = dialog.requireViewById<TextView>(R.id.reminderText)

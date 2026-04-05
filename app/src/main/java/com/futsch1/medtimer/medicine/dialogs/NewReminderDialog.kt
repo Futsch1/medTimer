@@ -8,13 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
@@ -32,7 +32,7 @@ import java.time.LocalTime
 
 class NewReminderDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
-    @Assisted private val fullMedicine: FullMedicineEntity,
+    @Assisted private val medicine: Medicine,
     @Assisted private val reminder: Reminder,
     private val reminderRepository: ReminderRepository,
     private val timeEditorFactory: TimeEditor.Factory,
@@ -41,7 +41,7 @@ class NewReminderDialog @AssistedInject constructor(
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(activity: FragmentActivity, fullMedicine: FullMedicineEntity, reminder: Reminder): NewReminderDialog
+        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -69,7 +69,7 @@ class NewReminderDialog @AssistedInject constructor(
         textInputEditText.postDelayed({
             inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
-        if (fullMedicine.isStockManagementActive) {
+        if (medicine.isStockManagementActive()) {
             textInputEditText.addTextChangedListener(
                 AmountTextWatcher(
                     textInputEditText

@@ -34,9 +34,9 @@ class TagDataFromMedicine @AssistedInject constructor(
     private var tagsAdapter: TagsAdapter = TagsAdapter({ it: TagWithState ->
         fragment.lifecycleScope.launch {
             if (it.isSelected) {
-                viewModel.associateTag(medicineId, it.tag.tagId)
+                viewModel.associateTag(medicineId, it.tag.id)
             } else {
-                viewModel.disassociateTag(medicineId, it.tag.tagId)
+                viewModel.disassociateTag(medicineId, it.tag.id)
             }
         }
     }, { it: TagWithState ->
@@ -58,7 +58,7 @@ class TagDataFromMedicine @AssistedInject constructor(
         }
         fragment.viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getMedicineWithTags(medicineId).collect {
-                tagsWithStateCollector.fullMedicine = it
+                tagsWithStateCollector.medicine = it
             }
         }
     }

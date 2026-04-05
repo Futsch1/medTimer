@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,9 +32,9 @@ open class ReminderEventRepository(
         return reminderEventDao.getAllLimited(startTimestamp, allStatusValues).map { it.toModel() }
     }
 
-    suspend fun getForScheduling(medicines: List<FullMedicineEntity>): List<ReminderEvent> {
+    suspend fun getForScheduling(medicines: List<Medicine>): List<ReminderEvent> {
         val activeReminders = medicines.flatMap { it.reminders }.filter { it.active }
-        return activeReminders.flatMap { getLastForScheduling(it.reminderId) }
+        return activeReminders.flatMap { getLastForScheduling(it.id) }
     }
 
     private suspend fun getLastForScheduling(reminderId: Int): List<ReminderEvent> {

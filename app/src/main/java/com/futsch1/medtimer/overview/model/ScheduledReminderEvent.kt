@@ -27,9 +27,9 @@ class ScheduledReminderEvent @AssistedInject constructor(
     override val timestamp: Long
         get() = scheduledReminder.timestamp.epochSecond
     override val icon: Int
-        get() = scheduledReminder.medicine.medicine.iconId
+        get() = scheduledReminder.medicine.iconId
     override val color: Int?
-        get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
+        get() = if (scheduledReminder.medicine.useColor) scheduledReminder.medicine.color else null
     override val state: OverviewState
         get() = OverviewState.PENDING
     override val reminderId: Int

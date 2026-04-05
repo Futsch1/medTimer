@@ -15,12 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.database.JSONBackup
 import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.MedicineRoomDatabase
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.ReminderDao
+import com.futsch1.medtimer.database.ReminderEventDao
 import com.futsch1.medtimer.database.TagRepository
-import com.futsch1.medtimer.database.toEntity
+import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.FileHelper
@@ -53,9 +53,9 @@ class BackupManager @AssistedInject constructor(
     @Assisted private val fragmentManager: FragmentManager? = null,
     private val preferencesDataSource: PreferencesDataSource,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val medicineRepository: MedicineRepository,
-    private val reminderRepository: ReminderRepository,
-    private val reminderEventRepository: ReminderEventRepository,
+    private val medicineDao: MedicineDao,
+    private val reminderDao: ReminderDao,
+    private val reminderEventDao: ReminderEventDao,
     private val tagRepository: TagRepository,
     private val database: MedicineRoomDatabase,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
@@ -169,16 +169,16 @@ class BackupManager @AssistedInject constructor(
         if (checkedItems[0]) {
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
-                    JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository),
-                    medicineRepository.getFullAll()
+                    JSONMedicineBackup(medicineDao, reminderDao, tagRepository),
+                    medicineDao.getMedicines()
                 )
             )
         }
         if (checkedItems[1]) {
             jsonObject.add(
                 EVENT_KEY, createBackup(
-                    JSONReminderEventBackup(reminderEventRepository),
-                    reminderEventRepository.getAllWithoutDeleted().map { it.toEntity() }
+                    JSONReminderEventBackup(reminderEventDao),
+                    reminderEventDao.getAllLimited(0L, statusValuesWithoutDelete)
                 )
             )
         }
@@ -226,9 +226,9 @@ class BackupManager @AssistedInject constructor(
 
             if (!restoreSuccessful && json != null) {
                 // Try legacy backup formats
-                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository)) || restoreBackup(
+                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineDao, reminderDao, tagRepository)) || restoreBackup(
                     json,
-                    JSONReminderEventBackup(reminderEventRepository)
+                    JSONReminderEventBackup(reminderEventDao)
                 )
             }
             Log.d(LogTags.BACKUP, "Backup restore finished")
@@ -252,13 +252,13 @@ class BackupManager @AssistedInject constructor(
             if (rootElement.has(MEDICINE_KEY)) {
                 restoreSuccessful = restoreBackup(
                     rootElement[MEDICINE_KEY].toString(),
-                    JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository)
+                    JSONMedicineBackup(medicineDao, reminderDao, tagRepository)
                 )
             }
             if (rootElement.has(EVENT_KEY)) {
                 restoreSuccessful = restoreSuccessful && restoreBackup(
                     rootElement[EVENT_KEY].toString(),
-                    JSONReminderEventBackup(reminderEventRepository)
+                    JSONReminderEventBackup(reminderEventDao)
                 )
             }
         } catch (_: JsonSyntaxException) {
@@ -305,14 +305,14 @@ class BackupManager @AssistedInject constructor(
         val jsonObject = JsonObject()
         jsonObject.add(
             MEDICINE_KEY, createBackup(
-                JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository),
-                medicineRepository.getFullAll()
+                JSONMedicineBackup(medicineDao, reminderDao, tagRepository),
+                medicineDao.getMedicines()
             )
         )
         jsonObject.add(
             EVENT_KEY, createBackup(
-                JSONReminderEventBackup(reminderEventRepository),
-                reminderEventRepository.getAllWithoutDeleted().map { it.toEntity() }
+                JSONReminderEventBackup(reminderEventDao),
+                reminderEventDao.getAllLimited(0L, statusValuesWithoutDelete)
             )
         )
 

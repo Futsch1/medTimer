@@ -19,9 +19,9 @@ class TagDataFromPreferences(fragment: Fragment) : TagDataProvider() {
 
     private var tagsAdapter: TagsAdapter = TagsAdapter({ it: TagWithState ->
         if (it.isSelected) {
-            tagFilterStore.selectedTags += it.tag.tagId
+            tagFilterStore.selectedTags += it.tag.id
         } else {
-            tagFilterStore.selectedTags -= it.tag.tagId
+            tagFilterStore.selectedTags -= it.tag.id
         }
     }, null)
 
@@ -29,7 +29,7 @@ class TagDataFromPreferences(fragment: Fragment) : TagDataProvider() {
         fragment.viewLifecycleOwner.lifecycleScope.launch {
             viewModel.tags.collect { tagList ->
                 tagsAdapter.submitList(
-                    tagList.map { TagWithState(it, tagFilterStore.selectedTags.contains(it.tagId)) }
+                    tagList.map { TagWithState(it, tagFilterStore.selectedTags.contains(it.id)) }
                 )
             }
         }

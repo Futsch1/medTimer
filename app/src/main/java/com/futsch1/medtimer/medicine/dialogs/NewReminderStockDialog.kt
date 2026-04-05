@@ -10,11 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
@@ -29,14 +29,14 @@ import java.time.LocalDate
 
 class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
-    @Assisted private val medicine: MedicineEntity,
+    @Assisted private val medicine: Medicine,
     @Assisted private val reminder: Reminder,
     private val reminderRepository: ReminderRepository,
     private val timeEditorFactory: TimeEditor.Factory
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(activity: FragmentActivity, medicine: MedicineEntity, reminder: Reminder): NewReminderStockDialog
+        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderStockDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -168,10 +168,12 @@ class NewReminderStockDialog @AssistedInject constructor(
                 else -> Reminder.ExpirationReminderType.OFF
             }
             val daysBefore = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
-            Pair(true, reminder.copy(
-                expirationReminderType = expirationReminderType,
-                periodStart = LocalDate.ofEpochDay(daysBefore)
-            ))
+            Pair(
+                true, reminder.copy(
+                    expirationReminderType = expirationReminderType,
+                    periodStart = LocalDate.ofEpochDay(daysBefore)
+                )
+            )
         } catch (_: NumberFormatException) {
             Pair(false, reminder)
         }

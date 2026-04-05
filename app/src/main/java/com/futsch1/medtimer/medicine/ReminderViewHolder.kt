@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.AmountTextWatcher
@@ -21,6 +20,7 @@ import com.futsch1.medtimer.helpers.getHelp
 import com.futsch1.medtimer.helpers.getIcon
 import com.futsch1.medtimer.helpers.getTitle
 import com.futsch1.medtimer.medicine.editors.TimeEditor
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
@@ -61,7 +61,7 @@ class ReminderViewHolder @AssistedInject constructor(
     private var timeEditor: TimeEditor? = null
 
     @SuppressLint("SetTextI18n")
-    fun bind(reminder: Reminder, fullMedicine: FullMedicineEntity) {
+    fun bind(reminder: Reminder, medicine: Medicine) {
         this.reminder = reminder
 
         setupTimeEditor()
@@ -79,7 +79,7 @@ class ReminderViewHolder @AssistedInject constructor(
             withContext(mainDispatcher) { advancedSettingsSummary.text = summary }
         }
 
-        if (fullMedicine.isStockManagementActive) {
+        if (medicine.isStockManagementActive()) {
             editAmount.addTextChangedListener(
                 AmountTextWatcher(
                     editAmount

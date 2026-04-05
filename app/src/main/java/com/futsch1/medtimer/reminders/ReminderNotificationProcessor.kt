@@ -6,11 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
@@ -111,7 +111,7 @@ class ReminderNotificationProcessor @Inject constructor(
     companion object {
         suspend fun buildReminderEvent(
             remindedTimeStamp: Long,
-            medicine: FullMedicineEntity,
+            medicine: Medicine,
             reminder: Reminder,
             reminderEventRepository: ReminderEventRepository,
             timeFormatter: TimeFormatter
@@ -119,11 +119,11 @@ class ReminderNotificationProcessor @Inject constructor(
             val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
             val amount = when (reminder.reminderType) {
                 ReminderType.OUT_OF_STOCK -> {
-                    MedicineHelper.formatAmount(medicine.medicine.amount, medicine.medicine.unit)
+                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
                 }
 
                 ReminderType.EXPIRATION_DATE -> {
-                    timeFormatter.daysSinceEpochToDateString(medicine.medicine.expirationDate)
+                    timeFormatter.localDateToString(medicine.expirationDate)
                 }
 
                 else -> {
@@ -145,15 +145,15 @@ class ReminderNotificationProcessor @Inject constructor(
             return ReminderEvent(
                 reminderEventId = 0,
                 reminderId = reminder.id,
-                medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder),
+                medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder),
                 amount = amount,
-                color = medicine.medicine.color,
-                useColor = medicine.medicine.useColor,
+                color = medicine.color,
+                useColor = medicine.useColor,
                 status = ReminderEvent.ReminderStatus.RAISED,
                 remindedTimestamp = remindedInstant,
                 processedTimestamp = Instant.EPOCH,
                 notificationId = 0,
-                iconId = medicine.medicine.iconId,
+                iconId = medicine.iconId,
                 remainingRepeats = 0,
                 notes = "",
                 reminderType = reminder.reminderType,

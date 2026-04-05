@@ -7,15 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
+import com.futsch1.medtimer.model.Medicine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,7 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class EditMedicineMenuProvider @AssistedInject constructor(
-    @Assisted private val medicine: MedicineEntity,
+    @Assisted private val medicine: Medicine,
     @Assisted private val fragment: EditMedicineFragment,
     @Assisted private val navController: NavController,
     private val medicineRepository: MedicineRepository,
@@ -36,7 +35,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            medicine: MedicineEntity,
+            medicine: Medicine,
             fragment: EditMedicineFragment,
             navController: NavController
         ): EditMedicineMenuProvider
@@ -55,9 +54,8 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         }
         MedicinesMenu.setupMenu(menu, R.id.duplicate) {
             fragment.lifecycleScope.launch(dispatcher) {
-                val oldMedicineId = medicine.medicineId
-                medicine.medicineId = 0
-                val newMedicineId = medicineRepository.create(medicine).toInt()
+                val oldMedicineId = medicine.id
+                val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
                 assignTags(oldMedicineId, newMedicineId)
             }
             navController.navigateUp()
@@ -73,19 +71,18 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     }
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.getFull(oldMedicineId)!!
+        val oldFullMedicine = medicineRepository.get(oldMedicineId)!!
         for (oldTag in oldFullMedicine.tags) {
-            tagRepository.addMedicineTag(newMedicineId, oldTag.tagId)
+            tagRepository.addMedicineTag(newMedicineId, oldTag.id)
         }
     }
 
     private suspend fun duplicateIncludingReminders() {
-        val fullMedicine = medicineRepository.getFull(medicine.medicineId)!!
-        val oldMedicineId = medicine.medicineId
-        medicine.medicineId = 0
-        val newMedicineId = medicineRepository.create(medicine).toInt()
+        val fullMedicine = medicineRepository.get(medicine.id)!!
+        val oldMedicineId = medicine.id
+        val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
         for (reminder in fullMedicine.reminders) {
-            reminderRepository.create(reminder.toModel().copy(id = 0, medicineRelId = newMedicineId))
+            reminderRepository.create(reminder.copy(id = 0, medicineRelId = newMedicineId))
         }
         assignTags(oldMedicineId, newMedicineId)
     }
@@ -98,7 +95,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
                 {
                     fragment.lifecycleScope.launch {
 
-                        medicineRepository.delete(medicine.medicineId)
+                        medicineRepository.delete(medicine.id)
                         navController.navigateUp()
                     }
                 },
@@ -128,7 +125,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
 
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val reminders = reminderRepository.getAll(medicine.medicineId)
+            val reminders = reminderRepository.getAll(medicine.id)
             com.futsch1.medtimer.helpers.setRemindersActive(reminders, reminderRepository, active)
         }
     }

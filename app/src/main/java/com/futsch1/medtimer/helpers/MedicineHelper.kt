@@ -3,8 +3,7 @@ package com.futsch1.medtimer.helpers
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.UserPreferences
 import java.text.NumberFormat
 import java.text.ParseException
@@ -18,7 +17,7 @@ object MedicineHelper {
     }
 
     fun getMedicineName(
-        medicine: MedicineEntity,
+        medicine: Medicine,
         notification: Boolean,
         userPreferences: UserPreferences
     ): String {
@@ -29,12 +28,12 @@ object MedicineHelper {
         }
     }
 
-    fun getStockIcons(fullMedicine: FullMedicineEntity): SpannableStringBuilder {
+    fun getStockIcons(medicine: Medicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        if (fullMedicine.isOutOfStock) {
+        if (medicine.isOutOfStock()) {
             builder.color(0xffcc0000.toInt()) { bold { append("⚠") } }
         }
-        val expiredIcon = getExpiredIcon(fullMedicine)
+        val expiredIcon = getExpiredIcon(medicine)
         if (expiredIcon.isNotEmpty()) {
             if (builder.isNotEmpty()) {
                 builder.append(" ")
@@ -44,9 +43,9 @@ object MedicineHelper {
         return builder
     }
 
-    fun getExpiredIcon(fullMedicine: FullMedicineEntity): SpannableStringBuilder {
+    fun getExpiredIcon(medicine: Medicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
-        if (fullMedicine.medicine.hasExpired()) {
+        if (medicine.hasExpired()) {
             builder.color(0xffcc0000.toInt()) { bold { append("\uD83D\uDEAB") } }
         }
         return builder

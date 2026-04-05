@@ -14,10 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.ModelDataPreferencesFragment
 import com.futsch1.medtimer.helpers.ModelDataStore
@@ -26,6 +24,8 @@ import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -39,7 +39,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StockSettingsFragment : ModelDataPreferencesFragment<FullMedicineEntity>(
+class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
     R.xml.stock_settings,
     mapOf(
     ),
@@ -92,53 +92,53 @@ class StockSettingsFragment : ModelDataPreferencesFragment<FullMedicineEntity>(
             }
         )
 
-    override suspend fun getDataStore(requireArguments: Bundle): ModelDataStore<FullMedicineEntity> {
+    override suspend fun getDataStore(requireArguments: Bundle): ModelDataStore<Medicine> {
         val entityId = requireArguments.getInt("medicineId")
-        val entity = medicineRepository.getFull(entityId)!!
+        val entity = medicineRepository.get(entityId)!!
         return medicineDataStoreFactory.create(entity)
     }
 
-    override fun getEntityViewModel(): ModelDataViewModel<FullMedicineEntity> = stockMedicineViewModel
+    override fun getEntityViewModel(): ModelDataViewModel<Medicine> = stockMedicineViewModel
 
-    override fun customSetup(modelData: FullMedicineEntity) {
+    override fun customSetup(modelData: Medicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
 
         calculateRunOutDate(modelData)
     }
 
-    override fun onModelDataUpdated(modelData: FullMedicineEntity) {
+    override fun onModelDataUpdated(modelData: Medicine) {
         super.onModelDataUpdated(modelData)
 
         calculateRunOutDate(modelData)
 
-        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(modelData.medicine.amount, modelData.medicine.unit)
-        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(modelData.medicine.refillSize, modelData.medicine.unit)
-        if (modelData.isOutOfStock) {
+        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(modelData.amount, modelData.unit)
+        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
+        if (modelData.isOutOfStock()) {
             findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
         } else {
             findPreference<EditTextPreference>("amount")!!.icon = null
         }
-        if (modelData.medicine.hasExpired()) {
+        if (modelData.hasExpired()) {
             findPreference<Preference>("expiration_date")!!.setIcon(R.drawable.ban)
         } else {
             findPreference<Preference>("expiration_date")!!.icon = null
         }
-        findPreference<Preference>("production_date")!!.summary = if (modelData.medicine.productionDate != 0L) {
-            timeFormatter.daysSinceEpochToDateString(modelData.medicine.productionDate)
+        findPreference<Preference>("production_date")!!.summary = if (modelData.productionDate != LocalDate.EPOCH) {
+            timeFormatter.localDateToString(modelData.productionDate)
         } else {
             ""
         }
-        findPreference<Preference>("expiration_date")!!.summary = if (modelData.medicine.expirationDate != 0L) {
-            timeFormatter.daysSinceEpochToDateString(modelData.medicine.expirationDate)
+        findPreference<Preference>("expiration_date")!!.summary = if (modelData.expirationDate != LocalDate.EPOCH) {
+            timeFormatter.localDateToString(modelData.expirationDate)
         } else {
             ""
         }
     }
 
-    private fun calculateRunOutDate(entity: FullMedicineEntity) {
+    private fun calculateRunOutDate(medicine: Medicine) {
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(entity.medicine.medicineId, entity.medicine.amount)
+            val runOutDate = estimateStockRunOutDate(medicine.id, medicine.amount)
 
             val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
 
@@ -152,14 +152,14 @@ class StockSettingsFragment : ModelDataPreferencesFragment<FullMedicineEntity>(
         medicineId: Int,
         currentAmount: Double? = null
     ): LocalDate? {
-        val fullMedicine = medicineRepository.getFull(medicineId) ?: return null
+        var medicine = medicineRepository.get(medicineId) ?: return null
 
         if (currentAmount != null) {
-            fullMedicine.medicine.amount = currentAmount
+            medicine = medicine.copy(amount = currentAmount)
         }
         val recentReminders =
-            reminderEventRepository.getForScheduling(listOf(fullMedicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
-        val schedulingSimulator = SchedulingSimulator(listOf(fullMedicine), recentReminders, timeAccess, preferencesDataSource)
+            reminderEventRepository.getForScheduling(listOf(medicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+        val schedulingSimulator = SchedulingSimulator(listOf(medicine), recentReminders, timeAccess, preferencesDataSource)
         val endDate = LocalDate.now().plusDays(365 * 2)
         var runOutDate: LocalDate? = null
 
@@ -177,7 +177,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<FullMedicineEntity>(
         val date = timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent =
-                createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.medicine.name, date)
+                createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name, date)
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {
@@ -187,24 +187,24 @@ class StockSettingsFragment : ModelDataPreferencesFragment<FullMedicineEntity>(
     }
 
     private fun refillNow() {
-        ReminderProcessorBroadcastReceiver.requestRefill(requireContext(), dataStore.modelData.medicine.medicineId)
+        ReminderProcessorBroadcastReceiver.requestRefill(requireContext(), dataStore.modelData.id)
     }
 
     private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {
         val reminder = Reminder.default().copy(
-            medicineRelId = dataStore.modelData.medicine.medicineId,
-            outOfStockThreshold = if (dataStore.modelData.medicine.amount > 0.0) dataStore.modelData.medicine.amount else 1.0,
+            medicineRelId = dataStore.modelData.id,
+            outOfStockThreshold = if (dataStore.modelData.amount > 0.0) dataStore.modelData.amount else 1.0,
             outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
         )
-        newReminderStockDialogFactory.create(activity, dataStore.modelData.medicine, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.modelData, reminder)
     }
 
     private fun showCreateNewReminderExpirationDateDialog(activity: FragmentActivity) {
         val reminder = Reminder.default().copy(
-            medicineRelId = dataStore.modelData.medicine.medicineId,
+            medicineRelId = dataStore.modelData.id,
             expirationReminderType = Reminder.ExpirationReminderType.ONCE
         )
-        newReminderStockDialogFactory.create(activity, dataStore.modelData.medicine, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.modelData, reminder)
     }
 }
 

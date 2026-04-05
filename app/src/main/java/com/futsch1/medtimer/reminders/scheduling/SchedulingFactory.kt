@@ -1,8 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.MedicineEntity
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -10,13 +9,13 @@ import com.futsch1.medtimer.reminders.TimeAccess
 
 class SchedulingFactory {
     fun create(
-        reminder: ReminderEntity,
-        medicine: MedicineEntity,
+        reminder: Reminder,
+        medicine: Medicine,
         reminderEvents: List<ReminderEvent>,
         timeAccess: TimeAccess,
         dataSource: PreferencesDataSource
     ): Scheduling {
-        val scheduler = when (reminder.toModel().reminderType) {
+        val scheduler = when (reminder.reminderType) {
             ReminderType.LINKED -> {
                 LinkedScheduling(reminder, reminderEvents, timeAccess)
             }

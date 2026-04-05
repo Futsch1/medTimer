@@ -4,16 +4,15 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -41,8 +40,8 @@ class CalendarEventsViewModel @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private var reminderEvents: List<ReminderEvent> = listOf()
-    private var allMedicines: List<FullMedicineEntity> = listOf()
-    private var medicine: MedicineEntity? = null
+    private var allMedicines: List<Medicine> = listOf()
+    private var medicine: Medicine? = null
     private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
 
@@ -62,11 +61,11 @@ class CalendarEventsViewModel @Inject constructor(
 
         viewModelScope.launch(ioDispatcher) {
             reminderEvents = reminderEventRepository.getLastDays(pastDays.toInt())
-            allMedicines = medicineRepository.getFullAll()
+            allMedicines = medicineRepository.getAll()
             if (medicineId > 0) {
                 medicine = medicineRepository.get(medicineId)
                 allMedicines =
-                    allMedicines.filter { medicine -> medicine.medicine.medicineId == medicineId }
+                    allMedicines.filter { medicine -> medicine.id == medicineId }
             }
             addPastEvents(pastDays)
             addFutureEvents(futureDays)

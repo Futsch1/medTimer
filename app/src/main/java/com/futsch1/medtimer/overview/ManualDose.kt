@@ -6,9 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -16,6 +14,7 @@ import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -67,7 +66,7 @@ class ManualDose @AssistedInject constructor(
         }
     }
 
-    private fun getManualDoseEntries(medicines: List<FullMedicineEntity>?): List<ManualDoseEntry> {
+    private fun getManualDoseEntries(medicines: List<Medicine>?): List<ManualDoseEntry> {
         val entries: MutableList<ManualDoseEntry> = ArrayList()
 
         entries.add(ManualDoseEntry(context.getString(R.string.custom)))
@@ -190,13 +189,13 @@ class ManualDose @AssistedInject constructor(
             amendName()
         }
 
-        constructor(medicine: FullMedicineEntity, amount: String?) {
-            this.baseName = medicine.medicine.name
-            this.color = medicine.medicine.color
-            this.useColor = medicine.medicine.useColor
+        constructor(medicine: Medicine, amount: String?) {
+            this.baseName = medicine.name
+            this.color = medicine.color
+            this.useColor = medicine.useColor
             this.amount = amount
-            this.iconId = medicine.medicine.iconId
-            this.medicineId = medicine.medicine.medicineId
+            this.iconId = medicine.iconId
+            this.medicineId = medicine.id
             this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
             amendName()
         }
@@ -234,12 +233,12 @@ class ManualDose @AssistedInject constructor(
 
     companion object {
         private fun addInactiveReminders(
-            medicine: FullMedicineEntity,
+            medicine: Medicine,
             entries: MutableList<ManualDoseEntry>
         ) {
             for (reminder in medicine.reminders) {
                 val entry = ManualDoseEntry(medicine, reminder.amount)
-                if (!isReminderActive(reminder.toModel()) && !entries.contains(entry)) {
+                if (!isReminderActive(reminder) && !entries.contains(entry)) {
                     entries.add(entry)
                 }
             }

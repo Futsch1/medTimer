@@ -9,15 +9,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,7 +40,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     lateinit var menuProviderFactory: AdvancedReminderSettingsMenuProvider.Factory
 
     val menuProvider by lazy { menuProviderFactory.create(this) }
-    var fullMedicine: FullMedicineEntity? = null
+    var medicine: Medicine? = null
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf("edit_medicine_stock_settings" to { _, _ ->
@@ -55,7 +56,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
 
         menuProvider.reminder = modelData
 
-        findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(modelData.outOfStockThreshold, fullMedicine?.medicine?.unit ?: "")
+        findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
     }
 
     override fun customSetup(modelData: Reminder) {
@@ -69,19 +70,16 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         findPreference<Preference>("medicine_expiration_date")?.isVisible = modelData.reminderType == ReminderType.EXPIRATION_DATE
 
         this.lifecycleScope.launch(ioDispatcher) {
-            fullMedicine = medicineRepository.getFull(modelData.medicineRelId)
+            val medicine = medicineRepository.get(modelData.medicineRelId) ?: return@launch
             this.launch(mainDispatcher) {
-                if (fullMedicine != null) {
-                    findPreference<Preference>("medicine_stock")?.summary =
-                        MedicineHelper.formatAmount(fullMedicine!!.medicine.amount, fullMedicine!!.medicine.unit)
-                    findPreference<Preference>("medicine_expiration_date")?.summary = if (fullMedicine!!.medicine.expirationDate != 0L) {
-
-                        timeFormatter.daysSinceEpochToDateString(fullMedicine!!.medicine.expirationDate)
-                    } else {
-                        context?.getString(R.string.never)
-                    }
-
+                findPreference<Preference>("medicine_stock")?.summary =
+                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+                findPreference<Preference>("medicine_expiration_date")?.summary = if (medicine.expirationDate != LocalDate.EPOCH) {
+                    timeFormatter.localDateToString(medicine.expirationDate)
+                } else {
+                    context?.getString(R.string.never)
                 }
+                this@AdvancedReminderPreferencesStockFragment.medicine = medicine
             }
         }
     }

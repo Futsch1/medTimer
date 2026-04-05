@@ -34,7 +34,7 @@ open class ReminderNotificationFactory @Inject constructor(
                 return null
             }
 
-            val medicine = medicineRepository.getFull(reminder.medicineRelId)
+            val medicine = medicineRepository.get(reminder.medicineRelId)
             if (medicine == null) {
                 Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
                 return null

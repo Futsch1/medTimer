@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
@@ -9,6 +8,7 @@ import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.model.Medicine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -61,8 +61,7 @@ class GenerateTestData @AssistedInject constructor(
 
         var sortOrder = 1.0
         for (testMedicine in testMedicines) {
-            val medicine = testMedicine.toMedicine()
-            medicine.sortOrder = sortOrder++
+            val medicine = testMedicine.toMedicine(sortOrder++)
             val medicineId = medicineRepository.create(medicine).toInt()
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
@@ -74,7 +73,7 @@ class GenerateTestData @AssistedInject constructor(
                 tagRepository.addMedicineTag(medicineId, tagId.toInt())
             }
             if (withEvents) {
-                // Insert reminder events for every day back from today
+                // Insert reminder events for every single day back from today
                 val reminderEvents: MutableList<ReminderEventEntity> = LinkedList()
                 for (testReminder in testMedicine.reminders) {
                     val today = Instant.now()
@@ -121,21 +120,25 @@ class GenerateTestData @AssistedInject constructor(
             return name.hashCode()
         }
 
-        fun toMedicine(): MedicineEntity {
-            val medicine = MedicineEntity(name)
-            if (color != null) {
-                medicine.useColor = true
-                medicine.color = color
-            }
-            medicine.iconId = iconId
-            if (stock > 0) {
-                medicine.amount = stock
-                medicine.unit = "pills"
-                medicine.refillSizes = arrayListOf(20.0)
-                medicine.expirationDate = LocalDate.now().toEpochDay() + 7
-                medicine.notes = "Some note\nabout this medicine"
-            }
-            return medicine
+        fun toMedicine(sortOrder: Double): Medicine {
+            return Medicine(
+                name = name,
+                id = 0,
+                color = color ?: 0,
+                useColor = color != null,
+                notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT,
+                iconId = iconId,
+                amount = stock,
+                refillSize = if (stock > 0) 20.0 else 0.0,
+                unit = if (stock > 0) "pills" else "",
+                notes = if (stock > 0) "Some note\nabout this medicine" else "",
+                showNotificationAsAlarm = false,
+                productionDate = LocalDate.now(),
+                expirationDate = LocalDate.now().plusDays(7),
+                sortOrder = sortOrder,
+                tags = emptyList(),
+                reminders = reminders.map { it.toReminder(0).toModel() }
+            )
         }
     }
 

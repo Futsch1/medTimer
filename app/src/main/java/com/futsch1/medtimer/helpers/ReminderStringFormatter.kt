@@ -56,7 +56,7 @@ class ReminderStringFormatter @Inject constructor(
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
         return SpannableStringBuilder().append(scheduledTime).append("\n").append(reminderTypeSpan).bold {
-            append(scheduledReminder.medicine.medicine.name)
+            append(scheduledReminder.medicine.name)
         }.append(getAmountOrStockString(scheduledReminder))
     }
 
@@ -88,7 +88,7 @@ class ReminderStringFormatter @Inject constructor(
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.medicine.name) }.append(
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.name) }.append(
             getAmountOrStockString(scheduledReminder)
         )
     }
@@ -111,11 +111,11 @@ class ReminderStringFormatter @Inject constructor(
         val amount =
             when (scheduledReminder.reminder.reminderType) {
                 ReminderType.OUT_OF_STOCK -> {
-                    MedicineHelper.formatAmount(scheduledReminder.medicine.medicine.amount, scheduledReminder.medicine.medicine.unit)
+                    MedicineHelper.formatAmount(scheduledReminder.medicine.amount, scheduledReminder.medicine.unit)
                 }
 
                 ReminderType.EXPIRATION_DATE -> {
-                    timeFormatter.daysSinceEpochToDateString(scheduledReminder.medicine.medicine.expirationDate)
+                    timeFormatter.localDateToString(scheduledReminder.medicine.expirationDate)
                 }
 
                 else -> {
