@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.database
 
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant

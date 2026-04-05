@@ -11,10 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.toEntityReminderType
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -27,32 +26,6 @@ class ReminderStringFormatter @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val timeFormatter: TimeFormatter
 ) {
-    fun formatReminderEvent(reminderEvent: ReminderEventEntity): Spanned {
-        var takenTime = timeFormatter.secondsSinceEpochToConfigurableTimeString(
-            reminderEvent.remindedTimestamp, false
-        )
-        val reminderTypeSpan = getReminderTypeSpan(reminderEvent.reminderType)
-        if (reminderEvent.processedTimestamp != 0L && (reminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN || reminderEvent.status == ReminderEventEntity.ReminderStatus.ACKNOWLEDGED) &&
-            preferencesDataSource.preferences.value.showTakenTimeInOverview
-        ) {
-            val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
-                timeFormatter.secondsSinceEpochToConfigurableTimeString(
-                    reminderEvent.processedTimestamp, false
-                )
-            else
-                timeFormatter.secondsSinceEpochToConfigurableDateTimeString(
-                    reminderEvent.processedTimestamp
-                )
-
-            takenTime = "$takenTime ➡ $processedTime"
-        }
-
-        val intervalTime = getLastIntervalTime(reminderEvent)
-
-        return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime).append(intervalTime).append("\n").bold { append(reminderEvent.medicineName) }
-            .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
-    }
-
     fun formatReminderEvent(reminderEvent: ReminderEvent): Spanned {
         var takenTime = timeFormatter.secondsSinceEpochToConfigurableTimeString(
             reminderEvent.remindedTimestamp.epochSecond, false
@@ -153,22 +126,6 @@ class ReminderStringFormatter @Inject constructor(
         return if (amount.isNotEmpty()) " (${amount})" else ""
     }
 
-    private fun getLastIntervalTime(reminderEvent: ReminderEventEntity): String =
-        if (reminderEvent.lastIntervalReminderTimeInMinutes > 0 && reminderEvent.status == ReminderEventEntity.ReminderStatus.TAKEN && calcLastIntervalTime(
-                reminderEvent
-            ) >= 0
-        ) {
-            " (" + context.getString(
-                R.string.interval_time, formatDuration(
-                    calcLastIntervalTime(reminderEvent)
-                ).toString()
-            ) + ")"
-        } else {
-            ""
-        }
-
-    private fun calcLastIntervalTime(reminderEvent: ReminderEventEntity): Long =
-        reminderEvent.processedTimestamp * 1000L - reminderEvent.lastIntervalReminderTimeInMinutes * 60_000L
 
     private fun getReminderTypeSpan(reminderEvent: ReminderEvent): Spanned =
         getReminderTypeSpan(reminderEvent.reminderType.toEntityReminderType())

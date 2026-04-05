@@ -3,7 +3,7 @@ package com.futsch1.medtimer.statistics
 import com.androidplot.xy.SimpleXYSeries
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.MedicineHelper.normalizeMedicineName
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId

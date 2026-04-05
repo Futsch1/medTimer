@@ -4,7 +4,7 @@ import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant

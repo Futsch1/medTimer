@@ -10,7 +10,7 @@ import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

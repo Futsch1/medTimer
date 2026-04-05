@@ -9,7 +9,7 @@ import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
 

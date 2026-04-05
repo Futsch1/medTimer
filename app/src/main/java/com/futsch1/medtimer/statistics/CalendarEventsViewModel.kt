@@ -13,7 +13,7 @@ import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource

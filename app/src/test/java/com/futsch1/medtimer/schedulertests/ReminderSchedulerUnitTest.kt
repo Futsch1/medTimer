@@ -2,7 +2,7 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.UserPreferences
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler

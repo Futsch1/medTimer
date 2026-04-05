@@ -3,11 +3,10 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -20,7 +19,7 @@ import javax.inject.Inject
  * as taken or skipped, updating the database, and managing notification states.
  *
  * This class handles:
- * - Updating [ReminderEventEntity] statuses and processing stock management.
+ * - Updating [ReminderEvent] statuses and processing stock management.
  * - Modifying or canceling active notifications when reminder events are processed.
  * - Triggering UI for variable dosage amounts.
  * - Scheduling follow-up notifications or rescheduling after status changes.

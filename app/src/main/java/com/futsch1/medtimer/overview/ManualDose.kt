@@ -7,9 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
@@ -29,6 +28,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
+import java.time.Instant
 
 class ManualDose @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -94,28 +94,27 @@ class ManualDose @AssistedInject constructor(
     }
 
     private fun startLogProcess(entry: ManualDoseEntry) {
-        val reminderEvent = ReminderEventEntity()
         // Manual dose is not assigned to an existing reminder
-        reminderEvent.reminderId = -1
-        reminderEvent.status = ReminderEventEntity.ReminderStatus.TAKEN
-        reminderEvent.medicineName = entry.baseName
-        reminderEvent.color = entry.color
-        reminderEvent.useColor = entry.useColor
-        reminderEvent.iconId = entry.iconId
-        reminderEvent.tags = entry.tags
+        val reminderEvent = ReminderEvent.default().copy(
+            reminderId = -1,
+            status = ReminderEvent.ReminderStatus.TAKEN,
+            medicineName = entry.baseName,
+            color = entry.color,
+            useColor = entry.useColor,
+            iconId = entry.iconId,
+            tags = entry.tags
+        )
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
             TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String ->
-                    reminderEvent.medicineName = name
                     entry.baseName = name
-                    getAmountAndContinue(reminderEvent, entry)
+                    getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)
                 }.show()
         } else {
             if (entry.amount == null || entry.medicineId == -1) {
                 getAmountAndContinue(reminderEvent, entry)
             } else {
-                reminderEvent.amount = entry.amount
-                getTimeAndLog(reminderEvent, entry.medicineId)
+                getTimeAndLog(reminderEvent.copy(amount = entry.amount), entry.medicineId)
             }
         }
     }
@@ -131,14 +130,13 @@ class ManualDose @AssistedInject constructor(
             persistentDataDataSource.setLastCustomDoseAmount(lastCustomDose.second)
         }
 
-    private fun getAmountAndContinue(reminderEvent: ReminderEventEntity, entry: ManualDoseEntry) {
+    private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
         val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
-                reminderEvent.amount = amount!!
                 if (entry.medicineId == -1) {
-                    lastCustomDose = Pair(entry.baseName, amount)
+                    lastCustomDose = Pair(entry.baseName, amount!!)
                 }
-                getTimeAndLog(reminderEvent, entry.medicineId)
+                getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
             }
         if (!entry.amount.isNullOrBlank()) {
             dialogBuilder.initialText(entry.amount)
@@ -146,14 +144,17 @@ class ManualDose @AssistedInject constructor(
         dialogBuilder.show()
     }
 
-    private fun getTimeAndLog(reminderEvent: ReminderEventEntity, medicineId: Int) {
+    private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
         val localDateTime = LocalDateTime.now()
         timePickerDialogFactory.create(localDateTime.hour, localDateTime.minute) { minutes: Int ->
-            reminderEvent.remindedTimestamp =
-                TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
-            reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
+            val remindedInstant: Instant = TimeHelper.instantFromDateAndMinutes(minutes, date)
             activity.lifecycleScope.launch {
-                reminderEventRepository.create(reminderEvent.toModel())
+                reminderEventRepository.create(
+                    reminderEvent.copy(
+                        remindedTimestamp = remindedInstant,
+                        processedTimestamp = remindedInstant
+                    )
+                )
             }
 
             if (medicineId == -1) {
@@ -162,7 +163,7 @@ class ManualDose @AssistedInject constructor(
 
             val amount = MedicineHelper.parseAmount(reminderEvent.amount)
             if (amount != null) {
-                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
+                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, remindedInstant.epochSecond)
             }
         }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }

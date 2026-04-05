@@ -1,6 +1,5 @@
-package com.futsch1.medtimer.model.reminderevent
+package com.futsch1.medtimer.model
 
-import com.futsch1.medtimer.model.Reminder
 import java.time.Instant
 
 enum class ReminderEventType {
@@ -10,7 +9,6 @@ enum class ReminderEventType {
 data class ReminderEvent(
     val reminderEventId: Int,
     val reminderId: Int,
-    val reminder: Reminder?,
     val medicineName: String,
     val amount: String,
     val color: Int,
@@ -42,7 +40,6 @@ data class ReminderEvent(
         fun default(): ReminderEvent = ReminderEvent(
             reminderEventId = 0,
             reminderId = 0,
-            reminder = null,
             medicineName = "",
             amount = "",
             color = 0,

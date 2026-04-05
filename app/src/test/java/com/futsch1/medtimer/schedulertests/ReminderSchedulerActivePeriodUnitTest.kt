@@ -2,7 +2,7 @@ package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import org.junit.Test
 import org.mockito.Mockito

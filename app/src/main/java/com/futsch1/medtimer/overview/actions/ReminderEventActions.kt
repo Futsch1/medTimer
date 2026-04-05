@@ -3,15 +3,12 @@ package com.futsch1.medtimer.overview.actions
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.toEntity
-import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.ReminderEventType
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEventType
 import com.futsch1.medtimer.overview.model.OverviewState
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -117,9 +114,7 @@ class ReminderEventActions @AssistedInject constructor(
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
-                val entity = reminderEvent.toEntity()
-                entity.status = ReminderEventEntity.ReminderStatus.DELETED
-                reminderEventRepository.update(entity.toModel())
+                reminderEventRepository.update(reminderEvent.copy(status = ReminderEvent.ReminderStatus.DELETED))
             }
         }, {})
     }

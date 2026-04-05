@@ -19,7 +19,7 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.database.toModel
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -59,7 +59,9 @@ class RepositoryFakes {
 
         // ReminderEventRepository mocks
         `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
-        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer { reminderEvents.firstOrNull { r -> r.reminderEventId == it.arguments[0] }?.toModel() }
+        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer {
+            reminderEvents.firstOrNull { r -> r.reminderEventId == it.arguments[0] }?.toModel()
+        }
         `when`(runBlocking { reminderEventRepositoryMock.create(any()) }).thenAnswer {
             val reminderEvent = (it.arguments[0] as ReminderEvent).toEntity()
             reminderEvent.reminderEventId = reminderEvents.size + 1

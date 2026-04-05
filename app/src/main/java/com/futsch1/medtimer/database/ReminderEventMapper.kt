@@ -1,15 +1,13 @@
 package com.futsch1.medtimer.database
 
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.ReminderEventType
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEventType
 import java.time.Instant
 
-fun ReminderEventEntity.toModel(reminder: Reminder? = null): ReminderEvent =
+fun ReminderEventEntity.toModel(): ReminderEvent =
     ReminderEvent(
         reminderEventId = reminderEventId,
         reminderId = reminderId,
-        reminder = reminder,
         medicineName = medicineName,
         amount = amount,
         color = color,

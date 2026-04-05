@@ -2,8 +2,8 @@ package com.futsch1.medtimer.reminders.notificationData
 
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
-import com.futsch1.medtimer.model.reminderevent.ReminderEventType
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEventType
 import java.time.LocalTime
 import java.time.ZoneId
 

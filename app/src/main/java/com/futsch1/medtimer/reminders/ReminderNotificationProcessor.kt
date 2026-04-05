@@ -13,7 +13,7 @@ import com.futsch1.medtimer.database.toModelReminderEventType
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.model.reminderevent.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -145,7 +145,6 @@ class ReminderNotificationProcessor @Inject constructor(
             return ReminderEvent(
                 reminderEventId = 0,
                 reminderId = reminder.reminderId,
-                reminder = null,
                 medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder),
                 amount = amount,
                 color = medicine.medicine.color,
