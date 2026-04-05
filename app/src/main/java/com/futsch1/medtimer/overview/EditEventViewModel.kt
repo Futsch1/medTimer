@@ -135,8 +135,8 @@ class EditEventViewModel @Inject constructor(
     }
 
     private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {
-        val withTime = TimeHelper.changeTimeStampMinutes(original.epochSecond, minutes)
-        return Instant.ofEpochSecond(TimeHelper.changeTimeStampDate(withTime, date))
+        val withTime = TimeHelper.changeTimeMinutes(original, minutes)
+        return Instant.ofEpochSecond(TimeHelper.changeTimeStampDate(withTime.epochSecond, date))
     }
 
     private fun timestampToMinutes(timestamp: Instant): Int {

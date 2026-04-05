@@ -21,10 +21,8 @@ import androidx.navigation.NavController
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.TagRepository
-import com.futsch1.medtimer.database.toEntity
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.exporters.CSVEventExport
@@ -40,6 +38,7 @@ import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
@@ -269,9 +268,8 @@ class OptionsMenu @AssistedInject constructor(
                 Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
-        val reminderEvents: List<ReminderEventEntity> =
+        val reminderEvents: List<ReminderEvent> =
             medicineViewModel.filterEvents(reminderEventRepository.getAllWithoutDeletedAndAcknowledged())
-                .map { it.toEntity() }
         val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
             reminderEvents,
             fragment.getParentFragmentManager()

@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
 import com.futsch1.medtimer.exporters.Export.ExporterException
@@ -33,27 +33,24 @@ internal class CSVExportUnitTest {
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     fun testCreateCsvFileWithCorrectHeadersAndData() {
-        val reminderEvents = mutableListOf(
-            ReminderEventEntity().apply {
-                // Set remindedTimestamp to a specific value
-                remindedTimestamp = 1620000000
-                processedTimestamp = 1620000120
-                medicineName = "Medicine 1"
-                amount = "10mg"
-                status = ReminderEventEntity.ReminderStatus.TAKEN
-                lastIntervalReminderTimeInMinutes = 134
-                tags = mutableListOf("Tag1", "Tag2")
+        val reminderEvents = listOf(
+            ReminderEvent.default().copy(
+                remindedTimestamp = java.time.Instant.ofEpochSecond(1620000000),
+                processedTimestamp = java.time.Instant.ofEpochSecond(1620000120),
+                medicineName = "Medicine 1",
+                amount = "10mg",
+                status = ReminderEvent.ReminderStatus.TAKEN,
+                lastIntervalReminderTimeInMinutes = 134,
+                tags = listOf("Tag1", "Tag2"),
                 notes = "Notes"
-            },
-            ReminderEventEntity().apply {
-                // Set remindedTimestamp to a specific value
-                remindedTimestamp = 1620001800
-                processedTimestamp = 1620001980
-                medicineName = "Medicine 2"
-                amount = "20mg"
-                status = ReminderEventEntity.ReminderStatus.SKIPPED
-                tags = emptyList()
-            }
+            ),
+            ReminderEvent.default().copy(
+                remindedTimestamp = java.time.Instant.ofEpochSecond(1620001800),
+                processedTimestamp = java.time.Instant.ofEpochSecond(1620001980),
+                medicineName = "Medicine 2",
+                amount = "20mg",
+                status = ReminderEvent.ReminderStatus.SKIPPED
+            )
         )
 
         // Create a mock Context
