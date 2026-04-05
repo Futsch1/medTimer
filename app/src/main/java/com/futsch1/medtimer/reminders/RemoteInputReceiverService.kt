@@ -2,7 +2,6 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.model.reminderevent.ReminderEvent
@@ -16,7 +15,6 @@ import javax.inject.Singleton
 @Singleton
 class RemoteInputReceiverService @Inject constructor(
     private val notificationProcessor: NotificationProcessor,
-    private val reminderEventRepository: ReminderEventRepository,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
@@ -35,8 +33,7 @@ class RemoteInputReceiverService @Inject constructor(
                 val amount = amountsByReminderEventId[reminderNotificationPart.reminderEvent.reminderEventId] ?: continue
                 Log.d(LogTags.REMINDER, "Setting variable amount to $amount of reID ${reminderNotificationPart.reminderEvent.reminderEventId}")
 
-                reminderEvents.add(reminderNotificationPart.reminderEvent)
-                reminderEventRepository.update(reminderNotificationPart.reminderEvent.copy(amount = amount))
+                reminderEvents.add(reminderNotificationPart.reminderEvent.copy(amount = amount))
                 continue
             }
 

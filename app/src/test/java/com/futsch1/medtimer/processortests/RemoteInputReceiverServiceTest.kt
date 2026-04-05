@@ -1,0 +1,148 @@
+package com.futsch1.medtimer.processortests
+
+import android.app.AlarmManager
+import android.app.NotificationManager
+import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.di.DatabaseModule
+import com.futsch1.medtimer.di.DatastoreModule
+import com.futsch1.medtimer.di.TimeAccessModule
+import com.futsch1.medtimer.reminders.RemoteInputReceiverService
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationPart
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import java.time.Instant
+import javax.inject.Inject
+import kotlin.test.assertEquals
+
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
+@UninstallModules(
+    DatabaseModule::class,
+    DatastoreModule::class,
+    TimeAccessModule::class
+)
+class RemoteInputReceiverServiceTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Before
+    fun init() {
+        hiltRule.inject()
+    }
+
+    val testReminderContext = TestReminderContext()
+
+    @BindValue
+    val boundAlarmManager: AlarmManager = testReminderContext.alarmManagerMock
+
+    @BindValue
+    val boundNotificationManager: NotificationManager = testReminderContext.notificationManagerFake.mock
+
+    @BindValue
+    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = testReminderContext.repositoryFakes.medicineRepositoryMock
+
+    @BindValue
+    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = testReminderContext.repositoryFakes.reminderRepositoryMock
+
+    @BindValue
+    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = testReminderContext.repositoryFakes.reminderEventRepositoryMock
+
+    @BindValue
+    val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = testReminderContext.preferencesDataSourceMock
+
+    @BindValue
+    val boundPersistentDataDataSource: com.futsch1.medtimer.preferences.PersistentDataDataSource = testReminderContext.persistentDataDataSourceMock
+
+    @BindValue
+    val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
+        override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
+        override fun localDate(): java.time.LocalDate = testReminderContext.localDate
+        override fun now(): Instant = testReminderContext.instant
+    }
+
+    @BindValue
+    val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = mock()
+
+    @BindValue
+    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = mock()
+
+    @BindValue
+    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = mock()
+
+    @BindValue
+    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = mock()
+
+    @BindValue
+    val boundTagDao: com.futsch1.medtimer.database.TagDao = mock()
+
+    @BindValue
+    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = mock()
+
+    @BindValue
+    val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.DefaultPreferences
+    val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
+
+    @BindValue
+    @com.futsch1.medtimer.di.MedTimerPreferencess
+    val boundMedTimerSharedPreferences: android.content.SharedPreferences = mock()
+
+    @BindValue
+    val boundReminderNotificationFactory: ReminderNotificationFactory = object : ReminderNotificationFactory(mock(), mock(), mock(), mock(), mock()) {
+        override suspend fun create(reminderNotificationData: ReminderNotificationData): ReminderNotification? {
+            if (!reminderNotificationData.valid) return null
+
+            val parts = mutableListOf<ReminderNotificationPart>()
+            for (i in reminderNotificationData.reminderIds.indices) {
+                val reminder = testReminderContext.repositoryFakes.reminderRepositoryMock.get(reminderNotificationData.reminderIds[i])
+                    ?: return null
+                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.getFull(reminder.medicineRelId)
+                    ?: return null
+                val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.get(reminderNotificationData.reminderEventIds[i])
+                    ?: return null
+                parts.add(ReminderNotificationPart(reminder, event, medicine))
+            }
+            return ReminderNotification(parts, reminderNotificationData)
+        }
+    }
+
+    @Inject
+    lateinit var remoteInputReceiverService: RemoteInputReceiverService
+
+    @Test
+    fun variableAmountIsPreservedAfterStatusUpdate() {
+        val reminderNotificationData = fillWithOneReminder(testReminderContext)
+        testReminderContext.repositoryFakes.reminders[0].variableAmount = true
+        testReminderContext.repositoryFakes.reminderEvents[0].amount = "1"
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
+
+        runBlocking {
+            remoteInputReceiverService.handleVariableAmount(
+                mapOf(1 to "5"),
+                reminderNotificationData
+            )
+        }
+
+        // The user-entered amount "5" must be persisted, not reverted to "1"
+        assertEquals("5", testReminderContext.repositoryFakes.reminderEvents[0].amount)
+        // Status must be TAKEN
+        assertEquals(ReminderEventEntity.ReminderStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
+    }
+}
