@@ -143,6 +143,11 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         return fragmentOverview
     }
 
+    override fun onResume() {
+        super.onResume()
+        daySelector.updateWeekRange()
+    }
+
     inner class OverviewOnSwipeListener : OnSwipeListener {
         override fun onSwipeLeft() {
             daySelector.selectNextDay()

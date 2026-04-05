@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.database.ReminderEventRepository
@@ -116,7 +117,12 @@ class NotificationProcessor @Inject constructor(
 
     suspend fun setReminderEventStatus(status: ReminderStatus, reminderEvents: List<ReminderEvent>) {
         for (reminderEvent in reminderEvents) {
-            reminderEvent.status = status
+            reminderEvent.status =
+                if (reminderEvent.reminderType == Reminder.ReminderType.OUT_OF_STOCK || reminderEvent.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+                    ReminderStatus.ACKNOWLEDGED
+                } else {
+                    status
+                }
             reminderEvent.processedTimestamp = timeAccess.now().epochSecond
             doStockHandling(reminderEvent)
             Log.i(

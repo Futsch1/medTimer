@@ -51,14 +51,19 @@ open class MedicineRepository(
 
     suspend fun move(fromPosition: Int, toPosition: Int) {
         val medicines = medicineDao.getFullAll().toMutableList()
-        try {
-            val moveMedicine = medicines.removeAt(fromPosition)
-            medicines.add(toPosition, moveMedicine)
-            moveMedicine.medicine.sortOrder = (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2
-            update(moveMedicine.medicine)
-        } catch (_: IndexOutOfBoundsException) {
-            // Intentionally left blank
+        if (fromPosition == toPosition || medicines.size < 2) return
+
+        val moveMedicine = medicines.removeAt(fromPosition)
+        medicines.add(toPosition, moveMedicine)
+
+        val newSortOrder = when (toPosition) {
+            0 -> medicines[1].medicine.sortOrder - 1.0
+            medicines.size - 1 -> medicines[toPosition - 1].medicine.sortOrder + 1.0
+            else -> (medicines[toPosition + 1].medicine.sortOrder + medicines[toPosition - 1].medicine.sortOrder) / 2.0
         }
+
+        moveMedicine.medicine.sortOrder = newSortOrder
+        update(moveMedicine.medicine)
     }
 
     suspend fun deleteAll() {
