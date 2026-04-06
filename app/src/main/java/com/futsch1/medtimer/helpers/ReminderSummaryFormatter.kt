@@ -124,7 +124,7 @@ class ReminderSummaryFormatter @Inject constructor(
         var current = reminderRepository.get(reminder.linkedReminderId) ?: return "?"
 
         while (current.reminderType == ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.time.toSecondOfDay() / 60))
+            delays.add(timeFormatter.toTimeString(current.time))
             current = reminderRepository.get(current.linkedReminderId) ?: return "?"
         }
 
@@ -141,7 +141,7 @@ class ReminderSummaryFormatter @Inject constructor(
         var current = reminder
 
         while (current.reminderType == ReminderType.LINKED) {
-            delays.add(timeFormatter.minutesToDurationString(current.time.toSecondOfDay() / 60))
+            delays.add(timeFormatter.toTimeString(current.time))
             val source = reminderRepository.get(current.linkedReminderId) ?: return "?"
             current = source
         }

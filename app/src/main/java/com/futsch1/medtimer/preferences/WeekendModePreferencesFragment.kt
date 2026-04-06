@@ -68,7 +68,7 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateTimePicker(settings: UserPreferences) {
         val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
-        preference?.setSummary(timeFormatter.minutesToTimeString(settings.weekendTime.hour * 60 + settings.weekendTime.minute))
+        preference?.setSummary(timeFormatter.toTimeString(settings.weekendTime))
     }
 
     private fun setupTimePicker() {

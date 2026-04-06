@@ -22,6 +22,7 @@ import com.futsch1.medtimer.helpers.getTitle
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,7 +34,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalTime
 
 class ReminderViewHolder @AssistedInject constructor(
     @Assisted parent: ViewGroup,
@@ -110,7 +110,7 @@ class ReminderViewHolder @AssistedInject constructor(
         if (reminder.usesTimeInMinutes) {
             @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay
             editTimeLayout.setHint(textId)
-            timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.time.toSecondOfDay() / 60, { _ ->
+            timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.time.minutes, { _ ->
 
             }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
         } else {
@@ -147,7 +147,7 @@ class ReminderViewHolder @AssistedInject constructor(
 
     fun getUpdatedReminder(): Reminder {
         val minutes = timeEditor?.getMinutes() ?: -1
-        val newTime = if (minutes >= 0) LocalTime.ofSecondOfDay(minutes * 60L) else reminder.time
+        val newTime = if (minutes >= 0) ReminderTime(minutes) else reminder.time
 
         return reminder.copy(time = newTime, amount = editAmount.text.toString())
     }

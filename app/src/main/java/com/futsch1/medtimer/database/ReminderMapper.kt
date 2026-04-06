@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
@@ -10,7 +11,7 @@ fun ReminderEntity.toModel(): Reminder =
     Reminder(
         id = reminderId,
         medicineRelId = medicineRelId,
-        time = LocalTime.ofSecondOfDay(timeInMinutes * 60L),
+        time = ReminderTime(timeInMinutes, intervalStart != 0L || windowedInterval),
         createdTime = Instant.ofEpochSecond(createdTimestamp),
         consecutiveDays = consecutiveDays,
         pauseDays = pauseDays,
@@ -38,7 +39,7 @@ fun ReminderEntity.toModel(): Reminder =
 fun Reminder.toEntity(): ReminderEntity {
     val entity = ReminderEntity(medicineRelId)
     entity.reminderId = id
-    entity.timeInMinutes = time.hour * 60 + time.minute
+    entity.timeInMinutes = time.minutes
     entity.createdTimestamp = createdTime.epochSecond
     entity.consecutiveDays = consecutiveDays
     entity.pauseDays = pauseDays

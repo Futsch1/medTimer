@@ -21,7 +21,7 @@ class LinkedScheduling(
                     || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)
         ) {
             return lastSourceReminderEvent.processedTimestamp.plusSeconds(
-                reminder.time.toSecondOfDay().toLong()
+                reminder.time.seconds
             )
         }
         return null

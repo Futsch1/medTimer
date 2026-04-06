@@ -11,8 +11,9 @@ class LinkedReminderAlgorithms @Inject constructor() {
         return reminders.sortedBy { r -> getTotalTimeInSeconds(r, reminders) }
     }
 
-    private fun getTotalTimeInSeconds(reminder: Reminder, reminders: List<Reminder>): Int {
-        var total = (if (reminder.reminderType != ReminderType.WINDOWED_INTERVAL) reminder.time else reminder.intervalStartTimeOfDay).toSecondOfDay()
+    private fun getTotalTimeInSeconds(reminder: Reminder, reminders: List<Reminder>): Long {
+        var total =
+            (if (reminder.reminderType != ReminderType.WINDOWED_INTERVAL) reminder.time.seconds else reminder.intervalStartTimeOfDay.toSecondOfDay().toLong())
         for (r in reminders) {
             if (r.id != reminder.linkedReminderId) {
                 continue
@@ -24,7 +25,7 @@ class LinkedReminderAlgorithms @Inject constructor() {
                 }
 
                 else -> {
-                    r.time.toSecondOfDay()
+                    r.time.seconds
                 }
             }
         }

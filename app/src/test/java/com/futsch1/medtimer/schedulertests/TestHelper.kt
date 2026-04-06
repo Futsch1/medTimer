@@ -3,6 +3,7 @@ package com.futsch1.medtimer.schedulertests
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.model.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
@@ -44,7 +45,7 @@ object TestHelper {
             id = reminderId,
             medicineRelId = medicineId,
             amount = amount,
-            time = LocalTime.of(timeInMinutes / 60, timeInMinutes % 60),
+            time = ReminderTime(timeInMinutes),
             pauseDays = daysBetweenReminders - 1
         )
     }

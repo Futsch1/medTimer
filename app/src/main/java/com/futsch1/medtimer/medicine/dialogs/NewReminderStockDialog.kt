@@ -16,6 +16,7 @@ import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -114,7 +115,7 @@ class NewReminderStockDialog @AssistedInject constructor(
         val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
-            reminder.time.toSecondOfDay() / 60,
+            reminder.time.minutes,
             { _ -> },
             null
         )
@@ -130,7 +131,7 @@ class NewReminderStockDialog @AssistedInject constructor(
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             activity.lifecycleScope.launch {
                 var updatedReminder = reminder.copy(
-                    time = java.time.LocalTime.ofSecondOfDay(timeEditor.getMinutes() * 60L)
+                    time = ReminderTime(timeEditor.getMinutes())
                 )
                 var canCreate = true
 

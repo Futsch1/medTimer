@@ -6,7 +6,7 @@ import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.ReminderDao
 import com.futsch1.medtimer.database.ReminderEventDao
-import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.TagDao
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,9 +35,9 @@ class JSONBackupFuzzTest(private val json: String) {
         val medicineDao = Mockito.mock<MedicineDao>()
         val reminderDao = Mockito.mock<ReminderDao>()
         val reminderEventDao = Mockito.mock<ReminderEventDao>()
-        val tagRepository = Mockito.mock<TagRepository>()
+        val tagDao = Mockito.mock<TagDao>()
 
-        checkBackup(JSONMedicineBackup(medicineDao, reminderDao, tagRepository), json)
+        checkBackup(JSONMedicineBackup(medicineDao, reminderDao, tagDao), json)
         checkBackup(JSONReminderEventBackup(reminderEventDao), json)
     }
 

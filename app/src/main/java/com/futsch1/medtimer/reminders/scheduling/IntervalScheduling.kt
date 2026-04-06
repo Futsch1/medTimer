@@ -35,7 +35,7 @@ open class IntervalScheduling(
                 else null
             } else
                 lastReminderEvent.remindedTimestamp
-        return instant?.plusSeconds(reminder.time.toSecondOfDay().toLong())
+        return instant?.plusSeconds(reminder.time.seconds)
     }
 
     protected fun adjustToToday(instant: Instant?): Instant? {
@@ -48,8 +48,8 @@ open class IntervalScheduling(
             if (instant.isBefore(todayInstant)) {
                 // First interval that is triggered today
                 val deltaMinutes: Long = (todayInstant.epochSecond - instant.epochSecond) / 60L
-                val numIntervals = ceil(deltaMinutes.toDouble() / (reminder.time.toSecondOfDay() / 60)).toLong()
-                adjustedInstant = instant.plusSeconds(numIntervals * reminder.time.toSecondOfDay())
+                val numIntervals = ceil(deltaMinutes.toDouble() / (reminder.time.minutes)).toLong()
+                adjustedInstant = instant.plusSeconds(numIntervals * reminder.time.seconds)
             }
         }
         return adjustedInstant

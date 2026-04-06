@@ -19,7 +19,7 @@ import com.futsch1.medtimer.database.MedicineDao
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.ReminderDao
 import com.futsch1.medtimer.database.ReminderEventDao
-import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.TagDao
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -56,7 +56,7 @@ class BackupManager @AssistedInject constructor(
     private val medicineDao: MedicineDao,
     private val reminderDao: ReminderDao,
     private val reminderEventDao: ReminderEventDao,
-    private val tagRepository: TagRepository,
+    private val tagDao: TagDao,
     private val database: MedicineRoomDatabase,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
@@ -169,7 +169,7 @@ class BackupManager @AssistedInject constructor(
         if (checkedItems[0]) {
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
-                    JSONMedicineBackup(medicineDao, reminderDao, tagRepository),
+                    JSONMedicineBackup(medicineDao, reminderDao, tagDao),
                     medicineDao.getMedicines()
                 )
             )
@@ -226,7 +226,7 @@ class BackupManager @AssistedInject constructor(
 
             if (!restoreSuccessful && json != null) {
                 // Try legacy backup formats
-                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineDao, reminderDao, tagRepository)) || restoreBackup(
+                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineDao, reminderDao, tagDao)) || restoreBackup(
                     json,
                     JSONReminderEventBackup(reminderEventDao)
                 )
@@ -252,7 +252,7 @@ class BackupManager @AssistedInject constructor(
             if (rootElement.has(MEDICINE_KEY)) {
                 restoreSuccessful = restoreBackup(
                     rootElement[MEDICINE_KEY].toString(),
-                    JSONMedicineBackup(medicineDao, reminderDao, tagRepository)
+                    JSONMedicineBackup(medicineDao, reminderDao, tagDao)
                 )
             }
             if (rootElement.has(EVENT_KEY)) {
@@ -305,7 +305,7 @@ class BackupManager @AssistedInject constructor(
         val jsonObject = JsonObject()
         jsonObject.add(
             MEDICINE_KEY, createBackup(
-                JSONMedicineBackup(medicineDao, reminderDao, tagRepository),
+                JSONMedicineBackup(medicineDao, reminderDao, tagDao),
                 medicineDao.getMedicines()
             )
         )

@@ -70,7 +70,7 @@ class WindowedIntervalScheduling(
                 else null
             } else
                 lastRemindedInstant
-        val nextTime = instant?.plusSeconds(reminder.time.toSecondOfDay().toLong())
+        val nextTime = instant?.plusSeconds(reminder.time.seconds)
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
         return if (nextTime != null) {
             val interval = Interval(reminder, timeAccess.localDate(), timeAccess)

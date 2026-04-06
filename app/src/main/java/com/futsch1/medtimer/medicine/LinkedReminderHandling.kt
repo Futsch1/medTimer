@@ -12,6 +12,7 @@ import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -21,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 
 class LinkedReminderHandling @AssistedInject constructor(
     @Assisted val reminder: Reminder,
@@ -57,7 +57,7 @@ class LinkedReminderHandling @AssistedInject constructor(
 
         timePickerDialogFactory.create(0, 0, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H) { minutes: Int ->
             coroutineScope.launch {
-                reminderRepository.create(linkedReminder.copy(time = LocalTime.ofSecondOfDay(minutes * 60L)))
+                reminderRepository.create(linkedReminder.copy(time = ReminderTime(minutes, isDuration = true)))
                 fragmentActivity.supportFragmentManager.popBackStack()
             }
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)

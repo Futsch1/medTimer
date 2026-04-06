@@ -23,7 +23,7 @@ class EditIntervalDialog(context: Context, reminder: Reminder, private val inter
     private val intervalEditor: IntervalEditor = IntervalEditor(
         dialog.requireViewById(R.id.editIntervalTime),
         dialog.requireViewById(R.id.editIntervalTimeLayout),
-        dialog.requireViewById(R.id.intervalUnit), reminder.time.toSecondOfDay() / 60,
+        dialog.requireViewById(R.id.intervalUnit), reminder.time.minutes,
         if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
     )
 }

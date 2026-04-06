@@ -60,7 +60,7 @@ class ScheduledReminderActions @AssistedInject constructor(
 
     private fun scheduleReminder(scheduledReminder: ScheduledReminder) {
         timePickerDialogFactory
-            .create(scheduledReminder.reminder.time.hour, scheduledReminder.reminder.time.minute) { minutes ->
+            .create(scheduledReminder.reminder.time.getLocalTime().hour, scheduledReminder.reminder.time.getLocalTime().minute) { minutes ->
                 val reminderTimeStamp =
                     TimeHelper.instantFromDateAndMinutes(minutes, scheduledReminder.timestamp.atZone(ZoneId.systemDefault()).toLocalDate()).epochSecond
                 fragmentActivity.lifecycleScope.launch {

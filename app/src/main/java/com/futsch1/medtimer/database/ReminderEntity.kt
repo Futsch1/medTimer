@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
-import java.util.Objects
 
 @Entity(tableName = "Reminder")
 class ReminderEntity(var medicineRelId: Int) {
@@ -104,49 +103,6 @@ class ReminderEntity(var medicineRelId: Int) {
 
     @Ignore
     constructor() : this(0)
-
-    override fun equals(other: Any?): Boolean {
-        if (other !is ReminderEntity) return false
-        return membersEqual(other)
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(
-            reminderId,
-            medicineRelId,
-            timeInMinutes,
-            createdTimestamp,
-            consecutiveDays,
-            pauseDays,
-            instructions,
-            cycleStartDay,
-            amount,
-            days,
-            active,
-            periodStart,
-            periodEnd,
-            activeDaysOfMonth,
-            linkedReminderId,
-            intervalStart,
-            intervalStartsFromProcessed,
-            variableAmount,
-            automaticallyTaken,
-            intervalStartTimeOfDay,
-            intervalEndTimeOfDay,
-            windowedInterval,
-            outOfStockThreshold,
-            outOfStockReminderType,
-            expirationReminderType
-        )
-    }
-
-    private fun membersEqual(other: ReminderEntity): Boolean {
-        return reminderId == other.reminderId && medicineRelId == other.medicineRelId && timeInMinutes == other.timeInMinutes && createdTimestamp == other.createdTimestamp && consecutiveDays == other.consecutiveDays && pauseDays == other.pauseDays &&
-                instructions == other.instructions && cycleStartDay == other.cycleStartDay &&
-                amount == other.amount &&
-                days == other.days && active == other.active && periodStart == other.periodStart && periodEnd == other.periodEnd && activeDaysOfMonth == other.activeDaysOfMonth && linkedReminderId == other.linkedReminderId && intervalStart == other.intervalStart && intervalStartsFromProcessed == other.intervalStartsFromProcessed && variableAmount == other.variableAmount && intervalStartTimeOfDay == other.intervalStartTimeOfDay && intervalEndTimeOfDay == other.intervalEndTimeOfDay && windowedInterval == other.windowedInterval &&
-                outOfStockThreshold == other.outOfStockThreshold && outOfStockReminderType == other.outOfStockReminderType && expirationReminderType == other.expirationReminderType
-    }
 
     enum class OutOfStockReminderType {
         ONCE,

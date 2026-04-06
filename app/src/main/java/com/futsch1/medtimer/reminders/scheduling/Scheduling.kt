@@ -62,7 +62,7 @@ abstract class SchedulingBase(
     }
 
     protected fun localDateToReminderInstant(localDate: LocalDate): Instant {
-        return localDate.atTime(reminder.time).atZone(
+        return localDate.atTime(reminder.time.getLocalTime()).atZone(
             systemZone
         ).toInstant()
     }

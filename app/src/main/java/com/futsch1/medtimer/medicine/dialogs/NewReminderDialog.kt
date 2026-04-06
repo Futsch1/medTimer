@@ -16,6 +16,7 @@ import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -111,7 +112,7 @@ class NewReminderDialog @AssistedInject constructor(
         val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
-            reminder.time.toSecondOfDay() / 60,
+            reminder.time.minutes,
             { _ -> },
             null
         )
@@ -167,12 +168,12 @@ class NewReminderDialog @AssistedInject constructor(
                     amount = dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
                 )
 
-                val minutes = if (reminder.reminderType == ReminderType.TIME_BASED) {
-                    timeEditor.getMinutes()
+                val reminderTime = if (reminder.reminderType == ReminderType.TIME_BASED) {
+                    ReminderTime(timeEditor.getMinutes())
                 } else {
-                    intervalEditor.getMinutes()
+                    ReminderTime(intervalEditor.getMinutes(), isDuration = true)
                 }
-                updatedReminder = updatedReminder.copy(time = LocalTime.ofSecondOfDay(minutes * 60L))
+                updatedReminder = updatedReminder.copy(time = reminderTime)
                 if (reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) {
                     updatedReminder = updatedReminder.copy(
                         intervalStart = Instant.ofEpochSecond(intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()),
@@ -185,7 +186,7 @@ class NewReminderDialog @AssistedInject constructor(
                         intervalEndTimeOfDay = LocalTime.ofSecondOfDay(dailyEndTimeEditor.getMinutes() * 60L)
                     )
                 }
-                if (minutes >= 0 && (reminder.reminderType == ReminderType.TIME_BASED || reminder.intervalStart != Instant.EPOCH)) {
+                if (reminder.reminderType == ReminderType.TIME_BASED || reminder.intervalStart != Instant.EPOCH) {
                     reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,

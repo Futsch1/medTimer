@@ -8,6 +8,7 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.ModelDataStore
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -69,8 +70,8 @@ class ReminderDataStore @AssistedInject constructor(
             "period_end_date" -> timeFormatter.daysSinceEpochToDateString(modelData.periodEnd.toEpochDay())
             "interval_start" -> if (modelData.intervalStartsFromProcessed) "1" else "0"
             "interval_start_time" -> timeFormatter.secondsSinceEpochToDateTimeString(modelData.intervalStart.epochSecond)
-            "interval_daily_start_time" -> timeFormatter.minutesToTimeString(modelData.intervalStartTimeOfDay.toSecondOfDay() / 60)
-            "interval_daily_end_time" -> timeFormatter.minutesToTimeString(modelData.intervalEndTimeOfDay.toSecondOfDay() / 60)
+            "interval_daily_start_time" -> timeFormatter.toTimeString(modelData.intervalStartTimeOfDay)
+            "interval_daily_end_time" -> timeFormatter.toTimeString(modelData.intervalEndTimeOfDay)
             "stock_threshold" -> MedicineHelper.formatAmount(modelData.outOfStockThreshold, "")
             "stock_reminder" -> modelData.outOfStockReminderType.ordinal.toString()
             "expiration_reminder" -> modelData.expirationReminderType.ordinal.toString()
@@ -90,8 +91,12 @@ class ReminderDataStore @AssistedInject constructor(
             "period_end_date" -> modelData = modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
             "interval_start" -> modelData = modelData.copy(intervalStartsFromProcessed = value == "1")
             "interval_start_time" -> modelData = modelData.copy(intervalStart = Instant.ofEpochSecond(timeFormatter.stringToSecondsSinceEpoch(value!!)))
-            "interval_daily_start_time" -> modelData = modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
-            "interval_daily_end_time" -> modelData = modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+            "interval_daily_start_time" -> modelData =
+                modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+
+            "interval_daily_end_time" -> modelData =
+                modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+
             "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(outOfStockThreshold = it) }
             "stock_reminder" -> modelData = modelData.copy(outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()])
             "expiration_reminder" -> modelData = modelData.copy(expirationReminderType = Reminder.ExpirationReminderType.entries[value!!.toInt()])
@@ -103,14 +108,14 @@ class ReminderDataStore @AssistedInject constructor(
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {
-            "interval" -> modelData.time.toSecondOfDay() / 60
+            "interval" -> modelData.time.minutes
             else -> defValue
         }
     }
 
     override fun putInt(key: String?, value: Int) {
         when (key) {
-            "interval" -> modelData = modelData.copy(time = LocalTime.ofSecondOfDay(value * 60L))
+            "interval" -> modelData = modelData.copy(time = ReminderTime(value, isDuration = true))
         }
 
         updateReminder(modelData)

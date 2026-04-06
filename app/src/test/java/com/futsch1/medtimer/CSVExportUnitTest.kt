@@ -15,6 +15,7 @@ import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
@@ -134,9 +135,9 @@ class CSVExportUnitTest {
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     fun testCreateMedicineCsvFileWithCorrectHeadersAndData() {
-        val firstReminder = Reminder.default().copy(medicineRelId = 1, time = LocalTime.of(1, 0), amount = "1")
-        val secondReminder = Reminder.default().copy(medicineRelId = 1, time = LocalTime.of(1, 1), amount = "2")
-        val thirdReminder = Reminder.default().copy(medicineRelId = 2, time = LocalTime.of(1, 2), amount = "three")
+        val firstReminder = Reminder.default().copy(medicineRelId = 1, time = ReminderTime(LocalTime.of(1, 0)), amount = "1")
+        val secondReminder = Reminder.default().copy(medicineRelId = 1, time = ReminderTime(LocalTime.of(1, 1)), amount = "2")
+        val thirdReminder = Reminder.default().copy(medicineRelId = 2, time = ReminderTime(LocalTime.of(1, 2)), amount = "three")
 
         // Create a list of Medicines
         val medicines = listOf(

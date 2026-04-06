@@ -8,7 +8,7 @@ import java.time.LocalTime
 data class Reminder(
     val id: Int,
     val medicineRelId: Int,
-    val time: LocalTime,
+    val time: ReminderTime,
     val createdTime: Instant,
     val consecutiveDays: Int,
     val pauseDays: Int,
@@ -71,7 +71,7 @@ data class Reminder(
         fun default(): Reminder = Reminder(
             id = 0,
             medicineRelId = 0,
-            time = LocalTime.of(8, 0),
+            time = ReminderTime(LocalTime.of(8, 0)),
             createdTime = Instant.EPOCH,
             consecutiveDays = 1,
             pauseDays = 0,
