@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.statistics
 
+import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.MedicineRepository
@@ -13,12 +13,12 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.helpers.addDividerToSpan
 import com.futsch1.medtimer.helpers.addImageToSpan
-import com.futsch1.medtimer.overview.getImage
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
+import com.futsch1.medtimer.overview.model.getImage
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,

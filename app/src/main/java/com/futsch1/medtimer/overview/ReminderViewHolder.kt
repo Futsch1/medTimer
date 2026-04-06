@@ -25,6 +25,8 @@ import com.futsch1.medtimer.overview.model.EventPosition
 import com.futsch1.medtimer.overview.model.OverviewEvent
 import com.futsch1.medtimer.overview.model.OverviewState
 import com.futsch1.medtimer.overview.model.PastReminderEvent
+import com.futsch1.medtimer.overview.model.getImage
+import com.futsch1.medtimer.overview.model.toString
 import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
