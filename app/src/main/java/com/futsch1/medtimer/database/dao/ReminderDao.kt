@@ -9,38 +9,38 @@ import com.futsch1.medtimer.database.ReminderEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class ReminderDao {
+interface ReminderDao {
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId = :medicineId ORDER BY timeInMinutes")
-    abstract fun getAllFlow(medicineId: Int): Flow<List<ReminderEntity>>
+    fun getAllFlow(medicineId: Int): Flow<List<ReminderEntity>>
 
     @Query("SELECT * FROM Reminder WHERE medicineRelId = :medicineId")
-    abstract suspend fun getAll(medicineId: Int): List<ReminderEntity>
+    suspend fun getAll(medicineId: Int): List<ReminderEntity>
 
     @Query("SELECT * FROM Reminder WHERE reminderId = :reminderId")
-    abstract suspend fun get(reminderId: Int): ReminderEntity?
+    suspend fun get(reminderId: Int): ReminderEntity?
 
     @Query("SELECT * FROM Reminder WHERE reminderId = :reminderId")
-    abstract fun getFlow(reminderId: Int): Flow<ReminderEntity?>
+    fun getFlow(reminderId: Int): Flow<ReminderEntity?>
 
     @Query("SELECT * FROM Reminder WHERE linkedReminderId = :reminderId")
-    abstract suspend fun getLinked(reminderId: Int): List<ReminderEntity>
+    suspend fun getLinked(reminderId: Int): List<ReminderEntity>
 
     @Insert
-    abstract suspend fun create(reminder: ReminderEntity): Long
+    suspend fun create(reminder: ReminderEntity): Long
 
     @Insert
-    abstract suspend fun createAll(reminders: List<ReminderEntity>)
+    suspend fun createAll(reminders: List<ReminderEntity>)
 
     @Update
-    abstract suspend fun update(reminder: ReminderEntity)
+    suspend fun update(reminder: ReminderEntity)
 
     @Update
-    abstract suspend fun updateAll(reminders: List<ReminderEntity>)
+    suspend fun updateAll(reminders: List<ReminderEntity>)
 
     @Delete
-    abstract suspend fun delete(reminder: ReminderEntity)
+    suspend fun delete(reminder: ReminderEntity)
 
     @Query("DELETE FROM Reminder")
-    abstract suspend fun deleteAll()
+    suspend fun deleteAll()
 }

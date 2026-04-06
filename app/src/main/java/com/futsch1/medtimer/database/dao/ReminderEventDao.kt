@@ -10,47 +10,47 @@ import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class ReminderEventDao {
+interface ReminderEventDao {
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp DESC")
-    abstract fun getAllFlowStartingFrom(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): Flow<List<ReminderEventEntity>>
+    fun getAllFlowStartingFrom(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): Flow<List<ReminderEventEntity>>
 
     @Query("SELECT * FROM ReminderEvent WHERE status IN (:statusValues) AND remindedTimestamp > :fromTimestamp ORDER BY remindedTimestamp")
-    abstract suspend fun getAllLimited(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): List<ReminderEventEntity>
+    suspend fun getAllLimited(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId = :reminderEventId")
-    abstract suspend fun get(reminderEventId: Int): ReminderEventEntity?
+    suspend fun get(reminderEventId: Int): ReminderEventEntity?
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId = :reminderEventId")
-    abstract fun getFlow(reminderEventId: Int): Flow<ReminderEventEntity?>
+    fun getFlow(reminderEventId: Int): Flow<ReminderEventEntity?>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId ORDER BY remindedTimestamp DESC")
-    abstract suspend fun getAllByReminder(reminderId: Int): List<ReminderEventEntity>
+    suspend fun getAllByReminder(reminderId: Int): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId ORDER BY remindedTimestamp DESC LIMIT 1")
-    abstract suspend fun getLast(reminderId: Int): ReminderEventEntity?
+    suspend fun getLast(reminderId: Int): ReminderEventEntity?
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId ORDER BY remindedTimestamp DESC LIMIT :limit")
-    abstract suspend fun getLastN(reminderId: Int, limit: Int): List<ReminderEventEntity>
+    suspend fun getLastN(reminderId: Int, limit: Int): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId AND remindedTimestamp = :remindedTimestamp")
-    abstract suspend fun get(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
+    suspend fun get(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
 
     @Insert
-    abstract suspend fun create(reminderEvent: ReminderEventEntity): Long
+    suspend fun create(reminderEvent: ReminderEventEntity): Long
 
     @Insert
-    abstract suspend fun createAll(reminderEvents: List<ReminderEventEntity>)
+    suspend fun createAll(reminderEvents: List<ReminderEventEntity>)
 
     @Update
-    abstract suspend fun update(reminderEvent: ReminderEventEntity)
+    suspend fun update(reminderEvent: ReminderEventEntity)
 
     @Update
-    abstract suspend fun updateAll(reminderEvents: List<ReminderEventEntity>)
+    suspend fun updateAll(reminderEvents: List<ReminderEventEntity>)
 
     @Delete
-    abstract suspend fun delete(reminderEvent: ReminderEventEntity)
+    suspend fun delete(reminderEvent: ReminderEventEntity)
 
     @Query("DELETE FROM ReminderEvent")
-    abstract suspend fun deleteAll()
+    suspend fun deleteAll()
 }
