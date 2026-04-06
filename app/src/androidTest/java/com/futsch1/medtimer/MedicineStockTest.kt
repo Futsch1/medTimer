@@ -271,6 +271,14 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("3", LocalTime.of(22, 0))
         AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
 
+        clickOn(R.id.addReminder)
+        clickOn(R.id.stockReminderCard)
+        writeTo(R.id.editStockThreshold, "12")
+        clickOn(R.string.daily_below_threshold)
+        clickOn(R.id.editReminderTime)
+        AndroidTestHelper.setTime(22, 0, false)
+        clickOn(R.id.createReminder)
+
         clickOn(R.id.openStockTracking)
         clickOn(R.string.amount)
         setValue("10")

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.statistics
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.database.MedicineRepository
@@ -10,6 +11,9 @@ import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
+import com.futsch1.medtimer.helpers.addDividerToSpan
+import com.futsch1.medtimer.helpers.addImageToSpan
+import com.futsch1.medtimer.overview.getImage
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ScheduledReminder
@@ -19,6 +23,7 @@ import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,6 +37,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
@@ -144,6 +150,11 @@ class CalendarEventsViewModel @Inject constructor(
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
-        return reminderEventFactory.create(reminderEvent).text
+        val overviewReminderEvent = reminderEventFactory.create(reminderEvent)
+        val builder = SpannableStringBuilder()
+        addDividerToSpan(builder)
+        addImageToSpan(overviewReminderEvent.state.getImage(), builder, context)
+
+        return builder.append(" ").append(overviewReminderEvent.text)
     }
 }

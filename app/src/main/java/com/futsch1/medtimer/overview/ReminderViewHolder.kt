@@ -189,20 +189,9 @@ class ReminderViewHolder(
     }
 
     private fun setStateButton(state: OverviewState) {
-        val imageResource = when (state) {
-            OverviewState.PENDING -> R.drawable.alarm
-            OverviewState.TAKEN -> R.drawable.check2_circle
-            OverviewState.SKIPPED -> R.drawable.x_circle
-            OverviewState.RAISED -> R.drawable.bell
-        }
-        stateButton.setImageResource(imageResource)
-        stateButton.tag = imageResource
-        stateButton.contentDescription = when (state) {
-            OverviewState.PENDING -> fragmentActivity.getString(R.string.please_wait)
-            OverviewState.TAKEN -> fragmentActivity.getString(R.string.taken)
-            OverviewState.SKIPPED -> fragmentActivity.getString(R.string.skipped)
-            OverviewState.RAISED -> fragmentActivity.getString(R.string.reminded)
-        }
+        stateButton.setImageResource(state.getImage())
+        stateButton.tag = state.getImage()
+        stateButton.contentDescription = state.toString(fragmentActivity)
     }
 
     private fun setBarsVisibility(position: EventPosition) {

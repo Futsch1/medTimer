@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -117,6 +118,12 @@ class NotificationProcessor @Inject constructor(
         val processedTime = timeAccess.now()
 
         val reminderEvents = reminderEvents.map { reminderEvent ->
+            val status =
+                if (reminderEvent.reminderType == ReminderType.OUT_OF_STOCK || reminderEvent.reminderType == ReminderType.EXPIRATION_DATE) {
+                    ReminderEvent.ReminderStatus.ACKNOWLEDGED
+                } else {
+                    status
+                }
             Log.i(
                 LogTags.REMINDER, String.format(
                     "%s reminder reID %d for %s (%s)",

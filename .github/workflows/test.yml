@@ -79,12 +79,7 @@ jobs:
           cores: 4
 
       - name: Android lint
-        run: ./gradlew lint -PnoGradleDeps
-        if: github.ref != 'refs/heads/main'
-
-      - name: Android lint
         run: ./gradlew lint
-        if: github.ref == 'refs/heads/main'
 
       - uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v2.2.0
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
