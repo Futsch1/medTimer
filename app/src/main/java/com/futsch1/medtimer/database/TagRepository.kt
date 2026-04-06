@@ -13,13 +13,13 @@ open class TagRepository(
         return tagDao.getMedicineTagsFlow()
     }
 
-    suspend fun create(tag: TagEntity): Long {
-        val existingTagId = getByName(tag.name)?.tagId?.toLong()
-        return existingTagId ?: tagDao.create(tag)
+    suspend fun create(tag: Tag): Long {
+        val existingTagId = getByName(tag.name)?.id?.toLong()
+        return existingTagId ?: tagDao.create(tag.toEntity())
     }
 
-    suspend fun getByName(name: String): TagEntity? {
-        return tagDao.getByName(name)
+    suspend fun getByName(name: String): Tag? {
+        return tagDao.getByName(name)?.toModel()
     }
 
     suspend fun delete(tag: Tag) {

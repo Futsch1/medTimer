@@ -7,7 +7,7 @@ import java.time.Instant
 class JSONMedicineBackup(
     private val medicineDao: MedicineDao,
     private val reminderDao: ReminderDao,
-    private val tagRepository: TagRepository
+    private val tagDao: TagDao
 ) : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
         // Correct the medicines where the reminder's instructions are null in this loop
@@ -32,7 +32,7 @@ class JSONMedicineBackup(
     override suspend fun applyBackup(list: List<FullMedicineEntity>) {
         reminderDao.deleteAll()
         medicineDao.deleteAll()
-        tagRepository.deleteAll()
+        tagDao.deleteAll()
 
         var sortOrder = 1.0
 
@@ -48,8 +48,8 @@ class JSONMedicineBackup(
 
     private suspend fun processTags(fullMedicine: FullMedicineEntity, medicineId: Int) {
         for (tag in fullMedicine.tags) {
-            val tagId = tagRepository.create(tag).toInt()
-            tagRepository.addMedicineTag(medicineId, tagId)
+            val tagId = tagDao.create(tag).toInt()
+            tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
         }
     }
 

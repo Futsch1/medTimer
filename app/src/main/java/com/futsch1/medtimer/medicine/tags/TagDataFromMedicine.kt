@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
+import com.futsch1.medtimer.model.Tag
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -73,7 +73,7 @@ class TagDataFromMedicine @AssistedInject constructor(
 
     override fun addTag(tagName: String) {
         fragment.lifecycleScope.launch(dispatcher) {
-            val tagId = tagRepository.create(TagEntity(tagName))
+            val tagId = tagRepository.create(Tag(tagName, 0))
             viewModel.associateTag(medicineId, tagId.toInt())
         }
     }

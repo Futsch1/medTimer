@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.map
 open class MedicineRepository(
     private val medicineDao: MedicineDao
 ) {
-    fun getFullAllFlow(): Flow<List<FullMedicineEntity>> = medicineDao.getMedicinesFlow()
-
     suspend fun get(medicineId: Int): Medicine? {
         return medicineDao.getMedicine(medicineId)?.toModel()
     }

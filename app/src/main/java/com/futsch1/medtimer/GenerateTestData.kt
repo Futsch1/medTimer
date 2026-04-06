@@ -5,10 +5,10 @@ import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.TagEntity
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.database.toModel
 import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Tag
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -69,7 +69,7 @@ class GenerateTestData @AssistedInject constructor(
                         .toInt()
             }
             for (tag in testMedicine.tags) {
-                val tagId = tagRepository.create(TagEntity(tag))
+                val tagId = tagRepository.create(Tag(tag, 0))
                 tagRepository.addMedicineTag(medicineId, tagId.toInt())
             }
             if (withEvents) {
