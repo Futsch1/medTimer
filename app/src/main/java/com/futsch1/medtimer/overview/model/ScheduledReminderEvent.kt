@@ -16,7 +16,7 @@ class ScheduledReminderEvent @AssistedInject constructor(
     OverviewEvent(preferencesDataSource) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(scheduledReminder: ScheduledReminder): ScheduledReminderEvent
     }
 

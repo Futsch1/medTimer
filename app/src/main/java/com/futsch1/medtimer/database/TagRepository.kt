@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.map
 open class TagRepository(
     private val tagDao: TagDao
 ) {
-    fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow().map { it -> it.map { it.toModel() } }
+    fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow().map { list ->
+        list.map { it.toModel() }
+    }
 
     fun getMedicineTagsFlow(): Flow<List<MedicineToTagEntity>> {
         return tagDao.getMedicineTagsFlow()

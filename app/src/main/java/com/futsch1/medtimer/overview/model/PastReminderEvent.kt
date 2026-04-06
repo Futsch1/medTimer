@@ -17,7 +17,7 @@ class PastReminderEvent @AssistedInject constructor(
     OverviewEvent(preferencesDataSource) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(reminderEvent: ReminderEvent): PastReminderEvent
     }
 
