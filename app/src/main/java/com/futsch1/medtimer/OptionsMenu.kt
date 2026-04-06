@@ -22,6 +22,7 @@ import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.exporters.CSVEventExport

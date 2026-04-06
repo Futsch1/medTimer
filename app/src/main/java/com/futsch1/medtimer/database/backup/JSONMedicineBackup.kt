@@ -1,5 +1,13 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.backup
 
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.MedicineToTagEntity
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.TagEntity
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import java.time.Instant

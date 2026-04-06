@@ -17,10 +17,10 @@ import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.toEntity
-import com.futsch1.medtimer.database.toModel
-import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.database.toModel.toEntity
+import com.futsch1.medtimer.database.toModel.toModel
 import com.futsch1.medtimer.model.PersistentData
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource

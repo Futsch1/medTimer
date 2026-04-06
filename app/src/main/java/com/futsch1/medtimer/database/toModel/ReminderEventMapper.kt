@@ -1,5 +1,7 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.toModel
 
+import com.futsch1.medtimer.database.ReminderEntityType
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
 import java.time.Instant

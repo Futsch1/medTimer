@@ -6,7 +6,7 @@ import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.TagRepository
-import com.futsch1.medtimer.database.toModel
+import com.futsch1.medtimer.database.toModel.toModel
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Tag
 import dagger.assisted.Assisted

@@ -2,10 +2,10 @@ package com.futsch1.medtimer
 
 import android.graphics.Color
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.JSONMedicineBackup
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.backup.JSONMedicineBackup
 import org.junit.Test
 import org.mockito.kotlin.mock
 import kotlin.test.assertEquals

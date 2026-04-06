@@ -1,10 +1,12 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.futsch1.medtimer.database.MedicineToTagEntity
+import com.futsch1.medtimer.database.TagEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

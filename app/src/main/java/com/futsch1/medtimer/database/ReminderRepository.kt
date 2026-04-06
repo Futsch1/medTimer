@@ -1,5 +1,8 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.toModel.toEntity
+import com.futsch1.medtimer.database.toModel.toModel
 import com.futsch1.medtimer.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,10 +34,6 @@ open class ReminderRepository(
 
     suspend fun create(reminder: Reminder): Long {
         return reminderDao.create(reminder.toEntity())
-    }
-
-    suspend fun createAll(reminders: List<Reminder>) {
-        reminderDao.createAll(reminders.map { it.toEntity() })
     }
 
     suspend fun update(reminder: Reminder) {

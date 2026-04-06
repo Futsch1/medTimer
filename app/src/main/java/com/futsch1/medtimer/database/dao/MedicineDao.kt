@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,6 +6,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

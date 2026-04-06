@@ -1,6 +1,8 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.toModel
 
 import com.futsch1.medtimer.ReminderNotificationChannelManager
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.model.Medicine
 import java.time.LocalDate
 

@@ -1,10 +1,11 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
 import kotlinx.coroutines.flow.Flow
 

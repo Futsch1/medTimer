@@ -1,4 +1,4 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.database.backup
 
 import android.content.Context
 import android.content.DialogInterface
@@ -12,19 +12,18 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.database.JSONBackup
-import com.futsch1.medtimer.database.JSONMedicineBackup
-import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.MedicineDao
+import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.MedicineRoomDatabase
-import com.futsch1.medtimer.database.ReminderDao
-import com.futsch1.medtimer.database.ReminderEventDao
-import com.futsch1.medtimer.database.TagDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.FileHelper
-import com.futsch1.medtimer.helpers.PathHelper.backupFilename
+import com.futsch1.medtimer.helpers.PathHelper
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
 import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -200,7 +199,7 @@ class BackupManager @AssistedInject constructor(
     }
 
     private fun createAndSave(fileContent: String?) {
-        val file = File(context.cacheDir, backupFilename)
+        val file = File(context.cacheDir, PathHelper.backupFilename)
         if (FileHelper.saveToFile(file, fileContent)) {
             FileHelper.shareFile(context, file)
         } else {
@@ -317,7 +316,7 @@ class BackupManager @AssistedInject constructor(
         )
 
         val json = gson.toJson(jsonObject)
-        val filename = backupFilename
+        val filename = PathHelper.backupFilename
         val success = saveToDirectory(directoryUri, filename, json)
 
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {

@@ -1,5 +1,7 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.backup
 
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.google.gson.GsonBuilder
 
 class JSONReminderEventBackup(

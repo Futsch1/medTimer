@@ -4,7 +4,11 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import com.futsch1.medtimer.database.MedicineEntity
-import com.futsch1.medtimer.database.toEntity
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
@@ -81,16 +85,16 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = org.mockito.Mockito.mock()
 
     @BindValue
-    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = org.mockito.Mockito.mock()
+    val boundMedicineDao: MedicineDao = org.mockito.Mockito.mock()
 
     @BindValue
-    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = org.mockito.Mockito.mock()
+    val boundReminderDao: ReminderDao = org.mockito.Mockito.mock()
 
     @BindValue
-    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = org.mockito.Mockito.mock()
+    val boundReminderEventDao: ReminderEventDao = org.mockito.Mockito.mock()
 
     @BindValue
-    val boundTagDao: com.futsch1.medtimer.database.TagDao = org.mockito.Mockito.mock()
+    val boundTagDao: TagDao = org.mockito.Mockito.mock()
 
     @BindValue
     val boundTagRepository: com.futsch1.medtimer.database.TagRepository = org.mockito.Mockito.mock()

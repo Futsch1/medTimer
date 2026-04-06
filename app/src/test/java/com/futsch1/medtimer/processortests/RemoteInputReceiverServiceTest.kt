@@ -3,6 +3,10 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.NotificationManager
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
@@ -78,16 +82,16 @@ class RemoteInputReceiverServiceTest {
     val boundMedicineRoomDatabase: com.futsch1.medtimer.database.MedicineRoomDatabase = mock()
 
     @BindValue
-    val boundMedicineDao: com.futsch1.medtimer.database.MedicineDao = mock()
+    val boundMedicineDao: MedicineDao = mock()
 
     @BindValue
-    val boundReminderDao: com.futsch1.medtimer.database.ReminderDao = mock()
+    val boundReminderDao: ReminderDao = mock()
 
     @BindValue
-    val boundReminderEventDao: com.futsch1.medtimer.database.ReminderEventDao = mock()
+    val boundReminderEventDao: ReminderEventDao = mock()
 
     @BindValue
-    val boundTagDao: com.futsch1.medtimer.database.TagDao = mock()
+    val boundTagDao: TagDao = mock()
 
     @BindValue
     val boundTagRepository: com.futsch1.medtimer.database.TagRepository = mock()

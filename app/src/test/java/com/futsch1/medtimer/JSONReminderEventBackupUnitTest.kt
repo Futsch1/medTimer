@@ -1,10 +1,10 @@
 package com.futsch1.medtimer
 
 import android.graphics.Color
-import com.futsch1.medtimer.database.JSONReminderEventBackup
 import com.futsch1.medtimer.database.ReminderEntityType
-import com.futsch1.medtimer.database.ReminderEventDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.database.backup.JSONReminderEventBackup
 import org.junit.Test
 import org.mockito.kotlin.mock
 import kotlin.test.assertEquals

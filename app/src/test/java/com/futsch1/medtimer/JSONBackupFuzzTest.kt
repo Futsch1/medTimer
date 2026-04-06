@@ -1,12 +1,12 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.database.JSONBackup
-import com.futsch1.medtimer.database.JSONMedicineBackup
-import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.MedicineDao
-import com.futsch1.medtimer.database.ReminderDao
-import com.futsch1.medtimer.database.ReminderEventDao
-import com.futsch1.medtimer.database.TagDao
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.backup.JSONBackup
+import com.futsch1.medtimer.database.backup.JSONMedicineBackup
+import com.futsch1.medtimer.database.backup.JSONReminderEventBackup
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
