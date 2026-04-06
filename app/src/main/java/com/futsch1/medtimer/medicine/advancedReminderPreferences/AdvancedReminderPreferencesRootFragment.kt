@@ -98,7 +98,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     }
 
     private fun getDaysSummary(reminder: Reminder): String {
-        return if (reminder.activeDaysOfMonth.isEmpty()) {
+        return if (reminder.activeDaysOfMonth.isEmpty() || reminder.activeDaysOfMonth.size == 31) {
             requireContext().getString(R.string.every_day_of_month)
         } else {
             requireContext().getString(R.string.on_day_of_month, reminder.activeDaysOfMonth.joinToString(", "))
@@ -106,7 +106,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     }
 
     private fun getWeekdaysSummary(reminder: Reminder): String {
-        return if (reminder.days.isEmpty()) {
+        return if (reminder.days.isEmpty() || reminder.days.size == 7) {
             requireContext().getString(R.string.every_day)
         } else {
             reminder.days.joinToString(", ") { it.getDisplayName(TextStyle.FULL, requireContext().resources.configuration.locales[0]) }

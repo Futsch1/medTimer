@@ -155,8 +155,8 @@ class ReminderSummaryFormatter @Inject constructor(
         reminder: Reminder,
         strings: MutableList<String>
     ) {
-        val dayOfMonthLimited = reminder.activeDaysOfMonth.isNotEmpty()
-        val hasWeekdayRestriction = reminder.days.isNotEmpty()
+        val dayOfMonthLimited = reminder.activeDaysOfMonth.isNotEmpty() && reminder.activeDaysOfMonth.size != 31
+        val hasWeekdayRestriction = reminder.days.isNotEmpty() && reminder.days.size != 7
 
         buildReminderStrings(
             strings,

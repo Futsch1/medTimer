@@ -186,7 +186,7 @@ class NewReminderDialog @AssistedInject constructor(
                         intervalEndTimeOfDay = LocalTime.ofSecondOfDay(dailyEndTimeEditor.getMinutes() * 60L)
                     )
                 }
-                if (reminder.reminderType == ReminderType.TIME_BASED || reminder.intervalStart != Instant.EPOCH) {
+                if (reminderTime.minutes >= 0) {
                     reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,

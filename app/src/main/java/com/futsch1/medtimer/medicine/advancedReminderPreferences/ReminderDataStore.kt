@@ -126,20 +126,16 @@ class ReminderDataStore @AssistedInject constructor(
             "remind_on_weekdays" -> {
                 val dayStrings = context.resources.getStringArray(R.array.one_to_seven)
                 DayOfWeek.entries.mapIndexedNotNull { i, dow ->
-                    if (dow in modelData.days) dayStrings[i] else null
+                    if (dow in modelData.days || modelData.days.isEmpty()) dayStrings[i] else null
                 }.toSet()
             }
 
             "remind_on_days" -> {
                 val dayStrings = context.resources.getStringArray(R.array.days_of_month)
-                if (modelData.activeDaysOfMonth.size < 31) {
-                    dayStrings.indices
-                        .filter { i -> (i + 1) in modelData.activeDaysOfMonth }
-                        .map { i -> dayStrings[i] }
-                        .toSet()
-                } else {
-                    emptySet()
-                }
+                dayStrings.indices
+                    .filter { i -> (i + 1) in modelData.activeDaysOfMonth || modelData.activeDaysOfMonth.isEmpty() }
+                    .map { i -> dayStrings[i] }
+                    .toSet()
             }
 
             else -> defValues

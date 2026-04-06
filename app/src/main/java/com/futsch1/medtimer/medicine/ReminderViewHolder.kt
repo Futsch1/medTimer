@@ -147,8 +147,8 @@ class ReminderViewHolder @AssistedInject constructor(
 
     fun getUpdatedReminder(): Reminder {
         val minutes = timeEditor?.getMinutes() ?: -1
-        val newTime = if (minutes >= 0) ReminderTime(minutes) else reminder.time
+        val newTime = if (minutes >= 0 && reminder.usesTimeInMinutes) ReminderTime(minutes) else reminder.time
 
-        return reminder.copy(time = newTime, amount = editAmount.text.toString())
+        return reminder.copy(time = newTime, amount = editAmount.text.toString().trim())
     }
 }

@@ -60,13 +60,6 @@ class VariableAmountHandler @Inject constructor(
                 }
                 .show()
         }
-
-        withContext(ioDispatcher) {
-            notificationProcessor.setReminderEventStatus(
-                ReminderEvent.ReminderStatus.TAKEN,
-                reminderEvents,
-            )
-        }
     }
 
     private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {

@@ -142,21 +142,20 @@ class NotificationProcessor @Inject constructor(
     }
 
     private suspend fun doStockHandling(status: ReminderEvent.ReminderStatus, reminderEvent: ReminderEvent, processedTime: Instant): Boolean {
-        if (reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN ||
-            !reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
+        if (!reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN ||
+            reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
         ) {
-            return false
+            val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return false
+            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return false
+            if (status == ReminderEvent.ReminderStatus.SKIPPED) {
+                amount = -amount
+            }
+            stockHandlingProcessor.processStock(
+                amount,
+                reminder.medicineRelId,
+                processedTime
+            )
         }
-        val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return false
-        var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return false
-        if (status == ReminderEvent.ReminderStatus.SKIPPED) {
-            amount = -amount
-        }
-        stockHandlingProcessor.processStock(
-            amount,
-            reminder.medicineRelId,
-            processedTime
-        )
         return status == ReminderEvent.ReminderStatus.TAKEN
     }
 }
