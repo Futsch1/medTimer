@@ -169,7 +169,7 @@ class BackupManager @AssistedInject constructor(
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
                     JSONMedicineBackup(medicineDao, reminderDao, tagDao),
-                    medicineDao.getMedicines()
+                    medicineDao.getAll()
                 )
             )
         }
@@ -305,7 +305,7 @@ class BackupManager @AssistedInject constructor(
         jsonObject.add(
             MEDICINE_KEY, createBackup(
                 JSONMedicineBackup(medicineDao, reminderDao, tagDao),
-                medicineDao.getMedicines()
+                medicineDao.getAll()
             )
         )
         jsonObject.add(

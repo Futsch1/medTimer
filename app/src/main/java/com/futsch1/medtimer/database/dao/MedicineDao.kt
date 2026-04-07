@@ -15,42 +15,42 @@ abstract class MedicineDao {
 
     @Transaction
     open suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicineEntity? {
-        val medicine = getOnlyMedicine(medicineId) ?: return null
+        val medicine = get(medicineId) ?: return null
         medicine.amount = maxOf(0.0, medicine.amount - decreaseAmount)
-        updateMedicine(medicine)
-        return getMedicine(medicineId)
+        update(medicine)
+        return getFull(medicineId)
     }
 
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
-    abstract fun getMedicinesFlow(): Flow<List<FullMedicineEntity>>
+    abstract fun getAllFlow(): Flow<List<FullMedicineEntity>>
 
     @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
-    abstract suspend fun getMedicines(): List<FullMedicineEntity>
+    abstract suspend fun getAll(): List<FullMedicineEntity>
 
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
-    abstract suspend fun getOnlyMedicine(medicineId: Int): MedicineEntity?
-
-    @Transaction
-    @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
-    abstract suspend fun getMedicine(medicineId: Int): FullMedicineEntity?
+    abstract suspend fun get(medicineId: Int): MedicineEntity?
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
-    abstract fun getMedicineFlow(medicineId: Int): Flow<FullMedicineEntity?>
+    abstract suspend fun getFull(medicineId: Int): FullMedicineEntity?
+
+    @Transaction
+    @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
+    abstract fun getFlow(medicineId: Int): Flow<FullMedicineEntity?>
 
     @Insert
-    abstract suspend fun insertMedicine(medicine: MedicineEntity): Long
+    abstract suspend fun create(medicine: MedicineEntity): Long
 
     @Update
-    abstract suspend fun updateMedicine(medicine: MedicineEntity)
+    abstract suspend fun update(medicine: MedicineEntity)
 
     @Update
-    abstract suspend fun updateMedicines(medicines: List<MedicineEntity>)
+    abstract suspend fun updateAll(medicines: List<MedicineEntity>)
 
     @Delete
-    abstract suspend fun deleteMedicine(medicine: MedicineEntity)
+    abstract suspend fun delete(medicine: MedicineEntity)
 
     @Query("DELETE FROM Medicine")
     abstract suspend fun deleteAll()

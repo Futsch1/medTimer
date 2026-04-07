@@ -32,8 +32,8 @@ open class ReminderRepository(
         return reminderDao.getLinked(reminderId).map { it.toModel() }
     }
 
-    suspend fun create(reminder: Reminder): Long {
-        return reminderDao.create(reminder.toEntity())
+    suspend fun create(reminder: Reminder): Int {
+        return reminderDao.create(reminder.toEntity()).toInt()
     }
 
     suspend fun update(reminder: Reminder) {

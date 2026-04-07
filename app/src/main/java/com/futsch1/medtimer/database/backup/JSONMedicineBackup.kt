@@ -1,13 +1,13 @@
 package com.futsch1.medtimer.database.backup
 
 import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineToTagEntity
-import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.TagDao
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import java.time.Instant
@@ -18,11 +18,9 @@ class JSONMedicineBackup(
     private val tagDao: TagDao
 ) : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
     override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
-        // Correct the medicines where the reminder's instructions are null in this loop
-        for (fullMedicine in list) {
-            fullMedicine.reminders.filter { reminder -> reminder.instructions == null }
-                .forEach { reminder -> reminder.instructions = "" }
-        }
+        list.flatMap { it.reminders }
+            .filter { it.instructions == null }
+            .forEach { it.instructions = "" }
         return super.createBackup(databaseVersion, list)
     }
 
@@ -48,7 +46,7 @@ class JSONMedicineBackup(
             if (fullMedicine.medicine.sortOrder == 0.0) {
                 fullMedicine.medicine.sortOrder = sortOrder++
             }
-            val medicineId = medicineDao.insertMedicine(fullMedicine.medicine)
+            val medicineId = medicineDao.create(fullMedicine.medicine)
             processReminders(fullMedicine, medicineId.toInt())
             processTags(fullMedicine, medicineId.toInt())
         }

@@ -11,35 +11,35 @@ open class MedicineRepository(
     private val medicineDao: MedicineDao
 ) {
     suspend fun get(medicineId: Int): Medicine? {
-        return medicineDao.getMedicine(medicineId)?.toModel()
+        return medicineDao.getFull(medicineId)?.toModel()
     }
 
     fun getFlow(medicineId: Int): Flow<Medicine?> {
-        return medicineDao.getMedicineFlow(medicineId).map { it?.toModel() }
+        return medicineDao.getFlow(medicineId).map { it?.toModel() }
     }
 
     suspend fun getAll(): List<Medicine> {
-        return medicineDao.getMedicines().map { it.toModel() }
+        return medicineDao.getAll().map { it.toModel() }
     }
 
     fun getAllFlow(): Flow<List<Medicine>> {
-        return medicineDao.getMedicinesFlow().map { medicines -> medicines.map { it.toModel() } }
+        return medicineDao.getAllFlow().map { medicines -> medicines.map { it.toModel() } }
     }
 
-    suspend fun create(medicine: Medicine): Long {
-        return medicineDao.insertMedicine(medicine.toEntity())
+    suspend fun create(medicine: Medicine): Int {
+        return medicineDao.create(medicine.toEntity()).toInt()
     }
 
     suspend fun delete(medicineId: Int) {
-        medicineDao.getOnlyMedicine(medicineId)?.let { medicineDao.deleteMedicine(it) }
+        medicineDao.get(medicineId)?.let { medicineDao.delete(it) }
     }
 
     suspend fun update(medicine: Medicine) {
-        medicineDao.updateMedicine(medicine.toEntity())
+        medicineDao.update(medicine.toEntity())
     }
 
     suspend fun updateAll(medicines: List<Medicine>) {
-        medicineDao.updateMedicines(medicines.map { it.toEntity() })
+        medicineDao.updateAll(medicines.map { it.toEntity() })
     }
 
     suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): Medicine? {
@@ -51,7 +51,7 @@ open class MedicineRepository(
     }
 
     suspend fun move(fromPosition: Int, toPosition: Int) {
-        val medicines = medicineDao.getMedicines().toMutableList()
+        val medicines = medicineDao.getAll().toMutableList()
         if (fromPosition == toPosition || medicines.size < 2) return
 
         val moveMedicine = medicines.removeAt(fromPosition)
@@ -64,7 +64,7 @@ open class MedicineRepository(
         }
 
         moveMedicine.medicine.sortOrder = newSortOrder
-        medicineDao.updateMedicine(moveMedicine.medicine)
+        medicineDao.update(moveMedicine.medicine)
     }
 
     suspend fun deleteAll() {
