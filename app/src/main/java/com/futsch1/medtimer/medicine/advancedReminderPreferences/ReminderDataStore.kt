@@ -133,7 +133,7 @@ class ReminderDataStore @AssistedInject constructor(
             "remind_on_days" -> {
                 val dayStrings = context.resources.getStringArray(R.array.days_of_month)
                 dayStrings.indices
-                    .filter { i -> (i + 1) in modelData.activeDaysOfMonth || modelData.activeDaysOfMonth.isEmpty() }
+                    .filter { i -> (i + 1) in modelData.activeDaysOfMonth }
                     .map { i -> dayStrings[i] }
                     .toSet()
             }

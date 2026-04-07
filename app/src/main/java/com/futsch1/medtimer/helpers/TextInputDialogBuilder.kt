@@ -81,9 +81,9 @@ class TextInputDialogBuilder(
                 editText.text?.let { textSink?.consumeText(it.toString()) }
             }
             .setNegativeButton(com.futsch1.medtimer.R.string.cancel) { dialog: DialogInterface, _: Int ->
+                cancelCallback?.cancel()
                 dialog.dismiss()
             }
-            .setOnDismissListener { cancelCallback?.cancel() }
             .apply {
                 titleString?.let { setTitle(it) }
             }.create()

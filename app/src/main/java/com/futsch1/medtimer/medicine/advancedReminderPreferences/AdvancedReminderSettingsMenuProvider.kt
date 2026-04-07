@@ -42,7 +42,7 @@ class AdvancedReminderSettingsMenuProvider @AssistedInject constructor(
         menu.findItem(R.id.duplicate).setOnMenuItemClickListener { _: MenuItem? ->
             if (this::reminder.isInitialized) {
                 fragment.lifecycleScope.launch(ioDispatcher) {
-                    reminderRepository.create(reminder)
+                    reminderRepository.create(reminder.copy(id = 0))
                 }
                 NavHostFragment.findNavController(fragment).navigateUp()
             }
