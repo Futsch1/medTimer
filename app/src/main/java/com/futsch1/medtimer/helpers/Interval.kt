@@ -4,13 +4,14 @@ import android.content.Context
 import com.futsch1.medtimer.R
 
 enum class IntervalUnit {
-    MINUTES, HOURS, DAYS
+    MINUTES, HOURS, DAYS, MONTHS
 }
 
 private fun getMinutes(unit: IntervalUnit, value: Int) = when (unit) {
     IntervalUnit.MINUTES -> value
     IntervalUnit.HOURS -> value * 60
     IntervalUnit.DAYS -> value * 60 * 24
+    IntervalUnit.MONTHS -> value * 60 * 24 * 31
 }
 
 class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MINUTES) {
@@ -21,6 +22,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
 
     fun getUnit(): IntervalUnit {
         return when {
+            minutesValue % (60 * 24 * 31) == 0 -> IntervalUnit.MONTHS
             minutesValue % (60 * 24) == 0 -> IntervalUnit.DAYS
             minutesValue % 60 == 0 -> IntervalUnit.HOURS
             else -> IntervalUnit.MINUTES
@@ -32,6 +34,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
             IntervalUnit.MINUTES -> minutesValue
             IntervalUnit.HOURS -> minutesValue / 60
             IntervalUnit.DAYS -> minutesValue / (60 * 24)
+            IntervalUnit.MONTHS -> minutesValue / (60 * 24 * 31)
         }
     }
 
@@ -40,6 +43,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
             IntervalUnit.MINUTES -> minutesValue
             IntervalUnit.HOURS -> minutesValue / 60
             IntervalUnit.DAYS -> minutesValue / (60 * 24)
+            IntervalUnit.MONTHS -> minutesValue / (60 * 24 * 31)
         }
     }
 
@@ -65,6 +69,6 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
     }
 
     companion object {
-        const val MAX_INTERVAL_MINUTES = 31 * 60 * 24
+        const val MAX_INTERVAL_MINUTES = 60 * 24 * 31 * 12
     }
 }

@@ -172,6 +172,13 @@
         <item quantity="other">dní</item>
     </plurals>
     <string name="days_string">Dny</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="few">???</item>
+        <item quantity="many">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Vytvořit připomenutí</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Čas začátku intervalu</string>

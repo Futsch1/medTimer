@@ -150,17 +150,22 @@
         <item quantity="one">Minute</item>
         <item quantity="other">Minuten</item>
     </plurals>
+    <string name="minutes_string">Minuten</string>
     <plurals name="hours">
         <item quantity="one">Stunde</item>
         <item quantity="other">Stunden</item>
     </plurals>
+    <string name="hours_string">Stunden</string>
     <plurals name="days">
         <item quantity="one">Tag</item>
         <item quantity="other">Tage</item>
     </plurals>
-    <string name="minutes_string">Minuten</string>
-    <string name="hours_string">Stunden</string>
     <string name="days_string">Tage</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Erinnerung erstellen</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>
