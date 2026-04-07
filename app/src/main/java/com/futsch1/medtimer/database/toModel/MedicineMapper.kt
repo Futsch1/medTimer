@@ -5,24 +5,22 @@ import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.model.Medicine
 import java.time.LocalDate
 
-fun Medicine.toEntity(): MedicineEntity {
-    val entity = MedicineEntity()
-    entity.name = name
-    entity.medicineId = id
-    entity.color = color
-    entity.useColor = useColor
-    entity.notificationImportance = notificationImportance.value
-    entity.iconId = iconId
-    entity.amount = amount
-    entity.refillSizes = if (refillSize != 0.0) mutableListOf(refillSize) else mutableListOf()
-    entity.unit = unit
-    entity.notes = notes
-    entity.showNotificationAsAlarm = showNotificationAsAlarm
-    entity.productionDate = productionDate.toEpochDay()
-    entity.expirationDate = expirationDate.toEpochDay()
-    entity.sortOrder = sortOrder
-    return entity
-}
+fun Medicine.toEntity(): MedicineEntity = MedicineEntity(
+    name = name,
+    medicineId = id,
+    color = color,
+    useColor = useColor,
+    notificationImportance = notificationImportance.value,
+    iconId = iconId,
+    amount = amount,
+    refillSizes = if (refillSize != 0.0) mutableListOf(refillSize) else mutableListOf(),
+    unit = unit,
+    sortOrder = sortOrder,
+    notes = notes,
+    showNotificationAsAlarm = showNotificationAsAlarm,
+    productionDate = productionDate.toEpochDay(),
+    expirationDate = expirationDate.toEpochDay()
+)
 
 fun FullMedicineEntity.toModel(): Medicine {
     return Medicine(

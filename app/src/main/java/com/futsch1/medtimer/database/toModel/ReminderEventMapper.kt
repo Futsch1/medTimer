@@ -28,28 +28,26 @@ fun ReminderEventEntity.toModel(): ReminderEvent =
         lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
     )
 
-fun ReminderEvent.toEntity(): ReminderEventEntity {
-    val entity = ReminderEventEntity()
-    entity.reminderEventId = reminderEventId
-    entity.reminderId = reminderId
-    entity.medicineName = medicineName
-    entity.amount = amount
-    entity.color = color
-    entity.useColor = useColor
-    entity.iconId = iconId
-    entity.tags = tags
-    entity.status = status.toEntity()
-    entity.remindedTimestamp = remindedTimestamp.epochSecond
-    entity.processedTimestamp = processedTimestamp.epochSecond
-    entity.notificationId = notificationId
-    entity.remainingRepeats = remainingRepeats
-    entity.notes = notes
-    entity.reminderType = reminderType.toEntityReminderType()
-    entity.stockHandled = stockHandled
-    entity.askForAmount = askForAmount
-    entity.lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
-    return entity
-}
+fun ReminderEvent.toEntity(): ReminderEventEntity = ReminderEventEntity(
+    reminderEventId = reminderEventId,
+    reminderId = reminderId,
+    medicineName = medicineName,
+    amount = amount,
+    color = color,
+    useColor = useColor,
+    iconId = iconId,
+    tags = tags,
+    status = status.toEntity(),
+    remindedTimestamp = remindedTimestamp.epochSecond,
+    processedTimestamp = processedTimestamp.epochSecond,
+    notificationId = notificationId,
+    remainingRepeats = remainingRepeats,
+    notes = notes,
+    reminderType = reminderType.toEntityReminderType(),
+    stockHandled = stockHandled,
+    askForAmount = askForAmount,
+    lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+)
 
 fun ReminderEventEntity.ReminderEntityStatus.toModel(): ReminderEvent.ReminderStatus =
     when (this) {

@@ -37,34 +37,33 @@ fun ReminderEntity.toModel(): Reminder =
         expirationReminderType = expirationReminderType.toModel()
     )
 
-fun Reminder.toEntity(): ReminderEntity {
-    val entity = ReminderEntity(medicineRelId)
-    entity.reminderId = id
-    entity.timeInMinutes = time.minutes
-    entity.createdTimestamp = createdTime.epochSecond
-    entity.consecutiveDays = consecutiveDays
-    entity.pauseDays = pauseDays
-    entity.instructions = instructions
-    entity.cycleStartDay = cycleStartDay.toEpochDay()
-    entity.amount = amount
-    entity.days = DayOfWeek.entries.map { it in days }.toMutableList()
-    entity.active = active
-    entity.periodStart = periodStart.toEpochDay()
-    entity.periodEnd = periodEnd.toEpochDay()
-    entity.activeDaysOfMonth = activeDaysOfMonth.fold(0) { acc, day -> acc or (1 shl (day - 1)) }
-    entity.linkedReminderId = linkedReminderId
-    entity.intervalStart = intervalStart.epochSecond
-    entity.intervalStartsFromProcessed = intervalStartsFromProcessed
-    entity.variableAmount = variableAmount
-    entity.automaticallyTaken = automaticallyTaken
-    entity.intervalStartTimeOfDay = intervalStartTimeOfDay.hour * 60 + intervalStartTimeOfDay.minute
-    entity.intervalEndTimeOfDay = intervalEndTimeOfDay.hour * 60 + intervalEndTimeOfDay.minute
-    entity.windowedInterval = windowedInterval
-    entity.outOfStockThreshold = outOfStockThreshold
-    entity.outOfStockReminderType = outOfStockReminderType.toEntity()
-    entity.expirationReminderType = expirationReminderType.toEntity()
-    return entity
-}
+fun Reminder.toEntity(): ReminderEntity = ReminderEntity(
+    medicineRelId = medicineRelId,
+    reminderId = id,
+    timeInMinutes = time.minutes,
+    createdTimestamp = createdTime.epochSecond,
+    consecutiveDays = consecutiveDays,
+    pauseDays = pauseDays,
+    instructions = instructions,
+    cycleStartDay = cycleStartDay.toEpochDay(),
+    amount = amount,
+    days = DayOfWeek.entries.map { it in days }.toMutableList(),
+    active = active,
+    periodStart = periodStart.toEpochDay(),
+    periodEnd = periodEnd.toEpochDay(),
+    activeDaysOfMonth = activeDaysOfMonth.fold(0) { acc, day -> acc or (1 shl (day - 1)) },
+    linkedReminderId = linkedReminderId,
+    intervalStart = intervalStart.epochSecond,
+    intervalStartsFromProcessed = intervalStartsFromProcessed,
+    variableAmount = variableAmount,
+    automaticallyTaken = automaticallyTaken,
+    intervalStartTimeOfDay = intervalStartTimeOfDay.hour * 60 + intervalStartTimeOfDay.minute,
+    intervalEndTimeOfDay = intervalEndTimeOfDay.hour * 60 + intervalEndTimeOfDay.minute,
+    windowedInterval = windowedInterval,
+    outOfStockThreshold = outOfStockThreshold,
+    outOfStockReminderType = outOfStockReminderType.toEntity(),
+    expirationReminderType = expirationReminderType.toEntity()
+)
 
 fun ReminderEntity.OutOfStockReminderType.toModel(): Reminder.OutOfStockReminderType =
     when (this) {

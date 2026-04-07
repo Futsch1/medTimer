@@ -10,8 +10,4 @@ fun TagEntity.toModel(): Tag {
     )
 }
 
-fun Tag.toEntity(): TagEntity {
-    val tagEntity = TagEntity(name)
-    tagEntity.tagId = id
-    return tagEntity
-}
+fun Tag.toEntity(): TagEntity = TagEntity(name = name, tagId = id)
