@@ -1,11 +1,9 @@
 package com.futsch1.medtimer
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.exporters.CSVEventExport
 import com.futsch1.medtimer.exporters.CSVMedicineExport
@@ -14,68 +12,90 @@ import com.futsch1.medtimer.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderTime
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
-import java.text.DateFormat
-import java.util.Locale
-import java.util.TimeZone
+import java.time.LocalTime
 import kotlin.test.fail
 
-internal class CSVExportUnitTest {
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
+@HiltAndroidTest
+class CSVExportUnitTest {
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @BindValue
+    val mockPreferenceDataSource: PreferencesDataSource = mock()
+
+    @BindValue
+    val boundAlarmManager: AlarmManager = mock()
+
+    @BindValue
+    val boundNotificationManager: NotificationManager = mock()
+
+    private lateinit var mockReminderRepository: ReminderRepository
+    private lateinit var timeFormatter: TimeFormatter
+    private lateinit var reminderSummaryFormatter: ReminderSummaryFormatter
+    private lateinit var context: Context
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+        mockReminderRepository = mock()
+        context = RuntimeEnvironment.getApplication()
+        val preferences = MutableStateFlow(UserPreferences.default())
+        `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
+        timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
+        reminderSummaryFormatter = ReminderSummaryFormatter(context, mockReminderRepository, timeFormatter)
+    }
+
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     fun testCreateCsvFileWithCorrectHeadersAndData() {
-        val reminderEvents = mutableListOf(
-            ReminderEvent().apply {
-                // Set remindedTimestamp to a specific value
-                remindedTimestamp = 1620000000
-                processedTimestamp = 1620000120
-                medicineName = "Medicine 1"
-                amount = "10mg"
-                status = ReminderEvent.ReminderStatus.TAKEN
-                lastIntervalReminderTimeInMinutes = 134
-                tags = mutableListOf("Tag1", "Tag2")
+        val reminderEvents = listOf(
+            ReminderEvent.default().copy(
+                remindedTimestamp = java.time.Instant.ofEpochSecond(1620000000),
+                processedTimestamp = java.time.Instant.ofEpochSecond(1620000120),
+                medicineName = "Medicine 1",
+                amount = "10mg",
+                status = ReminderEvent.ReminderStatus.TAKEN,
+                lastIntervalReminderTimeInMinutes = 134,
+                tags = listOf("Tag1", "Tag2"),
                 notes = "Notes"
-            },
-            ReminderEvent().apply {
-                // Set remindedTimestamp to a specific value
-                remindedTimestamp = 1620001800
-                processedTimestamp = 1620001980
-                medicineName = "Medicine 2"
-                amount = "20mg"
+            ),
+            ReminderEvent.default().copy(
+                remindedTimestamp = java.time.Instant.ofEpochSecond(1620001800),
+                processedTimestamp = java.time.Instant.ofEpochSecond(1620001980),
+                medicineName = "Medicine 2",
+                amount = "20mg",
                 status = ReminderEvent.ReminderStatus.SKIPPED
-                tags = emptyList()
-            }
+            )
         )
-
-        // Create a mock Context
-        val context = mock<Context>().apply {
-            Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
-            Mockito.`when`(getString(R.string.name)).thenReturn("Name")
-            Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
-            Mockito.`when`(getString(R.string.taken)).thenReturn("Taken")
-            Mockito.`when`(getString(R.string.tags)).thenReturn("Tags")
-            Mockito.`when`(getString(R.string.interval)).thenReturn("Interval")
-            Mockito.`when`(getString(R.string.notes)).thenReturn("Notes")
-        }
-
         // Create a mock File
         val file = mock<File>()
-        val utc = TimeZone.getTimeZone("WET")
-
-        val usDateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US)
-        usDateFormat.timeZone = utc
-
-        val usTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US)
-        usTimeFormat.timeZone = utc
 
         val fragmentManager =
             mock<FragmentManager>()
@@ -87,143 +107,86 @@ internal class CSVExportUnitTest {
                 fragmentManager,
                 context,
                 Dispatchers.Unconfined,
-                TimeFormatter(
-                    context,
-                    mock<PreferencesDataSource>(),
-                    mock<LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+                timeFormatter
             )
 
         Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
-            Mockito.mockStatic(android.text.format.DateFormat::class.java)
-                .use { dateAccessMockedStatic ->
-                    dateAccessMockedStatic.`when`<Any> {
-                        android.text.format.DateFormat.getDateFormat(
-                            ArgumentMatchers.any()
-                        )
-                    }.thenReturn(usDateFormat)
-                    dateAccessMockedStatic.`when`<Any> {
-                        android.text.format.DateFormat.getTimeFormat(
-                            ArgumentMatchers.any()
-                        )
-                    }.thenReturn(usTimeFormat)
+            try {
+                // Call the create method
+                runBlocking { csvEventExport.exportInternal(file) }
 
+                val fileWriter = fileWriterMockedConstruction.constructed().first()
 
-                    try {
-                        // Call the create method
-                        runBlocking { csvEventExport.exportInternal(file) }
-
-                        val fileWriter = fileWriterMockedConstruction.constructed().first()
-
-                        // Verify that the FileWriter wrote the correct data to the file
-                        Mockito.verify(fileWriter)
-                            .write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
-                        Mockito.verify(fileWriter)
-                            .write("5/3/21 1:00\u202FAM;Medicine 1;10mg;5/3/21 1:02\u202FAM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n")
-                        Mockito.verify(fileWriter)
-                            .write("5/3/21 1:30\u202FAM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n")
-                    } catch (_: ExporterException) {
-                        fail(EXCEPTION_OCCURRED)
-                    } catch (_: IOException) {
-                        fail(EXCEPTION_OCCURRED)
-                    }
-                }
+                // Verify that the FileWriter wrote the correct data to the file
+                Mockito.verify(fileWriter)
+                    .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
+                Mockito.verify(fileWriter)
+                    .write("5/3/21 2:00 AM;Medicine 1;10mg;5/3/21 2:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n")
+                Mockito.verify(fileWriter)
+                    .write("5/3/21 2:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n")
+            } catch (_: ExporterException) {
+                fail(EXCEPTION_OCCURRED)
+            } catch (_: IOException) {
+                fail(EXCEPTION_OCCURRED)
+            }
         }
     }
 
     // create CSV file with correct headers and data for a list of ReminderEvents
     @Test
     fun testCreateMedicineCsvFileWithCorrectHeadersAndData() {
-        val thirdReminder = Reminder(2).apply {
-            timeInMinutes = 62
-            amount = "three"
-        }
+        val firstReminder = Reminder.default().copy(medicineRelId = 1, time = ReminderTime(LocalTime.of(1, 0)), amount = "1")
+        val secondReminder = Reminder.default().copy(medicineRelId = 1, time = ReminderTime(LocalTime.of(1, 1)), amount = "2")
+        val thirdReminder = Reminder.default().copy(medicineRelId = 2, time = ReminderTime(LocalTime.of(1, 2)), amount = "three")
 
         // Create a list of Medicines
         val medicines = listOf(
-            FullMedicine().apply {
-                medicine = Medicine("Medicine 1")
-                reminders = mutableListOf(
-                    Reminder(1).apply {
-                        timeInMinutes = 60
-                        amount = "1"
-                    },
+            Medicine.default().copy(
+                name = "Medicine 1",
+                reminders = listOf(
+                    firstReminder,
                     thirdReminder
                 )
-            },
-            FullMedicine().apply {
-                medicine = Medicine("Medicine 2")
-                reminders = mutableListOf(
-                    Reminder(2).apply {
-                        timeInMinutes = 61
-                        amount = "2"
-                    },
+            ),
+            Medicine.default().copy(
+                name = "Medicine 2",
+                reminders = listOf(
+                    secondReminder,
                     thirdReminder
                 )
-            }
+            )
         )
-
-        // Create a mock Context
-        val context = mock<Context>().apply {
-            Mockito.`when`(getString(R.string.tab_medicine)).thenReturn("Medicine")
-            Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
-            Mockito.`when`(getString(R.string.time)).thenReturn("Time")
-            Mockito.`when`(getString(R.string.every_day)).thenReturn("Every day")
-        }
 
         // Create a mock File
         val file = mock<File>()
-        val utc = TimeZone.getTimeZone("UTC")
-        val usTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US)
-        usTimeFormat.timeZone = utc
+        val fragmentManager =
+            mock<FragmentManager>()
 
         Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
-            Mockito.mockStatic(android.text.format.DateFormat::class.java)
-                .use { dateAccessMockedStatic ->
-                    Mockito.mockStatic(
-                        TimeZone::class.java
-                    ).use { timeZoneMockedStatic ->
-                        val fragmentManager =
-                            mock<FragmentManager>()
-                        dateAccessMockedStatic.`when`<Any> {
-                            android.text.format.DateFormat.getTimeFormat(
-                                ArgumentMatchers.any()
-                            )
-                        }.thenReturn(usTimeFormat)
-                        timeZoneMockedStatic.`when`<Any> { TimeZone.getDefault() }
-                            .thenReturn(utc)
 
-                        // Create the CSVCreator object
-                        val mockPreferencesDataSource = mock<PreferencesDataSource>()
-                        val mockLocaleContextAccessor = mock<LocaleContextAccessor>()
-                            .also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) }
-                        val timeFormatter = TimeFormatter(context, mockPreferencesDataSource, mockLocaleContextAccessor)
-                        val mockReminderRepository = mock<ReminderRepository>()
-                        val reminderSummaryFormatter = ReminderSummaryFormatter(context, mockReminderRepository, timeFormatter)
-                        val csvExport =
-                            CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined, LinkedReminderAlgorithms())
-                        try {
-                            // Call the create method
-                            runBlocking { csvExport.exportInternal(file) }
+            val csvExport =
+                CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined, LinkedReminderAlgorithms())
+            try {
+                // Call the create method
+                runBlocking { csvExport.exportInternal(file) }
 
-                            val fileWriter =
-                                fileWriterMockedConstruction.constructed().first()
+                val fileWriter =
+                    fileWriterMockedConstruction.constructed().first()
 
-                            // Verify that the FileWriter wrote the correct data to the file
-                            Mockito.verify(fileWriter)
-                                .write("Medicine;Amount;Time\n")
-                            Mockito.verify(fileWriter)
-                                .write("Medicine 1;1;1:00\u202FAM, Every day\n")
-                            Mockito.verify(fileWriter)
-                                .write("Medicine 2;2;1:01\u202FAM, Every day\n")
-                            Mockito.verify(fileWriter)
-                                .write("Medicine 2;three;1:02\u202FAM, Every day\n")
-                        } catch (_: ExporterException) {
-                            fail(EXCEPTION_OCCURRED)
-                        } catch (_: IOException) {
-                            fail(EXCEPTION_OCCURRED)
-                        }
-                    }
-                }
+                // Verify that the FileWriter wrote the correct data to the file
+                Mockito.verify(fileWriter)
+                    .write("Medicine;Dosage;Time\n")
+                Mockito.verify(fileWriter)
+                    .write("Medicine 1;1;1:00 AM, Every day\n")
+                Mockito.verify(fileWriter)
+                    .write("Medicine 2;2;1:01 AM, Every day\n")
+                Mockito.verify(fileWriter)
+                    .write("Medicine 2;three;1:02 AM, Every day\n")
+            } catch (_: ExporterException) {
+                fail(EXCEPTION_OCCURRED)
+            } catch (_: IOException) {
+                fail(EXCEPTION_OCCURRED)
+            }
         }
     }
 
@@ -231,16 +194,6 @@ internal class CSVExportUnitTest {
     // handle empty list of ReminderEvents
     @Test
     fun testHandleEmptyListOfReminderEvents() {
-        // Create a mock Context
-        val context = mock<Context>().apply {
-            Mockito.`when`(getString(R.string.reminded)).thenReturn("Reminded")
-            Mockito.`when`(getString(R.string.name)).thenReturn("Name")
-            Mockito.`when`(getString(R.string.dosage)).thenReturn("Amount")
-            Mockito.`when`(getString(R.string.taken)).thenReturn("Taken")
-            Mockito.`when`(getString(R.string.tags)).thenReturn("Tags")
-            Mockito.`when`(getString(R.string.interval)).thenReturn("Interval")
-            Mockito.`when`(getString(R.string.notes)).thenReturn("Notes")
-        }
 
         // Create a mock File
         val file = mock<File>()
@@ -254,10 +207,7 @@ internal class CSVExportUnitTest {
                     fragmentManager,
                     context,
                     Dispatchers.Unconfined,
-                    TimeFormatter(
-                        context,
-                        mock<PreferencesDataSource>(),
-                        mock<LocaleContextAccessor>().also { Mockito.`when`(it.getLocaleAwareContext()).thenReturn(context) })
+                    timeFormatter
                 )
                 try {
                     // Call the create method
@@ -267,7 +217,7 @@ internal class CSVExportUnitTest {
 
                     // Verify that the FileWriter wrote the correct data to the file
                     Mockito.verify(fileWriter)
-                        .write("Reminded;Name;Amount;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
+                        .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
                 } catch (_: ExporterException) {
                     fail(EXCEPTION_OCCURRED)
                 } catch (_: IOException) {

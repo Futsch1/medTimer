@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.reminders.notificationData
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -17,11 +17,11 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
     }
 
     fun isOutOfStockNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.OUT_OF_STOCK
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderType.OUT_OF_STOCK
     }
 
     fun isExpirationDateNotification(): Boolean {
-        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == Reminder.ReminderType.EXPIRATION_DATE
+        return reminderNotificationParts.size == 1 && reminderNotificationParts[0].reminderEvent.reminderType == ReminderType.EXPIRATION_DATE
     }
 
     private fun filter(predicate: (ReminderNotificationPart) -> Boolean): ReminderNotification {
@@ -46,7 +46,7 @@ class ReminderNotification(val reminderNotificationParts: List<ReminderNotificat
 
     fun getRemindTime(timeFormatter: TimeFormatter): String {
         val remindTime = getRemindedTime()
-        return timeFormatter.minutesToTimeString(remindTime.hour * 60 + remindTime.minute)
+        return timeFormatter.toTimeString(remindTime)
     }
 
     override fun toString(): String {

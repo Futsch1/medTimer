@@ -3,12 +3,11 @@ package com.futsch1.medtimer.exporters
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getActiveReminders
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
+import com.futsch1.medtimer.model.Medicine
 import com.wwdablu.soumya.simplypdf.SimplyPdfDocument
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -21,7 +20,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class PDFMedicineExport @AssistedInject constructor(
-    @Assisted val medicines: List<FullMedicine>,
+    @Assisted val medicines: List<Medicine>,
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext val context: Context,
     private val timeFormatter: TimeFormatter,
@@ -31,8 +30,9 @@ class PDFMedicineExport @AssistedInject constructor(
 
     @AssistedFactory
     fun interface Factory {
-        fun create(medicines: List<FullMedicine>, fragmentManager: FragmentManager): PDFMedicineExport
+        fun create(medicines: List<Medicine>, fragmentManager: FragmentManager): PDFMedicineExport
     }
+
     @OptIn(ExperimentalTime::class)
     override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
@@ -42,7 +42,7 @@ class PDFMedicineExport @AssistedInject constructor(
 
         for (medicine in medicines) {
             val activeReminders = getActiveReminders(medicine)
-            simplyPdfDocument.text.write(medicine.medicine.name, biggestBoldProperties)
+            simplyPdfDocument.text.write(medicine.name, biggestBoldProperties)
             if (activeReminders.isNotEmpty()) {
                 exportMedicine(simplyPdfDocument, activeReminders)
             } else {
@@ -55,7 +55,7 @@ class PDFMedicineExport @AssistedInject constructor(
         }
     }
 
-    private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<Reminder>) {
+    private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<com.futsch1.medtimer.model.Reminder>) {
         val reminders = linkedReminderAlgorithms.sortRemindersList(activeReminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {

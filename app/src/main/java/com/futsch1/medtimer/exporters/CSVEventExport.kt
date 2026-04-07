@@ -2,12 +2,12 @@ package com.futsch1.medtimer.exporters
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper.getTableHeadersForEventExport
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToISO8601DatetimeString
+import com.futsch1.medtimer.model.ReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,19 +42,19 @@ class CSVEventExport @AssistedInject constructor(
                         val line = String.format(
                             "%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
                             timeFormatter.secondsSinceEpochToDateTimeString(
-                                reminderEvent.remindedTimestamp
+                                reminderEvent.remindedTimestamp.epochSecond
                             ),
                             reminderEvent.medicineName,
                             reminderEvent.amount,
                             if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
-                                reminderEvent.processedTimestamp
+                                reminderEvent.processedTimestamp.epochSecond
                             ) else "",
                             reminderEvent.tags.joinToString(", "),
                             timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
                             reminderEvent.notes,
-                            secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp),
+                            secondsSinceEpochToISO8601DatetimeString(reminderEvent.remindedTimestamp.epochSecond),
                             if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) secondsSinceEpochToISO8601DatetimeString(
-                                reminderEvent.processedTimestamp
+                                reminderEvent.processedTimestamp.epochSecond
                             ) else ""
                         )
                         csvFile.write(line)

@@ -2,11 +2,11 @@ package com.futsch1.medtimer.exporters
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.ReminderEvent
 import com.wwdablu.soumya.simplypdf.composers.properties.TableProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.TextProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.cell.Cell
@@ -81,13 +81,13 @@ class PDFEventExport @AssistedInject constructor(
 
     private fun getCells(reminderEvent: ReminderEvent, textProperties: TextProperties, columnWidths: IntArray): LinkedList<Cell> {
         val row = LinkedList<Cell>()
-        row.add(TextCell(timeFormatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
+        row.add(TextCell(timeFormatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp.epochSecond), textProperties, columnWidths[0]))
         row.add(TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]))
         row.add(TextCell(reminderEvent.amount, textProperties, columnWidths[2]))
         row.add(
             TextCell(
                 if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
-                    reminderEvent.processedTimestamp
+                    reminderEvent.processedTimestamp.epochSecond
                 ) else "", textProperties, columnWidths[3]
             )
         )

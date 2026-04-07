@@ -4,15 +4,14 @@ import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.allStatusValues
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -26,7 +25,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
     private val reminderEventRepository: ReminderEventRepository
 ) {
     private var reminderEvents: List<ReminderEvent>? = null
-    private var fullMedicines: List<FullMedicine>? = null
+    private var medicines: List<Medicine>? = null
 
     init {
         setupScheduleObservers(parentFragment)
@@ -36,14 +35,14 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         parentFragment.viewLifecycleOwner.lifecycleScope.launch {
             reminderEventRepository.getAllFlow(
                 Instant.now().toEpochMilli() / 1000 - 33 * 24 * 60 * 60,
-                allStatusValues
+                ReminderEvent.allStatusValues
             ).collect { reminderEvents ->
                 changedReminderEvents(reminderEvents)
             }
         }
         parentFragment.viewLifecycleOwner.lifecycleScope.launch {
-            medicineRepository.getFullAllFlow().collect { fullMedicines ->
-                changedMedicines(fullMedicines)
+            medicineRepository.getAllFlow().collect { medicines ->
+                changedMedicines(medicines)
             }
         }
     }
@@ -53,13 +52,13 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         calculateSchedule()
     }
 
-    private fun changedMedicines(fullMedicine: List<FullMedicine>) {
-        this.fullMedicines = fullMedicine
+    private fun changedMedicines(medicines: List<Medicine>) {
+        this.medicines = medicines
         calculateSchedule()
     }
 
     private fun calculateSchedule() {
-        val fullMedicines = fullMedicines ?: return
+        val medicines = medicines ?: return
         val reminderEvents = reminderEvents ?: return
 
         val scheduler = ReminderScheduler(object : TimeAccess {
@@ -69,7 +68,7 @@ class NextReminders @SuppressLint("WrongViewCast") constructor(
         }, dataSource)
 
         val reminders: List<ScheduledReminder> = scheduler.schedule(
-            fullMedicines, reminderEvents
+            medicines, reminderEvents
         )
         medicineViewModel.setScheduledReminders(reminders)
     }

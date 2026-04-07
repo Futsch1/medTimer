@@ -1,4 +1,4 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.database.backup
 
 import android.content.Context
 import android.content.DialogInterface
@@ -12,18 +12,18 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.database.JSONBackup
-import com.futsch1.medtimer.database.JSONMedicineBackup
-import com.futsch1.medtimer.database.JSONReminderEventBackup
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.MedicineRoomDatabase
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.statusValuesWithoutDelete
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.helpers.ExportBackupPath
 import com.futsch1.medtimer.helpers.FileHelper
-import com.futsch1.medtimer.helpers.PathHelper.backupFilename
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
 import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -52,10 +52,10 @@ class BackupManager @AssistedInject constructor(
     @Assisted private val fragmentManager: FragmentManager? = null,
     private val preferencesDataSource: PreferencesDataSource,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val medicineRepository: MedicineRepository,
-    private val reminderRepository: ReminderRepository,
-    private val reminderEventRepository: ReminderEventRepository,
-    private val tagRepository: TagRepository,
+    private val medicineDao: MedicineDao,
+    private val reminderDao: ReminderDao,
+    private val reminderEventDao: ReminderEventDao,
+    private val tagDao: TagDao,
     private val database: MedicineRoomDatabase,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
@@ -168,16 +168,16 @@ class BackupManager @AssistedInject constructor(
         if (checkedItems[0]) {
             jsonObject.add(
                 MEDICINE_KEY, createBackup(
-                    JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository),
-                    medicineRepository.getFullAll()
+                    JSONMedicineBackup(medicineDao, reminderDao, tagDao),
+                    medicineDao.getAll()
                 )
             )
         }
         if (checkedItems[1]) {
             jsonObject.add(
                 EVENT_KEY, createBackup(
-                    JSONReminderEventBackup(reminderEventRepository),
-                    reminderEventRepository.getAllWithoutDeleted()
+                    JSONReminderEventBackup(reminderEventDao),
+                    reminderEventDao.getAllLimited(0L, statusValuesWithoutDelete)
                 )
             )
         }
@@ -199,7 +199,7 @@ class BackupManager @AssistedInject constructor(
     }
 
     private fun createAndSave(fileContent: String?) {
-        val file = File(context.cacheDir, backupFilename)
+        val file = File(context.cacheDir, ExportBackupPath.backupFilename)
         if (FileHelper.saveToFile(file, fileContent)) {
             FileHelper.shareFile(context, file)
         } else {
@@ -225,9 +225,9 @@ class BackupManager @AssistedInject constructor(
 
             if (!restoreSuccessful && json != null) {
                 // Try legacy backup formats
-                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository)) || restoreBackup(
+                restoreSuccessful = restoreBackup(json, JSONMedicineBackup(medicineDao, reminderDao, tagDao)) || restoreBackup(
                     json,
-                    JSONReminderEventBackup(reminderEventRepository)
+                    JSONReminderEventBackup(reminderEventDao)
                 )
             }
             Log.d(LogTags.BACKUP, "Backup restore finished")
@@ -251,13 +251,13 @@ class BackupManager @AssistedInject constructor(
             if (rootElement.has(MEDICINE_KEY)) {
                 restoreSuccessful = restoreBackup(
                     rootElement[MEDICINE_KEY].toString(),
-                    JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository)
+                    JSONMedicineBackup(medicineDao, reminderDao, tagDao)
                 )
             }
             if (rootElement.has(EVENT_KEY)) {
                 restoreSuccessful = restoreSuccessful && restoreBackup(
                     rootElement[EVENT_KEY].toString(),
-                    JSONReminderEventBackup(reminderEventRepository)
+                    JSONReminderEventBackup(reminderEventDao)
                 )
             }
         } catch (_: JsonSyntaxException) {
@@ -304,19 +304,19 @@ class BackupManager @AssistedInject constructor(
         val jsonObject = JsonObject()
         jsonObject.add(
             MEDICINE_KEY, createBackup(
-                JSONMedicineBackup(medicineRepository, reminderRepository, tagRepository),
-                medicineRepository.getFullAll()
+                JSONMedicineBackup(medicineDao, reminderDao, tagDao),
+                medicineDao.getAll()
             )
         )
         jsonObject.add(
             EVENT_KEY, createBackup(
-                JSONReminderEventBackup(reminderEventRepository),
-                reminderEventRepository.getAllWithoutDeleted()
+                JSONReminderEventBackup(reminderEventDao),
+                reminderEventDao.getAllLimited(0L, statusValuesWithoutDelete)
             )
         )
 
         val json = gson.toJson(jsonObject)
-        val filename = backupFilename
+        val filename = ExportBackupPath.backupFilename
         val success = saveToDirectory(directoryUri, filename, json)
 
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {

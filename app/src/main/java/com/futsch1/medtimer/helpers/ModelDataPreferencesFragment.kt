@@ -17,16 +17,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-abstract class EntityDataStore<T> : PreferenceDataStore() {
-    abstract var entity: T
-    abstract val entityId: Int
+abstract class ModelDataStore<T> : PreferenceDataStore() {
+    abstract var modelData: T
+    abstract val modelDataId: Int
 }
 
-abstract class EntityViewModel<T> : ViewModel() {
+abstract class ModelDataViewModel<T> : ViewModel() {
     abstract fun getFlow(id: Int): Flow<T?>
 }
 
-abstract class EntityPreferencesFragment<T>(
+abstract class ModelDataPreferencesFragment<T>(
     val preferencesResId: Int,
     val links: Map<String, (Int) -> NavDirections>,
     open val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>,
@@ -40,14 +40,14 @@ abstract class EntityPreferencesFragment<T>(
     @Dispatcher(MedTimerDispatchers.Main)
     lateinit var mainDispatcher: CoroutineDispatcher
 
-    lateinit var dataStore: EntityDataStore<T>
+    lateinit var dataStore: ModelDataStore<T>
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()
 
         this.lifecycleScope.launch(ioDispatcher) {
             try {
-                dataStore = getEntityDataStore(requireArguments())
+                dataStore = getDataStore(requireArguments())
                 preferenceManager.preferenceDataStore = dataStore
             } catch (_: NullPointerException) {
                 // It may happen that the reminder is deleted already, so ignore this
@@ -58,29 +58,29 @@ abstract class EntityPreferencesFragment<T>(
                 observeUserData()
                 setupLinks()
                 setupOnClick()
-                customSetup(dataStore.entity)
+                customSetup(dataStore.modelData)
 
                 startPostponedEnterTransition()
             }
         }
     }
 
-    abstract suspend fun getEntityDataStore(
+    abstract suspend fun getDataStore(
         requireArguments: Bundle
-    ): EntityDataStore<T>
+    ): ModelDataStore<T>
 
-    abstract fun getEntityViewModel(): EntityViewModel<T>
+    abstract fun getEntityViewModel(): ModelDataViewModel<T>
 
-    abstract fun customSetup(entity: T)
+    abstract fun customSetup(modelData: T)
 
     private fun observeUserData() {
         lifecycleScope.launch {
-            getEntityViewModel().getFlow(dataStore.entityId).collect { entity ->
-                if (entity == null) {
+            getEntityViewModel().getFlow(dataStore.modelDataId).collect { modelData ->
+                if (modelData == null) {
                     return@collect
                 }
-                dataStore.entity = entity
-                onEntityUpdated(entity)
+                dataStore.modelData = modelData
+                onModelDataUpdated(modelData)
             }
         }
     }
@@ -93,7 +93,7 @@ abstract class EntityPreferencesFragment<T>(
                 val preference = findPreference<Preference?>(link.key)
                 preference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
                     try {
-                        navController.navigate(link.value(dataStore.entityId))
+                        navController.navigate(link.value(dataStore.modelDataId))
                     } catch (_: IllegalArgumentException) {
                         // Intentionally empty (monkey test can cause this to fail)
                     }
@@ -115,7 +115,7 @@ abstract class EntityPreferencesFragment<T>(
         }
     }
 
-    open fun onEntityUpdated(entity: T) {
+    open fun onModelDataUpdated(modelData: T) {
         for (simpleSummaryKey in simpleSummaryKeys) {
             val preference = findPreference<Preference?>(simpleSummaryKey)
             preference!!.summary = preferenceManager.preferenceDataStore?.getString(simpleSummaryKey, "?")

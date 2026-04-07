@@ -14,9 +14,13 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
-    entities = [Medicine::class, Reminder::class, ReminderEvent::class, Tag::class, MedicineToTag::class],
+    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
     version = 23,
     autoMigrations = [AutoMigration(from = 1, to = 2, spec = AutoMigration1To2::class), AutoMigration(from = 2, to = 3), AutoMigration(
         from = 3,

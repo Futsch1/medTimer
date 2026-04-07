@@ -25,10 +25,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
@@ -41,13 +38,12 @@ import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
-import com.futsch1.medtimer.medicine.editMedicine.importanceIndexToMedicine
-import com.futsch1.medtimer.medicine.editMedicine.importanceValueToIndex
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.gson.Gson
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
@@ -107,7 +103,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @Inject
     lateinit var reminderRepository: ReminderRepository
 
-    private var entity: FullMedicine? = null
+    private lateinit var medicine: Medicine
     private lateinit var fragmentView: View
     private var fragmentReady = false
     private lateinit var optionsMenu: EntityEditOptionsMenu
@@ -121,7 +117,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private var color = 0
     private lateinit var notificationImportance: Spinner
     private lateinit var selectIconButton: MaterialButton
-    var notes: String? = ""
+    var notes: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -144,14 +140,11 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupSwiping(recyclerView)
 
         lifecycleScope.launch(ioDispatcher) {
-            val entity = medicineRepository.getFull(getEntityId())
-            this@EditMedicineFragment.entity = entity
+            val medicine = medicineRepository.get(getMedicineId()) ?: return@launch
 
-            if (entity == null) {
-                return@launch
-            }
+            this@EditMedicineFragment.medicine = medicine
 
-            setupMenu(navController, entity)
+            setupMenu(navController, medicine)
 
             withContext(mainDispatcher) {
                 if (::optionsMenu.isInitialized) {
@@ -159,7 +152,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 }
 
                 // Signal that entity was loaded
-                onEntityLoaded(entity)
+                onMedicineLoaded(medicine)
             }
         }
 
@@ -174,8 +167,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         startPostponedEnterTransition()
     }
 
-    private fun setupMenu(navController: NavController, entity: FullMedicine) {
-        optionsMenu = editMedicineMenuProviderFactory.create(entity.medicine, this, navController)
+    private fun setupMenu(navController: NavController, medicine: Medicine) {
+        optionsMenu = editMedicineMenuProviderFactory.create(medicine, this, navController)
     }
 
     override fun onDestroy() {
@@ -188,22 +181,17 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     override fun onStop() {
         super.onStop()
-        val entity = entity ?: return
         if (fragmentReady) {
             applicationScope.launch {
-                val entityBefore = Gson().toJson(entity)
-                fillEntityData(entity)
-
-                val entityAfter = Gson().toJson(entity)
-                if (entityBefore != entityAfter) {
-                    medicineRepository.update(entity.medicine)
+                val newMedicine = buildMedicine()
+                if (medicine != newMedicine) {
+                    medicineRepository.update(newMedicine)
                 }
             }
         }
     }
 
-    private fun onEntityLoaded(entity: FullMedicine) {
-        val medicine = entity.medicine
+    private fun onMedicineLoaded(medicine: Medicine) {
 
         color = medicine.color
         iconId = medicine.iconId
@@ -220,18 +208,18 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupEnableColor(medicine.useColor)
         setupColorButton(medicine.useColor)
 
-        setupNotificationImportance(medicine)
+        setupNotificationImportance()
         setupNotesButton(subMenus)
         setupOpenCalendarButton(subMenus)
         setupStockButton(subMenus)
         setupTagsButton(subMenus)
 
-        setupAddReminderButton(entity)
+        setupAddReminderButton()
 
-        adapter.setMedicine(entity)
+        adapter.setMedicine(medicine)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            reminderRepository.getAllFlow(getEntityId()).collect {
+            reminderRepository.getAllFlow(getMedicineId()).collect {
                 sortAndSubmitList(it)
                 setFragmentReady()
             }
@@ -273,11 +261,19 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         colorButton.visibility = if (useColor) View.VISIBLE else View.GONE
     }
 
-    private fun setupNotificationImportance(medicine: Medicine) {
+    private fun setupNotificationImportance() {
+        val notificationImportance = fragmentView.findViewById<Spinner>(R.id.notificationImportance)
         val importanceTexts = this.resources.getStringArray(R.array.notification_importance)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
+        val index = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
+            0
+        } else {
+            if (medicine.showNotificationAsAlarm) 2 else 1
+        }
+
         notificationImportance.setAdapter(arrayAdapter)
-        notificationImportance.setSelection(importanceValueToIndex(medicine))
+
+        notificationImportance.setSelection(index)
         notificationImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 2) {
@@ -337,9 +333,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             .attachToRecyclerView(recyclerView)
     }
 
-    private fun setupAddReminderButton(fullMedicine: FullMedicine) {
+    private fun setupAddReminderButton() {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), fullMedicine) }
+        fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), medicine) }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {
@@ -359,16 +355,18 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private suspend fun fillEntityData(entity: FullMedicine) {
-        val medicine = entity.medicine
-        medicine.name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim()
-        medicine.useColor = enableColor.isChecked
-        medicine.color = color
-        importanceIndexToMedicine(notificationImportance.selectedItemPosition, medicine)
-        medicine.iconId = iconId
-        medicine.notes = notes
-
+    private suspend fun buildMedicine(): Medicine {
         updateReminders()
+
+        return medicine.copy(
+            name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim(),
+            useColor = enableColor.isChecked,
+            color = color,
+            iconId = iconId,
+            notes = notes,
+            notificationImportance = if (notificationImportance.selectedItemPosition == 0) Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
+            showNotificationAsAlarm = notificationImportance.selectedItemPosition == 2
+        )
     }
 
     private suspend fun updateReminders() {
@@ -380,7 +378,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private fun getEntityId(): Int {
+    private fun getMedicineId(): Int {
         return EditMedicineFragmentArgs.fromBundle(requireArguments()).medicineId
     }
 

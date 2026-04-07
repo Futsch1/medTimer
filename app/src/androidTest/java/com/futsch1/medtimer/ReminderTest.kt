@@ -236,7 +236,7 @@ class ReminderTest : BaseTestHelper() {
 
         expectedString = context.getString(
             R.string.linked_reminder_summary,
-            timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
+            timeFormatter().toTimeString(reminder1Time)
         )
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString)
 

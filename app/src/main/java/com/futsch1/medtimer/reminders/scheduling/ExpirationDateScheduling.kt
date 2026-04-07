@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -15,13 +15,13 @@ class ExpirationDateScheduling(
     timeAccess: TimeAccess
 ) : SchedulingBase(reminder, reminderEventList, timeAccess) {
     override fun getNextScheduledTime(): Instant? {
-        val firstRemindedDay = medicine.expirationDate - reminder.periodStart
+        val firstRemindedDay = medicine.expirationDate.toEpochDay() - reminder.periodStart.toEpochDay()
 
-        if (medicine.expirationDate != 0L) {
+        if (medicine.expirationDate != LocalDate.EPOCH) {
             return if (reminder.expirationReminderType == Reminder.ExpirationReminderType.ONCE) {
                 scheduleOnce(firstRemindedDay)
             } else {
-                val startRemindDay = max(medicine.expirationDate - reminder.periodStart, today())
+                val startRemindDay = max(firstRemindedDay, today())
                 getNextNotRemindedDay((startRemindDay - today()).coerceAtLeast(0))
             }
         }
@@ -30,7 +30,7 @@ class ExpirationDateScheduling(
 
     private fun scheduleOnce(firstRemindedDay: Long): Instant? {
         return if (firstRemindedDay <= today()) {
-            for (day in (medicine.expirationDate - reminder.periodStart..today()))
+            for (day in (medicine.expirationDate.toEpochDay() - reminder.periodStart.toEpochDay()..today()))
                 if (isRaisedOn(day)) {
                     return null
                 }

@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 
@@ -16,12 +16,12 @@ class LinkedScheduling(
         val lastReminderEvent: ReminderEvent? =
             findLastReminderEvent()
         if (lastSourceReminderEvent != null &&
-            lastSourceReminderEvent.processedTimestamp != 0L &&
+            lastSourceReminderEvent.processedTimestamp != Instant.EPOCH &&
             (lastReminderEvent == null
                     || lastSourceReminderEvent.processedTimestamp > lastReminderEvent.remindedTimestamp)
         ) {
-            return Instant.ofEpochSecond(lastSourceReminderEvent.processedTimestamp).plusSeconds(
-                reminder.timeInMinutes * 60L
+            return lastSourceReminderEvent.processedTimestamp.plusSeconds(
+                reminder.time.seconds
             )
         }
         return null

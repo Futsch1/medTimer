@@ -10,10 +10,10 @@ import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -27,20 +27,18 @@ class ReminderStringFormatter @Inject constructor(
 ) {
     fun formatReminderEvent(reminderEvent: ReminderEvent): Spanned {
         var takenTime = timeFormatter.secondsSinceEpochToConfigurableTimeString(
-            reminderEvent.remindedTimestamp, false
+            reminderEvent.remindedTimestamp.epochSecond, false
         )
-        val reminderTypeSpan = getReminderTypeSpan(reminderEvent.reminderType)
-        if (reminderEvent.processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
+        val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
+        val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
+        if (processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
             preferencesDataSource.preferences.value.showTakenTimeInOverview
         ) {
-            val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
-                timeFormatter.secondsSinceEpochToConfigurableTimeString(
-                    reminderEvent.processedTimestamp, false
-                )
+            val remindedTimestamp = reminderEvent.remindedTimestamp.epochSecond
+            val processedTime = if (TimeHelper.isSameDay(remindedTimestamp, processedTimestamp))
+                timeFormatter.secondsSinceEpochToConfigurableTimeString(processedTimestamp, false)
             else
-                timeFormatter.secondsSinceEpochToConfigurableDateTimeString(
-                    reminderEvent.processedTimestamp
-                )
+                timeFormatter.secondsSinceEpochToConfigurableDateTimeString(processedTimestamp)
 
             takenTime = "$takenTime ➡ $processedTime"
         }
@@ -57,21 +55,21 @@ class ReminderStringFormatter @Inject constructor(
         )
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(scheduledTime).append("\n").append(reminderTypeSpan).bold {
-            append(scheduledReminder.medicine.medicine.name)
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
+            append(scheduledReminder.medicine.name)
         }.append(getAmountOrStockString(scheduledReminder))
     }
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
         val takenTime = (if (isShort)
             timeFormatter.secondsSinceEpochToConfigurableTimeString(
-                reminderEvent.remindedTimestamp, true
+                reminderEvent.remindedTimestamp.epochSecond, true
             )
         else
             timeFormatter.secondsSinceEpochToConfigurableDateTimeString(
-                reminderEvent.remindedTimestamp
+                reminderEvent.remindedTimestamp.epochSecond
             )) + ": "
-        val reminderTypeSpan = getReminderTypeSpan(reminderEvent.reminderType)
+        val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
 
         val amountStatusString = "${reminderEvent.amount} ${statusToString(reminderEvent.status)}".trim()
 
@@ -90,14 +88,14 @@ class ReminderStringFormatter @Inject constructor(
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.medicine.name) }.append(
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.name) }.append(
             getAmountOrStockString(scheduledReminder)
         )
     }
 
-    fun getReminderTypeSpan(reminderType: Reminder.ReminderType): Spanned {
+    fun getReminderTypeSpan(reminderType: ReminderType): Spanned {
         val span = SpannableStringBuilder()
-        val drawable = ContextCompat.getDrawable(context, reminderType.icon)
+        val drawable = ContextCompat.getDrawable(context, reminderType.getIcon())
 
         if (drawable != null) {
             val imageSpan = TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE)
@@ -109,23 +107,15 @@ class ReminderStringFormatter @Inject constructor(
         return span
     }
 
-    private fun statusToString(status: ReminderEvent.ReminderStatus?): String {
-        return when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken)
-            ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped)
-            else -> ""
-        }
-    }
-
     private fun getAmountOrStockString(scheduledReminder: ScheduledReminder): String {
         val amount =
             when (scheduledReminder.reminder.reminderType) {
-                Reminder.ReminderType.OUT_OF_STOCK -> {
-                    MedicineHelper.formatAmount(scheduledReminder.medicine.medicine.amount, scheduledReminder.medicine.medicine.unit)
+                ReminderType.OUT_OF_STOCK -> {
+                    MedicineHelper.formatAmount(scheduledReminder.medicine.amount, scheduledReminder.medicine.unit)
                 }
 
-                Reminder.ReminderType.EXPIRATION_DATE -> {
-                    timeFormatter.daysSinceEpochToDateString(scheduledReminder.medicine.medicine.expirationDate)
+                ReminderType.EXPIRATION_DATE -> {
+                    timeFormatter.localDateToString(scheduledReminder.medicine.expirationDate)
                 }
 
                 else -> {
@@ -135,19 +125,28 @@ class ReminderStringFormatter @Inject constructor(
         return if (amount.isNotEmpty()) " (${amount})" else ""
     }
 
-    private fun getLastIntervalTime(reminderEvent: ReminderEvent): String =
-        if (reminderEvent.lastIntervalReminderTimeInMinutes > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && calcLastIntervalTime(reminderEvent) >= 0) {
-            " (" + context.getString(
-                R.string.interval_time, formatDuration(
-                    calcLastIntervalTime(reminderEvent)
-                ).toString()
-            ) + ")"
+
+    private fun getReminderTypeSpan(reminderEvent: ReminderEvent): Spanned =
+        getReminderTypeSpan(reminderEvent.reminderType)
+
+    private fun getLastIntervalTime(reminderEvent: ReminderEvent): String {
+        val lastIntervalTime = reminderEvent.lastIntervalReminderTimeInMinutes
+        val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
+        val durationMillis = processedTimestamp * 1000L - lastIntervalTime * 60_000L
+        return if (lastIntervalTime > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && durationMillis >= 0) {
+            " (" + context.getString(R.string.interval_time, formatDuration(durationMillis).toString()) + ")"
         } else {
             ""
         }
+    }
 
-    private fun calcLastIntervalTime(reminderEvent: ReminderEvent): Long =
-        reminderEvent.processedTimestamp * 1000L - reminderEvent.lastIntervalReminderTimeInMinutes * 60_000L
+    private fun statusToString(status: ReminderEvent.ReminderStatus?): String {
+        return when (status) {
+            ReminderEvent.ReminderStatus.TAKEN -> context.getString(R.string.taken)
+            ReminderEvent.ReminderStatus.SKIPPED -> context.getString(R.string.skipped)
+            else -> ""
+        }
+    }
 
     private fun formatDuration(durationMillis: Long): String? {
         val totalSeconds = durationMillis / 1000

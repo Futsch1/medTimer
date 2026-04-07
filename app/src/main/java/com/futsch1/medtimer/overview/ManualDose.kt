@@ -6,8 +6,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -16,6 +14,8 @@ import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,6 +25,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -65,7 +66,7 @@ class ManualDose @AssistedInject constructor(
         }
     }
 
-    private fun getManualDoseEntries(medicines: List<FullMedicine>?): List<ManualDoseEntry> {
+    private fun getManualDoseEntries(medicines: List<Medicine>?): List<ManualDoseEntry> {
         val entries: MutableList<ManualDoseEntry> = ArrayList()
 
         entries.add(ManualDoseEntry(context.getString(R.string.custom)))
@@ -93,28 +94,27 @@ class ManualDose @AssistedInject constructor(
     }
 
     private fun startLogProcess(entry: ManualDoseEntry) {
-        val reminderEvent = ReminderEvent()
         // Manual dose is not assigned to an existing reminder
-        reminderEvent.reminderId = -1
-        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
-        reminderEvent.medicineName = entry.baseName
-        reminderEvent.color = entry.color
-        reminderEvent.useColor = entry.useColor
-        reminderEvent.iconId = entry.iconId
-        reminderEvent.tags = entry.tags
+        val reminderEvent = ReminderEvent.default().copy(
+            reminderId = -1,
+            status = ReminderEvent.ReminderStatus.TAKEN,
+            medicineName = entry.baseName,
+            color = entry.color,
+            useColor = entry.useColor,
+            iconId = entry.iconId,
+            tags = entry.tags
+        )
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
             TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
                 .textSink { name: String ->
-                    reminderEvent.medicineName = name
                     entry.baseName = name
-                    getAmountAndContinue(reminderEvent, entry)
+                    getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)
                 }.show()
         } else {
             if (entry.amount == null || entry.medicineId == -1) {
                 getAmountAndContinue(reminderEvent, entry)
             } else {
-                reminderEvent.amount = entry.amount
-                getTimeAndLog(reminderEvent, entry.medicineId)
+                getTimeAndLog(reminderEvent.copy(amount = entry.amount), entry.medicineId)
             }
         }
     }
@@ -133,11 +133,10 @@ class ManualDose @AssistedInject constructor(
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
         val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
             .textSink { amount: String? ->
-                reminderEvent.amount = amount!!
                 if (entry.medicineId == -1) {
-                    lastCustomDose = Pair(entry.baseName, amount)
+                    lastCustomDose = Pair(entry.baseName, amount!!)
                 }
-                getTimeAndLog(reminderEvent, entry.medicineId)
+                getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
             }
         if (!entry.amount.isNullOrBlank()) {
             dialogBuilder.initialText(entry.amount)
@@ -148,11 +147,14 @@ class ManualDose @AssistedInject constructor(
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
         val localDateTime = LocalDateTime.now()
         timePickerDialogFactory.create(localDateTime.hour, localDateTime.minute) { minutes: Int ->
-            reminderEvent.remindedTimestamp =
-                TimeHelper.instantFromDateAndMinutes(minutes, date).epochSecond
-            reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
+            val remindedInstant: Instant = TimeHelper.instantFromDateAndMinutes(minutes, date)
             activity.lifecycleScope.launch {
-                reminderEventRepository.create(reminderEvent)
+                reminderEventRepository.create(
+                    reminderEvent.copy(
+                        remindedTimestamp = remindedInstant,
+                        processedTimestamp = remindedInstant
+                    )
+                )
             }
 
             if (medicineId == -1) {
@@ -161,7 +163,7 @@ class ManualDose @AssistedInject constructor(
 
             val amount = MedicineHelper.parseAmount(reminderEvent.amount)
             if (amount != null) {
-                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, reminderEvent.remindedTimestamp)
+                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, remindedInstant.epochSecond)
             }
         }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
@@ -187,13 +189,13 @@ class ManualDose @AssistedInject constructor(
             amendName()
         }
 
-        constructor(medicine: FullMedicine, amount: String?) {
-            this.baseName = medicine.medicine.name
-            this.color = medicine.medicine.color
-            this.useColor = medicine.medicine.useColor
+        constructor(medicine: Medicine, amount: String?) {
+            this.baseName = medicine.name
+            this.color = medicine.color
+            this.useColor = medicine.useColor
             this.amount = amount
-            this.iconId = medicine.medicine.iconId
-            this.medicineId = medicine.medicine.medicineId
+            this.iconId = medicine.iconId
+            this.medicineId = medicine.id
             this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
             amendName()
         }
@@ -231,7 +233,7 @@ class ManualDose @AssistedInject constructor(
 
     companion object {
         private fun addInactiveReminders(
-            medicine: FullMedicine,
+            medicine: Medicine,
             entries: MutableList<ManualDoseEntry>
         ) {
             for (reminder in medicine.reminders) {

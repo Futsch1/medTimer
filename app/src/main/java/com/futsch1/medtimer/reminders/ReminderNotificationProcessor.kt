@@ -6,22 +6,22 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.Instant
 import java.time.ZoneId
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 class ReminderNotificationProcessor @Inject constructor(
@@ -99,8 +99,7 @@ class ReminderNotificationProcessor @Inject constructor(
                 )
 
             for (notificationReminderEvent in reminderNotification.reminderNotificationParts) {
-                notificationReminderEvent.reminderEvent.notificationId = notificationId
-                reminderEventRepository.update(notificationReminderEvent.reminderEvent)
+                reminderEventRepository.update(notificationReminderEvent.reminderEvent.copy(notificationId = notificationId))
             }
         }
     }
@@ -112,65 +111,75 @@ class ReminderNotificationProcessor @Inject constructor(
     companion object {
         suspend fun buildReminderEvent(
             remindedTimeStamp: Long,
-            medicine: FullMedicine,
+            medicine: Medicine,
             reminder: Reminder,
             reminderEventRepository: ReminderEventRepository,
             timeFormatter: TimeFormatter
         ): ReminderEvent {
-            val reminderEvent = ReminderEvent()
-            reminderEvent.reminderId = reminder.reminderId
-            reminderEvent.remindedTimestamp = remindedTimeStamp
-            reminderEvent.medicineName = medicine.medicine.name + CyclesHelper.getCycleCountString(reminder)
-            reminderEvent.color = medicine.medicine.color
-            reminderEvent.useColor = medicine.medicine.useColor
-            reminderEvent.status = ReminderEvent.ReminderStatus.RAISED
-            reminderEvent.iconId = medicine.medicine.iconId
-            reminderEvent.askForAmount = reminder.variableAmount
-            reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))
-            reminderEvent.reminderType = reminder.reminderType
-
-            when (reminder.reminderType) {
-                Reminder.ReminderType.OUT_OF_STOCK -> {
-                    reminderEvent.amount = MedicineHelper.formatAmount(medicine.medicine.amount, medicine.medicine.unit)
+            val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
+            val amount = when (reminder.reminderType) {
+                ReminderType.OUT_OF_STOCK -> {
+                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
                 }
 
-                Reminder.ReminderType.EXPIRATION_DATE -> {
-                    reminderEvent.amount =
-                        timeFormatter.daysSinceEpochToDateString(medicine.medicine.expirationDate)
+                ReminderType.EXPIRATION_DATE -> {
+                    timeFormatter.localDateToString(medicine.expirationDate)
                 }
 
                 else -> {
-                    reminderEvent.amount = reminder.amount
+                    reminder.amount
                 }
             }
-            if (reminder.isInterval) {
-                reminderEvent.lastIntervalReminderTimeInMinutes = getLastReminderEventTimeInMinutes(
+
+            val lastIntervalReminderTimeInMinutes = if (reminder.isInterval) {
+                getLastReminderEventTimeInMinutes(
                     reminderEventRepository,
-                    reminderEvent,
-                    reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
+                    reminder.id,
+                    remindedInstant,
+                    reminder.reminderType == ReminderType.WINDOWED_INTERVAL
                 )
             } else {
-                reminderEvent.lastIntervalReminderTimeInMinutes = 0
+                0
             }
 
-            return reminderEvent
+            return ReminderEvent(
+                reminderEventId = 0,
+                reminderId = reminder.id,
+                medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder),
+                amount = amount,
+                color = medicine.color,
+                useColor = medicine.useColor,
+                status = ReminderEvent.ReminderStatus.RAISED,
+                remindedTimestamp = remindedInstant,
+                processedTimestamp = Instant.EPOCH,
+                notificationId = 0,
+                iconId = medicine.iconId,
+                remainingRepeats = 0,
+                notes = "",
+                reminderType = reminder.reminderType,
+                stockHandled = false,
+                askForAmount = reminder.variableAmount,
+                tags = medicine.tags.map { it.name },
+                lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+            )
         }
 
         private suspend fun getLastReminderEventTimeInMinutes(
             reminderEventRepository: ReminderEventRepository,
-            reminderEvent: ReminderEvent,
+            reminderId: Int,
+            remindedTimestamp: Instant,
             isWindowedInterval: Boolean
         ): Int {
-            val lastReminderEvent = reminderEventRepository.getLast(reminderEvent.reminderId)
+            val lastReminderEvent = reminderEventRepository.getLast(reminderId)
             return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
                 if (isWindowedInterval && TimeHelper.secondsSinceEpochToLocalDate(
-                        lastReminderEvent.remindedTimestamp,
+                        lastReminderEvent.remindedTimestamp.epochSecond,
                         ZoneId.systemDefault()
-                    ) !== TimeHelper.secondsSinceEpochToLocalDate(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
+                    ) != TimeHelper.secondsSinceEpochToLocalDate(remindedTimestamp.epochSecond, ZoneId.systemDefault())
                 ) {
                     0
                 } else {
-                    (lastReminderEvent.processedTimestamp / 60).toInt()
+                    (lastReminderEvent.processedTimestamp.epochSecond / 60).toInt()
                 }
             } else {
                 0

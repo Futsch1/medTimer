@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.database
+package com.futsch1.medtimer.database.backup
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags

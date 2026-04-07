@@ -2,16 +2,14 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 class RefillProcessor @Inject constructor(
@@ -22,17 +20,19 @@ class RefillProcessor @Inject constructor(
     private val timeAccess: TimeAccess
 ) {
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
-        val reminderEvent = reminderEventRepository.get(processedNotificationData.reminderEventIds[0])!!
-        val reminder = reminderRepository.get(reminderEvent.reminderId)
-        val medicineId = reminder!!.medicineRelId
-        processRefill(medicineId, reminderEvent)
+        val reminderEvent = reminderEventRepository.get(processedNotificationData.reminderEventIds[0])
+        val reminder = reminderEvent?.let { reminderRepository.get(it.reminderId) }
+        reminder?.let { processRefill(it.medicineRelId, reminderEvent) }
+
     }
 
-    suspend fun processRefill(medicineId: Int, reminderEvent: ReminderEvent? = null) {
-        val medicine = medicineRepository.getFull(medicineId)!!
+    suspend fun processRefill(medicineId: Int?, reminderEvent: ReminderEvent? = null) {
+        if (medicineId == null) {
+            return
+        }
+        val medicine = medicineRepository.get(medicineId) ?: return
 
-        val refillEvent = processRefillInternal(medicine)
-        medicineRepository.update(medicine.medicine)
+        val refillEvent = processRefillInternal(medicine, medicineRepository)
         reminderEventRepository.create(refillEvent)
 
         if (reminderEvent != null) {
@@ -43,33 +43,33 @@ class RefillProcessor @Inject constructor(
         }
     }
 
-    private fun processRefillInternal(medicine: FullMedicine): ReminderEvent {
-        medicine.medicine.amount += medicine.medicine.refillSize
-        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.medicine.name} with ${medicine.medicine.refillSize} to amount ${medicine.medicine.amount}")
+    private suspend fun processRefillInternal(medicine: Medicine, medicineRepository: MedicineRepository): ReminderEvent {
+        val medicine = medicine.copy(amount = medicine.amount + medicine.refillSize)
+        medicineRepository.update(medicine)
+        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.name} with ${medicine.refillSize} to amount ${medicine.amount + medicine.refillSize}")
 
         return buildReminderEvent(medicine)
     }
 
-    fun buildReminderEvent(medicine: FullMedicine): ReminderEvent {
-        val reminderEvent = ReminderEvent()
-        reminderEvent.reminderId = -1
-        reminderEvent.remindedTimestamp = timeAccess.now().toEpochMilli() / 1000
-        reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-        reminderEvent.medicineName = medicine.medicine.name
-        reminderEvent.color = medicine.medicine.color
-        reminderEvent.useColor = medicine.medicine.useColor
-        reminderEvent.status = ReminderEvent.ReminderStatus.ACKNOWLEDGED
-        reminderEvent.iconId = medicine.medicine.iconId
-        reminderEvent.askForAmount = false
-        reminderEvent.tags = medicine.tags.stream().map { t: Tag? -> t!!.name }.collect((Collectors.toList()))
-        reminderEvent.reminderType = Reminder.ReminderType.REFILL
-
-        reminderEvent.amount = "${MedicineHelper.formatAmount(medicine.medicine.amount - medicine.medicine.refillSize, medicine.medicine.unit)} ➡ ${
-            MedicineHelper.formatAmount(
-                medicine.medicine.amount,
-                medicine.medicine.unit
-            )
-        }"
+    fun buildReminderEvent(medicine: Medicine): ReminderEvent {
+        val reminderEvent = ReminderEvent.default().copy(
+            medicineName = medicine.name,
+            color = medicine.color,
+            useColor = medicine.useColor,
+            iconId = medicine.iconId,
+            tags = medicine.tags.map { it.name },
+            amount = "${MedicineHelper.formatAmount(medicine.amount - medicine.refillSize, medicine.unit)} ➡ ${
+                MedicineHelper.formatAmount(
+                    medicine.amount,
+                    medicine.unit
+                )
+            }",
+            status = ReminderEvent.ReminderStatus.ACKNOWLEDGED,
+            remindedTimestamp = timeAccess.now(),
+            processedTimestamp = timeAccess.now(),
+            reminderId = -1,
+            reminderType = ReminderType.REFILL
+        )
 
         return reminderEvent
     }

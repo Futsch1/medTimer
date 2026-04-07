@@ -1,0 +1,71 @@
+package com.futsch1.medtimer.database.backup
+
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.database.MedicineToTagEntity
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.TagEntity
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.TagDao
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import java.time.Instant
+
+class JSONMedicineBackup(
+    private val medicineDao: MedicineDao,
+    private val reminderDao: ReminderDao,
+    private val tagDao: TagDao
+) : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
+    override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
+        list.flatMap { it.reminders }
+            .filter { it.instructions == null }
+            .forEach { it.instructions = "" }
+        return super.createBackup(databaseVersion, list)
+    }
+
+    override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
+        return builder
+            .registerTypeAdapter(MedicineEntity::class.java, FullDeserialize<MedicineEntity?>())
+            .registerTypeAdapter(TagEntity::class.java, FullDeserialize<Any?>())
+            .registerTypeAdapter(ReminderEntity::class.java, FullDeserialize<ReminderEntity?>())
+    }
+
+    override fun isInvalid(item: FullMedicineEntity?): Boolean {
+        return item == null
+    }
+
+    override suspend fun applyBackup(list: List<FullMedicineEntity>) {
+        reminderDao.deleteAll()
+        medicineDao.deleteAll()
+        tagDao.deleteAll()
+
+        var sortOrder = 1.0
+
+        for (fullMedicine in list) {
+            if (fullMedicine.medicine.sortOrder == 0.0) {
+                fullMedicine.medicine.sortOrder = sortOrder++
+            }
+            val medicineId = medicineDao.create(fullMedicine.medicine)
+            processReminders(fullMedicine, medicineId.toInt())
+            processTags(fullMedicine, medicineId.toInt())
+        }
+    }
+
+    private suspend fun processTags(fullMedicine: FullMedicineEntity, medicineId: Int) {
+        for (tag in fullMedicine.tags) {
+            val tagId = tagDao.create(tag).toInt()
+            tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
+        }
+    }
+
+    private suspend fun processReminders(fullMedicine: FullMedicineEntity, medicineId: Int) {
+        val reminders: MutableList<ReminderEntity> = mutableListOf()
+        for (reminder in fullMedicine.reminders) {
+            reminder.medicineRelId = medicineId
+            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
+            reminders.add(reminder)
+        }
+        reminderDao.createAll(reminders)
+    }
+}

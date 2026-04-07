@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import android.app.NotificationManager
 import android.content.Context
+import com.futsch1.medtimer.model.Medicine
 
 class ReminderNotificationChannelManager {
     companion object {
@@ -20,34 +21,30 @@ class ReminderNotificationChannelManager {
                 channelId++
             }
 
-            createChannel(context, notificationManager, Importance.DEFAULT)
-            createChannel(context, notificationManager, Importance.HIGH)
+            createChannel(context, notificationManager, Medicine.NotificationImportance.DEFAULT)
+            createChannel(context, notificationManager, Medicine.NotificationImportance.HIGH)
         }
 
         fun getNotificationChannel(
             context: Context,
             notificationManager: NotificationManager,
-            importance: Importance
+            notificationImportance: Medicine.NotificationImportance
         ): ReminderNotificationChannel {
-            return createChannel(context, notificationManager, importance)
+            return createChannel(context, notificationManager, notificationImportance)
         }
 
         private fun createChannel(
             context: Context,
             notificationManager: NotificationManager,
-            importance: Importance
+            notificationImportance: Medicine.NotificationImportance
         ): ReminderNotificationChannel {
             return ReminderNotificationChannel(
                 context,
                 notificationManager,
-                importance.value,
-                if (importance == Importance.HIGH) R.string.high else R.string.default_
+                notificationImportance.value,
+                if (notificationImportance == Medicine.NotificationImportance.HIGH) R.string.high else R.string.default_
             )
         }
     }
 
-    enum class Importance(val value: Int) {
-        DEFAULT(NotificationManager.IMPORTANCE_DEFAULT),
-        HIGH(NotificationManager.IMPORTANCE_HIGH)
-    }
 }

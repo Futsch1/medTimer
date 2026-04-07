@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.ProcessorCode
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint

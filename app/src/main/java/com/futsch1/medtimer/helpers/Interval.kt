@@ -2,6 +2,7 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.model.ReminderTime
 
 enum class IntervalUnit {
     MINUTES, HOURS, DAYS
@@ -18,6 +19,8 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
     constructor(value: Int, unit: IntervalUnit) : this(
         getMinutes(unit, value)
     )
+
+    constructor(value: ReminderTime, maxMinutesValue: Int = MAX_INTERVAL_MINUTES) : this(value.minutes, maxMinutesValue)
 
     fun getUnit(): IntervalUnit {
         return when {

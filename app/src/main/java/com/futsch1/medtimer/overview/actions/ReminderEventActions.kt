@@ -3,25 +3,25 @@ package com.futsch1.medtimer.overview.actions
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.overview.OverviewReminderEvent
-import com.futsch1.medtimer.overview.OverviewState
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.overview.model.OverviewState
+import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ReminderEventActions @AssistedInject constructor(
-    @Assisted val event: OverviewReminderEvent,
+    @Assisted val event: PastReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderEventRepository: ReminderEventRepository,
     private val timePickerDialogFactory: TimePickerDialogFactory
@@ -29,10 +29,12 @@ class ReminderEventActions @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(event: OverviewReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
+        fun create(event: PastReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
     }
 
-    private val isStockEvent = event.reminderEvent.isOutOfStockOrExpirationOrRefillReminder
+    private val isStockEvent = event.reminderEvent.reminderType in setOf(
+        ReminderType.OUT_OF_STOCK, ReminderType.EXPIRATION_DATE, ReminderType.REFILL
+    )
 
     override val visibleButtons: MutableList<Button> = mutableListOf()
 
@@ -82,16 +84,15 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private fun processPostponeReminder(reminderEvent: ReminderEvent) {
-        val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminderEvent.remindedTimestamp), ZoneId.systemDefault())
+        val localDateTime = LocalDateTime.ofInstant(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
         timePickerDialogFactory
             .create(localDateTime.hour, localDateTime.minute) { minutes ->
-                val newReminderTime = TimeHelper.changeTimeStampMinutes(reminderEvent.remindedTimestamp, minutes)
+                val newReminderTime = TimeHelper.changeTimeMinutes(reminderEvent.remindedTimestamp, minutes)
                 fragmentActivity.lifecycleScope.launch {
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    reminderNotificationData.remindInstant = Instant.ofEpochSecond(newReminderTime)
+                    reminderNotificationData.remindInstant = newReminderTime
                     reminderNotificationData.notificationId = reminderEvent.notificationId
-                    reminderEvent.remindedTimestamp = newReminderTime
-                    reminderEventRepository.update(reminderEvent)
+                    reminderEventRepository.update(reminderEvent.copy(remindedTimestamp = newReminderTime))
                     ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
@@ -113,8 +114,7 @@ class ReminderEventActions @AssistedInject constructor(
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
-                reminderEvent.status = ReminderEvent.ReminderStatus.DELETED
-                reminderEventRepository.update(reminderEvent)
+                reminderEventRepository.update(reminderEvent.copy(status = ReminderEvent.ReminderStatus.DELETED))
             }
         }, {})
     }

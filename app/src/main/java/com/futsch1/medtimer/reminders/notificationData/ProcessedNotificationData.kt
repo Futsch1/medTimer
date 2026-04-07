@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders.notificationData
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 
 class ProcessedNotificationData(val reminderEventIds: List<Int>) {
     fun toIntent(actionIntent: Intent) {

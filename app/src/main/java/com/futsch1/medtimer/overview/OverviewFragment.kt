@@ -24,6 +24,7 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
@@ -87,7 +88,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
                 factory.create(
                     medicineViewModel.getLiveReminderEvents(
                         Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60),
-                        com.futsch1.medtimer.database.statusValuesWithoutDelete
+                        ReminderEvent.statusValuesWithoutDelete
                     ),
                     medicineViewModel.scheduledReminders
                 )

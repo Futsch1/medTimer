@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import android.annotation.SuppressLint
-import com.futsch1.medtimer.database.Reminder
+import com.futsch1.medtimer.model.Reminder
 import java.time.LocalDate
 
 object CyclesHelper {
@@ -12,7 +12,7 @@ object CyclesHelper {
         }
 
         val cycleStartDay = reminder.cycleStartDay
-        val dayInCycle = LocalDate.now().toEpochDay() - cycleStartDay
+        val dayInCycle = LocalDate.now().toEpochDay() - cycleStartDay.toEpochDay()
         val cycleLength = reminder.consecutiveDays + reminder.pauseDays
 
         val dayWithinCycle = dayInCycle % cycleLength + 1

@@ -10,14 +10,17 @@ import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.database.FullMedicineEntity
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.database.toModel.toEntity
+import com.futsch1.medtimer.database.toModel.toModel
 import com.futsch1.medtimer.model.PersistentData
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -33,9 +36,9 @@ import java.time.Instant
 import java.time.LocalDate
 
 class RepositoryFakes {
-    val medicines = mutableListOf<Medicine>()
-    val reminderEvents = mutableListOf<ReminderEvent>()
-    val reminders = mutableListOf<Reminder>()
+    val medicines = mutableListOf<MedicineEntity>()
+    val reminderEvents = mutableListOf<ReminderEventEntity>()
+    val reminders = mutableListOf<ReminderEntity>()
 
     val medicineRepositoryMock: MedicineRepository = mock()
     val reminderRepositoryMock: ReminderRepository = mock()
@@ -43,39 +46,51 @@ class RepositoryFakes {
 
     init {
         // MedicineRepository mocks
-        `when`(runBlocking { medicineRepositoryMock.getFullAll() }).thenAnswer { buildFullMedicines() }
-        `when`(runBlocking { medicineRepositoryMock.getFull(anyInt()) }).thenAnswer { buildFullMedicines().first { m -> m.medicine.medicineId == it.arguments[0] } }
+        `when`(runBlocking { medicineRepositoryMock.getAll() }).thenAnswer { buildMedicines() }
+        `when`(runBlocking { medicineRepositoryMock.get(anyInt()) }).thenAnswer { buildMedicines().firstOrNull { m -> m.id == it.arguments[0] } }
         `when`(runBlocking { medicineRepositoryMock.update(any()) }).thenAnswer {
-            val medicine = it.arguments[0] as Medicine
-            val index = medicines.indexOfFirst { m -> m.medicineId == medicine.medicineId }
-            medicines[index] = medicine
+            val medicine = it.arguments[0] as com.futsch1.medtimer.model.Medicine
+            val index = medicines.indexOfFirst { m -> m.medicineId == medicine.id }
+            if (index >= 0) medicines[index] = medicine.toEntity()
         }
 
         // ReminderRepository mocks
-        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.first { r -> r.reminderId == it.arguments[0] } }
+        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel() }
 
         // ReminderEventRepository mocks
-        `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents }
-        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer { reminderEvents.first { r -> r.reminderEventId == it.arguments[0] } }
+        `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
+        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer {
+            reminderEvents.firstOrNull { r -> r.reminderEventId == it.arguments[0] }?.toModel()
+        }
         `when`(runBlocking { reminderEventRepositoryMock.create(any()) }).thenAnswer {
-            val reminderEvent = it.arguments[0] as ReminderEvent
+            val reminderEvent = (it.arguments[0] as ReminderEvent).toEntity()
             reminderEvent.reminderEventId = reminderEvents.size + 1
             reminderEvents.add(reminderEvent)
-            reminderEvent.reminderEventId.toLong()
+            reminderEvents.size.toLong()
+        }
+        `when`(runBlocking { reminderEventRepositoryMock.update(any()) }).thenAnswer {
+            val domainEvent = it.arguments[0] as ReminderEvent
+            val index = reminderEvents.indexOfFirst { e -> e.reminderEventId == domainEvent.reminderEventId }
+            if (index >= 0) reminderEvents[index] = domainEvent.toEntity()
+        }
+        `when`(runBlocking { reminderEventRepositoryMock.updateAll(anyList()) }).thenAnswer {
+            @Suppress("UNCHECKED_CAST")
+            val domainEvents = it.arguments[0] as List<ReminderEvent>
+            domainEvents.forEach { domainEvent ->
+                val index = reminderEvents.indexOfFirst { e -> e.reminderEventId == domainEvent.reminderEventId }
+                if (index >= 0) reminderEvents[index] = domainEvent.toEntity()
+            }
         }
     }
 
-    fun buildFullMedicines(): List<FullMedicine> {
-        val fullMedicines = mutableListOf<FullMedicine>()
-        for (medicine in medicines) {
-            val reminders = this.reminders.stream().filter { r -> r.medicineRelId == medicine.medicineId }
-            val fullMedicine = FullMedicine()
-            fullMedicine.medicine = medicine
-            fullMedicine.reminders = reminders.toList()
+    fun buildMedicines(): List<com.futsch1.medtimer.model.Medicine> {
+        return medicines.map { medicineEntity ->
+            val fullMedicine = FullMedicineEntity()
+            fullMedicine.medicine = medicineEntity
+            fullMedicine.reminders = this.reminders.filter { r -> r.medicineRelId == medicineEntity.medicineId }.toMutableList()
             fullMedicine.tags = listOf()
-            fullMedicines.add(fullMedicine)
+            fullMedicine.toModel()
         }
-        return fullMedicines
     }
 }
 

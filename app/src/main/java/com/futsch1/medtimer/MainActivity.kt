@@ -30,6 +30,7 @@ import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
+import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.hasBiometrics
 import com.futsch1.medtimer.model.ThemeSetting

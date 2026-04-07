@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.ParseException
@@ -11,6 +12,7 @@ import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -42,6 +44,20 @@ class TimeFormatter @Inject constructor(
             return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(calendar.time)
         } catch (_: DateTimeException) {
             return minutesToDurationString(minutes)
+        }
+    }
+
+    fun toTimeString(localTime: LocalTime): String {
+        val dateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+            .withLocale(getLocale())
+        return localTime.format(dateTimeFormatter)
+    }
+
+    fun toTimeString(reminderTime: ReminderTime): String {
+        return if (reminderTime.isDuration) {
+            minutesToDurationString(reminderTime.minutes)
+        } else {
+            toTimeString(reminderTime.getLocalTime())
         }
     }
 

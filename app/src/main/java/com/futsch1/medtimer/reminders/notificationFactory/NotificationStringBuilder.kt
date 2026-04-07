@@ -4,9 +4,9 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.Tag
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationPart
@@ -50,20 +50,22 @@ class NotificationStringBuilder(
             builder.append("$separatorChar$instructions")
         }
 
-        val fullMedicine = reminderNotificationPart.medicine
-        if (fullMedicine.isStockManagementActive) {
+        val medicine = reminderNotificationPart.medicine
+        if (medicine.isStockManagementActive()) {
             builder.append(separatorChar)
-            builder.append(context.getString(
-                R.string.medicine_stock_string,
-                MedicineHelper.formatAmount(fullMedicine.medicine.amount, fullMedicine.medicine.unit)
-            ))
+            builder.append(
+                context.getString(
+                    R.string.medicine_stock_string,
+                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+                )
+            )
             if (showStockIcons) {
-                builder.append(MedicineHelper.getStockIcons(fullMedicine))
+                builder.append(MedicineHelper.getStockIcons(medicine))
             }
         }
 
         if (!concise) {
-            builder.append(getTagNames(fullMedicine.tags))
+            builder.append(getTagNames(medicine.tags))
         }
 
         return builder
@@ -71,7 +73,7 @@ class NotificationStringBuilder(
 
     private fun buildSingleBaseString(reminderNotificationPart: ReminderNotificationPart): SpannableStringBuilder {
         val medicineNameString =
-            MedicineHelper.getMedicineName(reminderNotificationPart.medicine.medicine, true, preferencesDataSource.preferences.value)
+            MedicineHelper.getMedicineName(reminderNotificationPart.medicine, true, preferencesDataSource.preferences.value)
         return SpannableStringBuilder().bold { append(medicineNameString) }
             .append(if (reminderNotificationPart.reminder.amount.isNotEmpty()) " (${reminderNotificationPart.reminder.amount})" else "")
     }

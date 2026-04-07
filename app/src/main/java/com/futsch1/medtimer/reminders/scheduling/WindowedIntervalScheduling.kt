@@ -1,10 +1,11 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
 class WindowedIntervalScheduling(
@@ -33,8 +34,8 @@ class WindowedIntervalScheduling(
             return instant in startInstant..endInstant
         }
 
-        private fun calcInstant(minutesOfDay: Int): Instant {
-            val dateTime = date.atTime(minutesOfDay / 60, minutesOfDay % 60)
+        private fun calcInstant(localTime: LocalTime): Instant {
+            val dateTime = date.atTime(localTime)
             return dateTime.toInstant(timeAccess.systemZone().rules.getOffset(dateTime))
         }
     }
@@ -51,7 +52,7 @@ class WindowedIntervalScheduling(
 
     private fun getStartInstant(date: LocalDate): Instant {
         val interval = Interval(reminder, date, timeAccess)
-        val createdInstant = Instant.ofEpochSecond(reminder.createdTimestamp)
+        val createdInstant = reminder.createdTime
         return if (interval.startInstant.isAfter(createdInstant)) {
             interval.startInstant
         } else {
@@ -60,17 +61,16 @@ class WindowedIntervalScheduling(
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
-        val lastRemindedInstant = Instant.ofEpochSecond(
-            lastReminderEvent.remindedTimestamp
-        )
+        val lastRemindedInstant = lastReminderEvent.remindedTimestamp
+
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                if (lastReminderEvent.processedTimestamp != 0L)
-                    Instant.ofEpochSecond(lastReminderEvent.processedTimestamp)
+                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
+                    lastReminderEvent.processedTimestamp
                 else null
             } else
                 lastRemindedInstant
-        val nextTime = instant?.plusSeconds(reminder.timeInMinutes * 60L)
+        val nextTime = instant?.plusSeconds(reminder.time.seconds)
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
         return if (nextTime != null) {
             val interval = Interval(reminder, timeAccess.localDate(), timeAccess)

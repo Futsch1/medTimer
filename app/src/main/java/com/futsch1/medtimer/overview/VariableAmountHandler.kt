@@ -4,11 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
@@ -40,16 +40,15 @@ class VariableAmountHandler @Inject constructor(
             }
 
             TextInputDialogBuilder(activity)
-                .title(reminderNotificationPart.medicine.medicine.name)
+                .title(reminderNotificationPart.medicine.name)
                 .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {
-                        reminderNotificationPart.reminderEvent.amount = it
                         activity.lifecycleScope.launch(ioDispatcher) {
                             notificationProcessor.setReminderEventStatus(
                                 ReminderEvent.ReminderStatus.TAKEN,
-                                listOf(reminderNotificationPart.reminderEvent)
+                                listOf(reminderNotificationPart.reminderEvent.copy(amount = it))
                             )
                         }
                     }
@@ -61,17 +60,9 @@ class VariableAmountHandler @Inject constructor(
                 }
                 .show()
         }
-
-        withContext(ioDispatcher) {
-            notificationProcessor.setReminderEventStatus(
-                ReminderEvent.ReminderStatus.TAKEN,
-                reminderEvents,
-            )
-        }
     }
 
     private suspend fun touchReminderEvent(reminderEvent: ReminderEvent) {
-        reminderEvent.processedTimestamp = Instant.now().epochSecond
-        reminderEventRepository.update(reminderEvent)
+        reminderEventRepository.update(reminderEvent.copy(processedTimestamp = Instant.now()))
     }
 }

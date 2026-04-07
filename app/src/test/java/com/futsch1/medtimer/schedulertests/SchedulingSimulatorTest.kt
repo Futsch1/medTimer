@@ -1,12 +1,12 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
@@ -16,11 +16,12 @@ import org.junit.Test
 import org.mockito.Mockito
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
-    private fun buildSchedulingSimulator(medicines: List<FullMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
+    private fun buildSchedulingSimulator(medicines: List<TestMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
         val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
@@ -28,14 +29,14 @@ class SchedulingSimulatorTest {
         val stateFlow = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferencesDataSource.preferences).thenReturn(stateFlow)
 
-        return SchedulingSimulator(medicines, recentReminders, mockTimeAccess, mockPreferencesDataSource)
+        return SchedulingSimulator(medicines.map { it.toMedicine() }, recentReminders, mockTimeAccess, mockPreferencesDataSource)
     }
 
     @Test
     fun standard() {
         val medicines = listOf(
-            TestHelper.buildFullMedicine(0, "Test"),
-            TestHelper.buildFullMedicine(1, "Test2")
+            TestHelper.buildTestMedicine(0, "Test"),
+            TestHelper.buildTestMedicine(1, "Test2")
         )
         medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 60, 1))
         medicines[1].reminders.add(TestHelper.buildReminder(1, 2, "1", 120, 1))
@@ -56,20 +57,23 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(5, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 60), medicines[0].medicine, medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 120), medicines[1].medicine, medicines[1].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 60), medicines[0].medicine, medicines[0].reminders[0], 2)
-        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[1].medicine, medicines[1].reminders[0], 3)
-        assertRemindedAtIndex(scheduledReminders, on(3, 60), medicines[0].medicine, medicines[0].reminders[0], 4)
+        assertReminded(scheduledReminders, on(1, 60), medicines[0].toMedicine(), medicines[0].reminders[0])
+        assertRemindedAtIndex(scheduledReminders, on(1, 120), medicines[1].toMedicine(), medicines[1].reminders[0], 1)
+        assertRemindedAtIndex(scheduledReminders, on(2, 60), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
+        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[1].toMedicine(), medicines[1].reminders[0], 3)
+        assertRemindedAtIndex(scheduledReminders, on(3, 60), medicines[0].toMedicine(), medicines[0].reminders[0], 4)
     }
 
     @Test
     fun interval() {
         val medicines = listOf(
-            TestHelper.buildFullMedicine(0, "Test")
+            TestHelper.buildTestMedicine(0, "Test")
         )
-        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 600, 1))
-        medicines[0].reminders[0].intervalStart = on(1, 600).epochSecond
+        medicines[0].reminders.add(
+            TestHelper.buildReminder(0, 1, "1", 600, 1).copy(
+                intervalStart = on(1, 600)
+            )
+        )
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
@@ -81,21 +85,24 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(3, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 600), medicines[0].medicine, medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 1200), medicines[0].medicine, medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 360), medicines[0].medicine, medicines[0].reminders[0], 2)
+        assertReminded(scheduledReminders, on(1, 600), medicines[0].toMedicine(), medicines[0].reminders[0])
+        assertRemindedAtIndex(scheduledReminders, on(1, 1200), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
+        assertRemindedAtIndex(scheduledReminders, on(2, 360), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
     }
 
     @Test
     fun windowedInterval() {
         val medicines = listOf(
-            TestHelper.buildFullMedicine(0, "Test")
+            TestHelper.buildTestMedicine(0, "Test")
         )
-        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 480, 1))
-        medicines[0].reminders[0].intervalStart = on(1, 0).epochSecond
-        medicines[0].reminders[0].windowedInterval = true
-        medicines[0].reminders[0].intervalStartTimeOfDay = 120
-        medicines[0].reminders[0].intervalEndTimeOfDay = 700
+        medicines[0].reminders.add(
+            TestHelper.buildReminder(0, 1, "1", 480, 1).copy(
+                intervalStart = on(1, 0),
+                windowedInterval = true,
+                intervalStartTimeOfDay = LocalTime.of(2, 0),
+                intervalEndTimeOfDay = LocalTime.of(11, 40)
+            )
+        )
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
@@ -107,21 +114,24 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(3, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 120), medicines[0].medicine, medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 600), medicines[0].medicine, medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[0].medicine, medicines[0].reminders[0], 2)
+        assertReminded(scheduledReminders, on(1, 120), medicines[0].toMedicine(), medicines[0].reminders[0])
+        assertRemindedAtIndex(scheduledReminders, on(1, 600), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
+        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
     }
 
     @Test
     fun windowedIntervalReversed() {
         val medicines = listOf(
-            TestHelper.buildFullMedicine(0, "Test")
+            TestHelper.buildTestMedicine(0, "Test")
         )
-        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 741, 1))
-        medicines[0].reminders[0].intervalStart = on(1, 0).epochSecond
-        medicines[0].reminders[0].windowedInterval = true
-        medicines[0].reminders[0].intervalStartTimeOfDay = 700
-        medicines[0].reminders[0].intervalEndTimeOfDay = 120
+        medicines[0].reminders.add(
+            TestHelper.buildReminder(0, 1, "1", 741, 1).copy(
+                intervalStart = on(1, 0),
+                windowedInterval = true,
+                intervalStartTimeOfDay = LocalTime.of(11, 40),
+                intervalEndTimeOfDay = LocalTime.of(2, 0)
+            )
+        )
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
@@ -133,22 +143,22 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(5, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 700), medicines[0].medicine, medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(2, 1), medicines[0].medicine, medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 700), medicines[0].medicine, medicines[0].reminders[0], 2)
-        assertRemindedAtIndex(scheduledReminders, on(3, 1), medicines[0].medicine, medicines[0].reminders[0], 3)
-        assertRemindedAtIndex(scheduledReminders, on(3, 700), medicines[0].medicine, medicines[0].reminders[0], 4)
-
+        assertReminded(scheduledReminders, on(1, 700), medicines[0].toMedicine(), medicines[0].reminders[0])
+        assertRemindedAtIndex(scheduledReminders, on(2, 1), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
+        assertRemindedAtIndex(scheduledReminders, on(2, 700), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
+        assertRemindedAtIndex(scheduledReminders, on(3, 1), medicines[0].toMedicine(), medicines[0].reminders[0], 3)
+        assertRemindedAtIndex(scheduledReminders, on(3, 700), medicines[0].toMedicine(), medicines[0].reminders[0], 4)
     }
 
     @Test
     fun linkedAndAmount() {
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        medicineWithReminders.medicine.amount = 12.0
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
+        medicineWithReminders.amount = 12.0
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
         medicineWithReminders.reminders.add(reminderSource)
-        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1)
-        reminderLinked.linkedReminderId = 1
+        val reminderLinked = TestHelper.buildReminder(1, 2, "2", 60, 1).copy(
+            linkedReminderId = 1
+        )
         medicineWithReminders.reminders.add(reminderLinked)
 
         val medicines = listOf(medicineWithReminders)
@@ -181,7 +191,7 @@ class SchedulingSimulatorTest {
 
     @Test
     fun noReminders() {
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val medicines = listOf(medicineWithReminders)
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
@@ -193,13 +203,14 @@ class SchedulingSimulatorTest {
 
     @Test
     fun dailyReminders() {
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.intervalStart = 1
-        reminder.windowedInterval = true
-        reminder.intervalStartsFromProcessed = false
-        reminder.intervalStartTimeOfDay = 120
-        reminder.intervalEndTimeOfDay = 700
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
+            intervalStart = Instant.ofEpochSecond(60 * 60),
+            windowedInterval = true,
+            intervalStartsFromProcessed = false,
+            intervalStartTimeOfDay = LocalTime.of(2, 0),
+            intervalEndTimeOfDay = LocalTime.of(11, 40)
+        )
         medicineWithReminders.reminders.add(reminder)
 
         val medicines = listOf(medicineWithReminders)
@@ -228,13 +239,14 @@ class SchedulingSimulatorTest {
 
     @Test
     fun outOfStock() {
-        val medicineWithReminders = TestHelper.buildFullMedicine(1, "Test")
-        medicineWithReminders.medicine.amount = 12.0
+        val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
+        medicineWithReminders.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "3", 480, 1)
         medicineWithReminders.reminders.add(reminder)
-        val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 481, 1)
-        outOfStockReminder.outOfStockThreshold = 6.0
-        outOfStockReminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+        val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 481, 1).copy(
+            outOfStockThreshold = 6.0,
+            outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+        )
         medicineWithReminders.reminders.add(outOfStockReminder)
 
         val medicines = listOf(medicineWithReminders)
@@ -252,7 +264,7 @@ class SchedulingSimulatorTest {
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(6.0, amount)
-                assertEquals(scheduledReminder.reminder.reminderType, Reminder.ReminderType.OUT_OF_STOCK)
+                assertEquals(scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
             }
             scheduledReminders.size < 3
         }
@@ -261,10 +273,11 @@ class SchedulingSimulatorTest {
     @Test
     fun singleDays() {
         val medicines = listOf(
-            TestHelper.buildFullMedicine(0, "Test")
+            TestHelper.buildTestMedicine(0, "Test")
         )
-        val reminder = TestHelper.buildReminder(0, 1, "1", 60, 1)
-        reminder.activeDaysOfMonth = (1 shl 5) or (1 shl 8)
+        val reminder = TestHelper.buildReminder(0, 1, "1", 60, 1).copy(
+            activeDaysOfMonth = listOf(5, 8)
+        )
         medicines[0].reminders.add(reminder)
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
@@ -273,11 +286,11 @@ class SchedulingSimulatorTest {
         simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
-                assertEquals(LocalDate.EPOCH.plusDays(5), localDate)
+                assertEquals(LocalDate.EPOCH.plusDays(4), localDate)
                 assertEquals(0.0, amount)
             }
             if (scheduledReminders.size == 2) {
-                assertEquals(LocalDate.EPOCH.plusDays(8), localDate)
+                assertEquals(LocalDate.EPOCH.plusDays(7), localDate)
             }
             scheduledReminders.size < 2
         }

@@ -8,9 +8,8 @@ import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.overview.EditEventSheetDialogFragment
 import com.futsch1.medtimer.remindertable.ReminderTableCellViewHolder.OnEditClickListener
 
@@ -106,7 +105,7 @@ class ReminderTableAdapter(
                 ),
                 ReminderTableCellModel(
                     reminderEvent.remindedTimestamp,
-                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp),
+                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp.epochSecond),
                     reminderEvent.reminderEventId,
                     "time"
                 )
@@ -133,8 +132,8 @@ class ReminderTableAdapter(
         formatter: TimeFormatter
     ): String {
         return when (reminderEvent.status) {
-            ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp)
-            ReminderStatus.RAISED -> " "
+            ReminderEvent.ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp.epochSecond)
+            ReminderEvent.ReminderStatus.RAISED -> " "
             else -> "-"
         }
     }
