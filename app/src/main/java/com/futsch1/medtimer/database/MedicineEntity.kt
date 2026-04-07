@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.ReminderNotificationChannelManager
+import com.futsch1.medtimer.model.Medicine
 import com.google.gson.annotations.Expose
 
 @Entity(tableName = "Medicine")
@@ -27,7 +27,7 @@ class MedicineEntity() {
 
     @ColumnInfo(defaultValue = "3")
     @Expose
-    var notificationImportance: Int = ReminderNotificationChannelManager.Importance.DEFAULT.value
+    var notificationImportance: Int = Medicine.NotificationImportance.DEFAULT.value
 
     @ColumnInfo(defaultValue = "0")
     @Expose

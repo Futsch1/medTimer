@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.model
 
-import com.futsch1.medtimer.ReminderNotificationChannelManager
+import android.app.NotificationManager
 import java.time.LocalDate
 
 data class Medicine(
@@ -8,7 +8,7 @@ data class Medicine(
     val id: Int,
     val color: Int,
     val useColor: Boolean,
-    val notificationImportance: ReminderNotificationChannelManager.Importance,
+    val notificationImportance: NotificationImportance,
     val iconId: Int,
     val amount: Double,
     val refillSize: Double,
@@ -21,6 +21,10 @@ data class Medicine(
     val tags: List<Tag>,
     val reminders: List<Reminder>
 ) {
+    enum class NotificationImportance(val value: Int) {
+        DEFAULT(NotificationManager.IMPORTANCE_DEFAULT),
+        HIGH(NotificationManager.IMPORTANCE_HIGH)
+    }
 
     fun hasExpired(): Boolean {
         return expirationDate != LocalDate.EPOCH && expirationDate < LocalDate.now()
@@ -44,7 +48,7 @@ data class Medicine(
             id = 0,
             color = 0,
             useColor = false,
-            notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT,
+            notificationImportance = NotificationImportance.DEFAULT,
             iconId = 0,
             amount = 0.0,
             refillSize = 0.0,

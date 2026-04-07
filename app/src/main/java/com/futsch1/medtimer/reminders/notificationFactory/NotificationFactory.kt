@@ -10,7 +10,6 @@ import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.ReminderNotificationChannelManager
-import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.model.Medicine
 import kotlin.time.Clock
@@ -51,12 +50,12 @@ abstract class NotificationFactory(
         return medicineIcons.getIconsBitmap(iconIds)
     }
 
-    private fun getHighestImportance(medicines: List<Medicine>): Importance {
+    private fun getHighestImportance(medicines: List<Medicine>): Medicine.NotificationImportance {
         for (medicine in medicines) {
-            if (medicine.notificationImportance == Importance.HIGH)
-                return Importance.HIGH
+            if (medicine.notificationImportance == Medicine.NotificationImportance.HIGH)
+                return Medicine.NotificationImportance.HIGH
         }
-        return Importance.DEFAULT
+        return Medicine.NotificationImportance.DEFAULT
     }
 
     private fun getColor(medicines: List<Medicine>): Color? {

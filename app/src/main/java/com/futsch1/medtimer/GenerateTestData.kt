@@ -126,7 +126,7 @@ class GenerateTestData @AssistedInject constructor(
                 id = 0,
                 color = color ?: 0,
                 useColor = color != null,
-                notificationImportance = ReminderNotificationChannelManager.Importance.DEFAULT,
+                notificationImportance = Medicine.NotificationImportance.DEFAULT,
                 iconId = iconId,
                 amount = stock,
                 refillSize = if (stock > 0) 20.0 else 0.0,

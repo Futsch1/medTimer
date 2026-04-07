@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.database.toModel
 
-import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.model.Medicine
@@ -31,7 +30,7 @@ fun FullMedicineEntity.toModel(): Medicine {
         id = medicine.medicineId,
         color = medicine.color,
         useColor = medicine.useColor,
-        notificationImportance = if (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.DEFAULT.value) ReminderNotificationChannelManager.Importance.DEFAULT else ReminderNotificationChannelManager.Importance.HIGH,
+        notificationImportance = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT.value) Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
         iconId = medicine.iconId,
         amount = medicine.amount,
         refillSize = if (medicine.refillSizes.isEmpty()) 0.0 else medicine.refillSizes[0],

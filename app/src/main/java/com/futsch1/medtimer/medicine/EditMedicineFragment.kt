@@ -25,7 +25,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
@@ -266,7 +265,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         val notificationImportance = fragmentView.findViewById<Spinner>(R.id.notificationImportance)
         val importanceTexts = this.resources.getStringArray(R.array.notification_importance)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
-        val index = if (medicine.notificationImportance == ReminderNotificationChannelManager.Importance.DEFAULT) {
+        val index = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
             0
         } else {
             if (medicine.showNotificationAsAlarm) 2 else 1
@@ -365,7 +364,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             color = color,
             iconId = iconId,
             notes = notes,
-            notificationImportance = if (notificationImportance.selectedItemPosition == 0) ReminderNotificationChannelManager.Importance.DEFAULT else ReminderNotificationChannelManager.Importance.HIGH,
+            notificationImportance = if (notificationImportance.selectedItemPosition == 0) Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
             showNotificationAsAlarm = notificationImportance.selectedItemPosition == 2
         )
     }

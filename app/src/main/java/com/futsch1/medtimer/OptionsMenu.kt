@@ -32,8 +32,8 @@ import com.futsch1.medtimer.exporters.Export.ExporterException
 import com.futsch1.medtimer.exporters.PDFEventExport
 import com.futsch1.medtimer.exporters.PDFMedicineExport
 import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
+import com.futsch1.medtimer.helpers.ExportBackupPath.getExportFilename
 import com.futsch1.medtimer.helpers.FileHelper
-import com.futsch1.medtimer.helpers.PathHelper.getExportFilename
 import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences

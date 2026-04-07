@@ -13,8 +13,8 @@ import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.ReminderNotificationChannelManager.Importance
 import com.futsch1.medtimer.helpers.safeStartActivity
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
@@ -65,12 +65,12 @@ class NotificationSettingsFragment : PreferencesFragment() {
         var preference =
             preferenceScreen.findPreference<Preference?>("notification_settings_high")
         if (preference != null) {
-            setupNotificationSettingsPreference(preference, Importance.HIGH)
+            setupNotificationSettingsPreference(preference, Medicine.NotificationImportance.HIGH)
         }
         preference =
             preferenceScreen.findPreference("notification_settings_default")
         if (preference != null) {
-            setupNotificationSettingsPreference(preference, Importance.DEFAULT)
+            setupNotificationSettingsPreference(preference, Medicine.NotificationImportance.DEFAULT)
         }
         preference =
             preferenceScreen.findPreference(OVERRIDE_DND)
@@ -86,12 +86,12 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun setupNotificationSettingsPreference(
         preference: Preference,
-        importance: Importance
+        notificationImportance: Medicine.NotificationImportance
     ) {
         preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
             val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-            intent.putExtra(Settings.EXTRA_CHANNEL_ID, importance.value.toString())
+            intent.putExtra(Settings.EXTRA_CHANNEL_ID, notificationImportance.value.toString())
             startActivity(intent)
             true
         }
