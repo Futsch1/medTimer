@@ -3,20 +3,29 @@ package com.futsch1.medtimer.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.futsch1.medtimer.model.ReminderTime
 import com.google.gson.annotations.Expose
 
 @Entity(tableName = "Reminder")
 class ReminderEntity(
     var medicineRelId: Int = 0,
     @PrimaryKey(autoGenerate = true) @field:Expose var reminderId: Int = 0,
-    @field:Expose var timeInMinutes: Int = DEFAULT_TIME,
+    @field:Expose var timeInMinutes: Int = ReminderTime.DEFAULT_TIME,
     @ColumnInfo(defaultValue = "0") var createdTimestamp: Long = 0,
     @ColumnInfo(defaultValue = "1") @field:Expose var consecutiveDays: Int = 1,
     @ColumnInfo(defaultValue = "0") @field:Expose var pauseDays: Int = 0,
     @ColumnInfo(defaultValue = "") @field:Expose var instructions: String? = "",
     @ColumnInfo(defaultValue = "19823") @field:Expose var cycleStartDay: Long = 0,
     @field:Expose var amount: String = "?",
-    @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]") @field:Expose var days: MutableList<Boolean> = mutableListOf(true, true, true, true, true, true, true),
+    @ColumnInfo(defaultValue = "[true, true, true, true, true, true, true]") @field:Expose var days: MutableList<Boolean> = mutableListOf(
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+    ),
     @ColumnInfo(defaultValue = "true") @field:Expose var active: Boolean = true,
     @ColumnInfo(defaultValue = "0") @field:Expose var periodStart: Long = 0,
     @ColumnInfo(defaultValue = "0") @field:Expose var periodEnd: Long = 0,
@@ -44,9 +53,5 @@ class ReminderEntity(
         ONCE,
         DAILY,
         OFF
-    }
-
-    companion object {
-        const val DEFAULT_TIME: Int = 480
     }
 }

@@ -26,4 +26,8 @@ class ReminderTime : Comparable<ReminderTime> {
     override fun compareTo(other: ReminderTime): Int {
         return minutes - other.minutes
     }
+
+    companion object {
+        const val DEFAULT_TIME: Int = 480
+    }
 }
