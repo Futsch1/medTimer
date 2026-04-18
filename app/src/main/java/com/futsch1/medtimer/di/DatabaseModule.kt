@@ -6,7 +6,6 @@ import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
-import com.futsch1.medtimer.database.MedicineRoomDatabase.Migration22To23
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.ReminderEventRepository
@@ -29,7 +28,6 @@ object DatabaseModule {
     @Singleton
     fun provideMedicineRoomDatabase(@ApplicationContext context: Context): MedicineRoomDatabase =
         Room.databaseBuilder(context, MedicineRoomDatabase::class.java, "medTimer")
-            .addMigrations(Migration22To23)
             .build()
 
     @Provides

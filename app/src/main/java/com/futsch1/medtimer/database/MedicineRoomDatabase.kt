@@ -7,7 +7,6 @@ import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration16To17
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
@@ -21,7 +20,7 @@ import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
     entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
-    version = 23,
+    version = 22,
     autoMigrations = [AutoMigration(from = 1, to = 2, spec = AutoMigration1To2::class), AutoMigration(from = 2, to = 3), AutoMigration(
         from = 3,
         to = 4
@@ -106,23 +105,4 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminderThreshold")
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
     internal class AutoMigration21To22 : AutoMigrationSpec
-
-    object Migration22To23 : Migration(22, 23) {
-        override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("UPDATE Medicine SET medicineName = '' WHERE medicineName IS NULL")
-            db.execSQL("UPDATE Medicine SET refillSizes = '[]' WHERE refillSizes IS NULL")
-            db.execSQL("UPDATE Medicine SET unit = '' WHERE unit IS NULL")
-
-            db.execSQL("UPDATE TAG SET name = '' WHERE name IS NULL")
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Medicine` (`medicineName` TEXT NOT NULL, `medicineId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `color` INTEGER NOT NULL DEFAULT 0xFFFF0000, `useColor` INTEGER NOT NULL DEFAULT false, `notificationImportance` INTEGER NOT NULL DEFAULT 3, `iconId` INTEGER NOT NULL DEFAULT 0, `amount` REAL NOT NULL DEFAULT 0, `refillSizes` TEXT NOT NULL DEFAULT '[]', `unit` TEXT NOT NULL DEFAULT '', `sortOrder` REAL NOT NULL DEFAULT 1.0, `notes` TEXT DEFAULT '', `showNotificationAsAlarm` INTEGER NOT NULL DEFAULT false, `productionDate` INTEGER NOT NULL DEFAULT 0, `expirationDate` INTEGER NOT NULL DEFAULT 0)")
-            db.execSQL("INSERT INTO `_new_Medicine` (`medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate`) SELECT `medicineName`,`medicineId`,`color`,`useColor`,`notificationImportance`,`iconId`,`amount`,`refillSizes`,`unit`,`sortOrder`,`notes`,`showNotificationAsAlarm`,`productionDate`,`expirationDate` FROM `Medicine`")
-            db.execSQL("DROP TABLE `Medicine`")
-            db.execSQL("ALTER TABLE `_new_Medicine` RENAME TO `Medicine`")
-            db.execSQL("CREATE TABLE IF NOT EXISTS `_new_Tag` (`name` TEXT NOT NULL, `tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)")
-            db.execSQL("INSERT INTO `_new_Tag` (`name`,`tagId`) SELECT `name`,`tagId` FROM `Tag`")
-            db.execSQL("DROP TABLE `Tag`")
-            db.execSQL("ALTER TABLE `_new_Tag` RENAME TO `Tag`")
-        }
-    }
 }

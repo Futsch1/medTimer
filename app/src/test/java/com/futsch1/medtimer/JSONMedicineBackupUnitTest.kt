@@ -44,6 +44,7 @@ internal class JSONMedicineBackupUnitTest {
                 useColor = true
                 color = Color.RED
                 iconId = 5
+                refillSizes = mutableListOf()
                 unit = "pills"
                 sortOrder = 4.5
                 notes = "Generic ingredient: Dihydrogen monoxide"
@@ -210,6 +211,8 @@ internal class JSONMedicineBackupUnitTest {
                 medicine.color = Color.RED
                 medicine.notificationImportance = 4
                 medicine.sortOrder = 3.44
+                medicine.unit = "A"
+                medicine.refillSizes = mutableListOf(1.0)
             }, FullMedicineEntity().apply {
                 reminders = mutableListOf(reminder1, reminder2)
                 medicine = MedicineEntity("Medicine B")
@@ -218,6 +221,8 @@ internal class JSONMedicineBackupUnitTest {
                 medicine.notificationImportance = 5
                 medicine.iconId = 7
                 medicine.amount = 17.0
+                medicine.unit = ""
+                medicine.refillSizes = mutableListOf()
             }
         )
 
@@ -237,8 +242,10 @@ internal class JSONMedicineBackupUnitTest {
         "notificationImportance": 4,
         "iconId": 0,
         "amount": 0.0,
-        "refillSizes": [],
-        "unit": "",
+        "refillSizes": [
+          1.0
+        ],
+        "unit": "A",
         "sortOrder": 3.44,
         "notes": "",
         "showNotificationAsAlarm": false,

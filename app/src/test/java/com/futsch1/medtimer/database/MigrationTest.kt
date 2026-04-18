@@ -29,33 +29,68 @@ class MigrationTest {
 
     @Test
     @Throws(IOException::class)
-    fun testMigrate22To23() {
-        // Create version 22 of the database.
-        var db = helper.createDatabase(testDb, 22)
-
-        // Insert some data with NULL values
-        db.execSQL("INSERT INTO Medicine (medicineName, color, useColor, notificationImportance, iconId, amount, refillSizes, unit, sortOrder, notes, showNotificationAsAlarm, productionDate, expirationDate) VALUES (NULL, 0, 0, 3, 0, 0.0, NULL, NULL, 1.0, '', 0, 0, 0)")
-        db.execSQL("INSERT INTO Tag (name, tagId) VALUES (NULL, 1)")
-
-        // Prepare for the next version.
+    fun testMigrate1To2() {
+        // Create version 1 of the database and insert a ReminderEvent using the old raisedTimestamp column.
+        var db = helper.createDatabase(testDb, 1)
+        db.execSQL(
+            "INSERT INTO ReminderEvent (medicineName, amount, status, raisedTimestamp, processedTimestamp, reminderId) VALUES ('Aspirin', '1.0', 'OPEN', 1700000000, 0, 42)"
+        )
         db.close()
 
-        // Re-open the database with version 23 and validate
-        db = helper.runMigrationsAndValidate(testDb, 23, true, MedicineRoomDatabase.Migration22To23)
+        // Run migration to version 2 (raisedTimestamp renamed to remindedTimestamp).
+        db = helper.runMigrationsAndValidate(testDb, 2, true)
 
-        // Verify data was migrated properly
-        var cursor = db.query("SELECT medicineName, refillSizes, unit FROM Medicine")
+        val cursor = db.query("SELECT remindedTimestamp FROM ReminderEvent")
         cursor.moveToFirst()
-        assertEquals("", cursor.getString(0))
-        assertEquals("[]", cursor.getString(1))
-        assertEquals("", cursor.getString(2))
+        assertEquals(1700000000L, cursor.getLong(0))
         cursor.close()
+        db.close()
+    }
 
-        cursor = db.query("SELECT name FROM Tag")
+    @Test
+    @Throws(IOException::class)
+    fun testMigrate5To6() {
+        // Create version 5 of the database and insert a Reminder with daysBetweenReminders = 3.
+        var db = helper.createDatabase(testDb, 5)
+        db.execSQL(
+            "INSERT INTO Reminder (medicineRelId, timeInMinutes, createdTimestamp, daysBetweenReminders, instructions, amount) VALUES (1, 480, 0, 3, '', '1.0')"
+        )
+        db.close()
+
+        // Run migration to version 6: column renamed to pauseDays and decremented by 1.
+        db = helper.runMigrationsAndValidate(testDb, 6, true)
+
+        val cursor = db.query("SELECT pauseDays FROM Reminder")
         cursor.moveToFirst()
-        assertEquals("", cursor.getString(0))
+        assertEquals(2, cursor.getInt(0))
         cursor.close()
+        db.close()
+    }
 
+    @Test
+    @Throws(IOException::class)
+    fun testMigrate16To17() {
+        // Create version 16 of the database and insert two Medicine rows (no sortOrder column yet).
+        var db = helper.createDatabase(testDb, 16)
+        db.execSQL(
+            "INSERT INTO Medicine (medicineName, color, useColor, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit) VALUES ('Alpha', 0, 0, 3, 0, 'OFF', 0.0, 0.0, '[]', '')"
+        )
+        db.execSQL(
+            "INSERT INTO Medicine (medicineName, color, useColor, notificationImportance, iconId, outOfStockReminder, amount, outOfStockReminderThreshold, refillSizes, unit) VALUES ('Beta', 0, 0, 3, 0, 'OFF', 0.0, 0.0, '[]', '')"
+        )
+        db.close()
+
+        // Run migration to version 17: sortOrder populated with row numbers.
+        db = helper.runMigrationsAndValidate(testDb, 17, true)
+
+        val cursor = db.query("SELECT medicineName, sortOrder FROM Medicine ORDER BY sortOrder")
+        cursor.moveToFirst()
+        assertEquals("Alpha", cursor.getString(0))
+        assertEquals(1.0, cursor.getDouble(1), 0.001)
+        cursor.moveToNext()
+        assertEquals("Beta", cursor.getString(0))
+        assertEquals(2.0, cursor.getDouble(1), 0.001)
+        cursor.close()
         db.close()
     }
 }
