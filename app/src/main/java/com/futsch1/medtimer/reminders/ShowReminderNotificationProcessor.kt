@@ -31,7 +31,7 @@ class ShowReminderNotificationProcessor @Inject constructor(
     }
 
     private suspend fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
-        val notificationData = getNotificationData(reminderNotificationData.notificationId)
+        val notificationData = getNotificationData(reminderNotificationData)
         if (notificationData != null) {
             // Check if all reminder event IDs from the notification are also in the reminder notification data
             val reminderEventIds = reminderNotificationData.reminderEventIds.toList()
@@ -58,10 +58,15 @@ class ShowReminderNotificationProcessor @Inject constructor(
         return false
     }
 
-    private fun getNotificationData(notificationId: Int): ReminderNotificationData? {
+    private fun getNotificationData(reminderNotificationData: ReminderNotificationData): ReminderNotificationData? {
         for (notification in notificationManager.activeNotifications) {
-            if (notification.id == notificationId) {
-                return ReminderNotificationData.fromBundle(notification.notification.extras)
+            val notificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
+            if (notificationData.notificationId == reminderNotificationData.notificationId || notificationData.reminderEventIds.all {
+                    reminderNotificationData.reminderEventIds.contains(
+                        it
+                    )
+                }) {
+                return notificationData
             }
         }
         return null
