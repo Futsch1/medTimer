@@ -22,6 +22,11 @@
         tools:ignore="FullScreenIntentPolicy" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        android:minSdkVersion="29" />
 
     <attribution
         android:label="@string/audio_playback_attribution"
@@ -133,6 +138,14 @@
             <intent-filter>
                 <action android:name="com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION" />
                 <action android:name="com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".location.GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.futsch1.medtimer.GEOFENCE_TRANSITION" />
             </intent-filter>
         </receiver>
 

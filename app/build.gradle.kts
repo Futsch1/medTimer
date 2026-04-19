@@ -144,6 +144,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
