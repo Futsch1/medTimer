@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.location
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.futsch1.medtimer.di.MedTimerPreferencess
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.Gson
@@ -13,14 +14,14 @@ class HomeLocationStore @Inject constructor(
     private val gson: Gson
 ) {
     private data class SerializablePendingSnooze(
-        val reminderIds: IntArray,
-        val reminderEventIds: IntArray,
+        val reminderIds: List<Int>,
+        val reminderEventIds: MutableList<Int>,
         val notificationId: Int,
         val remindInstantEpochSecond: Long
     )
 
     fun saveHomeLocation(location: HomeLocation) {
-        prefs.edit().putString(KEY_HOME_LOCATION, gson.toJson(location)).apply()
+        prefs.edit { putString(KEY_HOME_LOCATION, gson.toJson(location)) }
     }
 
     fun getHomeLocation(): HomeLocation? {
@@ -29,20 +30,20 @@ class HomeLocationStore @Inject constructor(
     }
 
     fun clearHomeLocation() {
-        prefs.edit().remove(KEY_HOME_LOCATION).apply()
+        prefs.edit { remove(KEY_HOME_LOCATION) }
     }
 
     fun addPendingLocationSnooze(data: ReminderNotificationData) {
         val current = getPendingSnoozeList().toMutableList()
         current.add(data.toSerializable())
-        prefs.edit().putString(KEY_PENDING_SNOOZES, gson.toJson(current)).apply()
+        prefs.edit { putString(KEY_PENDING_SNOOZES, gson.toJson(current)) }
     }
 
     fun getPendingLocationSnoozes(): List<ReminderNotificationData> =
         getPendingSnoozeList().map { it.toReminderNotificationData() }
 
     fun clearAllPendingLocationSnoozes() {
-        prefs.edit().remove(KEY_PENDING_SNOOZES).apply()
+        prefs.edit { remove(KEY_PENDING_SNOOZES) }
     }
 
     private fun getPendingSnoozeList(): List<SerializablePendingSnooze> {

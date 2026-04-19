@@ -60,8 +60,8 @@ class HomeLocationStoreTest {
     fun `addPendingLocationSnooze and getPendingLocationSnoozes round-trip`() {
         val data = ReminderNotificationData(
             remindInstant = Instant.ofEpochSecond(1234567890L),
-            reminderIds = intArrayOf(1, 2),
-            reminderEventIds = intArrayOf(10, 20),
+            reminderIds = listOf(1, 2),
+            reminderEventIds = mutableListOf(10, 20),
             notificationId = 42
         )
         store.addPendingLocationSnooze(data)
@@ -70,24 +70,24 @@ class HomeLocationStoreTest {
         assertEquals(1, loaded.size)
         val result = loaded[0]
         assertEquals(1234567890L, result.remindInstant.epochSecond)
-        assertTrue(result.reminderIds.contentEquals(intArrayOf(1, 2)))
-        assertTrue(result.reminderEventIds.contentEquals(intArrayOf(10, 20)))
+        assertEquals(listOf(1, 2), result.reminderIds)
+        assertEquals(listOf(10, 20), result.reminderEventIds)
         assertEquals(42, result.notificationId)
     }
 
     @Test
     fun `multiple addPendingLocationSnooze calls accumulate entries`() {
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), intArrayOf(1), intArrayOf(10), 1))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), intArrayOf(2), intArrayOf(20), 2))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), intArrayOf(3), intArrayOf(30), 3))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), listOf(3), mutableListOf(30), 3))
 
         assertEquals(3, store.getPendingLocationSnoozes().size)
     }
 
     @Test
     fun `clearAllPendingLocationSnoozes empties the list`() {
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), intArrayOf(1), intArrayOf(10), 1))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), intArrayOf(2), intArrayOf(20), 2))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
 
         store.clearAllPendingLocationSnoozes()
 

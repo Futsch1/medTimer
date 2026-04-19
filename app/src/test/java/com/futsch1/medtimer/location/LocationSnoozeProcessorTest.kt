@@ -46,7 +46,7 @@ class LocationSnoozeProcessorTest {
     @Test
     fun `processLocationSnooze fires alarm for single pending snooze`() {
         val futureInstant = Instant.now().plusSeconds(3600)
-        val data = ReminderNotificationData(futureInstant, intArrayOf(1), intArrayOf(10), 1)
+        val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(homeLocationStore.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
         processor.processLocationSnooze()
@@ -59,7 +59,7 @@ class LocationSnoozeProcessorTest {
     @Test
     fun `processLocationSnooze sets remindInstant to now before firing alarm`() {
         val futureInstant = Instant.now().plusSeconds(3600)
-        val data = ReminderNotificationData(futureInstant, intArrayOf(1), intArrayOf(10), 1)
+        val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(homeLocationStore.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
         val beforeCall = Instant.now()
@@ -75,9 +75,9 @@ class LocationSnoozeProcessorTest {
     @Test
     fun `processLocationSnooze fires one alarm per pending snooze`() {
         val snoozes = listOf(
-            ReminderNotificationData(Instant.now().plusSeconds(100), intArrayOf(1), intArrayOf(10), 1),
-            ReminderNotificationData(Instant.now().plusSeconds(200), intArrayOf(2), intArrayOf(20), 2),
-            ReminderNotificationData(Instant.now().plusSeconds(300), intArrayOf(3), intArrayOf(30), 3)
+            ReminderNotificationData(Instant.now().plusSeconds(100), listOf(1), mutableListOf(10), 1),
+            ReminderNotificationData(Instant.now().plusSeconds(200), listOf(2), mutableListOf(20), 2),
+            ReminderNotificationData(Instant.now().plusSeconds(300), listOf(3), mutableListOf(30), 3)
         )
         whenever(homeLocationStore.getPendingLocationSnoozes()).thenReturn(snoozes)
 
