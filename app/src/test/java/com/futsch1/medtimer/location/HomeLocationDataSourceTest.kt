@@ -3,7 +3,7 @@ package com.futsch1.medtimer.location
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.model.HomeLocation
-import com.futsch1.medtimer.preferences.HomeLocationStore
+import com.futsch1.medtimer.preferences.HomeLocationDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.GsonBuilder
 import org.junit.Assert.assertEquals
@@ -19,15 +19,15 @@ import java.time.Instant
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
-class HomeLocationStoreTest {
-    private lateinit var store: HomeLocationStore
+class HomeLocationDataSourceTest {
+    private lateinit var store: HomeLocationDataSource
 
     @Before
     fun setUp() {
         val prefs = ApplicationProvider.getApplicationContext<Context>()
             .getSharedPreferences("test_location", Context.MODE_PRIVATE)
         prefs.edit().clear().commit()
-        store = HomeLocationStore(prefs, GsonBuilder().create())
+        store = HomeLocationDataSource(prefs, GsonBuilder().create())
     }
 
     @Test

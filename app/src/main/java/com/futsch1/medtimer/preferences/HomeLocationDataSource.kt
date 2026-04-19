@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken
 import java.time.Instant
 import javax.inject.Inject
 
-class HomeLocationStore @Inject constructor(
+class HomeLocationDataSource @Inject constructor(
     @param:MedTimerPreferencess private val prefs: SharedPreferences,
     private val gson: Gson
 ) {
