@@ -195,6 +195,51 @@ Geofences are cleared by the OS after a device reboot. The existing `Autostart.k
 
 ---
 
+## Unit Tests
+
+All test files go in `app/src/test/java/com/futsch1/medtimer/location/`. Follow the existing pattern: `@RunWith(RobolectricTestRunner::class)`, `@Config(sdk = [36])`, Mockito for dependencies, direct constructor instantiation (no Hilt in unit tests).
+
+`GeofencingClient` is injected into `GeofenceRegistrar` via the `@Inject constructor`, making it trivially mockable with `mock<GeofencingClient>()` — no special test module needed.
+
+### `HomeLocationStoreTest.kt`
+Use a real `SharedPreferences` from Robolectric (`ApplicationProvider.getApplicationContext<Context>().getSharedPreferences("test", Context.MODE_PRIVATE)`) to test actual serialization behavior, not just mock calls.
+
+- `saveHomeLocation` → `getHomeLocation` round-trips correctly
+- `getHomeLocation` returns `null` when nothing saved
+- `clearHomeLocation` removes saved location
+- `addPendingLocationSnooze` → `getPendingLocationSnoozes` preserves all fields (reminderIds, reminderEventIds, notificationId, remindInstant epoch second)
+- Multiple `addPendingLocationSnooze` calls accumulate entries
+- `clearAllPendingLocationSnoozes` empties the list
+
+### `GeofenceRegistrarTest.kt`
+Use `mock<GeofencingClient>()`, `mock<HomeLocationStore>()`, and a Robolectric `Context`.
+
+- `registerHomeGeofence` returns `false` when `getHomeLocation()` returns `null`
+- `registerHomeGeofence` returns `false` when location permission not granted (use Robolectric's `ShadowApplication.grantPermissions` / deny flow)
+- `registerHomeGeofence` calls `geofencingClient.addGeofences(...)` with the correct geofence ID, transition type `GEOFENCE_TRANSITION_ENTER`, and `NEVER_EXPIRE` when home is set and permissions granted (mock `addGeofences` to return a successful `Task`)
+- `unregisterHomeGeofence` calls `geofencingClient.removeGeofences(listOf(GEOFENCE_ID))`
+- `registerHomeGeofence` returns `false` (no crash) when `addGeofences` throws `ApiException`
+
+### `LocationSnoozeProcessorTest.kt`
+Use `mock<AlarmProcessor>()`, `mock<HomeLocationStore>()`, `mock<GeofenceRegistrar>()`.
+
+- `processLocationSnooze` with empty pending list: no `setAlarmForReminderNotification` calls, `unregisterHomeGeofence` still called
+- `processLocationSnooze` with one pending snooze: `setAlarmForReminderNotification` called once with `remindInstant <= Instant.now()`, store cleared, geofence unregistered
+- `processLocationSnooze` with multiple pending snoozes: `setAlarmForReminderNotification` called once per entry
+- Verify `remindInstant` is set to a time <= `Instant.now()` before the `setAlarmForReminderNotification` call (i.e., the immediate-fire path is triggered)
+
+### `GeofenceBroadcastReceiverTest.kt`
+Use `mock<LocationSnoozeProcessor>()`. Construct the receiver directly and call `onReceive` with a crafted `Intent`.
+
+- `GEOFENCE_TRANSITION_ENTER` event → `processLocationSnooze()` called once
+- `GEOFENCE_TRANSITION_EXIT` event → `processLocationSnooze()` not called
+- Error event (`hasError() == true`) → `processLocationSnooze()` not called, no crash
+- Null/malformed intent → `processLocationSnooze()` not called, no crash
+
+Note: `GeofencingEvent.fromIntent()` is a static factory. Use Robolectric's shadow or construct a valid `Intent` with the geofencing extras directly to exercise the receiver.
+
+---
+
 ## Verification
 
 After implementation, test end-to-end by:
