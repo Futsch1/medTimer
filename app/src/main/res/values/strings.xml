@@ -41,6 +41,11 @@
     <string name="change_color_toast">Note that changes in color only take effect in future events</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
+    <string name="location_snooze">Location-based snooze</string>
+    <string name="location_snooze_summary">Re-notify when arriving home after snoozing</string>
+    <string name="location_snooze_no_play_services">Location-based snooze requires Google Play Services, which is not available on this device</string>
+    <string name="location_snooze_no_home_location">Please set a home location before enabling location-based snooze</string>
+    <string name="location_snooze_background_permission">To re-notify when arriving home, allow MedTimer to access location in the background</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>

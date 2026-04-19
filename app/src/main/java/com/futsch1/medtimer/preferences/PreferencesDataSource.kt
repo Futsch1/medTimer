@@ -167,5 +167,6 @@ class PreferencesDataSource @Inject constructor(
         const val APP_AUTHENTICATION = "app_authentication"
         const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
         const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
+        const val LOCATION_SNOOZE_ENABLED = "location_snooze_enabled"
     }
 }

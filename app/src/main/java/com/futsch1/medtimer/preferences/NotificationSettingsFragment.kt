@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.preferences
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationManager
@@ -8,14 +9,19 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.safeStartActivity
+import com.futsch1.medtimer.location.GeofenceRegistrar
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,7 +42,34 @@ class NotificationSettingsFragment : PreferencesFragment() {
     @Inject
     lateinit var notificationManager: NotificationManager
 
+    @Inject
+    lateinit var geofenceRegistrar: GeofenceRegistrar
+
+    @Inject
+    lateinit var homeLocationDataSource: HomeLocationDataSource
+
+    private lateinit var requestFineLocationLauncher: ActivityResultLauncher<String>
+    private lateinit var requestBackgroundLocationLauncher: ActivityResultLauncher<String>
+
     private var rootKey: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestFineLocationLauncher = registerForActivityResult(RequestPermission()) { granted ->
+            when {
+                granted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> showBackgroundLocationRationale()
+                granted -> onLocationPermissionsGranted()
+                else -> resetBooleanPreferenceAndReload(LOCATION_SNOOZE_ENABLED)
+            }
+        }
+        requestBackgroundLocationLauncher = registerForActivityResult(RequestPermission()) { granted ->
+            if (granted) {
+                onLocationPermissionsGranted()
+            } else {
+                resetBooleanPreferenceAndReload(LOCATION_SNOOZE_ENABLED)
+            }
+        }
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         this.rootKey = rootKey
@@ -48,6 +81,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         setupNotificationSettings()
         setupExactReminders()
         setupBatteryOptimization()
+        setupLocationSnooze()
 
         setupPreferencesLink(
             this,
@@ -111,6 +145,51 @@ class NotificationSettingsFragment : PreferencesFragment() {
                 }
         } else {
             preference.isVisible = false
+        }
+    }
+
+    private fun setupLocationSnooze() {
+        val preference = preferenceScreen.findPreference<SwitchPreferenceCompat>(LOCATION_SNOOZE_ENABLED) ?: return
+        preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            if (newValue == true) {
+                if (!geofenceRegistrar.isLocationServiceAvailable()) {
+                    showLocationSnoozeInfoDialog(R.string.location_snooze_no_play_services)
+                    return@OnPreferenceChangeListener false
+                }
+                if (homeLocationDataSource.getHomeLocation() == null) {
+                    showLocationSnoozeInfoDialog(R.string.location_snooze_no_home_location)
+                    return@OnPreferenceChangeListener false
+                }
+                requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            } else {
+                geofenceRegistrar.unregisterHomeGeofence()
+            }
+            true
+        }
+    }
+
+    private fun showLocationSnoozeInfoDialog(@StringRes messageRes: Int) {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(messageRes)
+            .setPositiveButton(R.string.ok, null)
+            .show()
+    }
+
+    private fun showBackgroundLocationRationale() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(R.string.location_snooze_background_permission)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                requestBackgroundLocationLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            }
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                resetBooleanPreferenceAndReload(LOCATION_SNOOZE_ENABLED)
+            }
+            .show()
+    }
+
+    private fun onLocationPermissionsGranted() {
+        if (!geofenceRegistrar.registerHomeGeofence()) {
+            resetBooleanPreferenceAndReload(LOCATION_SNOOZE_ENABLED)
         }
     }
 
@@ -184,6 +263,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
         super.onResume()
         resumeExactReminders()
         resumeOverrideDnd()
+        resumeLocationSnooze()
     }
 
     private fun resumeExactReminders() {
@@ -197,6 +277,14 @@ class NotificationSettingsFragment : PreferencesFragment() {
     private fun resumeOverrideDnd() {
         if (!notificationManager.isNotificationPolicyAccessGranted) {
             resetBooleanPreferenceAndReload(OVERRIDE_DND)
+        }
+    }
+
+    private fun resumeLocationSnooze() {
+        val pref = findPreference<SwitchPreferenceCompat>(LOCATION_SNOOZE_ENABLED) ?: return
+        if (pref.isChecked && !geofenceRegistrar.hasRequiredPermissions()) {
+            resetBooleanPreferenceAndReload(LOCATION_SNOOZE_ENABLED)
+            geofenceRegistrar.unregisterHomeGeofence()
         }
     }
 }

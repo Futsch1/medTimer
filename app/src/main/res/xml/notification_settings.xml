@@ -43,6 +43,12 @@
         android:title="@string/snooze_duration"
         app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:summary="@string/location_snooze_summary"
+        android:title="@string/location_snooze"
+        app:singleLineTitle="false"
+        app:key="location_snooze_enabled" />
+    <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"

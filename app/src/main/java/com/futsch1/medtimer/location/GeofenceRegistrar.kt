@@ -78,7 +78,7 @@ class GeofenceRegistrar @Inject constructor(
         )
     }
 
-    private fun hasRequiredPermissions(): Boolean {
+    internal fun hasRequiredPermissions(): Boolean {
         val fineLocation = ContextCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
