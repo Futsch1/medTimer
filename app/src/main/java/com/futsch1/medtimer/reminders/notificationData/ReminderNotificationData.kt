@@ -13,7 +13,7 @@ import java.time.Instant
 class ReminderNotificationData(
     var remindInstant: Instant,
     var reminderIds: List<Int> = listOf(),
-    var reminderEventIds: MutableList<Int> = mutableListOf(),
+    var reminderEventIds: List<Int> = listOf(),
     var notificationId: Int = -1
 ) {
     var valid: Boolean = reminderIds.isNotEmpty()

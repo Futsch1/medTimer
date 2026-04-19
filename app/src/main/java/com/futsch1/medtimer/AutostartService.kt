@@ -28,8 +28,8 @@ class AutostartService @Inject constructor(
             .filter { it.status == ReminderEvent.ReminderStatus.RAISED }
         val notificationsMap: Map<Long, List<ReminderEvent>> = reminderEventList.groupBy { it.remindedTimestamp.epochSecond }
         for (notificationEntry in notificationsMap) {
-            val reminderIds = notificationEntry.value.map { it.reminderId }.toIntArray()
-            val reminderEventIds = notificationEntry.value.map { it.reminderEventId }.toIntArray()
+            val reminderIds = notificationEntry.value.map { it.reminderId }
+            val reminderEventIds = notificationEntry.value.map { it.reminderEventId }.toMutableList()
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromArrays(
                     reminderIds,

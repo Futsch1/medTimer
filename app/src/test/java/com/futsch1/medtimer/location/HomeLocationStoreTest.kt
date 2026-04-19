@@ -2,6 +2,8 @@ package com.futsch1.medtimer.location
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.model.HomeLocation
+import com.futsch1.medtimer.preferences.HomeLocationStore
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.GsonBuilder
 import org.junit.Assert.assertEquals
@@ -61,7 +63,7 @@ class HomeLocationStoreTest {
         val data = ReminderNotificationData(
             remindInstant = Instant.ofEpochSecond(1234567890L),
             reminderIds = listOf(1, 2),
-            reminderEventIds = mutableListOf(10, 20),
+            reminderEventIds = listOf(10, 20),
             notificationId = 42
         )
         store.addPendingLocationSnooze(data)
@@ -77,17 +79,17 @@ class HomeLocationStoreTest {
 
     @Test
     fun `multiple addPendingLocationSnooze calls accumulate entries`() {
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), listOf(3), mutableListOf(30), 3))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), listOf(10), 1))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), listOf(20), 2))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), listOf(3), listOf(30), 3))
 
         assertEquals(3, store.getPendingLocationSnoozes().size)
     }
 
     @Test
     fun `clearAllPendingLocationSnoozes empties the list`() {
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
-        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), listOf(10), 1))
+        store.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), listOf(20), 2))
 
         store.clearAllPendingLocationSnoozes()
 

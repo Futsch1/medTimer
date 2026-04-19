@@ -1,8 +1,9 @@
-package com.futsch1.medtimer.location
+package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.futsch1.medtimer.di.MedTimerPreferencess
+import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -15,7 +16,7 @@ class HomeLocationStore @Inject constructor(
 ) {
     private data class SerializablePendingSnooze(
         val reminderIds: List<Int>,
-        val reminderEventIds: MutableList<Int>,
+        val reminderEventIds: List<Int>,
         val notificationId: Int,
         val remindInstantEpochSecond: Long
     )

@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.location
 
+import com.futsch1.medtimer.preferences.HomeLocationStore
 import com.futsch1.medtimer.reminders.AlarmProcessor
+import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import org.junit.Before
 import org.junit.Test

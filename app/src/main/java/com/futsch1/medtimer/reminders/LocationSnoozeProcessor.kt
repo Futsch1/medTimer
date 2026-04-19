@@ -1,6 +1,7 @@
-package com.futsch1.medtimer.location
+package com.futsch1.medtimer.reminders
 
-import com.futsch1.medtimer.reminders.AlarmProcessor
+import com.futsch1.medtimer.location.GeofenceRegistrar
+import com.futsch1.medtimer.preferences.HomeLocationStore
 import java.time.Instant
 import javax.inject.Inject
 

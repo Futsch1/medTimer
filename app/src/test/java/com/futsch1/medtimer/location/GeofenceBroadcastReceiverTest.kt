@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.location
 
+import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 import org.junit.Before

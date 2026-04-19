@@ -2,6 +2,8 @@ package com.futsch1.medtimer.location
 
 import android.Manifest
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.model.HomeLocation
+import com.futsch1.medtimer.preferences.HomeLocationStore
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.GeofencingClient

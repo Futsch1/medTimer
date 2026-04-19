@@ -27,6 +27,7 @@ open class ReminderNotificationFactory @Inject constructor(
         val result = mutableListOf<ReminderNotificationPart>()
 
         val numberOfRepeats = preferencesDataSource.preferences.value.numberOfRepetitions
+        val newReminderEventIds = mutableListOf<Int>()
         for (i in reminderNotificationData.reminderIds.indices) {
             val reminder = reminderRepository.get(reminderNotificationData.reminderIds[i])
             if (reminder == null) {
@@ -54,9 +55,10 @@ open class ReminderNotificationFactory @Inject constructor(
             } else {
                 reminderNotificationData.notificationId = reminderEvent.notificationId
             }
-            reminderNotificationData.reminderEventIds[i] = reminderEvent.reminderEventId
+            newReminderEventIds.add(reminderEvent.reminderEventId)
             result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
         }
+        reminderNotificationData.reminderEventIds = newReminderEventIds
 
         return ReminderNotification(result, reminderNotificationData)
     }

@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.preferences.HomeLocationStore
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.Geofence
@@ -28,15 +29,15 @@ class GeofenceRegistrar @Inject constructor(
 
     fun registerHomeGeofence(): Boolean {
         if (!isLocationServiceAvailable()) {
-            Log.w(LogTags.REMINDER, "Google Play Services unavailable, cannot register home geofence")
+            Log.w(LogTags.LOCATION, "Google Play Services unavailable, cannot register home geofence")
             return false
         }
         val homeLocation = homeLocationStore.getHomeLocation() ?: run {
-            Log.w(LogTags.REMINDER, "No home location saved, cannot register geofence")
+            Log.w(LogTags.LOCATION, "No home location saved, cannot register geofence")
             return false
         }
         if (!hasRequiredPermissions()) {
-            Log.w(LogTags.REMINDER, "Location permissions not granted, cannot register geofence")
+            Log.w(LogTags.LOCATION, "Location permissions not granted, cannot register geofence")
             return false
         }
 
@@ -54,19 +55,19 @@ class GeofenceRegistrar @Inject constructor(
 
         return try {
             geofencingClient.addGeofences(request, buildGeofencePendingIntent())
-                .addOnSuccessListener { Log.i(LogTags.REMINDER, "Home geofence registered successfully") }
-                .addOnFailureListener { Log.e(LogTags.REMINDER, "Failed to add home geofence: ${it.message}") }
+                .addOnSuccessListener { Log.i(LogTags.LOCATION, "Home geofence registered successfully") }
+                .addOnFailureListener { Log.e(LogTags.LOCATION, "Failed to add home geofence: ${it.message}") }
             true
         } catch (e: SecurityException) {
-            Log.e(LogTags.REMINDER, "Security exception registering home geofence: ${e.message}")
+            Log.e(LogTags.LOCATION, "Security exception registering home geofence: ${e.message}")
             false
         }
     }
 
     fun unregisterHomeGeofence() {
         geofencingClient.removeGeofences(listOf(GEOFENCE_ID))
-            .addOnSuccessListener { Log.i(LogTags.REMINDER, "Home geofence removed") }
-            .addOnFailureListener { Log.w(LogTags.REMINDER, "Failed to remove home geofence: ${it.message}") }
+            .addOnSuccessListener { Log.i(LogTags.LOCATION, "Home geofence removed") }
+            .addOnFailureListener { Log.w(LogTags.LOCATION, "Failed to remove home geofence: ${it.message}") }
     }
 
     private fun buildGeofencePendingIntent(): PendingIntent {
