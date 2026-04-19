@@ -284,4 +284,9 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk backup</string>
     <string name="backup_successful_to">Automatisk backup gennemført: %s</string>
+    <string name="location_snooze">Placeringsbaseret snooze</string>
+    <string name="location_snooze_summary">Giv besked igen ved hjemkomst efter snooze</string>
+    <string name="location_snooze_no_play_services">Placeringsbaseret snooze kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
+    <string name="location_snooze_no_home_location">Angiv en hjemplacering, inden du aktiverer placeringsbaseret snooze</string>
+    <string name="location_snooze_background_permission">For at blive adviseret ved hjemkomst, tillad MedTimer at tilgå placeringen i baggrunden</string>
 </resources>

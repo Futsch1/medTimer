@@ -291,4 +291,9 @@
     <string name="monthly">Ежемесячно</string>
     <string name="automatic_backup">Автоматическое резервное копирование</string>
     <string name="backup_successful_to">Автоматическое резервное копирование завершено успешно: %s</string>
+    <string name="location_snooze">Отложить по местоположению</string>
+    <string name="location_snooze_summary">Повторно уведомить при возвращении домой после отсрочки</string>
+    <string name="location_snooze_no_play_services">Отсрочка по местоположению требует Google Play Services, которые недоступны на этом устройстве</string>
+    <string name="location_snooze_no_home_location">Пожалуйста, установите домашнее местоположение перед включением отсрочки по местоположению</string>
+    <string name="location_snooze_background_permission">Чтобы получать уведомления при возвращении домой, разрешите MedTimer доступ к местоположению в фоне</string>
 </resources>

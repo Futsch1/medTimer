@@ -284,4 +284,9 @@
     <string name="monthly">Kuukausittain</string>
     <string name="automatic_backup">Automaattinen varmuuskopiointi</string>
     <string name="backup_successful_to">Automaattinen varmuuskopiointi onnistui: %s</string>
+    <string name="location_snooze">Sijaintipohjainen torkku</string>
+    <string name="location_snooze_summary">Ilmoita uudelleen kotiin saapuessa torkutuksen jälkeen</string>
+    <string name="location_snooze_no_play_services">Sijaintipohjainen torkku vaatii Google Play -palvelut, jotka eivät ole saatavilla tällä laitteella</string>
+    <string name="location_snooze_no_home_location">Aseta kotisijainti ennen sijaintipohjaisen torkutuksen käyttöönottoa</string>
+    <string name="location_snooze_background_permission">Jotta MedTimer voi ilmoittaa uudelleen kotiin saapuessa, salli sijaintipalvelujen käyttö taustalla</string>
 </resources>

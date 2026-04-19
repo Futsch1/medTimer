@@ -294,4 +294,9 @@
     <string name="monthly">Měsíčně</string>
     <string name="automatic_backup">Automatické zálohování</string>
     <string name="backup_successful_to">Automatické zálohování úspěšné: %s</string>
+    <string name="location_snooze">Odložení na základě polohy</string>
+    <string name="location_snooze_summary">Znovu upozornit po příchodu domů po odložení</string>
+    <string name="location_snooze_no_play_services">Odložení na základě polohy vyžaduje Služby Google Play, které nejsou na tomto zařízení dostupné</string>
+    <string name="location_snooze_no_home_location">Před aktivací odložení na základě polohy nastavte domácí polohu</string>
+    <string name="location_snooze_background_permission">Aby vás MedTimer znovu upozornil po příchodu domů, povolte přístup k poloze na pozadí</string>
 </resources>

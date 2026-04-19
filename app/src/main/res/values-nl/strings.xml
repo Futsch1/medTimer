@@ -284,4 +284,9 @@
     <string name="monthly">Maandelijks</string>
     <string name="automatic_backup">Automatische back-up</string>
     <string name="backup_successful_to">Automatische back-up geslaagd: %s</string>
+    <string name="location_snooze">Locatiegebaseerd sluimeren</string>
+    <string name="location_snooze_summary">Opnieuw melden bij thuiskomst na sluimeren</string>
+    <string name="location_snooze_no_play_services">Locatiegebaseerd sluimeren vereist Google Play Services, die niet beschikbaar zijn op dit apparaat</string>
+    <string name="location_snooze_no_home_location">Stel een thuislocatie in voordat u locatiegebaseerd sluimeren inschakelt</string>
+    <string name="location_snooze_background_permission">Sta MedTimer toe op de achtergrond toegang te hebben tot de locatie om opnieuw te melden bij thuiskomst</string>
 </resources>

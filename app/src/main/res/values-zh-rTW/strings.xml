@@ -279,4 +279,9 @@
     <string name="monthly">每月</string>
     <string name="automatic_backup">自動備份</string>
     <string name="backup_successful_to">自動備份成功：%s</string>
+    <string name="location_snooze">基於位置的小睡</string>
+    <string name="location_snooze_summary">小睡後回家時重新提醒</string>
+    <string name="location_snooze_no_play_services">基於位置的小睡需要 Google Play 服務，該服務在此裝置上不可用</string>
+    <string name="location_snooze_no_home_location">請在啟用基於位置的小睡之前設定家庭位置</string>
+    <string name="location_snooze_background_permission">要在回家時重新接收提醒，請允許 MedTimer 在背景存取位置</string>
 </resources>

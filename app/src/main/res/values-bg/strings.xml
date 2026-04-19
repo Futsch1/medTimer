@@ -284,4 +284,9 @@
     <string name="monthly">Ежемесечно</string>
     <string name="automatic_backup">Автоматично архивиране</string>
     <string name="backup_successful_to">Автоматичното архивиране е успешно: %s</string>
+    <string name="location_snooze">Отлагане по местоположение</string>
+    <string name="location_snooze_summary">Повторно известяване при завръщане вкъщи след отлагане</string>
+    <string name="location_snooze_no_play_services">Отлагането по местоположение изисква Google Play Services, което не е налично на това устройство</string>
+    <string name="location_snooze_no_home_location">Моля, задайте домашно местоположение преди да активирате отлагането по местоположение</string>
+    <string name="location_snooze_background_permission">За повторно известяване при завръщане вкъщи, разрешете на MedTimer достъп до местоположението на заден план</string>
 </resources>

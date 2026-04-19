@@ -304,4 +304,9 @@
     <string name="monthly">شهري</string>
     <string name="automatic_backup">نسخ احتياطي تلقائي</string>
     <string name="backup_successful_to">نجاح النسخ الاحتياطي التلقائي: %s</string>
+    <string name="location_snooze">تأجيل مستند إلى الموقع</string>
+    <string name="location_snooze_summary">إعادة الإشعار عند العودة إلى المنزل بعد التأجيل</string>
+    <string name="location_snooze_no_play_services">يتطلب التأجيل المستند إلى الموقع خدمات Google Play، غير المتوفرة على هذا الجهاز</string>
+    <string name="location_snooze_no_home_location">يرجى تعيين موقع المنزل قبل تفعيل التأجيل المستند إلى الموقع</string>
+    <string name="location_snooze_background_permission">للإشعار عند العودة إلى المنزل، اسمح لـ MedTimer بالوصول إلى الموقع في الخلفية</string>
 </resources>

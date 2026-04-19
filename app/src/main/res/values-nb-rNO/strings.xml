@@ -39,4 +39,9 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk sikkerhetskopiering</string>
     <string name="backup_successful_to">Automatisk sikkerhetskopiering vellykket: %s</string>
+    <string name="location_snooze">Stedsbasert snooze</string>
+    <string name="location_snooze_summary">Varsle igjen ved hjemkomst etter snooze</string>
+    <string name="location_snooze_no_play_services">Stedsbasert snooze krever Google Play Services, som ikke er tilgjengelig på denne enheten</string>
+    <string name="location_snooze_no_home_location">Angi et hjemsted før du aktiverer stedsbasert snooze</string>
+    <string name="location_snooze_background_permission">For å bli varslet ved hjemkomst, tillat MedTimer å få tilgang til plassering i bakgrunnen</string>
 </resources>

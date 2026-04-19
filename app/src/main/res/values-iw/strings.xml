@@ -289,4 +289,9 @@
     <string name="monthly">חודשי</string>
     <string name="automatic_backup">גיבוי אוטומטי</string>
     <string name="backup_successful_to">גיבוי אוטומטי הצליح: %s</string>
+    <string name="location_snooze">נודניק מבוסס מיקום</string>
+    <string name="location_snooze_summary">הודעה חוזרת עם החזרה הביתה לאחר דחייה</string>
+    <string name="location_snooze_no_play_services">נודניק מבוסס מיקום דורש שירותי Google Play, שאינם זמינים במכשיר זה</string>
+    <string name="location_snooze_no_home_location">אנא הגדר מיקום בית לפני הפעלת הנודניק המבוסס על מיקום</string>
+    <string name="location_snooze_background_permission">כדי לקבל הודעה חוזרת עם החזרה הביתה, אפשר ל-MedTimer גישה למיקום ברקע</string>
 </resources>

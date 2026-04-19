@@ -289,4 +289,9 @@
     <string name="monthly">Mensalmente</string>
     <string name="automatic_backup">Backup automático</string>
     <string name="backup_successful_to">Backup automático bem-sucedido: %s</string>
+    <string name="location_snooze">Soneca baseada em localização</string>
+    <string name="location_snooze_summary">Notificar novamente ao chegar em casa após soneca</string>
+    <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>
+    <string name="location_snooze_no_home_location">Por favor, defina uma localização de casa antes de ativar a soneca baseada em localização</string>
+    <string name="location_snooze_background_permission">Para ser notificado ao chegar em casa, permita que o MedTimer acesse a localização em segundo plano</string>
 </resources>

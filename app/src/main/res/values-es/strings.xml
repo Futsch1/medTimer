@@ -289,4 +289,9 @@
     <string name="monthly">Mensualmente</string>
     <string name="automatic_backup">Copia de seguridad automática</string>
     <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
+    <string name="location_snooze">Posponer según ubicación</string>
+    <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
+    <string name="location_snooze_no_play_services">La posposición según ubicación requiere Google Play Services, que no está disponible en este dispositivo</string>
+    <string name="location_snooze_no_home_location">Por favor, establezca una ubicación de casa antes de activar la posposición según ubicación</string>
+    <string name="location_snooze_background_permission">Para recibir notificaciones al llegar a casa, permita que MedTimer acceda a la ubicación en segundo plano</string>
 </resources>

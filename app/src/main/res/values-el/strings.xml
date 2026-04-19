@@ -284,4 +284,9 @@
     <string name="monthly">Μηνιαία</string>
     <string name="automatic_backup">Αυτόματη δημιουργία αντιγράφων ασφαλείας</string>
     <string name="backup_successful_to">Η αυτόματη δημιουργία αντιγράφων ασφαλείας ήταν επιτυχής: %s</string>
+    <string name="location_snooze">Αναβολή βάσει τοποθεσίας</string>
+    <string name="location_snooze_summary">Επανειδοποίηση κατά την άφιξη στο σπίτι μετά από αναβολή</string>
+    <string name="location_snooze_no_play_services">Η αναβολή βάσει τοποθεσίας απαιτεί τις Υπηρεσίες Google Play, οι οποίες δεν είναι διαθέσιμες σε αυτή τη συσκευή</string>
+    <string name="location_snooze_no_home_location">Ορίστε μια τοποθεσία σπιτιού πριν ενεργοποιήσετε την αναβολή βάσει τοποθεσίας</string>
+    <string name="location_snooze_background_permission">Για επανειδοποίηση κατά την άφιξη στο σπίτι, επιτρέψτε στο MedTimer την πρόσβαση στην τοποθεσία στο παρασκήνιο</string>
 </resources>

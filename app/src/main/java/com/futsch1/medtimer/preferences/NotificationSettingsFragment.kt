@@ -175,6 +175,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
             .show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showBackgroundLocationRationale() {
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(R.string.location_snooze_background_permission)

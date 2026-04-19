@@ -289,4 +289,9 @@
     <string name="monthly">Mensile</string>
     <string name="automatic_backup">Backup automatico</string>
     <string name="backup_successful_to">Backup automatico riuscito: %s</string>
+    <string name="location_snooze">Posticipo basato sulla posizione</string>
+    <string name="location_snooze_summary">Rinotifica al rientro a casa dopo aver posticipato</string>
+    <string name="location_snooze_no_play_services">Il posticipo basato sulla posizione richiede Google Play Services, che non è disponibile su questo dispositivo</string>
+    <string name="location_snooze_no_home_location">Imposta una posizione casa prima di abilitare il posticipo basato sulla posizione</string>
+    <string name="location_snooze_background_permission">Per ricevere notifiche al rientro a casa, consenti a MedTimer di accedere alla posizione in background</string>
 </resources>

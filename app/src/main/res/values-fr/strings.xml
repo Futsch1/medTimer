@@ -289,4 +289,9 @@
     <string name="monthly">Mensuel</string>
     <string name="automatic_backup">Sauvegarde automatique</string>
     <string name="backup_successful_to">Sauvegarde automatique réussie : %s</string>
+    <string name="location_snooze">Répétition basée sur la localisation</string>
+    <string name="location_snooze_summary">Notifier à nouveau en rentrant à la maison après avoir mis en veille</string>
+    <string name="location_snooze_no_play_services">La répétition basée sur la localisation nécessite Google Play Services, qui n\'est pas disponible sur cet appareil</string>
+    <string name="location_snooze_no_home_location">Veuillez définir un lieu de domicile avant d\'activer la répétition basée sur la localisation</string>
+    <string name="location_snooze_background_permission">Pour être notifié en rentrant à la maison, autorisez MedTimer à accéder à la localisation en arrière-plan</string>
 </resources>

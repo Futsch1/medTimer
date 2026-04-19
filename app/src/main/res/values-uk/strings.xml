@@ -294,4 +294,9 @@
     <string name="monthly">Щомісяця</string>
     <string name="automatic_backup">Автоматичне резервне копіювання</string>
     <string name="backup_successful_to">Автоматичне резервне копіювання завершено успішно: %s</string>
+    <string name="location_snooze">Відкласти за місцезнаходженням</string>
+    <string name="location_snooze_summary">Повторно повідомити при поверненні додому після відкладення</string>
+    <string name="location_snooze_no_play_services">Відкладення за місцезнаходженням вимагає Google Play Services, які недоступні на цьому пристрої</string>
+    <string name="location_snooze_no_home_location">Будь ласка, встановіть домашнє місцезнаходження перед увімкненням відкладення за місцезнаходженням</string>
+    <string name="location_snooze_background_permission">Щоб отримувати сповіщення при поверненні додому, дозвольте MedTimer доступ до місцезнаходження у фоновому режимі</string>
 </resources>
