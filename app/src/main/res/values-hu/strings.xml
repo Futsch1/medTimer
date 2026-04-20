@@ -289,4 +289,8 @@
     <string name="location_snooze_no_play_services">A helyzet alapú szundi Google Play Services szolgáltatást igényel, amely nem érhető el ezen az eszközön</string>
     <string name="location_snooze_no_home_location">Kérjük, állítson be otthoni helyzetet a helyzet alapú szundi engedélyezése előtt</string>
     <string name="location_snooze_background_permission">Hazaérkezéskor történő újraértesítéshez engedélyezze a MedTimer számára a háttérben való helymeghatározást</string>
+    <string name="snooze_settings">Szundi beállítások</string>
+    <string name="snooze_settings_summary">Szundi késleltetése és helyzet alapú szundi</string>
+    <string name="home_location">Otthoni helyszín</string>
+    <string name="home_location_not_set">Nincs beállítva</string>
 </resources>

@@ -289,4 +289,8 @@
     <string name="location_snooze_no_play_services">இடம் சார்ந்த சுணக்கம் Google Play Services தேவைப்படுகிறது, இது இந்த சாதனத்தில் கிடைக்கவில்லை</string>
     <string name="location_snooze_no_home_location">இடம் சார்ந்த சுணக்கத்தை இயக்குவதற்கு முன் வீட்டு இடத்தை அமைக்கவும்</string>
     <string name="location_snooze_background_permission">வீடு திரும்பும்போது மீண்டும் அறிவிக்க, MedTimer-க்கு பின்னணியில் இடத்தை அணுக அனுமதிக்கவும்</string>
+    <string name="snooze_settings">சுணக்க அமைப்புகள்</string>
+    <string name="snooze_settings_summary">சுணக்க காலம் மற்றும் இடம் சார்ந்த சுணக்கம்</string>
+    <string name="home_location">வீட்டு இடம்</string>
+    <string name="home_location_not_set">அமைக்கப்படவில்லை</string>
 </resources>

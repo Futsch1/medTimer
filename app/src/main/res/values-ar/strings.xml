@@ -309,4 +309,8 @@
     <string name="location_snooze_no_play_services">يتطلب التأجيل المستند إلى الموقع خدمات Google Play، غير المتوفرة على هذا الجهاز</string>
     <string name="location_snooze_no_home_location">يرجى تعيين موقع المنزل قبل تفعيل التأجيل المستند إلى الموقع</string>
     <string name="location_snooze_background_permission">للإشعار عند العودة إلى المنزل، اسمح لـ MedTimer بالوصول إلى الموقع في الخلفية</string>
+    <string name="snooze_settings">إعدادات الغفوة</string>
+    <string name="snooze_settings_summary">مدة الغفوة والتأجيل المستند إلى الموقع</string>
+    <string name="home_location">الموقع المنزلي</string>
+    <string name="home_location_not_set">غير محدد</string>
 </resources>

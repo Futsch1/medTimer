@@ -9,6 +9,11 @@
         app:key="alarm_settings"
         app:title="@string/alarm_settings" />
     <Preference
+        android:icon="@drawable/snooze"
+        app:key="snooze_settings"
+        app:summary="@string/snooze_settings_summary"
+        app:title="@string/snooze_settings" />
+    <Preference
         android:icon="@drawable/display"
         app:key="display_settings"
         app:title="@string/display_settings" />

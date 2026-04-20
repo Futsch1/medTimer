@@ -289,4 +289,8 @@
     <string name="location_snooze_no_play_services">Sijaintipohjainen torkku vaatii Google Play -palvelut, jotka eivät ole saatavilla tällä laitteella</string>
     <string name="location_snooze_no_home_location">Aseta kotisijainti ennen sijaintipohjaisen torkutuksen käyttöönottoa</string>
     <string name="location_snooze_background_permission">Jotta MedTimer voi ilmoittaa uudelleen kotiin saapuessa, salli sijaintipalvelujen käyttö taustalla</string>
+    <string name="snooze_settings">Torkku-asetukset</string>
+    <string name="snooze_settings_summary">Torkutuksen kesto ja sijaintipohjainen torkku</string>
+    <string name="home_location">Kotisijainti</string>
+    <string name="home_location_not_set">Ei asetettu</string>
 </resources>

@@ -299,4 +299,8 @@
     <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga Google Play Services, które nie są dostępne na tym urządzeniu</string>
     <string name="location_snooze_no_home_location">Ustaw lokalizację domu przed włączeniem drzemki opartej na lokalizacji</string>
     <string name="location_snooze_background_permission">Aby ponownie otrzymywać powiadomienia po przybyciu do domu, zezwól MedTimer na dostęp do lokalizacji w tle</string>
+    <string name="snooze_settings">Ustawienia drzemki</string>
+    <string name="snooze_settings_summary">Czas drzemki i drzemka oparta na lokalizacji</string>
+    <string name="home_location">Lokalizacja domowa</string>
+    <string name="home_location_not_set">Nie ustawiono</string>
 </resources>

@@ -284,4 +284,8 @@
     <string name="location_snooze_no_play_services">基于位置的小睡需要 Google Play 服务，该服务在此设备上不可用</string>
     <string name="location_snooze_no_home_location">请在启用基于位置的小睡之前设置家庭位置</string>
     <string name="location_snooze_background_permission">要在回家时重新接收提醒，请允许 MedTimer 在后台访问位置</string>
+    <string name="snooze_settings">小睡设置</string>
+    <string name="snooze_settings_summary">小睡时长和基于位置的小睡</string>
+    <string name="home_location">家庭位置</string>
+    <string name="home_location_not_set">未设置</string>
 </resources>
