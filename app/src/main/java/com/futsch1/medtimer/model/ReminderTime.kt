@@ -2,22 +2,12 @@ package com.futsch1.medtimer.model
 
 import java.time.LocalTime
 
-class ReminderTime : Comparable<ReminderTime> {
-    val minutes: Int
+class ReminderTime(val minutes: Int, val isDuration: Boolean = false) : Comparable<ReminderTime> {
     val seconds: Long
         get() = minutes * 60L
 
-    val isDuration: Boolean
+    constructor(localTime: LocalTime) : this(localTime.hour * 60 + localTime.minute)
 
-    constructor(minutes: Int, isDuration: Boolean = false) {
-        this.minutes = minutes
-        this.isDuration = isDuration
-    }
-
-    constructor(localTime: LocalTime) {
-        this.minutes = localTime.hour * 60 + localTime.minute
-        this.isDuration = false
-    }
 
     fun getLocalTime(): LocalTime {
         return LocalTime.of(minutes / 60, minutes % 60)

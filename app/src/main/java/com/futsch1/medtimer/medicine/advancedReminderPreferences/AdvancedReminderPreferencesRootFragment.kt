@@ -162,7 +162,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
             val startInstant = Instant.ofEpochSecond(currentDateTime)
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
             datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
-                timePickerDialogFactory.create(dateTime.hour, dateTime.minute) { minutes: Int ->
+                timePickerDialogFactory.create(dateTime.toLocalTime()) { minutes: Int ->
                     val selectedLocalDateTime = LocalDateTime.of(
                         LocalDate.ofEpochDay(daysSinceEpoch),
                         LocalTime.of(minutes / 60, minutes % 60)

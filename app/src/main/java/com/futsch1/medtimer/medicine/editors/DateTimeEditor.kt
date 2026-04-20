@@ -51,7 +51,7 @@ class DateTimeEditor @AssistedInject constructor(
             datePickerDialogFactory
                 .create(dateTime.toLocalDate()) { selectedDate ->
                     timePickerDialogFactory.create(
-                        dateTime.hour, dateTime.minute
+                        dateTime.toLocalTime()
                     ) { selectedTime ->
                         val selectedLocalDateTime = LocalDateTime.of(
                             LocalDate.ofEpochDay(selectedDate),

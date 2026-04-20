@@ -81,6 +81,13 @@ class RepositoryFakes {
                 if (index >= 0) reminderEvents[index] = domainEvent.toEntity()
             }
         }
+        `when`(runBlocking { reminderEventRepositoryMock.decreaseRepeats(any()) }).thenAnswer {
+            val reminderEventId = it.arguments[0] as Int
+            val index = reminderEvents.indexOfFirst { e -> e.reminderEventId == reminderEventId }
+            if (index >= 0) {
+                reminderEvents[index].remainingRepeats--
+            }
+        }
     }
 
     fun buildMedicines(): List<com.futsch1.medtimer.model.Medicine> {
