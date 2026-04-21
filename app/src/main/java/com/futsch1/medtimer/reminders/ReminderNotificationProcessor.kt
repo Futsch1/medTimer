@@ -9,6 +9,7 @@ import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
@@ -171,7 +172,9 @@ class ReminderNotificationProcessor @Inject constructor(
             val lastReminderEvent = reminderEventRepository.getLast(reminderId) ?: return 0
             if (lastReminderEvent.status != ReminderEvent.ReminderStatus.TAKEN) return 0
 
-            if (isWindowedInterval && lastReminderEvent.remindedTimestamp.epochSecond != remindedTimestamp.epochSecond) {
+            if (isWindowedInterval &&
+                TimeHelper.isSameDay(lastReminderEvent.remindedTimestamp, remindedTimestamp)
+            ) {
                 return 0
             }
 

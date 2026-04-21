@@ -86,8 +86,8 @@ object TimeHelper {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }
 
-    fun isSameDay(secondsSinceEpochOne: Long, secondsSinceEpochTwo: Long): Boolean {
-        return Instant.ofEpochSecond(secondsSinceEpochOne).atZone(ZoneId.systemDefault()).toLocalDate() == Instant.ofEpochSecond(secondsSinceEpochTwo).atZone(
+    fun isSameDay(instantOne: Instant, instantTwo: Instant): Boolean {
+        return instantOne.atZone(ZoneId.systemDefault()).toLocalDate() == instantTwo.atZone(
             ZoneId.systemDefault()
         ).toLocalDate()
     }

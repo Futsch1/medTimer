@@ -34,8 +34,7 @@ class ReminderStringFormatter @Inject constructor(
         if (processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
             preferencesDataSource.preferences.value.showTakenTimeInOverview
         ) {
-            val remindedTimestamp = reminderEvent.remindedTimestamp.epochSecond
-            val processedTime = if (TimeHelper.isSameDay(remindedTimestamp, processedTimestamp))
+            val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
                 timeFormatter.secondsSinceEpochToConfigurableTimeString(processedTimestamp, false)
             else
                 timeFormatter.secondsSinceEpochToConfigurableDateTimeString(processedTimestamp)
