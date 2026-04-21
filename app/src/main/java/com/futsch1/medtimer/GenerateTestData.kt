@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import android.graphics.Color
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
@@ -62,15 +63,14 @@ class GenerateTestData @AssistedInject constructor(
         var sortOrder = 1.0
         for (testMedicine in testMedicines) {
             val medicine = testMedicine.toMedicine(sortOrder++)
-            val medicineId = medicineRepository.create(medicine).toInt()
+            val medicineId = medicineRepository.create(medicine)
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
                     reminderRepository.create(testReminder.toReminder(medicineId).toModel())
-                        .toInt()
             }
             for (tag in testMedicine.tags) {
                 val tagId = tagRepository.create(Tag(tag, 0))
-                tagRepository.addMedicineTag(medicineId, tagId.toInt())
+                tagRepository.addMedicineTag(medicineId, tagId)
             }
             if (withEvents) {
                 // Insert reminder events for every single day back from today
@@ -124,7 +124,7 @@ class GenerateTestData @AssistedInject constructor(
             return Medicine(
                 name = name,
                 id = 0,
-                color = color ?: 0,
+                color = color ?: Color.DKGRAY,
                 useColor = color != null,
                 notificationImportance = Medicine.NotificationImportance.DEFAULT,
                 iconId = iconId,
