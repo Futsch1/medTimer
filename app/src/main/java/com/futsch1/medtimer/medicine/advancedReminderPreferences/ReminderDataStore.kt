@@ -69,7 +69,7 @@ class ReminderDataStore @AssistedInject constructor(
             "period_start_date" -> timeFormatter.daysSinceEpochToDateString(modelData.periodStart.toEpochDay())
             "period_end_date" -> timeFormatter.daysSinceEpochToDateString(modelData.periodEnd.toEpochDay())
             "interval_start" -> if (modelData.intervalStartsFromProcessed) "1" else "0"
-            "interval_start_time" -> timeFormatter.secondsSinceEpochToDateTimeString(modelData.intervalStart.epochSecond)
+            "interval_start_time" -> timeFormatter.toDateTimeString(modelData.intervalStart)
             "interval_daily_start_time" -> timeFormatter.toTimeString(modelData.intervalStartTimeOfDay)
             "interval_daily_end_time" -> timeFormatter.toTimeString(modelData.intervalEndTimeOfDay)
             "stock_threshold" -> MedicineHelper.formatAmount(modelData.outOfStockThreshold, "")
@@ -90,7 +90,7 @@ class ReminderDataStore @AssistedInject constructor(
             "period_start_date" -> modelData = modelData.copy(periodStart = timeFormatter.stringToLocalDate(value!!)!!)
             "period_end_date" -> modelData = modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
             "interval_start" -> modelData = modelData.copy(intervalStartsFromProcessed = value == "1")
-            "interval_start_time" -> modelData = modelData.copy(intervalStart = Instant.ofEpochSecond(timeFormatter.stringToSecondsSinceEpoch(value!!)))
+            "interval_start_time" -> modelData = modelData.copy(intervalStart = timeFormatter.stringToInstant(value!!) ?: Instant.EPOCH)
             "interval_daily_start_time" -> modelData =
                 modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
 

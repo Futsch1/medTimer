@@ -18,7 +18,7 @@ import java.time.ZoneId
 class DateTimeEditor @AssistedInject constructor(
     @Assisted private val fragmentActivity: FragmentActivity,
     @Assisted private val dateTimeEdit: TextInputEditText,
-    @Assisted initialDateTimeSecondsSinceEpoch: Long,
+    @Assisted initialInstant: Instant,
     private val timePickerDialogFactory: TimePickerDialogFactory,
     private val datePickerDialogFactory: DatePickerDialogFactory,
     private val timeFormatter: TimeFormatter
@@ -28,14 +28,14 @@ class DateTimeEditor @AssistedInject constructor(
         fun create(
             fragmentActivity: FragmentActivity,
             dateTimeEdit: TextInputEditText,
-            initialDateTimeSecondsSinceEpoch: Long
+            initialDateTimeSecondsSinceEpoch: Instant
         ): DateTimeEditor
     }
 
     init {
         dateTimeEdit.setText(
-            timeFormatter.secondsSinceEpochToDateTimeString(
-                initialDateTimeSecondsSinceEpoch
+            timeFormatter.toDateTimeString(
+                initialInstant
             )
         )
         dateTimeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
@@ -45,7 +45,7 @@ class DateTimeEditor @AssistedInject constructor(
 
     private fun onFocusChangeListener(hasFocus: Boolean) {
         if (hasFocus) {
-            val startInstant = Instant.ofEpochSecond(getDateTimeSecondsSinceEpoch())
+            val startInstant = getInstant() ?: Instant.EPOCH
             val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
 
             datePickerDialogFactory
@@ -58,8 +58,8 @@ class DateTimeEditor @AssistedInject constructor(
                             LocalTime.of(selectedTime / 60, selectedTime % 60)
                         )
                         dateTimeEdit.setText(
-                            timeFormatter.secondsSinceEpochToDateTimeString(
-                                selectedLocalDateTime.toEpochSecond(
+                            timeFormatter.toDateTimeString(
+                                selectedLocalDateTime.toInstant(
                                     ZoneId.systemDefault().rules.getOffset(
                                         selectedLocalDateTime
                                     )
@@ -71,8 +71,8 @@ class DateTimeEditor @AssistedInject constructor(
         }
     }
 
-    fun getDateTimeSecondsSinceEpoch(): Long {
-        return timeFormatter.stringToSecondsSinceEpoch(
+    fun getInstant(): Instant? {
+        return timeFormatter.stringToInstant(
             dateTimeEdit.getText().toString()
         )
     }

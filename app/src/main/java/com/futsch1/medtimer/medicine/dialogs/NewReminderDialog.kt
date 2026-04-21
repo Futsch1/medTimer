@@ -127,7 +127,7 @@ class NewReminderDialog @AssistedInject constructor(
         val intervalStartDateTimeEditor = dateTimeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalStartDateTime),
-            Instant.now().epochSecond
+            Instant.now()
         )
 
         val dailyStartTimeEditor = timeEditorFactory.create(
@@ -176,7 +176,7 @@ class NewReminderDialog @AssistedInject constructor(
                 updatedReminder = updatedReminder.copy(time = reminderTime)
                 if (reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) {
                     updatedReminder = updatedReminder.copy(
-                        intervalStart = Instant.ofEpochSecond(intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()),
+                        intervalStart = intervalStartDateTimeEditor.getInstant() ?: Instant.EPOCH,
                         intervalStartsFromProcessed = dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
                     )
                 }

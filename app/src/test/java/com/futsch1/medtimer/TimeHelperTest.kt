@@ -61,7 +61,7 @@ class TimeHelperTest {
         val timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
 
         assertEquals(englishDataSecondOfJan2023, timeFormatter.localDateToString(LocalDate.of(2023, 1, 2)))
-        assertEquals(englishDataSecondOfJan2023, timeFormatter.secondSinceEpochToDateString(Instant.parse("2023-01-02T12:00:00Z").epochSecond))
+        assertEquals(englishDataSecondOfJan2023, timeFormatter.toDateString(Instant.parse("2023-01-02T12:00:00Z")))
         assertEquals(englishDataSecondOfJan2023, timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay()))
 
         preferences.value = preferences.value.copy(systemLocale = true)

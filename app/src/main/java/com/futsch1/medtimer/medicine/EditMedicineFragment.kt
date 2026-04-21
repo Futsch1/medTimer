@@ -103,7 +103,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @Inject
     lateinit var reminderRepository: ReminderRepository
 
-    private lateinit var medicine: Medicine
+    private var medicine: Medicine? = null
     private lateinit var fragmentView: View
     private var fragmentReady = false
     private lateinit var optionsMenu: EntityEditOptionsMenu
@@ -184,7 +184,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         if (fragmentReady) {
             applicationScope.launch {
                 val newMedicine = buildMedicine()
-                if (medicine != newMedicine) {
+                if (medicine != newMedicine && newMedicine != null) {
                     medicineRepository.update(newMedicine)
                 }
             }
@@ -208,13 +208,13 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupEnableColor(medicine.useColor)
         setupColorButton(medicine.useColor)
 
-        setupNotificationImportance()
+        setupNotificationImportance(medicine)
         setupNotesButton(subMenus)
         setupOpenCalendarButton(subMenus)
         setupStockButton(subMenus)
         setupTagsButton(subMenus)
 
-        setupAddReminderButton()
+        setupAddReminderButton(medicine)
 
         adapter.setMedicine(medicine)
 
@@ -261,7 +261,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         colorButton.visibility = if (useColor) View.VISIBLE else View.GONE
     }
 
-    private fun setupNotificationImportance() {
+    private fun setupNotificationImportance(medicine: Medicine) {
         val notificationImportance = fragmentView.findViewById<Spinner>(R.id.notificationImportance)
         val importanceTexts = this.resources.getStringArray(R.array.notification_importance)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
@@ -333,7 +333,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             .attachToRecyclerView(recyclerView)
     }
 
-    private fun setupAddReminderButton() {
+    private fun setupAddReminderButton(medicine: Medicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
         fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), medicine) }
     }
@@ -355,10 +355,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private suspend fun buildMedicine(): Medicine {
+    private suspend fun buildMedicine(): Medicine? {
         updateReminders()
 
-        return medicine.copy(
+        return medicine?.copy(
             name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim(),
             useColor = enableColor.isChecked,
             color = color,

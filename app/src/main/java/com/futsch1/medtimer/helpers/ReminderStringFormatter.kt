@@ -26,8 +26,8 @@ class ReminderStringFormatter @Inject constructor(
     private val timeFormatter: TimeFormatter
 ) {
     fun formatReminderEvent(reminderEvent: ReminderEvent): Spanned {
-        var takenTime = timeFormatter.secondsSinceEpochToConfigurableTimeString(
-            reminderEvent.remindedTimestamp.epochSecond, false
+        var takenTime = timeFormatter.toConfigurableTimeString(
+            reminderEvent.remindedTimestamp, false
         )
         val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
         val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
@@ -35,9 +35,9 @@ class ReminderStringFormatter @Inject constructor(
             preferencesDataSource.preferences.value.showTakenTimeInOverview
         ) {
             val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
-                timeFormatter.secondsSinceEpochToConfigurableTimeString(processedTimestamp, false)
+                timeFormatter.toConfigurableTimeString(reminderEvent.processedTimestamp, false)
             else
-                timeFormatter.secondsSinceEpochToConfigurableDateTimeString(processedTimestamp)
+                timeFormatter.toConfigurableDateTimeString(reminderEvent.processedTimestamp)
 
             takenTime = "$takenTime ➡ $processedTime"
         }
@@ -49,8 +49,8 @@ class ReminderStringFormatter @Inject constructor(
     }
 
     fun formatScheduledReminder(scheduledReminder: ScheduledReminder): Spanned {
-        val scheduledTime = timeFormatter.secondsSinceEpochToConfigurableTimeString(
-            scheduledReminder.timestamp.toEpochMilli() / 1000, false
+        val scheduledTime = timeFormatter.toConfigurableTimeString(
+            scheduledReminder.timestamp, false
         )
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
@@ -61,12 +61,12 @@ class ReminderStringFormatter @Inject constructor(
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
         val takenTime = (if (isShort)
-            timeFormatter.secondsSinceEpochToConfigurableTimeString(
-                reminderEvent.remindedTimestamp.epochSecond, true
+            timeFormatter.toConfigurableTimeString(
+                reminderEvent.remindedTimestamp, true
             )
         else
-            timeFormatter.secondsSinceEpochToConfigurableDateTimeString(
-                reminderEvent.remindedTimestamp.epochSecond
+            timeFormatter.toConfigurableDateTimeString(
+                reminderEvent.remindedTimestamp
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
 
@@ -78,12 +78,12 @@ class ReminderStringFormatter @Inject constructor(
 
     fun formatScheduledReminderForWidget(scheduledReminder: ScheduledReminder, isShort: Boolean): Spanned {
         val scheduledTime = (if (isShort)
-            timeFormatter.secondsSinceEpochToConfigurableTimeString(
-                scheduledReminder.timestamp.toEpochMilli() / 1000, true
+            timeFormatter.toConfigurableTimeString(
+                scheduledReminder.timestamp, true
             )
         else
-            timeFormatter.secondsSinceEpochToConfigurableDateTimeString(
-                scheduledReminder.timestamp.toEpochMilli() / 1000
+            timeFormatter.toConfigurableDateTimeString(
+                scheduledReminder.timestamp
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 

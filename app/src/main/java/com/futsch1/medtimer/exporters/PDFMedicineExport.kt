@@ -16,7 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import kotlin.time.Clock
+import java.time.Instant
 import kotlin.time.ExperimentalTime
 
 class PDFMedicineExport @AssistedInject constructor(
@@ -38,7 +38,7 @@ class PDFMedicineExport @AssistedInject constructor(
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
         simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
-        simplyPdfDocument.text.write(timeFormatter.secondsSinceEpochToDateTimeString(Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(timeFormatter.toDateTimeString(Instant.now()) + "\n", standardTextProperties)
 
         for (medicine in medicines) {
             val activeReminders = getActiveReminders(medicine)

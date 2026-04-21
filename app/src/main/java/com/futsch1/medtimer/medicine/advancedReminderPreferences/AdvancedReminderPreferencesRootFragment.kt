@@ -18,7 +18,6 @@ import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -156,22 +155,20 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     }
 
     private fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
-        val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
-        if (currentDateString != null) {
-            val currentDateTime = timeFormatter.stringToSecondsSinceEpoch(currentDateString)
-            val startInstant = Instant.ofEpochSecond(currentDateTime)
-            val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
-            datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
-                timePickerDialogFactory.create(dateTime.toLocalTime()) { minutes: Int ->
-                    val selectedLocalDateTime = LocalDateTime.of(
-                        LocalDate.ofEpochDay(daysSinceEpoch),
-                        LocalTime.of(minutes / 60, minutes % 60)
-                    )
-                    val timeString = timeFormatter.localeDateTimeToDateTimeString(selectedLocalDateTime)
-                    preference.preferenceDataStore?.putString(preference.key, timeString)
-                }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
-            }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
-        }
+        val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
+        val currentDateTime = timeFormatter.stringToInstant(currentDateString)
+        val startInstant = currentDateTime ?: return
+        val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+        datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
+            timePickerDialogFactory.create(dateTime.toLocalTime()) { minutes: Int ->
+                val selectedLocalDateTime = LocalDateTime.of(
+                    LocalDate.ofEpochDay(daysSinceEpoch),
+                    LocalTime.of(minutes / 60, minutes % 60)
+                )
+                val timeString = timeFormatter.toDateTimeString(selectedLocalDateTime)
+                preference.preferenceDataStore?.putString(preference.key, timeString)
+            }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+        }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
     }
 
 }
