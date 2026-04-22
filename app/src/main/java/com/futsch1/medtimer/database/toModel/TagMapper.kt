@@ -5,7 +5,7 @@ import com.futsch1.medtimer.model.Tag
 
 fun TagEntity.toModel(): Tag {
     return Tag(
-        name = name,
+        name = name ?: "",
         id = tagId
     )
 }

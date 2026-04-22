@@ -2,10 +2,10 @@ package com.futsch1.medtimer.medicine.editors
 
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.model.ReminderTime
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
@@ -71,7 +71,7 @@ class TimeEditor @AssistedInject constructor(
         var startMinutes =
             timeFormatter.timeStringToMinutes(timeEdit.getText().toString())
         if (startMinutes < 0) {
-            startMinutes = ReminderEntity.DEFAULT_TIME
+            startMinutes = ReminderTime.DEFAULT_TIME
         }
         timePickerDialogFactory.create(
             startMinutes / 60, startMinutes % 60

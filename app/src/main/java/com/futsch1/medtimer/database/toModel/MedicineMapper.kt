@@ -24,15 +24,15 @@ fun Medicine.toEntity(): MedicineEntity = MedicineEntity(
 
 fun FullMedicineEntity.toModel(): Medicine {
     return Medicine(
-        name = medicine.name,
+        name = medicine.name ?: "",
         id = medicine.medicineId,
         color = medicine.color,
         useColor = medicine.useColor,
         notificationImportance = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT.value) Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
         iconId = medicine.iconId,
         amount = medicine.amount,
-        refillSize = if (medicine.refillSizes.isEmpty()) 0.0 else medicine.refillSizes[0],
-        unit = medicine.unit,
+        refillSize = medicine.refillSizes?.firstOrNull() ?: 0.0,
+        unit = medicine.unit ?: "",
         notes = medicine.notes ?: "",
         showNotificationAsAlarm = medicine.showNotificationAsAlarm,
         productionDate = LocalDate.ofEpochDay(medicine.productionDate),
