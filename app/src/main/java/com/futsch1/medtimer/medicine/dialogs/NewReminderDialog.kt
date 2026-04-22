@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.BuildConfig
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.AmountTextWatcher
@@ -67,9 +68,11 @@ class NewReminderDialog @AssistedInject constructor(
     private fun startEditAmount() {
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
         textInputEditText.requestFocus()
-        textInputEditText.postDelayed({
-            inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
-        }, 100)
+        if (!BuildConfig.DEBUG) {
+            textInputEditText.postDelayed({
+                inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+            }, 100)
+        }
         if (medicine.isStockManagementActive()) {
             textInputEditText.addTextChangedListener(
                 AmountTextWatcher(
