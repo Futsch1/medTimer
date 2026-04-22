@@ -27,19 +27,19 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
         medicineIcons,
         context,
         reminderNotification.reminderNotificationData.notificationId,
-        reminderNotification.reminderNotificationParts.map { it.medicine.medicine },
+        reminderNotification.reminderNotificationParts.map { it.medicine },
         notificationManager
     ) {
 
     init {
         val contentIntent = getStartAppIntent()
-        val medicine = reminderNotification.reminderNotificationParts[0].medicine.medicine
+        val medicine = reminderNotification.reminderNotificationParts[0].medicine
 
         val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)
         val notificationMessage = context.resources.getString(
             R.string.expiration_date_notification,
             medicineNameString,
-            timeFormatter.daysSinceEpochToDateString(medicine.expirationDate)
+            timeFormatter.localDateToString(medicine.expirationDate)
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 

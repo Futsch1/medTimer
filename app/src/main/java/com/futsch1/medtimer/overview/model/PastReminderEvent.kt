@@ -1,16 +1,15 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import java.time.Instant
 
-class OverviewReminderEvent @AssistedInject constructor(
+class PastReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     @Assisted val reminderEvent: ReminderEvent
@@ -18,8 +17,8 @@ class OverviewReminderEvent @AssistedInject constructor(
     OverviewEvent(preferencesDataSource) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(reminderEvent: ReminderEvent): OverviewReminderEvent
+    fun interface Factory {
+        fun create(reminderEvent: ReminderEvent): PastReminderEvent
     }
 
     override val text: Spanned = reminderStringFormatter.formatReminderEvent(reminderEvent)
@@ -27,22 +26,20 @@ class OverviewReminderEvent @AssistedInject constructor(
     override val id: Int
         get() = reminderEvent.reminderEventId
     override val timestamp: Long
-        get() = reminderEvent.remindedTimestamp
+        get() = reminderEvent.remindedTimestamp.epochSecond
     override val icon: Int
         get() = reminderEvent.iconId
     override val color: Int?
         get() = if (reminderEvent.useColor) reminderEvent.color else null
     override val state: OverviewState
         get() = mapReminderEventState(reminderEvent)
-    override val reminderType: Reminder.ReminderType
-        get() = reminderEvent.reminderType
     override val reminderId: Int
         get() = reminderEvent.reminderId
 
     private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
         return when (reminderEvent.status) {
             ReminderEvent.ReminderStatus.RAISED -> {
-                if (reminderEvent.remindedTimestamp <= Instant.now().toEpochMilli() / 1000) OverviewState.RAISED else OverviewState.PENDING
+                if (reminderEvent.remindedTimestamp <= Instant.now()) OverviewState.RAISED else OverviewState.PENDING
             }
 
             ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN

@@ -51,15 +51,10 @@ object TimeHelper {
         return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalTime()
     }
 
-    /**
-     * @param remindedTimestamp Time stamp in seconds since epoch
-     * @param localDate         Local date
-     * @return Time stamp in seconds since epoch with given date
-     */
-    fun changeTimeStampDate(remindedTimestamp: Long, localDate: LocalDate?): Long {
-        var localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(remindedTimestamp), ZoneId.systemDefault())
+    fun changeInstantDate(instant: Instant, localDate: LocalDate?): Instant {
+        var localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
         localDateTime = if (localDate != null) localDateTime.with(localDate) else localDateTime
-        return localDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(localDateTime))
+        return localDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(localDateTime))
     }
 
     /**
@@ -72,22 +67,22 @@ object TimeHelper {
     }
 
     /**
-     * @param timeStamp    Time stamp in seconds since epoch
+     * @param time    Time instant
      * @param localMinutes Minutes since midnight
      * @return Time stamp in seconds since epoch with given minutes
      */
-    fun changeTimeStampMinutes(timeStamp: Long, localMinutes: Int): Long {
-        var localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.systemDefault())
-        localDateTime = localDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60)
-        return localDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(localDateTime))
+    fun changeTimeMinutes(time: Instant, localMinutes: Int): Instant {
+        val zonedDateTime = time.atZone(ZoneId.systemDefault())
+        val localDateTime = zonedDateTime.withHour(localMinutes / 60).withMinute(localMinutes % 60)
+        return localDateTime.toInstant()
     }
 
     fun secondsSinceEpochToISO8601DatetimeString(remindedTimestamp: Long): Any {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }
 
-    fun isSameDay(secondsSinceEpochOne: Long, secondsSinceEpochTwo: Long): Boolean {
-        return Instant.ofEpochSecond(secondsSinceEpochOne).atZone(ZoneId.systemDefault()).toLocalDate() == Instant.ofEpochSecond(secondsSinceEpochTwo).atZone(
+    fun isSameDay(instantOne: Instant, instantTwo: Instant): Boolean {
+        return instantOne.atZone(ZoneId.systemDefault()).toLocalDate() == instantTwo.atZone(
             ZoneId.systemDefault()
         ).toLocalDate()
     }

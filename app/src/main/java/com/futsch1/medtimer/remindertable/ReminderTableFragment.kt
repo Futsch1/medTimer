@@ -13,7 +13,7 @@ import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.filter.Filter
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.statusValuesWithoutDeletedAndAcknowledged
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
@@ -57,7 +57,7 @@ class ReminderTableFragment : Fragment() {
             )
         )
         viewLifecycleOwner.lifecycleScope.launch {
-            medicineViewModel.getLiveReminderEvents(0, statusValuesWithoutDeletedAndAcknowledged)
+            medicineViewModel.getLiveReminderEvents(0, ReminderEvent.statusValuesWithoutDeletedAndAcknowledged)
                 .collect { reminderEvents ->
                     adapter.submitList(reminderEvents)
                     tableFilter.set(filter.text.toString())

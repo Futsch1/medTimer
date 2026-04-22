@@ -34,7 +34,7 @@ open class ReminderNotificationFactory @Inject constructor(
                 return null
             }
 
-            val medicine = medicineRepository.getFull(reminder.medicineRelId)
+            val medicine = medicineRepository.get(reminder.medicineRelId)
             if (medicine == null) {
                 Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
                 return null
@@ -43,16 +43,14 @@ open class ReminderNotificationFactory @Inject constructor(
             var reminderEvent = if (reminderNotificationData.reminderEventIds[i] != 0) {
                 reminderEventRepository.get(reminderNotificationData.reminderEventIds[i])
             } else {
-                reminderEventRepository.get(reminder.reminderId, reminderNotificationData.remindInstant.epochSecond)
+                reminderEventRepository.get(reminder.id, reminderNotificationData.remindInstant.epochSecond)
             }
 
             if (reminderEvent == null) {
                 val newEvent = ReminderNotificationProcessor.buildReminderEvent(
                     reminderNotificationData.remindInstant.epochSecond, medicine, reminder, reminderEventRepository, timeFormatter
                 )
-                newEvent.remainingRepeats = numberOfRepeats
-                newEvent.reminderEventId = reminderEventRepository.create(newEvent).toInt()
-                reminderEvent = newEvent
+                reminderEvent = reminderEventRepository.create(newEvent.copy(remainingRepeats = numberOfRepeats))
             } else {
                 reminderNotificationData.notificationId = reminderEvent.notificationId
             }

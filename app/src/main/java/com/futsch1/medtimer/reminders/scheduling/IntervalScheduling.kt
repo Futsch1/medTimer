@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
@@ -23,21 +23,19 @@ open class IntervalScheduling(
         return if (lastReminderEvent != null) {
             getNextIntervalTimeFromReminderEvent(lastReminderEvent)
         } else {
-            Instant.ofEpochSecond(reminder.intervalStart)
+            reminder.intervalStart
         }
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                if (lastReminderEvent.processedTimestamp != 0L)
-                    Instant.ofEpochSecond(lastReminderEvent.processedTimestamp)
+                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
+                    lastReminderEvent.processedTimestamp
                 else null
             } else
-                Instant.ofEpochSecond(
-                    lastReminderEvent.remindedTimestamp
-                )
-        return instant?.plusSeconds(reminder.timeInMinutes * 60L)
+                lastReminderEvent.remindedTimestamp
+        return instant?.plusSeconds(reminder.time.seconds)
     }
 
     protected fun adjustToToday(instant: Instant?): Instant? {
@@ -50,8 +48,8 @@ open class IntervalScheduling(
             if (instant.isBefore(todayInstant)) {
                 // First interval that is triggered today
                 val deltaMinutes: Long = (todayInstant.epochSecond - instant.epochSecond) / 60L
-                val numIntervals = ceil(deltaMinutes.toDouble() / reminder.timeInMinutes).toLong()
-                adjustedInstant = instant.plusSeconds(numIntervals * reminder.timeInMinutes * 60L)
+                val numIntervals = ceil(deltaMinutes.toDouble() / (reminder.time.minutes)).toLong()
+                adjustedInstant = instant.plusSeconds(numIntervals * reminder.time.seconds)
             }
         }
         return adjustedInstant
@@ -60,14 +58,14 @@ open class IntervalScheduling(
     protected fun adjustToPeriod(instant: Instant?): Instant? {
         var adjustedInstant = instant
         if (instant != null) {
-            val instantDay = instant.atZone(timeAccess.systemZone()).toLocalDate().toEpochDay()
-            if (reminder.periodStart != 0L && instantDay < reminder.periodStart) {
+            val instantDay = instant.atZone(timeAccess.systemZone()).toLocalDate()
+            if (reminder.periodStart != LocalDate.EPOCH && instantDay < reminder.periodStart) {
                 val instantTimeOfDay = instant.atZone(timeAccess.systemZone()).toLocalTime()
-                val periodStartLocalDateTime = LocalDate.ofEpochDay(reminder.periodStart).atTime(instantTimeOfDay)
+                val periodStartLocalDateTime = reminder.periodStart.atTime(instantTimeOfDay)
                 adjustedInstant = periodStartLocalDateTime.toInstant(timeAccess.systemZone().rules.getOffset(periodStartLocalDateTime))
             }
 
-            if (reminder.periodEnd != 0L && instantDay > reminder.periodEnd) {
+            if (reminder.periodEnd != LocalDate.EPOCH && instantDay > reminder.periodEnd) {
                 adjustedInstant = null
             }
         }

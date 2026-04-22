@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.medicine.editors.TimeEditor
 import com.futsch1.medtimer.medicine.stockSettings.addDoubleValidator
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
+import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -24,6 +26,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
 
 class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
@@ -88,12 +91,12 @@ class NewReminderStockDialog @AssistedInject constructor(
     }
 
     private fun setupVisibilities() {
-        val outOfStockVisibility = if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
+        val outOfStockVisibility = if (reminder.reminderType == ReminderType.OUT_OF_STOCK) {
             View.VISIBLE
         } else {
             View.GONE
         }
-        val expirationDateVisibility = if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
+        val expirationDateVisibility = if (reminder.reminderType == ReminderType.EXPIRATION_DATE) {
             View.VISIBLE
         } else {
             View.GONE
@@ -112,7 +115,7 @@ class NewReminderStockDialog @AssistedInject constructor(
         val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
-            reminder.timeInMinutes,
+            reminder.time.minutes,
             { _ -> },
             null
         )
@@ -127,20 +130,26 @@ class NewReminderStockDialog @AssistedInject constructor(
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             activity.lifecycleScope.launch {
+                var updatedReminder = reminder.copy(
+                    time = ReminderTime(timeEditor.getMinutes())
+                )
                 var canCreate = true
-                reminder.timeInMinutes = timeEditor.getMinutes()
 
-                if (reminder.reminderType == Reminder.ReminderType.OUT_OF_STOCK) {
-                    canCreate = fillOutOfStockReminder()
+                if (reminder.reminderType == ReminderType.OUT_OF_STOCK) {
+                    val result = fillOutOfStockReminder(updatedReminder)
+                    canCreate = result.first
+                    updatedReminder = result.second
                 }
-                if (reminder.reminderType == Reminder.ReminderType.EXPIRATION_DATE) {
-                    canCreate = fillExpirationReminder()
+                if (reminder.reminderType == ReminderType.EXPIRATION_DATE) {
+                    val result = fillExpirationReminder(updatedReminder)
+                    canCreate = result.first
+                    updatedReminder = result.second
                 }
 
                 if (!canCreate) {
                     Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
                 } else {
-                    reminderRepository.create(reminder)
+                    reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,
                         R.string.successfully_created_reminder,
@@ -152,34 +161,37 @@ class NewReminderStockDialog @AssistedInject constructor(
         }
     }
 
-    private fun fillExpirationReminder(): Boolean {
-        var canCreate = true
-        try {
-            reminder.expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
+    private fun fillExpirationReminder(reminder: Reminder): Pair<Boolean, Reminder> {
+        return try {
+            val expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
                 R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
                 R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
                 else -> Reminder.ExpirationReminderType.OFF
             }
-            reminder.periodStart = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
+            val daysBefore = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
+            Pair(
+                true, reminder.copy(
+                    expirationReminderType = expirationReminderType,
+                    periodStart = LocalDate.ofEpochDay(daysBefore)
+                )
+            )
         } catch (_: NumberFormatException) {
-            canCreate = false
+            Pair(false, reminder)
         }
-        return canCreate
     }
 
-    private fun fillOutOfStockReminder(): Boolean {
-        var canCreate = true
-        try {
-            reminder.outOfStockThreshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
+    private fun fillOutOfStockReminder(reminder: Reminder): Pair<Boolean, Reminder> {
+        return try {
+            val threshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
+            val outOfStockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
+                R.id.once -> Reminder.OutOfStockReminderType.ONCE
+                R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
+                R.id.daily -> Reminder.OutOfStockReminderType.DAILY
+                else -> Reminder.OutOfStockReminderType.OFF
+            }
+            Pair(true, reminder.copy(outOfStockThreshold = threshold, outOfStockReminderType = outOfStockReminderType))
         } catch (_: NumberFormatException) {
-            canCreate = false
+            Pair(false, reminder)
         }
-        reminder.outOfStockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-            R.id.once -> Reminder.OutOfStockReminderType.ONCE
-            R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
-            R.id.daily -> Reminder.OutOfStockReminderType.DAILY
-            else -> Reminder.OutOfStockReminderType.OFF
-        }
-        return canCreate
     }
 }

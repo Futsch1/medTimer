@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
@@ -18,45 +17,46 @@ class ReminderSchedulerIntervalUnitTest {
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
         val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
 
-        val medicine = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.intervalStart = TestHelper.on(1, 120).epochSecond
-        reminder.intervalStartsFromProcessed = false
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        var reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
+            intervalStart = TestHelper.on(1, 120),
+            intervalStartsFromProcessed = false
+        )
         medicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
-        medicineList.add(medicine)
+        val medicineList = mutableListOf(medicine)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
 
-        var scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        var scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(1, 120),
-            medicine.medicine,
+            medicine.toMedicine(),
             reminder
         )
 
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 120).epochSecond))
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 120)))
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 600),
-            medicine.medicine,
+            medicine.toMedicine(),
             reminder
         )
 
-        reminder.intervalStartsFromProcessed = true
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        reminder = reminder.copy(intervalStartsFromProcessed = true)
+        medicine.reminders[0] = reminder
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertEquals(0, scheduledReminders.size)
 
-        reminderEventList[0].processedTimestamp = TestHelper.on(2, 121).epochSecond
-        scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        reminderEventList[0] = reminderEventList[0].copy(processedTimestamp = TestHelper.on(2, 121))
+        scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(2, 601),
-            medicine.medicine,
+            medicine.toMedicine(),
             reminder
         )
     }
@@ -65,23 +65,23 @@ class ReminderSchedulerIntervalUnitTest {
     fun scheduleIntervalReminderPause() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(3)
 
-        val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1)
-        reminder.intervalStart = TestHelper.on(1, 120).epochSecond
-        reminder.intervalStartsFromProcessed = false
+        val fullMedicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
+            intervalStart = TestHelper.on(1, 120),
+            intervalStartsFromProcessed = false
+        )
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
-        medicineList.add(fullMedicine)
+        val medicineList = mutableListOf(fullMedicine)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 600).epochSecond))
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(1, 600)))
 
-        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        val scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
             TestHelper.on(4, 120),
-            fullMedicine.medicine,
+            fullMedicine.toMedicine(),
             reminder
         )
     }
@@ -90,24 +90,23 @@ class ReminderSchedulerIntervalUnitTest {
     fun scheduleIntervalReminderNotTaken() {
         val scheduler = ReminderSchedulerUnitTest.getScheduler(0)
 
-        val fullMedicine = TestHelper.buildFullMedicine(1, "Test")
-        val reminder = TestHelper.buildReminder(1, 1, "1", 24 * 60 * 3, 1)
-        reminder.intervalStart = TestHelper.on(1, 120).epochSecond
-        reminder.intervalStartsFromProcessed = true
+        val fullMedicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 23 * 60, 1).copy(
+            intervalStart = TestHelper.on(1, 120),
+            intervalStartsFromProcessed = true
+        )
         fullMedicine.reminders.add(reminder)
 
-        val medicineList: MutableList<FullMedicine> = mutableListOf()
-        medicineList.add(fullMedicine)
+        val medicineList = mutableListOf(fullMedicine)
 
         val reminderEventList: MutableList<ReminderEvent> = mutableListOf()
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(5, 120).epochSecond))
-        reminderEventList[0].processedTimestamp = TestHelper.on(5, 130).epochSecond
+        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 60)).copy(processedTimestamp = TestHelper.on(2, 60)))
 
-        val scheduledReminders = scheduler.schedule(medicineList, reminderEventList)
+        val scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
-            TestHelper.on(8, 130),
-            fullMedicine.medicine,
+            TestHelper.on(3, 0),
+            fullMedicine.toMedicine(),
             reminder
         )
     }

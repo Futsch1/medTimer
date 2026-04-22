@@ -1,36 +1,43 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.toModel.toEntity
+import com.futsch1.medtimer.database.toModel.toModel
+import com.futsch1.medtimer.model.Tag
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 open class TagRepository(
     private val tagDao: TagDao
 ) {
-    fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow()
+    fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow().map { list ->
+        list.map { it.toModel() }
+    }
 
-    suspend fun create(tag: Tag): Long {
-        val existingTagId = getByName(tag.name)?.tagId?.toLong()
-        return existingTagId ?: tagDao.create(tag)
+    fun getMedicineTagsFlow(): Flow<List<MedicineToTagEntity>> {
+        return tagDao.getMedicineTagsFlow()
+    }
+
+    suspend fun create(tag: Tag): Int {
+        val existingTagId = getByName(tag.name)?.id
+        return existingTagId ?: tagDao.create(tag.toEntity()).toInt()
     }
 
     suspend fun getByName(name: String): Tag? {
-        return tagDao.getByName(name)
+        return tagDao.getByName(name)?.toModel()
     }
 
     suspend fun delete(tag: Tag) {
-        tagDao.deleteMedicineToTagForTag(tag.tagId)
-        tagDao.delete(tag)
+        tagDao.deleteMedicineToTagForTag(tag.id)
+        tagDao.delete(tag.toEntity())
     }
 
     suspend fun addMedicineTag(medicineId: Int, tagId: Int) {
-        tagDao.createMedicineToTag(MedicineToTag(medicineId, tagId))
+        tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
     suspend fun removeMedicineTag(medicineId: Int, tagId: Int) {
-        tagDao.deleteMedicineToTag(MedicineToTag(medicineId, tagId))
-    }
-
-    fun getMedicineTagsFlow(): Flow<List<MedicineToTag>> {
-        return tagDao.getMedicineTagsFlow()
+        tagDao.deleteMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
     suspend fun hasAny(): Boolean {

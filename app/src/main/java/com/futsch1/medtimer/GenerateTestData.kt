@@ -1,13 +1,15 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.database.Medicine
+import android.graphics.Color
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.database.ReminderEntity
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.toModel.toModel
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Tag
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -60,30 +62,28 @@ class GenerateTestData @AssistedInject constructor(
 
         var sortOrder = 1.0
         for (testMedicine in testMedicines) {
-            val medicine = testMedicine.toMedicine()
-            medicine.sortOrder = sortOrder++
-            val medicineId = medicineRepository.create(medicine).toInt()
+            val medicine = testMedicine.toMedicine(sortOrder++)
+            val medicineId = medicineRepository.create(medicine)
             for (testReminder in testMedicine.reminders) {
                 testReminder.id =
-                    reminderRepository.create(testReminder.toReminder(medicineId))
-                        .toInt()
+                    reminderRepository.create(testReminder.toReminder(medicineId).toModel())
             }
             for (tag in testMedicine.tags) {
-                val tagId = tagRepository.create(Tag(tag))
-                tagRepository.addMedicineTag(medicineId, tagId.toInt())
+                val tagId = tagRepository.create(Tag(tag, 0))
+                tagRepository.addMedicineTag(medicineId, tagId)
             }
             if (withEvents) {
-                // Insert reminder events for every day back from today
-                val reminderEvents: MutableList<ReminderEvent> = LinkedList()
+                // Insert reminder events for every single day back from today
+                val reminderEvents: MutableList<ReminderEventEntity> = LinkedList()
                 for (testReminder in testMedicine.reminders) {
                     val today = Instant.now()
 
                     for (i in 1..1000) {
-                        val reminderEvent = ReminderEvent()
+                        val reminderEvent = ReminderEventEntity()
                         reminderEvent.reminderId = testReminder.id
                         reminderEvent.remindedTimestamp = today.minus(Period.ofDays(i)).epochSecond
                         reminderEvent.processedTimestamp = reminderEvent.remindedTimestamp
-                        reminderEvent.status = ReminderEvent.ReminderStatus.TAKEN
+                        reminderEvent.status = ReminderEventEntity.ReminderEntityStatus.TAKEN
                         reminderEvent.medicineName = testMedicine.name
                         reminderEvent.amount = testReminder.toReminder(0).amount
                         reminderEvent.notes = ""
@@ -92,7 +92,7 @@ class GenerateTestData @AssistedInject constructor(
                     }
                 }
 
-                reminderEventRepository.createAll(reminderEvents)
+                reminderEventRepository.createAll(reminderEvents.map { it.toModel() })
             }
         }
     }
@@ -120,26 +120,30 @@ class GenerateTestData @AssistedInject constructor(
             return name.hashCode()
         }
 
-        fun toMedicine(): Medicine {
-            val medicine = Medicine(name)
-            if (color != null) {
-                medicine.useColor = true
-                medicine.color = color
-            }
-            medicine.iconId = iconId
-            if (stock > 0) {
-                medicine.amount = stock
-                medicine.unit = "pills"
-                medicine.refillSizes = arrayListOf(20.0)
-                medicine.expirationDate = LocalDate.now().toEpochDay() + 7
-                medicine.notes = "Some note\nabout this medicine"
-            }
-            return medicine
+        fun toMedicine(sortOrder: Double): Medicine {
+            return Medicine(
+                name = name,
+                id = 0,
+                color = color ?: Color.DKGRAY,
+                useColor = color != null,
+                notificationImportance = Medicine.NotificationImportance.DEFAULT,
+                iconId = iconId,
+                amount = stock,
+                refillSize = if (stock > 0) 20.0 else 0.0,
+                unit = if (stock > 0) "pills" else "",
+                notes = if (stock > 0) "Some note\nabout this medicine" else "",
+                showNotificationAsAlarm = false,
+                productionDate = LocalDate.now(),
+                expirationDate = LocalDate.now().plusDays(7),
+                sortOrder = sortOrder,
+                tags = emptyList(),
+                reminders = reminders.map { it.toReminder(0).toModel() }
+            )
         }
     }
 
     private abstract class TestReminder {
-        abstract fun toReminder(medicineId: Int): Reminder
+        abstract fun toReminder(medicineId: Int): ReminderEntity
         var id: Int = -1
     }
 
@@ -148,8 +152,8 @@ class GenerateTestData @AssistedInject constructor(
         val pauseDays: Int,
         val instructions: String, val variableAmount: Boolean = false
     ) : TestReminder() {
-        override fun toReminder(medicineId: Int): Reminder {
-            val reminder = Reminder(medicineId)
+        override fun toReminder(medicineId: Int): ReminderEntity {
+            val reminder = ReminderEntity(medicineId)
             reminder.amount = amount
             reminder.timeInMinutes = time
             reminder.consecutiveDays = consecutiveDays
@@ -164,8 +168,8 @@ class GenerateTestData @AssistedInject constructor(
     private class TestReminderLinked(
         val amount: String, val time: Int, val sourceReminder: TestReminder
     ) : TestReminder() {
-        override fun toReminder(medicineId: Int): Reminder {
-            val reminder = Reminder(medicineId)
+        override fun toReminder(medicineId: Int): ReminderEntity {
+            val reminder = ReminderEntity(medicineId)
             reminder.amount = amount
             reminder.timeInMinutes = time
             reminder.linkedReminderId = sourceReminder.id
@@ -176,8 +180,8 @@ class GenerateTestData @AssistedInject constructor(
     private class TestReminderIntervalBased(
         val amount: String, val time: Int
     ) : TestReminder() {
-        override fun toReminder(medicineId: Int): Reminder {
-            val reminder = Reminder(medicineId)
+        override fun toReminder(medicineId: Int): ReminderEntity {
+            val reminder = ReminderEntity(medicineId)
             reminder.amount = amount
             reminder.timeInMinutes = time
             reminder.intervalStartsFromProcessed = true
@@ -189,10 +193,10 @@ class GenerateTestData @AssistedInject constructor(
     private class TestReminderOutOfStock(
         val threshold: Double
     ) : TestReminder() {
-        override fun toReminder(medicineId: Int): Reminder {
-            val reminder = Reminder(medicineId)
+        override fun toReminder(medicineId: Int): ReminderEntity {
+            val reminder = ReminderEntity(medicineId)
             reminder.outOfStockThreshold = threshold
-            reminder.outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+            reminder.outOfStockReminderType = ReminderEntity.OutOfStockReminderType.DAILY
             return reminder
         }
     }
@@ -200,11 +204,11 @@ class GenerateTestData @AssistedInject constructor(
     private class TestReminderExpirationDate(
         val time: Int, val daysBefore: Long
     ) : TestReminder() {
-        override fun toReminder(medicineId: Int): Reminder {
-            val reminder = Reminder(medicineId)
+        override fun toReminder(medicineId: Int): ReminderEntity {
+            val reminder = ReminderEntity(medicineId)
             reminder.timeInMinutes = time
             reminder.periodStart = daysBefore
-            reminder.expirationReminderType = Reminder.ExpirationReminderType.DAILY
+            reminder.expirationReminderType = ReminderEntity.ExpirationReminderType.DAILY
             return reminder
         }
     }

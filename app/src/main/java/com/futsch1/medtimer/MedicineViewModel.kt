@@ -2,18 +2,16 @@ package com.futsch1.medtimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineToTag
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEvent.ReminderStatus
+import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.database.TagRepository
-import com.futsch1.medtimer.database.allStatusValues
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.model.Tag
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,18 +32,18 @@ class MedicineViewModel @Inject constructor(
     private val tagRepository: TagRepository,
     private val reminderEventRepository: ReminderEventRepository,
 ) : ViewModel() {
-    private val liveMedicines = medicineRepository.getFullAllFlow()
+    private val liveMedicines = medicineRepository.getAllFlow()
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
-    private var medicineToTags: List<MedicineToTag> = emptyList()
+    private var medicineToTags: List<MedicineToTagEntity> = emptyList()
     private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
     )
 
     private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
 
-    val medicines: StateFlow<List<FullMedicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
+    val medicines: StateFlow<List<Medicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
         getFiltered(medicines, tagIds ?: emptySet())
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
@@ -88,7 +86,7 @@ class MedicineViewModel @Inject constructor(
         return getFilteredEvents(events, validTagIds.value ?: setOf(), liveTags.value)
     }
 
-    fun filterMedicines(medicines: List<FullMedicine>): List<FullMedicine> {
+    fun filterMedicines(medicines: List<Medicine>): List<Medicine> {
         return getFiltered(medicines, validTagIds.value ?: emptySet())
     }
 
@@ -106,20 +104,19 @@ class MedicineViewModel @Inject constructor(
         }
         // Get all valid tag names from the list of valid IDs
         val validTagNames =
-            liveTags.stream().filter { tag -> validTagIds.contains(tag.tagId) }
+            liveTags.stream().filter { tag -> validTagIds.contains(tag.id) }
                 .map { tag -> tag.name }.collect(Collectors.toSet())
         // Now filter all reminder events and check if they contain any of the valid tags
         return liveData.stream().filter { reminderEvent ->
             validTagNames.stream().filter { reminderEvent.tags.contains(it) }.count() > 0
         }.collect(Collectors.toList())
-
     }
 
     private fun getId(medicineWithReminder: Any): Int {
-        return if (medicineWithReminder is FullMedicine) {
-            medicineWithReminder.medicine.medicineId
+        return if (medicineWithReminder is Medicine) {
+            medicineWithReminder.id
         } else {
-            (medicineWithReminder as ScheduledReminder).medicine.medicine.medicineId
+            (medicineWithReminder as ScheduledReminder).medicine.id
         }
     }
 
@@ -141,7 +138,7 @@ class MedicineViewModel @Inject constructor(
 
     fun getLiveReminderEvents(
         timeStamp: Long,
-        statusValues: List<ReminderStatus> = allStatusValues
+        statusValues: List<ReminderEvent.ReminderStatus> = ReminderEvent.allStatusValues
     ): Flow<List<ReminderEvent>> {
         return combine(
             reminderEventRepository.getAllFlow(timeStamp, statusValues),

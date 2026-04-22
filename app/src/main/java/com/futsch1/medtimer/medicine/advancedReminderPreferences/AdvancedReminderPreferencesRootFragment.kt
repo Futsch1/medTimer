@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
@@ -16,12 +15,14 @@ import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.helpers.isReminderActive
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.TextStyle
 import javax.inject.Inject
 
 
@@ -70,7 +71,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         get() = mapOf(
             "add_linked_reminder" to { activity, preference ->
                 val reminderDataStore = preference.preferenceDataStore as ReminderDataStore
-                linkedReminderHandlingFactory.create(reminderDataStore.entity, activity.lifecycleScope).addLinkedReminder(activity)
+                linkedReminderHandlingFactory.create(reminderDataStore.modelData, activity.lifecycleScope).addLinkedReminder(activity)
             },
             "interval_start_time" to { activity, preference -> showDateTimeEdit(activity, preference) },
             "interval_daily_start_time" to { activity, preference -> showTimeEdit(activity, preference) },
@@ -79,62 +80,48 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
 
     val menuProvider by lazy { menuProviderFactory.create(this) }
 
-    override fun onEntityUpdated(entity: Reminder) {
-        super.onEntityUpdated(entity)
+    override fun onModelDataUpdated(modelData: Reminder) {
+        super.onModelDataUpdated(modelData)
 
-        menuProvider.reminder = entity
+        menuProvider.reminder = modelData
 
         findPreference<Preference>("reminder_status")?.summary =
-            requireContext().getString(if (isReminderActive(entity)) R.string.active else R.string.inactive)
-        findPreference<Preference>("interval")?.summary = Interval(entity.timeInMinutes).toTranslatedString(requireContext())
-        findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(entity)
-        findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(entity)
+            requireContext().getString(if (isReminderActive(modelData)) R.string.active else R.string.inactive)
+        findPreference<Preference>("interval")?.summary = Interval(modelData.time).toTranslatedString(requireContext())
+        findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(modelData)
+        findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(modelData)
         findPreference<Preference>("interval_start")?.summary =
-            requireContext().getString(if (entity.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
-        findPreference<Preference>("interval_type")?.summary = reminderSummaryFormatter.getIntervalTypeSummary(entity)
-        findPreference<Preference>("cyclic_reminder")?.summary = reminderSummaryFormatter.getCyclicReminderString(entity)
+            requireContext().getString(if (modelData.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
+        findPreference<Preference>("interval_type")?.summary = reminderSummaryFormatter.getIntervalTypeSummary(modelData)
+        findPreference<Preference>("cyclic_reminder")?.summary = reminderSummaryFormatter.getCyclicReminderString(modelData)
     }
 
     private fun getDaysSummary(reminder: Reminder): String {
-        return if ((reminder.activeDaysOfMonth and 0x7FFF_FFFF) == 0x7FFF_FFFF) {
+        return if (reminder.activeDaysOfMonth.isEmpty() || reminder.activeDaysOfMonth.size == 31) {
             requireContext().getString(R.string.every_day_of_month)
         } else {
-            val days: MutableList<String> = mutableListOf()
-            for (i in 0..30) {
-                if ((reminder.activeDaysOfMonth and (1 shl i)) != 0) {
-                    days += (i + 1).toString()
-                }
-            }
-            requireContext().getString(R.string.on_day_of_month, days.joinToString(", "))
+            requireContext().getString(R.string.on_day_of_month, reminder.activeDaysOfMonth.joinToString(", "))
         }
     }
 
     private fun getWeekdaysSummary(reminder: Reminder): String {
-        return if (reminder.days.none { it }) {
-            requireContext().getString(R.string.never)
-        } else if (reminder.days.all { it }) {
+        return if (reminder.days.isEmpty() || reminder.days.size == 7) {
             requireContext().getString(R.string.every_day)
         } else {
-            val days: MutableList<String> = mutableListOf()
-            for ((i, day) in requireContext().resources.getStringArray(R.array.days).withIndex()) {
-                if (reminder.days[i]) {
-                    days += day
-                }
-            }
-            days.joinToString(", ")
+            reminder.days.joinToString(", ") { it.getDisplayName(TextStyle.FULL, requireContext().resources.configuration.locales[0]) }
         }
     }
 
-    override fun customSetup(entity: Reminder) {
-        findPreference<Preference>("add_linked_reminder")?.isVisible = !entity.isInterval
-        findPreference<Preference>("interval_category")?.isVisible = entity.isInterval
-        findPreference<Preference>("interval_start_time")?.isVisible = entity.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL
-        findPreference<Preference>("interval_daily_start_time")?.isVisible = entity.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
-        findPreference<Preference>("interval_daily_end_time")?.isVisible = entity.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL
-        findPreference<Preference>("time_based_category")?.isVisible = entity.reminderType == Reminder.ReminderType.TIME_BASED
+    override fun customSetup(modelData: Reminder) {
+        findPreference<Preference>("add_linked_reminder")?.isVisible = !modelData.isInterval
+        findPreference<Preference>("interval_category")?.isVisible = modelData.isInterval
+        findPreference<Preference>("interval_start_time")?.isVisible = modelData.reminderType == ReminderType.CONTINUOUS_INTERVAL
+        findPreference<Preference>("interval_daily_start_time")?.isVisible = modelData.reminderType == ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("interval_daily_end_time")?.isVisible = modelData.reminderType == ReminderType.WINDOWED_INTERVAL
+        findPreference<Preference>("time_based_category")?.isVisible = modelData.reminderType == ReminderType.TIME_BASED
 
         findPreference<Preference>("interval")?.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            EditIntervalDialog(requireContext(), entity) { newIntervalMinutes ->
+            EditIntervalDialog(requireContext(), modelData) { newIntervalMinutes ->
                 preferenceManager.preferenceDataStore?.putInt(
                     "interval",
                     newIntervalMinutes
@@ -168,22 +155,20 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     }
 
     private fun showDateTimeEdit(activity: FragmentActivity, preference: Preference) {
-        val currentDateString = preference.preferenceDataStore?.getString(preference.key, null)
-        if (currentDateString != null) {
-            val currentDateTime = timeFormatter.stringToSecondsSinceEpoch(currentDateString)
-            val startInstant = Instant.ofEpochSecond(currentDateTime)
-            val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
-            datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
-                timePickerDialogFactory.create(dateTime.hour, dateTime.minute) { minutes: Int ->
-                    val selectedLocalDateTime = LocalDateTime.of(
-                        LocalDate.ofEpochDay(daysSinceEpoch),
-                        LocalTime.of(minutes / 60, minutes % 60)
-                    )
-                    val timeString = timeFormatter.localeDateTimeToDateTimeString(selectedLocalDateTime)
-                    preference.preferenceDataStore?.putString(preference.key, timeString)
-                }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
-            }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
-        }
+        val currentDateString = preference.preferenceDataStore?.getString(preference.key, null) ?: return
+        val currentDateTime = timeFormatter.stringToInstant(currentDateString)
+        val startInstant = currentDateTime ?: return
+        val dateTime = startInstant.atZone(ZoneId.systemDefault()).toLocalDateTime()
+        datePickerDialogFactory.create(dateTime.toLocalDate()) { daysSinceEpoch: Long ->
+            timePickerDialogFactory.create(dateTime.toLocalTime()) { minutes: Int ->
+                val selectedLocalDateTime = LocalDateTime.of(
+                    LocalDate.ofEpochDay(daysSinceEpoch),
+                    LocalTime.of(minutes / 60, minutes % 60)
+                )
+                val timeString = timeFormatter.toDateTimeString(selectedLocalDateTime)
+                preference.preferenceDataStore?.putString(preference.key, timeString)
+            }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+        }.show(activity.supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
     }
 
 }

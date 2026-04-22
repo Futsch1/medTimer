@@ -236,7 +236,7 @@ class ReminderTest : BaseTestHelper() {
 
         expectedString = context.getString(
             R.string.linked_reminder_summary,
-            timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
+            timeFormatter().toTimeString(reminder1Time)
         )
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString)
 
@@ -291,16 +291,16 @@ class ReminderTest : BaseTestHelper() {
 
         writeTo(android.R.id.input, "12")
         clickDialogPositiveButton()
-        val now = Instant.now().epochSecond
+        val now = Instant.now()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
         assertContains(R.id.editEventName, "Test")
         assertContains(R.id.editEventAmount, "12")
-        assertContains(R.id.editEventRemindedTimestamp, timeFormatter().secondsSinceEpochToTimeString(now))
-        assertContains(R.id.editEventRemindedDate, timeFormatter().secondSinceEpochToDateString(now))
-        assertContains(R.id.editEventTakenTimestamp, timeFormatter().secondsSinceEpochToTimeString(now))
-        assertContains(R.id.editEventTakenDate, timeFormatter().secondSinceEpochToDateString(now))
+        assertContains(R.id.editEventRemindedTimestamp, timeFormatter().toTimeString(now))
+        assertContains(R.id.editEventRemindedDate, timeFormatter().toDateString(now))
+        assertContains(R.id.editEventTakenTimestamp, timeFormatter().toTimeString(now))
+        assertContains(R.id.editEventTakenDate, timeFormatter().toDateString(now))
         assertContains(R.id.editEventNotes, "")
 
         clickOn(R.string.skipped)
@@ -317,13 +317,13 @@ class ReminderTest : BaseTestHelper() {
         clickOn(R.string.taken)
         assertContains(R.id.editEventNotes, "Test notes")
 
-        val newReminded = now + 60 * 60 * 24 + 120
-        writeTo(R.id.editEventRemindedTimestamp, timeFormatter().secondsSinceEpochToTimeString(newReminded))
-        writeTo(R.id.editEventRemindedDate, timeFormatter().secondSinceEpochToDateString(newReminded))
+        val newReminded = now.plusSeconds(60 * 60 * 24 + 120)
+        writeTo(R.id.editEventRemindedTimestamp, timeFormatter().toTimeString(newReminded))
+        writeTo(R.id.editEventRemindedDate, timeFormatter().toDateString(newReminded))
 
-        val newTaken = now + 60 * 60 * 48 + 180
-        writeTo(R.id.editEventTakenTimestamp, timeFormatter().secondsSinceEpochToTimeString(newTaken))
-        writeTo(R.id.editEventTakenDate, timeFormatter().secondSinceEpochToDateString(newTaken))
+        val newTaken = now.plusSeconds(60 * 60 * 48 + 180)
+        writeTo(R.id.editEventTakenTimestamp, timeFormatter().toTimeString(newTaken))
+        writeTo(R.id.editEventTakenDate, timeFormatter().toDateString(newTaken))
 
         Espresso.pressBack()
 
@@ -335,9 +335,9 @@ class ReminderTest : BaseTestHelper() {
         tableView.set(baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table))
 
         var view = tableView.get()!!.cellRecyclerView.findViewWithTag<TextView>("time")
-        TestCase.assertEquals(timeFormatter().secondsSinceEpochToDateTimeString(newReminded), view.getText())
+        TestCase.assertEquals(timeFormatter().toDateTimeString(newReminded), view.getText())
         view = tableView.get()!!.cellRecyclerView.findViewWithTag("taken")
-        TestCase.assertEquals(timeFormatter().secondsSinceEpochToDateTimeString(newTaken), view.getText())
+        TestCase.assertEquals(timeFormatter().toDateTimeString(newTaken), view.getText())
     }
 
     @Test

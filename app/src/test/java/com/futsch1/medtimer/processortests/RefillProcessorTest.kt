@@ -4,17 +4,19 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.SharedPreferences
 import com.futsch1.medtimer.database.DatabaseManager
-import com.futsch1.medtimer.database.MedicineDao
+import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderDao
-import com.futsch1.medtimer.database.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEventDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.ReminderEntityType
+import com.futsch1.medtimer.database.dao.ReminderEventDao
+import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.TagDao
+import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
@@ -125,7 +127,7 @@ class RefillProcessorTest {
     fun directRefill() {
         reminderContext.instant = Instant.ofEpochSecond(10)
 
-        reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
         reminderContext.repositoryFakes.medicines[0].refillSizes.add(10.0)
         reminderContext.repositoryFakes.medicines[0].amount = 100.0
 
@@ -137,22 +139,22 @@ class RefillProcessorTest {
         assertEquals(10, reminderContext.repositoryFakes.reminderEvents[0].processedTimestamp)
         assertEquals(10, reminderContext.repositoryFakes.reminderEvents[0].remindedTimestamp)
         assertEquals("100 ➡ 110", reminderContext.repositoryFakes.reminderEvents[0].amount)
-        assertEquals(Reminder.ReminderType.REFILL, reminderContext.repositoryFakes.reminderEvents[0].reminderType)
+        assertEquals(ReminderEntityType.REFILL, reminderContext.repositoryFakes.reminderEvents[0].reminderType)
     }
 
     @Test
     fun refillViaEvent() {
-        reminderContext.repositoryFakes.medicines.add(TestHelper.buildFullMedicine(1, "Test").medicine)
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
         reminderContext.repositoryFakes.medicines[0].refillSizes.add(10.0)
         reminderContext.repositoryFakes.medicines[0].amount = 100.0
-        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1))
-        reminderContext.repositoryFakes.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1))
+        reminderContext.repositoryFakes.reminders.add(TestHelper.buildReminder(1, 1, "1", 0, 1).toEntity())
+        reminderContext.repositoryFakes.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1).toEntity())
 
         runBlocking {
             refillProcessor.processRefill(ProcessedNotificationData(listOf(1)))
         }
 
         assertEquals(110.0, reminderContext.repositoryFakes.medicines[0].amount)
-        assertEquals(ReminderEvent.ReminderStatus.ACKNOWLEDGED, reminderContext.repositoryFakes.reminderEvents[0].status)
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.ACKNOWLEDGED, reminderContext.repositoryFakes.reminderEvents[0].status)
     }
 }

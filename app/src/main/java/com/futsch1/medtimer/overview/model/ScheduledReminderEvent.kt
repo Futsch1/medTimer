@@ -1,15 +1,14 @@
-package com.futsch1.medtimer.overview
+package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-class OverviewScheduledReminderEvent @AssistedInject constructor(
+class ScheduledReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     @Assisted val scheduledReminder: ScheduledReminder
@@ -17,24 +16,22 @@ class OverviewScheduledReminderEvent @AssistedInject constructor(
     OverviewEvent(preferencesDataSource) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(scheduledReminder: ScheduledReminder): OverviewScheduledReminderEvent
+    fun interface Factory {
+        fun create(scheduledReminder: ScheduledReminder): ScheduledReminderEvent
     }
 
     override val text: Spanned = reminderStringFormatter.formatScheduledReminder(scheduledReminder)
     override val id: Int
-        get() = scheduledReminder.reminder.reminderId + 1_000_000
+        get() = scheduledReminder.reminder.id + 1_000_000
 
     override val timestamp: Long
         get() = scheduledReminder.timestamp.epochSecond
     override val icon: Int
-        get() = scheduledReminder.medicine.medicine.iconId
+        get() = scheduledReminder.medicine.iconId
     override val color: Int?
-        get() = if (scheduledReminder.medicine.medicine.useColor) scheduledReminder.medicine.medicine.color else null
+        get() = if (scheduledReminder.medicine.useColor) scheduledReminder.medicine.color else null
     override val state: OverviewState
         get() = OverviewState.PENDING
-    override val reminderType: Reminder.ReminderType
-        get() = scheduledReminder.reminder.reminderType
     override val reminderId: Int
-        get() = scheduledReminder.reminder.reminderId
+        get() = scheduledReminder.reminder.id
 }

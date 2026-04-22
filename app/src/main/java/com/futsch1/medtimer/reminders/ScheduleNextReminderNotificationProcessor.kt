@@ -2,14 +2,14 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
-import com.futsch1.medtimer.reminders.scheduling.ScheduledReminder
 import javax.inject.Inject
 
 class ScheduleNextReminderNotificationProcessor @Inject constructor(
@@ -21,20 +21,20 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
 ) {
 
     suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
-        val fullMedicines = medicineRepository.getFullAll()
-        val reminderEvents = reminderEventRepository.getForScheduling(fullMedicines)
+        val medicines = medicineRepository.getAll()
+        val reminderEvents = reminderEventRepository.getForScheduling(medicines)
         val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }
 
-        scheduleNextReminderInternal(fullMedicines, allEvents)
+        scheduleNextReminderInternal(medicines, allEvents)
     }
 
     private fun scheduleNextReminderInternal(
-        fullMedicines: List<FullMedicine>,
+        medicines: List<Medicine>,
         reminderEvents: List<ReminderEvent>
     ) {
         val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
         val scheduledReminders: List<ScheduledReminder> =
-            reminderScheduler.schedule(fullMedicines, reminderEvents)
+            reminderScheduler.schedule(medicines, reminderEvents)
         if (scheduledReminders.isNotEmpty()) {
             val scheduledReminderNotificationData =
                 ReminderNotificationData.fromScheduledReminders(

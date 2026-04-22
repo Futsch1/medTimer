@@ -8,14 +8,16 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.AmountTextWatcher
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderTime
+import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.radiobutton.MaterialRadioButton
@@ -26,11 +28,12 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.LocalTime
 
 
 class NewReminderDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
-    @Assisted private val fullMedicine: FullMedicine,
+    @Assisted private val medicine: Medicine,
     @Assisted private val reminder: Reminder,
     private val reminderRepository: ReminderRepository,
     private val timeEditorFactory: TimeEditor.Factory,
@@ -39,7 +42,7 @@ class NewReminderDialog @AssistedInject constructor(
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(activity: FragmentActivity, fullMedicine: FullMedicine, reminder: Reminder): NewReminderDialog
+        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -67,7 +70,7 @@ class NewReminderDialog @AssistedInject constructor(
         textInputEditText.postDelayed({
             inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
-        if (fullMedicine.isStockManagementActive) {
+        if (medicine.isStockManagementActive()) {
             textInputEditText.addTextChangedListener(
                 AmountTextWatcher(
                     textInputEditText
@@ -80,13 +83,13 @@ class NewReminderDialog @AssistedInject constructor(
 
     private fun setupVisibilities() {
         val timeBasedVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderType.TIME_BASED) ViewGroup.VISIBLE else ViewGroup.GONE
         val intervalBasedVisibility =
             if (reminder.isInterval) ViewGroup.VISIBLE else ViewGroup.GONE
         val continuousIntervalVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
         val windowedIntervalVisibility =
-            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
+            if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) ViewGroup.VISIBLE else ViewGroup.GONE
 
         dialog.findViewById<TextInputLayout>(R.id.editIntervalTimeLayout).visibility =
             intervalBasedVisibility
@@ -109,7 +112,7 @@ class NewReminderDialog @AssistedInject constructor(
         val timeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editReminderTime),
-            reminder.timeInMinutes,
+            reminder.time.minutes,
             { _ -> },
             null
         )
@@ -118,26 +121,26 @@ class NewReminderDialog @AssistedInject constructor(
             dialog.findViewById(R.id.editIntervalTime),
             dialog.findViewById(R.id.editIntervalTimeLayout),
             dialog.findViewById(R.id.intervalUnit), 12 * 60,
-            if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
+            if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
         )
 
         val intervalStartDateTimeEditor = dateTimeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalStartDateTime),
-            Instant.now().epochSecond
+            Instant.now()
         )
 
         val dailyStartTimeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalDailyStartTime),
-            reminder.intervalStartTimeOfDay,
+            reminder.intervalStartTimeOfDay.toSecondOfDay() / 60,
             { _ -> },
             null
         )
         val dailyEndTimeEditor = timeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalDailyEndTime),
-            reminder.intervalEndTimeOfDay,
+            reminder.intervalEndTimeOfDay.toSecondOfDay() / 60,
             { _ -> },
             null
         )
@@ -161,27 +164,30 @@ class NewReminderDialog @AssistedInject constructor(
     ) {
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             activity.lifecycleScope.launch {
-                reminder.amount =
-                    dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
+                var updatedReminder = reminder.copy(
+                    amount = dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
+                )
 
-                val minutes = if (reminder.reminderType == Reminder.ReminderType.TIME_BASED) {
-                    timeEditor.getMinutes()
+                val reminderTime = if (reminder.reminderType == ReminderType.TIME_BASED) {
+                    ReminderTime(timeEditor.getMinutes())
                 } else {
-                    intervalEditor.getMinutes()
+                    ReminderTime(intervalEditor.getMinutes(), isDuration = true)
                 }
-                reminder.timeInMinutes = minutes
-                if (reminder.reminderType == Reminder.ReminderType.CONTINUOUS_INTERVAL) {
-                    reminder.intervalStart =
-                        intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()
-                    reminder.intervalStartsFromProcessed =
-                        dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
+                updatedReminder = updatedReminder.copy(time = reminderTime)
+                if (reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) {
+                    updatedReminder = updatedReminder.copy(
+                        intervalStart = intervalStartDateTimeEditor.getInstant() ?: Instant.EPOCH,
+                        intervalStartsFromProcessed = dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
+                    )
                 }
-                if (reminder.reminderType == Reminder.ReminderType.WINDOWED_INTERVAL) {
-                    reminder.intervalStartTimeOfDay = dailyStartTimeEditor.getMinutes()
-                    reminder.intervalEndTimeOfDay = dailyEndTimeEditor.getMinutes()
+                if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) {
+                    updatedReminder = updatedReminder.copy(
+                        intervalStartTimeOfDay = LocalTime.ofSecondOfDay(dailyStartTimeEditor.getMinutes() * 60L),
+                        intervalEndTimeOfDay = LocalTime.ofSecondOfDay(dailyEndTimeEditor.getMinutes() * 60L)
+                    )
                 }
-                if (minutes >= 0 && (reminder.reminderType == Reminder.ReminderType.TIME_BASED || reminder.intervalStart >= 0)) {
-                    reminderRepository.create(reminder)
+                if (reminderTime.minutes >= 0) {
+                    reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,
                         R.string.successfully_created_reminder,

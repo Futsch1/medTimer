@@ -30,6 +30,7 @@ class AlarmFragment(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : Fragment() {
     lateinit var reminderNotificationData: ReminderNotificationData
+
     @Inject
     lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
 
@@ -68,7 +69,7 @@ class AlarmFragment(
                 val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {
-                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock })
+                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() })
                     setupButtons(view, intents)
                 }
             }

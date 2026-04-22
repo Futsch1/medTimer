@@ -92,6 +92,11 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
+            all {
+                it.jvmArgs("-Duser.timezone=Europe/Berlin")
+                it.systemProperty("user.language", "en")
+                it.systemProperty("user.country", "US")
+            }
         }
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"

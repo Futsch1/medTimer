@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.overview.actions
 
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.overview.OverviewEvent
-import com.futsch1.medtimer.overview.OverviewReminderEvent
-import com.futsch1.medtimer.overview.OverviewScheduledReminderEvent
+import com.futsch1.medtimer.overview.model.OverviewEvent
+import com.futsch1.medtimer.overview.model.PastReminderEvent
+import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import javax.inject.Inject
 
 class ActionsFactory @Inject constructor(
@@ -12,8 +12,8 @@ class ActionsFactory @Inject constructor(
 ) {
     fun createActions(event: OverviewEvent, fragmentActivity: FragmentActivity): Actions? {
         return when (event) {
-            is OverviewReminderEvent -> reminderEventActionsFactory.create(event, fragmentActivity)
-            is OverviewScheduledReminderEvent -> scheduledReminderActionsFactory.create(event, fragmentActivity)
+            is PastReminderEvent -> reminderEventActionsFactory.create(event, fragmentActivity)
+            is ScheduledReminderEvent -> scheduledReminderActionsFactory.create(event, fragmentActivity)
             else -> null
         }
     }

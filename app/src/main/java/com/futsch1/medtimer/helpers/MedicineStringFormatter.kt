@@ -4,11 +4,11 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Medicine
+import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,29 +18,29 @@ class MedicineStringFormatter @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val timeFormatter: TimeFormatter
 ) {
-    fun getMedicineNameWithStockText(fullMedicine: FullMedicine): SpannableStringBuilder {
-        return getMedicineNameWithStockText(preferencesDataSource.preferences.value, fullMedicine)
+    fun getMedicineNameWithStockText(medicine: Medicine): SpannableStringBuilder {
+        return getMedicineNameWithStockText(preferencesDataSource.preferences.value, medicine)
     }
 
-    fun getMedicineNameWithStockText(userPreferences: UserPreferences, fullMedicine: FullMedicine): SpannableStringBuilder {
+    fun getMedicineNameWithStockText(userPreferences: UserPreferences, medicine: Medicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 MedicineHelper.getMedicineName(
-                    fullMedicine.medicine,
+                    medicine,
                     false,
                     userPreferences
                 )
             )
         }
-        builder.append(getStockTextWithIcons(fullMedicine))
+        builder.append(getStockTextWithIcons(medicine))
         return builder
     }
 
-    private fun getStockTextWithIcons(fullMedicine: FullMedicine): SpannableStringBuilder {
+    private fun getStockTextWithIcons(medicine: Medicine): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
 
-        val stockIconText = MedicineHelper.getStockIcons(fullMedicine)
-        val stockText = if (fullMedicine.isStockManagementActive) getStockText(fullMedicine.medicine) else ""
+        val stockIconText = MedicineHelper.getStockIcons(medicine)
+        val stockText = if (medicine.isStockManagementActive()) getStockText(medicine) else ""
 
         if (stockIconText.isNotEmpty() || stockText.isNotEmpty()) {
             builder.append(" (")
@@ -53,23 +53,22 @@ class MedicineStringFormatter @Inject constructor(
         return builder
     }
 
-    fun getDatesText(fullMedicine: FullMedicine): SpannableStringBuilder {
+    fun getDatesText(medicine: Medicine): SpannableStringBuilder {
         val s = SpannableStringBuilder()
-        val medicine = fullMedicine.medicine
 
-        if (medicine.productionDate != 0L) {
+        if (medicine.productionDate != LocalDate.EPOCH) {
             s.append(context.getString(R.string.production_date))
             s.append(": ")
-            s.append(timeFormatter.daysSinceEpochToDateString(medicine.productionDate))
+            s.append(timeFormatter.localDateToString(medicine.productionDate))
         }
-        if (medicine.expirationDate != 0L) {
+        if (medicine.expirationDate != LocalDate.EPOCH) {
             if (s.isNotEmpty()) {
                 s.append(", ")
             }
             s.append(context.getString(R.string.expiration_date))
             s.append(": ")
-            s.append(timeFormatter.daysSinceEpochToDateString(medicine.expirationDate))
-            val expiredIcon = MedicineHelper.getExpiredIcon(fullMedicine)
+            s.append(timeFormatter.localDateToString(medicine.expirationDate))
+            val expiredIcon = MedicineHelper.getExpiredIcon(medicine)
             if (expiredIcon.isNotEmpty()) {
                 s.append(" ")
                 s.append(expiredIcon)

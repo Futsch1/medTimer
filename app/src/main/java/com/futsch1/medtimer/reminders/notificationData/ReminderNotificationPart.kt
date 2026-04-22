@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.notificationData
 
-import com.futsch1.medtimer.database.FullMedicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
 
-class ReminderNotificationPart(val reminder: Reminder, val reminderEvent: ReminderEvent, val medicine: FullMedicine)
+data class ReminderNotificationPart(val reminder: Reminder, val reminderEvent: ReminderEvent, val medicine: Medicine)

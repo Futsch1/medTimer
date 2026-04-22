@@ -3,13 +3,13 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,13 +24,12 @@ sealed interface ShowMedicineUiState {
     data object Loading : ShowMedicineUiState
     data object NotFound : ShowMedicineUiState
     data class Loaded(
-        val fullMedicine: FullMedicine,
+        val medicine: Medicine,
         val reminder: Reminder,
         val reminderSummaryText: String,
         val userPreferences: UserPreferences
     ) : ShowMedicineUiState
 }
-
 
 @HiltViewModel
 class ShowMedicineViewModel @Inject constructor(
@@ -59,14 +58,14 @@ class ShowMedicineViewModel @Inject constructor(
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
-            val fullMedicine = medicineRepository.getFull(reminder.medicineRelId)
-            if (fullMedicine == null) {
+            val medicine = medicineRepository.get(reminder.medicineRelId)
+            if (medicine == null) {
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
             val summaryText = reminderSummaryFormatter.formatReminderSummary(reminder)
             _uiState.value = ShowMedicineUiState.Loaded(
-                fullMedicine = fullMedicine,
+                medicine = medicine,
                 reminder = reminder,
                 reminderSummaryText = summaryText,
                 userPreferences = userPreferences

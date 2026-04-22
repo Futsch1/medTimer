@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import com.futsch1.medtimer.model.ReminderTime
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.ParseException
@@ -11,6 +12,7 @@ import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -45,6 +47,20 @@ class TimeFormatter @Inject constructor(
         }
     }
 
+    fun toTimeString(localTime: LocalTime): String {
+        val dateTimeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+            .withLocale(getLocale())
+        return localTime.format(dateTimeFormatter)
+    }
+
+    fun toTimeString(reminderTime: ReminderTime): String {
+        return if (reminderTime.isDuration) {
+            minutesToDurationString(reminderTime.minutes)
+        } else {
+            toTimeString(reminderTime.getLocalTime())
+        }
+    }
+
     /**
      * @param minutes Minutes since midnight
      * @return Time string in local format
@@ -72,68 +88,47 @@ class TimeFormatter @Inject constructor(
         return localDateToString(LocalDate.ofEpochDay(days))
     }
 
-    /**
-     * @param timestamp Time stamp in seconds since epoch
-     * @return Time string in local format
-     */
-    fun secondsSinceEpochToTimeString(timestamp: Long): String {
-        return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(Instant.ofEpochSecond(timestamp)))
+    fun toTimeString(instant: Instant): String {
+        return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(instant))
     }
 
-    /**
-     * @param timestamp Time stamp in seconds since epoch
-     * @return Date string in local format
-     */
-    fun secondSinceEpochToDateString(timestamp: Long): String {
-        return DateFormat.getDateFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(Instant.ofEpochSecond(timestamp)))
+    fun toDateString(instant: Instant): String {
+        return DateFormat.getDateFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(instant))
     }
 
-    /**
-     * @param timestamp Time stamp in seconds since epoch
-     * @return Date and time string in local format
-     */
-    fun secondsSinceEpochToDateTimeString(timestamp: Long): String {
-        return "${secondSinceEpochToDateString(timestamp)} ${secondsSinceEpochToTimeString(timestamp)}"
+    fun toDateTimeString(instant: Instant): String {
+        return "${toDateString(instant)} ${toTimeString(instant)}"
     }
 
-    /**
-     * @param timestamp Time stamp in seconds since epoch
-     * @return Date and time string in local format as relative date time string
-     */
-    fun secondsSinceEpochToConfigurableDateTimeString(timestamp: Long): String {
+    fun toConfigurableDateTimeString(instant: Instant): String {
         return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             DateUtils.getRelativeDateTimeString(
                 localeContextAccessor.getLocaleAwareContext(),
-                timestamp * 1000,
+                instant.toEpochMilli(),
                 DateUtils.MINUTE_IN_MILLIS,
                 DateUtils.DAY_IN_MILLIS * 2,
                 DateUtils.FORMAT_SHOW_TIME
             ).toString()
         } else {
-            secondsSinceEpochToDateTimeString(timestamp)
+            toDateTimeString(instant)
         }
     }
 
-    /**
-     * @param timestamp Time stamp in seconds since epoch
-     * @param isShort   Whether to show the actual time stamp or not
-     * @return Date and time string in local format as relative date time string
-     */
-    fun secondsSinceEpochToConfigurableTimeString(timestamp: Long, isShort: Boolean): String {
+    fun toConfigurableTimeString(instant: Instant, isShort: Boolean): String {
         return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             if (isShort) {
-                DateUtils.getRelativeTimeSpanString(timestamp * 1000, Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString()
+                DateUtils.getRelativeTimeSpanString(instant.toEpochMilli(), Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString()
             } else {
                 DateUtils.getRelativeDateTimeString(
                     localeContextAccessor.getLocaleAwareContext(),
-                    timestamp * 1000,
+                    instant.toEpochMilli(),
                     DateUtils.MINUTE_IN_MILLIS,
                     DateUtils.DAY_IN_MILLIS * 2,
                     DateUtils.FORMAT_SHOW_TIME
                 ).toString()
             }
         } else {
-            secondsSinceEpochToTimeString(timestamp)
+            toTimeString(instant)
         }
     }
 
@@ -143,9 +138,9 @@ class TimeFormatter @Inject constructor(
      * @param localDateTime The local date time.
      * @return A string representing the date and time in the localized format.
      */
-    fun localeDateTimeToDateTimeString(localDateTime: LocalDateTime): String {
-        val epochSecond = localDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(localDateTime))
-        return secondsSinceEpochToDateTimeString(epochSecond)
+    fun toDateTimeString(localDateTime: LocalDateTime): String {
+        val instant = localDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(localDateTime))
+        return toDateTimeString(instant)
     }
 
     /**
@@ -185,19 +180,19 @@ class TimeFormatter @Inject constructor(
      * @param dateTimeString String containing date and time
      * @return Seconds since epoch of date/time
      */
-    fun stringToSecondsSinceEpoch(dateTimeString: String): Long {
+    fun stringToInstant(dateTimeString: String): Instant? {
         val dateTimeComponents = dateTimeString.split(" ".toRegex(), limit = 2).toTypedArray()
         if (dateTimeComponents.size != 2) {
-            return -1
+            return null
         }
 
-        val date = stringToLocalDate(dateTimeComponents[0]) ?: return -1
+        val date = stringToLocalDate(dateTimeComponents[0]) ?: return null
         val minutes = timeStringToMinutes(dateTimeComponents[1])
         if (minutes == -1) {
-            return -1
+            return null
         }
 
-        return TimeHelper.changeTimeStampDate(TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now()).epochSecond, date)
+        return TimeHelper.changeInstantDate(TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now()), date)
     }
 
     private fun getLocale(): Locale {

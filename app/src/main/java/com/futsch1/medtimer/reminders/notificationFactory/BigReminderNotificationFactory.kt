@@ -47,7 +47,7 @@ class BigReminderNotificationFactory @AssistedInject constructor(
         views.setOnClickPendingIntent(R.id.takenButton, intents.pendingTaken)
         views.setOnClickPendingIntent(R.id.skippedButton, intents.pendingSkipped)
         views.setOnClickPendingIntent(R.id.snoozeButton, intents.pendingSnooze)
-        val isAnyOutOfStock = reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock }
+        val isAnyOutOfStock = reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() }
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,
             if (isAnyOutOfStock) R.drawable.exclamation_triangle_fill else 0,

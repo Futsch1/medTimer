@@ -1,8 +1,9 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.database.Medicine
-import com.futsch1.medtimer.database.Reminder
-import com.futsch1.medtimer.database.ReminderEvent
+import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 
@@ -15,31 +16,31 @@ class SchedulingFactory {
         dataSource: PreferencesDataSource
     ): Scheduling {
         val scheduler = when (reminder.reminderType) {
-            Reminder.ReminderType.LINKED -> {
+            ReminderType.LINKED -> {
                 LinkedScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.CONTINUOUS_INTERVAL -> {
+            ReminderType.CONTINUOUS_INTERVAL -> {
                 IntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.WINDOWED_INTERVAL -> {
+            ReminderType.WINDOWED_INTERVAL -> {
                 WindowedIntervalScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.TIME_BASED -> {
+            ReminderType.TIME_BASED -> {
                 StandardScheduling(reminder, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.OUT_OF_STOCK -> {
+            ReminderType.OUT_OF_STOCK -> {
                 OutOfStockScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.EXPIRATION_DATE -> {
+            ReminderType.EXPIRATION_DATE -> {
                 ExpirationDateScheduling(reminder, medicine, reminderEvents, timeAccess)
             }
 
-            Reminder.ReminderType.REFILL -> {
+            ReminderType.REFILL -> {
                 error("Refill reminder cannot be scheduled.")
             }
         }

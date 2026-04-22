@@ -3,15 +3,15 @@ package com.futsch1.medtimer.di
 import android.content.Context
 import androidx.room.Room
 import com.futsch1.medtimer.database.DatabaseManager
-import com.futsch1.medtimer.database.MedicineDao
+import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.MedicineRoomDatabase.Migration22To23
-import com.futsch1.medtimer.database.ReminderDao
-import com.futsch1.medtimer.database.ReminderEventDao
+import com.futsch1.medtimer.database.dao.ReminderDao
+import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.TagDao
+import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.TagRepository
 import dagger.Module
 import dagger.Provides
@@ -51,9 +51,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideMedicineRepository(
-        medicineDao: MedicineDao,
-        tagDao: TagDao
-    ): MedicineRepository = MedicineRepository(medicineDao, tagDao)
+        medicineDao: MedicineDao
+    ): MedicineRepository = MedicineRepository(medicineDao)
 
     @Provides
     @Singleton

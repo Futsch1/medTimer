@@ -4,6 +4,7 @@ import android.text.format.DateFormat
 import androidx.annotation.StringRes
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,8 +14,9 @@ class TimePickerDialogFactory @Inject constructor(private val localeContextAcces
         const val DIALOG_TAG = "time_picker"
     }
 
-    private val autoTimeFormat: Int get() =
-        if (DateFormat.is24HourFormat(localeContextAccessor.getLocaleAwareContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+    private val autoTimeFormat: Int
+        get() =
+            if (DateFormat.is24HourFormat(localeContextAccessor.getLocaleAwareContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
     fun create(
         hourOfDay: Int,
@@ -35,5 +37,14 @@ class TimePickerDialogFactory @Inject constructor(private val localeContextAcces
         timePickerDialog.addOnPositiveButtonClickListener { onPositiveButtonClick(timePickerDialog.hour * 60 + timePickerDialog.minute) }
 
         return timePickerDialog
+    }
+
+    fun create(
+        localTime: LocalTime,
+        @StringRes titleText: Int? = null,
+        timeFormat: Int = autoTimeFormat,
+        onPositiveButtonClick: (minutes: Int) -> Unit
+    ): MaterialTimePicker {
+        return create(localTime.hour, localTime.minute, titleText, timeFormat, onPositiveButtonClick)
     }
 }

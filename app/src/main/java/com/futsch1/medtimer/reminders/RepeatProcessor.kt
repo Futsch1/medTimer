@@ -19,13 +19,7 @@ class RepeatProcessor @Inject constructor(
         alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
 
         for (reminderEventId in reminderNotificationData.reminderEventIds) {
-            decreaseRemainingRepeats(reminderEventId)
+            reminderEventRepository.decreaseRepeats(reminderEventId)
         }
-    }
-
-    private suspend fun decreaseRemainingRepeats(reminderEventId: Int) {
-        val reminderEvent = reminderEventRepository.get(reminderEventId) ?: return
-        reminderEvent.remainingRepeats -= 1
-        reminderEventRepository.update(reminderEvent)
     }
 }

@@ -5,12 +5,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.FullMedicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.helpers.setRemindersActive
+import com.futsch1.medtimer.model.Medicine
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class MedicinesMenu @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
 
-    lateinit var medicines: List<FullMedicine>
+    lateinit var medicines: List<Medicine>
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines_settings, menu)
@@ -36,30 +37,30 @@ class MedicinesMenu @Inject constructor(
             setRemindersActive(false)
         }
         setupMenu(menu, R.id.sortByName) {
-            sortBy { m -> m.sortedBy { it.medicine.name } }
+            sortBy { m -> m.sortedBy { it.name } }
         }
         setupMenu(menu, R.id.sortByCreationDateAsc) {
-            sortBy { m -> m.sortedBy { it.medicine.medicineId } }
+            sortBy { m -> m.sortedBy { it.id } }
         }
         setupMenu(menu, R.id.sortByCreationDateDesc) {
-            sortBy { m -> m.sortedByDescending { it.medicine.medicineId } }
+            sortBy { m -> m.sortedByDescending { it.id } }
         }
     }
 
-    private fun sortBy(sortFunction: (List<FullMedicine>) -> List<FullMedicine>) {
+    private fun sortBy(sortFunction: (List<Medicine>) -> List<Medicine>) {
         applicationScope.launch(dispatcher) {
-            val medicines = sortFunction(medicines)
-            medicines.stream().forEach { it.medicine.sortOrder = 1.0 + medicines.indexOf(it) }
-            medicineRepository.updateAll(medicines.stream().map { it.medicine }.toList())
+            var medicines = sortFunction(medicines)
+            medicines = medicines.map { it.copy(sortOrder = 1.0 + medicines.indexOf(it)) }
+            medicineRepository.updateAll(medicines)
         }
     }
 
     private fun setRemindersActive(active: Boolean) {
         applicationScope.launch(dispatcher) {
             if (this@MedicinesMenu::medicines.isInitialized) {
-                for (fullMedicine in medicines) {
-                    val localMedicine = medicineRepository.getFull(fullMedicine.medicine.medicineId)
-                    com.futsch1.medtimer.helpers.setRemindersActive(localMedicine!!.reminders, reminderRepository, active)
+                for (medicine in medicines) {
+                    val localMedicine = medicineRepository.get(medicine.id) ?: return@launch
+                    setRemindersActive(localMedicine.reminders, reminderRepository, active)
                 }
             }
         }

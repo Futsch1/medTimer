@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.Tag
 import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.model.Tag
 
 typealias TagCallback = ((TagWithState) -> Unit)
 
@@ -32,7 +32,7 @@ class TagsAdapter(
 
     class TagsWithStateDiffCallback : DiffUtil.ItemCallback<TagWithState>() {
         override fun areItemsTheSame(oldItem: TagWithState, newItem: TagWithState): Boolean {
-            return oldItem.tag.tagId == newItem.tag.tagId
+            return oldItem.tag.id == newItem.tag.id
         }
 
         override fun areContentsTheSame(oldItem: TagWithState, newItem: TagWithState): Boolean {

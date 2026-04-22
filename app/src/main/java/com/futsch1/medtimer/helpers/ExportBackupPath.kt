@@ -4,7 +4,7 @@ import com.futsch1.medtimer.exporters.Export
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-object PathHelper {
+object ExportBackupPath {
     private const val RESERVED_CHARS = "[\\[|?*<\":>+/'\\],]"
 
     fun getExportFilename(export: Export): String {
