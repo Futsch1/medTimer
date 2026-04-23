@@ -72,6 +72,11 @@ abstract class ModelDataPreferencesFragment<T>(
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        idlingResource.destroy()
+    }
+
     abstract suspend fun getDataStore(
         requireArguments: Bundle
     ): ModelDataStore<T>
