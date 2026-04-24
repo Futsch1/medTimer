@@ -183,7 +183,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         super.onStop()
         if (fragmentReady) {
             applicationScope.launch {
-                val newMedicine = buildMedicine()
+                val (newMedicine, updatedReminders) = withContext(mainDispatcher) {
+                    Pair(buildMedicine(), collectUpdatedReminders())
+                }
+                updatedReminders.forEach { reminderRepository.update(it) }
                 if (medicine != newMedicine) {
                     medicineRepository.update(newMedicine)
                 }
@@ -355,9 +358,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private suspend fun buildMedicine(): Medicine {
-        updateReminders()
-
+    private fun buildMedicine(): Medicine {
         return medicine.copy(
             name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim(),
             useColor = enableColor.isChecked,
@@ -369,12 +370,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         )
     }
 
-    private suspend fun updateReminders() {
+    private fun collectUpdatedReminders(): List<Reminder> {
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.reminderList)
-        for (i in 0..<recyclerView.size) {
-            val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder
-
-            this.reminderRepository.update(viewHolder.getUpdatedReminder())
+        return (0..<recyclerView.size).map { i ->
+            (recyclerView.getChildViewHolder(recyclerView.getChildAt(i)) as ReminderViewHolder).getUpdatedReminder()
         }
     }
 
