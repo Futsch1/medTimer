@@ -67,8 +67,8 @@ class NewReminderDialog @AssistedInject constructor(
 
     private fun startEditAmount() {
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
-        textInputEditText.requestFocus()
         if (!BuildConfig.DEBUG) {
+            textInputEditText.requestFocus()
             textInputEditText.postDelayed({
                 inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
             }, 100)
