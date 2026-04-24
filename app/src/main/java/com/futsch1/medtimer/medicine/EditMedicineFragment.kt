@@ -187,7 +187,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                     Pair(buildMedicine(), collectUpdatedReminders())
                 }
                 updatedReminders.forEach { reminderRepository.update(it) }
-                if (medicine != newMedicine) {
+                if (medicine != newMedicine && newMedicine != null) {
                     medicineRepository.update(newMedicine)
                 }
             }
@@ -358,8 +358,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private fun buildMedicine(): Medicine {
-        return medicine.copy(
+    private fun buildMedicine(): Medicine? {
+        return medicine?.copy(
             name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim(),
             useColor = enableColor.isChecked,
             color = color,
