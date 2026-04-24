@@ -4,7 +4,6 @@ import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.model.Medicine
 import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderType
-import java.time.Instant
 import java.time.LocalDate
 
 
@@ -28,7 +27,7 @@ suspend fun setRemindersActive(reminders: List<Reminder>, reminderRepository: Re
         var r = reminder
         if (!reminder.active && active && reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) {
             // If reminder is activated again and an interval reminder, reset the interval start date to the current day in seconds since epoch
-            r = r.copy(intervalStart = Instant.ofEpochSecond(TimeHelper.changeTimeStampDate(reminder.intervalStart.epochSecond, LocalDate.now())))
+            r = r.copy(intervalStart = TimeHelper.changeInstantDate(reminder.intervalStart, LocalDate.now()))
         }
         r.copy(active = active)
     }

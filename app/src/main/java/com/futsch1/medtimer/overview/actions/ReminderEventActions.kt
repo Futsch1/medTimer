@@ -86,7 +86,7 @@ class ReminderEventActions @AssistedInject constructor(
     private fun processPostponeReminder(reminderEvent: ReminderEvent) {
         val localDateTime = LocalDateTime.ofInstant(reminderEvent.remindedTimestamp, ZoneId.systemDefault())
         timePickerDialogFactory
-            .create(localDateTime.hour, localDateTime.minute) { minutes ->
+            .create(localDateTime.toLocalTime()) { minutes ->
                 val newReminderTime = TimeHelper.changeTimeMinutes(reminderEvent.remindedTimestamp, minutes)
                 fragmentActivity.lifecycleScope.launch {
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)

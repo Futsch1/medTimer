@@ -51,15 +51,10 @@ object TimeHelper {
         return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalTime()
     }
 
-    /**
-     * @param remindedTimestamp Time stamp in seconds since epoch
-     * @param localDate         Local date
-     * @return Time stamp in seconds since epoch with given date
-     */
-    fun changeTimeStampDate(remindedTimestamp: Long, localDate: LocalDate?): Long {
-        var localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(remindedTimestamp), ZoneId.systemDefault())
+    fun changeInstantDate(instant: Instant, localDate: LocalDate?): Instant {
+        var localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
         localDateTime = if (localDate != null) localDateTime.with(localDate) else localDateTime
-        return localDateTime.toEpochSecond(ZoneId.systemDefault().rules.getOffset(localDateTime))
+        return localDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(localDateTime))
     }
 
     /**
@@ -86,8 +81,8 @@ object TimeHelper {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }
 
-    fun isSameDay(secondsSinceEpochOne: Long, secondsSinceEpochTwo: Long): Boolean {
-        return Instant.ofEpochSecond(secondsSinceEpochOne).atZone(ZoneId.systemDefault()).toLocalDate() == Instant.ofEpochSecond(secondsSinceEpochTwo).atZone(
+    fun isSameDay(instantOne: Instant, instantTwo: Instant): Boolean {
+        return instantOne.atZone(ZoneId.systemDefault()).toLocalDate() == instantTwo.atZone(
             ZoneId.systemDefault()
         ).toLocalDate()
     }

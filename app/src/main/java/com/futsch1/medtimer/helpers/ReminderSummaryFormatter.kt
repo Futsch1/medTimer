@@ -114,7 +114,7 @@ class ReminderSummaryFormatter @Inject constructor(
         } else {
             context.getString(
                 R.string.continuous_from,
-                timeFormatter.secondsSinceEpochToDateTimeString(reminder.intervalStart.epochSecond)
+                timeFormatter.toDateTimeString(reminder.intervalStart)
             )
         }
     }

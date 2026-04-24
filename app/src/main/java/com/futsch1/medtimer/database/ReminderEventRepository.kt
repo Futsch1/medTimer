@@ -91,4 +91,8 @@ open class ReminderEventRepository(
     suspend fun deleteAll() {
         reminderEventDao.deleteAll()
     }
+
+    suspend fun decreaseRepeats(reminderEventId: Int) {
+        reminderEventDao.decreaseRepeats(reminderEventId)
+    }
 }

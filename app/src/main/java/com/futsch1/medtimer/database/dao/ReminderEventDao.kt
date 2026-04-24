@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
@@ -53,4 +54,11 @@ interface ReminderEventDao {
 
     @Query("DELETE FROM ReminderEvent")
     suspend fun deleteAll()
+
+    @Transaction
+    suspend fun decreaseRepeats(reminderEventId: Int) {
+        val reminderEvent = get(reminderEventId) ?: return
+        reminderEvent.remainingRepeats = maxOf(0, reminderEvent.remainingRepeats - 1)
+        update(reminderEvent)
+    }
 }

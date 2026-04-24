@@ -105,7 +105,7 @@ class ReminderTableAdapter(
                 ),
                 ReminderTableCellModel(
                     reminderEvent.remindedTimestamp,
-                    formatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp.epochSecond),
+                    formatter.toDateTimeString(reminderEvent.remindedTimestamp),
                     reminderEvent.reminderEventId,
                     "time"
                 )
@@ -132,7 +132,7 @@ class ReminderTableAdapter(
         formatter: TimeFormatter
     ): String {
         return when (reminderEvent.status) {
-            ReminderEvent.ReminderStatus.TAKEN -> formatter.secondsSinceEpochToDateTimeString(reminderEvent.processedTimestamp.epochSecond)
+            ReminderEvent.ReminderStatus.TAKEN -> formatter.toDateTimeString(reminderEvent.processedTimestamp)
             ReminderEvent.ReminderStatus.RAISED -> " "
             else -> "-"
         }

@@ -24,25 +24,26 @@ class StockHandlingProcessor @Inject constructor(
 
     private fun checkForThreshold(medicine: Medicine, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in medicine.reminders) {
-            if (reminder.outOfStockReminderType != Reminder.OutOfStockReminderType.OFF && medicine.amount <= reminder.outOfStockThreshold) {
-                val showEvent =
-                    when (reminder.outOfStockReminderType) {
-                        Reminder.OutOfStockReminderType.ONCE -> {
-                            medicine.amount + decreaseAmount > reminder.outOfStockThreshold
-                        }
-
-                        Reminder.OutOfStockReminderType.ALWAYS -> true
-                        else -> {
-                            false
-                        }
+            if (reminder.outOfStockReminderType == Reminder.OutOfStockReminderType.OFF || medicine.amount > reminder.outOfStockThreshold) {
+                continue
+            }
+            val showEvent =
+                when (reminder.outOfStockReminderType) {
+                    Reminder.OutOfStockReminderType.ONCE -> {
+                        medicine.amount + decreaseAmount > reminder.outOfStockThreshold
                     }
 
-                if (showEvent) {
-                    Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.id}")
-                    val scheduledReminder = ScheduledReminder(medicine, reminder, processedInstant)
-                    val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
+                    Reminder.OutOfStockReminderType.ALWAYS -> true
+                    else -> {
+                        false
+                    }
                 }
+
+            if (showEvent) {
+                Log.i(LogTags.STOCK_HANDLING, "Show out of stock reminder rID ${reminder.id}")
+                val scheduledReminder = ScheduledReminder(medicine, reminder, processedInstant)
+                val reminderNotificationData = ReminderNotificationData.fromScheduledReminders(listOf(scheduledReminder))
+                ReminderProcessorBroadcastReceiver.requestShowReminderNotification(context, reminderNotificationData)
             }
         }
     }

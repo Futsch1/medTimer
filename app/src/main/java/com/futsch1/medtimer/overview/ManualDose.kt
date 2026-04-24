@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.stream.Collectors
 
 class ManualDose @AssistedInject constructor(
@@ -145,8 +145,8 @@ class ManualDose @AssistedInject constructor(
     }
 
     private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
-        val localDateTime = LocalDateTime.now()
-        timePickerDialogFactory.create(localDateTime.hour, localDateTime.minute) { minutes: Int ->
+        val localDateTime = LocalTime.now()
+        timePickerDialogFactory.create(localDateTime) { minutes: Int ->
             val remindedInstant: Instant = TimeHelper.instantFromDateAndMinutes(minutes, date)
             activity.lifecycleScope.launch {
                 reminderEventRepository.create(
