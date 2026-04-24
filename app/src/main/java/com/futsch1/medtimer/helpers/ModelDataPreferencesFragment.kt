@@ -42,6 +42,12 @@ abstract class ModelDataPreferencesFragment<T>(
 
     lateinit var dataStore: ModelDataStore<T>
 
+    var idlingResource: SimpleIdlingResource = SimpleIdlingResource("ModelDataPreferencesFragment_${preferencesResId}")
+
+    init {
+        idlingResource.setBusy()
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()
 
@@ -61,8 +67,14 @@ abstract class ModelDataPreferencesFragment<T>(
                 customSetup(dataStore.modelData)
 
                 startPostponedEnterTransition()
+                idlingResource.setIdle()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        idlingResource.destroy()
     }
 
     abstract suspend fun getDataStore(

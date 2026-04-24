@@ -34,6 +34,8 @@ class TimeEditor @AssistedInject constructor(
         ): TimeEditor
     }
 
+    private var openedByFocusChange = false
+
     init {
         timeEdit.setText(
             if (durationHintText == null) timeFormatter.minutesToTimeString(initialTimeMinutesOfDay) else TimeHelper.minutesToDurationString(
@@ -42,15 +44,19 @@ class TimeEditor @AssistedInject constructor(
         )
 
         timeEdit.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            when {
-                hasFocus && durationHintText != null ->
-                    editDuration()
-
-                hasFocus -> editTime()
+            if (hasFocus) {
+                openedByFocusChange = true
+                if (durationHintText != null) editDuration() else editTime()
+            } else {
+                openedByFocusChange = false
             }
         }
         timeEdit.setOnClickListener {
-            timeEdit.onFocusChangeListener.onFocusChange(timeEdit, true)
+            if (openedByFocusChange) {
+                openedByFocusChange = false
+            } else {
+                if (durationHintText != null) editDuration() else editTime()
+            }
         }
     }
 
