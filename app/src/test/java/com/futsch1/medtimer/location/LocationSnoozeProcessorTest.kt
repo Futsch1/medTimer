@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.location
 
-import com.futsch1.medtimer.preferences.HomeLocationDataSource
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.AlarmProcessor
 import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -22,26 +22,26 @@ import kotlin.test.assertTrue
 @Config(sdk = [36])
 class LocationSnoozeProcessorTest {
     private lateinit var alarmProcessor: AlarmProcessor
-    private lateinit var homeLocationDataSource: HomeLocationDataSource
+    private lateinit var persistentDataDataSource: PersistentDataDataSource
     private lateinit var geofenceRegistrar: GeofenceRegistrar
     private lateinit var processor: LocationSnoozeProcessor
 
     @Before
     fun setUp() {
         alarmProcessor = mock()
-        homeLocationDataSource = mock()
+        persistentDataDataSource = mock()
         geofenceRegistrar = mock()
-        processor = LocationSnoozeProcessor(alarmProcessor, homeLocationDataSource, geofenceRegistrar)
+        processor = LocationSnoozeProcessor(alarmProcessor, persistentDataDataSource, geofenceRegistrar)
     }
 
     @Test
     fun `processLocationSnooze with empty pending list does not call setAlarmForReminderNotification`() {
-        whenever(homeLocationDataSource.getPendingLocationSnoozes()).thenReturn(emptyList())
+        whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(emptyList())
 
         processor.processLocationSnooze()
 
         verify(alarmProcessor, never()).setAlarmForReminderNotification(any())
-        verify(homeLocationDataSource).clearAllPendingLocationSnoozes()
+        verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
 
@@ -49,12 +49,12 @@ class LocationSnoozeProcessorTest {
     fun `processLocationSnooze fires alarm for single pending snooze`() {
         val futureInstant = Instant.now().plusSeconds(3600)
         val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
-        whenever(homeLocationDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
+        whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
         processor.processLocationSnooze()
 
         verify(alarmProcessor, times(1)).setAlarmForReminderNotification(any())
-        verify(homeLocationDataSource).clearAllPendingLocationSnoozes()
+        verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
 
@@ -62,7 +62,7 @@ class LocationSnoozeProcessorTest {
     fun `processLocationSnooze sets remindInstant to now before firing alarm`() {
         val futureInstant = Instant.now().plusSeconds(3600)
         val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
-        whenever(homeLocationDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
+        whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
         val beforeCall = Instant.now()
         processor.processLocationSnooze()
@@ -81,7 +81,7 @@ class LocationSnoozeProcessorTest {
             ReminderNotificationData(Instant.now().plusSeconds(200), listOf(2), mutableListOf(20), 2),
             ReminderNotificationData(Instant.now().plusSeconds(300), listOf(3), mutableListOf(30), 3)
         )
-        whenever(homeLocationDataSource.getPendingLocationSnoozes()).thenReturn(snoozes)
+        whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(snoozes)
 
         processor.processLocationSnooze()
 

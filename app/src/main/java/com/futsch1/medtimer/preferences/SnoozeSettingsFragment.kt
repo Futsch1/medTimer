@@ -36,9 +36,6 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     lateinit var geofenceRegistrar: GeofenceRegistrar
 
     @Inject
-    lateinit var homeLocationDataSource: HomeLocationDataSource
-
-    @Inject
     lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var requestFineLocationLauncher: ActivityResultLauncher<String>
@@ -84,7 +81,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
                 requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             } else {
                 geofenceRegistrar.unregisterHomeGeofence()
-                homeLocationDataSource.clearHomeLocation()
+                preferencesDataSource.clearHomeLocation()
                 updateLocationPrefsVisibility(false)
             }
             true
@@ -102,7 +99,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun setupShowOnMap() {
         val pref = preferenceScreen.findPreference<Preference>("show_home_location_on_map") ?: return
         pref.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            val loc = homeLocationDataSource.getHomeLocation() ?: return@OnPreferenceClickListener true
+            val loc = preferencesDataSource.getHomeLocation() ?: return@OnPreferenceClickListener true
             val uri = "geo:${loc.latitude},${loc.longitude}?q=${loc.latitude},${loc.longitude}".toUri()
             safeStartActivity(context, Intent(Intent.ACTION_VIEW, uri))
             true
@@ -141,9 +138,9 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(getString(R.string.set_home_location_confirm, lat, lon))
             .setPositiveButton(R.string.ok) { _, _ ->
-                homeLocationDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
+                preferencesDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
                 updateLocationPrefsVisibility(true)
-                if (homeLocationDataSource.getHomeLocation() != null) {
+                if (preferencesDataSource.getHomeLocation() != null) {
                     geofenceRegistrar.registerHomeGeofence()
                 }
             }
@@ -154,7 +151,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun updateLocationPrefsVisibility(locationSnoozeEnabled: Boolean) {
         val homeLocPref = preferenceScreen.findPreference<Preference>("home_location") ?: return
         val mapPref = preferenceScreen.findPreference<Preference>("show_home_location_on_map") ?: return
-        val hasHomeLocation = homeLocationDataSource.getHomeLocation() != null
+        val hasHomeLocation = preferencesDataSource.getHomeLocation() != null
 
         homeLocPref.isVisible = locationSnoozeEnabled
         homeLocPref.summary = if (hasHomeLocation) getString(R.string.home_location_set)
@@ -186,7 +183,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     private fun onLocationPermissionsGranted() {
         updateLocationPrefsVisibility(true)
-        if (homeLocationDataSource.getHomeLocation() != null && !geofenceRegistrar.registerHomeGeofence()) {
+        if (preferencesDataSource.getHomeLocation() != null && !geofenceRegistrar.registerHomeGeofence()) {
             resetLocationSnooze()
         }
     }

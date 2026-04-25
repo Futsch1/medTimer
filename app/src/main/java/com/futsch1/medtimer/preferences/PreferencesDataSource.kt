@@ -9,8 +9,10 @@ import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPreferences
 import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.model.DismissNotificationAction
+import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.model.UserPreferences
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +27,7 @@ class PreferencesDataSource @Inject constructor(
     @param:DefaultPreferences private val sharedPreferences: SharedPreferences,
     @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
 ) : PreferenceDataStore() {
+    private val gson = GsonBuilder().create()
     val preferences: StateFlow<UserPreferences> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getSettings())
@@ -47,6 +50,19 @@ class PreferencesDataSource @Inject constructor(
 
     fun setAutomaticBackupDirectory(uri: Uri) {
         sharedPreferences.edit { putString(AUTOMATIC_BACKUP_DIRECTORY, uri.toString()) }
+    }
+
+    fun saveHomeLocation(location: HomeLocation) {
+        sharedPreferences.edit { putString(HOME_LOCATION, gson.toJson(location)) }
+    }
+
+    fun getHomeLocation(): HomeLocation? {
+        val json = sharedPreferences.getString(HOME_LOCATION, null) ?: return null
+        return gson.fromJson(json, HomeLocation::class.java)
+    }
+
+    fun clearHomeLocation() {
+        sharedPreferences.edit { remove(HOME_LOCATION) }
     }
 
     // Functions for compatibility with PreferencesFragment
@@ -168,5 +184,6 @@ class PreferencesDataSource @Inject constructor(
         const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
         const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
         const val LOCATION_SNOOZE_ENABLED = "location_snooze_enabled"
+        const val HOME_LOCATION = "home_location"
     }
 }

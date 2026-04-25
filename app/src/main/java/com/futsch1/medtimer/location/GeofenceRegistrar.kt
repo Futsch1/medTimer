@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.preferences.HomeLocationDataSource
+import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.Geofence
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class GeofenceRegistrar @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val geofencingClient: GeofencingClient,
-    private val homeLocationDataSource: HomeLocationDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
     private val googleApiAvailability: GoogleApiAvailability
 ) {
     fun isLocationServiceAvailable(): Boolean =
@@ -32,7 +32,7 @@ class GeofenceRegistrar @Inject constructor(
             Log.w(LogTags.LOCATION, "Google Play Services unavailable, cannot register home geofence")
             return false
         }
-        val homeLocation = homeLocationDataSource.getHomeLocation() ?: run {
+        val homeLocation = preferencesDataSource.getHomeLocation() ?: run {
             Log.w(LogTags.LOCATION, "No home location saved, cannot register geofence")
             return false
         }
