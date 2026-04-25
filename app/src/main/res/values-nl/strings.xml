@@ -26,9 +26,9 @@
     <string name="next_reminders">Volgende herinneringen</string>
     <string name="version">Versie %s</string>
     <string name="are_you_sure_delete_reminder">Weet u zeker dat u de herinnering wilt verwijderen?</string>
-    <string name="clear_events">Herinneringen verwijderen</string>
+    <string name="clear_events">Volledige geschiedenis wissen</string>
     <string name="app_version">App versie</string>
-    <string name="are_you_sure_delete_events">Weet je zeker dat je alle herinneringen wilt verwijderen?</string>
+    <string name="are_you_sure_delete_events">Dit zal de volledige medicatiegeschiedenis permanent verwijderen. Deze actie kan niet ongedaan worden gemaakt.</string>
     <string name="show_notifications">Meldingen weergeven</string>
     <string name="twenty_four_hours">24 uur</string>
     <string name="two_days">2 dagen</string>
