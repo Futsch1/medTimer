@@ -303,6 +303,9 @@
     <string name="snooze_settings_summary">Doba odložení a odložení na základě polohy</string>
     <string name="home_location">Domovská poloha</string>
     <string name="home_location_not_set">Nenastaveno</string>
+    <string name="home_location_set">Nastaveno</string>
+    <string name="determining_location">Zjišťování aktuální polohy…</string>
+    <string name="show_home_location_on_map">Zobrazit domovskou polohu na mapě</string>
     <string name="set_home_location_confirm">Nastavit domovskou polohu na\n%1$s, %2$s?</string>
     <string name="home_location_error">Nepodařilo se určit vaši aktuální polohu</string>
 </resources>

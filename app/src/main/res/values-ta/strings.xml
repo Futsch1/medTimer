@@ -293,6 +293,9 @@
     <string name="snooze_settings_summary">சுணக்க காலம் மற்றும் இடம் சார்ந்த சுணக்கம்</string>
     <string name="home_location">வீட்டு இடம்</string>
     <string name="home_location_not_set">அமைக்கப்படவில்லை</string>
+    <string name="home_location_set">அமைக்கப்பட்டது</string>
+    <string name="determining_location">தற்போதைய இடத்தை தீர்மானிக்கிறது…</string>
+    <string name="show_home_location_on_map">வீட்டு இடத்தை வரைபடத்தில் காட்டு</string>
     <string name="set_home_location_confirm">வீட்டு இடத்தை\n%1$s, %2$s ஆக அமைக்கவா?</string>
     <string name="home_location_error">உங்கள் தற்போதைய இடத்தை தீர்மானிக்க முடியவில்லை</string>
 </resources>

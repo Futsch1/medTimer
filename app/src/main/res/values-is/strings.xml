@@ -191,6 +191,9 @@
     <string name="snooze_settings_summary">Blund-tími og staðsetningarbundið snooze</string>
     <string name="home_location">Heimilisstaðsetning</string>
     <string name="home_location_not_set">Ekki stillt</string>
+    <string name="home_location_set">Stillt</string>
+    <string name="determining_location">Ákvarðar núverandi staðsetningu…</string>
+    <string name="show_home_location_on_map">Sýna heimilisstaðsetningu á korti</string>
     <string name="set_home_location_confirm">Setja heimilisstaðsetningu á\n%1$s, %2$s?</string>
     <string name="home_location_error">Ekki tókst að ákvarða núverandi staðsetningu þína</string>
 </resources>

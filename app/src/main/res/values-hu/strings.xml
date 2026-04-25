@@ -293,6 +293,9 @@
     <string name="snooze_settings_summary">Szundi késleltetése és helyzet alapú szundi</string>
     <string name="home_location">Otthoni helyszín</string>
     <string name="home_location_not_set">Nincs beállítva</string>
+    <string name="home_location_set">Beállítva</string>
+    <string name="determining_location">Jelenlegi helyszín meghatározása…</string>
+    <string name="show_home_location_on_map">Otthoni helyszín megjelenítése a térképen</string>
     <string name="set_home_location_confirm">Otthoni helyszín beállítása erre:\n%1$s, %2$s?</string>
     <string name="home_location_error">Nem sikerült meghatározni a jelenlegi tartózkodási helyét</string>
 </resources>

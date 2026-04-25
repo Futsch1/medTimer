@@ -313,6 +313,9 @@
     <string name="snooze_settings_summary">مدة الغفوة والتأجيل المستند إلى الموقع</string>
     <string name="home_location">الموقع المنزلي</string>
     <string name="home_location_not_set">غير محدد</string>
+    <string name="home_location_set">تم التحديد</string>
+    <string name="determining_location">جارٍ تحديد الموقع الحالي…</string>
+    <string name="show_home_location_on_map">عرض الموقع المنزلي على الخريطة</string>
     <string name="set_home_location_confirm">تعيين الموقع المنزلي إلى\n%1$s، %2$s؟</string>
     <string name="home_location_error">تعذّر تحديد موقعك الحالي</string>
 </resources>

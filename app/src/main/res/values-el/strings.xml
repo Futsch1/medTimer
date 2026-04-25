@@ -293,6 +293,9 @@
     <string name="snooze_settings_summary">Διάρκεια αναβολής και αναβολή βάσει τοποθεσίας</string>
     <string name="home_location">Τοποθεσία σπιτιού</string>
     <string name="home_location_not_set">Δεν έχει οριστεί</string>
+    <string name="home_location_set">Ορίστηκε</string>
+    <string name="determining_location">Εντοπισμός τρέχουσας τοποθεσίας…</string>
+    <string name="show_home_location_on_map">Εμφάνιση τοποθεσίας σπιτιού στον χάρτη</string>
     <string name="set_home_location_confirm">Ορισμός τοποθεσίας σπιτιού σε\n%1$s, %2$s;</string>
     <string name="home_location_error">Δεν ήταν δυνατός ο προσδιορισμός της τρέχουσας τοποθεσίας σας</string>
 </resources>

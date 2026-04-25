@@ -293,6 +293,9 @@
     <string name="snooze_settings_summary">Erteleme süresi ve konuma dayalı erteleme</string>
     <string name="home_location">Ev konumu</string>
     <string name="home_location_not_set">Ayarlanmadı</string>
+    <string name="home_location_set">Ayarlandı</string>
+    <string name="determining_location">Mevcut konum belirleniyor…</string>
+    <string name="show_home_location_on_map">Ev konumunu haritada göster</string>
     <string name="set_home_location_confirm">Ev konumunu şu şekilde ayarla:\n%1$s, %2$s?</string>
     <string name="home_location_error">Mevcut konumunuz belirlenemedi</string>
 </resources>

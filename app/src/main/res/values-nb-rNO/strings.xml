@@ -48,6 +48,9 @@
     <string name="snooze_settings_summary">Snooze-varighet og stedsbasert snooze</string>
     <string name="home_location">Hjemsted</string>
     <string name="home_location_not_set">Ikke angitt</string>
+    <string name="home_location_set">Angitt</string>
+    <string name="determining_location">Bestemmer gjeldende posisjon…</string>
+    <string name="show_home_location_on_map">Vis hjemsted på kart</string>
     <string name="set_home_location_confirm">Angi hjemsted til\n%1$s, %2$s?</string>
     <string name="home_location_error">Kunne ikke bestemme gjeldende posisjon</string>
 </resources>

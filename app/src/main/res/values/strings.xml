@@ -208,6 +208,9 @@
     <string name="snooze_settings_summary">Snooze duration and location snooze</string>
     <string name="home_location">Home location</string>
     <string name="home_location_not_set">Not set</string>
+    <string name="home_location_set">Set</string>
+    <string name="determining_location">Determining current location…</string>
+    <string name="show_home_location_on_map">Show home location on map</string>
     <string name="set_home_location_confirm">Set home location to\n%1$s, %2$s?</string>
     <string name="home_location_error">Could not determine your current location</string>
     <string name="display_settings">Display settings</string>

@@ -288,6 +288,9 @@
     <string name="snooze_settings_summary">小睡时长和基于位置的小睡</string>
     <string name="home_location">家庭位置</string>
     <string name="home_location_not_set">未设置</string>
+    <string name="home_location_set">已设置</string>
+    <string name="determining_location">正在确定当前位置…</string>
+    <string name="show_home_location_on_map">在地图上显示家庭位置</string>
     <string name="set_home_location_confirm">将家庭位置设置为\n%1$s, %2$s？</string>
     <string name="home_location_error">无法确定您的当前位置</string>
 </resources>

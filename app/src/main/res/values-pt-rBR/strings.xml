@@ -298,6 +298,9 @@
     <string name="snooze_settings_summary">Duração do adiamento e soneca baseada em localização</string>
     <string name="home_location">Localização de casa</string>
     <string name="home_location_not_set">Não definida</string>
+    <string name="home_location_set">Definida</string>
+    <string name="determining_location">Determinando localização atual…</string>
+    <string name="show_home_location_on_map">Mostrar localização de casa no mapa</string>
     <string name="set_home_location_confirm">Definir localização de casa para\n%1$s, %2$s?</string>
     <string name="home_location_error">Não foi possível determinar sua localização atual</string>
 </resources>
