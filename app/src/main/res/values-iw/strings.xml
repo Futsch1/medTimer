@@ -298,4 +298,6 @@
     <string name="snooze_settings_summary">משך זמן הדחייה ונודניק מבוסס מיקום</string>
     <string name="home_location">מיקום הבית</string>
     <string name="home_location_not_set">לא הוגדר</string>
+    <string name="set_home_location_confirm">להגדיר את מיקום הבית ל-\n%1$s, %2$s?</string>
+    <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
 </resources>

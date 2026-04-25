@@ -293,4 +293,6 @@
     <string name="snooze_settings_summary">Продължителност на отлагането и отлагане по местоположение</string>
     <string name="home_location">Домашно местоположение</string>
     <string name="home_location_not_set">Не е зададено</string>
+    <string name="set_home_location_confirm">Задаване на домашно местоположение на\n%1$s, %2$s?</string>
+    <string name="home_location_error">Неуспешно определяне на текущото ви местоположение</string>
 </resources>

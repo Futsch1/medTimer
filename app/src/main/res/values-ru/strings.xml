@@ -300,4 +300,6 @@
     <string name="snooze_settings_summary">Время откладывания и откладывание по местоположению</string>
     <string name="home_location">Домашнее местоположение</string>
     <string name="home_location_not_set">Не задано</string>
+    <string name="set_home_location_confirm">Задать домашнее местоположение:\n%1$s, %2$s?</string>
+    <string name="home_location_error">Не удалось определить ваше текущее местоположение</string>
 </resources>

@@ -292,4 +292,6 @@
     <string name="snooze_settings_summary">Snooze-tid och platsbaserad snooze</string>
     <string name="home_location">Hemplats</string>
     <string name="home_location_not_set">Inte inställd</string>
+    <string name="set_home_location_confirm">Ange hemplats till\n%1$s, %2$s?</string>
+    <string name="home_location_error">Det gick inte att fastställa din aktuella plats</string>
 </resources>

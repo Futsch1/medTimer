@@ -298,4 +298,6 @@
     <string name="snooze_settings_summary">Durata del posticipo e posticipo basato sulla posizione</string>
     <string name="home_location">Posizione di casa</string>
     <string name="home_location_not_set">Non impostata</string>
+    <string name="set_home_location_confirm">Impostare la posizione di casa su\n%1$s, %2$s?</string>
+    <string name="home_location_error">Impossibile determinare la posizione attuale</string>
 </resources>

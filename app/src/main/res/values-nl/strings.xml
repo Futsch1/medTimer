@@ -293,4 +293,6 @@
     <string name="snooze_settings_summary">Sluimertijd en locatiegebaseerd sluimeren</string>
     <string name="home_location">Thuislocatie</string>
     <string name="home_location_not_set">Niet ingesteld</string>
+    <string name="set_home_location_confirm">Thuislocatie instellen op\n%1$s, %2$s?</string>
+    <string name="home_location_error">Kon uw huidige locatie niet bepalen</string>
 </resources>

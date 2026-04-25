@@ -303,4 +303,6 @@
     <string name="snooze_settings_summary">Czas drzemki i drzemka oparta na lokalizacji</string>
     <string name="home_location">Lokalizacja domowa</string>
     <string name="home_location_not_set">Nie ustawiono</string>
+    <string name="set_home_location_confirm">Ustawić lokalizację domową na\n%1$s, %2$s?</string>
+    <string name="home_location_error">Nie można określić bieżącej lokalizacji</string>
 </resources>

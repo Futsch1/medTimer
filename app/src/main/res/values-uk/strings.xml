@@ -303,4 +303,6 @@
     <string name="snooze_settings_summary">Тривалість відкладення та відкладення за місцезнаходженням</string>
     <string name="home_location">Домашнє місцезнаходження</string>
     <string name="home_location_not_set">Не задано</string>
+    <string name="set_home_location_confirm">Встановити домашнє місцезнаходження:\n%1$s, %2$s?</string>
+    <string name="home_location_error">Не вдалося визначити ваше поточне місцезнаходження</string>
 </resources>

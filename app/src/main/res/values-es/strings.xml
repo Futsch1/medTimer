@@ -298,4 +298,6 @@
     <string name="snooze_settings_summary">Duración al posponer y posposición según ubicación</string>
     <string name="home_location">Ubicación de casa</string>
     <string name="home_location_not_set">No establecida</string>
+    <string name="set_home_location_confirm">¿Establecer ubicación de casa en\n%1$s, %2$s?</string>
+    <string name="home_location_error">No se pudo determinar tu ubicación actual</string>
 </resources>

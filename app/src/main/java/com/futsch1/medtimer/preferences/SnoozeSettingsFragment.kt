@@ -1,18 +1,26 @@
 package com.futsch1.medtimer.preferences
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.location.GeofenceRegistrar
+import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +33,9 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     @Inject
     lateinit var homeLocationDataSource: HomeLocationDataSource
+
+    @Inject
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var requestFineLocationLauncher: ActivityResultLauncher<String>
     private lateinit var requestBackgroundLocationLauncher: ActivityResultLauncher<String>
@@ -53,6 +64,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         setPreferencesFromResource(R.xml.snooze_settings, rootKey)
 
         setupLocationSnooze()
+        setupHomeLocation()
     }
 
     private fun setupLocationSnooze() {
@@ -73,13 +85,57 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         }
     }
 
+    private fun setupHomeLocation() {
+        val pref = preferenceScreen.findPreference<Preference>("home_location") ?: return
+        pref.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+            fetchCurrentLocationAndConfirm()
+            true
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun fetchCurrentLocationAndConfirm() {
+        val cts = CancellationTokenSource()
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    showSetHomeLocationDialog(location)
+                } else {
+                    showLocationSnoozeInfoDialog(R.string.home_location_error)
+                }
+            }
+            .addOnFailureListener {
+                showLocationSnoozeInfoDialog(R.string.home_location_error)
+            }
+    }
+
+    private fun showSetHomeLocationDialog(location: Location) {
+        val lat = String.format(Locale.US, "%.5f", location.latitude)
+        val lon = String.format(Locale.US, "%.5f", location.longitude)
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(getString(R.string.set_home_location_confirm, lat, lon))
+            .setPositiveButton(R.string.ok) { _, _ ->
+                homeLocationDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
+                updateHomeLocationVisibility(true)
+                val homeLocation = homeLocationDataSource.getHomeLocation()
+                if (homeLocation != null) {
+                    geofenceRegistrar.registerHomeGeofence()
+                }
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun updateHomeLocationVisibility(visible: Boolean) {
         val pref = preferenceScreen.findPreference<Preference>("home_location") ?: return
         pref.isVisible = visible
         if (visible) {
-            pref.summary = homeLocationDataSource.getHomeLocation()
-                ?.let { "${it.latitude}, ${it.longitude}" }
-                ?: getString(R.string.home_location_not_set)
+            val loc = homeLocationDataSource.getHomeLocation()
+            pref.summary = if (loc != null) {
+                String.format(Locale.US, "%.5f, %.5f", loc.latitude, loc.longitude)
+            } else {
+                getString(R.string.home_location_not_set)
+            }
         }
     }
 
@@ -90,6 +146,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
             .show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showBackgroundLocationRationale() {
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(R.string.location_snooze_background_permission)

@@ -298,4 +298,6 @@
     <string name="snooze_settings_summary">Intervalle de répétition et répétition basée sur la localisation</string>
     <string name="home_location">Position du domicile</string>
     <string name="home_location_not_set">Non définie</string>
+    <string name="set_home_location_confirm">Définir la position du domicile à\n%1$s, %2$s ?</string>
+    <string name="home_location_error">Impossible de déterminer votre position actuelle</string>
 </resources>

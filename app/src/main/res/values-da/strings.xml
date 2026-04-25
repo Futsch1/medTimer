@@ -293,4 +293,6 @@
     <string name="snooze_settings_summary">Slumrevarighed og placeringsbaseret snooze</string>
     <string name="home_location">Hjemsted</string>
     <string name="home_location_not_set">Ikke angivet</string>
+    <string name="set_home_location_confirm">Angiv hjemsted som\n%1$s, %2$s?</string>
+    <string name="home_location_error">Kunne ikke bestemme din aktuelle placering</string>
 </resources>

@@ -293,4 +293,6 @@
     <string name="snooze_settings_summary">Schlummerdauer und standortbasiertes Schlummern</string>
     <string name="home_location">Heimstandort</string>
     <string name="home_location_not_set">Nicht festgelegt</string>
+    <string name="set_home_location_confirm">Heimstandort setzen auf\n%1$s, %2$s?</string>
+    <string name="home_location_error">Aktueller Standort konnte nicht ermittelt werden</string>
 </resources>
