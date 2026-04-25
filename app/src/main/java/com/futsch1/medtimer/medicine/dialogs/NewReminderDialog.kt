@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.BuildConfig
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.AmountTextWatcher
@@ -66,10 +67,12 @@ class NewReminderDialog @AssistedInject constructor(
 
     private fun startEditAmount() {
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editAmount)
-        textInputEditText.requestFocus()
-        textInputEditText.postDelayed({
-            inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
-        }, 100)
+        if (!BuildConfig.DEBUG) {
+            textInputEditText.requestFocus()
+            textInputEditText.postDelayed({
+                inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+            }, 100)
+        }
         if (medicine.isStockManagementActive()) {
             textInputEditText.addTextChangedListener(
                 AmountTextWatcher(
@@ -127,7 +130,7 @@ class NewReminderDialog @AssistedInject constructor(
         val intervalStartDateTimeEditor = dateTimeEditorFactory.create(
             activity,
             dialog.findViewById(R.id.editIntervalStartDateTime),
-            Instant.now().epochSecond
+            Instant.now()
         )
 
         val dailyStartTimeEditor = timeEditorFactory.create(
@@ -176,7 +179,7 @@ class NewReminderDialog @AssistedInject constructor(
                 updatedReminder = updatedReminder.copy(time = reminderTime)
                 if (reminder.reminderType == ReminderType.CONTINUOUS_INTERVAL) {
                     updatedReminder = updatedReminder.copy(
-                        intervalStart = Instant.ofEpochSecond(intervalStartDateTimeEditor.getDateTimeSecondsSinceEpoch()),
+                        intervalStart = intervalStartDateTimeEditor.getInstant() ?: Instant.EPOCH,
                         intervalStartsFromProcessed = dialog.findViewById<MaterialRadioButton>(R.id.intervalStarsFromProcessed).isChecked
                     )
                 }

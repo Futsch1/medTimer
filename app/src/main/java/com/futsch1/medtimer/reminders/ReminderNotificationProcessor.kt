@@ -21,7 +21,6 @@ import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFacto
 import com.futsch1.medtimer.reminders.scheduling.CyclesHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
-import java.time.ZoneId
 import javax.inject.Inject
 
 class ReminderNotificationProcessor @Inject constructor(
@@ -170,20 +169,16 @@ class ReminderNotificationProcessor @Inject constructor(
             remindedTimestamp: Instant,
             isWindowedInterval: Boolean
         ): Int {
-            val lastReminderEvent = reminderEventRepository.getLast(reminderId)
-            return if (lastReminderEvent != null && lastReminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) {
-                if (isWindowedInterval && TimeHelper.secondsSinceEpochToLocalDate(
-                        lastReminderEvent.remindedTimestamp.epochSecond,
-                        ZoneId.systemDefault()
-                    ) != TimeHelper.secondsSinceEpochToLocalDate(remindedTimestamp.epochSecond, ZoneId.systemDefault())
-                ) {
-                    0
-                } else {
-                    (lastReminderEvent.processedTimestamp.epochSecond / 60).toInt()
-                }
-            } else {
-                0
+            val lastReminderEvent = reminderEventRepository.getLast(reminderId) ?: return 0
+            if (lastReminderEvent.status != ReminderEvent.ReminderStatus.TAKEN) return 0
+
+            if (isWindowedInterval &&
+                TimeHelper.isSameDay(lastReminderEvent.remindedTimestamp, remindedTimestamp)
+            ) {
+                return 0
             }
+
+            return (lastReminderEvent.processedTimestamp.epochSecond / 60).toInt()
         }
     }
 }

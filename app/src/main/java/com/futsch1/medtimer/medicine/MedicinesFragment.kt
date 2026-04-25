@@ -15,6 +15,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.futsch1.medtimer.BuildConfig
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
@@ -148,7 +149,9 @@ class MedicinesFragment : Fragment() {
             editText.setHint(R.string.medicine_name)
             editText.setSingleLine()
             editText.setId(R.id.medicineName)
-            editText.postDelayed({ editText.showSoftKeyboard() }, 200)
+            if (!BuildConfig.DEBUG) {
+                editText.postDelayed({ editText.showSoftKeyboard() }, 200)
+            }
 
             textInputLayout.addView(editText)
             textInputLayout.setPadding(requireContext().resources.dpToPx(16f).toInt())
@@ -169,7 +172,7 @@ class MedicinesFragment : Fragment() {
                 lifecycleScope.launch(dispatcher) {
                     val highestSortOrder = medicineRepository.getHighestSortOrder()
                     val medicine = Medicine.default().copy(name = text.toString().trim(), sortOrder = highestSortOrder)
-                    val medicineId = medicineRepository.create(medicine).toInt()
+                    val medicineId = medicineRepository.create(medicine)
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }

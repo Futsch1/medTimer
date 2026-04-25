@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.model
 
 import android.app.NotificationManager
+import android.graphics.Color
 import java.time.LocalDate
 
 data class Medicine(
@@ -46,7 +47,7 @@ data class Medicine(
         fun default(): Medicine = Medicine(
             name = "",
             id = 0,
-            color = 0,
+            color = Color.DKGRAY,
             useColor = false,
             notificationImportance = NotificationImportance.DEFAULT,
             iconId = 0,

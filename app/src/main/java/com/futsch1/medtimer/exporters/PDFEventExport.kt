@@ -18,8 +18,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.Instant
 import java.util.LinkedList
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class PDFEventExport @AssistedInject constructor(
@@ -59,7 +59,7 @@ class PDFEventExport @AssistedInject constructor(
             rows.add(row)
         }
 
-        simplyPdfDocument.text.write(timeFormatter.secondsSinceEpochToDateTimeString(Clock.System.now().epochSeconds) + "\n", standardTextProperties)
+        simplyPdfDocument.text.write(timeFormatter.toDateTimeString(Instant.now()) + "\n", standardTextProperties)
         simplyPdfDocument.table.draw(rows, tableProperties)
 
         withContext(ioDispatcher) {
@@ -81,13 +81,13 @@ class PDFEventExport @AssistedInject constructor(
 
     private fun getCells(reminderEvent: ReminderEvent, textProperties: TextProperties, columnWidths: IntArray): LinkedList<Cell> {
         val row = LinkedList<Cell>()
-        row.add(TextCell(timeFormatter.secondsSinceEpochToDateTimeString(reminderEvent.remindedTimestamp.epochSecond), textProperties, columnWidths[0]))
+        row.add(TextCell(timeFormatter.toDateTimeString(reminderEvent.remindedTimestamp), textProperties, columnWidths[0]))
         row.add(TextCell(reminderEvent.medicineName, textProperties, columnWidths[1]))
         row.add(TextCell(reminderEvent.amount, textProperties, columnWidths[2]))
         row.add(
             TextCell(
-                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
-                    reminderEvent.processedTimestamp.epochSecond
+                if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.toDateTimeString(
+                    reminderEvent.processedTimestamp
                 ) else "", textProperties, columnWidths[3]
             )
         )

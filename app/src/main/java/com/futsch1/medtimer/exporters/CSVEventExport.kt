@@ -41,13 +41,13 @@ class CSVEventExport @AssistedInject constructor(
                     for (reminderEvent in reminderEvents) {
                         val line = String.format(
                             "%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                            timeFormatter.secondsSinceEpochToDateTimeString(
-                                reminderEvent.remindedTimestamp.epochSecond
+                            timeFormatter.toDateTimeString(
+                                reminderEvent.remindedTimestamp
                             ),
                             reminderEvent.medicineName,
                             reminderEvent.amount,
-                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.secondsSinceEpochToDateTimeString(
-                                reminderEvent.processedTimestamp.epochSecond
+                            if (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN) timeFormatter.toDateTimeString(
+                                reminderEvent.processedTimestamp
                             ) else "",
                             reminderEvent.tags.joinToString(", "),
                             timeFormatter.minutesToDurationString(reminderEvent.lastIntervalReminderTimeInMinutes),
