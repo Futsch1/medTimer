@@ -53,8 +53,8 @@
     <string name="confirm">Підтвердити</string>
     <string name="app_url">MedTimer на GitHub</string>
     <string name="three_days">3 дні</string>
-    <string name="clear_events">Видалити події</string>
-    <string name="are_you_sure_delete_events">Ви впевнені що хочете видалити всі події?</string>
+    <string name="clear_events">Очистити всю історію</string>
+    <string name="are_you_sure_delete_events">Це безповоротно видалить всю історію прийому ліків. Цю дію не можна скасувати.</string>
     <string name="cycle_consecutive_days">Активні дні</string>
     <string name="color">Колір</string>
     <string name="version">Версія %s</string>

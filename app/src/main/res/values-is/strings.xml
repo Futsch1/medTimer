@@ -26,9 +26,9 @@
     <string name="next_reminders">Næstu áminningar</string>
     <string name="version">Útgáfa %s</string>
     <string name="are_you_sure_delete_reminder">Ertu viss um að þú viljir eyða áminningu?</string>
-    <string name="clear_events">Eyða atvikum</string>
+    <string name="clear_events">Hreinsa alla sögu</string>
     <string name="app_version">App útgáfa</string>
-    <string name="are_you_sure_delete_events">Ertu viss að þú viljir eyða öllum atvikum?</string>
+    <string name="are_you_sure_delete_events">Þetta mun eyða öllum lyfjasögunni varanlega. Þessa aðgerð er ekki hægt að afturkalla.</string>
     <string name="show_notifications">Sýna tilkynningar</string>
     <string name="twenty_four_hours">24 tímar</string>
     <string name="two_days">2 dagar</string>
