@@ -50,7 +50,7 @@ class CalendarTest : BaseTestHelper() {
         clickOn(R.id.logManualDose)
         clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
-        clickDialogPositiveButton()
+        clickDialogPositiveButton(false)
         clickDialogPositiveButton()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
