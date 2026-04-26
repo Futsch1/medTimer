@@ -14,7 +14,7 @@ class LocationSnoozeProcessor @Inject constructor(
 ) {
     fun processLocationSnooze() {
         val pending = persistentDataDataSource.getPendingLocationSnoozes()
-        Log.d(LogTags.REMINDER, "Entered home location, restoring ${pending.size} snoozed reminders")
+        Log.d(LogTags.REMINDER, "In home location, restoring ${pending.size} snoozed reminders")
         for (data in pending) {
             data.remindInstant = Instant.now()
             alarmProcessor.setAlarmForReminderNotification(data)

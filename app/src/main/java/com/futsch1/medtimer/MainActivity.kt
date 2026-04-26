@@ -33,7 +33,6 @@ import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initial
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.hasBiometrics
-import com.futsch1.medtimer.location.GeofenceRegistrar
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.overview.VariableAmountHandler
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
@@ -78,10 +77,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var activityManager: ActivityManager
-
-    @Inject
-    lateinit var geofenceRegistrar: GeofenceRegistrar
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -154,10 +149,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.dismissBatteryWarning)?.setOnClickListener { _: View ->
             persistentDataDataSource.setBatteryWarningShown(true)
             checkBatteryOptimization()
-        }
-
-        if (preferencesDataSource.preferences.value.locationBasedSnooze) {
-            geofenceRegistrar.registerHomeGeofence()
         }
 
         dispatchIntent(this.intent)

@@ -134,7 +134,7 @@
 
         </receiver>
         <receiver
-            android:name="com.futsch1.medtimer.reminders.RemoteInputReceiver"
+            android:name=".reminders.RemoteInputReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION" />

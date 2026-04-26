@@ -27,7 +27,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             Log.e(LogTags.LOCATION, "Geofence error code: ${event.errorCode}")
             return
         }
-        if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+        if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
             locationSnoozeProcessor.processLocationSnooze()
         }
     }

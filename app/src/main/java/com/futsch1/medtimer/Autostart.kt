@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.location.GeofenceRegistrar
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +24,12 @@ class Autostart : BroadcastReceiver() {
     lateinit var autostartService: AutostartService
 
     @Inject
+    lateinit var geofenceRegistrar: GeofenceRegistrar
+
+    @Inject
+    lateinit var persistentDataDataSource: PersistentDataDataSource
+
+    @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
     override fun onReceive(context: Context, intent: Intent) {
@@ -36,6 +44,9 @@ class Autostart : BroadcastReceiver() {
         hasRestored = true
         applicationScope.launch {
             autostartService.restoreNotifications()
+            if (persistentDataDataSource.getPendingLocationSnoozes().isNotEmpty()) {
+                geofenceRegistrar.registerHomeGeofence()
+            }
             Log.i(LogTags.AUTOSTART, "Requesting reschedule")
             ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
         }

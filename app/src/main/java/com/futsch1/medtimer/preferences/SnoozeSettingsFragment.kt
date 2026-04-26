@@ -185,7 +185,8 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun onLocationPermissionsGranted() {
         updateLocationPrefsVisibility(true)
         if (preferencesDataSource.preferences.value.homeLocation != null) {
-            if (!geofenceRegistrar.registerHomeGeofence(::onGeofenceRegistrationFailed)) {
+            // Try registering to check if it would work, unregister immediately
+            if (!geofenceRegistrar.registerHomeGeofence({ geofenceRegistrar.unregisterHomeGeofence() }, ::onGeofenceRegistrationFailed)) {
                 onGeofenceRegistrationFailed()
             }
         }

@@ -61,8 +61,8 @@
     <string name="log_additional_dose">Skrá auka-lyfjatöku</string>
     <string name="dismiss_notification_action">Aðgerð þegar þú hunsar tilkynningu</string>
     <string name="skip_reminder">Sleppa skamti</string>
-    <string name="snooze">Blunda</string>
-    <string name="snooze_duration">Blund-tími</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_duration">Snooze-tími</string>
     <string name="minutes_5">5 mínútur</string>
     <string name="minutes_10">10 mínútur</string>
     <string name="minutes_15">15 mínútur</string>
@@ -107,7 +107,7 @@
     <string name="intro_welcome_description">MedTimer er frjálst og opið smáforrit með áherslu á friðhelgi, til að minna á lyfjatöku.\n\nÞað þarf að hafa leyfi til að senda tilkynningar, þ.e. áminningar um lyfjatöku.</string>
     <string name="intro_medicine_description">Notið flipann \"Lyf\" til að skrá þau lyf sem þú tekur og vilt fá áminningar um. Þú getur tengt merkingar við lyf og fylgst með áfyllingum.</string>
     <string name="intro_reminder_description">Veljið lyf til að skrá upplýsingar og búa til áminningar um mismunandi skammta sem þú þarft að taka\n\nÁminningar geta verið á ákveðnum timum, ákveðnu millibili og á ákveðnum dögum.</string>
-    <string name="intro_notification_description">þegar komið er að áminningu, birtist tilkynning sem gefur þér kost á að merkja hvort skammtur hafi þegar verið tekinn (með því að merkja sem \"Tekið\"), \"Hunsa\" áminningu eða fá nýja áminningu eftir stutta stund (\"Blunda\").</string>
+    <string name="intro_notification_description">þegar komið er að áminningu, birtist tilkynning sem gefur þér kost á að merkja hvort skammtur hafi þegar verið tekinn (með því að merkja sem \"Tekið\"), \"Hunsa\" áminningu eða fá nýja áminningu eftir stutta stund (\"Snooze\").</string>
     <string name="intro_overview_description">Á yfirlits-skjánum getur þú séð væntanlegar áminningar og síðustu áminningar. Hægt er að breyta áminningum með því að strjúka til hægri eða eyða með því að strjúka til vinstri.\n\nAuk þess getur þú skráð handvirkt auka-skammta af skráðum lyfjum eða eitthvað sérsniðið.</string>
     <string name="intro_analysis_description">Forritið geymir allar áminningar. Þú getur skoðað fyrri skammta á greiningar-skjánum og flutt út lyfja-annál með því smella á punktana þrjá. Lyfja-annállinn verður geymdur þótt þú fjarlægir lyf eða eyðir áminningum.</string>
     <string name="show_intro">Sýna upplýsingar um forrit</string>
@@ -188,7 +188,7 @@
     <string name="location_snooze_no_home_location">Vinsamlegast stilltu heimastaðsetningu áður en þú virkjar staðsetningarbundið snooze</string>
     <string name="location_snooze_background_permission">Til að fá tilkynningu við heimkomu skaltu leyfa MedTimer að fá aðgang að staðsetningu í bakgrunni</string>
     <string name="snooze_settings">Snooze-stillingar</string>
-    <string name="snooze_settings_summary">Blund-tími og staðsetningarbundið snooze</string>
+    <string name="snooze_settings_summary">Snooze-tími og staðsetningarbundið snooze</string>
     <string name="home_location">Heimilisstaðsetning</string>
     <string name="home_location_not_set">Ekki stillt</string>
     <string name="home_location_set">Stillt</string>

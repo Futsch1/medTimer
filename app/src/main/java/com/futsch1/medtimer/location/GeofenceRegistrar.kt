@@ -27,7 +27,7 @@ class GeofenceRegistrar @Inject constructor(
     fun isLocationServiceAvailable(): Boolean =
         googleApiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
-    fun registerHomeGeofence(onFailure: (() -> Unit)? = null): Boolean {
+    fun registerHomeGeofence(onSuccess: (() -> Unit)? = null, onFailure: (() -> Unit)? = null): Boolean {
         if (!isLocationServiceAvailable()) {
             Log.w(LogTags.LOCATION, "Google Play Services unavailable, cannot register home geofence")
             return false
@@ -45,17 +45,22 @@ class GeofenceRegistrar @Inject constructor(
             .setRequestId(GEOFENCE_ID)
             .setCircularRegion(homeLocation.latitude, homeLocation.longitude, homeLocation.radiusMeters)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+            // Quick loitering delay, as the geofence will be unregistered as soon as the snoozed events are fired.
+            // So if we are already inside the fence, this should trigger soon.
+            .setLoiteringDelay(30_000)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL)
             .build()
 
         val request = GeofencingRequest.Builder()
-            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
             .addGeofence(geofence)
             .build()
 
         return try {
             geofencingClient.addGeofences(request, buildGeofencePendingIntent())
-                .addOnSuccessListener { Log.i(LogTags.LOCATION, "Home geofence registered successfully") }
+                .addOnSuccessListener {
+                    Log.i(LogTags.LOCATION, "Home geofence registered successfully")
+                    onSuccess?.invoke()
+                }
                 .addOnFailureListener {
                     Log.e(LogTags.LOCATION, "Failed to add home geofence: ${it.message}")
                     onFailure?.invoke()

@@ -86,5 +86,6 @@ class LocationSnoozeProcessorTest {
         processor.processLocationSnooze()
 
         verify(alarmProcessor, times(3)).setAlarmForReminderNotification(any())
+        verify(geofenceRegistrar).unregisterHomeGeofence()
     }
 }
