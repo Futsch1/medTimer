@@ -27,7 +27,7 @@ class GenerateTestData @AssistedInject constructor(
 ) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(withEvents: Boolean): GenerateTestData
     }
 
@@ -97,8 +97,6 @@ class GenerateTestData @AssistedInject constructor(
         }
     }
 
-    // Record, intentionally empty
-    @JvmRecord
     private data class TestMedicine(
         val name: String,
         val color: Int?,
