@@ -140,7 +140,9 @@ class SnoozeSettingsFragment : PreferencesFragment() {
                 preferencesDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
                 updateLocationPrefsVisibility(true)
                 if (preferencesDataSource.preferences.value.homeLocation != null) {
-                    geofenceRegistrar.registerHomeGeofence()
+                    if (!geofenceRegistrar.registerHomeGeofence(::onGeofenceRegistrationFailed)) {
+                        onGeofenceRegistrationFailed()
+                    }
                 }
             }
             .setNegativeButton(R.string.cancel, null)
@@ -182,9 +184,16 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     private fun onLocationPermissionsGranted() {
         updateLocationPrefsVisibility(true)
-        if (preferencesDataSource.preferences.value.homeLocation != null && !geofenceRegistrar.registerHomeGeofence()) {
-            resetLocationSnooze()
+        if (preferencesDataSource.preferences.value.homeLocation != null) {
+            if (!geofenceRegistrar.registerHomeGeofence(::onGeofenceRegistrationFailed)) {
+                onGeofenceRegistrationFailed()
+            }
         }
+    }
+
+    private fun onGeofenceRegistrationFailed() {
+        showInfoDialog(R.string.location_snooze_no_play_services)
+        resetLocationSnooze()
     }
 
     override fun onResume() {

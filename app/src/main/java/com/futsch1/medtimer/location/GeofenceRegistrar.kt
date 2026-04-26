@@ -27,7 +27,7 @@ class GeofenceRegistrar @Inject constructor(
     fun isLocationServiceAvailable(): Boolean =
         googleApiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
-    fun registerHomeGeofence(): Boolean {
+    fun registerHomeGeofence(onFailure: (() -> Unit)? = null): Boolean {
         if (!isLocationServiceAvailable()) {
             Log.w(LogTags.LOCATION, "Google Play Services unavailable, cannot register home geofence")
             return false
@@ -56,7 +56,10 @@ class GeofenceRegistrar @Inject constructor(
         return try {
             geofencingClient.addGeofences(request, buildGeofencePendingIntent())
                 .addOnSuccessListener { Log.i(LogTags.LOCATION, "Home geofence registered successfully") }
-                .addOnFailureListener { Log.e(LogTags.LOCATION, "Failed to add home geofence: ${it.message}") }
+                .addOnFailureListener {
+                    Log.e(LogTags.LOCATION, "Failed to add home geofence: ${it.message}")
+                    onFailure?.invoke()
+                }
             true
         } catch (e: SecurityException) {
             Log.e(LogTags.LOCATION, "Security exception registering home geofence: ${e.message}")
