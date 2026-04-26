@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.reminders
 
+import android.util.Log
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.location.GeofenceRegistrar
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import java.time.Instant
@@ -12,6 +14,7 @@ class LocationSnoozeProcessor @Inject constructor(
 ) {
     fun processLocationSnooze() {
         val pending = persistentDataDataSource.getPendingLocationSnoozes()
+        Log.d(LogTags.REMINDER, "Entered home location, restoring ${pending.size} snoozed reminders")
         for (data in pending) {
             data.remindInstant = Instant.now()
             alarmProcessor.setAlarmForReminderNotification(data)

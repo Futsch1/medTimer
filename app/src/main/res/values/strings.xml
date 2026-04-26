@@ -303,4 +303,5 @@
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
+    <string name="snooze_until_home">Snooze until home</string>
 </resources>

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.NotificationManager
 import android.content.Context
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
@@ -47,6 +48,11 @@ class BigReminderNotificationFactory @AssistedInject constructor(
         views.setOnClickPendingIntent(R.id.takenButton, intents.pendingTaken)
         views.setOnClickPendingIntent(R.id.skippedButton, intents.pendingSkipped)
         views.setOnClickPendingIntent(R.id.snoozeButton, intents.pendingSnooze)
+        if (intents.pendingLocationSnooze != null) {
+            views.setOnClickPendingIntent(R.id.locationSnoozeButton, intents.pendingLocationSnooze)
+        } else {
+            views.setViewVisibility(R.id.locationSnoozeButton, View.GONE)
+        }
         val isAnyOutOfStock = reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() }
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,

@@ -12,6 +12,7 @@ import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.RemoteInputReceiver
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
+import com.futsch1.medtimer.reminders.getLocationSnoozeIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.reminders.getSnoozeIntent
 import com.futsch1.medtimer.reminders.getTakenActionIntent
@@ -37,6 +38,8 @@ class NotificationIntentBuilder @AssistedInject constructor(
 
     val pendingSnooze = getSnoozePendingIntent()
     val actionSnoozeRemoteInput = getSnoozeActionRemoteInput()
+    val pendingLocationSnooze = getLocationSnoozePendingIntent()
+
     val pendingSkipped = getSkippedPendingIntent()
     val pendingTaken = getTakenPendingIntent()
     val actionTaken = getTakenActionRemoteInput()
@@ -92,6 +95,18 @@ class NotificationIntentBuilder @AssistedInject constructor(
                 reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
+    }
+
+    private fun getLocationSnoozePendingIntent(): PendingIntent? {
+        if (!preferencesDataSource.preferences.value.locationBasedSnooze || preferencesDataSource.preferences.value.homeLocation == null) {
+            return null
+        }
+
+        val snooze = getLocationSnoozeIntent(context, reminderNotification.reminderNotificationData)
+        return PendingIntent.getBroadcast(
+            context,
+            reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     private fun getSnoozeActionRemoteInput(): NotificationCompat.Action? {

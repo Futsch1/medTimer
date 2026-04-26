@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
  */
 open class SnoozeProcessor @Inject constructor(
     val alarmProcessor: AlarmProcessor,
-    val notificationProcessor: NotificationProcessor
+    val notificationProcessor: NotificationProcessor,
+    val persistentDataDataSource: PersistentDataDataSource
 ) {
 
     fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
@@ -28,6 +30,14 @@ open class SnoozeProcessor @Inject constructor(
 
         alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
 
+        notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
+    }
+
+    fun processLocationSnooze(reminderNotificationData: ReminderNotificationData) {
+        Log.d(LogTags.REMINDER, "Snoozing reminder until home: $reminderNotificationData")
+
+        alarmProcessor.cancelPendingReminderNotifications(reminderNotificationData)
+        persistentDataDataSource.addPendingLocationSnooze(reminderNotificationData)
         notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
     }
 }

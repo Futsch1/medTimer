@@ -13,6 +13,7 @@
         android:summary="@string/location_snooze_summary"
         android:title="@string/location_snooze"
         app:singleLineTitle="false"
+        android:icon="@drawable/geo_alt_fill"
         app:key="location_snooze_enabled" />
     <Preference
         android:title="@string/home_location"
@@ -20,5 +21,6 @@
         app:key="home_location" />
     <Preference
         android:title="@string/show_home_location_on_map"
-        app:key="show_home_location_on_map" />
+        app:key="show_home_location_on_map"
+        android:icon="@drawable/link"/>
 </androidx.preference.PreferenceScreen>

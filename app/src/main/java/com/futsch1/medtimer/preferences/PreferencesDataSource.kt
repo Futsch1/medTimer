@@ -12,7 +12,7 @@ import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.model.UserPreferences
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,9 +25,9 @@ import kotlin.time.toDuration
 
 class PreferencesDataSource @Inject constructor(
     @param:DefaultPreferences private val sharedPreferences: SharedPreferences,
-    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
+    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope,
+    private val gson: Gson
 ) : PreferenceDataStore() {
-    private val gson = GsonBuilder().create()
     val preferences: StateFlow<UserPreferences> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             trySend(getSettings())
@@ -56,7 +56,7 @@ class PreferencesDataSource @Inject constructor(
         sharedPreferences.edit { putString(HOME_LOCATION, gson.toJson(location)) }
     }
 
-    fun getHomeLocation(): HomeLocation? {
+    private fun getHomeLocation(): HomeLocation? {
         val json = sharedPreferences.getString(HOME_LOCATION, null) ?: return null
         return gson.fromJson(json, HomeLocation::class.java)
     }
@@ -153,7 +153,9 @@ class PreferencesDataSource @Inject constructor(
             ),
             noVibrationWhenSilent = sharedPreferences.getBoolean(NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
             automaticBackupInterval = BackupInterval.entries[sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")?.toInt() ?: 0],
-            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri()
+            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
+            locationBasedSnooze = sharedPreferences.getBoolean(LOCATION_SNOOZE_ENABLED, default.locationBasedSnooze),
+            homeLocation = getHomeLocation()
         )
     }
 

@@ -32,7 +32,7 @@ class GeofenceRegistrar @Inject constructor(
             Log.w(LogTags.LOCATION, "Google Play Services unavailable, cannot register home geofence")
             return false
         }
-        val homeLocation = preferencesDataSource.getHomeLocation() ?: run {
+        val homeLocation = preferencesDataSource.preferences.value.homeLocation ?: run {
             Log.w(LogTags.LOCATION, "No home location saved, cannot register geofence")
             return false
         }

@@ -107,6 +107,7 @@ abstract class ReminderNotificationFactory(
                 addSnoozeAction()
             }
         }
+        addLocationSnoozeAction()
     }
 
     private fun addSkippedAction() {
@@ -126,6 +127,15 @@ abstract class ReminderNotificationFactory(
         }
     }
 
+    private fun addLocationSnoozeAction() {
+        val pendingIntent = intents.pendingLocationSnooze
+        if (pendingIntent != null) {
+            builder.addAction(
+                R.drawable.geo_alt_fill, context.getString(R.string.snooze_until_home), pendingIntent
+            )
+        }
+    }
+
     private fun addTakenAction() {
         val action = intents.actionTaken
         if (action != null) {
@@ -136,5 +146,4 @@ abstract class ReminderNotificationFactory(
             )
         }
     }
-
 }

@@ -84,6 +84,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
                     ProcessorCode.Refill -> processRefill(intent)
                     ProcessorCode.StockHandling -> processStockHandling(intent)
                     ProcessorCode.Schedule -> scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    ProcessorCode.LocationSnooze -> snoozeProcessor.processLocationSnooze(ReminderNotificationData.fromBundle(intent.extras!!))
                 }
             } finally {
                 pendingResult.finish()

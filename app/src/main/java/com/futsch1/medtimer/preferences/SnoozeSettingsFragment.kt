@@ -81,7 +81,6 @@ class SnoozeSettingsFragment : PreferencesFragment() {
                 requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             } else {
                 geofenceRegistrar.unregisterHomeGeofence()
-                preferencesDataSource.clearHomeLocation()
                 updateLocationPrefsVisibility(false)
             }
             true
@@ -99,7 +98,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun setupShowOnMap() {
         val pref = preferenceScreen.findPreference<Preference>("show_home_location_on_map") ?: return
         pref.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
-            val loc = preferencesDataSource.getHomeLocation() ?: return@OnPreferenceClickListener true
+            val loc = preferencesDataSource.preferences.value.homeLocation ?: return@OnPreferenceClickListener true
             val uri = "geo:${loc.latitude},${loc.longitude}?q=${loc.latitude},${loc.longitude}".toUri()
             safeStartActivity(context, Intent(Intent.ACTION_VIEW, uri))
             true
@@ -140,7 +139,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
             .setPositiveButton(R.string.ok) { _, _ ->
                 preferencesDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
                 updateLocationPrefsVisibility(true)
-                if (preferencesDataSource.getHomeLocation() != null) {
+                if (preferencesDataSource.preferences.value.homeLocation != null) {
                     geofenceRegistrar.registerHomeGeofence()
                 }
             }
@@ -151,7 +150,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun updateLocationPrefsVisibility(locationSnoozeEnabled: Boolean) {
         val homeLocPref = preferenceScreen.findPreference<Preference>("home_location") ?: return
         val mapPref = preferenceScreen.findPreference<Preference>("show_home_location_on_map") ?: return
-        val hasHomeLocation = preferencesDataSource.getHomeLocation() != null
+        val hasHomeLocation = preferencesDataSource.preferences.value.homeLocation != null
 
         homeLocPref.isVisible = locationSnoozeEnabled
         homeLocPref.summary = if (hasHomeLocation) getString(R.string.home_location_set)
@@ -183,7 +182,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     private fun onLocationPermissionsGranted() {
         updateLocationPrefsVisibility(true)
-        if (preferencesDataSource.getHomeLocation() != null && !geofenceRegistrar.registerHomeGeofence()) {
+        if (preferencesDataSource.preferences.value.homeLocation != null && !geofenceRegistrar.registerHomeGeofence()) {
             resetLocationSnooze()
         }
     }
