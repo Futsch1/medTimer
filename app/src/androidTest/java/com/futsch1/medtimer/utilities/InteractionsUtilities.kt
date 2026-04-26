@@ -10,6 +10,10 @@ fun clickDialogPositiveButton() {
     val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     device.waitForView(By.res("android:id/button1"), 1_000)
     BaristaDialogInteractions.clickDialogPositiveButton()
+    device.waitForIdle()
+    if (null != device.findObject(By.res("android:id/button1"))) {
+        BaristaDialogInteractions.clickDialogPositiveButton()
+    }
 }
 
 fun openNotification(): AutoCloseable {
