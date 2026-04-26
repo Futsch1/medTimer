@@ -191,6 +191,9 @@
     <string name="login">Πρόσβαση στην εφαρμογή MedTimer με ταυτοποίηση μέσω βιομετρικών δεδομένων</string>
     <string name="privacy_settings">Ρυθμίσεις ιδιωτικότητας</string>
     <string name="hide_med_name">Απόκρυψη ονομασίας φαρμάκου κατά την ειδοποίηση</string>
+    <string name="disable_widget">Απενεργοποίηση γραφικών στοιχείων αρχικής οθόνης</string>
+    <string name="disable_widget_summary">Αποτροπή εμφάνισης ευαίσθητων πληροφοριών φαρμάκων από γραφικά στοιχεία στην αρχική οθόνη</string>
+    <string name="widget_disabled_privacy">Τα γραφικά στοιχεία είναι απενεργοποιημένα για λόγους απορρήτου — ανοίξτε την εφαρμογή για προβολή υπενθυμίσεων</string>
     <string name="re_raise_event">Επανενεργοποίηση ειδοποίησης συμβάντος</string>
     <string name="notification_reminder_settings">Ρυθμίσεις ειδοποίησης και υπενθύμισης</string>
     <string name="display_settings">Ρυθμίσεις προβολής</string>

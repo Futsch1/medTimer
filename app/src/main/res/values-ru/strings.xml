@@ -199,6 +199,9 @@
     <string name="login">Вход в MedTimer с помощью биометрической аутентификации</string>
     <string name="privacy_settings">Настройки конфиденциальности</string>
     <string name="hide_med_name">Скрыть название лекарства в уведомлении</string>
+    <string name="disable_widget">Отключить виджеты главного экрана</string>
+    <string name="disable_widget_summary">Запретить виджетам отображать конфиденциальную информацию о лекарствах на главном экране</string>
+    <string name="widget_disabled_privacy">Виджеты отключены для защиты конфиденциальности — откройте приложение для просмотра напоминаний</string>
     <string name="re_raise_event">Повторно вызвать событие</string>
     <string name="notification_reminder_settings">Настройки уведомлений и напоминаний</string>
     <string name="display_settings">Настройки дисплея</string>

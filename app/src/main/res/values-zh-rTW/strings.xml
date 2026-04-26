@@ -187,6 +187,9 @@
     <string name="privacy_settings">隱私設定</string>
     <string name="login">使用生物辨識登入 MedTimer</string>
     <string name="hide_med_name">在通知中隱藏藥品名稱</string>
+    <string name="disable_widget">停用主畫面小工具</string>
+    <string name="disable_widget_summary">防止小工具在主畫面顯示敏感的藥物資訊</string>
+    <string name="widget_disabled_privacy">小工具因隱私已停用 — 開啟應用程式查看提醒</string>
     <string name="re_raise_event">重新顯示事件</string>
     <string name="notification_reminder_settings">通知與提醒設定</string>
     <string name="display_settings">顯示設定</string>

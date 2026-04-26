@@ -192,6 +192,9 @@
     <string name="login">Anmeldung bei MedTimer mit biometrischer Authentifizierung</string>
     <string name="privacy_settings">Datenschutz-Einstellungen</string>
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
+    <string name="disable_widget">Widgets auf dem Startbildschirm deaktivieren</string>
+    <string name="disable_widget_summary">Verhindert, dass Widgets sensible Medikamenteninformationen auf dem Startbildschirm anzeigen</string>
+    <string name="widget_disabled_privacy">Widgets aus Datenschutzgründen deaktiviert — App öffnen, um Erinnerungen anzuzeigen</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
     <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
     <string name="display_settings">Anzeigeeinstellungen</string>
