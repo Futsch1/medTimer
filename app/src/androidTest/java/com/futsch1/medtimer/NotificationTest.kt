@@ -384,6 +384,8 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.snooze_settings)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
+        pressBack()
+        clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.snooze)
         pressBack()

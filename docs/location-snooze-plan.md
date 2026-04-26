@@ -1,6 +1,7 @@
 # Plan: Location-Based Snooze ("Snooze Until Home") — Support Classes
 
 ## Context
+
 Users want to snooze a medication reminder and have it re-fire automatically when they arrive home. This plan covers all support infrastructure (location classes, DI module, manifest, Gradle) so the user can wire in the UI themselves.
 
 The app has no existing location code. Reminders flow through `AlarmProcessor` → `ReminderProcessorBroadcastReceiver`. The standard snooze path lives in `SnoozeProcessor`. Crucially, `AlarmProcessor.setAlarmForReminderNotification()` already short-circuits and fires a broadcast immediately if the scheduled time is <= now, which the new processor exploits.
@@ -20,12 +21,15 @@ Pending snoozed reminders are persisted in `SharedPreferences("medTimer")` as JS
 All new files go in `app/src/main/java/com/futsch1/medtimer/location/`.
 
 ### `HomeLocation.kt`
+
 ```kotlin
 data class HomeLocation(val latitude: Double, val longitude: Double, val radiusMeters: Float = 150f)
 ```
+
 Pure data carrier, no dependencies.
 
 ### `HomeLocationStore.kt`
+
 Persists home location and the list of pending location-snoozed reminders.
 
 ```kotlin
@@ -42,11 +46,13 @@ class HomeLocationStore @Inject constructor(
     fun clearAllPendingLocationSnoozes()
 }
 ```
+
 - Keys: `"home_location"` (JSON string), `"pending_location_snoozes"` (JSON array)
 - `ReminderNotificationData` is serialized via a private wrapper `SerializablePendingSnooze(reminderIds: IntArray, reminderEventIds: IntArray, notificationId: Int, remindInstantEpochSecond: Long)` to avoid `Instant` serialization issues
 - Uses `@MedTimerPreferencess` qualifier (note: intentionally double-`s` to match existing code in `DatastoreModule.kt`)
 
 ### `GeofenceRegistrar.kt`
+
 Wraps all `GeofencingClient` calls.
 
 ```kotlin
@@ -64,6 +70,7 @@ class GeofenceRegistrar @Inject constructor(
     private fun hasRequiredPermissions(): Boolean  // checks ACCESS_FINE_LOCATION + ACCESS_BACKGROUND_LOCATION on API 29+
 }
 ```
+
 - `isLocationServiceAvailable()` uses `GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)` as an upfront check. Returns `false` on devices without Google Play Services (some Huawei, Amazon Fire, custom ROMs). The UI integration should call this first and hide/disable the "Snooze until home" option if it returns `false`.
 - `registerHomeGeofence()` calls `isLocationServiceAvailable()` first and returns `false` immediately if Play Services are absent. Even without this check, `addGeofences` is wrapped in try/catch on `ApiException` as a safety net. The feature degrades gracefully — no crash, the snooze simply isn't registered.
 - Transition type: `GEOFENCE_TRANSITION_ENTER` only (avoids duplicate DWELL/EXIT firings)
@@ -71,6 +78,7 @@ class GeofenceRegistrar @Inject constructor(
 - `PendingIntent` flags: `FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT`, request code 0 (one home geofence)
 
 ### `LocationSnoozeProcessor.kt`
+
 Fires all pending location-snoozed reminders when the geofence triggers.
 
 ```kotlin
@@ -82,6 +90,7 @@ class LocationSnoozeProcessor @Inject constructor(
     fun processLocationSnooze()
 }
 ```
+
 - Reads `homeLocationStore.getPendingLocationSnoozes()`
 - For each `ReminderNotificationData`: sets `remindInstant = Instant.now()`, then calls `alarmProcessor.setAlarmForReminderNotification(data)` — this exploits the existing short-circuit in `AlarmProcessor.kt:44` that fires a broadcast immediately when time <= now, triggering the standard `Reminder` → `ReminderNotificationProcessor` path with no new code paths
 - Clears pending store
@@ -89,6 +98,7 @@ class LocationSnoozeProcessor @Inject constructor(
 - No coroutine needed: `setAlarmForReminderNotification` only posts a broadcast synchronously
 
 ### `GeofenceBroadcastReceiver.kt`
+
 Receives the OS geofence transition event.
 
 ```kotlin
@@ -105,6 +115,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     }
 }
 ```
+
 - `@AndroidEntryPoint` enables Hilt injection in `BroadcastReceiver`
 - `onReceive` is main-thread; `processLocationSnooze()` only sends broadcasts (no I/O), so no `goAsync()` needed
 
@@ -126,6 +137,7 @@ object LocationModule {
     fun provideGson(): Gson = GsonBuilder().create()
 }
 ```
+
 `GeofencingClient` must be singleton (add/remove must use same instance). `Gson` singleton is safe — no other module provides it; existing usages create local instances.
 
 ---
@@ -139,6 +151,7 @@ No new `ProcessorCode` enum entry is needed — `GeofenceBroadcastReceiver` rece
 ## AndroidManifest.xml Changes
 
 **Add permissions** (after existing `<uses-permission>` block):
+
 ```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -146,9 +159,11 @@ No new `ProcessorCode` enum entry is needed — `GeofenceBroadcastReceiver` rece
     android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
     android:minSdkVersion="29" />
 ```
+
 Background location is API 29+ only (`android:minSdkVersion="29"` suppresses lint on API 28 devices). On API 29+ users must grant coarse/fine first, then background in a separate flow — the UI implementation must handle this two-step request.
 
 **Register receiver** (inside `<application>`, alongside other receivers):
+
 ```xml
 <receiver
     android:name=".location.GeofenceBroadcastReceiver"
@@ -159,6 +174,7 @@ Background location is API 29+ only (`android:minSdkVersion="29"` suppresses lin
     </intent-filter>
 </receiver>
 ```
+
 `exported="false"` is correct — geofencing delivers via `PendingIntent`, not public broadcast.
 
 ---
@@ -166,6 +182,7 @@ Background location is API 29+ only (`android:minSdkVersion="29"` suppresses lin
 ## Gradle Changes
 
 **`gradle/libs.versions.toml`** — add:
+
 ```toml
 [versions]
 playServicesLocation = "21.3.0"
@@ -175,6 +192,7 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 ```
 
 **`app/build.gradle.kts`** — add to `dependencies`:
+
 ```kotlin
 implementation(libs.play.services.location)
 ```
@@ -182,6 +200,7 @@ implementation(libs.play.services.location)
 ---
 
 ## Boot Handling Note
+
 Geofences are cleared by the OS after a device reboot. The existing `Autostart.kt` / `AutostartService.kt` handles `BOOT_COMPLETED` and restores pending notifications. The user should also add a call to `geofenceRegistrar.registerHomeGeofence()` there when `homeLocationStore.getPendingLocationSnoozes().isNotEmpty()`. This is part of the user's integration work.
 
 ---
@@ -202,6 +221,7 @@ All test files go in `app/src/test/java/com/futsch1/medtimer/location/`. Follow 
 `GeofencingClient` is injected into `GeofenceRegistrar` via the `@Inject constructor`, making it trivially mockable with `mock<GeofencingClient>()` — no special test module needed.
 
 ### `HomeLocationStoreTest.kt`
+
 Use a real `SharedPreferences` from Robolectric (`ApplicationProvider.getApplicationContext<Context>().getSharedPreferences("test", Context.MODE_PRIVATE)`) to test actual serialization behavior, not just mock calls.
 
 - `saveHomeLocation` → `getHomeLocation` round-trips correctly
@@ -212,6 +232,7 @@ Use a real `SharedPreferences` from Robolectric (`ApplicationProvider.getApplica
 - `clearAllPendingLocationSnoozes` empties the list
 
 ### `GeofenceRegistrarTest.kt`
+
 Use `mock<GeofencingClient>()`, `mock<HomeLocationStore>()`, and a Robolectric `Context`.
 
 - `registerHomeGeofence` returns `false` when `getHomeLocation()` returns `null`
@@ -221,6 +242,7 @@ Use `mock<GeofencingClient>()`, `mock<HomeLocationStore>()`, and a Robolectric `
 - `registerHomeGeofence` returns `false` (no crash) when `addGeofences` throws `ApiException`
 
 ### `LocationSnoozeProcessorTest.kt`
+
 Use `mock<AlarmProcessor>()`, `mock<HomeLocationStore>()`, `mock<GeofenceRegistrar>()`.
 
 - `processLocationSnooze` with empty pending list: no `setAlarmForReminderNotification` calls, `unregisterHomeGeofence` still called
@@ -229,6 +251,7 @@ Use `mock<AlarmProcessor>()`, `mock<HomeLocationStore>()`, `mock<GeofenceRegistr
 - Verify `remindInstant` is set to a time <= `Instant.now()` before the `setAlarmForReminderNotification` call (i.e., the immediate-fire path is triggered)
 
 ### `GeofenceBroadcastReceiverTest.kt`
+
 Use `mock<LocationSnoozeProcessor>()`. Construct the receiver directly and call `onReceive` with a crafted `Intent`.
 
 - `GEOFENCE_TRANSITION_ENTER` event → `processLocationSnooze()` called once
@@ -243,6 +266,7 @@ Note: `GeofencingEvent.fromIntent()` is a static factory. Use Robolectric's shad
 ## Verification
 
 After implementation, test end-to-end by:
+
 1. Set home location via the preferences UI
 2. Grant all location permissions
 3. Trigger a reminder and press "Snooze until home"
