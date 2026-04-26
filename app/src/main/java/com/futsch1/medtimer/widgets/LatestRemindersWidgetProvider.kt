@@ -1,15 +1,34 @@
 package com.futsch1.medtimer.widgets
 
 import android.content.Context
+import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.preferences.PreferencesDataSource
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
-class LatestRemindersWidgetProvider @Inject constructor(private val latestRemindersLineProvider: LatestRemindersLineProvider) : WidgetProvider() {
+@AndroidEntryPoint
+class LatestRemindersWidgetProvider @Inject constructor() : WidgetProvider() {
+
+    @Inject
+    lateinit var latestRemindersLineProvider: LatestRemindersLineProvider
+
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
     override fun getWidgetImpl(context: Context): WidgetImpl {
+        val lineProvider = if (preferencesDataSource.preferences.value.disableWidget) {
+            WidgetLineProvider { line, _ ->
+                if (line == 0) SpannableStringBuilder(context.getString(R.string.widget_disabled_privacy))
+                else SpannableStringBuilder()
+            }
+        } else {
+            latestRemindersLineProvider
+        }
         return WidgetImpl(
             context,
-            latestRemindersLineProvider,
+            lineProvider,
             WidgetIds(
                 R.id.latestReminderWidget,
                 R.layout.latest_reminders_widget,

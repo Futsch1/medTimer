@@ -18,4 +18,10 @@
         android:key="hide_med_name"
         android:title="@string/hide_med_name"
         app:singleLineTitle="false"/>
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="disable_widget"
+        android:title="@string/disable_widget"
+        android:summary="@string/disable_widget_summary"
+        app:singleLineTitle="false"/>
 </androidx.preference.PreferenceScreen>
