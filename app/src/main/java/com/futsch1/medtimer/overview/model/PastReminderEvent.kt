@@ -3,6 +3,7 @@ package com.futsch1.medtimer.overview.model
 import android.text.Spanned
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -12,6 +13,7 @@ import java.time.Instant
 class PastReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
+    val persistentDataDataSource: PersistentDataDataSource,
     @Assisted val reminderEvent: ReminderEvent
 ) :
     OverviewEvent(preferencesDataSource) {
@@ -39,7 +41,13 @@ class PastReminderEvent @AssistedInject constructor(
     private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
         return when (reminderEvent.status) {
             ReminderEvent.ReminderStatus.RAISED -> {
-                if (reminderEvent.remindedTimestamp <= Instant.now()) OverviewState.RAISED else OverviewState.PENDING
+                if (reminderEvent.remindedTimestamp <= Instant.now()) {
+                    if (isLocationSnooze(reminderEvent)) {
+                        OverviewState.LOCATION
+                    } else {
+                        OverviewState.RAISED
+                    }
+                } else OverviewState.PENDING
             }
 
             ReminderEvent.ReminderStatus.TAKEN -> OverviewState.TAKEN
@@ -47,5 +55,9 @@ class PastReminderEvent @AssistedInject constructor(
             ReminderEvent.ReminderStatus.ACKNOWLEDGED -> OverviewState.TAKEN
             ReminderEvent.ReminderStatus.DELETED -> OverviewState.SKIPPED
         }
+    }
+
+    private fun isLocationSnooze(reminderEvent: ReminderEvent): Boolean {
+        return persistentDataDataSource.getPendingLocationSnoozes().any { it.reminderEventIds.contains(reminderEvent.reminderEventId) }
     }
 }
