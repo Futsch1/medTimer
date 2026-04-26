@@ -10,6 +10,7 @@ Recordatorios flexibles y personalizados:
 - Cree recordatorios flexibles con descansos y días específicos (por ejemplo, para píldoras anticonceptivas).
 - Modo fin de semana: retrase los recordatorios a una hora definida en los días seleccionados.
 - Posponga notificaciones para más tarde o recíbalas de forma repetida.
+- Posposición según ubicación: recibe una nueva notificación al llegar a casa.
 - Añada dosis adicionales en cualquier momento.
 - Cree recordatorios basados en intervalos, recordatorios que se encadenan entre sí o recordatorios por intervalos limitados por una hora de inicio y fin cada día.
 - Utilice recordatorios tipo alarma para garantizar la notificación incluso cuando el dispositivo esté en modo silencio.

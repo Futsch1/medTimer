@@ -44,6 +44,7 @@
     <string name="location_snooze_no_play_services">Stedsbasert snooze krever Google Play Services, som ikke er tilgjengelig på denne enheten</string>
     <string name="location_snooze_no_home_location">Angi et hjemsted før du aktiverer stedsbasert snooze</string>
     <string name="location_snooze_background_permission">For å bli varslet ved hjemkomst, tillat MedTimer å få tilgang til plassering i bakgrunnen</string>
+    <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="snooze_settings">Snooze-innstillinger</string>
     <string name="snooze_settings_summary">Snooze-varighet og stedsbasert snooze</string>
     <string name="home_location">Hjemsted</string>

@@ -294,6 +294,7 @@
     <string name="location_snooze_no_play_services">La répétition basée sur la localisation nécessite Google Play Services, qui n\'est pas disponible sur cet appareil</string>
     <string name="location_snooze_no_home_location">Veuillez définir un lieu de domicile avant d\'activer la répétition basée sur la localisation</string>
     <string name="location_snooze_background_permission">Pour être notifié en rentrant à la maison, autorisez MedTimer à accéder à la localisation en arrière-plan</string>
+    <string name="snooze_until_home">Répéter jusqu\'à la maison</string>
     <string name="snooze_settings">Paramètres de répétition</string>
     <string name="snooze_settings_summary">Intervalle de répétition et répétition basée sur la localisation</string>
     <string name="home_location">Position du domicile</string>

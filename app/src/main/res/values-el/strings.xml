@@ -289,6 +289,7 @@
     <string name="location_snooze_no_play_services">Η αναβολή βάσει τοποθεσίας απαιτεί τις Υπηρεσίες Google Play, οι οποίες δεν είναι διαθέσιμες σε αυτή τη συσκευή</string>
     <string name="location_snooze_no_home_location">Ορίστε μια τοποθεσία σπιτιού πριν ενεργοποιήσετε την αναβολή βάσει τοποθεσίας</string>
     <string name="location_snooze_background_permission">Για επανειδοποίηση κατά την άφιξη στο σπίτι, επιτρέψτε στο MedTimer την πρόσβαση στην τοποθεσία στο παρασκήνιο</string>
+    <string name="snooze_until_home">Αναβολή έως επιστροφή στο σπίτι</string>
     <string name="snooze_settings">Ρυθμίσεις αναβολής</string>
     <string name="snooze_settings_summary">Διάρκεια αναβολής και αναβολή βάσει τοποθεσίας</string>
     <string name="home_location">Τοποθεσία σπιτιού</string>

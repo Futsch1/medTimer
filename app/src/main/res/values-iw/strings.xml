@@ -294,6 +294,7 @@
     <string name="location_snooze_no_play_services">נודניק מבוסס מיקום דורש שירותי Google Play, שאינם זמינים במכשיר זה</string>
     <string name="location_snooze_no_home_location">אנא הגדר מיקום בית לפני הפעלת הנודניק המבוסס על מיקום</string>
     <string name="location_snooze_background_permission">כדי לקבל הודעה חוזרת עם החזרה הביתה, אפשר ל-MedTimer גישה למיקום ברקע</string>
+    <string name="snooze_until_home">נודניק עד הבית</string>
     <string name="snooze_settings">הגדרות נודניק</string>
     <string name="snooze_settings_summary">משך זמן הדחייה ונודניק מבוסס מיקום</string>
     <string name="home_location">מיקום הבית</string>

@@ -299,6 +299,7 @@
     <string name="location_snooze_no_play_services">Odložení na základě polohy vyžaduje Služby Google Play, které nejsou na tomto zařízení dostupné</string>
     <string name="location_snooze_no_home_location">Před aktivací odložení na základě polohy nastavte domácí polohu</string>
     <string name="location_snooze_background_permission">Aby vás MedTimer znovu upozornil po příchodu domů, povolte přístup k poloze na pozadí</string>
+    <string name="snooze_until_home">Odložit do příchodu domů</string>
     <string name="snooze_settings">Nastavení odložení</string>
     <string name="snooze_settings_summary">Doba odložení a odložení na základě polohy</string>
     <string name="home_location">Domovská poloha</string>

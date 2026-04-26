@@ -289,6 +289,7 @@
     <string name="location_snooze_no_play_services">Отлагането по местоположение изисква Google Play Services, което не е налично на това устройство</string>
     <string name="location_snooze_no_home_location">Моля, задайте домашно местоположение преди да активирате отлагането по местоположение</string>
     <string name="location_snooze_background_permission">За повторно известяване при завръщане вкъщи, разрешете на MedTimer достъп до местоположението на заден план</string>
+    <string name="snooze_until_home">Отлагане до завръщане вкъщи</string>
     <string name="snooze_settings">Настройки за отлагане</string>
     <string name="snooze_settings_summary">Продължителност на отлагането и отлагане по местоположение</string>
     <string name="home_location">Домашно местоположение</string>

@@ -294,6 +294,7 @@
     <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>
     <string name="location_snooze_no_home_location">Por favor, defina uma localização de casa antes de ativar a soneca baseada em localização</string>
     <string name="location_snooze_background_permission">Para ser notificado ao chegar em casa, permita que o MedTimer acesse a localização em segundo plano</string>
+    <string name="snooze_until_home">Soneca até chegar em casa</string>
     <string name="snooze_settings">Configurações de soneca</string>
     <string name="snooze_settings_summary">Duração do adiamento e soneca baseada em localização</string>
     <string name="home_location">Localização de casa</string>
