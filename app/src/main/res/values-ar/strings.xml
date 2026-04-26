@@ -216,6 +216,9 @@
     <string name="login">تسجيل الدخول إلى منبه الدواء باستخدام المصادقة البيومترية</string>
     <string name="privacy_settings">إعدادات الخصوصية</string>
     <string name="hide_med_name">أخفِ اسم الدواء في الإشعار</string>
+    <string name="disable_widget">تعطيل أدوات الشاشة الرئيسية</string>
+    <string name="disable_widget_summary">منع الأدوات من عرض معلومات الدواء الحساسة على الشاشة الرئيسية</string>
+    <string name="widget_disabled_privacy">الأدوات معطّلة للحماية — افتح التطبيق لعرض التذكيرات</string>
     <string name="re_raise_event">أعد إظهار الحدث</string>
     <string name="notification_reminder_settings">إعدادات الإشعارات والتذكيرات</string>
     <string name="display_settings">إعدادات العرض</string>

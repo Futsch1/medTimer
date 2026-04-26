@@ -150,6 +150,9 @@
     <string name="add_tag">Adicionar etiqueta</string>
     <string name="override_dnd_summary">Reproduz sons de notificação se apenas vibrar estiver ativado ou não perturbe sem vibrar ou silenciar</string>
     <string name="hide_med_name">Ocultar nome do medicamento na notificação</string>
+    <string name="disable_widget">Desativar widgets da tela inicial</string>
+    <string name="disable_widget_summary">Impedir que os widgets exibam informações sensíveis sobre medicamentos na tela inicial</string>
+    <string name="widget_disabled_privacy">Widgets desativados por privacidade — abra o aplicativo para ver os lembretes</string>
     <string name="display_settings">Configurações de exibição</string>
     <string name="use_relative_date_time">Data/hora relativa</string>
     <string name="sticky_on_lockscreen">Lembretes persistentes na tela de bloqueio</string>

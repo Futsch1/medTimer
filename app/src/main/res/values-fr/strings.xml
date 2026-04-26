@@ -197,6 +197,9 @@
     <string name="login">Se connecter à MedTimer en utilisant l\'authentification biométrique</string>
     <string name="privacy_settings">Paramètres de confidentialité</string>
     <string name="hide_med_name">Cacher le nom du médicament dans la notification</string>
+    <string name="disable_widget">Désactiver les widgets de l\'écran d\'accueil</string>
+    <string name="disable_widget_summary">Empêcher les widgets d\'afficher des informations sensibles sur les médicaments sur l\'écran d\'accueil</string>
+    <string name="widget_disabled_privacy">Widgets désactivés pour la confidentialité — ouvrez l\'application pour voir les rappels</string>
     <string name="re_raise_event">Redéclencher l\'événement</string>
     <string name="notification_reminder_settings">Paramètres de notification et de rappel</string>
     <string name="display_settings">Paramètres d\'affichage</string>

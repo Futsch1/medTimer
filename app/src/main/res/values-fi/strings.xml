@@ -193,6 +193,9 @@
     <string name="login">Kirjaudu MedTimeriin käyttämällä biometrista tunnistautumista</string>
     <string name="privacy_settings">Yksityisyysasetukset</string>
     <string name="hide_med_name">Piilota lääkkeen nimi ilmoituksessa</string>
+    <string name="disable_widget">Poista aloitusnäytön widgetit käytöstä</string>
+    <string name="disable_widget_summary">Estä widgettejä näyttämästä arkaluonteisia lääketietoja aloitusnäytöllä</string>
+    <string name="widget_disabled_privacy">Widgetit poistettu käytöstä yksityisyydensuojan vuoksi — avaa sovellus nähdäksesi muistutukset</string>
     <string name="re_raise_event">Nosta tapahtuma uudelleen</string>
     <string name="notification_reminder_settings">Ilmoitus- ja muistutusasetukset</string>
     <string name="display_settings">Näyttöasetukset</string>

@@ -203,6 +203,9 @@
     <string name="login">Přihlásit se do MedTimer s použitím biometrie</string>
     <string name="privacy_settings">Nastavení soukromí</string>
     <string name="hide_med_name">Skrýt jméno léku v notifikaci</string>
+    <string name="disable_widget">Zakázat widgety na domovské obrazovce</string>
+    <string name="disable_widget_summary">Zabránit widgetům zobrazovat citlivé informace o léčivech na domovské obrazovce</string>
+    <string name="widget_disabled_privacy">Widgety zakázány z důvodu ochrany soukromí — otevřete aplikaci pro zobrazení připomínek</string>
     <string name="re_raise_event">Znovu vyvolat událost</string>
     <string name="notification_reminder_settings">Nastavení notifikací a připomenutí</string>
     <string name="display_settings">Nastavení zobrazení</string>

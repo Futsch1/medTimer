@@ -192,6 +192,9 @@
     <string name="login">Aanmelden bij MedTimer met biometrische verificatie</string>
     <string name="privacy_settings">Privacy-instellingen</string>
     <string name="hide_med_name">Verberg medicijnnaam in melding</string>
+    <string name="disable_widget">Widgets op startscherm uitschakelen</string>
+    <string name="disable_widget_summary">Voorkom dat widgets gevoelige medicatie-informatie weergeven op het startscherm</string>
+    <string name="widget_disabled_privacy">Widgets uitgeschakeld voor privacy — open de app om herinneringen te bekijken</string>
     <string name="re_raise_event">De gebeurtenis opnieuw activeren</string>
     <string name="notification_reminder_settings">Instellingen voor meldingen en herinneringen</string>
     <string name="display_settings">Weergave-instellingen</string>
