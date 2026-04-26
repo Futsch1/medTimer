@@ -27,7 +27,7 @@ class GeofenceBroadcastReceiverTest {
     }
 
     @Test
-    fun `GEOFENCE_TRANSITION_ENTER triggers processLocationSnooze`() {
+    fun enterTransitionTriggersProcessing() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(false)
         whenever(event.geofenceTransition).thenReturn(Geofence.GEOFENCE_TRANSITION_ENTER)
@@ -38,7 +38,7 @@ class GeofenceBroadcastReceiverTest {
     }
 
     @Test
-    fun `GEOFENCE_TRANSITION_EXIT does not trigger processLocationSnooze`() {
+    fun exitTransitionDoesNotTriggerProcessing() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(false)
         whenever(event.geofenceTransition).thenReturn(Geofence.GEOFENCE_TRANSITION_EXIT)
@@ -49,7 +49,7 @@ class GeofenceBroadcastReceiverTest {
     }
 
     @Test
-    fun `error event does not trigger processLocationSnooze`() {
+    fun errorEventDoesNotTriggerProcessing() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(true)
         whenever(event.errorCode).thenReturn(1)

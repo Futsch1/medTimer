@@ -297,11 +297,9 @@
     <string name="location_snooze">Відкласти за місцезнаходженням</string>
     <string name="location_snooze_summary">Повторно повідомити при поверненні додому після відкладення</string>
     <string name="location_snooze_no_play_services">Відкладення за місцезнаходженням вимагає Google Play Services, які недоступні на цьому пристрої</string>
-    <string name="location_snooze_no_home_location">Будь ласка, встановіть домашнє місцезнаходження перед увімкненням відкладення за місцезнаходженням</string>
     <string name="location_snooze_background_permission">Щоб отримувати сповіщення при поверненні додому, дозвольте MedTimer доступ до місцезнаходження у фоновому режимі</string>
     <string name="snooze_until_home">Відкласти до повернення додому</string>
     <string name="snooze_settings">Налаштування відкладення</string>
-    <string name="snooze_settings_summary">Тривалість відкладення та відкладення за місцезнаходженням</string>
     <string name="home_location">Домашнє місцезнаходження</string>
     <string name="home_location_not_set">Не задано</string>
     <string name="home_location_set">Задано</string>

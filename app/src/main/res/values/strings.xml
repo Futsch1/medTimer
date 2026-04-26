@@ -44,7 +44,6 @@
     <string name="location_snooze">Location-based snooze</string>
     <string name="location_snooze_summary">Re-notify when arriving home after snoozing</string>
     <string name="location_snooze_no_play_services">Location-based snooze requires Google Play Services, which is not available on this device</string>
-    <string name="location_snooze_no_home_location">Please set a home location before enabling location-based snooze</string>
     <string name="location_snooze_background_permission">To re-notify when arriving home, allow MedTimer to access location in the background</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
@@ -205,7 +204,6 @@
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
     <string name="snooze_settings">Snooze settings</string>
-    <string name="snooze_settings_summary">Snooze duration and location snooze</string>
     <string name="home_location">Home location</string>
     <string name="home_location_not_set">Not set</string>
     <string name="home_location_set">Set</string>

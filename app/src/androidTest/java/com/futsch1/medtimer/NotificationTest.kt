@@ -381,7 +381,7 @@ class NotificationTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.tab_settings)
-        clickOn(R.string.notification_reminder_settings)
+        clickOn(R.string.snooze_settings)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
         clickOn(R.string.dismiss_notification_action)

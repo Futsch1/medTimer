@@ -37,12 +37,12 @@ class PersistentDataDataSourcePendingSnoozeTest {
     }
 
     @Test
-    fun `getPendingLocationSnoozes returns empty list when nothing saved`() {
+    fun getPendingSnoozeReturnsEmptyListInitially() {
         assertTrue(dataSource.getPendingLocationSnoozes().isEmpty())
     }
 
     @Test
-    fun `addPendingLocationSnooze and getPendingLocationSnoozes round-trip`() {
+    fun addAndGetPendingSnoozeRoundTrip() {
         val data = ReminderNotificationData(
             remindInstant = Instant.ofEpochSecond(1234567890L),
             reminderIds = listOf(1, 2),
@@ -61,7 +61,7 @@ class PersistentDataDataSourcePendingSnoozeTest {
     }
 
     @Test
-    fun `multiple addPendingLocationSnooze calls accumulate entries`() {
+    fun multiplePendingSnoozesAccumulate() {
         dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
         dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
         dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), listOf(3), mutableListOf(30), 3))
@@ -70,7 +70,7 @@ class PersistentDataDataSourcePendingSnoozeTest {
     }
 
     @Test
-    fun `clearAllPendingLocationSnoozes empties the list`() {
+    fun clearAllPendingSnoozesEmptiesList() {
         dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
         dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
 

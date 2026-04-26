@@ -185,11 +185,9 @@
     <string name="location_snooze">Staðsetningarbundið snooze</string>
     <string name="location_snooze_summary">Tilkynna aftur við heimkomu eftir snooze</string>
     <string name="location_snooze_no_play_services">Staðsetningarbundið snooze krefst Google Play Services, sem er ekki tiltækt á þessum tæki</string>
-    <string name="location_snooze_no_home_location">Vinsamlegast stilltu heimastaðsetningu áður en þú virkjar staðsetningarbundið snooze</string>
     <string name="location_snooze_background_permission">Til að fá tilkynningu við heimkomu skaltu leyfa MedTimer að fá aðgang að staðsetningu í bakgrunni</string>
     <string name="snooze_until_home">Snooze þar til heim</string>
     <string name="snooze_settings">Snooze-stillingar</string>
-    <string name="snooze_settings_summary">Snooze-tími og staðsetningarbundið snooze</string>
     <string name="home_location">Heimilisstaðsetning</string>
     <string name="home_location_not_set">Ekki stillt</string>
     <string name="home_location_set">Stillt</string>

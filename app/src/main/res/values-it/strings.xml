@@ -292,11 +292,9 @@
     <string name="location_snooze">Posticipo basato sulla posizione</string>
     <string name="location_snooze_summary">Rinotifica al rientro a casa dopo aver posticipato</string>
     <string name="location_snooze_no_play_services">Il posticipo basato sulla posizione richiede Google Play Services, che non è disponibile su questo dispositivo</string>
-    <string name="location_snooze_no_home_location">Imposta una posizione casa prima di abilitare il posticipo basato sulla posizione</string>
     <string name="location_snooze_background_permission">Per ricevere notifiche al rientro a casa, consenti a MedTimer di accedere alla posizione in background</string>
     <string name="snooze_until_home">Posticipa fino al ritorno a casa</string>
     <string name="snooze_settings">Impostazioni del posticipo</string>
-    <string name="snooze_settings_summary">Durata del posticipo e posticipo basato sulla posizione</string>
     <string name="home_location">Posizione di casa</string>
     <string name="home_location_not_set">Non impostata</string>
     <string name="home_location_set">Impostata</string>

@@ -35,7 +35,7 @@ class LocationSnoozeProcessorTest {
     }
 
     @Test
-    fun `processLocationSnooze with empty pending list does not call setAlarmForReminderNotification`() {
+    fun emptyPendingList() {
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(emptyList())
 
         processor.processLocationSnooze()
@@ -46,7 +46,7 @@ class LocationSnoozeProcessorTest {
     }
 
     @Test
-    fun `processLocationSnooze fires alarm for single pending snooze`() {
+    fun singlePendingSnooze() {
         val futureInstant = Instant.now().plusSeconds(3600)
         val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
@@ -59,7 +59,7 @@ class LocationSnoozeProcessorTest {
     }
 
     @Test
-    fun `processLocationSnooze sets remindInstant to now before firing alarm`() {
+    fun remindInstant() {
         val futureInstant = Instant.now().plusSeconds(3600)
         val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
@@ -75,7 +75,7 @@ class LocationSnoozeProcessorTest {
     }
 
     @Test
-    fun `processLocationSnooze fires one alarm per pending snooze`() {
+    fun multipleSnoozes() {
         val snoozes = listOf(
             ReminderNotificationData(Instant.now().plusSeconds(100), listOf(1), mutableListOf(10), 1),
             ReminderNotificationData(Instant.now().plusSeconds(200), listOf(2), mutableListOf(20), 2),

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
@@ -25,19 +26,19 @@ class PreferencesDataSourceHomeLocationTest {
         val prefs = ApplicationProvider.getApplicationContext<Context>()
             .getSharedPreferences("test_prefs_home_location", Context.MODE_PRIVATE)
         prefs.edit().clear().commit()
-        dataSource = PreferencesDataSource(prefs, CoroutineScope(Dispatchers.Unconfined))
+        dataSource = PreferencesDataSource(prefs, CoroutineScope(Dispatchers.Unconfined), GsonBuilder().create())
     }
 
     @Test
-    fun `getHomeLocation returns null when nothing saved`() {
-        assertNull(dataSource.getHomeLocation())
+    fun getHomeLocationReturnsNullWhenEmpty() {
+        assertNull(dataSource.preferences.value.homeLocation)
     }
 
     @Test
-    fun `saveHomeLocation and getHomeLocation round-trip`() {
+    fun saveAndGetHomeLocationRoundTrip() {
         val location = HomeLocation(48.137, 11.575, 200f)
         dataSource.saveHomeLocation(location)
-        val loaded = dataSource.getHomeLocation()
+        val loaded = dataSource.preferences.value.homeLocation
         assertNotNull(loaded)
         assertEquals(48.137, loaded!!.latitude, 0.0001)
         assertEquals(11.575, loaded.longitude, 0.0001)
@@ -45,9 +46,9 @@ class PreferencesDataSourceHomeLocationTest {
     }
 
     @Test
-    fun `clearHomeLocation removes saved location`() {
+    fun clearHomeLocationRemovesIt() {
         dataSource.saveHomeLocation(HomeLocation(1.0, 2.0))
         dataSource.clearHomeLocation()
-        assertNull(dataSource.getHomeLocation())
+        assertNull(dataSource.preferences.value.homeLocation)
     }
 }

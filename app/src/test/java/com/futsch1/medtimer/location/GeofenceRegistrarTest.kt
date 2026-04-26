@@ -3,11 +3,13 @@ package com.futsch1.medtimer.location
 import android.Manifest
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.model.HomeLocation
+import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.tasks.Task
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,6 +43,7 @@ class GeofenceRegistrarTest {
         whenever(geofencingClient.removeGeofences(any<List<String>>())).thenReturn(mockTask)
         whenever(mockTask.addOnSuccessListener(any())).thenReturn(mockTask)
         whenever(mockTask.addOnFailureListener(any())).thenReturn(mockTask)
+        whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
         registrar = GeofenceRegistrar(
             ApplicationProvider.getApplicationContext(),
@@ -51,19 +54,19 @@ class GeofenceRegistrarTest {
     }
 
     @Test
-    fun `isLocationServiceAvailable returns true when Play Services available`() {
+    fun locationServiceAvailableWhenPlayServicesPresent() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS)
         assertTrue(registrar.isLocationServiceAvailable())
     }
 
     @Test
-    fun `isLocationServiceAvailable returns false when Play Services unavailable`() {
+    fun locationServiceUnavailableWhenPlayServicesMissing() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SERVICE_MISSING)
         assertFalse(registrar.isLocationServiceAvailable())
     }
 
     @Test
-    fun `registerHomeGeofence returns false when Play Services unavailable`() {
+    fun registerReturnsFalseWhenPlayServicesMissing() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SERVICE_MISSING)
 
         assertFalse(registrar.registerHomeGeofence())
@@ -71,9 +74,9 @@ class GeofenceRegistrarTest {
     }
 
     @Test
-    fun `registerHomeGeofence returns false when no home location saved`() {
+    fun registerReturnsFalseWhenNoHomeLocation() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS)
-        whenever(preferencesDataSource.getHomeLocation()).thenReturn(null)
+        whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(homeLocation = null)))
         grantLocationPermissions()
 
         assertFalse(registrar.registerHomeGeofence())
@@ -81,18 +84,18 @@ class GeofenceRegistrarTest {
     }
 
     @Test
-    fun `registerHomeGeofence returns false when fine location permission not granted`() {
+    fun registerReturnsFalseWhenPermissionDenied() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS)
-        whenever(preferencesDataSource.getHomeLocation()).thenReturn(HomeLocation(48.0, 11.0))
+        whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(homeLocation = HomeLocation(48.0, 11.0))))
 
         assertFalse(registrar.registerHomeGeofence())
         verify(geofencingClient, never()).addGeofences(any(), any())
     }
 
     @Test
-    fun `registerHomeGeofence calls addGeofences when all conditions met`() {
+    fun registerCallsAddGeofencesWhenConditionsMet() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS)
-        whenever(preferencesDataSource.getHomeLocation()).thenReturn(HomeLocation(48.137, 11.575, 150f))
+        whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(homeLocation = HomeLocation(48.137, 11.575, 150f))))
         grantLocationPermissions()
 
         val result = registrar.registerHomeGeofence()
@@ -102,9 +105,9 @@ class GeofenceRegistrarTest {
     }
 
     @Test
-    fun `registerHomeGeofence returns false on SecurityException`() {
+    fun registerReturnsFalseOnSecurityException() {
         whenever(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS)
-        whenever(preferencesDataSource.getHomeLocation()).thenReturn(HomeLocation(48.0, 11.0))
+        whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(homeLocation = HomeLocation(48.0, 11.0))))
         grantLocationPermissions()
         whenever(geofencingClient.addGeofences(any(), any())).thenThrow(SecurityException("denied"))
 
@@ -112,7 +115,7 @@ class GeofenceRegistrarTest {
     }
 
     @Test
-    fun `unregisterHomeGeofence calls removeGeofences with the correct ID`() {
+    fun unregisterCallsRemoveGeofences() {
         registrar.unregisterHomeGeofence()
         verify(geofencingClient).removeGeofences(listOf(GeofenceRegistrar.GEOFENCE_ID))
     }
