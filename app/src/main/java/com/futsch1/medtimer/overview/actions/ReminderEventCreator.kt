@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.overview.actions
 
 import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class ReminderEventCreator @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
+    private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
@@ -24,8 +26,9 @@ class ReminderEventCreator @Inject constructor(
             return@withContext existingReminderEvent
         }
 
+        val reminder = reminderRepository.get(scheduledReminder.reminder.id) ?: scheduledReminder.reminder
         val newReminderEvent = ReminderNotificationProcessor.buildReminderEvent(
-            reminderTimeStamp, scheduledReminder.medicine, scheduledReminder.reminder, reminderEventRepository, timeFormatter
+            reminderTimeStamp, scheduledReminder.medicine, reminder, reminderEventRepository, timeFormatter
         )
         return@withContext reminderEventRepository.create(newReminderEvent)
     }

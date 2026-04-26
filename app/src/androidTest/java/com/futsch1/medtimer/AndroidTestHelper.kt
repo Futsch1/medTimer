@@ -19,7 +19,6 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import com.google.android.material.textfield.TextInputEditText
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -64,8 +63,8 @@ object AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_minute_text_input)
         Espresso.onView(
             Matchers.allOf(
-                ViewMatchers.isDisplayed(),
-                ViewMatchers.withClassName(Matchers.`is`(TextInputEditText::class.java.getName()))
+                ViewMatchers.isDescendantOfA(ViewMatchers.withId(com.google.android.material.R.id.material_minute_text_input)),
+                ViewMatchers.isAssignableFrom(android.widget.EditText::class.java)
             )
         ).perform(ViewActions.replaceText(minute.toString()))
         closeKeyboard()
