@@ -28,9 +28,9 @@
     <string name="next_reminders">Следующие напоминания</string>
     <string name="version">Версия %s</string>
     <string name="are_you_sure_delete_reminder">Вы точно хотите удалить напоминание?</string>
-    <string name="clear_events">Очистить события</string>
+    <string name="clear_events">Очистить всю историю</string>
     <string name="app_version">Версия приложения</string>
-    <string name="are_you_sure_delete_events">Вы точно хотите удалить все события?</string>
+    <string name="are_you_sure_delete_events">Это безвозвратно удалит всю историю приёма лекарств. Это действие нельзя отменить.</string>
     <string name="show_notifications">Показать уведомления</string>
     <string name="twenty_four_hours">24 часа</string>
     <string name="two_days">2 дня</string>

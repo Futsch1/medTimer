@@ -26,7 +26,7 @@
     <string name="next_reminders">Próximos lembretes</string>
     <string name="version">Versão %s</string>
     <string name="are_you_sure_delete_reminder">Tem certeza de que deseja excluir o lembrete?</string>
-    <string name="clear_events">Limpar eventos</string>
+    <string name="clear_events">Limpar todo o histórico</string>
     <string name="app_version">Versão do aplicativo</string>
     <string name="show_notifications">Mostrar notificações</string>
     <string name="twenty_four_hours">24 horas</string>
@@ -161,7 +161,7 @@
     <string name="minutes_10">10 minutos</string>
     <string name="create_reminder_dosage_hint">Dosagem para novo lembrete</string>
     <string name="recent_events">Eventos recentes</string>
-    <string name="are_you_sure_delete_events">Tem certeza de que deseja excluir todos os eventos?</string>
+    <string name="are_you_sure_delete_events">Isso excluirá permanentemente todo o histórico de medicamentos. Esta ação não pode ser desfeita.</string>
     <string name="exact_reminders_summary">Lembretes são agendados para o horário exato (aumenta o uso da bateria)</string>
     <string name="time_before_meal">x minutos antes da refeição</string>
     <string name="generate_test_data">Gerar dados de teste</string>

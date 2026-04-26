@@ -26,9 +26,9 @@
     <string name="next_reminders">Επόμενες υπενθυμίσεις</string>
     <string name="version">Έκδοση %s</string>
     <string name="are_you_sure_delete_reminder">Σίγουρα θέλετε να διαγράψετε αυτή την υπενθύμιση;</string>
-    <string name="clear_events">Εκκαθάριση συμβάντων</string>
+    <string name="clear_events">Εκκαθάριση όλου του ιστορικού</string>
     <string name="app_version">Έκδοση εφαρμογής</string>
-    <string name="are_you_sure_delete_events">Σίγουρα θέλετε να διαγράψετε όλα τα συμβάντα;</string>
+    <string name="are_you_sure_delete_events">Αυτό θα διαγράψει οριστικά όλο το ιστορικό φαρμακευτικής αγωγής. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
     <string name="show_notifications">Εμφάνιση ειδοποιήσεων</string>
     <string name="twenty_four_hours">24 ώρες</string>
     <string name="two_days">2 ημέρες</string>

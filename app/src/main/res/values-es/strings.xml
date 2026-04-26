@@ -27,9 +27,9 @@
     <string name="next_reminders">Siguientes recordatorios</string>
     <string name="version">Versión %s</string>
     <string name="are_you_sure_delete_reminder">¿Quieres eliminar el recordatorio?</string>
-    <string name="clear_events">Borrar eventos</string>
+    <string name="clear_events">Borrar todo el historial</string>
     <string name="app_version">Versión de la aplicación</string>
-    <string name="are_you_sure_delete_events">¿Quieres eliminar todos los recordatorios?</string>
+    <string name="are_you_sure_delete_events">Esto eliminará permanentemente todo el historial de medicamentos. Esta acción no se puede deshacer.</string>
     <string name="show_notifications">Enviar notificaciones</string>
     <string name="twenty_four_hours">24 horas</string>
     <string name="two_days">2 días</string>

@@ -26,9 +26,9 @@
     <string name="next_reminders">Sonraki hatırlatıcılar</string>
     <string name="version">Versiyon %s</string>
     <string name="are_you_sure_delete_reminder">Hatırlatıcıyı silmek istediğinizden emin misiniz?</string>
-    <string name="clear_events">Etkinlikleri temizle</string>
+    <string name="clear_events">Tüm geçmişi temizle</string>
     <string name="app_version">Uygulama versiyonu</string>
-    <string name="are_you_sure_delete_events">Tüm etkinlikleri silmek istediğinizden emin misiniz?</string>
+    <string name="are_you_sure_delete_events">Bu işlem tüm ilaç geçmişinizi kalıcı olarak silecektir. Bu işlem geri alınamaz.</string>
     <string name="show_notifications">Bildirimleri göster</string>
     <string name="twenty_four_hours">24 saat</string>
     <string name="two_days">2 gün</string>

@@ -27,9 +27,9 @@
     <string name="next_reminders">ההתראות הבאות</string>
     <string name="version">גרסה %s</string>
     <string name="are_you_sure_delete_reminder">האם אתם בטוחים שאתם רוצים למחוק את ההתראה?</string>
-    <string name="clear_events">מחקו אירועים</string>
+    <string name="clear_events">מחק את כל ההיסטוריה</string>
     <string name="app_version">גרסת אפליקציה</string>
-    <string name="are_you_sure_delete_events">האם אתם בטוחים שאתם רוצים למחוק את כל האירועים?</string>
+    <string name="are_you_sure_delete_events">פעולה זו תמחק לצמיתות את כל היסטוריית התרופות. לא ניתן לבטל פעולה זו.</string>
     <string name="show_notifications">הראה התראות</string>
     <string name="twenty_four_hours">24 שעות</string>
     <string name="two_days">יומיים</string>

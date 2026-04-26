@@ -27,9 +27,9 @@
     <string name="next_reminders">Prossimi promemoria</string>
     <string name="version">Versione %s</string>
     <string name="are_you_sure_delete_reminder">Vuoi davvero eliminare il promemoria?</string>
-    <string name="clear_events">Elimina gli eventi</string>
+    <string name="clear_events">Cancella tutta la cronologia</string>
     <string name="app_version">Versione dell\'app</string>
-    <string name="are_you_sure_delete_events">Vuoi davvero eliminare tutti gli eventi?</string>
+    <string name="are_you_sure_delete_events">Questo eliminerà definitivamente tutta la cronologia dei farmaci. Questa azione non può essere annullata.</string>
     <string name="show_notifications">Mostra le notifiche</string>
     <string name="twenty_four_hours">24 ore</string>
     <string name="two_days">2 giorni</string>

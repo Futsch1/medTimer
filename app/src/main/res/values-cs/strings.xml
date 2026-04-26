@@ -28,9 +28,9 @@
     <string name="next_reminders">Další připomenutí</string>
     <string name="version">Verze %s</string>
     <string name="are_you_sure_delete_reminder">Opravdu chcete smazat připomenutí?</string>
-    <string name="clear_events">Vymazat události</string>
+    <string name="clear_events">Vymazat celou historii</string>
     <string name="app_version">Verze aplikace</string>
-    <string name="are_you_sure_delete_events">Opravdu smazat všechny události?</string>
+    <string name="are_you_sure_delete_events">Toto trvale smaže celou historii léků. Tuto akci nelze vrátit zpět.</string>
     <string name="show_notifications">Zobrazit notifikace</string>
     <string name="twenty_four_hours">24 hodin</string>
     <string name="two_days">2 dny</string>

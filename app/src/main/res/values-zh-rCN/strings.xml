@@ -25,9 +25,9 @@
     <string name="next_reminders">下次服药提醒</string>
     <string name="version">版本 %s</string>
     <string name="are_you_sure_delete_reminder">确定要删除该提醒吗？</string>
-    <string name="clear_events">清除所有服药记录</string>
+    <string name="clear_events">清除所有历史记录</string>
     <string name="app_version">应用程序版本</string>
-    <string name="are_you_sure_delete_events">您确定要删除所有服药记录吗？</string>
+    <string name="are_you_sure_delete_events">这将永久删除您的所有用药历史记录。此操作无法撤销。</string>
     <string name="show_notifications">显示通知</string>
     <string name="twenty_four_hours">24 小时</string>
     <string name="two_days">2 天</string>

@@ -6,9 +6,9 @@
     <string name="next_reminders">التذكيرات القادمة</string>
     <string name="version">الإصدار %s</string>
     <string name="are_you_sure_delete_reminder">هل أنت متأكد من حذف التذكير؟</string>
-    <string name="clear_events">امسح الأحداث</string>
+    <string name="clear_events">مسح كل السجلات</string>
     <string name="app_version">إصدار التطبيق</string>
-    <string name="are_you_sure_delete_events">هل أنت متأكد من حذف جميع الأحداث؟</string>
+    <string name="are_you_sure_delete_events">سيؤدي هذا إلى حذف سجل الأدوية بالكامل نهائياً. لا يمكن التراجع عن هذا الإجراء.</string>
     <string name="show_notifications">اعرض الإشعارات</string>
     <string name="tab_settings">الإعدادات</string>
     <string name="tab_overview">نظرة عامة</string>

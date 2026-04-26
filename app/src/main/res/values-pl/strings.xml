@@ -32,7 +32,7 @@
     <string name="skipped">Pominięto</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>
     <string name="app_version">Wersja aplikacji</string>
-    <string name="are_you_sure_delete_events">Czy na pewno chcesz usunąć wszystkie zdarzenia?</string>
+    <string name="are_you_sure_delete_events">Spowoduje to trwałe usunięcie całej historii leków. Tej operacji nie można cofnąć.</string>
     <string name="show_notifications">Pokaż powiadomienia</string>
     <string name="twenty_four_hours">24 godziny</string>
     <string name="two_days">2 dni</string>
@@ -152,7 +152,7 @@
     <string name="intro_welcome_description">MedTimer to darmowa i otwartoźródłowa aplikacja przypominająca o zażyciu leków, która kładzie nacisk na prywatność.\n\nWymagane jest zezwolenie na wyświetlanie powiadomień przypominających o lekach.</string>
     <string name="cycle_start_date">Pierwszy start cyklu</string>
     <string name="time_based_reminder">Przypomnienie według harmonogramu</string>
-    <string name="clear_events">Wyczyść zdarzenia</string>
+    <string name="clear_events">Wyczyść całą historię</string>
     <string name="app_url">MedTimer na GitHubie</string>
     <string name="exact_reminders">Dokładne przypomnienia</string>
     <string name="hide_med_name">Ukryj nazwę leku w powiadomieniu</string>

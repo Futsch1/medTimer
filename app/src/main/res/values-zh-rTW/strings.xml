@@ -24,10 +24,10 @@
     <string name="recent_events">近期事件</string>
     <string name="next_reminders">接下來的提醒</string>
     <string name="version">版本 %s</string>
-    <string name="clear_events">清楚事件</string>
+    <string name="clear_events">清除所有歷史記錄</string>
     <string name="are_you_sure_delete_reminder">您確定要刪除此提醒嗎？</string>
     <string name="app_version">應用程式版本</string>
-    <string name="are_you_sure_delete_events">您確定要刪除所有事件嗎？</string>
+    <string name="are_you_sure_delete_events">這將永久刪除您的所有用藥歷史記錄。此操作無法復原。</string>
     <string name="twenty_four_hours">24 小時</string>
     <string name="two_days">2 天</string>
     <string name="show_notifications">顯示通知</string>

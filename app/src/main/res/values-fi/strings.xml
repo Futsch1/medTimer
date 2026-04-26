@@ -26,9 +26,9 @@
     <string name="next_reminders">Seuraavat muistutukset</string>
     <string name="version">Versio %s</string>
     <string name="are_you_sure_delete_reminder">Haluatko varmasti poistaa muistutuksen?</string>
-    <string name="clear_events">Tyhjennä tapahtumat</string>
+    <string name="clear_events">Tyhjennä koko historia</string>
     <string name="app_version">Sovelluksen versio</string>
-    <string name="are_you_sure_delete_events">Haluatko varmasti poistaa kaikki tapahtumat?</string>
+    <string name="are_you_sure_delete_events">Tämä poistaa pysyvästi koko lääkityshistoriasi. Tätä toimintoa ei voi kumota.</string>
     <string name="show_notifications">Näytä ilmoitukset</string>
     <string name="twenty_four_hours">24 tuntia</string>
     <string name="two_days">2 päivää</string>

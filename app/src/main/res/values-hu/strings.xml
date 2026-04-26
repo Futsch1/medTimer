@@ -26,9 +26,9 @@
     <string name="next_reminders">Következő emlékeztetők</string>
     <string name="version">Verzió %s</string>
     <string name="are_you_sure_delete_reminder">Biztosan törölni szeretnéd az emlékeztetőt?</string>
-    <string name="clear_events">Események törlése</string>
+    <string name="clear_events">Teljes előzmény törlése</string>
     <string name="app_version">Alkalmazás verziója</string>
-    <string name="are_you_sure_delete_events">Biztosan törölni szeretnéd az összes eseményt?</string>
+    <string name="are_you_sure_delete_events">Ez véglegesen törli a teljes gyógyszerelési előzményt. Ez a művelet nem vonható vissza.</string>
     <string name="show_notifications">Értesítések megjelenítése</string>
     <string name="twenty_four_hours">24 óra</string>
     <string name="two_days">2 nap</string>

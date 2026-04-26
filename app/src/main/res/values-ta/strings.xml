@@ -34,9 +34,9 @@
     <string name="next_reminders">அடுத்த நினைவூட்டல்கள்</string>
     <string name="version">பதிப்பு %s</string>
     <string name="are_you_sure_delete_reminder">நினைவூட்டலை நீக்குவது உறுதி?</string>
-    <string name="clear_events">நிகழ்வுகளை அழிக்கவும்</string>
+    <string name="clear_events">முழு வரலாற்றையும் அழி</string>
     <string name="app_version">பயன்பாட்டு பதிப்பு</string>
-    <string name="are_you_sure_delete_events">எல்லா நிகழ்வுகளையும் நீக்குவது உறுதி?</string>
+    <string name="are_you_sure_delete_events">இது உங்கள் முழு மருந்து வரலாற்றையும் நிரந்தரமாக நீக்கும். இந்த செயலை மீட்டெடுக்க முடியாது.</string>
     <string name="show_notifications">அறிவிப்புகளைக் காட்டு</string>
     <string name="twenty_four_hours">24 மணி நேரம்</string>
     <string name="two_days">2 நாட்கள்</string>

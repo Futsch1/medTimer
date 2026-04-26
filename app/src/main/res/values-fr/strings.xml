@@ -27,9 +27,9 @@
     <string name="next_reminders">Prochains rappels</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Êtes-vous sûr de supprimer le rappel ?</string>
-    <string name="clear_events">Effacer les événements</string>
+    <string name="clear_events">Effacer tout l\'historique</string>
     <string name="app_version">Version de l\'application</string>
-    <string name="are_you_sure_delete_events">Êtes-vous sûr de supprimer tous les événements ?</string>
+    <string name="are_you_sure_delete_events">Cela supprimera définitivement tout l\'historique de médicaments. Cette action est irréversible.</string>
     <string name="show_notifications">Afficher les notifications</string>
     <string name="twenty_four_hours">24 heures</string>
     <string name="two_days">2 jours</string>
