@@ -10,6 +10,7 @@ Flexibele en gepersonaliseerde herinneringen:
 - Maak flexibele herinneringen met pauzes en specifieke dagen (bijv. voor anticonceptiepillen).
 - Weekendmodus: Stel herinneringen uit naar een bepaald tijdstip op gekozen dagen.
 - Snooze meldingen voor latere herinneringen of word herhaaldelijk herinnerd.
+- Locatiegebaseerd sluimeren: ontvang een herinnering wanneer je thuiskomt.
 - Voeg extra doses toe wanneer u dat wilt.
 - Maak intervalherinneringen, herinneringen die elkaar in intervallen opvolgen of intervalherinneringen met een begin- en eindtijd per dag.
 - Gebruik alarmherinneringen om meldingen te garanderen, zelfs wanneer het apparaat in de stille modus staat.

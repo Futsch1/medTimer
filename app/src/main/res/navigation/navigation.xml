@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_preferencesFragment_to_alarmSettingsFragment"
             app:destination="@id/alarmSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_snoozeSettingsFragment"
+            app:destination="@id/snoozeSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -103,6 +106,10 @@
             android:id="@+id/action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment"
             app:destination="@id/repeatRemindersPreferencesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/snoozeSettingsFragment"
+        android:name="com.futsch1.medtimer.preferences.SnoozeSettingsFragment"
+        android:label="@string/snooze_settings" />
     <fragment
         android:id="@+id/displaySettingsFragment"
         android:name="com.futsch1.medtimer.preferences.DisplaySettingsFragment"

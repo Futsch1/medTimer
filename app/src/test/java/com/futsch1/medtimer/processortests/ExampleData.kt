@@ -15,8 +15,8 @@ fun fillWithTwoReminders(reminderContext: TestReminderContext): ReminderNotifica
 
     return ReminderNotificationData(
         Instant.ofEpochSecond(0),
-        intArrayOf(1, 2),
-        intArrayOf(1, 2)
+        listOf(1, 2),
+        listOf(1, 2)
     )
 }
 
@@ -27,7 +27,7 @@ fun fillWithOneReminder(reminderContext: TestReminderContext): ReminderNotificat
 
     return ReminderNotificationData(
         Instant.ofEpochSecond(0),
-        intArrayOf(1),
-        intArrayOf(1)
+        listOf(1),
+        listOf(1)
     )
 }

@@ -12,8 +12,8 @@ import java.time.Instant
 
 class ReminderNotificationData(
     var remindInstant: Instant,
-    var reminderIds: IntArray = IntArray(0),
-    var reminderEventIds: IntArray = IntArray(0),
+    var reminderIds: List<Int> = listOf(),
+    var reminderEventIds: List<Int> = listOf(),
     var notificationId: Int = -1
 ) {
     var valid: Boolean = reminderIds.isNotEmpty()
@@ -40,8 +40,8 @@ class ReminderNotificationData(
 
         return ReminderNotificationData(
             remindInstant,
-            newReminderIds.toIntArray(),
-            newReminderEventIds.toIntArray(),
+            newReminderIds,
+            newReminderEventIds,
             notificationId
         )
     }
@@ -53,19 +53,19 @@ class ReminderNotificationData(
     }
 
     fun toIntent(intent: Intent) {
-        intent.putExtra(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds)
-        intent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
+        intent.putExtra(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds.toIntArray())
+        intent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
         intent.putExtra(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
         intent.putExtra(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
     }
 
     override fun toString(): String {
-        return "rIDs ${reminderIds.contentToString()} rEIDs ${reminderEventIds.contentToString()} nID $notificationId @ $remindInstant"
+        return "rIDs $reminderIds rEIDs $reminderEventIds nID $notificationId @ $remindInstant"
     }
 
     fun toBundle(bundle: Bundle) {
-        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds)
-        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds)
+        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds.toIntArray())
+        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
         bundle.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
         bundle.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
     }
@@ -81,17 +81,17 @@ class ReminderNotificationData(
             return fromArrays(reminderIds, reminderEventIds, remindInstant, notificationId)
         }
 
-        fun getReminderIds(bundle: Bundle): IntArray {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST) ?: IntArray(0)
+        fun getReminderIds(bundle: Bundle): List<Int> {
+            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)?.toList() ?: listOf()
         }
 
-        fun getReminderEventIds(bundle: Bundle): IntArray {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST) ?: IntArray(0)
+        fun getReminderEventIds(bundle: Bundle): MutableList<Int> {
+            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)?.toMutableList() ?: mutableListOf()
         }
 
         fun fromArrays(
-            reminderIds: IntArray,
-            reminderEventIds: IntArray,
+            reminderIds: List<Int>,
+            reminderEventIds: MutableList<Int>,
             remindInstant: Instant,
             notificationId: Int = -1
         ): ReminderNotificationData {
@@ -112,13 +112,13 @@ class ReminderNotificationData(
             }
 
             return ReminderNotificationData(
-                firstTimestamp, reminderIds.toIntArray(), reminderEventIds.toIntArray(), -1
+                firstTimestamp, reminderIds, reminderEventIds, -1
             )
         }
 
         fun fromReminderEvent(reminderEvent: ReminderEvent): ReminderNotificationData {
-            val reminderIds = intArrayOf(reminderEvent.reminderId)
-            val reminderEventIds = intArrayOf(reminderEvent.reminderEventId)
+            val reminderIds = listOf(reminderEvent.reminderId)
+            val reminderEventIds = mutableListOf(reminderEvent.reminderEventId)
             return ReminderNotificationData(
                 reminderEvent.remindedTimestamp, reminderIds, reminderEventIds
             )

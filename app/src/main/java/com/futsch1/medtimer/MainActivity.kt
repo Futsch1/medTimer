@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var activityManager: ActivityManager
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

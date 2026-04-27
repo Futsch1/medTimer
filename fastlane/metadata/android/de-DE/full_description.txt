@@ -8,6 +8,7 @@ Flexible und personalisierte Erinnerungen:
 - Erstelle flexible Erinnerungen mit Pausen und nur für bestimmten Tage (z.B. für die Antibabypille).
 - Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
 - Verschiebe ("snooze") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
+- Standortbasierter Snooze: Erneute Benachrichtigung bei Heimkehr nach einem Snooze.
 - Protokolliere zusätzliche, ungeplante Einnahmen.
 - Erstelle intervallbasierte Erinnerungen und solche, die auf vorherige Einnahmen nach einer gewissen Zeit folgen.
 

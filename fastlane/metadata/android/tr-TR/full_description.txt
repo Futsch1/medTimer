@@ -10,6 +10,7 @@ Esnek ve Kişiselleştirilmiş Hatırlatıcılar:
 - Molalar ve belirli günler için esnek hatırlatıcılar oluşturun (örn. doğum kontrol hapları için).
 - Hafta sonu modu: Hatırlatıcıları seçilen günlerde tanımlanmış bir zamana erteleyin.
 - Daha sonraki hatırlatmalar için bildirimleri erteleyin veya tekrar tekrar hatırlatın.
+- Konuma dayalı erteleme: eve gelince yeniden bildirim al.
 - Anında ekstra dozlar ekleyin.
 - Aralıklarla birbirini takip eden dozları almak için hatırlatıcılar oluşturun.
 

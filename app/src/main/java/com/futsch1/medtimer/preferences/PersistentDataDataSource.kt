@@ -8,6 +8,10 @@ import com.futsch1.medtimer.di.MedTimerPreferencess
 import com.futsch1.medtimer.model.OverviewFilter
 import com.futsch1.medtimer.model.PersistentData
 import com.futsch1.medtimer.model.StatisticFragment
+import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.time.Instant
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +23,15 @@ import javax.inject.Inject
 class PersistentDataDataSource @Inject constructor(
     @param:DefaultPreferences private val defaultSharedPreferences: SharedPreferences,
     @param:MedTimerPreferencess private val medTimerSharedPreferences: SharedPreferences,
-    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
+    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope,
+    private val gson: Gson
 ) {
+    private data class SerializablePendingSnooze(
+        val reminderIds: List<Int>,
+        val reminderEventIds: List<Int>,
+        val notificationId: Int,
+        val remindInstantEpochSecond: Long
+    )
 
     val data: StateFlow<PersistentData> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -84,6 +95,39 @@ class PersistentDataDataSource @Inject constructor(
         medTimerSharedPreferences.edit { putBoolean(SHOW_NOTIFICATION, showNotifications) }
     }
 
+    fun addPendingLocationSnooze(data: ReminderNotificationData) {
+        val current = getPendingSnoozeList().toMutableList()
+        current.add(data.toSerializable())
+        medTimerSharedPreferences.edit { putString(PENDING_SNOOZES, gson.toJson(current)) }
+    }
+
+    fun getPendingLocationSnoozes(): List<ReminderNotificationData> =
+        getPendingSnoozeList().map { it.toReminderNotificationData() }
+
+    fun clearAllPendingLocationSnoozes() {
+        medTimerSharedPreferences.edit { remove(PENDING_SNOOZES) }
+    }
+
+    private fun getPendingSnoozeList(): List<SerializablePendingSnooze> {
+        val json = medTimerSharedPreferences.getString(PENDING_SNOOZES, null) ?: return emptyList()
+        val type = object : TypeToken<List<SerializablePendingSnooze>>() {}.type
+        return gson.fromJson(json, type) ?: emptyList()
+    }
+
+    private fun ReminderNotificationData.toSerializable() = SerializablePendingSnooze(
+        reminderIds = reminderIds,
+        reminderEventIds = reminderEventIds,
+        notificationId = notificationId,
+        remindInstantEpochSecond = remindInstant.epochSecond
+    )
+
+    private fun SerializablePendingSnooze.toReminderNotificationData() = ReminderNotificationData(
+        remindInstant = Instant.ofEpochSecond(remindInstantEpochSecond),
+        reminderIds = reminderIds,
+        reminderEventIds = reminderEventIds,
+        notificationId = notificationId
+    )
+
     private fun getPersistentData(): PersistentData {
         val default = PersistentData.default()
         return PersistentData(
@@ -119,6 +163,6 @@ class PersistentDataDataSource @Inject constructor(
         const val LAST_CUSTOM_DOSE_AMOUNT = "lastCustomDoseAmount"
         const val FILTER_TAGS = "filterTags"
         const val CHECKED_FILTERS = "checkedFilters"
-
+        const val PENDING_SNOOZES = "pending_location_snoozes"
     }
 }

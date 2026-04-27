@@ -50,7 +50,10 @@ data class UserPreferences(
     val noVibrationWhenSilent: Boolean,
     // Automatic backup settings
     val automaticBackupInterval: BackupInterval,
-    val automaticBackupDirectory: Uri?
+    val automaticBackupDirectory: Uri?,
+    // Location based snooze
+    val locationBasedSnooze: Boolean,
+    val homeLocation: HomeLocation?
 ) {
     companion object {
         fun default(): UserPreferences {
@@ -80,7 +83,9 @@ data class UserPreferences(
                 noAlarmSoundWhenSilent = false,
                 noVibrationWhenSilent = false,
                 automaticBackupInterval = BackupInterval.NEVER,
-                automaticBackupDirectory = null
+                automaticBackupDirectory = null,
+                locationBasedSnooze = false,
+                homeLocation = null
             )
         }
     }

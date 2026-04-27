@@ -69,3 +69,10 @@ The build must pass `assembleDebug` and `lint` before merging.
 - Lint is strict: fix warnings, do not suppress without justification
 - Uses SonarQube as additional static code analysis
 - Standard Kotlin Code Style with line length set to 160 characters
+
+## Translations
+
+- When adding or changing strings in one of the language files, consider the translation to all other languages the app supports (`localeFilters` in
+  `app/build.gradle.kts`)
+- Escape `'` with a single `\`
+- Use `\n` for newline

@@ -25,7 +25,8 @@ enum class ProcessorCode(val action: String) {
     Refill("com.futsch1.medtimer.REFILL_ACTION"),
     ShowReminderNotification("com.futsch1.medtimer.SHOW_REMINDER_NOTIFICATION"),
     StockHandling("com.futsch1.medtimer.STOCK_HANDLING"),
-    Schedule("com.futsch1.medtimer.SCHEDULE");
+    Schedule("com.futsch1.medtimer.SCHEDULE"),
+    LocationSnooze("com.futsch1.medtimer.LOCATION_SNOOZE");
 
     companion object {
         private val actionMap = entries.associateBy { it.action }

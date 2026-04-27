@@ -7,7 +7,8 @@ enum class OverviewState {
     PENDING,
     RAISED,
     TAKEN,
-    SKIPPED
+    SKIPPED,
+    LOCATION
 }
 
 fun OverviewState.toString(context: Context): String {
@@ -16,6 +17,7 @@ fun OverviewState.toString(context: Context): String {
         OverviewState.TAKEN -> context.getString(R.string.taken)
         OverviewState.SKIPPED -> context.getString(R.string.skipped)
         OverviewState.RAISED -> context.getString(R.string.reminded)
+        OverviewState.LOCATION -> context.getString(R.string.snooze_until_home)
     }
 }
 
@@ -25,5 +27,6 @@ fun OverviewState.getImage(): Int {
         OverviewState.TAKEN -> R.drawable.check2_circle
         OverviewState.SKIPPED -> R.drawable.x_circle
         OverviewState.RAISED -> R.drawable.bell
+        OverviewState.LOCATION -> R.drawable.geo_alt_fill
     }
 }

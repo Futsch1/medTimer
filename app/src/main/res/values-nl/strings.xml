@@ -287,4 +287,17 @@
     <string name="monthly">Maandelijks</string>
     <string name="automatic_backup">Automatische back-up</string>
     <string name="backup_successful_to">Automatische back-up geslaagd: %s</string>
+    <string name="location_snooze">Locatiegebaseerd sluimeren</string>
+    <string name="location_snooze_summary">Opnieuw melden bij thuiskomst na sluimeren</string>
+    <string name="location_snooze_no_play_services">Locatiegebaseerd sluimeren vereist Google Play Services, die niet beschikbaar zijn op dit apparaat</string>
+    <string name="location_snooze_background_permission">Sta MedTimer toe op de achtergrond toegang te hebben tot de locatie om opnieuw te melden bij thuiskomst</string>
+    <string name="snooze_until_home">Sluimeren tot thuiskomst</string>
+    <string name="snooze_settings">Sluimerinstellingen</string>
+    <string name="home_location">Thuislocatie</string>
+    <string name="home_location_not_set">Niet ingesteld</string>
+    <string name="home_location_set">Ingesteld</string>
+    <string name="determining_location">Huidige locatie bepalen…</string>
+    <string name="show_home_location_on_map">Thuislocatie tonen op kaart</string>
+    <string name="set_home_location_confirm">Thuislocatie instellen op\n%1$s, %2$s?</string>
+    <string name="home_location_error">Kon uw huidige locatie niet bepalen</string>
 </resources>

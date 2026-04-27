@@ -292,4 +292,17 @@
     <string name="monthly">Mensal</string>
     <string name="automatic_backup">Cópia de segurança automática</string>
     <string name="backup_successful_to">Cópia de segurança automática com sucesso: %s</string>
+    <string name="location_snooze">Soneca baseada em localização</string>
+    <string name="location_snooze_summary">Notificar novamente ao chegar a casa após soneca</string>
+    <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>
+    <string name="location_snooze_background_permission">Para ser notificado ao chegar a casa, permita que o MedTimer aceda à localização em segundo plano</string>
+    <string name="snooze_until_home">Soneca até chegar a casa</string>
+    <string name="snooze_settings">Configurações de soneca</string>
+    <string name="home_location">Localização de casa</string>
+    <string name="home_location_not_set">Não definida</string>
+    <string name="home_location_set">Definida</string>
+    <string name="determining_location">A determinar a localização atual…</string>
+    <string name="show_home_location_on_map">Mostrar localização de casa no mapa</string>
+    <string name="set_home_location_confirm">Definir localização de casa para\n%1$s, %2$s?</string>
+    <string name="home_location_error">Não foi possível determinar a sua localização atual</string>
 </resources>

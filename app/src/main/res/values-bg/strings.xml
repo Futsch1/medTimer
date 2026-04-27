@@ -287,4 +287,17 @@
     <string name="monthly">Ежемесечно</string>
     <string name="automatic_backup">Автоматично архивиране</string>
     <string name="backup_successful_to">Автоматичното архивиране е успешно: %s</string>
+    <string name="location_snooze">Отлагане по местоположение</string>
+    <string name="location_snooze_summary">Повторно известяване при завръщане вкъщи след отлагане</string>
+    <string name="location_snooze_no_play_services">Отлагането по местоположение изисква Google Play Services, което не е налично на това устройство</string>
+    <string name="location_snooze_background_permission">За повторно известяване при завръщане вкъщи, разрешете на MedTimer достъп до местоположението на заден план</string>
+    <string name="snooze_until_home">Отлагане до завръщане вкъщи</string>
+    <string name="snooze_settings">Настройки за отлагане</string>
+    <string name="home_location">Домашно местоположение</string>
+    <string name="home_location_not_set">Не е зададено</string>
+    <string name="home_location_set">Зададено</string>
+    <string name="determining_location">Определяне на текущото местоположение…</string>
+    <string name="show_home_location_on_map">Покажи домашното местоположение на картата</string>
+    <string name="set_home_location_confirm">Задаване на домашно местоположение на\n%1$s, %2$s?</string>
+    <string name="home_location_error">Неуспешно определяне на текущото ви местоположение</string>
 </resources>

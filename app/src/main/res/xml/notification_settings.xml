@@ -35,13 +35,6 @@
         android:title="@string/dismiss_notification_action"
         app:singleLineTitle="false"
         app:useSimpleSummaryProvider="true" />
-    <ListPreference
-        android:defaultValue="15"
-        android:entries="@array/snooze_duration"
-        android:entryValues="@array/snooze_duration_values"
-        android:key="snooze_duration"
-        android:title="@string/snooze_duration"
-        app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

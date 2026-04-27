@@ -286,4 +286,17 @@
     <string name="monthly">Varje månad</string>
     <string name="automatic_backup">Automatisk säkerhetskopiering</string>
     <string name="backup_successful_to">Automatisk säkerhetskopiering lyckades: %s</string>
+    <string name="location_snooze">Platsbaserad snooze</string>
+    <string name="location_snooze_summary">Meddela igen när du anländer hem efter snooze</string>
+    <string name="location_snooze_no_play_services">Platsbaserad snooze kräver Google Play Services, som inte är tillgängligt på den här enheten</string>
+    <string name="location_snooze_background_permission">För att meddelas vid hemkomst, tillåt MedTimer att komma åt plats i bakgrunden</string>
+    <string name="snooze_until_home">Snooze till hemkomst</string>
+    <string name="snooze_settings">Snooze-inställningar</string>
+    <string name="home_location">Hemplats</string>
+    <string name="home_location_not_set">Inte inställd</string>
+    <string name="home_location_set">Inställd</string>
+    <string name="determining_location">Fastställer aktuell plats…</string>
+    <string name="show_home_location_on_map">Visa hemplats på karta</string>
+    <string name="set_home_location_confirm">Ange hemplats till\n%1$s, %2$s?</string>
+    <string name="home_location_error">Det gick inte att fastställa din aktuella plats</string>
 </resources>

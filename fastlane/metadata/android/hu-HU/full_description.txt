@@ -10,6 +10,7 @@ Rugalmas és személyre szabott emlékeztetők:
 - Hozz létre rugalmas emlékeztetőket szünetekkel és meghatározott napokkal (pl. fogamzásgátló tabletták esetében).
 - Hétvégi mód: késleltesd az emlékeztetőket egy meghatározott időpontra a kiválasztott napokon.
 - Szundi funkció: halaszd el az értesítéseket későbbre, vagy ismételd meg őket többször.
+- Helyzet alapú szundi: értesítés hazaérkezéskor.
 - Adj hozzá extra adagokat bármikor.
 - Hozz létre időközönkénti emlékeztetőket, vagy egymást követő, intervallumokban megjelenő emlékeztetőket.
 

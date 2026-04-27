@@ -287,4 +287,17 @@
     <string name="monthly">Monatlich</string>
     <string name="automatic_backup">Automatisches Backup</string>
     <string name="backup_successful_to">Automatisches Backup erfolgreich: %s</string>
+    <string name="location_snooze">Standortbasierter Snooze</string>
+    <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach einem Snooze nach Hause kommt</string>
+    <string name="location_snooze_no_play_services">Standortbasierter Snooze erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>
+    <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlauben Sie MedTimer den Hintergrundstandortzugriff</string>
+    <string name="snooze_until_home">Snooze bis zur Heimkehr</string>
+    <string name="snooze_settings">Snooze-Einstellungen</string>
+    <string name="home_location">Heimstandort</string>
+    <string name="home_location_not_set">Nicht festgelegt</string>
+    <string name="home_location_set">Festgelegt</string>
+    <string name="determining_location">Aktuellen Standort ermitteln…</string>
+    <string name="show_home_location_on_map">Heimstandort auf Karte anzeigen</string>
+    <string name="set_home_location_confirm">Heimstandort setzen auf\n%1$s, %2$s?</string>
+    <string name="home_location_error">Aktueller Standort konnte nicht ermittelt werden</string>
 </resources>

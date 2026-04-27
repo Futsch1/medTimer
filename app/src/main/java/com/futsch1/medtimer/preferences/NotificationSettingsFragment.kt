@@ -36,11 +36,7 @@ class NotificationSettingsFragment : PreferencesFragment() {
     @Inject
     lateinit var notificationManager: NotificationManager
 
-    private var rootKey: String? = null
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        this.rootKey = rootKey
-
         preferenceManager.preferenceDataStore = preferencesDataSource
 
         setPreferencesFromResource(R.xml.notification_settings, rootKey)
@@ -54,7 +50,6 @@ class NotificationSettingsFragment : PreferencesFragment() {
             "repeat_reminders_preferences",
             R.id.action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment
         )
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             preferenceScreen.findPreference<Preference?>(STICKY_ON_LOCKSCREEN)?.isVisible = false
         }

@@ -287,4 +287,17 @@
     <string name="monthly">Havonta</string>
     <string name="automatic_backup">Automatikus biztonsági mentés</string>
     <string name="backup_successful_to">Automatikus biztonsági mentés sikeres: %s</string>
+    <string name="location_snooze">Helyzet alapú szundi</string>
+    <string name="location_snooze_summary">Újraértesítés hazaérkezéskor szundi után</string>
+    <string name="location_snooze_no_play_services">A helyzet alapú szundi Google Play Services szolgáltatást igényel, amely nem érhető el ezen az eszközön</string>
+    <string name="location_snooze_background_permission">Hazaérkezéskor történő újraértesítéshez engedélyezze a MedTimer számára a háttérben való helymeghatározást</string>
+    <string name="snooze_until_home">Szundi hazaérkezésig</string>
+    <string name="snooze_settings">Szundi beállítások</string>
+    <string name="home_location">Otthoni helyszín</string>
+    <string name="home_location_not_set">Nincs beállítva</string>
+    <string name="home_location_set">Beállítva</string>
+    <string name="determining_location">Jelenlegi helyszín meghatározása…</string>
+    <string name="show_home_location_on_map">Otthoni helyszín megjelenítése a térképen</string>
+    <string name="set_home_location_confirm">Otthoni helyszín beállítása erre:\n%1$s, %2$s?</string>
+    <string name="home_location_error">Nem sikerült meghatározni a jelenlegi tartózkodási helyét</string>
 </resources>

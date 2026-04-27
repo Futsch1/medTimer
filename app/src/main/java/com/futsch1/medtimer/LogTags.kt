@@ -9,4 +9,5 @@ object LogTags {
     const val AUTOSTART = "AutostartDebug"
     const val MAIN = "MedTimerMain"
     const val BIOMETRICS = "Biometrics"
+    const val LOCATION = "Location"
 }

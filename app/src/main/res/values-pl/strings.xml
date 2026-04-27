@@ -297,4 +297,17 @@
     <string name="monthly">Miesięcznie</string>
     <string name="automatic_backup">Automatyczna kopia zapasowa</string>
     <string name="backup_successful_to">Automatyczna kopia zapasowa zakończona sukcesem: %s</string>
+    <string name="location_snooze">Drzemka oparta na lokalizacji</string>
+    <string name="location_snooze_summary">Ponownie powiadom po przybyciu do domu po drzemce</string>
+    <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga Google Play Services, które nie są dostępne na tym urządzeniu</string>
+    <string name="location_snooze_background_permission">Aby ponownie otrzymywać powiadomienia po przybyciu do domu, zezwól MedTimer na dostęp do lokalizacji w tle</string>
+    <string name="snooze_until_home">Drzemka do powrotu do domu</string>
+    <string name="snooze_settings">Ustawienia drzemki</string>
+    <string name="home_location">Lokalizacja domowa</string>
+    <string name="home_location_not_set">Nie ustawiono</string>
+    <string name="home_location_set">Ustawiono</string>
+    <string name="determining_location">Ustalanie bieżącej lokalizacji…</string>
+    <string name="show_home_location_on_map">Pokaż lokalizację domową na mapie</string>
+    <string name="set_home_location_confirm">Ustawić lokalizację domową na\n%1$s, %2$s?</string>
+    <string name="home_location_error">Nie można określić bieżącej lokalizacji</string>
 </resources>

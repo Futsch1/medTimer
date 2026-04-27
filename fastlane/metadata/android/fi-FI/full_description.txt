@@ -11,6 +11,7 @@ Joustavat ja yksilölliset muistutukset:
 - Luo joustavia muistutuksia tauoilla ja tietyille päiville (esim. ehkäisypillereille).
 - Viikonlopputila: Viivästytä muistutuksia määritettyyn aikaan valittuina päivinä.
 - Torkkumuistutukset myöhemmille muistutuksille tai muistutettavaksi toistuvasti.
+- Sijaintipohjainen torkku: saa ilmoitus kotiin saapuessa.
 - Lisää ylimääräisiä annoksia lennossa.
 - Luo väliaikapohjaisia muistutuksia tai toisiaan väliajoin seuraavia muistutuksia.
 

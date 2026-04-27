@@ -57,8 +57,8 @@
     <string name="log_additional_dose">Tilføj ekstra dosis</string>
     <string name="dismiss_notification_action">Handling ved afvisning af notifikation</string>
     <string name="skip_reminder">Spring dosis over</string>
-    <string name="snooze">Slumre</string>
-    <string name="snooze_duration">Slumrevarighed</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_duration">Snooze-varighed</string>
     <string name="minutes_5">5 minutter</string>
     <string name="minutes_10">10 minutter</string>
     <string name="minutes_15">15 minutter</string>
@@ -101,7 +101,7 @@
     <string name="intro_welcome_description">MedTimer er en gratis open source-app til medicinpåmindelser med fokus på privatliv.\n\nDen kræver tilladelse til at vise notifikationer for medicinpåmindelser.</string>
     <string name="intro_medicine_description">Brug fanen \"Medicin\" til at oprette den medicin, du tager og vil have påmindelser om. Du kan tilføje tags og konfigurere lagerbeholdning.</string>
     <string name="intro_reminder_description">Vælg en medicin for at redigere detaljer og oprette påmindelser for de doser, du skal tage.\n\nPåmindelser kan være tids- eller intervalbaserede og kan begrænses til bestemte dage.</string>
-    <string name="intro_notification_description">Når en påmindelse udløses, vises en notifikation, hvor du kan markere dosis som taget (ved at trykke på knappen \"TAGET\"), springe den over ved at afvise notifikationen eller få en ny påmindelse senere (\"SLUMRE\").</string>
+    <string name="intro_notification_description">Når en påmindelse udløses, vises en notifikation, hvor du kan markere dosis som taget (ved at trykke på knappen \"TAGET\"), springe den over ved at afvise notifikationen eller få en ny påmindelse senere (\"SNOOZE\").</string>
     <string name="intro_overview_description">På oversigtsskærmen kan du se kommende påmindelser og de seneste hændelser. Påmindelser kan redigeres ved at swipe til højre og slettes ved at swipe til venstre.\n\nDu kan også manuelt registrere ekstra doser af enten en konfigureret medicin eller en brugerdefineret.</string>
     <string name="intro_analysis_description">Appen gemmer alle påmindelseshændelser. På analysesiden kan du gennemgå tidligere doser og eksportere historikken via menuen med tre prikker. Historikken bevares, selv hvis medicin eller påmindelser slettes eller omdøbes.</string>
     <string name="show_intro">Vis app-intro</string>
@@ -287,4 +287,17 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk backup</string>
     <string name="backup_successful_to">Automatisk backup gennemført: %s</string>
+    <string name="location_snooze">Placeringsbaseret snooze</string>
+    <string name="location_snooze_summary">Giv besked igen ved hjemkomst efter snooze</string>
+    <string name="location_snooze_no_play_services">Placeringsbaseret snooze kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
+    <string name="location_snooze_background_permission">For at blive adviseret ved hjemkomst, tillad MedTimer at tilgå placeringen i baggrunden</string>
+    <string name="snooze_until_home">Snooze til hjemkomst</string>
+    <string name="snooze_settings">Snooze-indstillinger</string>
+    <string name="home_location">Hjemsted</string>
+    <string name="home_location_not_set">Ikke angivet</string>
+    <string name="home_location_set">Angivet</string>
+    <string name="determining_location">Bestemmer aktuel placering…</string>
+    <string name="show_home_location_on_map">Vis hjemsted på kort</string>
+    <string name="set_home_location_confirm">Angiv hjemsted som\n%1$s, %2$s?</string>
+    <string name="home_location_error">Kunne ikke bestemme din aktuelle placering</string>
 </resources>

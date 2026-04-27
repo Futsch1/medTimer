@@ -39,4 +39,17 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk sikkerhetskopiering</string>
     <string name="backup_successful_to">Automatisk sikkerhetskopiering vellykket: %s</string>
+    <string name="location_snooze">Stedsbasert snooze</string>
+    <string name="location_snooze_summary">Varsle igjen ved hjemkomst etter snooze</string>
+    <string name="location_snooze_no_play_services">Stedsbasert snooze krever Google Play Services, som ikke er tilgjengelig på denne enheten</string>
+    <string name="location_snooze_background_permission">For å bli varslet ved hjemkomst, tillat MedTimer å få tilgang til plassering i bakgrunnen</string>
+    <string name="snooze_until_home">Snooze til hjemkomst</string>
+    <string name="snooze_settings">Snooze-innstillinger</string>
+    <string name="home_location">Hjemsted</string>
+    <string name="home_location_not_set">Ikke angitt</string>
+    <string name="home_location_set">Angitt</string>
+    <string name="determining_location">Bestemmer gjeldende posisjon…</string>
+    <string name="show_home_location_on_map">Vis hjemsted på kart</string>
+    <string name="set_home_location_confirm">Angi hjemsted til\n%1$s, %2$s?</string>
+    <string name="home_location_error">Kunne ikke bestemme gjeldende posisjon</string>
 </resources>

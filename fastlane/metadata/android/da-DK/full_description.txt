@@ -10,6 +10,7 @@ Fleksible og personaliserede påmindelser:
 - Opret fleksible påmindelser med pauser og specifikke dage (f.eks. for p-piller).
 - Weekendtilstand: Udskyd påmindelser til et bestemt tidspunkt på udvalgte dage.
 - Slumre påmindelser eller få gentagne påmindelser.
+- Placeringsbaseret snooze: modtag en ny påmindelse, når du ankommer hjem.
 - Tilføj ekstra doser efter behov.
 - Opret intervalbaserede påmindelser, sekventielle intervaller eller intervaller med fast start- og sluttid pr. dag.
 - Brug alarmtype-påmindelser for at sikre at blive underrettet, selv når enheden er på lydløs.

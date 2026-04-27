@@ -294,4 +294,17 @@
     <string name="monthly">Ежемесячно</string>
     <string name="automatic_backup">Автоматическое резервное копирование</string>
     <string name="backup_successful_to">Автоматическое резервное копирование завершено успешно: %s</string>
+    <string name="location_snooze">Отложить по местоположению</string>
+    <string name="location_snooze_summary">Повторно уведомить при возвращении домой после отсрочки</string>
+    <string name="location_snooze_no_play_services">Отсрочка по местоположению требует Google Play Services, которые недоступны на этом устройстве</string>
+    <string name="location_snooze_background_permission">Чтобы получать уведомления при возвращении домой, разрешите MedTimer доступ к местоположению в фоне</string>
+    <string name="snooze_until_home">Отложить до возвращения домой</string>
+    <string name="snooze_settings">Настройки отложенных уведомлений</string>
+    <string name="home_location">Домашнее местоположение</string>
+    <string name="home_location_not_set">Не задано</string>
+    <string name="home_location_set">Задано</string>
+    <string name="determining_location">Определение текущего местоположения…</string>
+    <string name="show_home_location_on_map">Показать домашнее местоположение на карте</string>
+    <string name="set_home_location_confirm">Задать домашнее местоположение:\n%1$s, %2$s?</string>
+    <string name="home_location_error">Не удалось определить ваше текущее местоположение</string>
 </resources>

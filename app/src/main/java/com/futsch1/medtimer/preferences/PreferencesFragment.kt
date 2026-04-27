@@ -56,6 +56,11 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
             "privacy_settings",
             R.id.action_preferencesFragment_to_privacyPreferencesFragment
         )
+        setupPreferencesLink(
+            this,
+            "snooze_settings",
+            R.id.action_preferencesFragment_to_snoozeSettingsFragment
+        )
     }
 
     private fun setupTheme() {

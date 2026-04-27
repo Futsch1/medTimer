@@ -10,6 +10,7 @@ Promemoria flessibili e personalizzati:
 - Crea promemoria flessibili con pause e giorni specifici (ad es. per le pillole anticoncezionali).
 - Imposta la modalità fine-settimana: ritarda i promemoria ad un orario prefissato in giorni selezionati.
 - Metti in pausa (snooze) le notifiche per promemoria posticipati o generati ripetutamente.
+- Posticipo basato sulla posizione: ricevi nuovamente la notifica quando arrivi a casa.
 - Aggiungi dosi extra al volo.
 - Crea promemoria basati su intervalli, promemoria che si ripetono ad intervalli o promemoria ad intervalli con un orario di inizio e di fine giornaliero.
 - Attiva promemoria con allarme per garantire la ricezione delle notifiche anche quando il dispositivo è in modalità silenziosa.

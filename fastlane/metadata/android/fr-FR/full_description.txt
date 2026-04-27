@@ -11,6 +11,7 @@ Flexible et flexible rappels personnalisés :
 - Création de rappels flexibles avec des pauses et des jours spécifiques (idéal pour les pilules contraceptives).
 - Mode week-end : Retardez les rappels à une heure définie les jours choisis.
 - Répétition des notifications pour les rappels ultérieurs.
+- Répétition basée sur la localisation : recevoir à nouveau une notification au retour à la maison.
 - Ajout des doses supplémentaires à la volée.
 
 Gestion simple et sécurisée des données :

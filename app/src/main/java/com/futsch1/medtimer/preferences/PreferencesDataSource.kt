@@ -9,8 +9,10 @@ import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPreferences
 import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.model.DismissNotificationAction
+import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.model.ThemeSetting
 import com.futsch1.medtimer.model.UserPreferences
+import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,8 @@ import kotlin.time.toDuration
 
 class PreferencesDataSource @Inject constructor(
     @param:DefaultPreferences private val sharedPreferences: SharedPreferences,
-    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope
+    @param:ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope,
+    private val gson: Gson
 ) : PreferenceDataStore() {
     val preferences: StateFlow<UserPreferences> = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -47,6 +50,19 @@ class PreferencesDataSource @Inject constructor(
 
     fun setAutomaticBackupDirectory(uri: Uri) {
         sharedPreferences.edit { putString(AUTOMATIC_BACKUP_DIRECTORY, uri.toString()) }
+    }
+
+    fun saveHomeLocation(location: HomeLocation) {
+        sharedPreferences.edit { putString(HOME_LOCATION, gson.toJson(location)) }
+    }
+
+    private fun getHomeLocation(): HomeLocation? {
+        val json = sharedPreferences.getString(HOME_LOCATION, null) ?: return null
+        return gson.fromJson(json, HomeLocation::class.java)
+    }
+
+    fun clearHomeLocation() {
+        sharedPreferences.edit { remove(HOME_LOCATION) }
     }
 
     // Functions for compatibility with PreferencesFragment
@@ -138,7 +154,9 @@ class PreferencesDataSource @Inject constructor(
             ),
             noVibrationWhenSilent = sharedPreferences.getBoolean(NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
             automaticBackupInterval = BackupInterval.entries[sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")?.toInt() ?: 0],
-            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri()
+            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
+            locationBasedSnooze = sharedPreferences.getBoolean(LOCATION_SNOOZE_ENABLED, default.locationBasedSnooze),
+            homeLocation = getHomeLocation()
         )
     }
 
@@ -169,5 +187,7 @@ class PreferencesDataSource @Inject constructor(
         const val DISABLE_WIDGET = "disable_widget"
         const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
         const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
+        const val LOCATION_SNOOZE_ENABLED = "location_snooze_enabled"
+        const val HOME_LOCATION = "home_location"
     }
 }

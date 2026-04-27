@@ -2,6 +2,8 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.location.GeofenceRegistrar
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
@@ -15,8 +17,10 @@ import javax.inject.Inject
  * schedules a new alarm for the future.
  */
 open class SnoozeProcessor @Inject constructor(
-    val alarmProcessor: AlarmProcessor,
-    val notificationProcessor: NotificationProcessor
+    private val alarmProcessor: AlarmProcessor,
+    private val notificationProcessor: NotificationProcessor,
+    private val persistentDataDataSource: PersistentDataDataSource,
+    private val geofenceRegistrar: GeofenceRegistrar
 ) {
 
     fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
@@ -28,6 +32,15 @@ open class SnoozeProcessor @Inject constructor(
 
         alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
 
+        notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
+    }
+
+    fun processLocationSnooze(reminderNotificationData: ReminderNotificationData) {
+        Log.d(LogTags.REMINDER, "Snoozing reminder until home: $reminderNotificationData")
+
+        alarmProcessor.cancelPendingReminderNotifications(reminderNotificationData)
+        persistentDataDataSource.addPendingLocationSnooze(reminderNotificationData)
+        geofenceRegistrar.registerHomeGeofence()
         notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
     }
 }

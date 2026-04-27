@@ -37,6 +37,13 @@ fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotifica
     return snoozeIntent
 }
 
+fun getLocationSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
+    val snoozeIntent = Intent(ProcessorCode.LocationSnooze.action)
+    reminderNotificationData.toIntent(snoozeIntent)
+    snoozeIntent.setClass(context, ReminderProcessorBroadcastReceiver::class.java)
+    return snoozeIntent
+}
+
 fun getShowReminderNotificationIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
     val reminderIntent = Intent(ProcessorCode.ShowReminderNotification.action)
     reminderNotificationData.toIntent(reminderIntent)

@@ -41,6 +41,10 @@
     <string name="change_color_toast">Note that changes in color only take effect in future events</string>
     <string name="exact_reminders_summary">Reminders are scheduled at the exact time (increases battery usage)</string>
     <string name="enable_alarm_dialog">In order to allow scheduling exact alarms, enable this for MedTimer in the following menu</string>
+    <string name="location_snooze">Location-based snooze</string>
+    <string name="location_snooze_summary">Re-notify when arriving home after snoozing</string>
+    <string name="location_snooze_no_play_services">Location-based snooze requires Google Play Services, which is not available on this device</string>
+    <string name="location_snooze_background_permission">To re-notify when arriving home, allow MedTimer to access location in the background</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
@@ -202,6 +206,14 @@
     <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
+    <string name="snooze_settings">Snooze settings</string>
+    <string name="home_location">Home location</string>
+    <string name="home_location_not_set">Not set</string>
+    <string name="home_location_set">Set</string>
+    <string name="determining_location">Determining current location…</string>
+    <string name="show_home_location_on_map">Show home location on map</string>
+    <string name="set_home_location_confirm">Set home location to\n%1$s, %2$s?</string>
+    <string name="home_location_error">Could not determine your current location</string>
     <string name="display_settings">Display settings</string>
     <string name="use_relative_date_time_summary">Show relative date/time for reminders</string>
     <string name="use_relative_date_time">Relative date/time</string>
@@ -292,4 +304,5 @@
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
+    <string name="snooze_until_home">Snooze until home</string>
 </resources>
