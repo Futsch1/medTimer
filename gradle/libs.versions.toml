@@ -6,7 +6,7 @@ navigation-safe-args = "2.9.7"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.2.3.7755"
-ksp = "2.3.6"
+ksp = "2.3.7"
 
 # AndroidX
 appcompat = "1.7.1"
