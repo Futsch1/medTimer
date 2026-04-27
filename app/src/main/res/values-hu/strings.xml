@@ -193,6 +193,9 @@
     <string name="login">MedTimer feloldása biometrikus azonosítással</string>
     <string name="privacy_settings">Adatvédelmi beállítások</string>
     <string name="hide_med_name">Gyógyszer neve ne jelenjen meg az értesítésekben</string>
+    <string name="disable_widget">Kezdőképernyő-widgetek letiltása</string>
+    <string name="disable_widget_summary">Megakadályozza, hogy a widgetek érzékeny gyógyszerinformációkat jelenítsenek meg a kezdőképernyőn</string>
+    <string name="widget_disabled_privacy">A widgetek adatvédelmi okokból le vannak tiltva — nyissa meg az alkalmazást az emlékeztetők megtekintéséhez</string>
     <string name="re_raise_event">Esemény megismétlése</string>
     <string name="notification_reminder_settings">Értesítési és emlékeztető beállítások</string>
     <string name="display_settings">Megjelenítési beállítások</string>

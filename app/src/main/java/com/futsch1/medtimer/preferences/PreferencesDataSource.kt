@@ -130,6 +130,7 @@ class PreferencesDataSource @Inject constructor(
             hideMedicineName = sharedPreferences.getBoolean(HIDE_MED_NAME, default.hideMedicineName),
             appAuthentication = sharedPreferences.getBoolean(APP_AUTHENTICATION, default.appAuthentication),
             useSecureWindow = sharedPreferences.getBoolean(SECURE_WINDOW, default.useSecureWindow),
+            disableWidget = sharedPreferences.getBoolean(DISABLE_WIDGET, default.disableWidget),
             alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.toUri() ?: default.alarmRingtone,
             noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
                 NO_ALARM_SOUND_WHEN_SILENT,
@@ -165,6 +166,7 @@ class PreferencesDataSource @Inject constructor(
         const val NO_VIBRATION_WHEN_SILENT = "no_vibration_when_silent"
         const val THEME = "theme"
         const val APP_AUTHENTICATION = "app_authentication"
+        const val DISABLE_WIDGET = "disable_widget"
         const val AUTOMATIC_BACKUP_INTERVAL = "automatic_backup_interval"
         const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
     }

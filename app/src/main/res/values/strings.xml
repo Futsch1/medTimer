@@ -197,6 +197,9 @@
     <string name="login">Login to MedTimer using biometric authentication</string>
     <string name="privacy_settings">Privacy settings</string>
     <string name="hide_med_name">Hide medication name in notification</string>
+    <string name="disable_widget">Disable home screen widgets</string>
+    <string name="disable_widget_summary">Prevent widgets from displaying sensitive medication information on the home screen</string>
+    <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
     <string name="display_settings">Display settings</string>

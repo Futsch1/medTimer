@@ -185,6 +185,9 @@
     <string name="app_authentication">Изисквай автентикация за отваряне на приложението</string>
     <string name="login">Вход в MedTimer чрез биометрична автентикация</string>
     <string name="hide_med_name">Скриване на името на лекарството в известията</string>
+    <string name="disable_widget">Деактивиране на приспособленията на началния екран</string>
+    <string name="disable_widget_summary">Предотвратяване на показването на чувствителна информация за лекарства в приспособленията</string>
+    <string name="widget_disabled_privacy">Приспособленията са деактивирани поради поверителност — отворете приложението за напомняния</string>
     <string name="notification_reminder_settings">Настройки на известията и напомнянията</string>
     <string name="use_relative_date_time_summary">Покажи относителни време/дата за напомнянията</string>
     <string name="use_relative_date_time">Относителни време/дата</string>

@@ -6,10 +6,21 @@ import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 
 
-fun clickDialogPositiveButton() {
+fun clickDialogPositiveButton(retryIfStillVisible: Boolean = true) {
     val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     device.waitForView(By.res("android:id/button1"), 1_000)
-    BaristaDialogInteractions.clickDialogPositiveButton()
+    clickDialogPositiveButtonIfVisible(device)
+    device.waitForIdle()
+    if (retryIfStillVisible) {
+        clickDialogPositiveButtonIfVisible(device)
+    }
+}
+
+private fun clickDialogPositiveButtonIfVisible(device: UiDevice) {
+    device.waitForIdle()
+    if (null != device.findObject(By.res("android:id/button1"))) {
+        BaristaDialogInteractions.clickDialogPositiveButton()
+    }
 }
 
 fun openNotification(): AutoCloseable {

@@ -43,6 +43,7 @@ data class UserPreferences(
     val hideMedicineName: Boolean,
     val appAuthentication: Boolean,
     val useSecureWindow: Boolean,
+    val disableWidget: Boolean,
     // Alarm settings
     val alarmRingtone: Uri?,
     val noAlarmSoundWhenSilent: Boolean,
@@ -74,6 +75,7 @@ data class UserPreferences(
                 hideMedicineName = false,
                 appAuthentication = false,
                 useSecureWindow = false,
+                disableWidget = false,
                 alarmRingtone = Settings.System.DEFAULT_ALARM_ALERT_URI,
                 noAlarmSoundWhenSilent = false,
                 noVibrationWhenSilent = false,

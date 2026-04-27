@@ -61,6 +61,7 @@ object AndroidTestHelper {
         clickOn(com.google.android.material.R.id.material_timepicker_mode_button)
         writeTo(com.google.android.material.R.id.material_hour_text_input, hour.toString())
         clickOn(com.google.android.material.R.id.material_minute_text_input)
+        clickOn(com.google.android.material.R.id.material_minute_text_input) // Fails sometimes, do this twice
         Espresso.onView(
             Matchers.allOf(
                 ViewMatchers.isDescendantOfA(ViewMatchers.withId(com.google.android.material.R.id.material_minute_text_input)),

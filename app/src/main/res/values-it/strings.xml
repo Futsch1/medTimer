@@ -197,6 +197,9 @@
     <string name="login">Accede a MedTimer mediante l\'autenticazione biometrica</string>
     <string name="privacy_settings">Impostazioni della privacy</string>
     <string name="hide_med_name">Nasconde il nome del farmaco nella notifica</string>
+    <string name="disable_widget">Disabilita i widget della schermata iniziale</string>
+    <string name="disable_widget_summary">Impedisce ai widget di visualizzare informazioni sensibili sui farmaci nella schermata iniziale</string>
+    <string name="widget_disabled_privacy">Widget disabilitati per la privacy — apri l\'app per visualizzare i promemoria</string>
     <string name="re_raise_event">Rilancia l\'evento</string>
     <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
     <string name="display_settings">Impostazioni visualizzazione</string>

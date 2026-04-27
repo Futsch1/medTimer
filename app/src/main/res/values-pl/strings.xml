@@ -156,6 +156,9 @@
     <string name="app_url">MedTimer na GitHubie</string>
     <string name="exact_reminders">Dokładne przypomnienia</string>
     <string name="hide_med_name">Ukryj nazwę leku w powiadomieniu</string>
+    <string name="disable_widget">Wyłącz widgety na ekranie głównym</string>
+    <string name="disable_widget_summary">Zapobiegaj wyświetlaniu przez widgety wrażliwych informacji o lekach na ekranie głównym</string>
+    <string name="widget_disabled_privacy">Widgety wyłączone ze względu na prywatność — otwórz aplikację, aby wyświetlić przypomnienia</string>
     <string name="date">Data</string>
     <string name="exact_reminders_summary">Przypomnienia są zaplanowane na dokładny czas (zwiększa to zużycie baterii)</string>
     <string name="out_of_stock_notification">Zostało tylko %2$s z %1$s!\nRozważ uzupełnienie leku wkrótce.</string>

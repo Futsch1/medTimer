@@ -192,6 +192,9 @@
     <string name="login">உயிர் அடையாள அங்கீகரிப்பு மூலம் MedTimer-ல் உள்நுழையவும்</string>
     <string name="privacy_settings">தனியுரிமை அமைப்புகள்</string>
     <string name="hide_med_name">அறிவிப்பில் மருந்து பெயரை மறை</string>
+    <string name="disable_widget">முகப்பு திரை விட்ஜெட்களை முடக்கு</string>
+    <string name="disable_widget_summary">முகப்பு திரையில் விட்ஜெட்கள் முக்கிய மருந்து தகவலை காட்டாமல் தடுக்கவும்</string>
+    <string name="widget_disabled_privacy">தனியுரிமைக்காக விட்ஜெட்கள் முடக்கப்பட்டன — நினைவூட்டல்களைப் பார்க்க பயன்பாட்டைத் திறக்கவும்</string>
     <string name="re_raise_event">மீண்டும் உயர்த்தும் நிகழ்வு</string>
     <string name="notification_reminder_settings">அறிவிப்பு மற்றும் நினைவூட்டல் அமைப்புகள்</string>
     <string name="display_settings">காட்சி அமைப்புகள்</string>

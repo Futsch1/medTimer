@@ -192,6 +192,9 @@
     <string name="login">Logga in på MedTimer med hjälp av biometrisk autentisering</string>
     <string name="privacy_settings">Sekretessinställningar</string>
     <string name="hide_med_name">Dölj läkemedelsnamn i avisering</string>
+    <string name="disable_widget">Inaktivera widgets på startskärmen</string>
+    <string name="disable_widget_summary">Förhindra widgets från att visa känslig läkemedelsinformation på startskärmen</string>
+    <string name="widget_disabled_privacy">Widgets inaktiverade av integritetsskäl — öppna appen för att se påminnelser</string>
     <string name="re_raise_event">Återskapa händelse</string>
     <string name="notification_reminder_settings">Inställningar för aviseringar och påminnelser</string>
     <string name="display_settings">Displayinställningar</string>

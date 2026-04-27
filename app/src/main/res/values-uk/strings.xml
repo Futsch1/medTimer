@@ -202,6 +202,9 @@
     <string name="login">Вхід до MedTimer за допомогою біометрії</string>
     <string name="privacy_settings">Налаштування конфіденційності</string>
     <string name="hide_med_name">Приховати назву препарату в сповіщенні</string>
+    <string name="disable_widget">Вимкнути віджети головного екрану</string>
+    <string name="disable_widget_summary">Заборонити віджетам відображати конфіденційну інформацію про ліки на головному екрані</string>
+    <string name="widget_disabled_privacy">Віджети вимкнено для захисту конфіденційності — відкрийте програму для перегляду нагадувань</string>
     <string name="re_raise_event">Повторно запустити подію</string>
     <string name="notification_reminder_settings">Налаштування сповіщень та нагадувань</string>
     <string name="display_settings">Налаштування відображення</string>
