@@ -7,6 +7,7 @@
         android:entryValues="@array/snooze_duration_values"
         android:key="snooze_duration"
         android:title="@string/snooze_duration"
+        app:singleLineTitle="false"
         app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -18,9 +19,11 @@
     <Preference
         android:title="@string/home_location"
         android:summary="@string/home_location_not_set"
+        app:singleLineTitle="false"
         app:key="home_location" />
     <Preference
         android:title="@string/show_home_location_on_map"
         app:key="show_home_location_on_map"
+        app:singleLineTitle="false"
         android:icon="@drawable/link"/>
 </androidx.preference.PreferenceScreen>

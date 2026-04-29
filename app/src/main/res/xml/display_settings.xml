@@ -4,6 +4,7 @@
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:title="@string/big_notifications"
+        app:singleLineTitle="false"
         app:key="big_notifications" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -15,10 +16,12 @@
         android:defaultValue="false"
         android:summary="@string/use_relative_date_time_summary"
         android:title="@string/use_relative_date_time"
+        app:singleLineTitle="false"
         app:key="use_relative_date_time" />
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:title="@string/show_taken_time_in_overview"
+        app:singleLineTitle="false"
         app:key="show_taken_time_in_overview" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -33,5 +36,6 @@
         android:entryValues="@array/values_0_and_1"
         android:title="@string/theme"
         app:key="theme"
+        app:singleLineTitle="false"
         app:useSimpleSummaryProvider="true" />
 </androidx.preference.PreferenceScreen>
