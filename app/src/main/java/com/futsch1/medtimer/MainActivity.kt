@@ -191,6 +191,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         bottomNavigationView.setOnItemSelectedListener { item: MenuItem? ->
+            navController.popBackStack(R.id.preferencesFragment, true)
             onNavDestinationSelected(item!!, navController)
             true
         }
