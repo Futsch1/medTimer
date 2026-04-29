@@ -261,7 +261,7 @@
     <string name="reschedule_reminder">Reprogramar recordatorio</string>
     <string name="interval_start_condition">Condición de inicio de intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
-    <string name="show_taken_time_in_overview">Mostrar tiempo empleado en resumen</string>
+    <string name="show_taken_time_in_overview">Mostrar hora de toma en el resumen</string>
     <string name="refill">Reposición de existencias</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
     <string name="production_date">Fecha de producción</string>

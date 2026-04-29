@@ -255,7 +255,7 @@
     <string name="reschedule_reminder">Schemalägg om påminnelsen</string>
     <string name="interval_start_condition">Intervallets startvillkor</string>
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
-    <string name="show_taken_time_in_overview">Visa tidsåtgång i översikt</string>
+    <string name="show_taken_time_in_overview">Visa intagningstid i översikt</string>
     <string name="refill">Lagerpåfyllning</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
     <string name="production_date">Produktionsdatum</string>
