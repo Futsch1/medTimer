@@ -61,7 +61,7 @@ private fun buildActionIntent(context: Context, processedNotificationData: Proce
 fun getCustomSnoozeActionIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
     val actionIntent = Intent(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
     actionIntent.setClass(context, MainActivity::class.java)
-    actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     reminderNotificationData.toIntent(actionIntent)
     return actionIntent
 }
@@ -89,7 +89,7 @@ fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: 
     val intent = Intent(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
     intent.setClass(context, MainActivity::class.java)
     reminderNotificationData.toIntent(intent)
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     return intent
 }
 
