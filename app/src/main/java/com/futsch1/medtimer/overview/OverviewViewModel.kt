@@ -3,8 +3,8 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.model.OverviewFilter
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.overview.model.EventPosition
 import com.futsch1.medtimer.overview.model.OverviewEvent
 import com.futsch1.medtimer.overview.model.PastReminderEvent
@@ -124,7 +124,9 @@ class OverviewViewModel @AssistedInject constructor(
 
     private fun isReminderEventVisible(reminderEvent: ReminderEvent, filterState: FilterState): Boolean {
         val reminderEventVisible = filterState.activeFilters.isEmpty() ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && filterState.activeFilters.contains(OverviewFilter.TAKEN)) ||
+                ((reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) && filterState.activeFilters.contains(
+                    OverviewFilter.TAKEN
+                )) ||
                 (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(OverviewFilter.SKIPPED)) ||
                 (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(OverviewFilter.RAISED))
         return isSameDay(reminderEvent.remindedTimestamp.epochSecond, filterState.day) && reminderEventVisible
