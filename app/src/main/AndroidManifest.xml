@@ -134,14 +134,6 @@
 
         </receiver>
         <receiver
-            android:name=".reminders.RemoteInputReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION" />
-                <action android:name="com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".location.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="false">

@@ -9,9 +9,6 @@ object ActivityCodes {
     const val EXTRA_REMINDER_ID_LIST: String = "com.futsch1.medtimer.REMINDER_ID_LIST"
     const val EXTRA_REMIND_INSTANT: String = "com.futsch1.medtimer.REMIND_INSTANT"
 
-    const val REMOTE_INPUT_SNOOZE_ACTION: String = "com.futsch1.medtimer.REMOTE_INPUT_SNOOZE_ACTION"
-    const val REMOTE_INPUT_VARIABLE_AMOUNT_ACTION: String = "com.futsch1.medtimer.REMOTE_INPUT_VARIABLE_AMOUNT_ACTION"
-
     const val VARIABLE_AMOUNT_ACTIVITY: String = "com.futsch1.medtimer.VARIABLE_AMOUNT_ACTIVITY"
     const val CUSTOM_SNOOZE_ACTIVITY: String = "com.futsch1.medtimer.CUSTOM_SNOOZE_ACTIVITY"
 }
