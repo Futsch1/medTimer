@@ -28,9 +28,9 @@ data class ReminderEvent(
         val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
         val statusValuesWithoutDelete: List<ReminderStatus> =
             ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
-        val statusValuesWithoutDeletedAndAcknowledged: List<ReminderStatus> =
-            ReminderStatus.entries.filterNot {
-                it == ReminderStatus.ACKNOWLEDGED || it == ReminderStatus.DELETED
+        val statusValuesTakenOrSkipped: List<ReminderStatus> =
+            ReminderStatus.entries.filter {
+                it == ReminderStatus.TAKEN || it == ReminderStatus.SKIPPED
             }
 
         fun default(): ReminderEvent = ReminderEvent(
