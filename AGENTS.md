@@ -44,7 +44,8 @@ app/schemas/         Room database migration schemas
 ./gradlew JacocoDebugCodeCoverage
 ```
 
-**Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally** — instrumented tests require an emulator and take a very long time. CI handles them.
+**Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally, only on explicit request** — instrumented tests require an emulator and take a very
+long time. CI handles them.
 
 ## CI / GitHub Actions
 
@@ -76,3 +77,9 @@ The build must pass `assembleDebug` and `lint` before merging.
   `app/build.gradle.kts`)
 - Escape `'` with a single `\`
 - Use `\n` for newline
+
+## Testing
+
+- Prefer unit tests to Android tests, since the latter are often flaky and take a long time to run
+- Tests are important for this app, if implementing a feature or a bugfix, a test driven approach is preferred
+

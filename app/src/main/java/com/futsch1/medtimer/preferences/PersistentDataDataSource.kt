@@ -108,6 +108,18 @@ class PersistentDataDataSource @Inject constructor(
         medTimerSharedPreferences.edit { remove(PENDING_SNOOZES) }
     }
 
+    fun removePendingLocationSnoozesForReminderEventIds(reminderEventIds: List<Int>) {
+        val current = getPendingSnoozeList()
+        val updated = current.filter { snooze -> snooze.reminderEventIds.none { it in reminderEventIds } }
+        if (updated.size != current.size) {
+            if (updated.isEmpty()) {
+                medTimerSharedPreferences.edit { remove(PENDING_SNOOZES) }
+            } else {
+                medTimerSharedPreferences.edit { putString(PENDING_SNOOZES, gson.toJson(updated)) }
+            }
+        }
+    }
+
     private fun getPendingSnoozeList(): List<SerializablePendingSnooze> {
         val json = medTimerSharedPreferences.getString(PENDING_SNOOZES, null) ?: return emptyList()
         val type = object : TypeToken<List<SerializablePendingSnooze>>() {}.type
