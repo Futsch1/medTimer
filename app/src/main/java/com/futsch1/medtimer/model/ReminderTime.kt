@@ -2,7 +2,7 @@ package com.futsch1.medtimer.model
 
 import java.time.LocalTime
 
-class ReminderTime(val minutes: Int, val isDuration: Boolean = false) : Comparable<ReminderTime> {
+data class ReminderTime(val minutes: Int, val isDuration: Boolean = false) : Comparable<ReminderTime> {
     val seconds: Long
         get() = minutes * 60L
 
