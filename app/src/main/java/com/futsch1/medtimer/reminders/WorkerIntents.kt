@@ -32,7 +32,7 @@ fun getReminderAction(context: Context): Intent {
 fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration): Intent {
     val snoozeIntent = Intent(ProcessorCode.Snooze.action)
     reminderNotificationData.toIntent(snoozeIntent)
-    snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME, snoozeDuration.inWholeSeconds)
+    snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, snoozeDuration.inWholeSeconds)
     snoozeIntent.setClass(context, ReminderProcessorBroadcastReceiver::class.java)
     return snoozeIntent
 }
