@@ -1,22 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/activate_group">
-        <item
-            android:id="@+id/activate_all"
-            android:title="@string/activate_all" />
-        <item
-            android:id="@+id/deactivate_all"
-            android:title="@string/deactivate_all" />
-    </group>
-    <group android:id="@+id/duplicate_group">
-        <item
-            android:id="@+id/duplicate"
-            android:title="@string/duplicate"
-            android:icon="@drawable/copy"/>
-        <item
-            android:id="@+id/duplicate_including_reminders"
-            android:title="@string/duplicate_including_reminders"
-            android:icon="@drawable/copy"/>
-    </group>
     <group>
         <item
             android:id="@+id/openNotes"
@@ -35,7 +17,23 @@
             android:icon="@drawable/calendar_week"
             android:title="@string/calendar" />
     </group>
-    <group>
+    <group android:id="@+id/activate_group">
+        <item
+            android:id="@+id/activate_all"
+            android:title="@string/activate_all" />
+        <item
+            android:id="@+id/deactivate_all"
+            android:title="@string/deactivate_all" />
+    </group>
+    <group android:id="@+id/modify_group">
+        <item
+            android:id="@+id/duplicate"
+            android:title="@string/duplicate"
+            android:icon="@drawable/copy"/>
+        <item
+            android:id="@+id/duplicate_including_reminders"
+            android:title="@string/duplicate_including_reminders"
+            android:icon="@drawable/copy"/>
         <item
             android:id="@+id/delete_medicine"
             android:icon="@drawable/trash"
