@@ -45,7 +45,7 @@ class GeofenceRegistrarTest {
         whenever(mockTask.addOnFailureListener(any())).thenReturn(mockTask)
         whenever(preferencesDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default()))
 
-        registrar = GeofenceRegistrar(
+        registrar = GmsGeofenceRegistrar(
             ApplicationProvider.getApplicationContext(),
             geofencingClient,
             preferencesDataSource,

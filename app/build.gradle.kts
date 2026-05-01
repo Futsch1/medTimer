@@ -37,6 +37,17 @@ android {
             )
         )
     }
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("full") {
+            dimension = "distribution"
+            isDefault = true
+        }
+        create("foss") {
+            dimension = "distribution"
+        }
+    }
+
     buildTypes {
         release {
             @Suppress("kotlin:S7204") // Does not make sense for open source apps
@@ -144,7 +155,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
-    implementation(libs.play.services.location)
+    "fullImplementation"(libs.play.services.location)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -194,7 +205,7 @@ sonar {
         property("sonar.organization", "futsch1")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.gradle.skipCompile", "true")
-        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property("sonar.android.lint.report", "build/reports/lint-results-fullDebug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
             "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
@@ -214,8 +225,8 @@ tasks.withType(Test::class) {
 }
 
 // Define task names for unit tests and Android tests
-val unitTests = "testDebugUnitTest"
-val androidTests = "connectedDebugAndroidTest"
+val unitTests = "testFullDebugUnitTest"
+val androidTests = "connectedFullDebugAndroidTest"
 val exclusions = listOf(
     "**/R.class",
     "**/R$*.class",

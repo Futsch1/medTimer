@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.preferences
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Build
@@ -17,11 +16,9 @@ import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.location.GeofenceRegistrar
+import com.futsch1.medtimer.location.LocationProvider
 import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -36,7 +33,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     lateinit var geofenceRegistrar: GeofenceRegistrar
 
     @Inject
-    lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var locationProvider: LocationProvider
 
     private lateinit var requestFineLocationLauncher: ActivityResultLauncher<String>
     private lateinit var requestBackgroundLocationLauncher: ActivityResultLauncher<String>
@@ -71,6 +68,11 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     private fun setupLocationSnooze() {
         val preference = preferenceScreen.findPreference<SwitchPreferenceCompat>(LOCATION_SNOOZE_ENABLED) ?: return
+        if (!geofenceRegistrar.isSupported) {
+            preference.isVisible = false
+            updateLocationPrefsVisibility(false)
+            return
+        }
         updateLocationPrefsVisibility(preference.isChecked)
         preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue == true) {
@@ -105,30 +107,25 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun fetchCurrentLocationAndConfirm() {
-        val cts = CancellationTokenSource()
+        var cancelLocation: (() -> Unit)? = null
         val progressDialog: AlertDialog = MaterialAlertDialogBuilder(requireActivity())
             .setMessage(R.string.determining_location)
             .setCancelable(false)
-            .setNegativeButton(R.string.cancel) { _, _ -> cts.cancel() }
+            .setNegativeButton(R.string.cancel) { _, _ -> cancelLocation?.invoke() }
             .show()
 
-        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
-            .addOnSuccessListener { location ->
-                if (isAdded) {
-                    progressDialog.dismiss()
-                }
-                if (location != null) {
-                    showSetHomeLocationDialog(location)
-                } else {
-                    showInfoDialog(R.string.home_location_error)
-                }
-            }
-            .addOnFailureListener {
+        cancelLocation = locationProvider.getCurrentLocation(
+            onSuccess = { location ->
+                if (isAdded) progressDialog.dismiss()
+                if (location != null) showSetHomeLocationDialog(location)
+                else showInfoDialog(R.string.home_location_error)
+            },
+            onFailure = {
                 if (isAdded) progressDialog.dismiss()
                 showInfoDialog(R.string.home_location_error)
             }
+        )
     }
 
     private fun showSetHomeLocationDialog(location: Location) {
@@ -199,6 +196,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
     override fun onResume() {
         super.onResume()
+        if (!geofenceRegistrar.isSupported) return
         val pref = findPreference<SwitchPreferenceCompat>(LOCATION_SNOOZE_ENABLED) ?: return
         if (pref.isChecked && !geofenceRegistrar.hasRequiredPermissions()) {
             resetLocationSnooze()
