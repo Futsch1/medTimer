@@ -46,7 +46,7 @@ abstract class NotificationFactory(
     }
 
     private fun getIcon(medicines: List<Medicine>): Bitmap? {
-        val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.toList()
+        val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.distinct().toList()
         return medicineIcons.getIconsBitmap(iconIds)
     }
 
