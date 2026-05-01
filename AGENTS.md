@@ -82,4 +82,3 @@ The build must pass `assembleDebug` and `lint` before merging.
 
 - Prefer unit tests to Android tests, since the latter are often flaky and take a long time to run
 - Tests are important for this app, if implementing a feature or a bugfix, a test driven approach is preferred
-
