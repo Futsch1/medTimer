@@ -87,7 +87,7 @@ class ReminderTableAdapter(
         for (reminderEvent in reminderEvents) {
             val cell = listOf(
                 ReminderTableCellModel(
-                    reminderEvent.status,
+                    reminderEvent.processedTimestamp,
                     getStatusString(reminderEvent, formatter),
                     reminderEvent.reminderEventId, "taken"
                 ),

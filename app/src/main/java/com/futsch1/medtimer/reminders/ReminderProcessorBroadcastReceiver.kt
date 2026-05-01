@@ -16,6 +16,8 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 /**
  * [BroadcastReceiver] that acts as the central entry point for reminder-related events and background tasks.
@@ -103,7 +105,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     private fun processSnooze(intent: Intent) {
         snoozeProcessor.processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
-            intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME, 0)
+            intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, 0).toDuration(DurationUnit.SECONDS)
         )
     }
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.helpers.IdlingResourcesPool.Companion.getInstance
 
 abstract class IdlingListAdapter<T, VH : RecyclerView.ViewHolder>
-protected constructor(diffCallback: DiffUtil.ItemCallback<T>, idlingResourceName: String = "IdlingListAdapter_$diffCallback") :
+protected constructor(diffCallback: DiffUtil.ItemCallback<T>, idlingResourceName: String = "IdlingListAdapter_${diffCallback::class.qualifiedName}") :
     ListAdapter<T, VH>(diffCallback) {
     private val idlingResource: SimpleIdlingResource = getInstance().getResource(idlingResourceName)
 

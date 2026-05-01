@@ -8,6 +8,7 @@ import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
@@ -37,6 +38,7 @@ class NotificationProcessor @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
+    private val persistentDataDataSource: PersistentDataDataSource,
     private val timeAccess: TimeAccess
 ) {
     suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderEvent.ReminderStatus) {
@@ -137,6 +139,7 @@ class NotificationProcessor @Inject constructor(
             reminderEvent.copy(status = status, processedTimestamp = processedTime, stockHandled = doStockHandling(status, reminderEvent, processedTime))
         }
 
+        persistentDataDataSource.removePendingLocationSnoozesForReminderEventIds(reminderEvents.map { it.reminderEventId })
         reminderEventRepository.updateAll(reminderEvents)
         removeRemindersFromNotification(reminderEvents)
     }

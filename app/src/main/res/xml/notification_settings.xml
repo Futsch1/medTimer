@@ -6,12 +6,14 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/bell"
         android:title="@string/notification_settings_default"
+        app:singleLineTitle="false"
         app:key="notification_settings_default" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/bell"
         android:title="@string/notification_settings_high"
+        app:singleLineTitle="false"
         app:key="notification_settings_high" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:summary="@string/repeat_reminders_summary"
         android:title="@string/repeat_reminders"
+        app:singleLineTitle="false"
         app:key="repeat_reminders_preferences" />
     <ListPreference
         android:defaultValue="0"
@@ -49,6 +52,7 @@
         android:defaultValue="false"
         android:summary="@string/exact_reminders_summary"
         android:title="@string/exact_reminders"
+        app:singleLineTitle="false"
         app:key="exact_reminders" />
     <Preference
         android:layout_width="wrap_content"

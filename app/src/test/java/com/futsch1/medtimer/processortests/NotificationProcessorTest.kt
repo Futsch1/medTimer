@@ -163,6 +163,25 @@ class NotificationProcessorTest {
     }
 
     @Test
+    fun takenClearsPendingLocationSnooze() {
+        testReminderContext.instant = Instant.ofEpochSecond(10)
+        val reminderNotificationData = fillWithOneReminder(testReminderContext)
+        val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotificationData)
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
+
+        runBlocking {
+            notificationProcessor.processReminderEventsInNotification(
+                processedNotificationData,
+                ReminderEvent.ReminderStatus.TAKEN
+            )
+        }
+
+        verify(testReminderContext.persistentDataDataSourceMock, times(1))
+            .removePendingLocationSnoozesForReminderEventIds(listOf(1))
+    }
+
+    @Test
     fun removeSingle() {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         testReminderContext.notificationId = 2

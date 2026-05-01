@@ -124,9 +124,10 @@ class CalendarEventsViewModel @Inject constructor(
     }
 
     private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
-        return scheduledReminderEventFactory.create(scheduledReminder).text
+        val builder = SpannableStringBuilder()
+        addDividerToSpan(builder)
+        return builder.append(scheduledReminderEventFactory.create(scheduledReminder).text)
     }
-
 
     private fun addPastEvents(pastDays: Long) {
         val startDay = LocalDate.now().minusDays(pastDays)

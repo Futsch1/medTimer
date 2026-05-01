@@ -74,7 +74,8 @@
         app:argType="string" />
     <action
         android:id="@+id/action_global_preferencesFragment"
-        app:destination="@id/preferencesFragment" />
+        app:destination="@id/preferencesFragment"
+        app:launchSingleTop="true" />
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.futsch1.medtimer.statistics.StatisticsFragment"

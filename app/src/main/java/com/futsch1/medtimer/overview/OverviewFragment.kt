@@ -151,11 +151,11 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     inner class OverviewOnSwipeListener : OnSwipeListener {
         override fun onSwipeLeft() {
-            daySelector.selectNextDay()
+            daySelector.selectPreviousDay()
         }
 
         override fun onSwipeRight() {
-            daySelector.selectPreviousDay()
+            daySelector.selectNextDay()
         }
 
         override fun onSwipeUp() {

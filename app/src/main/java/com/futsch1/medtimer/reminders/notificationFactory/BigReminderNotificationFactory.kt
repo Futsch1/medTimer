@@ -2,6 +2,7 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -65,6 +66,7 @@ class BigReminderNotificationFactory @AssistedInject constructor(
         builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
         builder.setCustomBigContentView(views)
         builder.setContentText(notificationStrings.baseString)
+        builder.setLargeIcon(null as Bitmap?)
 
         buildActions()
     }

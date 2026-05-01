@@ -89,8 +89,6 @@ fun getNotificationText(@StringRes stringId: Int, vararg args: Any): String {
 }
 
 
-private const val COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND = "com.android.systemui:id/remote_input_send"
-
 class NotificationTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
@@ -295,18 +293,17 @@ class NotificationTest : BaseTestHelper() {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
             device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
             clickNotificationButton(device, getNotificationText(R.string.taken))
-
-            val notificationInput1 = device.wait(Until.findObject(By.hintContains(TEST_MED)), 2_000)
-            notificationInput1.text = TEST_VARIABLE_AMOUNT
-            device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
-            device.wait(Until.gone(By.textContains(TEST_MED)), 2_000)
-
-            clickNotificationButton(device, getNotificationText(R.string.taken))
-            val notificationInput2 = device.wait(Until.findObject(By.hintContains(SECOND_ONE)), 2_000)
-            notificationInput2.text = TEST_ANOTHER_VARIABLE_AMOUNT
-            device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
-            device.wait(Until.gone(By.textContains(SECOND_ONE)), 2_000)
         }
+
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        assertContains(TEST_MED)
+        writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
+        clickDialogPositiveButton()
+
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        assertContains(SECOND_ONE)
+        writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
+        clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_VARIABLE_AMOUNT)
@@ -433,13 +430,11 @@ class NotificationTest : BaseTestHelper() {
             internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
             internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
             clickNotificationButton(device, getNotificationText(R.string.snooze))
-
-            val snoozeString = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.snooze)
-            val input = device.wait(Until.findObject(By.hintContains(snoozeString)), 2_000)
-            input.text = "13"
-            device.findObject(By.res(COM_ANDROID_SYSTEMUI_ID_REMOTE_INPUT_SEND)).click()
-            device.wait(Until.gone(By.textContains(snoozeString)), 2_000)
         }
+
+        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        writeTo(android.R.id.input, "13")
+        clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
         assertCustomAssertionAtPosition(

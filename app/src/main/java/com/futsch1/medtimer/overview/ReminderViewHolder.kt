@@ -104,7 +104,7 @@ class ReminderViewHolder(
     private fun setupEditEvent() {
         this.contentContainer.setOnClickListener {
             if (!clickDelegate.onItemClick(layoutPosition)) {
-                if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING) {
+                if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.state != OverviewState.LOCATION) {
                     EditEventSheetDialogFragment.newInstance(
                         (event as PastReminderEvent).reminderEvent.reminderEventId
                     ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")

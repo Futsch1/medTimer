@@ -65,7 +65,6 @@ jobs:
           rm $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
         continue-on-error: true
       - name: Upload App Package
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: apk

@@ -78,4 +78,47 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
         assertTrue(dataSource.getPendingLocationSnoozes().isEmpty())
     }
+
+    @Test
+    fun removeByEventIdDropsEntireEntryWhenAllEventsMatch() {
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1, 2), mutableListOf(10, 20), 1))
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(3), mutableListOf(30), 2))
+
+        dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
+
+        val remaining = dataSource.getPendingLocationSnoozes()
+        assertEquals(1, remaining.size)
+        assertEquals(listOf(30), remaining[0].reminderEventIds)
+    }
+
+    @Test
+    fun removeByEventIdKeepsUnmatchedEventIdsWithinSameEntry() {
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1, 2, 3), mutableListOf(10, 20, 30), 1))
+
+        dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(20))
+
+        val remaining = dataSource.getPendingLocationSnoozes()
+        assertEquals(1, remaining.size)
+        assertEquals(listOf(1, 3), remaining[0].reminderIds)
+        assertEquals(listOf(10, 30), remaining[0].reminderEventIds)
+    }
+
+    @Test
+    fun removeByEventIdNoMatchLeavesListUnchanged() {
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+
+        dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(99))
+
+        assertEquals(1, dataSource.getPendingLocationSnoozes().size)
+    }
+
+    @Test
+    fun removeByEventIdAllEntriesRemovedResultsInEmptyList() {
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+
+        dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
+
+        assertTrue(dataSource.getPendingLocationSnoozes().isEmpty())
+    }
 }

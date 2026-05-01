@@ -64,16 +64,23 @@
             android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/locationSnoozeButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:drawableStart="@drawable/geo_alt_fill"
             android:text="@string/snooze_until_home"
             android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
+
     </LinearLayout>
 
 </LinearLayout>

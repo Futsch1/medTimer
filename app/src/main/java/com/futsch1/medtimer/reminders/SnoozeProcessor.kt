@@ -7,6 +7,7 @@ import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
+import kotlin.time.Duration
 
 /**
  * Handles the snooze functionality for reminders.
@@ -23,8 +24,8 @@ open class SnoozeProcessor @Inject constructor(
     private val geofenceRegistrar: GeofenceRegistrar
 ) {
 
-    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Long) {
-        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime * 60)
+    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Duration) {
+        reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime.inWholeSeconds)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
         // Cancel a potential repeat alarm

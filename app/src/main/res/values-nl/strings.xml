@@ -256,7 +256,7 @@
     <string name="reschedule_reminder">Herinnering opnieuw plannen</string>
     <string name="interval_start_condition">Interval startvoorwaarde</string>
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
-    <string name="show_taken_time_in_overview">Toon benodigde tijd in overzicht</string>
+    <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
     <string name="refill">Voorraad aanvullen</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
     <string name="production_date">Productiedatum</string>
