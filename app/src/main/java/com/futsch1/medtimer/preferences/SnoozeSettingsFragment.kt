@@ -139,7 +139,11 @@ class SnoozeSettingsFragment : PreferencesFragment() {
             .setPositiveButton(R.string.ok) { _, _ ->
                 preferencesDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
                 updateLocationPrefsVisibility(true)
-                if (preferencesDataSource.preferences.value.homeLocation != null && !geofenceRegistrar.registerHomeGeofence(::onGeofenceRegistrationFailed)) {
+                if (preferencesDataSource.preferences.value.homeLocation != null && !geofenceRegistrar.registerHomeGeofence(
+                        null,
+                        ::onGeofenceRegistrationFailed
+                    )
+                ) {
                     onGeofenceRegistrationFailed()
                 }
             }
