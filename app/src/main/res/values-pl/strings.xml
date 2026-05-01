@@ -299,7 +299,7 @@
     <string name="backup_successful_to">Automatyczna kopia zapasowa zakończona sukcesem: %s</string>
     <string name="location_snooze">Drzemka oparta na lokalizacji</string>
     <string name="location_snooze_summary">Ponownie powiadom po przybyciu do domu po drzemce</string>
-    <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga Google Play Services, które nie są dostępne na tym urządzeniu</string>
+    <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga usług Google Play, które nie są dostępne na tym urządzeniu</string>
     <string name="location_snooze_background_permission">Aby ponownie otrzymywać powiadomienia po przybyciu do domu, zezwól MedTimer na dostęp do lokalizacji w tle</string>
     <string name="snooze_until_home">Drzemka do powrotu do domu</string>
     <string name="snooze_settings">Ustawienia drzemki</string>
