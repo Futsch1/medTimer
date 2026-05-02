@@ -12,13 +12,13 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class LocationModule {
+interface LocationModule {
 
     @Binds
     @Singleton
-    abstract fun bindGeofenceRegistrar(impl: NoOpGeofenceRegistrar): GeofenceRegistrar
+    fun bindGeofenceRegistrar(impl: NoOpGeofenceRegistrar): GeofenceRegistrar
 
     @Binds
     @Singleton
-    abstract fun bindLocationProvider(impl: NoOpLocationProvider): LocationProvider
+    fun bindLocationProvider(impl: NoOpLocationProvider): LocationProvider
 }

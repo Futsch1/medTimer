@@ -10,7 +10,7 @@ Package: `com.futsch1.medtimer`
 The app has two product flavors on the `distribution` dimension:
 
 | Flavor | Purpose               | GMS dependency                 |
-|--------|-----------------------|--------------------------------|
+| ------ | --------------------- | ------------------------------ |
 | `full` | Google Play Store     | Yes (`play-services-location`) |
 | `foss` | FOSS app repositories | No                             |
 
