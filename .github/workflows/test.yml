@@ -78,7 +78,7 @@ jobs:
             adb uninstall com.futsch1.medtimer || true
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
-            EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+            EXIT_CODE=0 && ./gradlew jacocoFullDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
 
       - name: Android lint

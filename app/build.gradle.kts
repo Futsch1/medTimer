@@ -238,7 +238,7 @@ val exclusions = listOf(
 )
 
 // Register a JacocoReport task for code coverage analysis
-tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
+tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
     // Depend on unit tests and Android tests tasks
     dependsOn(listOf(unitTests, androidTests))
     // Set task grouping and description
@@ -250,14 +250,16 @@ tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
         html.required.set(true)
     }
     // Set source directories to the main source directory
-    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
+    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"),
+        layout.projectDirectory.dir("src/main/full/java")
+        )
     // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
     classDirectories.setFrom(
         files(
-            fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/javac/fullDebug/")) {
                 exclude(exclusions)
             },
-            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/fullDebug/")) {
                 exclude(exclusions)
             }
         ))

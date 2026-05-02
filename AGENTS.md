@@ -66,7 +66,7 @@ app/schemas/         Room database migration schemas
 ./gradlew lint
 
 # Full coverage report (requires connected device/emulator — very slow)
-./gradlew JacocoDebugCodeCoverage
+./gradlew jacocoFullDebugCodeCoverage
 ```
 
 **Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally, only on explicit request** — instrumented tests require an emulator and take a very
