@@ -5,6 +5,22 @@
 medTimer is an Android medication reminder app (Kotlin, minSdk 28, targetSdk 36).
 Package: `com.futsch1.medtimer`
 
+## Build Variants
+
+The app has two product flavors on the `distribution` dimension:
+
+| Flavor | Purpose               | GMS dependency                 |
+| ------ | --------------------- | ------------------------------ |
+| `full` | Google Play Store     | Yes (`play-services-location`) |
+| `foss` | FOSS app repositories | No                             |
+
+Flavor-specific source sets:
+
+- `app/src/full/` — GMS implementations (`GmsGeofenceRegistrar`, `GmsLocationProvider`, `GeofenceBroadcastReceiver`) and the flavor manifest (location
+  permissions + broadcast receiver)
+- `app/src/foss/` — No-op stubs (`NoOpGeofenceRegistrar`, `NoOpLocationProvider`)
+- `app/src/testFull/` — Unit tests that import GMS classes (`GeofenceRegistrarTest`, `GeofenceBroadcastReceiverTest`)
+
 ## Repository Layout
 
 ```
@@ -21,9 +37,13 @@ app/src/main/java/com/futsch1/medtimer/
   helpers/           Utility classes (time formatting, string formatting)
   preferences/       Persistent preferences and data sources
   widgets/           Home-screen widgets
-  di/                Hilt dependency injection modules
+  location/          GeofenceRegistrar and LocationProvider interfaces
+  di/                Hilt dependency injection modules (GsonModule + flavor LocationModules)
 
-app/src/test/        JVM unit tests (Robolectric, Mockito, JUnit 4)
+app/src/full/        Full-flavor sources (GMS geofencing implementations)
+app/src/foss/        FOSS-flavor sources (no-op geofencing stubs)
+app/src/test/        JVM unit tests shared across flavors (Robolectric, Mockito, JUnit 4)
+app/src/testFull/    JVM unit tests specific to the full flavor (require GMS classes)
 app/src/androidTest/ Instrumented UI tests (Espresso, Barista, UIAutomator)
 app/schemas/         Room database migration schemas
 ```
@@ -31,17 +51,22 @@ app/schemas/         Room database migration schemas
 ## Build Commands
 
 ```bash
-# Standard verification — run this after every code change
+# Standard verification — builds both flavors
 ./gradlew assembleDebug
 
-# Run JVM unit tests only (fast, no device needed)
-./gradlew testDebugUnitTest
+# Build a specific flavor
+./gradlew assembleFullDebug   # with GMS geofencing
+./gradlew assembleFossDebug   # without GMS
+
+# Run JVM unit tests (fast, no device needed)
+./gradlew testFullDebugUnitTest   # full flavor (includes GMS-specific tests)
+./gradlew testFossDebugUnitTest   # foss flavor (no-op stubs)
 
 # Lint (enforced on CI; abortOnError = true, warningsAsErrors = true)
 ./gradlew lint
 
 # Full coverage report (requires connected device/emulator — very slow)
-./gradlew JacocoDebugCodeCoverage
+./gradlew jacocoFullDebugCodeCoverage
 ```
 
 **Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally, only on explicit request** — instrumented tests require an emulator and take a very
@@ -49,10 +74,12 @@ long time. CI handles them.
 
 ## CI / GitHub Actions
 
-- **`build.yml`** — runs on every push and PR to `main`; executes `assembleRelease` + `bundleRelease`, signs artifacts, creates GitHub releases on version tags.
-- **`test.yml`** — runs on every push and PR to `main`; runs fuzzing unit tests (`testDebug -Dfuzzing=true`), instrumented tests on an API 36 emulator (
-  `JacocoDebugCodeCoverage`), and lint.
-- Other workflows: `compatibilityTest`, `monkeyTest`, `firebaseTest`, `codeql`, `scorecard`, `storeListing`.
+- **`build.yml`** — runs on every push and PR to `main`; runs `assembleRelease` + `bundleRelease` (builds both flavors); signs and uploads `aab-full`,
+  `apk-full`, and `apk-foss` artifacts; creates GitHub releases (AAB + both APKs) on version tags.
+- **`test.yml`** — runs on every push and PR to `main`; runs fuzzing unit tests on both flavors (`testFullDebug testFossDebug -Dfuzzing=true`), FOSS unit
+  tests (`testFossDebugUnitTest`), instrumented tests on an API 36 emulator via `JacocoDebugCodeCoverage` (full flavor), and lint.
+- **`compatibilityTest.yml`** — runs instrumented tests (`connectedFullDebugAndroidTest`) on API 28 and 36 emulators in a matrix.
+- Other workflows: `monkeyTest`, `firebaseTest`, `codeql`, `scorecard`, `storeListing`.
 
 The build must pass `assembleDebug` and `lint` before merging.
 

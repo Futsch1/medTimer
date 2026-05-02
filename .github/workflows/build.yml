@@ -7,8 +7,9 @@ on:
     branches: [main]
 
 env:
-  APK_RELEASE_DIRECTORY: app/build/outputs/apk/release
-  AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/release
+  FULL_APK_RELEASE_DIRECTORY: app/build/outputs/apk/full/release
+  FOSS_APK_RELEASE_DIRECTORY: app/build/outputs/apk/foss/release
+  FULL_AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/fullRelease
   BUILD_TOOLS_HOME: /usr/local/lib/android/sdk/build-tools
 
 permissions:
@@ -37,42 +38,59 @@ jobs:
       - name: Release bundle
         run: ./gradlew bundleRelease
 
-      - name: Sign AAB
+      - name: Sign Full AAB
         run: |
-          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $AAB_RELEASE_DIRECTORY/signingKey.jks
-          jarsigner -keystore $AAB_RELEASE_DIRECTORY/signingKey.jks -storepass ${{ secrets.SIGNING_KEYSTORE_PASSWORD }} \
-            -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $AAB_RELEASE_DIRECTORY/MedTimer-release.aab ${{ secrets.SIGNING_ALIAS }}
+          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks
+          jarsigner -keystore $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks -storepass ${{ secrets.SIGNING_KEYSTORE_PASSWORD }} \
+            -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $FULL_AAB_RELEASE_DIRECTORY/MedTimer-full-release.aab ${{ secrets.SIGNING_ALIAS }}
         continue-on-error: true
-      - name: Upload App Bundle
+      - name: Upload Full App Bundle
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: aab
-          path: ${{env.AAB_RELEASE_DIRECTORY}}/MedTimer-release.aab
+          name: aab-full
+          path: ${{env.FULL_AAB_RELEASE_DIRECTORY}}/MedTimer-full-release.aab
 
       - name: Setup build tool version variable
         shell: bash
         run: |
           BUILD_TOOLS_VERSION=$(ls $BUILD_TOOLS_HOME | tail -1)
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
-      - name: Sign APK
+
+      - name: Sign Full APK
         run: |
-          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $APK_RELEASE_DIRECTORY/signingKey.jks
-          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FULL_APK_RELEASE_DIRECTORY/signingKey.jks
+          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $FULL_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
             --alignment-preserved \
             --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
-            --out $APK_RELEASE_DIRECTORY/MedTimer-release-signed.apk \
-            $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
-          rm $APK_RELEASE_DIRECTORY/MedTimer-release-unsigned.apk
+            --out $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-signed.apk \
+            $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-unsigned.apk
+          rm $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-unsigned.apk
         continue-on-error: true
-      - name: Upload App Package
+      - name: Upload Full App Package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: apk
-          path: ${{env.APK_RELEASE_DIRECTORY}}/MedTimer-release-signed.apk
+          name: apk-full
+          path: ${{env.FULL_APK_RELEASE_DIRECTORY}}/MedTimer-full-release-signed.apk
+
+      - name: Sign FOSS APK
+        run: |
+          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks
+          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+            --alignment-preserved \
+            --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
+            --out $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-signed.apk \
+            $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-unsigned.apk
+          rm $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-unsigned.apk
+        continue-on-error: true
+      - name: Upload FOSS App Package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: apk-foss
+          path: ${{env.FOSS_APK_RELEASE_DIRECTORY}}/MedTimer-foss-release-signed.apk
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
-          artifacts: app/build/outputs/bundle/release/*.aab,app/build/outputs/apk/release/*.apk
+          artifacts: ${{env.FULL_AAB_RELEASE_DIRECTORY}}/*.aab,${{env.FULL_APK_RELEASE_DIRECTORY}}/*.apk,${{env.FOSS_APK_RELEASE_DIRECTORY}}/*.apk
           generateReleaseNotes: true

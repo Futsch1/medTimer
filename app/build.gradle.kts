@@ -37,6 +37,17 @@ android {
             )
         )
     }
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("full") {
+            dimension = "distribution"
+            isDefault = true
+        }
+        create("foss") {
+            dimension = "distribution"
+        }
+    }
+
     buildTypes {
         release {
             @Suppress("kotlin:S7204") // Does not make sense for open source apps
@@ -144,7 +155,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
-    implementation(libs.play.services.location)
+    "fullImplementation"(libs.play.services.location)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -194,7 +205,7 @@ sonar {
         property("sonar.organization", "futsch1")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.gradle.skipCompile", "true")
-        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property("sonar.android.lint.report", "build/reports/lint-results-fullDebug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
             "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
@@ -214,8 +225,8 @@ tasks.withType(Test::class) {
 }
 
 // Define task names for unit tests and Android tests
-val unitTests = "testDebugUnitTest"
-val androidTests = "connectedDebugAndroidTest"
+val unitTests = "testFullDebugUnitTest"
+val androidTests = "connectedFullDebugAndroidTest"
 val exclusions = listOf(
     "**/R.class",
     "**/R$*.class",
@@ -227,7 +238,7 @@ val exclusions = listOf(
 )
 
 // Register a JacocoReport task for code coverage analysis
-tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
+tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
     // Depend on unit tests and Android tests tasks
     dependsOn(listOf(unitTests, androidTests))
     // Set task grouping and description
@@ -239,14 +250,16 @@ tasks.register<JacocoReport>("JacocoDebugCodeCoverage") {
         html.required.set(true)
     }
     // Set source directories to the main source directory
-    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"))
+    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"),
+        layout.projectDirectory.dir("src/main/full/java")
+        )
     // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
     classDirectories.setFrom(
         files(
-            fileTree(layout.buildDirectory.dir("intermediates/javac/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/javac/fullDebug/")) {
                 exclude(exclusions)
             },
-            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/")) {
+            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/fullDebug/")) {
                 exclude(exclusions)
             }
         ))

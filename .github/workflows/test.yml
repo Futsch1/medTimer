@@ -55,8 +55,11 @@ jobs:
           disable-animations: true
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run fuzzing tests
-        run: ./gradlew testDebug -Dfuzzing=true
+      - name: Run fuzzing tests (both variants)
+        run: ./gradlew testFullDebug testFossDebug -Dfuzzing=true
+
+      - name: Run FOSS unit tests
+        run: ./gradlew testFossDebugUnitTest
 
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@e89f39f1abbbd05b1113a29cf4db69e7540cae5a # v2.37.0
@@ -69,13 +72,13 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           script: |
-            ./gradlew packageDebug packageDebugUnitTest
+            ./gradlew packageFullDebug packageFullDebugUnitTest
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
-            EXIT_CODE=0 && ./gradlew JacocoDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+            EXIT_CODE=0 && ./gradlew jacocoFullDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
           cores: 4
 
       - name: Android lint
@@ -84,7 +87,7 @@ jobs:
       - uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v2.2.0
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         env:
-          JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsDebug app/build/generated/ap_generated_sources/debug/out
+          JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsFullDebug app/build/generated/ap_generated_sources/fullDebug/out
         with:
           oidc: true
           files: app/build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
@@ -103,7 +106,8 @@ jobs:
           name: TestReports
           path: |
             app/build/reports/jacoco/JacocoDebugCodeCoverage/html
-            app/build/reports/tests/testDebugUnitTest
-            app/build/reports/androidTest/connected/debug
-            app/build/reports/lint-results-debug.html
+            app/build/reports/tests/testFullDebugUnitTest
+            app/build/reports/tests/testFossDebugUnitTest
+            app/build/reports/androidTest/connected/fullDebug
+            app/build/reports/lint-results-fullDebug.html
             app/build/outputs/androidTest-results

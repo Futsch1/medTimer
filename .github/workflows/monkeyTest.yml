@@ -64,10 +64,10 @@ jobs:
           script: |
             adb shell settings put global auto_time 0
             adb shell su 0 date 01012100
-            ./gradlew packageDebug
+            ./gradlew packageFullDebug
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
-            adb install -g app/build/outputs/apk/debug/MedTimer-debug.apk
+            adb install -g app/build/outputs/apk/full/debug/MedTimer-full-debug.apk
             adb shell monkey -p com.futsch1.medtimer -v 10000 --throttle 20
           cores: 4
