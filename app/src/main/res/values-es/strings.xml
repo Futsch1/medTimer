@@ -153,19 +153,25 @@
         <item quantity="other">minutos</item>
         <item quantity="many">minutos</item>
     </plurals>
+    <string name="minutes_string">Minutos</string>
     <plurals name="hours">
         <item quantity="one">hora</item>
         <item quantity="other">horas</item>
         <item quantity="many">horas</item>
     </plurals>
+    <string name="hours_string">Horas</string>
     <plurals name="days">
         <item quantity="one">día</item>
         <item quantity="other">días</item>
         <item quantity="many">días</item>
     </plurals>
-    <string name="minutes_string">Minutos</string>
-    <string name="hours_string">Horas</string>
     <string name="days_string">Días</string>
+        <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+        <item quantity="many">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Crear recordatorio</string>
     <string name="interval">Intervalo</string>
     <string name="interval_start_time">Hora de inicio del intervalo</string>

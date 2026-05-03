@@ -161,6 +161,11 @@
         <item quantity="other">ημέρες</item>
     </plurals>
     <string name="days_string">Ημέρες</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Δημιουργία υπενθύμισης</string>
     <string name="interval">Χρονικό διάστημα</string>
     <string name="interval_start_time">Ώρα έναρξης χρονικού διαστήματος</string>

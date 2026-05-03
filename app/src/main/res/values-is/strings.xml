@@ -162,6 +162,11 @@
         <item quantity="other">dagar</item>
     </plurals>
     <string name="days_string">Dagar</string>
+    <plurals name="months">
+        <item quantity="one" tools:ignore="ImpliedQuantity">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Búa til áminningu</string>
     <string name="interval">Tímabil</string>
     <string name="interval_start_time">Byrjun tímabils</string>

@@ -150,17 +150,22 @@
         <item quantity="one">dakika</item>
         <item quantity="other">dakika</item>
     </plurals>
+    <string name="minutes_string">Dakika</string>
     <plurals name="hours">
         <item quantity="one">saat</item>
         <item quantity="other">saat</item>
     </plurals>
+    <string name="hours_string">Saatler</string>
     <plurals name="days">
         <item quantity="one">gün</item>
         <item quantity="other">gün</item>
     </plurals>
-    <string name="minutes_string">Dakika</string>
-    <string name="hours_string">Saatler</string>
     <string name="days_string">Günler</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Hatırlatma oluşturun</string>
     <string name="interval">Aralık</string>
     <string name="interval_start_time">Aralık başlangıç zamanı</string>

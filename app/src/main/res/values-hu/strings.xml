@@ -162,6 +162,11 @@
         <item quantity="other">nap</item>
     </plurals>
     <string name="days_string">Nap</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Emlékeztető létrehozása</string>
     <string name="interval">Ismétlési idő</string>
     <string name="interval_start_time">Ismétlés kezdete</string>

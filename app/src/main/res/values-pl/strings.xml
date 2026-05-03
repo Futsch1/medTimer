@@ -113,8 +113,6 @@
     <string name="add_linked_reminder">Dodaj przypomnienie o następnej dawce</string>
     <string name="linked_reminder_delay">Opóźnienie kolejnej dawki</string>
     <string name="delay">Opóźnienie</string>
-    <string name="minutes_string">Minut</string>
-    <string name="hours_string">Godzin</string>
     <string name="create_reminder">Utwórz przypomnienie</string>
     <string name="every_interval">Co %s</string>
     <string name="always_below_threshold">Zawsze, gdy poniżej progu</string>
@@ -175,7 +173,6 @@
     <string name="next_month">Następny miesiąc</string>
     <string name="minutes_1">1 minuta</string>
     <string name="advanced_settings">Zaawansowane</string>
-    <string name="days_string">Dni</string>
     <string name="every_day">Codziennie</string>
     <string name="cycle_reminder">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
@@ -197,18 +194,28 @@
         <item quantity="many">minut</item>
         <item quantity="other">minut</item>
     </plurals>
+    <string name="minutes_string">Minut</string>
     <plurals name="hours">
         <item quantity="one">godzina</item>
         <item quantity="few">godziny</item>
         <item quantity="many">godzin</item>
         <item quantity="other">godzin</item>
     </plurals>
+    <string name="hours_string">Godzin</string>
     <plurals name="days">
         <item quantity="one">dzień</item>
         <item quantity="few">dni</item>
         <item quantity="many">dni</item>
         <item quantity="other">dni</item>
     </plurals>
+    <string name="days_string">Dni</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="few">???</item>
+        <item quantity="many">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="use_relative_date_time">Względna data/godzina</string>
     <string name="invalid_amount">Pole musi zawierać liczbę, aby włączyć śledzenie zapasów leków dla tego przypomnienia.</string>
     <string name="sticky_on_lockscreen">Stałe przypomnienia na ekranie blokady</string>

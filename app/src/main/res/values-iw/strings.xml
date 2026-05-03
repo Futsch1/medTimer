@@ -163,6 +163,12 @@
         <item quantity="other">ימים</item>
     </plurals>
     <string name="days_string">ימים</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="two">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">צרו תזכורת</string>
     <string name="interval">מחזור</string>
     <string name="interval_start_time">זמן תחילת מחזור</string>

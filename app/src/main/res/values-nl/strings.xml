@@ -150,17 +150,22 @@
         <item quantity="one">minuut</item>
         <item quantity="other">minuten</item>
     </plurals>
+    <string name="minutes_string">Minuten</string>
     <plurals name="hours">
         <item quantity="one">uur</item>
         <item quantity="other">uren</item>
     </plurals>
+    <string name="hours_string">Uren</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dagen</item>
     </plurals>
-    <string name="minutes_string">Minuten</string>
-    <string name="hours_string">Uren</string>
     <string name="days_string">Dagen</string>
+    <plurals name="months">
+        <item quantity="one">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="create_reminder">Herinnering maken</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Starttijd interval</string>

@@ -68,7 +68,7 @@ abstract class SchedulingBase(
     }
 
     protected fun getNextNotRemindedDay(start: Long = 0): Instant? {
-        for (day in start..31) {
+        for (day in start..(31 * 12)) {
             val day = today() + day
             if (!isRaisedOn(day)) {
                 return localDateToReminderInstant(LocalDate.ofEpochDay(day))

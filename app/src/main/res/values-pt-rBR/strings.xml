@@ -135,6 +135,13 @@
         <item quantity="many">dias</item>
         <item quantity="other">dias</item>
     </plurals>
+    <string name="days_string">Dias</string>
+    <plurals name="months">
+        <item quantity="one" tools:ignore="ImpliedQuantity">???</item>
+        <item quantity="many">???</item>
+        <item quantity="other">???</item>
+    </plurals>
+    <string name="months_string">???</string>
     <string name="interval">Intervalo</string>
     <string name="interval_start_processed">O intervalo começa ao marcar como tomado ou pulado</string>
     <string name="every_interval">Cada %s</string>
@@ -195,7 +202,6 @@
     <string name="sticky_on_lockscreen_summary">Os lembretes não podem ser dispensados na tela de bloqueio, apenas na gaveta de notificações\nObservação: alguns smartwatches podem não mostrar mais notificações</string>
     <string name="invalid_amount">O valor deve conter um número para permitir o monitoramento do estoque de medicamentos para este lembrete.</string>
     <string name="never">Nunca</string>
-    <string name="days_string">Dias</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
     <string name="number_of_repetitions">Número de repetições</string>
     <string name="intro_notification_description">Quando o horário de um lembrete chegar, uma notificação aparecerá oferecendo-lhe a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
