@@ -364,6 +364,78 @@ class MedicineStockTest : BaseTestHelper() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun undoStockOnDeleteTest() {
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("2", LocalTime.of(20, 0))
+
+        clickOn(R.id.openStockTracking)
+        clickOn(R.string.amount)
+        setValue("10")
+        clickOn(R.string.unit)
+        setValue("pills")
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
+        pressBack()
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.deleteButton)
+        clickOn(R.string.yes)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun undoStockOnReraiseTest() {
+        AndroidTestHelper.createMedicine("Test")
+        AndroidTestHelper.createReminder("2", LocalTime.of(20, 0))
+
+        clickOn(R.id.openStockTracking)
+        clickOn(R.string.amount)
+        setValue("10")
+        clickOn(R.string.unit)
+        setValue("pills")
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.takenButton)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
+        pressBack()
+        pressBack()
+
+        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
+        clickOn(R.id.reraiseButton)
+        clickOn(R.string.yes)
+
+        navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        clickListItem(R.id.medicineList, 0)
+        clickOn(R.id.openStockTracking)
+        assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun dailyStockReminderTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
