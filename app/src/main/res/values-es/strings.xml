@@ -294,7 +294,7 @@
     <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
     <string name="location_snooze">Posponer según ubicación</string>
     <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
-    <string name="location_snooze_no_play_services">La posposición según ubicación requiere Google Play Services, que no está disponible en este dispositivo</string>
+    <string name="location_snooze_no_play_services">Posponer según ubicación requiere los servicios de Google Play, que no están disponibles en este dispositivo</string>
     <string name="location_snooze_background_permission">Para recibir notificaciones al llegar a casa, permita que MedTimer acceda a la ubicación en segundo plano</string>
     <string name="snooze_until_home">Posponer hasta llegar a casa</string>
     <string name="snooze_settings">Configuración de posposición</string>
