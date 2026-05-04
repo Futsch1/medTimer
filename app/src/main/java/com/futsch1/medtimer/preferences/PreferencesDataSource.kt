@@ -153,7 +153,16 @@ class PreferencesDataSource @Inject constructor(
                 default.noAlarmSoundWhenSilent
             ),
             noVibrationWhenSilent = sharedPreferences.getBoolean(NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
-            automaticBackupInterval = BackupInterval.entries[sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")?.toInt() ?: 0],
+            automaticBackupInterval = sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")
+                .let { v ->
+                    when (v) {
+                        "never" -> BackupInterval.NEVER
+                        "daily" -> BackupInterval.DAILY
+                        "weekly" -> BackupInterval.WEEKLY
+                        "monthly" -> BackupInterval.MONTHLY
+                        else -> BackupInterval.entries[v?.toIntOrNull() ?: 0]
+                    }
+                },
             automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
             locationBasedSnooze = sharedPreferences.getBoolean(LOCATION_SNOOZE_ENABLED, default.locationBasedSnooze),
             homeLocation = getHomeLocation()
