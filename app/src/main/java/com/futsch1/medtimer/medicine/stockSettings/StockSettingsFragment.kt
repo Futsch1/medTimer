@@ -177,7 +177,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
         val date = timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent =
-                createCalendarEventIntent(context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name, date)
+                createCalendarEventIntent("\uD83D\uDC8A " + context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name, date)
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {
