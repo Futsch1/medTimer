@@ -78,7 +78,9 @@
     <string name="friday">Vrijdag</string>
     <string name="saturday">Zaterdag</string>
     <string name="sunday">Zondag</string>
-    <string name="weekend_mode_summary">Meldingen op bepaalde dagen van de week uitstellen tot een bepaald tijdstip</string>
+    <string name="weekend_mode_summary">Meldingen op bepaalde dagen van de week uitstellen binnen een bepaald tijdsbereik</string>
+    <string name="weekend_start_time">Begintijd</string>
+    <string name="weekend_end_time">Eindtijd</string>
     <string name="custom">Aangepast…</string>
     <string name="advanced_settings">Geavanceerde instellingen</string>
     <string name="every_day">Elke dag</string>

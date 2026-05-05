@@ -78,7 +78,9 @@
     <string name="friday">Cuma</string>
     <string name="saturday">Cumartesi</string>
     <string name="sunday">Pazar</string>
-    <string name="weekend_mode_summary">Haftanın belirli günlerinde bildirimleri belirli bir zamana kadar ertele</string>
+    <string name="weekend_mode_summary">Haftanın belirli günlerinde bildirimleri belirli bir zaman aralığında ertele</string>
+    <string name="weekend_start_time">Başlangıç saati</string>
+    <string name="weekend_end_time">Bitiş saati</string>
     <string name="custom">Özel…</string>
     <string name="advanced_settings">Gelişmiş ayarlar</string>
     <string name="every_day">Her gün</string>

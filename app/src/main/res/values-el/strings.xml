@@ -78,7 +78,9 @@
     <string name="friday">Παρασκευή</string>
     <string name="saturday">Σάββατο</string>
     <string name="sunday">Κυριακή</string>
-    <string name="weekend_mode_summary">Καθυστέρηση των ειδοποιήσεων σε συγκεκριμένες ημέρες της εβδομάδας έως μια ορισμένη ώρα</string>
+    <string name="weekend_mode_summary">Καθυστέρηση των ειδοποιήσεων σε συγκεκριμένες ημέρες της εβδομάδας εντός ενός καθορισμένου χρονικού εύρους</string>
+    <string name="weekend_start_time">Ώρα έναρξης</string>
+    <string name="weekend_end_time">Ώρα λήξης</string>
     <string name="custom">Προσαρμοσμένη…</string>
     <string name="advanced_settings">Σύνθετες ρυθμίσεις</string>
     <string name="every_day">Κάθε μέρα</string>

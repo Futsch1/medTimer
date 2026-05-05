@@ -15,6 +15,7 @@ import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_MODE
+import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_START_TIME
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_TIME
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,14 +46,16 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWeekendMode()
-        setupTimePicker()
+        setupStartTimePicker()
+        setupEndTimePicker()
         setupDays()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 preferencesDataSource.preferences.collect { settings ->
                     currentSettings = settings
-                    updateTimePicker(settings)
+                    updateStartTimePicker(settings)
+                    updateEndTimePicker(settings)
                 }
             }
         }
@@ -66,18 +69,38 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun updateTimePicker(settings: UserPreferences) {
-        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
-        preference?.setSummary(timeFormatter.toTimeString(settings.weekendTime))
+    private fun updateStartTimePicker(settings: UserPreferences) {
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_START_TIME)
+        preference?.setSummary(timeFormatter.toTimeString(settings.weekendStartTime))
     }
 
-    private fun setupTimePicker() {
+    private fun updateEndTimePicker(settings: UserPreferences) {
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
+        preference?.setSummary(timeFormatter.toTimeString(settings.weekendEndTime))
+    }
+
+    private fun setupStartTimePicker() {
+        val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_START_TIME)
+        if (preference != null) {
+            preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
+                val startTime = currentSettings?.weekendStartTime ?: LocalTime.of(0, 0)
+                timePickerDialogFactory.create(startTime) { minutes: Int ->
+                    preferencesDataSource.setWeekendStartTime(LocalTime.of(minutes / 60, minutes % 60))
+                    preference1!!.setSummary(timeFormatter.minutesToTimeString(minutes))
+                    requestReschedule()
+                }.show(parentFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+                true
+            }
+        }
+    }
+
+    private fun setupEndTimePicker() {
         val preference = preferenceScreen.findPreference<Preference?>(WEEKEND_TIME)
         if (preference != null) {
             preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference1: Preference? ->
-                val weekendTime = currentSettings?.weekendTime ?: LocalTime.of(9, 0)
-                timePickerDialogFactory.create(weekendTime) { minutes: Int ->
-                    preferencesDataSource.setWeekendTime(LocalTime.of(minutes / 60, minutes % 60))
+                val endTime = currentSettings?.weekendEndTime ?: LocalTime.of(9, 0)
+                timePickerDialogFactory.create(endTime) { minutes: Int ->
+                    preferencesDataSource.setWeekendEndTime(LocalTime.of(minutes / 60, minutes % 60))
                     preference1!!.setSummary(timeFormatter.minutesToTimeString(minutes))
                     requestReschedule()
                 }.show(parentFragmentManager, TimePickerDialogFactory.DIALOG_TAG)

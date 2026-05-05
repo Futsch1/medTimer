@@ -73,7 +73,9 @@
     <string name="friday">Fredag</string>
     <string name="saturday">Lørdag</string>
     <string name="sunday">Søndag</string>
-    <string name="weekend_mode_summary">Udskyd notifikationer på bestemte ugedage indtil et bestemt tidspunkt</string>
+    <string name="weekend_mode_summary">Udskyd notifikationer på bestemte ugedage inden for et bestemt tidsinterval</string>
+    <string name="weekend_start_time">Starttidspunkt</string>
+    <string name="weekend_end_time">Sluttidspunkt</string>
     <string name="custom">Brugerdefineret…</string>
     <string name="advanced_settings">Avancerede indstillinger</string>
     <string name="every_day">Hver dag</string>

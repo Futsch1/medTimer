@@ -77,7 +77,9 @@
     <string name="friday">föstudag</string>
     <string name="saturday">laugardag</string>
     <string name="sunday">sunnudag</string>
-    <string name="weekend_mode_summary">Seinka tilkynningum á ákveðnum dögum til ákveðins tíma</string>
+    <string name="weekend_mode_summary">Seinka tilkynningum á ákveðnum dögum innan ákveðins tímabils</string>
+    <string name="weekend_start_time">Upphafsími</string>
+    <string name="weekend_end_time">Lokatími</string>
     <string name="custom">Sérsnið…</string>
     <string name="advanced_settings">Ítarlegri stillingar</string>
     <string name="every_day">Alla daga</string>

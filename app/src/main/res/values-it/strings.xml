@@ -79,7 +79,9 @@
     <string name="friday">Venerdì</string>
     <string name="saturday">Sabato</string>
     <string name="sunday">Domenica</string>
-    <string name="weekend_mode_summary">Ritarda le notifiche ad un orario prestabilito in certi giorni della settimana</string>
+    <string name="weekend_mode_summary">Ritarda le notifiche in certi giorni della settimana all\'interno di un intervallo di tempo prestabilito</string>
+    <string name="weekend_start_time">Ora di inizio</string>
+    <string name="weekend_end_time">Ora di fine</string>
     <string name="custom">Personalizzato…</string>
     <string name="advanced_settings">Impostazioni avanzate</string>
     <string name="every_day">Ogni giorno</string>

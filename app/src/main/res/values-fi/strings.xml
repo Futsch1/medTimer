@@ -78,7 +78,9 @@
     <string name="friday">Perjantai</string>
     <string name="saturday">Lauantai</string>
     <string name="sunday">Sunnuntai</string>
-    <string name="weekend_mode_summary">Viivästytä ilmoituksia tiettyinä viikonpäivinä tiettyyn aikaan asti</string>
+    <string name="weekend_mode_summary">Viivästytä ilmoituksia tiettyinä viikonpäivinä tietyllä aikavälillä</string>
+    <string name="weekend_start_time">Aloitusaika</string>
+    <string name="weekend_end_time">Lopetusaika</string>
     <string name="custom">Mukautettu…</string>
     <string name="advanced_settings">Edistyneet asetukset</string>
     <string name="every_day">Joka päivä</string>

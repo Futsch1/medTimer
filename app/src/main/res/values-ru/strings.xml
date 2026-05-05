@@ -80,7 +80,9 @@
     <string name="friday">Пятница</string>
     <string name="saturday">Суббота</string>
     <string name="sunday">Воскресенье</string>
-    <string name="weekend_mode_summary">Откладывать уведомления в конкретные дни недели до заданного времени</string>
+    <string name="weekend_mode_summary">Откладывать уведомления в конкретные дни недели в заданном временном диапазоне</string>
+    <string name="weekend_start_time">Время начала</string>
+    <string name="weekend_end_time">Время окончания</string>
     <string name="custom">Пользовательский…</string>
     <string name="advanced_settings">Продвинутые настройки</string>
     <string name="every_day">Каждый день</string>
