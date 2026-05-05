@@ -170,6 +170,11 @@
         <item quantity="other">days</item>
     </plurals>
     <string name="days_string">Days</string>
+    <plurals name="weeks">
+        <item quantity="one">week</item>
+        <item quantity="other">weeks</item>
+    </plurals>
+    <string name="weeks_string">Weeks</string>
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>

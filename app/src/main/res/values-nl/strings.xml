@@ -161,6 +161,11 @@
     <string name="minutes_string">Minuten</string>
     <string name="hours_string">Uren</string>
     <string name="days_string">Dagen</string>
+    <plurals name="weeks">
+        <item quantity="one">week</item>
+        <item quantity="other">weken</item>
+    </plurals>
+    <string name="weeks_string">Weken</string>
     <string name="create_reminder">Herinnering maken</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Starttijd interval</string>

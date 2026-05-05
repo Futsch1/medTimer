@@ -176,6 +176,13 @@
     <string name="minutes_1">1 minuta</string>
     <string name="advanced_settings">Zaawansowane</string>
     <string name="days_string">Dni</string>
+    <plurals name="weeks">
+        <item quantity="one">tydzień</item>
+        <item quantity="few">tygodnie</item>
+        <item quantity="many">tygodni</item>
+        <item quantity="other">tygodnia</item>
+    </plurals>
+    <string name="weeks_string">Tygodnie</string>
     <string name="every_day">Codziennie</string>
     <string name="cycle_reminder">Przypomnienia cykliczne</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
