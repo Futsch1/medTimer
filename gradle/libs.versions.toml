@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-android-gradle-plugin = "9.2.0"
+android-gradle-plugin = "9.2.1"
 hilt = "2.59.2"
 navigation-safe-args = "2.9.8"
 room-plugin = "2.8.4"
