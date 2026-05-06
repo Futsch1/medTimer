@@ -54,6 +54,15 @@ class IntervalTest {
     }
 
     @Test
+    fun testWeeksConstructor() {
+        val interval = Interval(2, IntervalUnit.WEEKS)
+        assertEquals(2 * 7 * 24 * 60, interval.minutesValue)
+        assertEquals(IntervalUnit.WEEKS, interval.getUnit())
+        assertEquals(2, interval.getValue())
+        assertEquals(14, interval.getValue(IntervalUnit.DAYS))
+    }
+
+    @Test
     fun testToString() {
         var interval = Interval(60)
         assertEquals("1 hours", interval.toString())

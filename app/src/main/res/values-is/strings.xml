@@ -162,6 +162,11 @@
         <item quantity="other">dagar</item>
     </plurals>
     <string name="days_string">Dagar</string>
+    <plurals name="weeks">
+        <item quantity="one" tools:ignore="ImpliedQuantity">vika</item>
+        <item quantity="other">vikur</item>
+    </plurals>
+    <string name="weeks_string">Vikur</string>
     <string name="create_reminder">Búa til áminningu</string>
     <string name="interval">Tímabil</string>
     <string name="interval_start_time">Byrjun tímabils</string>

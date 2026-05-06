@@ -161,6 +161,11 @@
     <string name="minutes_string">Minuten</string>
     <string name="hours_string">Stunden</string>
     <string name="days_string">Tage</string>
+    <plurals name="weeks">
+        <item quantity="one">Woche</item>
+        <item quantity="other">Wochen</item>
+    </plurals>
+    <string name="weeks_string">Wochen</string>
     <string name="create_reminder">Erinnerung erstellen</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>

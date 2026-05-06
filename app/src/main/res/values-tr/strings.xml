@@ -161,6 +161,11 @@
     <string name="minutes_string">Dakika</string>
     <string name="hours_string">Saatler</string>
     <string name="days_string">Günler</string>
+    <plurals name="weeks">
+        <item quantity="one">hafta</item>
+        <item quantity="other">hafta</item>
+    </plurals>
+    <string name="weeks_string">Haftalar</string>
     <string name="create_reminder">Hatırlatma oluşturun</string>
     <string name="interval">Aralık</string>
     <string name="interval_start_time">Aralık başlangıç zamanı</string>

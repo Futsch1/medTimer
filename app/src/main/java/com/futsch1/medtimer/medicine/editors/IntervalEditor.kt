@@ -56,6 +56,7 @@ class IntervalEditor(
             IntervalUnit.MINUTES -> timeEditLayout.context.getString(R.string.minutes_string)
             IntervalUnit.HOURS -> timeEditLayout.context.getString(R.string.hours_string)
             IntervalUnit.DAYS -> timeEditLayout.context.getString(R.string.days_string)
+            IntervalUnit.WEEKS -> timeEditLayout.context.getString(R.string.weeks_string)
         }
     }
 
@@ -83,6 +84,7 @@ class IntervalEditor(
     private fun checkedIntervalUnit(checkedId: Int) = when (checkedId) {
         intervalUnitToggle.getChildAt(0).id -> IntervalUnit.MINUTES
         intervalUnitToggle.getChildAt(1).id -> IntervalUnit.HOURS
-        else -> IntervalUnit.DAYS
+        intervalUnitToggle.getChildAt(2).id -> IntervalUnit.DAYS
+        else -> IntervalUnit.WEEKS
     }
 }

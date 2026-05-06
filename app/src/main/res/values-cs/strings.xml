@@ -172,6 +172,13 @@
         <item quantity="other">dní</item>
     </plurals>
     <string name="days_string">Dny</string>
+    <plurals name="weeks">
+        <item quantity="one">týden</item>
+        <item quantity="few">týdny</item>
+        <item quantity="many">týdnů</item>
+        <item quantity="other">týdnů</item>
+    </plurals>
+    <string name="weeks_string">Týdny</string>
     <string name="create_reminder">Vytvořit připomenutí</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Čas začátku intervalu</string>

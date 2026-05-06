@@ -166,6 +166,12 @@
     <string name="minutes_string">Minuti</string>
     <string name="hours_string">Ore</string>
     <string name="days_string">Giorni</string>
+    <plurals name="weeks">
+        <item quantity="one">settimana</item>
+        <item quantity="other">settimane</item>
+        <item quantity="many">settimane</item>
+    </plurals>
+    <string name="weeks_string">Settimane</string>
     <string name="create_reminder">Crea il promemoria</string>
     <string name="interval">Intervallo</string>
     <string name="interval_start_time">Orario di inizio dell\'intervallo</string>

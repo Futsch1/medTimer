@@ -166,6 +166,12 @@
     <string name="minutes_string">Minutes</string>
     <string name="hours_string">Heures</string>
     <string name="days_string">Jours</string>
+    <plurals name="weeks">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">semaine</item>
+        <item quantity="other">semaines</item>
+        <item quantity="many">semaines</item>
+    </plurals>
+    <string name="weeks_string">Semaines</string>
     <string name="create_reminder">Créer un rappel</string>
     <string name="interval">Intervalle</string>
     <string name="interval_start_time">Heure de début de l\'intervalle</string>

@@ -5,13 +5,14 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.model.ReminderTime
 
 enum class IntervalUnit {
-    MINUTES, HOURS, DAYS
+    MINUTES, HOURS, DAYS, WEEKS
 }
 
 private fun getMinutes(unit: IntervalUnit, value: Int) = when (unit) {
     IntervalUnit.MINUTES -> value
     IntervalUnit.HOURS -> value * 60
     IntervalUnit.DAYS -> value * 60 * 24
+    IntervalUnit.WEEKS -> value * 60 * 24 * 7
 }
 
 class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MINUTES) {
@@ -24,6 +25,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
 
     fun getUnit(): IntervalUnit {
         return when {
+            minutesValue % (60 * 24 * 7) == 0 -> IntervalUnit.WEEKS
             minutesValue % (60 * 24) == 0 -> IntervalUnit.DAYS
             minutesValue % 60 == 0 -> IntervalUnit.HOURS
             else -> IntervalUnit.MINUTES
@@ -35,6 +37,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
             IntervalUnit.MINUTES -> minutesValue
             IntervalUnit.HOURS -> minutesValue / 60
             IntervalUnit.DAYS -> minutesValue / (60 * 24)
+            IntervalUnit.WEEKS -> minutesValue / (60 * 24 * 7)
         }
     }
 
@@ -43,6 +46,7 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
             IntervalUnit.MINUTES -> minutesValue
             IntervalUnit.HOURS -> minutesValue / 60
             IntervalUnit.DAYS -> minutesValue / (60 * 24)
+            IntervalUnit.WEEKS -> minutesValue / (60 * 24 * 7)
         }
     }
 
@@ -63,11 +67,12 @@ class Interval(var minutesValue: Int, var maxMinutesValue: Int = MAX_INTERVAL_MI
             IntervalUnit.MINUTES -> R.plurals.minutes
             IntervalUnit.HOURS -> R.plurals.hours
             IntervalUnit.DAYS -> R.plurals.days
+            IntervalUnit.WEEKS -> R.plurals.weeks
         }
         return "$value ${context.resources.getQuantityString(textId, value)}"
     }
 
     companion object {
-        const val MAX_INTERVAL_MINUTES = 31 * 60 * 24
+        const val MAX_INTERVAL_MINUTES = 365 * 60 * 24
     }
 }
