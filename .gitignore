@@ -44,3 +44,4 @@ gradle/gradle-daemon-jvm.properties
 
 # Kotlin
 .kotlin
+/caveman.json

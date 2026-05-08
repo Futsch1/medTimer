@@ -24,7 +24,7 @@ open class SnoozeProcessor @Inject constructor(
     private val geofenceRegistrar: GeofenceRegistrar
 ) {
 
-    fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Duration) {
+    suspend fun processSnooze(reminderNotificationData: ReminderNotificationData, snoozeTime: Duration) {
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime.inWholeSeconds)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 

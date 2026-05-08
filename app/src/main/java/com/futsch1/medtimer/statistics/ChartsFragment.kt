@@ -327,7 +327,11 @@ class ChartsFragment : Fragment() {
         viewModel.setDays(viewModel.uiState.value?.days ?: (arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0))
     }
 
-    fun setDays(days: Int) = viewModel.setDays(days)
+    fun setDays(days: Int) {
+            if (isAdded) {
+                viewModel.setDays(days)
+            }
+        }
 
     private inner class DaysSinceEpochFormat : NumberFormat() {
         override fun format(

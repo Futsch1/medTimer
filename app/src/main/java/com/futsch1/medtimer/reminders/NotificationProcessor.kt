@@ -30,7 +30,6 @@ import javax.inject.Inject
 class NotificationProcessor @Inject constructor(
     private val alarmProcessor: AlarmProcessor,
     private val notifications: Notifications,
-    private val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val stockHandlingProcessor: StockHandlingProcessor,
     private val repeatProcessor: RepeatProcessor,
     private val notificationManager: NotificationManager,
@@ -56,8 +55,6 @@ class NotificationProcessor @Inject constructor(
 
         setReminderEventStatus(status, reminderEventsToUpdate)
 
-        // Reschedule since the trigger condition for a linked reminder might have changed
-        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
     fun cancelNotification(notificationId: Int) {

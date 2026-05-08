@@ -3,7 +3,10 @@ package com.futsch1.medtimer.reminders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.ProcessorCode
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.model.Reminder
@@ -61,24 +64,39 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         applicationScope.launch {
             try {
+                Log.d(LogTags.REMINDER, "Received intent $intentAction")
                 when (intentAction) {
-                    ProcessorCode.Dismissed -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.SKIPPED
-                    )
+                    ProcessorCode.Dismissed -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.SKIPPED
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
-                    ProcessorCode.Taken -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.TAKEN
-                    )
+                    ProcessorCode.Taken -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.TAKEN
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
-                    ProcessorCode.Acknowledged -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.ACKNOWLEDGED
-                    )
+                    ProcessorCode.Acknowledged -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.ACKNOWLEDGED
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
                     ProcessorCode.Snooze -> processSnooze(intent)
-                    ProcessorCode.Reminder -> reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras!!))
+                    ProcessorCode.Reminder -> {
+                        if (reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras ?: Bundle()))) {
+                            scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                        }
+                    }
+
                     ProcessorCode.ShowReminderNotification -> showReminderNotificationProcessor.showReminder(
                         ReminderNotificationData.fromBundle(intent.extras!!)
                     )
@@ -86,7 +104,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
                     ProcessorCode.Refill -> processRefill(intent)
                     ProcessorCode.StockHandling -> processStockHandling(intent)
                     ProcessorCode.Schedule -> scheduleNextReminderNotificationProcessor.scheduleNextReminder()
-                    ProcessorCode.LocationSnooze -> snoozeProcessor.processLocationSnooze(ReminderNotificationData.fromBundle(intent.extras!!))
+                    ProcessorCode.LocationSnooze -> snoozeProcessor.processLocationSnooze(ReminderNotificationData.fromBundle(intent.extras ?: Bundle()))
                 }
             } finally {
                 pendingResult.finish()
@@ -102,7 +120,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processSnooze(intent: Intent) {
+    private suspend fun processSnooze(intent: Intent) {
         snoozeProcessor.processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
             intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, 0).toDuration(DurationUnit.SECONDS)

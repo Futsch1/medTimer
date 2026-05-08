@@ -96,14 +96,23 @@ class ReminderAlarmActivity : AppCompatActivity() {
         } else {
             this@ReminderAlarmActivity
         }
-        mediaPlayer =
-            MediaPlayer.create(
-                audioContext,
-                preferencesDataSource.preferences.value.alarmRingtone ?: Settings.System.DEFAULT_ALARM_ALERT_URI,
-                null,
-                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
-                0
-            ).apply { isLooping = true }
+        val tmpMediaPlayer = MediaPlayer.create(
+            audioContext,
+            preferencesDataSource.preferences.value.alarmRingtone ?: Settings.System.DEFAULT_ALARM_ALERT_URI,
+            null,
+            AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
+            0
+        ) ?: MediaPlayer.create(
+            audioContext,
+            Settings.System.DEFAULT_ALARM_ALERT_URI,
+            null,
+            AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
+            0
+        )
+        if (tmpMediaPlayer != null) {
+            tmpMediaPlayer.isLooping = true
+            mediaPlayer = tmpMediaPlayer
+        }
     }
 
     private suspend fun startAlarm() {
@@ -136,6 +145,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     private fun releaseMediaPlayer() {
         mediaPlayer?.release()
+        mediaPlayer = null
         Log.d("ReminderAlarm", "Released media player")
     }
 
@@ -178,7 +188,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
             reminderNotificationData: ReminderNotificationData
         ): Intent {
             val intent = Intent(context, ReminderAlarmActivity::class.java).apply {
-                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
 
             reminderNotificationData.toIntent(intent)

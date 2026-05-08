@@ -28,7 +28,6 @@ class ReminderNotificationProcessor @Inject constructor(
     val notifications: Notifications,
     val notificationProcessor: NotificationProcessor,
     val repeatProcessor: RepeatProcessor,
-    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource
@@ -45,9 +44,6 @@ class ReminderNotificationProcessor @Inject constructor(
             Log.d(LogTags.REMINDER, "Processing reminder notification $nonTakenReminderNotification")
             notificationAction(nonTakenReminderNotification)
         }
-
-        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
-        scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
 
         return true
     }
