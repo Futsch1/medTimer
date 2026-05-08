@@ -374,6 +374,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.string.unit)
         setValue("pills")
         pressBack()
+        pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
@@ -409,6 +410,7 @@ class MedicineStockTest : BaseTestHelper() {
         setValue("10")
         clickOn(R.string.unit)
         setValue("pills")
+        pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
