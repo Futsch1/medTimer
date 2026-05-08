@@ -78,7 +78,9 @@
     <string name="friday">Péntek</string>
     <string name="saturday">Szombat</string>
     <string name="sunday">Vasárnap</string>
-    <string name="weekend_mode_summary">Értesítések késleltetése bizonyos napokon a megadott időpontig</string>
+    <string name="weekend_mode_summary">Értesítések késleltetése bizonyos napokon egy adott időtartományon belül</string>
+    <string name="weekend_start_time">Kezdési idő</string>
+    <string name="weekend_end_time">Befejezési idő</string>
     <string name="custom">Egyedi…</string>
     <string name="advanced_settings">Speciális beállítások</string>
     <string name="every_day">Minden nap</string>

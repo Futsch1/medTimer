@@ -78,7 +78,9 @@
     <string name="friday">Петък</string>
     <string name="saturday">Събота</string>
     <string name="sunday">Неделя</string>
-    <string name="weekend_mode_summary">Отлагане на напомняне в определени дни от седмицата за зададеното време</string>
+    <string name="weekend_mode_summary">Отлагане на напомняния в определени дни от седмицата в зададен времеви диапазон</string>
+    <string name="weekend_start_time">Начален час</string>
+    <string name="weekend_end_time">Краен час</string>
     <string name="custom">Ръчно…</string>
     <string name="advanced_settings">Разширени настройки</string>
     <string name="every_day">Всеки ден</string>

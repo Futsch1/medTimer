@@ -457,7 +457,9 @@ class ReminderTest : BaseTestHelper() {
         clickOn(R.string.days_string)
         clickOn(R.string.friday)
         clickDialogPositiveButton()
-        clickOn(R.string.time)
+        clickOn(R.string.weekend_start_time)
+        AndroidTestHelper.setTime(19, 0, false)
+        clickOn(R.string.weekend_end_time)
         AndroidTestHelper.setTime(21, 0, false)
 
         AndroidTestHelper.createMedicine("Test")

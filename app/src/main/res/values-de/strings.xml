@@ -78,7 +78,9 @@
     <string name="friday">Freitag</string>
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
-    <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen bis zu einer bestimmten Uhrzeit</string>
+    <string name="weekend_mode_summary">Verzögerung von Benachrichtigungen an bestimmten Wochentagen innerhalb eines bestimmten Zeitraums</string>
+    <string name="weekend_start_time">Startzeit</string>
+    <string name="weekend_end_time">Endzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="every_day">Jeden Tag</string>

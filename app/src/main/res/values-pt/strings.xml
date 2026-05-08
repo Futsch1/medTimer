@@ -69,7 +69,9 @@
     <string name="friday">Sexta-feira</string>
     <string name="saturday">Sábado</string>
     <string name="sunday">Domingo</string>
-    <string name="weekend_mode_summary">Adiar notificações em determinados dias da semana até um horário determinado</string>
+    <string name="weekend_mode_summary">Adiar notificações em determinados dias da semana dentro de um intervalo de tempo determinado</string>
+    <string name="weekend_start_time">Hora de início</string>
+    <string name="weekend_end_time">Hora de fim</string>
     <string name="custom">Personalizado…</string>
     <string name="advanced_settings">Configurações avançadas</string>
     <string name="every_day">Diariamente</string>

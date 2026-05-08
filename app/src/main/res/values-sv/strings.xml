@@ -91,7 +91,9 @@
     <string name="friday">fredag</string>
     <string name="saturday">lördag</string>
     <string name="sunday">söndag</string>
-    <string name="weekend_mode_summary">Fördröja aviseringar på vissa veckodagar till en viss tidpunkt</string>
+    <string name="weekend_mode_summary">Fördröja aviseringar på vissa veckodagar inom ett visst tidsintervall</string>
+    <string name="weekend_start_time">Starttid</string>
+    <string name="weekend_end_time">Sluttid</string>
     <string name="custom">Anpassa…</string>
     <string name="advanced_settings">Avancerade inställnignar</string>
     <string name="every_day">Varje dag</string>

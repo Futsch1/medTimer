@@ -40,7 +40,11 @@ class PreferencesDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getSettings())
 
-    fun setWeekendTime(value: LocalTime) {
+    fun setWeekendStartTime(value: LocalTime) {
+        sharedPreferences.edit { putInt(WEEKEND_START_TIME, value.toSecondOfDay() / 60) }
+    }
+
+    fun setWeekendEndTime(value: LocalTime) {
         sharedPreferences.edit { putInt(WEEKEND_TIME, value.toSecondOfDay() / 60) }
     }
 
@@ -101,9 +105,13 @@ class PreferencesDataSource @Inject constructor(
     private fun getSettings(): UserPreferences {
         val default = UserPreferences.default()
         return UserPreferences(
-            weekendTime = LocalTime.of(
-                sharedPreferences.getInt(WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) / 60,
-                sharedPreferences.getInt(WEEKEND_TIME, default.weekendTime.toSecondOfDay() / 60) % 60
+            weekendStartTime = LocalTime.of(
+                sharedPreferences.getInt(WEEKEND_START_TIME, default.weekendStartTime.toSecondOfDay() / 60) / 60,
+                sharedPreferences.getInt(WEEKEND_START_TIME, default.weekendStartTime.toSecondOfDay() / 60) % 60
+            ),
+            weekendEndTime = LocalTime.of(
+                sharedPreferences.getInt(WEEKEND_TIME, default.weekendEndTime.toSecondOfDay() / 60) / 60,
+                sharedPreferences.getInt(WEEKEND_TIME, default.weekendEndTime.toSecondOfDay() / 60) % 60
             ),
             weekendMode = sharedPreferences.getBoolean(WEEKEND_MODE, default.weekendMode),
             weekendDays = sharedPreferences.getStringSet(WEEKEND_DAYS, default.weekendDays) ?: emptySet(),
@@ -171,6 +179,7 @@ class PreferencesDataSource @Inject constructor(
 
     companion object {
         const val WEEKEND_TIME = "weekend_time"
+        const val WEEKEND_START_TIME = "weekend_start_time"
         const val WEEKEND_MODE = "weekend_mode"
         const val WEEKEND_DAYS = "weekend_days"
         const val EXACT_REMINDERS = "exact_reminders"

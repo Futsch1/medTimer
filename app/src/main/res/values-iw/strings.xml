@@ -79,7 +79,9 @@
     <string name="friday">שישי</string>
     <string name="saturday">שבת</string>
     <string name="sunday">ראשון</string>
-    <string name="weekend_mode_summary">דחו התראות בימים מסויימים בשבוע עד זמן נתון</string>
+    <string name="weekend_mode_summary">דחו התראות בימים מסויימים בשבוע בטווח זמן נתון</string>
+    <string name="weekend_start_time">שעת התחלה</string>
+    <string name="weekend_end_time">שעת סיום</string>
     <string name="custom">מותאם אישית…</string>
     <string name="advanced_settings">הגדרות מתקדמות</string>
     <string name="every_day">כל יום</string>

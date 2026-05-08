@@ -15,9 +15,14 @@
         app:title="@string/weekend_mode_days"
         app:dependency="weekend_mode"/>
     <Preference
+        android:defaultValue="0"
+        app:key="weekend_start_time"
+        app:title="@string/weekend_start_time"
+        app:dependency="weekend_mode"/>
+    <Preference
         android:defaultValue="540"
         app:key="weekend_time"
-        app:title="@string/time"
+        app:title="@string/weekend_end_time"
         app:dependency="weekend_mode"/>
 
 </androidx.preference.PreferenceScreen>

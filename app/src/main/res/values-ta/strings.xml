@@ -80,7 +80,9 @@
     <string name="friday">வெள்ளிக்கிழமை</string>
     <string name="saturday">காரிக்கிழமை</string>
     <string name="sunday">ஞாயிற்றுக்கிழமை</string>
-    <string name="weekend_mode_summary">ஒரு குறிப்பிட்ட நேரம் வரை வாரத்தின் சில நாட்களில் அறிவிப்புகளை தாமதப்படுத்துங்கள்</string>
+    <string name="weekend_mode_summary">வாரத்தின் சில நாட்களில் குறிப்பிட்ட நேர வரம்பிற்குள் அறிவிப்புகளை தாமதப்படுத்துங்கள்</string>
+    <string name="weekend_start_time">தொடக்க நேரம்</string>
+    <string name="weekend_end_time">முடிவு நேரம்</string>
     <string name="custom">வழக்கம்…</string>
     <string name="advanced_settings">மேம்பட்ட அமைப்புகள்</string>
     <string name="every_day">தினமும்</string>

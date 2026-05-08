@@ -80,7 +80,9 @@
     <string name="friday">Pátek</string>
     <string name="saturday">Sobota</string>
     <string name="sunday">Neděle</string>
-    <string name="weekend_mode_summary">Odložit notifikace v určité dny v týdnu do zvoleného času</string>
+    <string name="weekend_mode_summary">Odložit notifikace v určité dny v týdnu v zadaném časovém rozsahu</string>
+    <string name="weekend_start_time">Čas začátku</string>
+    <string name="weekend_end_time">Čas konce</string>
     <string name="custom">Vlastní…</string>
     <string name="advanced_settings">Pokročilá nastavení</string>
     <string name="every_day">Každý den</string>

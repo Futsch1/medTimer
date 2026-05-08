@@ -21,7 +21,8 @@ enum class BackupInterval {
 
 data class UserPreferences(
     // Reminder settings
-    val weekendTime: LocalTime,
+    val weekendStartTime: LocalTime,
+    val weekendEndTime: LocalTime,
     val weekendMode: Boolean,
     val weekendDays: Set<String>,
     val exactReminders: Boolean,
@@ -58,7 +59,8 @@ data class UserPreferences(
     companion object {
         fun default(): UserPreferences {
             return UserPreferences(
-                weekendTime = LocalTime.of(9, 0),
+                weekendStartTime = LocalTime.of(0, 0),
+                weekendEndTime = LocalTime.of(9, 0),
                 weekendMode = false,
                 weekendDays = emptySet(),
                 exactReminders = false,

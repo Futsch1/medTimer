@@ -93,7 +93,9 @@
     <string name="minutes_30">30 دقيقة</string>
     <string name="minutes_60">60 دقيقة</string>
     <string name="weekend_mode">وضع عطلة نهاية الأسبوع</string>
-    <string name="weekend_mode_summary">تأخير الإشعارات في أيام معينة من الأسبوع حتى وقت محدد</string>
+    <string name="weekend_mode_summary">تأخير الإشعارات في أيام معينة من الأسبوع ضمن نطاق زمني محدد</string>
+    <string name="weekend_start_time">وقت البدء</string>
+    <string name="weekend_end_time">وقت الانتهاء</string>
     <string name="custom">مخصّص…</string>
     <string name="advanced_settings">إعدادات متقدّمة</string>
     <string name="every_day">كل يوم</string>

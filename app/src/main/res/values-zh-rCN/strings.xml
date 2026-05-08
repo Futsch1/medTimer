@@ -77,7 +77,9 @@
     <string name="friday">星期五</string>
     <string name="saturday">星期六</string>
     <string name="sunday">星期日</string>
-    <string name="weekend_mode_summary">周末模式当天的服药提醒将延迟到指定时间</string>
+    <string name="weekend_mode_summary">在周末模式当天，在指定时间段内延迟服药提醒</string>
+    <string name="weekend_start_time">开始时间</string>
+    <string name="weekend_end_time">结束时间</string>
     <string name="custom">自定义……</string>
     <string name="advanced_settings">详细设置</string>
     <string name="every_day">每天（按周设置）</string>

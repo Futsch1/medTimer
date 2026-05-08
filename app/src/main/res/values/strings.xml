@@ -84,7 +84,9 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
-    <string name="weekend_mode_summary">Delay notifications on certain days of the week until a given time</string>
+    <string name="weekend_mode_summary">Delay notifications on certain days of the week within a given time range</string>
+    <string name="weekend_start_time">Start time</string>
+    <string name="weekend_end_time">End time</string>
     <string name="custom">Custom…</string>
     <string name="advanced_settings">Advanced settings</string>
     <string name="every_day">Every day</string>
