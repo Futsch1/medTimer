@@ -24,7 +24,7 @@ class AlarmProcessor @Inject constructor(
 ) {
     private val exactReminders: Boolean = preferencesDataSource.preferences.value.exactReminders
 
-    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData) {
+    fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, sendImmediateBroadcast: Boolean = true): Boolean {
         val originalInstant = scheduledReminderNotificationData.remindInstant
         scheduledReminderNotificationData.remindInstant = adjustTimestamp(timeAccess, originalInstant)
 
@@ -49,10 +49,12 @@ class AlarmProcessor @Inject constructor(
                     scheduledReminderNotificationData
                 )
             )
-            val reminderIntent = getReminderAction(context)
-            scheduledReminderNotificationData.toIntent(reminderIntent)
-            context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
-            return
+            if (sendImmediateBroadcast) {
+                val reminderIntent = getReminderAction(context)
+                scheduledReminderNotificationData.toIntent(reminderIntent)
+                context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
+            }
+            return true
         }
 
         val pendingIntent = scheduledReminderNotificationData.getPendingIntent(context)
@@ -71,6 +73,7 @@ class AlarmProcessor @Inject constructor(
         )
 
         updateNextReminderWidget()
+        return false
     }
 
     fun cancelNextReminder() {

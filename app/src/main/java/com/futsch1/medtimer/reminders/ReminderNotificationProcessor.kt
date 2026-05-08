@@ -15,7 +15,6 @@ import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
@@ -45,8 +44,6 @@ class ReminderNotificationProcessor @Inject constructor(
             Log.d(LogTags.REMINDER, "Processing reminder notification $nonTakenReminderNotification")
             notificationAction(nonTakenReminderNotification)
         }
-
-        requestScheduleNextNotification(context)
 
         return true
     }

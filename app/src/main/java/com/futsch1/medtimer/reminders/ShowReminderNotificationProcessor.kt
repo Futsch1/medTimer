@@ -4,7 +4,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -29,8 +28,6 @@ class ShowReminderNotificationProcessor @Inject constructor(
         if (!isNotificationActive(reminderNotificationData)) {
             alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
         }
-
-        requestScheduleNextNotification(context)
     }
 
     private suspend fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {

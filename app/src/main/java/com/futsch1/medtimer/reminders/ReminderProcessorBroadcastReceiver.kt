@@ -65,23 +65,37 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             try {
                 Log.d(LogTags.REMINDER, "Received intent $intentAction")
                 when (intentAction) {
-                    ProcessorCode.Dismissed -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.SKIPPED
-                    )
+                    ProcessorCode.Dismissed -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.SKIPPED
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
-                    ProcessorCode.Taken -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.TAKEN
-                    )
+                    ProcessorCode.Taken -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.TAKEN
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
-                    ProcessorCode.Acknowledged -> notificationProcessor.processReminderEventsInNotification(
-                        ProcessedNotificationData.fromBundle(intent.extras!!),
-                        ReminderEvent.ReminderStatus.ACKNOWLEDGED
-                    )
+                    ProcessorCode.Acknowledged -> {
+                        notificationProcessor.processReminderEventsInNotification(
+                            ProcessedNotificationData.fromBundle(intent.extras!!),
+                            ReminderEvent.ReminderStatus.ACKNOWLEDGED
+                        )
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
                     ProcessorCode.Snooze -> processSnooze(intent)
-                    ProcessorCode.Reminder -> reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras!!))
+                    ProcessorCode.Reminder -> {
+                        if (reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras!!))) {
+                            scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                        }
+                    }
+
                     ProcessorCode.ShowReminderNotification -> showReminderNotificationProcessor.showReminder(
                         ReminderNotificationData.fromBundle(intent.extras!!)
                     )
