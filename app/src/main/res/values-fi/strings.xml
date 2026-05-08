@@ -162,6 +162,11 @@
         <item quantity="other">päivää</item>
     </plurals>
     <string name="days_string">Päivää</string>
+    <plurals name="weeks">
+        <item quantity="one">viikko</item>
+        <item quantity="other">viikkoa</item>
+    </plurals>
+    <string name="weeks_string">Viikkoa</string>
     <string name="create_reminder">Luo muistutus</string>
     <string name="interval">Väliaika</string>
     <string name="interval_start_time">Väliajan aloitusaika</string>

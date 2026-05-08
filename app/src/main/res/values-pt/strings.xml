@@ -196,6 +196,12 @@
     <string name="invalid_amount">O valor deve conter um número para permitir o monitoramento do estoque de medicamentos para este lembrete.</string>
     <string name="never">Nunca</string>
     <string name="days_string">Dias</string>
+    <plurals name="weeks">
+        <item quantity="one" tools:ignore="ImpliedQuantity">semana</item>
+        <item quantity="many">semanas</item>
+        <item quantity="other">semanas</item>
+    </plurals>
+    <string name="weeks_string">Semanas</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
     <string name="number_of_repetitions">Número de repetições</string>
     <string name="intro_notification_description">Quando o horário de um lembrete chegar, uma notificação aparecerá oferecendo-lhe a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>

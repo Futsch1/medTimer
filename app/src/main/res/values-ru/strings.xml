@@ -168,6 +168,12 @@
     <string name="minutes_string">Минуты</string>
     <string name="hours_string">Часы</string>
     <string name="days_string">Дни</string>
+    <plurals name="weeks">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">неделя</item>
+        <item quantity="few">недели</item>
+        <item quantity="many">недель</item>
+    </plurals>
+    <string name="weeks_string">Недели</string>
     <string name="create_reminder">Создать напоминание</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Время начала интервала</string>

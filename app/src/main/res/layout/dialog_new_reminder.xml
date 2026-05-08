@@ -69,7 +69,7 @@
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/intervalUnit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:checkedButton="@id/intervalHours"
                 app:selectionRequired="true"
@@ -78,23 +78,34 @@
                 <Button
                     android:id="@+id/intervalMinutes"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/minutes_string" />
 
                 <Button
                     android:id="@+id/intervalHours"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/hours_string" />
 
                 <Button
                     android:id="@+id/intervalDays"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/days_string" />
+
+                <Button
+                    android:id="@+id/intervalWeeks"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weeks_string" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

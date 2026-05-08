@@ -156,6 +156,10 @@
     <string name="time_based_reminder">時間型提醒</string>
     <string name="interval_based_reminder">間隔型提醒</string>
     <string name="days_string">天</string>
+    <plurals name="weeks">
+        <item quantity="other">週</item>
+    </plurals>
+    <string name="weeks_string">週</string>
     <string name="create_reminder">建立提醒</string>
     <string name="interval">間隔</string>
     <string name="interval_start_time">間隔開始時間</string>

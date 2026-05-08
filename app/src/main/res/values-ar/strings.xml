@@ -182,6 +182,15 @@
         <item quantity="other">يوم</item>
     </plurals>
     <string name="days_string">أيام</string>
+    <plurals name="weeks">
+        <item quantity="zero">أسبوع</item>
+        <item quantity="one">أسبوع</item>
+        <item quantity="two">أسبوعان</item>
+        <item quantity="few">أسابيع</item>
+        <item quantity="many">أسبوعاً</item>
+        <item quantity="other">أسبوع</item>
+    </plurals>
+    <string name="weeks_string">أسابيع</string>
     <string name="create_reminder">أنشئ تذكير</string>
     <string name="interval">الفاصل الزمني</string>
     <string name="interval_start_time">وقت بداية الفاصل الزمني</string>

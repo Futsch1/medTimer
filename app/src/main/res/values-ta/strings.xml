@@ -149,6 +149,11 @@
     <string name="minutes_string">Minutes</string>
     <string name="hours_string">மணிகள்</string>
     <string name="days_string">நாட்கள்</string>
+    <plurals name="weeks">
+        <item quantity="one">வாரம்</item>
+        <item quantity="other">வாரங்கள்</item>
+    </plurals>
+    <string name="weeks_string">வாரங்கள்</string>
     <string name="create_reminder">நினைவூட்டலை உருவாக்கவும்</string>
     <string name="interval">இடைவேளை</string>
     <string name="interval_start_time">இடைவெளி தொடக்க நேரம்</string>

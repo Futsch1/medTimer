@@ -160,6 +160,11 @@
         <item quantity="other">дни</item>
     </plurals>
     <string name="days_string">Дни</string>
+    <plurals name="weeks">
+        <item quantity="one">седмица</item>
+        <item quantity="other">седмици</item>
+    </plurals>
+    <string name="weeks_string">Седмици</string>
     <string name="create_reminder">Създаване на напомняне</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Начало на интервала</string>

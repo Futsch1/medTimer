@@ -166,6 +166,12 @@
     <string name="minutes_string">Minutos</string>
     <string name="hours_string">Horas</string>
     <string name="days_string">Días</string>
+    <plurals name="weeks">
+        <item quantity="one">semana</item>
+        <item quantity="other">semanas</item>
+        <item quantity="many">semanas</item>
+    </plurals>
+    <string name="weeks_string">Semanas</string>
     <string name="create_reminder">Crear recordatorio</string>
     <string name="interval">Intervalo</string>
     <string name="interval_start_time">Hora de inicio del intervalo</string>
@@ -294,7 +300,7 @@
     <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
     <string name="location_snooze">Posponer según ubicación</string>
     <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
-    <string name="location_snooze_no_play_services">La posposición según ubicación requiere Google Play Services, que no está disponible en este dispositivo</string>
+    <string name="location_snooze_no_play_services">Posponer según ubicación requiere los servicios de Google Play, que no están disponibles en este dispositivo</string>
     <string name="location_snooze_background_permission">Para recibir notificaciones al llegar a casa, permita que MedTimer acceda a la ubicación en segundo plano</string>
     <string name="snooze_until_home">Posponer hasta llegar a casa</string>
     <string name="snooze_settings">Configuración de posposición</string>

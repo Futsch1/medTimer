@@ -147,6 +147,13 @@
     <string name="minutes_string">Хвилини</string>
     <string name="hours_string">Години</string>
     <string name="days_string">Дні</string>
+    <plurals name="weeks">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">тиждень</item>
+        <item quantity="other">тижні</item>
+        <item quantity="few">тижні</item>
+        <item quantity="many">тижнів</item>
+    </plurals>
+    <string name="weeks_string">Тижні</string>
     <string name="create_reminder">Створити нагадування</string>
     <string name="interval">Інтервал</string>
     <string name="interval_start_time">Початок інтервалу</string>
