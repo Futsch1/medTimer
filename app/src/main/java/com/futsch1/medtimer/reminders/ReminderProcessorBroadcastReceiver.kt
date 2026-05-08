@@ -3,7 +3,9 @@ package com.futsch1.medtimer.reminders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.ProcessorCode
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.model.Reminder
@@ -61,6 +63,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         applicationScope.launch {
             try {
+                Log.d(LogTags.REMINDER, "Received intent $intentAction")
                 when (intentAction) {
                     ProcessorCode.Dismissed -> notificationProcessor.processReminderEventsInNotification(
                         ProcessedNotificationData.fromBundle(intent.extras!!),

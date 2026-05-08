@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.reminders
 
 import android.app.NotificationManager
+import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.database.ReminderEventRepository
@@ -10,9 +11,12 @@ import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
 import javax.inject.Inject
 
@@ -28,9 +32,10 @@ import javax.inject.Inject
 
  */
 class NotificationProcessor @Inject constructor(
+    @param:ApplicationContext
+    private val context: Context,
     private val alarmProcessor: AlarmProcessor,
     private val notifications: Notifications,
-    private val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val stockHandlingProcessor: StockHandlingProcessor,
     private val repeatProcessor: RepeatProcessor,
     private val notificationManager: NotificationManager,
@@ -57,7 +62,7 @@ class NotificationProcessor @Inject constructor(
         setReminderEventStatus(status, reminderEventsToUpdate)
 
         // Reschedule since the trigger condition for a linked reminder might have changed
-        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+        requestScheduleNextNotification(context)
     }
 
     fun cancelNotification(notificationId: Int) {

@@ -20,12 +20,11 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource
 ) {
 
-    suspend fun scheduleNextReminder(processedEvents: List<ReminderEvent> = emptyList()) {
+    suspend fun scheduleNextReminder() {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-        val allEvents = (reminderEvents + processedEvents).distinctBy { it.reminderEventId }
-
-        scheduleNextReminderInternal(medicines, allEvents)
+        Log.d(LogTags.REMINDER, "Schedule next reminders, considering events ${reminderEvents.map { it.reminderEventId }}")
+        scheduleNextReminderInternal(medicines, reminderEvents)
     }
 
     private fun scheduleNextReminderInternal(

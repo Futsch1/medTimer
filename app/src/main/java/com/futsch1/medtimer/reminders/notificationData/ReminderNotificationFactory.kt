@@ -52,6 +52,7 @@ open class ReminderNotificationFactory @Inject constructor(
                     reminderNotificationData.remindInstant.epochSecond, medicine, reminder, reminderEventRepository, timeFormatter
                 )
                 reminderEvent = reminderEventRepository.create(newEvent.copy(remainingRepeats = numberOfRepeats))
+                Log.d(LogTags.REMINDER, "Created reminder event rEID [${reminderEvent.reminderEventId}] for reminder rID [${reminder.id}]")
             } else {
                 reminderNotificationData.notificationId = reminderEvent.notificationId
             }

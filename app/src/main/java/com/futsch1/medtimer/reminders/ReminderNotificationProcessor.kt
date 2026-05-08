@@ -15,6 +15,7 @@ import com.futsch1.medtimer.model.Reminder
 import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.model.ReminderType
 import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
@@ -28,7 +29,6 @@ class ReminderNotificationProcessor @Inject constructor(
     val notifications: Notifications,
     val notificationProcessor: NotificationProcessor,
     val repeatProcessor: RepeatProcessor,
-    val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource
@@ -46,8 +46,7 @@ class ReminderNotificationProcessor @Inject constructor(
             notificationAction(nonTakenReminderNotification)
         }
 
-        val processedEvents = nonTakenReminderNotification.reminderNotificationParts.map { it.reminderEvent }
-        scheduleNextReminderNotificationProcessor.scheduleNextReminder(processedEvents)
+        requestScheduleNextNotification(context)
 
         return true
     }
