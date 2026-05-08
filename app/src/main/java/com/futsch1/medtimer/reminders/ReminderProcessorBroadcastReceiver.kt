@@ -119,7 +119,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processSnooze(intent: Intent) {
+    private suspend fun processSnooze(intent: Intent) {
         snoozeProcessor.processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
             intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, 0).toDuration(DurationUnit.SECONDS)

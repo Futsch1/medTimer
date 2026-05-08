@@ -25,34 +25,23 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
 
     suspend fun scheduleNextReminder() {
         mutex.withLock {
-            while (scheduleNextReminderStep()) {
-                // loop until a future alarm is set or no reminders remain
+            val medicines = medicineRepository.getAll()
+            val reminderEvents = reminderEventRepository.getForScheduling(medicines)
+            Log.d(LogTags.REMINDER, "Schedule next reminders, considering events ${reminderEvents.map { it.reminderEventId }}")
+
+            val scheduledReminders = ReminderScheduler(timeAccess, preferencesDataSource).schedule(medicines, reminderEvents)
+            if (scheduledReminders.isEmpty()) {
+                Log.d(LogTags.REMINDER, "No reminders scheduled")
+                alarmProcessor.cancelNextReminder()
+                return
             }
+
+            val data = ReminderNotificationData.fromScheduledReminders(
+                if (preferencesDataSource.preferences.value.combineNotifications) scheduledReminders
+                else listOf(scheduledReminders[0])
+            )
+
+            alarmProcessor.setAlarmForReminderNotification(data, reminderNotificationProcessor)
         }
-    }
-
-    private suspend fun scheduleNextReminderStep(): Boolean {
-        val medicines = medicineRepository.getAll()
-        val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-        Log.d(LogTags.REMINDER, "Schedule next reminders, considering events ${reminderEvents.map { it.reminderEventId }}")
-
-        val scheduledReminders = ReminderScheduler(timeAccess, preferencesDataSource).schedule(medicines, reminderEvents)
-        if (scheduledReminders.isEmpty()) {
-            Log.d(LogTags.REMINDER, "No reminders scheduled")
-            alarmProcessor.cancelNextReminder()
-            return false
-        }
-
-        val data = ReminderNotificationData.fromScheduledReminders(
-            if (preferencesDataSource.preferences.value.combineNotifications) scheduledReminders
-            else listOf(scheduledReminders[0])
-        )
-
-        val isImmediate = alarmProcessor.setAlarmForReminderNotification(data, sendImmediateBroadcast = false)
-        if (isImmediate) {
-            reminderNotificationProcessor.processReminders(data)
-            return true
-        }
-        return false
     }
 }
