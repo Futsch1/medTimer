@@ -34,6 +34,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
@@ -139,8 +140,6 @@ class ShowReminderNotificationProcessorTest {
 
         // The actually requested reminder
         verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
-        // And the one for tomorrow
-        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(24 * 60 * 60 * 1000L + 10 * 60 * 60 * 1000L), any())
     }
 
     @Test
@@ -160,10 +159,8 @@ class ShowReminderNotificationProcessorTest {
         verify(reminderContext.notificationManagerFake.mock, never()).cancel(anyInt())
         // Never raise a new one
         verify(reminderContext.notificationManagerFake.mock, never()).notify(anyInt(), any())
-        // The actually requested reminder
-        verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
-        // And the one for tomorrow
-        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(24 * 60 * 60 * 1000L + 10 * 60 * 60 * 1000L), any())
+        // No alarm set when notification is already active
+        verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), anyLong(), any())
     }
 
     @Test
@@ -180,13 +177,11 @@ class ShowReminderNotificationProcessorTest {
             )
         }
 
-        // Send broadcast (one for the reminder and one for updating the widget)
+        // Send broadcast for the reminder
         val broadcastIntents = shadowOf(ApplicationProvider.getApplicationContext<Application>()).broadcastIntents
-        assertEquals(2, broadcastIntents.size)
+        assertEquals(1, broadcastIntents.size)
         // The actually requested reminder
         verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
-        // And two times for tomorrow (twice is actually unnecessary, but to reduce complexity, scheduling is called more often)
-        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(24 * 60 * 60 * 1000L + 10 * 60 * 60 * 1000L), any())
     }
 
     @Test

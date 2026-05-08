@@ -3,6 +3,9 @@ package com.futsch1.medtimer.location
 import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,6 +27,7 @@ class GeofenceBroadcastReceiverTest {
         locationSnoozeProcessor = mock()
         receiver = GeofenceBroadcastReceiver()
         receiver.locationSnoozeProcessor = locationSnoozeProcessor
+        receiver.applicationScope = CoroutineScope(Dispatchers.Unconfined)
     }
 
     @Test
@@ -34,7 +38,7 @@ class GeofenceBroadcastReceiverTest {
 
         receiver.handleGeofencingEvent(event)
 
-        verify(locationSnoozeProcessor).processLocationSnooze()
+        runBlocking { verify(locationSnoozeProcessor).processLocationSnooze() }
     }
 
     @Test
@@ -45,7 +49,7 @@ class GeofenceBroadcastReceiverTest {
 
         receiver.handleGeofencingEvent(event)
 
-        verify(locationSnoozeProcessor, never()).processLocationSnooze()
+        runBlocking { verify(locationSnoozeProcessor, never()).processLocationSnooze() }
     }
 
     @Test
@@ -56,6 +60,6 @@ class GeofenceBroadcastReceiverTest {
 
         receiver.handleGeofencingEvent(event)
 
-        verify(locationSnoozeProcessor, never()).processLocationSnooze()
+        runBlocking { verify(locationSnoozeProcessor, never()).processLocationSnooze() }
     }
 }

@@ -4,10 +4,12 @@ import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.AlarmProcessor
 import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.isNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
@@ -37,9 +39,9 @@ class LocationSnoozeProcessorTest {
     fun emptyPendingList() {
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(emptyList())
 
-        processor.processLocationSnooze()
+        runBlocking { processor.processLocationSnooze() }
 
-        verify(alarmProcessor, never()).setAlarmForReminderNotification(any())
+        runBlocking { verify(alarmProcessor, never()).setAlarmForReminderNotification(any(), isNull()) }
         verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
@@ -50,9 +52,9 @@ class LocationSnoozeProcessorTest {
         val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
-        processor.processLocationSnooze()
+        runBlocking { processor.processLocationSnooze() }
 
-        verify(alarmProcessor, times(1)).setAlarmForReminderNotification(any())
+        runBlocking { verify(alarmProcessor, times(1)).setAlarmForReminderNotification(any(), isNull()) }
         verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
@@ -66,9 +68,9 @@ class LocationSnoozeProcessorTest {
         )
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(snoozes)
 
-        processor.processLocationSnooze()
+        runBlocking { processor.processLocationSnooze() }
 
-        verify(alarmProcessor, times(3)).setAlarmForReminderNotification(any())
+        runBlocking { verify(alarmProcessor, times(3)).setAlarmForReminderNotification(any(), isNull()) }
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
 }
