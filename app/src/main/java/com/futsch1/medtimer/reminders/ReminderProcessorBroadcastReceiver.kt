@@ -3,6 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.LogTags
@@ -91,7 +92,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
 
                     ProcessorCode.Snooze -> processSnooze(intent)
                     ProcessorCode.Reminder -> {
-                        if (reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras!!))) {
+                        if (reminderNotificationProcessor.processReminders(ReminderNotificationData.fromBundle(intent.extras ?: Bundle()))) {
                             scheduleNextReminderNotificationProcessor.scheduleNextReminder()
                         }
                     }
@@ -103,7 +104,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
                     ProcessorCode.Refill -> processRefill(intent)
                     ProcessorCode.StockHandling -> processStockHandling(intent)
                     ProcessorCode.Schedule -> scheduleNextReminderNotificationProcessor.scheduleNextReminder()
-                    ProcessorCode.LocationSnooze -> snoozeProcessor.processLocationSnooze(ReminderNotificationData.fromBundle(intent.extras!!))
+                    ProcessorCode.LocationSnooze -> snoozeProcessor.processLocationSnooze(ReminderNotificationData.fromBundle(intent.extras ?: Bundle()))
                 }
             } finally {
                 pendingResult.finish()
