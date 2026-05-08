@@ -3,8 +3,11 @@ package com.futsch1.medtimer.overview.actions
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.DeleteHelper
+import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.model.ReminderEvent
@@ -24,6 +27,8 @@ class ReminderEventActions @AssistedInject constructor(
     @Assisted val event: PastReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderEventRepository: ReminderEventRepository,
+    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
     private val timePickerDialogFactory: TimePickerDialogFactory
 ) : Actions {
 
@@ -105,16 +110,24 @@ class ReminderEventActions @AssistedInject constructor(
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
+                undoStock(reminderEvent)
                 reminderEventRepository.delete(reminderEvent)
                 ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
             }
         }, {})
     }
 
+    private suspend fun undoStock(reminderEvent: ReminderEvent) {
+        val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
+        val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return
+        medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
+    }
+
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
         DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
-                reminderEventRepository.update(reminderEvent.copy(status = ReminderEvent.ReminderStatus.DELETED))
+                undoStock(reminderEvent)
+                reminderEventRepository.update(reminderEvent.copy(status = ReminderEvent.ReminderStatus.DELETED, stockHandled = false))
             }
         }, {})
     }
