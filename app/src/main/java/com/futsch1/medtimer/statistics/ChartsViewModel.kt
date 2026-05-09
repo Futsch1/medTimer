@@ -85,9 +85,10 @@ class ChartsViewModel @Inject constructor(
     }
 
     private suspend fun computeSeriesColors(series: List<SimpleXYSeries>): List<Int> {
+        val allMedicines = medicineRepository.getAll()
         var colorIndex = 0
         return series.map { xySeries ->
-            medicineRepository.getAll()
+            allMedicines
                 .firstOrNull { it.name == xySeries.title && it.useColor }
                 ?.color
                 ?: COLORS[colorIndex++ % COLORS.size]

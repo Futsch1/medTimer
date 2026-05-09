@@ -94,8 +94,8 @@ class ChartsFragment : Fragment() {
         takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal)
 
         setupTakenSkippedCharts()
+        setupMedicinesPerDayChart()
         lifecycleScope.launch(backgroundDispatcher) {
-            setupMedicinesPerDayChart()
             viewModel.uiState.filterNotNull().collect { state ->
                 withContext(mainDispatcher) {
                     updateMedicinesPerDayChart(state)
@@ -148,17 +148,13 @@ class ChartsFragment : Fragment() {
             )
         )
         pieChart.plotPaddingTop = requireContext().resources.dpToPx(5.0f)
-        pieChart.backgroundPaint.setColor(
-            requireContext().getMaterialColor(
-                com.google.android.material.R.attr.colorSurface,
-                "TakenSkippedChart"
-            )
+        pieChart.backgroundPaint.color = requireContext().getMaterialColor(
+            com.google.android.material.R.attr.colorSurface,
+            "TakenSkippedChart"
         )
-        pieChart.title.labelPaint.setColor(
-            requireContext().getMaterialColor(
-                com.google.android.material.R.attr.colorOnSurface,
-                "TakenSkippedChart"
-            )
+        pieChart.title.labelPaint.color = requireContext().getMaterialColor(
+            com.google.android.material.R.attr.colorOnSurface,
+            "TakenSkippedChart"
         )
         val renderer = pieChart.getRenderer(PieRenderer::class.java)
         renderer.setDonutSize(0.0f, PieRenderer.DonutMode.PERCENT)
@@ -168,9 +164,7 @@ class ChartsFragment : Fragment() {
         val formatter = SegmentFormatter(
             requireContext().getMaterialColor(colorSegment, "TakenSkippedChart")
         )
-        formatter.labelPaint.setColor(
-            requireContext().getMaterialColor(colorText, "TakenSkippedChart")
-        )
+        formatter.labelPaint.color = requireContext().getMaterialColor(colorText, "TakenSkippedChart")
         return formatter
     }
 
@@ -222,7 +216,7 @@ class ChartsFragment : Fragment() {
     private fun Paint.applyAxisLabelStyle() {
         val context = requireContext()
         textSize = context.resources.dpToPx(10.0f)
-        setColor(context.getMaterialColor(com.google.android.material.R.attr.colorOnSurface, "TakenSkippedChart"))
+        color = context.getMaterialColor(com.google.android.material.R.attr.colorOnSurface, "TakenSkippedChart")
     }
 
     private fun setupBottomLine() {
@@ -286,12 +280,10 @@ class ChartsFragment : Fragment() {
 
     private fun getBarFormatter(color: Int): MedicinePerDayChartFormatter {
         val formatter = MedicinePerDayChartFormatter()
-        formatter.fillPaint.setColor(color)
-        formatter.borderPaint.setColor(
-            requireContext().getMaterialColor(
-                androidx.appcompat.R.attr.colorPrimary,
-                "TakenSkippedChart"
-            )
+        formatter.fillPaint.color = color
+        formatter.borderPaint.color = requireContext().getMaterialColor(
+            androidx.appcompat.R.attr.colorPrimary,
+            "TakenSkippedChart"
         )
         return formatter
     }
@@ -328,10 +320,8 @@ class ChartsFragment : Fragment() {
     }
 
     fun setDays(days: Int) {
-            if (isAdded) {
-                viewModel.setDays(days)
-            }
-        }
+        viewModel.setDays(days)
+    }
 
     private inner class DaysSinceEpochFormat : NumberFormat() {
         override fun format(
