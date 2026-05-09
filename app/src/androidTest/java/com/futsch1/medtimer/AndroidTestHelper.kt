@@ -82,6 +82,7 @@ object AndroidTestHelper {
         val dateString = dateToStringForDateEdit(date)
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString)
+        closeKeyboard()
         clickOn(com.google.android.material.R.id.confirm_button)
     }
 
@@ -114,6 +115,7 @@ object AndroidTestHelper {
     @JvmStatic
     fun setValue(value: String) {
         writeTo(android.R.id.edit, value)
+        closeKeyboard()
         clickDialogPositiveButton()
     }
 
