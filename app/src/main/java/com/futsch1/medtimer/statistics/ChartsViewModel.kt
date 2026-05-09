@@ -51,7 +51,7 @@ class ChartsViewModel @Inject constructor(
     val uiState: StateFlow<ChartsUiState?> = _days
         .flatMapLatest { days -> flow { emit(loadState(days)) } }
         .flowOn(ioDispatcher)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(0), null)
 
     fun setDays(days: Int) {
         _days.value = days

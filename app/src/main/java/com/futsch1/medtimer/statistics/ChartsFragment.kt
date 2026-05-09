@@ -45,7 +45,7 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class ChartsFragment : Fragment() {
-    private val viewModel: ChartsViewModel by viewModels()
+    private val viewModel: ChartsViewModel by viewModels({ requireParentFragment() })
 
     @Inject
     @Dispatcher(MedTimerDispatchers.Main)
@@ -69,19 +69,6 @@ class ChartsFragment : Fragment() {
 
     private var medicinesPerDayChartInitialized = false
 
-    companion object {
-        private const val DAYS_BUNDLE_KEY = "days"
-
-        fun newInstance(days: Int) = ChartsFragment().apply {
-            arguments = Bundle().apply { putInt(DAYS_BUNDLE_KEY, days) }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.setDays(arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -95,7 +82,7 @@ class ChartsFragment : Fragment() {
 
         setupTakenSkippedCharts()
         setupMedicinesPerDayChart()
-        lifecycleScope.launch(backgroundDispatcher) {
+        viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
             viewModel.uiState.filterNotNull().collect { state ->
                 withContext(mainDispatcher) {
                     updateMedicinesPerDayChart(state)
@@ -311,16 +298,6 @@ class ChartsFragment : Fragment() {
             renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, barWidth)
             renderer.barOrientation = BarRenderer.BarOrientation.STACKED
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Re-trigger data load with current days on resume
-        viewModel.setDays(viewModel.uiState.value?.days ?: (arguments?.getInt(DAYS_BUNDLE_KEY) ?: 0))
-    }
-
-    fun setDays(days: Int) {
-        viewModel.setDays(days)
     }
 
     private inner class DaysSinceEpochFormat : NumberFormat() {

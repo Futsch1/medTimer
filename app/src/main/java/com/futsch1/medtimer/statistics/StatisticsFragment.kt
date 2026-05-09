@@ -22,6 +22,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private val medicineViewModel: MedicineViewModel by viewModels()
+    private val chartsViewModel: ChartsViewModel by viewModels()
     private lateinit var timeSpinner: Spinner
     private lateinit var chartsFragment: ChartsFragment
 
@@ -35,7 +36,8 @@ class StatisticsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        chartsFragment = ChartsFragment.newInstance(persistentDataDataSource.data.value.analysisDays)
+        chartsFragment = ChartsFragment()
+        chartsViewModel.setDays(persistentDataDataSource.data.value.analysisDays)
 
         optionsMenu = optionsMenuFactory.create(
             this,
@@ -150,7 +152,7 @@ class StatisticsFragment : Fragment() {
                     val days = AnalysisDays.getDays(requireContext(), position)
                     persistentDataDataSource.setAnalysisDays(days)
 
-                    chartsFragment.setDays(days)
+                    chartsViewModel.setDays(days)
                 }
             }
 
