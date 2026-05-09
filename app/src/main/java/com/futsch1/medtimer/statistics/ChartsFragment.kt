@@ -82,8 +82,9 @@ class ChartsFragment : Fragment() {
 
         setupTakenSkippedCharts()
         setupMedicinesPerDayChart()
+        val uiState = viewModel.uiState
         viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
-            viewModel.uiState.filterNotNull().collect { state ->
+            uiState.filterNotNull().collect { state ->
                 withContext(mainDispatcher) {
                     updateMedicinesPerDayChart(state)
                     updateTakenSkipped(
