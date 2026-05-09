@@ -98,24 +98,34 @@ class MedicineViewHolder @AssistedInject constructor(
 
     fun buildTags(tagsList: List<Tag>) {
         tags.removeAllViews()
-        for (tag in tagsList) {
-            @SuppressLint("InflateParams") val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip
-            chip.text = tag.name
-            chip.isChecked = true
-            chip.isCheckable = false
-            chip.isCloseIconVisible = false
-            chip.setOnClickListener { _: View? -> itemView.performClick() }
-            chip.rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
-            val params = FlexboxLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            val margin = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 4f, this.itemView.resources.displayMetrics
-            ).toInt()
-            params.setMargins(margin, 0, margin, 0)
-            chip.setLayoutParams(params)
-            tags.addView(chip)
+        val visibleTags = tagsList.take(MAX_VISIBLE_TAGS)
+        val overflowCount = tagsList.size - visibleTags.size
+        for (tag in visibleTags) {
+            tags.addView(createTagChip(tag.name, isChecked = true))
         }
+        if (overflowCount > 0) {
+            tags.addView(createTagChip(itemView.context.getString(R.string.more_tags, overflowCount), isChecked = false))
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    private fun createTagChip(text: String, isChecked: Boolean): Chip {
+        val chip = LayoutInflater.from(itemView.context).inflate(R.layout.tag, null) as Chip
+        chip.text = text
+        chip.isChecked = isChecked
+        chip.isCheckable = false
+        chip.isCloseIconVisible = false
+        chip.setOnClickListener { _: View? -> itemView.performClick() }
+        chip.rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
+        val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, itemView.resources.displayMetrics).toInt()
+        val params = FlexboxLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        params.flexShrink = 0f
+        params.setMargins(margin, 0, margin, 0)
+        chip.layoutParams = params
+        return chip
+    }
+
+    companion object {
+        private const val MAX_VISIBLE_TAGS = 5
     }
 }

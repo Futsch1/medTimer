@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
@@ -26,6 +27,8 @@ class TagsFragment @AssistedInject constructor(
         fun create(tagDataProvider: TagDataProvider): TagsFragment
     }
 
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,7 +36,7 @@ class TagsFragment @AssistedInject constructor(
     ): View {
         val view = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.tags)
+        recyclerView = view.findViewById(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
         recyclerView.adapter = tagDataProvider.getAdapter()
 
@@ -49,7 +52,21 @@ class TagsFragment @AssistedInject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        recyclerView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            requireView().post { if (isAdded) capDialogHeight(requireView()) }
+        }
+    }
 
+    private fun capDialogHeight(view: View) {
+        val maxHeight = (resources.displayMetrics.heightPixels * 0.8f).toInt()
+        if (view.height > maxHeight) {
+            val nonRecyclerHeight = view.height - recyclerView.height
+            val targetHeight = maxHeight - nonRecyclerHeight
+            if (recyclerView.height != targetHeight) {
+                recyclerView.updateLayoutParams { height = targetHeight }
+            }
+        }
         requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
@@ -68,17 +85,9 @@ class TagsFragment @AssistedInject constructor(
                 .textSink { tagName: String? ->
                     if (!tagName.isNullOrBlank()) {
                         tagDataProvider.addTag(tagName)
-                        growWindow()
                     }
                 }
                 .show()
         }
-    }
-
-    private fun growWindow() {
-        dialog!!.window!!.setLayout(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
-        )
     }
 }

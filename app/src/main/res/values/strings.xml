@@ -199,6 +199,7 @@
     <string name="tags">Tags</string>
     <string name="add_tag">Add tag</string>
     <string name="are_you_sure_delete_tag">Are you sure to delete the tag?</string>
+    <string name="more_tags" translatable="false">+%d</string>
     <string name="unit">Unit</string>
     <string name="unlimited">Unlimited</string>
     <string name="override_dnd">Always play notification sound</string>
