@@ -54,7 +54,8 @@
                 android:id="@+id/tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp" />
+                android:layout_marginHorizontal="4dp"
+                app:flexWrap="wrap" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
