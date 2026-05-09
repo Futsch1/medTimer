@@ -32,6 +32,7 @@ object AndroidTestHelper {
         clickOn(R.id.addReminder)
         clickOn(R.id.timeBasedCard)
         writeTo(R.id.editAmount, amount)
+        closeKeyboard()
 
         if (time != null) {
             clickOn(R.id.editReminderTime)
@@ -60,8 +61,12 @@ object AndroidTestHelper {
 
         clickOn(com.google.android.material.R.id.material_timepicker_mode_button)
         writeTo(com.google.android.material.R.id.material_hour_text_input, hour.toString())
+        // Close the keyboard before clicking the minute field – on tablets the soft keyboard
+        // causes the time-picker dialog to be shifted (adjustPan) and the minute field leaves
+        // the global visible rect, making Espresso unable to click it and eventually
+        // dismissing the dialog entirely.
+        closeKeyboard()
         clickOn(com.google.android.material.R.id.material_minute_text_input)
-        clickOn(com.google.android.material.R.id.material_minute_text_input) // Fails sometimes, do this twice
         Espresso.onView(
             Matchers.allOf(
                 ViewMatchers.isDescendantOfA(ViewMatchers.withId(com.google.android.material.R.id.material_minute_text_input)),
@@ -77,6 +82,7 @@ object AndroidTestHelper {
         val dateString = dateToStringForDateEdit(date)
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, dateString)
+        closeKeyboard()
         clickOn(com.google.android.material.R.id.confirm_button)
     }
 
@@ -109,6 +115,7 @@ object AndroidTestHelper {
     @JvmStatic
     fun setValue(value: String) {
         writeTo(android.R.id.edit, value)
+        closeKeyboard()
         clickDialogPositiveButton()
     }
 
