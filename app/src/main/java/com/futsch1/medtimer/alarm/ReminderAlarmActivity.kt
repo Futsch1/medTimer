@@ -15,24 +15,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ReminderAlarmActivity : AppCompatActivity() {
 
-    @Inject
-    @Dispatcher(MedTimerDispatchers.Default)
-    lateinit var backgroundDispatcher: CoroutineDispatcher
+    // Single-threaded executor ensures buildMediaPlayer, startAlarm, and pauseAlarm
+    // run sequentially, preventing concurrent MediaPlayer state transitions.
+    private val alarmExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -44,7 +45,6 @@ class ReminderAlarmActivity : AppCompatActivity() {
     lateinit var audioManager: AudioManager
 
     private var mediaPlayer: MediaPlayer? = null
-    private var buildMediaPlayerJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,34 +60,30 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
         addAlarmFragment(intent)
 
-        buildMediaPlayerJob = lifecycleScope.launch(backgroundDispatcher) {
+        lifecycleScope.launch(alarmExecutor) {
             buildMediaPlayer()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch(backgroundDispatcher) {
+        lifecycleScope.launch(alarmExecutor) {
             startAlarm()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        lifecycleScope.launch(backgroundDispatcher) {
+        lifecycleScope.launch(alarmExecutor) {
             pauseAlarm()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        (alarmExecutor.executor as ExecutorService).awaitTermination(1, TimeUnit.SECONDS)
         releaseMediaPlayer()
-        Log.d("ReminderAlarm", "Destroyed alarm activity")
-    }
-
-    private suspend fun awaitMediaPlayer(): MediaPlayer? {
-        buildMediaPlayerJob?.join()
-        return mediaPlayer
+        Log.d(LogTags.ALARM, "Destroyed alarm activity")
     }
 
     private fun buildMediaPlayer() {
@@ -112,11 +108,13 @@ class ReminderAlarmActivity : AppCompatActivity() {
         if (tmpMediaPlayer != null) {
             tmpMediaPlayer.isLooping = true
             mediaPlayer = tmpMediaPlayer
+        } else {
+            Log.w(LogTags.ALARM, "Failed to create media player")
         }
     }
 
-    private suspend fun startAlarm() {
-        Log.d("ReminderAlarm", "Executing startAlarm job")
+    private fun startAlarm() {
+        Log.d(LogTags.ALARM, "Executing startAlarm job")
 
         if (shallPlayAlarm()) {
             playAlarmTone()
@@ -127,14 +125,12 @@ class ReminderAlarmActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun pauseAlarm() {
-        Log.d("ReminderAlarm", "Executing pauseAlarm job")
-
-        val mediaPlayer = awaitMediaPlayer() ?: return
+    private fun pauseAlarm() {
+        Log.d(LogTags.ALARM, "Executing pauseAlarm job")
 
         try {
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
             }
         } catch (_: IllegalStateException) {
             // Ignore
@@ -146,16 +142,15 @@ class ReminderAlarmActivity : AppCompatActivity() {
     private fun releaseMediaPlayer() {
         mediaPlayer?.release()
         mediaPlayer = null
-        Log.d("ReminderAlarm", "Released media player")
+        Log.d(LogTags.ALARM, "Released media player")
     }
 
     private fun vibrate() {
         vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(500, 500), 0))
     }
 
-    private suspend fun playAlarmTone() {
-        val mediaPlayer = awaitMediaPlayer() ?: return
-        mediaPlayer.start()
+    private fun playAlarmTone() {
+        mediaPlayer?.start()
     }
 
     private fun shallPlayAlarm(): Boolean {
@@ -176,7 +171,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
-            Log.d("ReminderAlarm", "Adding alarm fragment")
+            Log.d(LogTags.ALARM, "Adding alarm fragment")
             supportFragmentManager.beginTransaction()
                 .add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
