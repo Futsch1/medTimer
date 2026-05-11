@@ -51,6 +51,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:configChanges="locale|layoutDirection"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.MedTimer">
             <intent-filter>
