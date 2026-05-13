@@ -296,7 +296,7 @@
     <string name="backup_successful_to">Otomatik yedekleme başarılı: %s</string>
     <string name="location_snooze">Konuma dayalı erteleme</string>
     <string name="location_snooze_summary">Ertelemeden sonra eve gelince yeniden bildirim</string>
-    <string name="location_snooze_no_play_services">Konuma dayalı erteleme, bu cihazda bulunmayan Google Play Services gerektirir</string>
+    <string name="location_snooze_no_play_services">Konuma dayalı erteleme, bu cihazda bulunmayan Google Play Servislerijini gerektirir</string>
     <string name="location_snooze_background_permission">Eve gelince yeniden bildirim almak için MedTimer\'ın arka planda konuma erişmesine izin verin</string>
     <string name="snooze_until_home">Eve dönene kadar ertele</string>
     <string name="snooze_settings">Erteleme ayarları</string>
