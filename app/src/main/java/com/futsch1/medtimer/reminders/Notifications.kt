@@ -45,12 +45,7 @@ class Notifications @Inject constructor(
     }
 
     private val nextNotificationId: Int
-        get() {
-            val notificationId = persistentDataDataSource.data.value.notificationId
-            persistentDataDataSource.increaseNotificationId()
-
-            return notificationId
-        }
+        get() = persistentDataDataSource.getAndIncreaseNotificationId()
 
     private fun notify(notificationId: Int, notification: android.app.Notification) {
         notificationManager.notify(notificationId, notification)
