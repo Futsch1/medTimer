@@ -25,23 +25,34 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
 
     suspend fun scheduleNextReminder() {
         mutex.withLock {
+            var futureReminderScheduled = false
             val medicines = medicineRepository.getAll()
-            val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-            Log.d(LogTags.REMINDER, "Schedule next reminders, considering events ${reminderEvents.map { it.reminderEventId }}")
 
-            val scheduledReminders = ReminderScheduler(timeAccess, preferencesDataSource).schedule(medicines, reminderEvents)
-            if (scheduledReminders.isEmpty()) {
-                Log.d(LogTags.REMINDER, "No reminders scheduled")
-                alarmProcessor.cancelNextReminder()
-                return
+            while(!futureReminderScheduled) {
+                val reminderEvents = reminderEventRepository.getForScheduling(medicines)
+                Log.d(
+                    LogTags.REMINDER,
+                    "Schedule next reminders, considering events ${reminderEvents.map { it.reminderEventId }}"
+                )
+
+                val scheduledReminders =
+                    ReminderScheduler(timeAccess, preferencesDataSource).schedule(
+                        medicines,
+                        reminderEvents
+                    )
+                if (scheduledReminders.isEmpty()) {
+                    Log.d(LogTags.REMINDER, "No reminders scheduled")
+                    alarmProcessor.cancelNextReminder()
+                    return
+                }
+
+                val data = ReminderNotificationData.fromScheduledReminders(
+                    if (preferencesDataSource.preferences.value.combineNotifications) scheduledReminders
+                    else listOf(scheduledReminders[0])
+                )
+
+                futureReminderScheduled = alarmProcessor.setAlarmForReminderNotification(data, reminderNotificationProcessor)
             }
-
-            val data = ReminderNotificationData.fromScheduledReminders(
-                if (preferencesDataSource.preferences.value.combineNotifications) scheduledReminders
-                else listOf(scheduledReminders[0])
-            )
-
-            alarmProcessor.setAlarmForReminderNotification(data, reminderNotificationProcessor)
         }
     }
 }
