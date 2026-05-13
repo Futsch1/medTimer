@@ -105,7 +105,7 @@ class NotificationProcessor @Inject constructor(
             .get(reminderNotificationData.reminderEventIds[0])
             ?.remainingRepeats ?: return
 
-        if (remainingRepeats > 0) {
+        if (remainingRepeats != 0) {
             repeatProcessor.processRepeat(
                 reminderNotificationData,
                 preferences.repeatDelay
