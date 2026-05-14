@@ -58,9 +58,9 @@ class ChartsFragment : Fragment() {
     @Inject
     lateinit var timeFormatter: TimeFormatter
 
-    private lateinit var takenSkippedChartView: PieChart
-    private lateinit var takenSkippedTotalChartView: PieChart
-    private lateinit var medicinesPerDayChartView: XYPlot
+    private var takenSkippedChartView: PieChart? = null
+    private var takenSkippedTotalChartView: PieChart? = null
+    private var medicinesPerDayChartView: XYPlot? = null
 
     private lateinit var segmentTakenPeriod: Segment
     private lateinit var segmentSkippedPeriod: Segment
@@ -76,17 +76,22 @@ class ChartsFragment : Fragment() {
     ): View {
         val statisticsView = inflater.inflate(R.layout.fragment_charts, container, false)
 
-        medicinesPerDayChartView = statisticsView.findViewById(R.id.medicinesPerDayChart)
-        takenSkippedChartView = statisticsView.findViewById(R.id.takenSkippedChart)
-        takenSkippedTotalChartView = statisticsView.findViewById(R.id.takenSkippedChartTotal)
+        val medicinesPerDayChartView: XYPlot = statisticsView.findViewById(R.id.medicinesPerDayChart)
+        val takenSkippedChartView: PieChart = statisticsView.findViewById(R.id.takenSkippedChart)
+        val takenSkippedTotalChartView: PieChart = statisticsView.findViewById(R.id.takenSkippedChartTotal)
+        this.medicinesPerDayChartView = medicinesPerDayChartView
+        this.takenSkippedChartView = takenSkippedChartView
+        this.takenSkippedTotalChartView = takenSkippedTotalChartView
 
-        setupTakenSkippedCharts()
-        setupMedicinesPerDayChart()
+        setupTakenSkippedCharts(takenSkippedChartView, takenSkippedTotalChartView)
+        setupMedicinesPerDayChart(medicinesPerDayChartView)
         val uiState = viewModel.uiState
         viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
             uiState.filterNotNull().collect { state ->
                 withContext(mainDispatcher) {
                     updateMedicinesPerDayChart(state)
+                    val takenSkippedChartView = takenSkippedChartView ?: return@withContext
+                    val takenSkippedTotalChartView = takenSkippedTotalChartView ?: return@withContext
                     updateTakenSkipped(
                         takenSkippedChartView,
                         segmentTakenPeriod,
@@ -110,7 +115,14 @@ class ChartsFragment : Fragment() {
         return statisticsView
     }
 
-    private fun setupTakenSkippedCharts() {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        takenSkippedChartView = null
+        takenSkippedTotalChartView = null
+        medicinesPerDayChartView = null
+    }
+
+    private fun setupTakenSkippedCharts(takenSkippedChartView: PieChart, takenSkippedTotalChartView: PieChart) {
         segmentTakenPeriod = Segment(requireContext().getString(R.string.taken), 0)
         segmentSkippedPeriod = Segment(requireContext().getString(R.string.skipped), 0)
         setupPieChart(takenSkippedChartView, segmentTakenPeriod, segmentSkippedPeriod)
@@ -188,13 +200,13 @@ class ChartsFragment : Fragment() {
         segment.title = "$stringValue: ${"%d%%".format(Locale.US, percentageValue)}"
     }
 
-    private fun setupMedicinesPerDayChart() {
+    private fun setupMedicinesPerDayChart(medicinesPerDayChartView: XYPlot) {
         try {
             medicinesPerDayChartView.setRangeLowerBoundary(0, BoundaryMode.FIXED)
-            setupBottomLine()
-            setupLeftLine()
-            setupNoBackgrounds()
-            setupLegend()
+            setupBottomLine(medicinesPerDayChartView)
+            setupLeftLine(medicinesPerDayChartView)
+            setupNoBackgrounds(medicinesPerDayChartView)
+            setupLegend(medicinesPerDayChartView)
             medicinesPerDayChartInitialized = true
         } catch (_: IllegalStateException) {
             // Intentionally ignored
@@ -207,20 +219,20 @@ class ChartsFragment : Fragment() {
         color = context.getMaterialColor(com.google.android.material.R.attr.colorOnSurface, "TakenSkippedChart")
     }
 
-    private fun setupBottomLine() {
+    private fun setupBottomLine(medicinesPerDayChartView: XYPlot) {
         val bottomLine = medicinesPerDayChartView.graph.getLineLabelStyle(XYGraphWidget.Edge.BOTTOM)
         bottomLine.format = DaysSinceEpochFormat()
         bottomLine.paint.textAlign = Paint.Align.CENTER
         bottomLine.paint.applyAxisLabelStyle()
     }
 
-    private fun setupLeftLine() {
+    private fun setupLeftLine(medicinesPerDayChartView: XYPlot) {
         val leftLine = medicinesPerDayChartView.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT)
         leftLine.format = DecimalFormat("#")
         leftLine.paint.applyAxisLabelStyle()
     }
 
-    private fun setupNoBackgrounds() {
+    private fun setupNoBackgrounds(medicinesPerDayChartView: XYPlot) {
         medicinesPerDayChartView.backgroundPaint = null
         medicinesPerDayChartView.graph.rangeGridLinePaint = null
         medicinesPerDayChartView.graph.domainGridLinePaint = null
@@ -232,7 +244,7 @@ class ChartsFragment : Fragment() {
         medicinesPerDayChartView.graph.rangeOriginLinePaint = null
     }
 
-    private fun setupLegend() {
+    private fun setupLegend(medicinesPerDayChartView: XYPlot) {
         val legend = medicinesPerDayChartView.legend
         legend.textPaint.applyAxisLabelStyle()
         legend.setPadding(requireContext().resources.dpToPx(4.0f), 0f, requireContext().resources.dpToPx(4.0f), 0f)
@@ -240,6 +252,7 @@ class ChartsFragment : Fragment() {
 
     private fun updateMedicinesPerDayChart(state: ChartsUiState) {
         if (!medicinesPerDayChartInitialized) return
+        val medicinesPerDayChartView = medicinesPerDayChartView ?: return
         val series = state.series
 
         medicinesPerDayChartView.clear()
@@ -262,7 +275,7 @@ class ChartsFragment : Fragment() {
             DynamicTableModel(numLegendColumns, 3, TableOrder.ROW_MAJOR)
         )
 
-        setupBarRenderer(state.domainMax - state.domainMin + 1)
+        setupBarRenderer(medicinesPerDayChartView, state.domainMax - state.domainMin + 1)
         medicinesPerDayChartView.redraw()
     }
 
@@ -286,7 +299,7 @@ class ChartsFragment : Fragment() {
         series.setTitle(title)
     }
 
-    private fun setupBarRenderer(numDomains: Long) {
+    private fun setupBarRenderer(medicinesPerDayChartView: XYPlot, numDomains: Long) {
         // The space between each bar and next to the outer bars is half bar width.
         // So we have numDomainsBar bars, numDomains - 1 spaces + 2 outer bars
         val numBars = numDomains + (numDomains - 1 + 2) / 2.0f

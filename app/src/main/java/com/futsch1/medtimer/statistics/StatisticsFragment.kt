@@ -23,7 +23,7 @@ import javax.inject.Inject
 class StatisticsFragment : Fragment() {
     private val medicineViewModel: MedicineViewModel by viewModels()
     private val chartsViewModel: ChartsViewModel by viewModels()
-    private lateinit var timeSpinner: Spinner
+    private var timeSpinner: Spinner? = null
     private lateinit var chartsFragment: ChartsFragment
 
     @Inject
@@ -64,6 +64,11 @@ class StatisticsFragment : Fragment() {
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
         return statisticsView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timeSpinner = null
     }
 
     override fun onPause() {
@@ -132,15 +137,15 @@ class StatisticsFragment : Fragment() {
 
     private fun checkTimeSpinnerVisibility() {
         if (persistentDataDataSource.data.value.activeStatisticsFragment == StatisticFragment.CHARTS) {
-            timeSpinner.visibility = View.VISIBLE
+            timeSpinner?.visibility = View.VISIBLE
         } else {
-            timeSpinner.visibility = View.INVISIBLE
+            timeSpinner?.visibility = View.INVISIBLE
         }
     }
 
     private fun setupTimeSpinner() {
-        timeSpinner.setSelection(AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays))
-        timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        timeSpinner?.setSelection(AnalysisDays.getPosition(requireContext(), persistentDataDataSource.data.value.analysisDays))
+        timeSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
