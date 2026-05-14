@@ -81,7 +81,7 @@ class MedTimerAppIntro : AppIntro() {
 
         this.setColorDoneText(
             this.getMaterialColor(
-                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.WHITE
+                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.BLACK
             )
         )
         this.setNextArrowColor(
@@ -91,7 +91,7 @@ class MedTimerAppIntro : AppIntro() {
         )
         this.setColorSkipButton(
             this.getMaterialColor(
-                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.WHITE
+                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.BLACK
             )
         )
         this.setBarColor(
