@@ -23,7 +23,7 @@
     <string name="are_you_sure_delete_reminder">Er du sikker på, at du vil slette påmindelsen?</string>
     <string name="clear_events">Ryd al historik</string>
     <string name="app_version">Appversion</string>
-    <string name="are_you_sure_delete_events">Dette vil permanent slette din hele medicineringshistorik. Denne handling kan ikke fortrydes.</string>
+    <string name="are_you_sure_delete_events">Dette vil slette hele din medicinhistorik permanent. Denne handling kan ikke fortrydes.</string>
     <string name="show_notifications">Vis notifikationer</string>
     <string name="twenty_four_hours">24 timer</string>
     <string name="two_days">2 dage</string>
@@ -41,9 +41,9 @@
     <string name="theme">Tema</string>
     <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
-    <string name="before_meal">før måltidet</string>
-    <string name="after_meal">efter måltidet</string>
-    <string name="time_before_meal">x minutter før måltidet</string>
+    <string name="before_meal">før måltid</string>
+    <string name="after_meal">efter måltid</string>
+    <string name="time_before_meal">x minutter før måltid</string>
     <string name="time_after">x timer efter medicin y</string>
     <string name="medicine_data">Medicindata</string>
     <string name="export_csv">Eksportér som CSV</string>
@@ -57,8 +57,8 @@
     <string name="log_additional_dose">Tilføj ekstra dosis</string>
     <string name="dismiss_notification_action">Handling ved afvisning af notifikation</string>
     <string name="skip_reminder">Spring dosis over</string>
-    <string name="snooze">Snooze</string>
-    <string name="snooze_duration">Snooze-varighed</string>
+    <string name="snooze">Udsæt</string>
+    <string name="snooze_duration">Udsættelsesvarighed</string>
     <string name="minutes_5">5 minutter</string>
     <string name="minutes_10">10 minutter</string>
     <string name="minutes_15">15 minutter</string>
@@ -73,7 +73,7 @@
     <string name="friday">Fredag</string>
     <string name="saturday">Lørdag</string>
     <string name="sunday">Søndag</string>
-    <string name="weekend_mode_summary">Udskyd notifikationer på bestemte ugedage inden for et bestemt tidsinterval</string>
+    <string name="weekend_mode_summary">Udskyd notifikationer på bestemte ugedage inden for et valgt tidsrum</string>
     <string name="weekend_start_time">Starttidspunkt</string>
     <string name="weekend_end_time">Sluttidspunkt</string>
     <string name="custom">Brugerdefineret…</string>
@@ -294,10 +294,10 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk backup</string>
     <string name="backup_successful_to">Automatisk backup gennemført: %s</string>
-    <string name="location_snooze">Placeringsbaseret snooze</string>
-    <string name="location_snooze_summary">Giv besked igen ved hjemkomst efter snooze</string>
-    <string name="location_snooze_no_play_services">Placeringsbaseret snooze kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
-    <string name="location_snooze_background_permission">For at blive adviseret ved hjemkomst, tillad MedTimer at tilgå placeringen i baggrunden</string>
+    <string name="location_snooze">Lokationsbaseret udsættelse</string>
+    <string name="location_snooze_summary">Påmind igen ved hjemkomst efter udsættelse</string>
+    <string name="location_snooze_no_play_services">Lokationsbaseret udsættelse kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
+    <string name="location_snooze_background_permission">For at påminde igen ved hjemkomst skal MedTimer have adgang til din lokation i baggrunden</string>
     <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="snooze_settings">Snooze-indstillinger</string>
     <string name="home_location">Hjemsted</string>
