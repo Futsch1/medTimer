@@ -58,7 +58,9 @@ interface ReminderEventDao {
     @Transaction
     suspend fun decreaseRepeats(reminderEventId: Int) {
         val reminderEvent = get(reminderEventId) ?: return
-        reminderEvent.remainingRepeats = maxOf(0, reminderEvent.remainingRepeats - 1)
-        update(reminderEvent)
+        if (reminderEvent.remainingRepeats > 0) {
+            reminderEvent.remainingRepeats -= 1
+            update(reminderEvent)
+        }
     }
 }
