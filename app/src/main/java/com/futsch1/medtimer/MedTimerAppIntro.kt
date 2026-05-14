@@ -80,23 +80,23 @@ class MedTimerAppIntro : AppIntro() {
         this.isImmersive = false
 
         this.setColorDoneText(
-            this.applicationContext.getMaterialColor(
-                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.WHITE
             )
         )
         this.setNextArrowColor(
-            this.applicationContext.getMaterialColor(
-                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.BLACK
             )
         )
         this.setColorSkipButton(
-            this.applicationContext.getMaterialColor(
-                com.google.android.material.R.attr.colorOnPrimary, Color.WHITE
+            this.getMaterialColor(
+                com.google.android.material.R.attr.colorOnPrimaryContainer, Color.WHITE
             )
         )
         this.setBarColor(
-            this.applicationContext.getMaterialColor(
-                androidx.appcompat.R.attr.colorPrimary,
+            this.getMaterialColor(
+                com.google.android.material.R.attr.colorPrimaryContainer,
                 Color.WHITE
             )
         )
