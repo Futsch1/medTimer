@@ -24,8 +24,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReminderTableFragment : Fragment() {
-    private lateinit var filterLayout: TextInputLayout
-    private lateinit var filter: TextInputEditText
+    private var filterLayout: TextInputLayout? = null
+    private var filter: TextInputEditText? = null
 
     @Inject
     lateinit var timeFormatter: TimeFormatter
@@ -60,11 +60,11 @@ class ReminderTableFragment : Fragment() {
             medicineViewModel.getLiveReminderEvents(0, ReminderEvent.statusValuesTakenOrSkipped)
                 .collect { reminderEvents ->
                     adapter.submitList(reminderEvents)
-                    tableFilter.set(filter.text.toString())
+                    tableFilter.set(filter?.text?.toString() ?: "")
                 }
         }
 
-        // This is a workaround for a recycler view bug that causes random crashes
+        // workaround for a recycler view bug that causes random crashes
         tableView.cellRecyclerView.setItemAnimator(null)
         tableView.columnHeaderRecyclerView.setItemAnimator(null)
         tableView.rowHeaderRecyclerView.setItemAnimator(null)
@@ -77,12 +77,18 @@ class ReminderTableFragment : Fragment() {
         return fragmentView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        filter = null
+        filterLayout = null
+    }
+
     private fun setupFilter(tableFilter: Filter) {
-        filterLayout.setEndIconOnClickListener { _: View? ->
-            filter.setText("")
+        filterLayout?.setEndIconOnClickListener { _: View? ->
+            filter?.setText("")
             tableFilter.set("")
         }
-        filter.addTextChangedListener(object : TextWatcher {
+        filter?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // Intentionally empty
             }

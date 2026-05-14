@@ -100,7 +100,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     lateinit var optionsMenuFactory: OptionsMenu.Factory
     private lateinit var optionsMenu: OptionsMenu
     private lateinit var daySelector: DaySelector
-    private lateinit var fragmentOverview: FragmentSwipeLayout
+    private var fragmentOverview: FragmentSwipeLayout? = null
     private var onceStable = false
     private var actionMode: ActionMode? = null
     private var actionsMenu: ActionsMenu? = null
@@ -128,20 +128,21 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         NextReminders(this, medicineViewModel, preferencesDataSource, medicineRepository, reminderEventRepository)
 
-        fragmentOverview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
+        val overview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
+        fragmentOverview = overview
 
-        daySelector = DaySelector(requireContext(), fragmentOverview.findViewById(R.id.overviewWeek), overviewViewModel.day) { day -> daySelected(day) }
+        daySelector = DaySelector(requireContext(), overview.findViewById(R.id.overviewWeek), overviewViewModel.day) { day -> daySelected(day) }
 
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
-        setupReminders()
+        setupReminders(overview)
 
-        setupLogManualDose()
-        FilterToggleGroup(fragmentOverview.findViewById(R.id.filterButtons), overviewViewModel, persistentDataDataSource)
+        setupLogManualDose(overview)
+        FilterToggleGroup(overview.findViewById(R.id.filterButtons), overviewViewModel, persistentDataDataSource)
 
-        fragmentOverview.onSwipeListener = OverviewOnSwipeListener()
+        overview.onSwipeListener = OverviewOnSwipeListener()
 
-        return fragmentOverview
+        return overview
     }
 
     override fun onResume() {
@@ -167,11 +168,11 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         }
     }
 
-    private fun setupReminders() {
-        reminders = fragmentOverview.findViewById(R.id.reminders)
+    private fun setupReminders(overview: FragmentSwipeLayout) {
+        reminders = overview.findViewById(R.id.reminders)
         adapter = remindersViewAdapterFactory.create(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
         reminders.setAdapter(adapter)
-        reminders.setLayoutManager(LinearLayoutManager(fragmentOverview.context))
+        reminders.setLayoutManager(LinearLayoutManager(overview.context))
         adapter.clickListener = this
 
         viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
@@ -201,8 +202,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         }
     }
 
-    private fun setupLogManualDose() {
-        val logManualDose = fragmentOverview.findViewById<Button>(R.id.logManualDose)
+    private fun setupLogManualDose(overview: FragmentSwipeLayout) {
+        val logManualDose = overview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
             lifecycleScope.launch {
                 manualDoseFactory.create(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day).logManualDose()
@@ -214,6 +215,11 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         overviewViewModel.day = date
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentOverview = null
+    }
 
     override fun onDestroy() {
         super.onDestroy()
