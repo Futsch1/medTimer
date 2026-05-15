@@ -16,7 +16,6 @@ navigation = "2.9.8"
 preference-ktx = "1.2.1"
 lifecycle-extensions = "2.2.0"
 lifecycle-ktx = "2.10.0"
-work-runtime = "2.11.2"
 room = "2.8.4"
 biometric = "1.1.0"
 espresso = "3.7.0"
@@ -62,7 +61,6 @@ androidx-preference-ktx = { module = "androidx.preference:preference-ktx", versi
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
-androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "work-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
