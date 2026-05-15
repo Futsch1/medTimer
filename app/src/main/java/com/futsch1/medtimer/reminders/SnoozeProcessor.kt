@@ -28,9 +28,6 @@ open class SnoozeProcessor @Inject constructor(
         reminderNotificationData.remindInstant = Instant.now().plusSeconds(snoozeTime.inWholeSeconds)
         Log.d(LogTags.REMINDER, "Snoozing reminder: $reminderNotificationData")
 
-        // Cancel a potential repeat alarm
-        alarmProcessor.cancelPendingReminderNotifications(reminderNotificationData)
-
         alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
 
         notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
