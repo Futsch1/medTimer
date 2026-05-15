@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".medicine.EditMedicineFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -166,9 +166,10 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:contentDescription="@string/reminders"
+                android:nestedScrollingEnabled="false"
                 android:paddingBottom="80dp" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
