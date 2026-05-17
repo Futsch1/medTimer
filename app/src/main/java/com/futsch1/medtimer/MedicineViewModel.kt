@@ -3,13 +3,13 @@ package com.futsch1.medtimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.MedicineToTag
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.Tag
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.MedicineToTagEntity
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ class MedicineViewModel @Inject constructor(
 
     val validTagIds = MutableStateFlow<Set<Int>?>(null)
     val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
-    private var medicineToTags: List<MedicineToTagEntity> = emptyList()
+    private var medicineToTags: List<MedicineToTag> = emptyList()
     private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
     )

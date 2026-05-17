@@ -60,13 +60,14 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundNotificationManager: NotificationManager = reminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = reminderContext.repositoryFakes.medicineRepositoryMock
+    val boundMedicineRepository: com.futsch1.medtimer.core.domain.repository.MedicineRepository = reminderContext.repositoryFakes.medicineRepositoryMock
 
     @BindValue
-    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
+    val boundReminderRepository: com.futsch1.medtimer.core.domain.repository.ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
 
     @BindValue
-    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
+    val boundReminderEventRepository: com.futsch1.medtimer.core.domain.repository.ReminderEventRepository =
+        reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
@@ -97,7 +98,7 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundTagDao: TagDao = org.mockito.Mockito.mock()
 
     @BindValue
-    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = org.mockito.Mockito.mock()
+    val boundTagRepository: com.futsch1.medtimer.core.domain.repository.TagRepository = org.mockito.Mockito.mock()
 
     @BindValue
     val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = org.mockito.Mockito.mock()

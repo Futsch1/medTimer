@@ -3,12 +3,12 @@ package com.futsch1.medtimer
 import android.graphics.Color
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Tag
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.database.toModel.toModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

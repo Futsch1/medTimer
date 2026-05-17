@@ -4,7 +4,7 @@ import android.content.Context
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.String.join
 import java.util.Locale

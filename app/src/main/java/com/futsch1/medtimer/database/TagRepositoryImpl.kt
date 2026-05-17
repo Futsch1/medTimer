@@ -1,50 +1,52 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.core.domain.model.MedicineToTag
 import com.futsch1.medtimer.core.domain.model.Tag
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-open class TagRepository(
+class TagRepositoryImpl(
     private val tagDao: TagDao
-) {
-    fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow().map { list ->
+) : TagRepository {
+    override fun getAllFlow(): Flow<List<Tag>> = tagDao.getAllFlow().map { list ->
         list.map { it.toModel() }
     }
 
-    fun getMedicineTagsFlow(): Flow<List<MedicineToTagEntity>> {
-        return tagDao.getMedicineTagsFlow()
+    override fun getMedicineTagsFlow(): Flow<List<MedicineToTag>> {
+        return tagDao.getMedicineTagsFlow().map { list -> list.map { it.toModel() } }
     }
 
-    suspend fun create(tag: Tag): Int {
+    override suspend fun create(tag: Tag): Int {
         val existingTagId = getByName(tag.name)?.id
         return existingTagId ?: tagDao.create(tag.toEntity()).toInt()
     }
 
-    suspend fun getByName(name: String): Tag? {
+    override suspend fun getByName(name: String): Tag? {
         return tagDao.getByName(name)?.toModel()
     }
 
-    suspend fun delete(tag: Tag) {
+    override suspend fun delete(tag: Tag) {
         tagDao.deleteMedicineToTagForTag(tag.id)
         tagDao.delete(tag.toEntity())
     }
 
-    suspend fun addMedicineTag(medicineId: Int, tagId: Int) {
+    override suspend fun addMedicineTag(medicineId: Int, tagId: Int) {
         tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
-    suspend fun removeMedicineTag(medicineId: Int, tagId: Int) {
+    override suspend fun removeMedicineTag(medicineId: Int, tagId: Int) {
         tagDao.deleteMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
-    suspend fun hasAny(): Boolean {
+    override suspend fun hasAny(): Boolean {
         return tagDao.count() > 0
     }
 
-    suspend fun deleteAll() {
+    override suspend fun deleteAll() {
         tagDao.deleteAll()
         tagDao.deleteAllMedicineToTags()
     }

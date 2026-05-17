@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.IdlingListAdapter

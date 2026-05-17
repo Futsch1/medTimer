@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.domain.model.Tag
-import com.futsch1.medtimer.database.TagRepository
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
