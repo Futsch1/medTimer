@@ -2,10 +2,10 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditIntervalDialog(context: Context, reminder: Reminder, private val intervalUpdatedCallback: (Int) -> Unit) {

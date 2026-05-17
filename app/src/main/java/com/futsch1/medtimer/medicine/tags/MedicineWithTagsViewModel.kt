@@ -1,10 +1,10 @@
 package com.futsch1.medtimer.medicine.tags
 
 import androidx.lifecycle.ViewModel
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.TagRepository
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

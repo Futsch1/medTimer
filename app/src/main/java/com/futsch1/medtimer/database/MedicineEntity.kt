@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.google.gson.annotations.Expose
 
 @Entity(tableName = "Medicine")

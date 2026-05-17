@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate

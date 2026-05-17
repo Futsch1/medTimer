@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.reminders.scheduling
 
 import android.annotation.SuppressLint
-import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.core.domain.model.Reminder
 import java.time.LocalDate
 
 object CyclesHelper {

@@ -2,15 +2,15 @@ package com.futsch1.medtimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ScheduledReminder
-import com.futsch1.medtimer.model.Tag
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

@@ -115,6 +115,7 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 androidx-room = { id = "androidx.room", version.ref = "room-plugin" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation-safe-args" }
 triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }

@@ -2,11 +2,11 @@ package com.futsch1.medtimer.exporters
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TableHelper
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.ReminderEvent
 import com.wwdablu.soumya.simplypdf.composers.properties.TableProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.TextProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.cell.Cell

@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import java.time.Instant

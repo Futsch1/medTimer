@@ -5,6 +5,9 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
@@ -13,9 +16,6 @@ import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.helpers.addDividerToSpan
 import com.futsch1.medtimer.helpers.addImageToSpan
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ScheduledReminder
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.overview.model.getImage

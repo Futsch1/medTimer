@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.core.domain.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

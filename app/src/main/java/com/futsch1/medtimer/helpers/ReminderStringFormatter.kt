@@ -10,9 +10,9 @@ import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderType
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale

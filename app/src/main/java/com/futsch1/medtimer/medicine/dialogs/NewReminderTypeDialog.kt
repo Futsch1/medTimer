@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.google.android.material.button.MaterialButton
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

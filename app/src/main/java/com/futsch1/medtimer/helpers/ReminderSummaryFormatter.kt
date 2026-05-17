@@ -2,9 +2,9 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.String.join
 import java.util.Locale
@@ -58,8 +58,9 @@ class ReminderSummaryFormatter @Inject constructor(
                 strings.add(context.getString(R.string.refill))
             }
         }
-        if (reminder.instructions?.isNotEmpty() == true) {
-            strings.add(reminder.instructions)
+        val instructions = reminder.instructions
+        if (instructions?.isNotEmpty() == true) {
+            strings.add(instructions)
         }
         strings = strings.filter { it.isNotEmpty() }.toMutableList()
 

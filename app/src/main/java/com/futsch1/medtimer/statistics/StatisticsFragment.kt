@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.StatisticFragment
+import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.remindertable.ReminderTableFragment
 import com.google.android.material.chip.ChipGroup

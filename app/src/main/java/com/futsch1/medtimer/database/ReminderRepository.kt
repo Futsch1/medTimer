@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.database
 
+import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
-import com.futsch1.medtimer.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

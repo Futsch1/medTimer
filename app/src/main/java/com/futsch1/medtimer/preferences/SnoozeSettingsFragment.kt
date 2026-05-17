@@ -14,10 +14,10 @@ import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.location.GeofenceRegistrar
 import com.futsch1.medtimer.location.LocationProvider
-import com.futsch1.medtimer.model.HomeLocation
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

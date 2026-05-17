@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.core.domain.model.PersistentData
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.database.FullMedicineEntity
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.MedicineRepository
@@ -19,9 +22,6 @@ import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
-import com.futsch1.medtimer.model.PersistentData
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.UserPreferences
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +49,7 @@ class RepositoryFakes {
         `when`(runBlocking { medicineRepositoryMock.getAll() }).thenAnswer { buildMedicines() }
         `when`(runBlocking { medicineRepositoryMock.get(anyInt()) }).thenAnswer { buildMedicines().firstOrNull { m -> m.id == it.arguments[0] } }
         `when`(runBlocking { medicineRepositoryMock.update(any()) }).thenAnswer {
-            val medicine = it.arguments[0] as com.futsch1.medtimer.model.Medicine
+            val medicine = it.arguments[0] as com.futsch1.medtimer.core.domain.model.Medicine
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.id }
             if (index >= 0) medicines[index] = medicine.toEntity()
         }
@@ -90,7 +90,7 @@ class RepositoryFakes {
         }
     }
 
-    fun buildMedicines(): List<com.futsch1.medtimer.model.Medicine> {
+    fun buildMedicines(): List<com.futsch1.medtimer.core.domain.model.Medicine> {
         return medicines.map { medicineEntity ->
             val fullMedicine = FullMedicineEntity()
             fullMedicine.medicine = medicineEntity

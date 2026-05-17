@@ -2,21 +2,21 @@ package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.core.domain.model.PersistentData
+import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.di.DefaultPreferences
 import com.futsch1.medtimer.di.MedTimerPreferencess
-import com.futsch1.medtimer.model.OverviewFilter
-import com.futsch1.medtimer.model.PersistentData
-import com.futsch1.medtimer.model.StatisticFragment
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.time.Instant
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
+import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 
