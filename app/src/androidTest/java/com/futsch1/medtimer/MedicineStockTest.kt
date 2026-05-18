@@ -110,6 +110,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.refill_now)
 
         assertDisplayed(MedicineHelper.formatAmount(10.8, "pills"))
