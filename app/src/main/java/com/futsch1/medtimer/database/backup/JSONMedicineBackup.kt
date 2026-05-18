@@ -1,23 +1,18 @@
 package com.futsch1.medtimer.database.backup
 
-import com.futsch1.medtimer.database.FullMedicineEntity
-import com.futsch1.medtimer.database.MedicineEntity
+import com.futsch1.medtimer.core.domain.backup.FullMedicineBackup
+import com.futsch1.medtimer.core.domain.backup.MedicineBackup
+import com.futsch1.medtimer.core.domain.backup.ReminderBackup
+import com.futsch1.medtimer.core.domain.backup.TagBackup
+import com.futsch1.medtimer.core.domain.repository.BackupRepository
 import com.futsch1.medtimer.database.MedicineToTagEntity
-import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.database.TagEntity
-import com.futsch1.medtimer.database.dao.MedicineDao
-import com.futsch1.medtimer.database.dao.ReminderDao
-import com.futsch1.medtimer.database.dao.TagDao
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
-import java.time.Instant
 
 class JSONMedicineBackup(
-    private val medicineDao: MedicineDao,
-    private val reminderDao: ReminderDao,
-    private val tagDao: TagDao
-) : JSONBackup<FullMedicineEntity>(FullMedicineEntity::class.java) {
-    override fun createBackup(databaseVersion: Int, list: List<FullMedicineEntity>): JsonElement {
+    private val backupRepository: BackupRepository
+) : JSONBackup<FullMedicineBackup>(FullMedicineBackup::class.java) {
+    override fun createBackup(databaseVersion: Int, list: List<FullMedicineBackup>): JsonElement {
         list.flatMap { it.reminders }
             .filter { it.instructions == null }
             .forEach { it.instructions = "" }
@@ -26,19 +21,17 @@ class JSONMedicineBackup(
 
     override fun registerTypeAdapters(builder: GsonBuilder): GsonBuilder {
         return builder
-            .registerTypeAdapter(MedicineEntity::class.java, FullDeserialize<MedicineEntity?>())
-            .registerTypeAdapter(TagEntity::class.java, FullDeserialize<Any?>())
-            .registerTypeAdapter(ReminderEntity::class.java, FullDeserialize<ReminderEntity?>())
+            .registerTypeAdapter(MedicineBackup::class.java, FullDeserialize<MedicineBackup?>())
+            .registerTypeAdapter(TagBackup::class.java, FullDeserialize<Any?>())
+            .registerTypeAdapter(ReminderBackup::class.java, FullDeserialize<ReminderBackup?>())
     }
 
-    override fun isInvalid(item: FullMedicineEntity?): Boolean {
+    override fun isInvalid(item: FullMedicineBackup?): Boolean {
         return item == null
     }
 
-    override suspend fun applyBackup(list: List<FullMedicineEntity>) {
-        reminderDao.deleteAll()
-        medicineDao.deleteAll()
-        tagDao.deleteAll()
+    override suspend fun applyBackup(list: List<FullMedicineBackup>) {
+        backupRepository.clearMedicineData()
 
         var sortOrder = 1.0
 
@@ -46,27 +39,17 @@ class JSONMedicineBackup(
             if (fullMedicine.medicine.sortOrder == 0.0) {
                 fullMedicine.medicine.sortOrder = sortOrder++
             }
-            val medicineId = medicineDao.create(fullMedicine.medicine)
-            processReminders(fullMedicine, medicineId.toInt())
-            processTags(fullMedicine, medicineId.toInt())
+            val medicineId = backupRepository.insertMedicine(fullMedicine.medicine)
+            backupRepository.insertReminders(fullMedicine.reminders, medicineId)
+            processTags(fullMedicine, medicineId)
         }
     }
 
-    private suspend fun processTags(fullMedicine: FullMedicineEntity, medicineId: Int) {
+    private suspend fun processTags(fullMedicine: FullMedicineBackup, medicineId: Int) {
         for (tag in fullMedicine.tags) {
-            val tagEntity = tagDao.getByName(tag.name ?: "")
-            val tagId = tagEntity?.tagId ?: tagDao.create(tag).toInt()
-            tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
+            val tagEntity = backupRepository.getTagByName(tag.name ?: "")
+            val tagId = tagEntity?.tagId ?: backupRepository.insertTag(tag)
+            backupRepository.linkMedicineTag(MedicineToTagEntity(medicineId, tagId))
         }
-    }
-
-    private suspend fun processReminders(fullMedicine: FullMedicineEntity, medicineId: Int) {
-        val reminders: MutableList<ReminderEntity> = mutableListOf()
-        for (reminder in fullMedicine.reminders) {
-            reminder.medicineRelId = medicineId
-            reminder.createdTimestamp = Instant.now().toEpochMilli() / 1000
-            reminders.add(reminder)
-        }
-        reminderDao.createAll(reminders)
     }
 }
