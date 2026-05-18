@@ -157,4 +157,30 @@ class RefillProcessorTest {
         assertEquals(110.0, reminderContext.repositoryFakes.medicines[0].amount)
         assertEquals(ReminderEventEntity.ReminderEntityStatus.ACKNOWLEDGED, reminderContext.repositoryFakes.reminderEvents[0].status)
     }
+
+    @Test
+    fun supplyRemainingNonZero() {
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
+        reminderContext.repositoryFakes.medicines[0].refillSizes = mutableListOf(10.0)
+        reminderContext.repositoryFakes.medicines[0].supplyRemaining = 5
+
+        runBlocking {
+            refillProcessor.processRefill(1)
+        }
+
+        assertEquals(4, reminderContext.repositoryFakes.medicines[0].supplyRemaining)
+    }
+
+    @Test
+    fun supplyRemainingZero() {
+        reminderContext.repositoryFakes.medicines.add(MedicineEntity("Test").also { it.medicineId = 1 })
+        reminderContext.repositoryFakes.medicines[0].refillSizes = mutableListOf(10.0)
+        reminderContext.repositoryFakes.medicines[0].supplyRemaining = 0
+
+        runBlocking {
+            refillProcessor.processRefill(1)
+        }
+
+        assertEquals(0, reminderContext.repositoryFakes.medicines[0].supplyRemaining)
+    }
 }

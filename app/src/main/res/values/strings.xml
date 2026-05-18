@@ -194,6 +194,7 @@
     <string name="out_of_stock_reminder">Out of stock reminder</string>
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
+    <string name="supply_remaining">Supply remaining</string>
     <string name="refill_now">Refill now</string>
     <string name="variable_amount">Enter dosage when taken</string>
     <string name="tags">Tags</string>
@@ -233,7 +234,8 @@
     <string name="interval_time">Interval %s</string>
     <string name="reminded">Reminded</string>
     <string name="all_taken">All taken (%s)</string>
-    <string name="estimated_run_out_date">Estimated run out date</string>
+    <string name="estimated_run_out_date">Estimated run out date (for current stock)</string>
+    <string name="estimated_run_out_date_supply">Estimated run out date (for total supply)</string>
     <string name="create_calendar_entry">Create calendar entry</string>
     <string name="notes">Notes</string>
     <string name="automatically_taken">Automatically mark as taken</string>

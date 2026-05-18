@@ -71,6 +71,7 @@ internal class JSONMedicineBackupUnitTest {
         "iconId": 5,
         "amount": 0.0,
         "refillSizes": [],
+        "supplyRemaining": 0,
         "unit": "pills",
         "sortOrder": 4.5,
         "notes": "Generic ingredient: Dihydrogen monoxide",
@@ -213,6 +214,7 @@ internal class JSONMedicineBackupUnitTest {
                 medicine.sortOrder = 3.44
                 medicine.unit = "A"
                 medicine.refillSizes = mutableListOf(1.0)
+                medicine.supplyRemaining = 5
             }, FullMedicineEntity().apply {
                 reminders = mutableListOf(reminder1, reminder2)
                 medicine = MedicineEntity("Medicine B")
@@ -245,6 +247,7 @@ internal class JSONMedicineBackupUnitTest {
         "refillSizes": [
           1.0
         ],
+        "supplyRemaining": 5,
         "unit": "A",
         "sortOrder": 3.44,
         "notes": "",
@@ -298,6 +301,7 @@ internal class JSONMedicineBackupUnitTest {
         "iconId": 7,
         "amount": 17.0,
         "refillSizes": [],
+        "supplyRemaining": 0,
         "unit": "",
         "sortOrder": 1.0,
         "notes": "",

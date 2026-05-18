@@ -17,6 +17,7 @@ class MedicineEntity(
     @ColumnInfo(defaultValue = "0") @field:Expose var iconId: Int = 0,
     @ColumnInfo(defaultValue = "0") @field:Expose var amount: Double = 0.0,
     @ColumnInfo(defaultValue = "[]") @field:Expose var refillSizes: MutableList<Double>? = null,
+    @ColumnInfo(defaultValue = "0") @field:Expose var supplyRemaining: Int = 0,
     @ColumnInfo(defaultValue = "") @field:Expose var unit: String? = null,
     @ColumnInfo(defaultValue = "1.0") @field:Expose var sortOrder: Double = 1.0,
     @ColumnInfo(defaultValue = "") @field:Expose var notes: String? = "",

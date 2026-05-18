@@ -32,6 +32,7 @@ class MedicineDataStore @AssistedInject constructor(
             "amount" -> MedicineHelper.formatAmount(modelData.amount, "")
             "stock_unit" -> modelData.unit
             "stock_refill_size" -> MedicineHelper.formatAmount(modelData.refillSize, "")
+            "supply_remaining" -> modelData.supplyRemaining.toString()
             "production_date" -> timeFormatter.localDateToString(modelData.productionDate)
             "expiration_date" -> timeFormatter.localDateToString(modelData.expirationDate)
             else -> defValue
@@ -43,6 +44,7 @@ class MedicineDataStore @AssistedInject constructor(
             "amount" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(amount = it) }
             "stock_unit" -> modelData = modelData.copy(unit = value!!)
             "stock_refill_size" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(refillSize = it) }
+            "supply_remaining" -> value?.toIntOrNull()?.let { modelData = modelData.copy(supplyRemaining = it) }
             "production_date" -> modelData = modelData.copy(productionDate = timeFormatter.stringToLocalDate(value!!)!!)
             "expiration_date" -> modelData = modelData.copy(expirationDate = timeFormatter.stringToLocalDate(value!!)!!)
         }

@@ -44,7 +44,10 @@ class RefillProcessor @Inject constructor(
     }
 
     private suspend fun processRefillInternal(medicine: Medicine, medicineRepository: MedicineRepository): ReminderEvent {
-        val medicine = medicine.copy(amount = medicine.amount + medicine.refillSize)
+        val medicine = medicine.copy(
+            amount = medicine.amount + medicine.refillSize,
+            supplyRemaining = maxOf(medicine.supplyRemaining - 1, 0)
+        )
         medicineRepository.update(medicine)
         Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.name} with ${medicine.refillSize} to amount ${medicine.amount + medicine.refillSize}")
 

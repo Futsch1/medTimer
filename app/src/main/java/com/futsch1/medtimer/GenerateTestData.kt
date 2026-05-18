@@ -128,6 +128,7 @@ class GenerateTestData @AssistedInject constructor(
                 iconId = iconId,
                 amount = stock,
                 refillSize = if (stock > 0) 20.0 else 0.0,
+                supplyRemaining = 0,
                 unit = if (stock > 0) "pills" else "",
                 notes = if (stock > 0) "Some note\nabout this medicine" else "",
                 showNotificationAsAlarm = false,

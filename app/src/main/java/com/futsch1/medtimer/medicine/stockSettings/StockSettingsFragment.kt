@@ -103,6 +103,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
     override fun customSetup(modelData: Medicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
+        setupAmountEdit(findPreference("supply_remaining")!!, true)
 
         calculateRunOutDate(modelData)
     }
@@ -114,6 +115,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
 
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(modelData.amount, modelData.unit)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
+        findPreference<EditTextPreference>("supply_remaining")!!.summary = modelData.supplyRemaining.toString()
         if (modelData.isOutOfStock()) {
             findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
         } else {
@@ -138,25 +140,26 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
 
     private fun calculateRunOutDate(medicine: Medicine) {
         this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(medicine.id, medicine.amount)
+            val stockRunOutDate = estimateRunOutDate(medicine.id, medicine.amount)
+            val supplyRunOutDate = estimateRunOutDate(medicine.id, medicine.amount + medicine.refillSize * medicine.supplyRemaining)
 
-            val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
+            val stockRunOutString = if (stockRunOutDate != null && context != null) timeFormatter.localDateToString(stockRunOutDate) else "---"
+            val supplyRunOutString = if (supplyRunOutDate != null && context != null) timeFormatter.localDateToString(supplyRunOutDate) else "---"
 
             withContext(mainDispatcher) {
-                findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
+                findPreference<EditTextPreference>("stock_run_out_date")!!.summary = stockRunOutString
+                findPreference<EditTextPreference>("supply_run_out_date")!!.summary = supplyRunOutString
             }
         }
     }
 
-    private suspend fun estimateStockRunOutDate(
+    private suspend fun estimateRunOutDate(
         medicineId: Int,
-        currentAmount: Double? = null
+        currentAmount: Double
     ): LocalDate? {
         var medicine = medicineRepository.get(medicineId) ?: return null
+        medicine = medicine.copy(amount = currentAmount)
 
-        if (currentAmount != null) {
-            medicine = medicine.copy(amount = currentAmount)
-        }
         val recentReminders =
             reminderEventRepository.getForScheduling(listOf(medicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
         val schedulingSimulator = SchedulingSimulator(listOf(medicine), recentReminders, timeAccess, preferencesDataSource)
@@ -230,12 +233,16 @@ fun EditText.addDoubleValidator() {
     })
 }
 
-fun setupAmountEdit(editTextPreference: EditTextPreference) {
+fun setupAmountEdit(editTextPreference: EditTextPreference, integer: Boolean = false) {
     editTextPreference.setOnBindEditTextListener { editText ->
         val separator = DecimalFormatSymbols.getInstance().decimalSeparator
         editText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
         editText.addDoubleValidator()
-        editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        editText.inputType = if (!integer) {
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        } else {
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+        }
     }
 }
 
