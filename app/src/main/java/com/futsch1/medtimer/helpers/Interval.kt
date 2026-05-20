@@ -2,7 +2,7 @@ package com.futsch1.medtimer.helpers
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.ReminderTime
+import com.futsch1.medtimer.core.domain.model.ReminderTime
 
 enum class IntervalUnit {
     MINUTES, HOURS, DAYS, WEEKS

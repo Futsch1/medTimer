@@ -3,12 +3,12 @@ package com.futsch1.medtimer.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.model.ReminderEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

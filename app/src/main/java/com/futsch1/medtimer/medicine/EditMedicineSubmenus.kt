@@ -2,10 +2,10 @@ package com.futsch1.medtimer.medicine
 
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.medicine.tags.TagsFragment
-import com.futsch1.medtimer.model.Medicine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

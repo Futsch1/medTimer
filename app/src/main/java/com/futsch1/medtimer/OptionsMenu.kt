@@ -18,6 +18,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.ReminderEventRepository
@@ -38,8 +40,6 @@ import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted

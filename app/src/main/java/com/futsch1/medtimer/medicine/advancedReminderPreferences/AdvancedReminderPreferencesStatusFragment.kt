@@ -3,7 +3,7 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.Reminder
+import com.futsch1.medtimer.core.domain.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import org.junit.Test

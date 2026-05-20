@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.medicine.tags
 
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Tag
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Tag
 
 class TagWithStateCollector(
     private val doneCallback: (list: List<TagWithState>) -> Unit

@@ -9,11 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.OptionsMenu.Companion.enableOptionalIcons
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
-import com.futsch1.medtimer.model.Reminder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

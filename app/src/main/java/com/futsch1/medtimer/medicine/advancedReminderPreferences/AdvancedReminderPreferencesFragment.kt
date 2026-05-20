@@ -5,11 +5,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
+import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.helpers.ModelDataPreferencesFragment
 import com.futsch1.medtimer.helpers.ModelDataStore
 import com.futsch1.medtimer.helpers.ModelDataViewModel
-import com.futsch1.medtimer.model.Reminder
 import javax.inject.Inject
 
 abstract class AdvancedReminderPreferencesFragment(

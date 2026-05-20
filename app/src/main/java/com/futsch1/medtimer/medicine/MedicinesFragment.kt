@@ -19,6 +19,7 @@ import com.futsch1.medtimer.BuildConfig
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
@@ -27,7 +28,6 @@ import com.futsch1.medtimer.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.helpers.SwipeHelper
 import com.futsch1.medtimer.helpers.dpToPx
 import com.futsch1.medtimer.helpers.showSoftKeyboard
-import com.futsch1.medtimer.model.Medicine
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText

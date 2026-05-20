@@ -2,6 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
@@ -10,7 +11,6 @@ import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification

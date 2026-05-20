@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.reminders.scheduling
 
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 

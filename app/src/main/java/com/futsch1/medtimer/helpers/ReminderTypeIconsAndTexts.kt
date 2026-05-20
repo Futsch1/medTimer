@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.helpers
 
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.ReminderType
 
 fun ReminderType.getIcon(): Int {
     return when (this) {

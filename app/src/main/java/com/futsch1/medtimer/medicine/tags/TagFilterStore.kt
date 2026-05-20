@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.medicine.tags
 
-import com.futsch1.medtimer.model.Tag
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.stream.Collectors

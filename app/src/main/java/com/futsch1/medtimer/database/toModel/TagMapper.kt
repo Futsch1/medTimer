@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.database.toModel
 
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.database.TagEntity
-import com.futsch1.medtimer.model.Tag
 
 fun TagEntity.toModel(): Tag {
     return Tag(

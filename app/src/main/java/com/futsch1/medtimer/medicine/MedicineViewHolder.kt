@@ -13,6 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.MedicineIcons
@@ -20,9 +23,6 @@ import com.futsch1.medtimer.helpers.MedicineStringFormatter
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.ViewColorHelper
 import com.futsch1.medtimer.helpers.getActiveReminders
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.Tag
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.assisted.Assisted
