@@ -54,7 +54,8 @@ class JSONMedicineBackup(
 
     private suspend fun processTags(fullMedicine: FullMedicineEntity, medicineId: Int) {
         for (tag in fullMedicine.tags) {
-            val tagId = tagDao.create(tag).toInt()
+            val tagEntity = tagDao.getByName(tag.name ?: "")
+            val tagId = tagEntity?.tagId ?: tagDao.create(tag).toInt()
             tagDao.createMedicineToTag(MedicineToTagEntity(medicineId, tagId))
         }
     }

@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.futsch1.medtimer.database.TagEntity
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,13 @@ interface TagDao {
     suspend fun delete(tag: TagEntity)
 
     @Query("DELETE FROM Tag")
-    suspend fun deleteAll()
+    suspend fun deleteOnlyTags()
+
+    @Transaction
+    suspend fun deleteAll() {
+        deleteOnlyTags()
+        deleteAllMedicineToTags()
+    }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun createMedicineToTag(medicineToTag: MedicineToTagEntity)
