@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.location
 
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.reminders.AlarmProcessor
 import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -49,7 +49,7 @@ class LocationSnoozeProcessorTest {
     @Test
     fun singlePendingSnooze() {
         val futureInstant = Instant.now().plusSeconds(3600)
-        val data = ReminderNotificationData(futureInstant, listOf(1), mutableListOf(10), 1)
+        val data = PendingSnooze(futureInstant, listOf(1), mutableListOf(10), 1)
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(listOf(data))
 
         runBlocking { processor.processLocationSnooze() }
@@ -62,9 +62,9 @@ class LocationSnoozeProcessorTest {
     @Test
     fun multipleSnoozes() {
         val snoozes = listOf(
-            ReminderNotificationData(Instant.now().plusSeconds(100), listOf(1), mutableListOf(10), 1),
-            ReminderNotificationData(Instant.now().plusSeconds(200), listOf(2), mutableListOf(20), 2),
-            ReminderNotificationData(Instant.now().plusSeconds(300), listOf(3), mutableListOf(30), 3)
+            PendingSnooze(Instant.now().plusSeconds(100), listOf(1), mutableListOf(10), 1),
+            PendingSnooze(Instant.now().plusSeconds(200), listOf(2), mutableListOf(20), 2),
+            PendingSnooze(Instant.now().plusSeconds(300), listOf(3), mutableListOf(30), 3)
         )
         whenever(persistentDataDataSource.getPendingLocationSnoozes()).thenReturn(snoozes)
 

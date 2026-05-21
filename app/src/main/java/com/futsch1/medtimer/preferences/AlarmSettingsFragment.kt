@@ -2,6 +2,7 @@ package com.futsch1.medtimer.preferences
 
 import android.os.Bundle
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.takisoft.preferencex.PreferenceFragmentCompat
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

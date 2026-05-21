@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -17,7 +18,6 @@ import com.futsch1.medtimer.exporters.Export.ExporterException
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

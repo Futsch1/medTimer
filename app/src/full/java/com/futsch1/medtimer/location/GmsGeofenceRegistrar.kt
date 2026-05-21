@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.futsch1.medtimer.core.common.LogTags
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.Geofence

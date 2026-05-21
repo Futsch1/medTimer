@@ -19,6 +19,7 @@ import com.futsch1.medtimer.core.common.helpers.ModelDataPreferencesFragment
 import com.futsch1.medtimer.core.common.helpers.ModelDataStore
 import com.futsch1.medtimer.core.common.helpers.ModelDataViewModel
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -27,7 +28,6 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.SystemTimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator

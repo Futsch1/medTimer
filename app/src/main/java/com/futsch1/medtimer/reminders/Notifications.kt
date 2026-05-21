@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationFactory.BigReminderNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.ExpirationDateNotificationFactory

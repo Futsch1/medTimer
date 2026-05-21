@@ -2,8 +2,8 @@ package com.futsch1.medtimer.location
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +43,7 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun addAndGetPendingSnoozeRoundTrip() {
-        val data = ReminderNotificationData(
+        val data = PendingSnooze(
             remindInstant = Instant.ofEpochSecond(1234567890L),
             reminderIds = listOf(1, 2),
             reminderEventIds = mutableListOf(10, 20),
@@ -62,17 +62,17 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun multiplePendingSnoozesAccumulate() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(300), listOf(3), mutableListOf(30), 3))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(300), listOf(3), mutableListOf(30), 3))
 
         assertEquals(3, dataSource.getPendingLocationSnoozes().size)
     }
 
     @Test
     fun clearAllPendingSnoozesEmptiesList() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
 
         dataSource.clearAllPendingLocationSnoozes()
 
@@ -81,8 +81,8 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun removeByEventIdDropsEntireEntryWhenAllEventsMatch() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1, 2), mutableListOf(10, 20), 1))
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(3), mutableListOf(30), 2))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2), mutableListOf(10, 20), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(3), mutableListOf(30), 2))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
 
@@ -93,7 +93,7 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun removeByEventIdKeepsUnmatchedEventIdsWithinSameEntry() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1, 2, 3), mutableListOf(10, 20, 30), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2, 3), mutableListOf(10, 20, 30), 1))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(20))
 
@@ -105,7 +105,7 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun removeByEventIdNoMatchLeavesListUnchanged() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(99))
 
@@ -114,8 +114,8 @@ class PersistentDataDataSourcePendingSnoozeTest {
 
     @Test
     fun removeByEventIdAllEntriesRemovedResultsInEmptyList() {
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
-        dataSource.addPendingLocationSnooze(ReminderNotificationData(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(2), mutableListOf(20), 2))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
 

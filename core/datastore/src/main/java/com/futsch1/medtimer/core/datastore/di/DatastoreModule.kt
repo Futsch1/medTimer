@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.core.common.di
+package com.futsch1.medtimer.core.datastore.di
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,16 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Qualifier
 import javax.inject.Singleton
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class DefaultPreferences
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class MedTimerPreferencess
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,7 +23,7 @@ object DatastoreModule {
 
     @Provides
     @Singleton
-    @MedTimerPreferencess
+    @MedTimerPreferences
     fun providesMedTimerSharedPreferences(@ApplicationContext ctx: Context): SharedPreferences {
         return ctx.getSharedPreferences("medTimer", Context.MODE_PRIVATE)
     }
