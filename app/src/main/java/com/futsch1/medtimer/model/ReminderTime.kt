@@ -10,7 +10,7 @@ data class ReminderTime(val minutes: Int, val isDuration: Boolean = false) : Com
 
 
     fun getLocalTime(): LocalTime {
-        return LocalTime.of(minutes / 60, minutes % 60)
+        return LocalTime.of((minutes / 60) % 24, minutes % 60)
     }
 
     override fun compareTo(other: ReminderTime): Int {
