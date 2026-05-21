@@ -25,8 +25,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
+import java.util.Locale
 
 class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
@@ -74,10 +74,10 @@ class NewReminderStockDialog @AssistedInject constructor(
         val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold)
 
         textInputEditText.setText(MedicineHelper.formatAmount(medicine.amount, ""))
-        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
-        textInputEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
-        textInputEditText.addDoubleValidator()
+
         textInputEditText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        textInputEditText.addDoubleValidator()
+        textInputEditText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }
 
     private fun setupStockReminderType() {

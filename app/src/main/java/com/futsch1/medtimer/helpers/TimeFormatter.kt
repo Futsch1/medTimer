@@ -196,7 +196,7 @@ class TimeFormatter @Inject constructor(
     }
 
     private fun getLocale(): Locale {
-        val localeList = context.resources.configuration.getLocales()
+        val localeList = context.resources.configuration.locales
         return if (preferencesDataSource.preferences.value.systemLocale && localeList.size() > 1) {
             localeList[1]
         } else {
