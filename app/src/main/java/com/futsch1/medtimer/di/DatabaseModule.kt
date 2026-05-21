@@ -2,16 +2,20 @@ package com.futsch1.medtimer.di
 
 import android.content.Context
 import androidx.room.Room
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.DatabaseManager
-import com.futsch1.medtimer.database.dao.MedicineDao
-import com.futsch1.medtimer.database.MedicineRepository
+import com.futsch1.medtimer.database.MedicineRepositoryImpl
 import com.futsch1.medtimer.database.MedicineRoomDatabase
+import com.futsch1.medtimer.database.ReminderEventRepositoryImpl
+import com.futsch1.medtimer.database.ReminderRepositoryImpl
+import com.futsch1.medtimer.database.TagRepositoryImpl
+import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.dao.TagDao
-import com.futsch1.medtimer.database.TagRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,25 +54,25 @@ object DatabaseModule {
     @Singleton
     fun provideMedicineRepository(
         medicineDao: MedicineDao
-    ): MedicineRepository = MedicineRepository(medicineDao)
+    ): MedicineRepository = MedicineRepositoryImpl(medicineDao)
 
     @Provides
     @Singleton
     fun provideReminderRepository(
         reminderDao: ReminderDao
-    ): ReminderRepository = ReminderRepository(reminderDao)
+    ): ReminderRepository = ReminderRepositoryImpl(reminderDao)
 
     @Provides
     @Singleton
     fun provideReminderEventRepository(
         reminderEventDao: ReminderEventDao
-    ): ReminderEventRepository = ReminderEventRepository(reminderEventDao)
+    ): ReminderEventRepository = ReminderEventRepositoryImpl(reminderEventDao)
 
     @Provides
     @Singleton
     fun provideTagRepository(
         tagDao: TagDao
-    ): TagRepository = TagRepository(tagDao)
+    ): TagRepository = TagRepositoryImpl(tagDao)
 
     @Provides
     @Singleton

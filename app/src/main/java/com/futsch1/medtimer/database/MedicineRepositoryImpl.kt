@@ -1,56 +1,57 @@
 package com.futsch1.medtimer.database
 
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-open class MedicineRepository(
+class MedicineRepositoryImpl(
     private val medicineDao: MedicineDao
-) {
-    suspend fun get(medicineId: Int): Medicine? {
+) : MedicineRepository {
+    override suspend fun get(medicineId: Int): Medicine? {
         return medicineDao.getFull(medicineId)?.toModel()
     }
 
-    fun getFlow(medicineId: Int): Flow<Medicine?> {
+    override fun getFlow(medicineId: Int): Flow<Medicine?> {
         return medicineDao.getFlow(medicineId).map { it?.toModel() }
     }
 
-    suspend fun getAll(): List<Medicine> {
+    override suspend fun getAll(): List<Medicine> {
         return medicineDao.getAll().map { it.toModel() }
     }
 
-    fun getAllFlow(): Flow<List<Medicine>> {
+    override fun getAllFlow(): Flow<List<Medicine>> {
         return medicineDao.getAllFlow().map { medicines -> medicines.map { it.toModel() } }
     }
 
-    suspend fun create(medicine: Medicine): Int {
+    override suspend fun create(medicine: Medicine): Int {
         return medicineDao.create(medicine.toEntity()).toInt()
     }
 
-    suspend fun delete(medicineId: Int) {
+    override suspend fun delete(medicineId: Int) {
         medicineDao.get(medicineId)?.let { medicineDao.delete(it) }
     }
 
-    suspend fun update(medicine: Medicine) {
+    override suspend fun update(medicine: Medicine) {
         medicineDao.update(medicine.toEntity())
     }
 
-    suspend fun updateAll(medicines: List<Medicine>) {
+    override suspend fun updateAll(medicines: List<Medicine>) {
         medicineDao.updateAll(medicines.map { it.toEntity() })
     }
 
-    suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): Medicine? {
+    override suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): Medicine? {
         return medicineDao.decreaseStock(medicineId, decreaseAmount)?.toModel()
     }
 
-    suspend fun getHighestSortOrder(): Double {
+    override suspend fun getHighestSortOrder(): Double {
         return medicineDao.getHighestSortOrder()
     }
 
-    suspend fun move(fromPosition: Int, toPosition: Int) {
+    override suspend fun move(fromPosition: Int, toPosition: Int) {
         val medicines = medicineDao.getAll().toMutableList()
         if (fromPosition == toPosition || medicines.size < 2) return
 
@@ -67,7 +68,7 @@ open class MedicineRepository(
         medicineDao.update(moveMedicine.medicine)
     }
 
-    suspend fun deleteAll() {
+    override suspend fun deleteAll() {
         medicineDao.deleteAll()
     }
 }

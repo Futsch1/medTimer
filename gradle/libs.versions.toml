@@ -51,6 +51,9 @@ barista = "4.3.0"
 desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
 
+# Coroutines
+kotlinx-coroutines = "1.9.0"
+
 [libraries]
 # AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -107,6 +110,9 @@ barista = { module = "com.adevinta.android:barista", version.ref = "barista" }
 # Build
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
+
+# Coroutines
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }

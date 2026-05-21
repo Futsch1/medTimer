@@ -3,7 +3,7 @@ package com.futsch1.medtimer
 import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
