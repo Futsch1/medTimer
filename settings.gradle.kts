@@ -25,4 +25,5 @@ rootProject.name = "MedTimer"
 include(":app")
 include(":core:domain")
 include(":core:database")
+include(":core:common")
  

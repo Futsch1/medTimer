@@ -2,6 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.core.common.di.DatastoreModule
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -13,7 +14,6 @@ import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
-import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
 import com.futsch1.medtimer.reminders.RepeatProcessor
 import dagger.hilt.android.testing.BindValue
@@ -109,11 +109,11 @@ class RepeatProcessorTest {
     val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = mock()
 
     @BindValue
-    @com.futsch1.medtimer.di.DefaultPreferences
+    @com.futsch1.medtimer.core.common.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
 
     @BindValue
-    @com.futsch1.medtimer.di.MedTimerPreferencess
+    @com.futsch1.medtimer.core.common.di.MedTimerPreferencess
     val boundMedTimerSharedPreferences: android.content.SharedPreferences = mock()
 
     @Inject

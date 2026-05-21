@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.util.Log
-import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification

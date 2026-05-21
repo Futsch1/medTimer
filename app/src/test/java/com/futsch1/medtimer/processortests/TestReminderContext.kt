@@ -9,7 +9,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
-import com.futsch1.medtimer.ActivityCodes
+import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.UserPreferences

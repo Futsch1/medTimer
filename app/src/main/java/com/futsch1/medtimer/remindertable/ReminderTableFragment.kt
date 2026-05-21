@@ -13,9 +13,9 @@ import com.evrencoskun.tableview.TableView
 import com.evrencoskun.tableview.filter.Filter
 import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.getMaterialColor
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint

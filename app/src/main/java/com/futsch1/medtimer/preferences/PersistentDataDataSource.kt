@@ -2,12 +2,12 @@ package com.futsch1.medtimer.preferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.DefaultPreferences
+import com.futsch1.medtimer.core.common.di.MedTimerPreferencess
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
-import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.DefaultPreferences
-import com.futsch1.medtimer.di.MedTimerPreferencess
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

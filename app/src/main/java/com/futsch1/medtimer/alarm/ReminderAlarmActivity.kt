@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint

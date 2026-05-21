@@ -8,6 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.maltaisn.icondialog.pack.IconDrawableLoader
 import com.maltaisn.icondialog.pack.IconPack

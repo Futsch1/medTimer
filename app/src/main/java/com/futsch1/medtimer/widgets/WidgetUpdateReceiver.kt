@@ -5,9 +5,9 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

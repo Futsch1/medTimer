@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent

@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.futsch1.medtimer.ActivityCodes
-import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.ProcessorCode
+import com.futsch1.medtimer.core.common.ActivityCodes
+import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.common.ProcessorCode
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint

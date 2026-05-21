@@ -10,9 +10,9 @@ import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceFragmentCompat
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_DAYS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_MODE
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.WEEKEND_START_TIME
