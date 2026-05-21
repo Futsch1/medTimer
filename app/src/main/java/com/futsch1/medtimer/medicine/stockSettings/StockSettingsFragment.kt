@@ -34,8 +34,8 @@ import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DecimalFormatSymbols
 import java.time.LocalDate
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -232,10 +232,9 @@ fun EditText.addDoubleValidator() {
 
 fun setupAmountEdit(editTextPreference: EditTextPreference) {
     editTextPreference.setOnBindEditTextListener { editText ->
-        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
-        editText.setKeyListener(DigitsKeyListener.getInstance("0123456789$separator"))
-        editText.addDoubleValidator()
         editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        editText.addDoubleValidator()
+        editText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }
 }
 
