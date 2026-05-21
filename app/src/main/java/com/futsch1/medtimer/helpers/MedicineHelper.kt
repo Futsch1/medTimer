@@ -3,8 +3,8 @@ package com.futsch1.medtimer.helpers
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import androidx.core.text.color
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.regex.Pattern

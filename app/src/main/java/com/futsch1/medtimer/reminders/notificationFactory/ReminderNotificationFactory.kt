@@ -8,9 +8,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
+import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.DismissNotificationAction
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 

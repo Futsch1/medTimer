@@ -2,9 +2,9 @@ package com.futsch1.medtimer.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.model.OverviewFilter
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.overview.model.EventPosition
 import com.futsch1.medtimer.overview.model.OverviewEvent
 import com.futsch1.medtimer.overview.model.PastReminderEvent

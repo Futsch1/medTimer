@@ -3,7 +3,7 @@ package com.futsch1.medtimer.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.futsch1.medtimer.model.ReminderTime
+import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.google.gson.annotations.Expose
 
 @Entity(tableName = "Reminder")

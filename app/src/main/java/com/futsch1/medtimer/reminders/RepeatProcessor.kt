@@ -2,7 +2,7 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import javax.inject.Inject
 import kotlin.time.Duration

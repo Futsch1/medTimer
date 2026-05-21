@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.getScheduler
 import com.futsch1.medtimer.schedulertests.ReminderSchedulerUnitTest.Companion.scheduler

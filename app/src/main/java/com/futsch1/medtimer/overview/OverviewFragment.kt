@@ -19,12 +19,12 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.OnFragmentReselectedListener
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions

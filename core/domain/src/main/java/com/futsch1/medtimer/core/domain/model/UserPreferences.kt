@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.model
+package com.futsch1.medtimer.core.domain.model
 
 import android.net.Uri
 import android.provider.Settings

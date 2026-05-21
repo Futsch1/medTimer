@@ -1,9 +1,9 @@
 package com.futsch1.medtimer.helpers
 
-import com.futsch1.medtimer.database.ReminderRepository
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import java.time.LocalDate
 
 

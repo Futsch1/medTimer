@@ -1,7 +1,9 @@
 package com.futsch1.medtimer.database.toModel
 
+import com.futsch1.medtimer.core.domain.model.MedicineToTag
+import com.futsch1.medtimer.core.domain.model.Tag
+import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.futsch1.medtimer.database.TagEntity
-import com.futsch1.medtimer.model.Tag
 
 fun TagEntity.toModel(): Tag {
     return Tag(
@@ -11,3 +13,5 @@ fun TagEntity.toModel(): Tag {
 }
 
 fun Tag.toEntity(): TagEntity = TagEntity(name = name, tagId = id)
+
+fun MedicineToTagEntity.toModel(): MedicineToTag = MedicineToTag(medicineId, tagId)

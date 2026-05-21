@@ -2,16 +2,16 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.DatabaseManager
-import com.futsch1.medtimer.database.dao.MedicineDao
-import com.futsch1.medtimer.database.MedicineRepository
 import com.futsch1.medtimer.database.MedicineRoomDatabase
+import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
 import com.futsch1.medtimer.database.dao.TagDao
-import com.futsch1.medtimer.database.TagRepository
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule

@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.medicine
 
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import javax.inject.Inject
 import javax.inject.Singleton
 

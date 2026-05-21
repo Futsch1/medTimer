@@ -2,7 +2,7 @@ package com.futsch1.medtimer
 
 import android.app.NotificationManager
 import android.content.Context
-import com.futsch1.medtimer.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Medicine
 
 class ReminderNotificationChannelManager {
     companion object {

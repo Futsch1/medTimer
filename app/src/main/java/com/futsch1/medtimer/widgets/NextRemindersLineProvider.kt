@@ -2,8 +2,8 @@ package com.futsch1.medtimer.widgets
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource

@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.helpers.IdlingListAdapter
-import com.futsch1.medtimer.model.Tag
 
 typealias TagCallback = ((TagWithState) -> Unit)
 

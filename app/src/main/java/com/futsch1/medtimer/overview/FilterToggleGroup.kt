@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.overview
 
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.OverviewFilter
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.google.android.material.button.MaterialButtonToggleGroup
 

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
@@ -10,7 +11,6 @@ import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.reminders.NotificationProcessor
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
@@ -65,13 +65,14 @@ class NotificationProcessorTest {
     val boundNotificationManager: NotificationManager = testReminderContext.notificationManagerFake.mock
 
     @BindValue
-    val boundMedicineRepository: com.futsch1.medtimer.database.MedicineRepository = testReminderContext.repositoryFakes.medicineRepositoryMock
+    val boundMedicineRepository: com.futsch1.medtimer.core.domain.repository.MedicineRepository = testReminderContext.repositoryFakes.medicineRepositoryMock
 
     @BindValue
-    val boundReminderRepository: com.futsch1.medtimer.database.ReminderRepository = testReminderContext.repositoryFakes.reminderRepositoryMock
+    val boundReminderRepository: com.futsch1.medtimer.core.domain.repository.ReminderRepository = testReminderContext.repositoryFakes.reminderRepositoryMock
 
     @BindValue
-    val boundReminderEventRepository: com.futsch1.medtimer.database.ReminderEventRepository = testReminderContext.repositoryFakes.reminderEventRepositoryMock
+    val boundReminderEventRepository: com.futsch1.medtimer.core.domain.repository.ReminderEventRepository =
+        testReminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = testReminderContext.preferencesDataSourceMock
@@ -102,7 +103,7 @@ class NotificationProcessorTest {
     val boundTagDao: TagDao = mock()
 
     @BindValue
-    val boundTagRepository: com.futsch1.medtimer.database.TagRepository = mock()
+    val boundTagRepository: com.futsch1.medtimer.core.domain.repository.TagRepository = mock()
 
     @BindValue
     val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = mock()

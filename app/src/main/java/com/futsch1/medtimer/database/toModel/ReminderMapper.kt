@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.database.toModel
 
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.database.ReminderEntity
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderTime
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate

@@ -1,10 +1,10 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderEvent
-import com.futsch1.medtimer.model.ReminderTime
-import com.futsch1.medtimer.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderTime
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime

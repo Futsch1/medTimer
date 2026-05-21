@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.processortests
 
-import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.reminders.AlarmProcessor
 import com.futsch1.medtimer.reminders.TimeAccess
 import kotlinx.coroutines.runBlocking

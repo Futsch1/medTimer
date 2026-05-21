@@ -4,8 +4,8 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.model.Medicine
-import com.futsch1.medtimer.model.UserPreferences
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalDate

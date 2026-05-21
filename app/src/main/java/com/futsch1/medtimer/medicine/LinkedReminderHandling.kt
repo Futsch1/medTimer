@@ -5,14 +5,14 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderTime
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderTime
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

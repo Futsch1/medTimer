@@ -2,9 +2,9 @@ package com.futsch1.medtimer.reminders.notificationData
 
 import android.util.Log
 import com.futsch1.medtimer.LogTags
-import com.futsch1.medtimer.database.MedicineRepository
-import com.futsch1.medtimer.database.ReminderEventRepository
-import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor

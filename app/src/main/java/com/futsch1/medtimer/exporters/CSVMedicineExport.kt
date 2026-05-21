@@ -3,11 +3,11 @@ package com.futsch1.medtimer.exporters
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.di.Dispatcher
 import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
-import com.futsch1.medtimer.model.Medicine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

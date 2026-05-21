@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.LogTags
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
@@ -25,7 +26,6 @@ import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.ExportBackupPath
 import com.futsch1.medtimer.helpers.FileHelper
 import com.futsch1.medtimer.helpers.ProgressDialogFragment
-import com.futsch1.medtimer.model.BackupInterval
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

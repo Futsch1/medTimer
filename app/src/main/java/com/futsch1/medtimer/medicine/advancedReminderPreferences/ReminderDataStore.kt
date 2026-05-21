@@ -2,13 +2,13 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.database.ReminderRepository
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderTime
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.di.ApplicationScope
 import com.futsch1.medtimer.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.ModelDataStore
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.model.Reminder
-import com.futsch1.medtimer.model.ReminderTime
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

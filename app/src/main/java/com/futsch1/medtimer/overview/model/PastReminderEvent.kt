@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.helpers.ReminderStringFormatter
-import com.futsch1.medtimer.model.ReminderEvent
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.assisted.Assisted
