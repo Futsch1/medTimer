@@ -54,6 +54,10 @@ class BackupRepositoryImpl(
         reminderDao.createAll(entities)
     }
 
+    override suspend fun getTagByName(name: String): Int? {
+        return tagDao.getByName(name)?.tagId
+    }
+
     override suspend fun insertTag(tag: TagBackup): Int {
         return tagDao.create(tag.toEntity()).toInt()
     }

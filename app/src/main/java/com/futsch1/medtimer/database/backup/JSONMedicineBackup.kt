@@ -5,7 +5,6 @@ import com.futsch1.medtimer.core.domain.backup.MedicineBackup
 import com.futsch1.medtimer.core.domain.backup.ReminderBackup
 import com.futsch1.medtimer.core.domain.backup.TagBackup
 import com.futsch1.medtimer.core.domain.repository.BackupRepository
-import com.futsch1.medtimer.database.MedicineToTagEntity
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 
@@ -47,9 +46,10 @@ class JSONMedicineBackup(
 
     private suspend fun processTags(fullMedicine: FullMedicineBackup, medicineId: Int) {
         for (tag in fullMedicine.tags) {
-            val tagEntity = backupRepository.getTagByName(tag.name ?: "")
-            val tagId = tagEntity?.tagId ?: backupRepository.insertTag(tag)
-            backupRepository.linkMedicineTag(MedicineToTagEntity(medicineId, tagId))
+            val tagName = tag.name
+            var tagId = if (tagName != null) backupRepository.getTagByName(tagName) else null
+            tagId = tagId ?: backupRepository.insertTag(tag)
+            backupRepository.linkMedicineTag(medicineId, tagId)
         }
     }
 }

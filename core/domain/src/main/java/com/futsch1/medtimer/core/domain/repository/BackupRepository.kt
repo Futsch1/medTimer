@@ -13,6 +13,7 @@ interface BackupRepository {
     suspend fun clearMedicineData()
     suspend fun insertMedicine(medicine: MedicineBackup): Int
     suspend fun insertReminders(reminders: List<ReminderBackup>, medicineId: Int)
+    suspend fun getTagByName(name: String): Int?
     suspend fun insertTag(tag: TagBackup): Int
     suspend fun linkMedicineTag(medicineId: Int, tagId: Int)
     suspend fun clearReminderEvents()
