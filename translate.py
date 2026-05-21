@@ -71,7 +71,9 @@ def load_english_strings() -> typing.Dict[str, str]:
 def load_language_trees(
     english_strings: typing.Dict[str, str],
     forced_strings: typing.List[str],
-) -> typing.Tuple[typing.Dict[str, lxml.etree._ElementTree], typing.List[typing.Tuple[str, str]]]:
+) -> typing.Tuple[
+    typing.Dict[str, lxml.etree._ElementTree], typing.List[typing.Tuple[str, str]]
+]:
     language_tree: typing.Dict[str, lxml.etree._ElementTree] = {}
     translate_list: typing.List[typing.Tuple[str, str]] = []
 
@@ -140,8 +142,10 @@ def translate_with_deepl(
         element.text = escape(translated.text)
 
 
-def _validate_format_specifiers(source: str, translation: str, string_name: str) -> bool:
-    pattern = r'%\d*\$?[a-zA-Z]'
+def _validate_format_specifiers(
+    source: str, translation: str, string_name: str
+) -> bool:
+    pattern = r"%\d*\$?[a-zA-Z]"
     source_specs = sorted(re.findall(pattern, source or ""))
     trans_specs = sorted(re.findall(pattern, translation or ""))
     if source_specs != trans_specs:
@@ -179,7 +183,9 @@ def translate_with_claude(
             f"{json.dumps(strings_input, ensure_ascii=False, indent=2)}"
         )
 
-        print(f"Translating {len(string_names)} strings to {lang_display} ({language})...")
+        print(
+            f"Translating {len(string_names)} strings to {lang_display} ({language})..."
+        )
 
         try:
             result = subprocess.run(
@@ -189,7 +195,9 @@ def translate_with_claude(
                 timeout=120,
             )
         except FileNotFoundError:
-            print("Error: 'claude' CLI not found. Ensure Claude Code is installed and in PATH.")
+            print(
+                "Error: 'claude' CLI not found. Ensure Claude Code is installed and in PATH."
+            )
             sys.exit(1)
         except subprocess.TimeoutExpired:
             print(f"  Timeout for {language}, skipping.")
@@ -201,8 +209,8 @@ def translate_with_claude(
 
         text = result.stdout.strip()
         # Strip markdown code fences if Claude wraps the JSON anyway
-        text = re.sub(r'^```[a-z]*\n?', '', text, flags=re.MULTILINE)
-        text = re.sub(r'\n?```\s*$', '', text, flags=re.MULTILINE)
+        text = re.sub(r"^```[a-z]*\n?", "", text, flags=re.MULTILINE)
+        text = re.sub(r"\n?```\s*$", "", text, flags=re.MULTILINE)
         text = text.strip()
 
         try:
@@ -218,7 +226,9 @@ def translate_with_claude(
                 continue
 
             translation = str(translations[string_name])
-            if not _validate_format_specifiers(english_strings[string_name], translation, string_name):
+            if not _validate_format_specifiers(
+                english_strings[string_name], translation, string_name
+            ):
                 continue
 
             element = language_tree[language].find(f'string[@name="{string_name}"]')
@@ -246,7 +256,9 @@ def main() -> None:
         default="deepl",
         help="Translation backend (default: deepl)",
     )
-    parser.add_argument("--auth-key", help="DeepL API auth key (required for deepl backend)")
+    parser.add_argument(
+        "--auth-key", help="DeepL API auth key (required for deepl backend)"
+    )
     parser.add_argument(
         "--strings",
         nargs="*",
@@ -260,14 +272,18 @@ def main() -> None:
         parser.error("--auth-key is required for the deepl backend")
 
     english_strings = load_english_strings()
-    language_tree, translate_list = load_language_trees(english_strings, args.strings or [])
+    language_tree, translate_list = load_language_trees(
+        english_strings, args.strings or []
+    )
 
     if not translate_list:
         print("Nothing to translate.")
         return
 
     if args.backend == "deepl":
-        translate_with_deepl(translate_list, english_strings, language_tree, args.auth_key)
+        translate_with_deepl(
+            translate_list, english_strings, language_tree, args.auth_key
+        )
     else:
         translate_with_claude(translate_list, english_strings, language_tree)
 
