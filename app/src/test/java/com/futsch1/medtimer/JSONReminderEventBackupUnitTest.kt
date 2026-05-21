@@ -1,9 +1,9 @@
 package com.futsch1.medtimer
 
 import android.graphics.Color
-import com.futsch1.medtimer.database.ReminderEntityType
-import com.futsch1.medtimer.database.dao.ReminderEventDao
-import com.futsch1.medtimer.database.ReminderEventEntity
+import com.futsch1.medtimer.core.domain.backup.ReminderEventBackup
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.database.backup.JSONReminderEventBackup
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -14,12 +14,12 @@ internal class JSONReminderEventBackupUnitTest {
     // creates a backup object with a version number and a medicines array
     @Test
     fun testBackup() {
-        val reminderEvents = listOf(ReminderEventEntity().apply {
+        val reminderEvents = listOf(ReminderEventBackup().apply {
             medicineName = "Medicine A"
             color = Color.RED
             useColor = true
             amount = "1"
-            status = ReminderEventEntity.ReminderEntityStatus.TAKEN
+            status = ReminderEvent.ReminderStatus.TAKEN
             remindedTimestamp = 1
             processedTimestamp = 2
             reminderId = 3
@@ -28,10 +28,10 @@ internal class JSONReminderEventBackupUnitTest {
             tags = listOf("Tag A")
             lastIntervalReminderTimeInMinutes = 12
             notes = "Notes"
-            reminderType = ReminderEntityType.LINKED
+            reminderType = ReminderType.LINKED
         })
 
-        val jsonReminderEventBackup = JSONReminderEventBackup(mock<ReminderEventDao>())
+        val jsonReminderEventBackup = JSONReminderEventBackup(mock())
         val result = assertNotNull(jsonReminderEventBackup.createBackupAsString(1, reminderEvents))
 
         // @formatter:off
@@ -59,15 +59,15 @@ internal class JSONReminderEventBackupUnitTest {
   ]
 }
 """.trimIndent(), result)
-        
+
         val parsedReminders =
             assertNotNull(jsonReminderEventBackup.parseBackup(result))
         compareListReminderEvents(parsedReminders, reminderEvents)
     }
 
     private fun compareListReminderEvents(
-        actual: List<ReminderEventEntity>,
-        expected: List<ReminderEventEntity>
+        actual: List<ReminderEventBackup>,
+        expected: List<ReminderEventBackup>
     ) {
         assertEquals(expected.size, actual.size)
         for (i in actual.indices) {
@@ -75,7 +75,7 @@ internal class JSONReminderEventBackupUnitTest {
         }
     }
 
-    private fun compareReminderEvent(reminderEvent1: ReminderEventEntity, reminderEvent2: ReminderEventEntity) {
+    private fun compareReminderEvent(reminderEvent1: ReminderEventBackup, reminderEvent2: ReminderEventBackup) {
         assertEquals(reminderEvent1.medicineName, reminderEvent2.medicineName)
         assertEquals(reminderEvent1.color, reminderEvent2.color)
         assertEquals(reminderEvent1.useColor, reminderEvent2.useColor)
@@ -97,4 +97,3 @@ internal class JSONReminderEventBackupUnitTest {
         assertEquals(reminderEvent1.reminderType, reminderEvent2.reminderType)
     }
 }
-

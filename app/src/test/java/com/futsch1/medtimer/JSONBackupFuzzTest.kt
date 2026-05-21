@@ -1,9 +1,6 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.database.dao.MedicineDao
-import com.futsch1.medtimer.database.dao.ReminderDao
-import com.futsch1.medtimer.database.dao.ReminderEventDao
-import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.core.domain.repository.BackupRepository
 import com.futsch1.medtimer.database.backup.JSONBackup
 import com.futsch1.medtimer.database.backup.JSONMedicineBackup
 import com.futsch1.medtimer.database.backup.JSONReminderEventBackup
@@ -32,13 +29,10 @@ class JSONBackupFuzzTest(private val json: String) {
 
     @Test
     fun fuzzTestMedicineBackup() {
-        val medicineDao = Mockito.mock<MedicineDao>()
-        val reminderDao = Mockito.mock<ReminderDao>()
-        val reminderEventDao = Mockito.mock<ReminderEventDao>()
-        val tagDao = Mockito.mock<TagDao>()
+        val backupRepository = Mockito.mock<BackupRepository>()
 
-        checkBackup(JSONMedicineBackup(medicineDao, reminderDao, tagDao), json)
-        checkBackup(JSONReminderEventBackup(reminderEventDao), json)
+        checkBackup(JSONMedicineBackup(backupRepository), json)
+        checkBackup(JSONReminderEventBackup(backupRepository), json)
     }
 
     private fun <T> checkBackup(backup: JSONBackup<T>, json: String) {
