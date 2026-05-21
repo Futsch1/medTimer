@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 rootProject.name = "MedTimer"
 include(":app")
 include(":core:domain")
+include(":core:database")
  
