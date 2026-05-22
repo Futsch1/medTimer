@@ -41,7 +41,6 @@ class ReminderViewHolder @AssistedInject constructor(
     private val linkedReminderHandlingFactory: LinkedReminderHandling.Factory,
     private val timeEditorFactory: TimeEditor.Factory,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_reminder, parent, false)) {
 
@@ -74,7 +73,7 @@ class ReminderViewHolder @AssistedInject constructor(
             editAmount.visibility = View.GONE
         }
 
-        fragmentActivity.lifecycleScope.launch(dispatcher) {
+        fragmentActivity.lifecycleScope.launch {
             val summary = reminderSummaryFormatter.formatReminderSummary(reminder)
             withContext(mainDispatcher) { advancedSettingsSummary.text = summary }
         }

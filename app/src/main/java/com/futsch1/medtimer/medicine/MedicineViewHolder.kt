@@ -38,7 +38,6 @@ class MedicineViewHolder @AssistedInject constructor(
     private val medicineStringFormatter: MedicineStringFormatter,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     private val medicineIcons: MedicineIcons,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_medicine, parent, false)) {
 
@@ -77,7 +76,7 @@ class MedicineViewHolder @AssistedInject constructor(
                 remindersSummaryView.setText(R.string.inactive)
             }
         } else {
-            activity.lifecycleScope.launch(dispatcher) {
+            activity.lifecycleScope.launch {
                 val summary = reminderSummaryFormatter.formatRemindersSummary(activeReminders)
                 withContext(mainDispatcher) { remindersSummaryView.text = summary }
             }

@@ -6,14 +6,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Collections
 
@@ -22,7 +19,6 @@ class MedicineViewAdapter @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
     private val medicineViewHolderFactory: MedicineViewHolder.Factory,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) :
     IdlingListAdapter<Medicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 
@@ -61,7 +57,7 @@ class MedicineViewAdapter @AssistedInject constructor(
 
     override fun onMoveCompleted(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
-            activity.lifecycleScope.launch(dispatcher) {
+            activity.lifecycleScope.launch {
                 medicineRepository.move(fromPosition, toPosition)
             }
         }

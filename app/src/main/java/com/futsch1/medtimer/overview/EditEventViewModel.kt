@@ -5,12 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.helpers.TimeHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +17,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -31,7 +27,6 @@ class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderEventRepository: ReminderEventRepository,
     private val timeFormatter: TimeFormatter,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     companion object {
@@ -129,9 +124,7 @@ class EditEventViewModel @Inject constructor(
             status = status ?: event.status
         )
 
-        withContext(ioDispatcher) {
-            reminderEventRepository.update(updatedEvent)
-        }
+        reminderEventRepository.update(updatedEvent)
     }
 
     private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {

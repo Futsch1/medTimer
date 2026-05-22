@@ -61,7 +61,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
             navController.navigateUp()
         }
         MedicinesMenu.setupMenu(menu, R.id.duplicate_including_reminders) {
-            fragment.lifecycleScope.launch(dispatcher) {
+            fragment.lifecycleScope.launch {
                 duplicateIncludingReminders()
             }
             navController.navigateUp()
@@ -94,7 +94,6 @@ class EditMedicineMenuProvider @AssistedInject constructor(
                 R.string.are_you_sure_delete_medicine,
                 {
                     fragment.lifecycleScope.launch {
-
                         medicineRepository.delete(medicine.id)
                         navController.navigateUp()
                     }
@@ -124,7 +123,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     }
 
     private fun setRemindersActive(active: Boolean) {
-        fragment.lifecycleScope.launch(dispatcher) {
+        fragment.lifecycleScope.launch {
             val reminders = reminderRepository.getAll(medicine.id)
             com.futsch1.medtimer.helpers.setRemindersActive(reminders, reminderRepository, active)
         }

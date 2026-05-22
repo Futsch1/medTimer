@@ -104,7 +104,7 @@ class BackupManager @AssistedInject constructor(
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
         alertDialogBuilder.setPositiveButton(R.string.ok) { _, _ ->
-            lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
+            lifecycleOwner.lifecycleScope.launch {
                 performBackup(checkedItems)
             }
         }
@@ -284,7 +284,7 @@ class BackupManager @AssistedInject constructor(
             Log.d(LogTags.BACKUP, "Starting auto backup, last was at $lastBackup")
             val directoryUri = preferencesDataSource.preferences.value.automaticBackupDirectory ?: return
 
-            lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
+            lifecycleOwner.lifecycleScope.launch {
                 performAutoBackup(directoryUri)
             }
         }

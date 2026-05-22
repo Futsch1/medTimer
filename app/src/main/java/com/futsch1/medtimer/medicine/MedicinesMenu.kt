@@ -56,7 +56,7 @@ class MedicinesMenu @Inject constructor(
     }
 
     private fun setRemindersActive(active: Boolean) {
-        applicationScope.launch(dispatcher) {
+        applicationScope.launch {
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (medicine in medicines) {
                     val localMedicine = medicineRepository.get(medicine.id) ?: return@launch
