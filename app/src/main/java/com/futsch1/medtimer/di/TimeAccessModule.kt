@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class TimeAccessModule {
+fun interface TimeAccessModule {
     @Binds
-    abstract fun bindTimeAccess(impl: SystemTimeAccess): TimeAccess
+    fun bindTimeAccess(impl: SystemTimeAccess): TimeAccess
 }

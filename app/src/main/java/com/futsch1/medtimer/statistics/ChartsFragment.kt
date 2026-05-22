@@ -90,8 +90,6 @@ class ChartsFragment : Fragment() {
             uiState.filterNotNull().collect { state ->
                 withContext(mainDispatcher) {
                     updateMedicinesPerDayChart(state)
-                    val takenSkippedChartView = takenSkippedChartView ?: return@withContext
-                    val takenSkippedTotalChartView = takenSkippedTotalChartView ?: return@withContext
                     updateTakenSkipped(
                         takenSkippedChartView,
                         segmentTakenPeriod,
