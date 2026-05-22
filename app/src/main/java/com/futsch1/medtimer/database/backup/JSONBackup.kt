@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
-import com.google.gson.annotations.Expose
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
@@ -20,7 +19,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
 
     open fun createBackup(databaseVersion: Int, list: List<T>): JsonElement {
         val content = DatabaseContentWithVersion(databaseVersion, list)
-        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create()
+        val gson = GsonBuilder().setPrettyPrinting().create()
         return gson.toJsonTree(content)
     }
 
@@ -31,7 +30,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
             val type = TypeToken.getParameterized(DatabaseContentWithVersion::class.java, contentClass).type
             var content: DatabaseContentWithVersion<T>? = gson.fromJson(jsonFile, type)
             if (content != null && content.version >= 0) {
-                gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().setVersion(content.version.toDouble()).create()
+                gson = GsonBuilder().setVersion(content.version.toDouble()).create()
                 content = gson.fromJson(jsonFile, type)
                 return checkBackup(content?.list)
             }
@@ -58,8 +57,8 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
     abstract suspend fun applyBackup(list: List<T>)
 
     protected data class DatabaseContentWithVersion<T>(
-        @field:Expose val version: Int,
-        @field:Expose val list: List<T>?
+        val version: Int,
+        val list: List<T>?
     )
 
     protected class FullDeserialize<T> : JsonDeserializer<T?> {

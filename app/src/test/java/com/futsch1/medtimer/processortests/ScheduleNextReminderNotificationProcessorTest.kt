@@ -104,6 +104,9 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = org.mockito.Mockito.mock()
 
     @BindValue
+    val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = org.mockito.Mockito.mock()
+
+    @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
 

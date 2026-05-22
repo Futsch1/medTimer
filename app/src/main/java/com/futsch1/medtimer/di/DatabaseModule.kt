@@ -2,10 +2,12 @@ package com.futsch1.medtimer.di
 
 import android.content.Context
 import androidx.room.Room
+import com.futsch1.medtimer.core.domain.repository.BackupRepository
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
+import com.futsch1.medtimer.database.BackupRepositoryImpl
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.MedicineRepositoryImpl
 import com.futsch1.medtimer.database.MedicineRoomDatabase
@@ -82,4 +84,14 @@ object DatabaseModule {
         reminderEventRepository: ReminderEventRepository,
         tagRepository: TagRepository
     ): DatabaseManager = DatabaseManager(medicineRepository, reminderRepository, reminderEventRepository, tagRepository)
+
+    @Provides
+    @Singleton
+    fun provideBackupRepository(
+        medicineDao: MedicineDao,
+        reminderDao: ReminderDao,
+        reminderEventDao: ReminderEventDao,
+        tagDao: TagDao,
+        database: MedicineRoomDatabase
+    ): BackupRepository = BackupRepositoryImpl(medicineDao, reminderDao, reminderEventDao, tagDao, database)
 }

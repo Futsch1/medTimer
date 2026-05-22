@@ -117,6 +117,9 @@ class ShowReminderNotificationProcessorTest {
     val boundDatabaseManager: DatabaseManager = mock()
 
     @BindValue
+    val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = mock()
+
+    @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
     val boundDefaultSharedPreferences: SharedPreferences = mock()
 

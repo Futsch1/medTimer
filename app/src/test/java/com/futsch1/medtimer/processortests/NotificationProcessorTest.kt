@@ -109,6 +109,9 @@ class NotificationProcessorTest {
     val boundDatabaseManager: com.futsch1.medtimer.database.DatabaseManager = mock()
 
     @BindValue
+    val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = mock()
+
+    @BindValue
     @com.futsch1.medtimer.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = mock()
 
