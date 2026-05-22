@@ -33,7 +33,7 @@ class ReminderEventActions @AssistedInject constructor(
 ) : Actions {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(event: PastReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
     }
 

@@ -9,6 +9,6 @@ import dagger.hilt.components.SingletonComponent
 // Must live in the main source set so it is installed in the real app's SingletonComponent.
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-interface TimeFormatterEntryPoint {
+fun interface TimeFormatterEntryPoint {
     fun timeFormatter(): TimeFormatter
 }

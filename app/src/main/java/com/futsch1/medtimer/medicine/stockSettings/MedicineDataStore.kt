@@ -21,7 +21,7 @@ class MedicineDataStore @AssistedInject constructor(
 ) : ModelDataStore<Medicine>() {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(modelData: Medicine): MedicineDataStore
     }
 

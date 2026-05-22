@@ -33,7 +33,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
 ) : EntityEditOptionsMenu {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             medicine: Medicine,
             fragment: EditMedicineFragment,

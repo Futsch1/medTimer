@@ -17,7 +17,7 @@ class EditMedicineSubmenus @AssistedInject constructor(
     private val tagsFragmentFactory: TagsFragment.Factory
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             editMedicineFragment: EditMedicineFragment,
             medicine: Medicine

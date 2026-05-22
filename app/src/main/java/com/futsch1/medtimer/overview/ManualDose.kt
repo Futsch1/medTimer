@@ -42,7 +42,7 @@ class ManualDose @AssistedInject constructor(
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             context: Context,
             medicineViewModel: MedicineViewModel,

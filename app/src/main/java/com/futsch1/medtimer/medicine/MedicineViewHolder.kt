@@ -43,7 +43,7 @@ class MedicineViewHolder @AssistedInject constructor(
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_medicine, parent, false)) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(parent: ViewGroup, activity: FragmentActivity): MedicineViewHolder
     }
 

@@ -23,7 +23,7 @@ class TagsFragment @AssistedInject constructor(
     DialogFragment() {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(tagDataProvider: TagDataProvider): TagsFragment
     }
 

@@ -46,7 +46,7 @@ class ReminderViewHolder @AssistedInject constructor(
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_reminder, parent, false)) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(parent: ViewGroup, fragmentActivity: FragmentActivity): ReminderViewHolder
     }
 

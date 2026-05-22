@@ -27,7 +27,7 @@ class MedicineViewAdapter @AssistedInject constructor(
     IdlingListAdapter<Medicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(activity: FragmentActivity): MedicineViewAdapter
     }
 

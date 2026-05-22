@@ -22,7 +22,7 @@ class NewReminderTypeDialog @AssistedInject constructor(
     val newReminderStockDialogFactory: NewReminderStockDialog.Factory
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(activity: FragmentActivity, medicine: Medicine): NewReminderTypeDialog
     }
 

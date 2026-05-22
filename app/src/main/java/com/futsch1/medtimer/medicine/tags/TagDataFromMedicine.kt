@@ -24,7 +24,7 @@ class TagDataFromMedicine @AssistedInject constructor(
 ) : TagDataProvider() {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(fragment: Fragment, medicineId: Int): TagDataFromMedicine
     }
 

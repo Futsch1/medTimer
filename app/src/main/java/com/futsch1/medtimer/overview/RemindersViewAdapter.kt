@@ -21,7 +21,7 @@ class RemindersViewAdapter @AssistedInject constructor(
     ReminderViewHolder.ClickDelegate {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, fragmentActivity: FragmentActivity): RemindersViewAdapter
     }
 
