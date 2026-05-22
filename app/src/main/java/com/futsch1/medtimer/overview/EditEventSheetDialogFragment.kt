@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -88,13 +87,13 @@ class EditEventSheetDialogFragment : DialogFragment() {
         // Guard prevents setText from firing when the EditText already has the same text,
         // which would otherwise reset the cursor position.
         viewModel.medicineName.onEach { if (editEventName.text.toString() != it) editEventName.setText(it) }.launchIn(lifecycleScope)
-        editEventName.doAfterTextChanged { viewModel.medicineName.value = it?.toString() ?: "" }
+        editEventName.doAfterTextChanged { viewModel.setMedicineName(it?.toString() ?: "") }
 
         viewModel.amount.onEach { if (editEventAmount.text.toString() != it) editEventAmount.setText(it) }.launchIn(lifecycleScope)
-        editEventAmount.doAfterTextChanged { viewModel.amount.value = it?.toString() ?: "" }
+        editEventAmount.doAfterTextChanged { viewModel.setAmount(it?.toString() ?: "") }
 
         viewModel.notes.onEach { if (editEventNotes.text.toString() != it) editEventNotes.setText(it) }.launchIn(lifecycleScope)
-        editEventNotes.doAfterTextChanged { viewModel.notes.value = it?.toString() ?: "" }
+        editEventNotes.doAfterTextChanged { viewModel.setNotes(it?.toString() ?: "") }
 
         // Time/date display strings: reactive to picker changes
         viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }
@@ -138,9 +137,7 @@ class EditEventSheetDialogFragment : DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        requireActivity().lifecycleScope.launch {
-            viewModel.updateEvent()
-        }
+        viewModel.updateEvent()
         super.onDismiss(dialog)
     }
 

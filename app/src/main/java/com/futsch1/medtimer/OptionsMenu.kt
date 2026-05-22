@@ -257,7 +257,7 @@ class OptionsMenu @AssistedInject constructor(
                         // Intentionally empty, do nothing
                     }
                 } else {
-                    medicineViewModel.validTagIds.value = setOf()
+                     medicineViewModel.clearTagFilter()
                 }
             }
         }

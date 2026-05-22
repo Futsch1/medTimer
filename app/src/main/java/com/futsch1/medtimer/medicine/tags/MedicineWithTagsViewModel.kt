@@ -5,8 +5,10 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,11 +21,15 @@ class MedicineWithTagsViewModel @Inject constructor(
 
     val tags: Flow<List<Tag>> = tagRepository.getAllFlow()
 
-    suspend fun associateTag(medicineId: Int, tagId: Int) {
-        tagRepository.addMedicineTag(medicineId, tagId)
+    fun associateTag(medicineId: Int, tagId: Int) {
+        viewModelScope.launch {
+            tagRepository.addMedicineTag(medicineId, tagId)
+        }
     }
 
-    suspend fun disassociateTag(medicineId: Int, tagId: Int) {
-        tagRepository.removeMedicineTag(medicineId, tagId)
+    fun disassociateTag(medicineId: Int, tagId: Int) {
+        viewModelScope.launch {
+            tagRepository.removeMedicineTag(medicineId, tagId)
+        }
     }
 }

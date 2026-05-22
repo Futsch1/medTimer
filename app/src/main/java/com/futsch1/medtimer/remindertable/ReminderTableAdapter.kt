@@ -37,11 +37,9 @@ class ReminderTableAdapter(
         val viewHolder = holder as ReminderTableCellViewHolder
         viewHolder.textView.text = modelContent
         viewHolder.textView.tag = cellItemModel.viewTag
-        viewHolder.setupEditButton(if (columnPosition == 1) object : OnEditClickListener {
-            override fun onEditClick() {
-                EditEventSheetDialogFragment.newInstance(cellItemModel.idAsInt)
-                    .show(fragmentManager, "EditEventDialog")
-            }
+        viewHolder.setupEditButton(if (columnPosition == 1) OnEditClickListener {
+            EditEventSheetDialogFragment.newInstance(cellItemModel.idAsInt)
+                .show(fragmentManager, "EditEventDialog")
         } else null)
     }
 

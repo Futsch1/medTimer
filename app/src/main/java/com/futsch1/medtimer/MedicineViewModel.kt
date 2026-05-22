@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -34,8 +35,11 @@ class MedicineViewModel @Inject constructor(
 ) : ViewModel() {
     private val liveMedicines = medicineRepository.getAllFlow()
 
-    val validTagIds = MutableStateFlow<Set<Int>?>(null)
-    val tagFilterStore = TagFilterStore(persistentDataDataSource, validTagIds)
+    private val _validTagIds = MutableStateFlow<Set<Int>?>(null)
+    val validTagIds: StateFlow<Set<Int>?> = _validTagIds.asStateFlow()
+    val tagFilterStore = TagFilterStore(persistentDataDataSource, _validTagIds)
+
+    fun clearTagFilter() { _validTagIds.value = setOf() }
     private var medicineToTags: List<MedicineToTag> = emptyList()
     private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
