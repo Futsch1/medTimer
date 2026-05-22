@@ -53,4 +53,10 @@
     <string name="once_below_threshold">Once when falling below threshold</string>
     <string name="always_below_threshold">Always when below threshold</string>
     <string name="daily_below_threshold">Daily when below threshold</string>
+    <string name="out_of_stock_notification_title">Medicine out of stock reminder</string>
+    <string name="snooze_until_home">Snooze until home</string>
+    <string name="default_">Default</string>
+    <string name="high">High</string>
+    <string name="snooze">Snooze</string>
+    <string name="expiration_reminder">Expiration reminder</string>
 </resources>

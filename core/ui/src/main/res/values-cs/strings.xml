@@ -63,4 +63,10 @@
     <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
     <string name="always_below_threshold">Vždy pod nastavenou mezí</string>
     <string name="daily_below_threshold">Denně, pokud je pod nastavenou mezí</string>
+    <string name="out_of_stock_notification_title">Připomenutí prázdných zásob léků</string>
+    <string name="snooze_until_home">Odložit do příchodu domů</string>
+    <string name="default_">Výchozí</string>
+    <string name="high">Vysoká</string>
+    <string name="snooze">Odložit</string>
+    <string name="expiration_reminder">Připomenutí expirace</string>
 </resources>

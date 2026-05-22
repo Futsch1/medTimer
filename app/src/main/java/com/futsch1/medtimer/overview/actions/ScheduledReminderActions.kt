@@ -5,9 +5,9 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

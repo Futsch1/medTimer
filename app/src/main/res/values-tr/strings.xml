@@ -15,9 +15,6 @@
     <string name="confirm">Onayla</string>
     <string name="are_you_sure_delete_medicine">İlacı silmek istediğinizden emin misiniz?</string>
     <string name="no_reminders">Hiç hatırlatıcı ayarlanmadı</string>
-    <string name="notification_title">İlaç hatırlatıcısı</string>
-    <string name="recent_events">Son etkinlikler</string>
-    <string name="next_reminders">Sonraki hatırlatıcılar</string>
     <string name="version">Versiyon %s</string>
     <string name="are_you_sure_delete_reminder">Hatırlatıcıyı silmek istediğinizden emin misiniz?</string>
     <string name="clear_events">Tüm geçmişi temizle</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Yeni hatırlatıcı için dozaj</string>
     <string name="cycle_consecutive_days">Aktif günler</string>
     <string name="theme">Tema</string>
-    <string name="default_">Varsayılan</string>
     <string name="alternative">Alternatif</string>
     <string name="before_meal">yemekten önce</string>
     <string name="after_meal">yemekten sonra</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Ek doz kaydet</string>
     <string name="dismiss_notification_action">Bildirim reddedildiğinde yapılacak işlem</string>
     <string name="skip_reminder">Dozu atla</string>
-    <string name="snooze">Ertele</string>
     <string name="snooze_duration">Erteleme süresi</string>
     <string name="minutes_5">5 dakika</string>
     <string name="minutes_10">10 dakika</string>
@@ -103,7 +98,6 @@
     <string name="intro_analysis_description">Uygulama tüm hatırlatıcı etkinliklerini saklar. Geçmiş dozlarınızı analiz ekranında analiz edebilir ve üç nokta menüsünden geçmişinizi dışa aktarabilirsiniz. Geçmiş, ilaçlar veya hatırlatıcılar silinse veya yeniden adlandırılsa bile kalacaktır.</string>
     <string name="show_intro">Uygulama tanıtımını göster</string>
     <string name="are_you_sure_delete_reminder_event">Hatırlatıcı etkinliğini silmek istediğinizden emin misiniz?</string>
-    <string name="high">Yüksek</string>
     <string name="notification_importance">Bildirim önceliği</string>
     <string name="notification_settings_default">Bildirim ayarları varsayılan öncelik</string>
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
@@ -144,8 +138,6 @@
     <string name="interval_start_reminded">Hatırlatıldığında aralık başlar</string>
     <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
     <string name="invalid_input">Geçersiz giriş</string>
-    <string name="out_of_stock_notification">%1$s&amp;apos;dan sadece %2$s kaldı!\nİlacı yakında yeniden doldurmayı düşünün.</string>
-    <string name="out_of_stock_notification_title">İlaç stokta yok hatırlatması</string>
     <string name="medicine_stock">İlaç stoğu</string>
     <string name="amount">Miktar</string>
     <string name="reminder_threshold">Hatırlatma eşiği</string>
@@ -166,7 +158,6 @@
     <string name="hide_med_name">Bildirimde ilaç adını gizleme</string>
     <string name="disable_widget">Ana ekran widget\'larını devre dışı bırak</string>
     <string name="disable_widget_summary">Widget\'ların ana ekranda hassas ilaç bilgilerini görüntülemesini engelle</string>
-    <string name="widget_disabled_privacy">Widget\'lar gizlilik nedeniyle devre dışı — hatırlatıcıları görüntülemek için uygulamayı aç</string>
     <string name="re_raise_event">Olayı yeniden tetiklemek</string>
     <string name="notification_reminder_settings">Bildirim ve hatırlatma ayarları</string>
     <string name="display_settings">Ekran ayarları</string>
@@ -178,7 +169,6 @@
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
     <string name="please_wait">Lütfen bekleyin…</string>
     <string name="reminded">Hatırlatıldı</string>
-    <string name="all_taken">Hepsi alındı (%s)</string>
     <string name="estimated_run_out_date">Tahmini Bitiş Tarihi</string>
     <string name="create_calendar_entry">Takvim girişi oluştur</string>
     <string name="notes">Notlar</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
     <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
     <string name="expiration_settings">Son kullanma ayarları</string>
-    <string name="expiration_reminder">Son kullanma hatırlatıcısı</string>
     <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
     <string name="medicine_stock_settings">İlaç stok ayarları</string>
     <string name="edit_medicine_stock_settings">İlaç stok ayarlarını düzenle</string>
     <string name="clear_dates">Tarihleri temizle</string>
     <string name="acknowledged">Onaylandı</string>
-    <string name="refill_amount">Yeniden doldur (%s)</string>
-    <string name="expiration_date_notification">%1$s ilacının son kullanma tarihi %2$s.\nİlacı değiştirmeyi düşünün.</string>
     <string name="select_all">Tümünü seç</string>
     <string name="by_name">İsme göre</string>
     <string name="by_creation_date_ascending">Oluşturma tarihine göre artan</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Ertelemeden sonra eve gelince yeniden bildirim</string>
     <string name="location_snooze_no_play_services">Konuma dayalı erteleme, bu cihazda bulunmayan Google Play Servislerijini gerektirir</string>
     <string name="location_snooze_background_permission">Eve gelince yeniden bildirim almak için MedTimer\'ın arka planda konuma erişmesine izin verin</string>
-    <string name="snooze_until_home">Eve dönene kadar ertele</string>
     <string name="snooze_settings">Erteleme ayarları</string>
     <string name="home_location">Ev konumu</string>
     <string name="home_location_not_set">Ayarlanmadı</string>

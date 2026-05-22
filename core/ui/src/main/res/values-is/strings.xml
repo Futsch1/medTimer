@@ -34,4 +34,9 @@
     </plurals>
     <string name="once_below_threshold">Einu sinni ef neðan þröskulds</string>
     <string name="always_below_threshold">Alltaf ef neðan þröskulds</string>
+    <string name="out_of_stock_notification_title">Áminning um að lyf sé ekki til</string>
+    <string name="snooze_until_home">Snooze þar til heim</string>
+    <string name="default_">Sjálfgefið</string>
+    <string name="high">Hátt</string>
+    <string name="snooze">Snooze</string>
 </resources>

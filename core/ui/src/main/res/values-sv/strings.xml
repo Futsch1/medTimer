@@ -53,4 +53,10 @@
     <string name="once_below_threshold">En gång när tröskelvärdet underskrids</string>
     <string name="always_below_threshold">Alltid när under tröskelvärdet</string>
     <string name="daily_below_threshold">Dagligen under tröskelvärdet</string>
+    <string name="out_of_stock_notification_title">Påminnelse om att läkemedlet är slut i lager</string>
+    <string name="snooze_until_home">Snooze till hemkomst</string>
+    <string name="default_">Standard</string>
+    <string name="high">Hög</string>
+    <string name="snooze">Snooza</string>
+    <string name="expiration_reminder">Påminnelse om utgångsdatum</string>
 </resources>

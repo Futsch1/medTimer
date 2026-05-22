@@ -4,7 +4,6 @@
     <string name="log_additional_dose">கூடுதல் டோச் பதிவு</string>
     <string name="dismiss_notification_action">அறிவிப்பை நிராகரிக்கும் போது நடவடிக்கை</string>
     <string name="skip_reminder">கப்பல்கள் டோச்</string>
-    <string name="snooze">உறக்கநிலை</string>
     <string name="snooze_duration">உறக்கநிலை காலம்</string>
     <string name="delay">சுணக்கம்</string>
     <string name="tab_settings">அமைப்புகள்</string>
@@ -22,9 +21,6 @@
     <string name="confirm">உறுதிப்படுத்தவும்</string>
     <string name="are_you_sure_delete_medicine">மருந்தை நீக்குவது உறுதி?</string>
     <string name="no_reminders">நினைவூட்டல்கள் இல்லை</string>
-    <string name="notification_title">மருந்து நினைவூட்டல்</string>
-    <string name="recent_events">அண்மைக் கால நிகழ்வுகள்</string>
-    <string name="next_reminders">அடுத்த நினைவூட்டல்கள்</string>
     <string name="version">பதிப்பு %s</string>
     <string name="are_you_sure_delete_reminder">நினைவூட்டலை நீக்குவது உறுதி?</string>
     <string name="clear_events">முழு வரலாற்றையும் அழி</string>
@@ -45,7 +41,6 @@
     <string name="create_reminder_dosage_hint">புதிய நினைவூட்டலுக்கான அளவு</string>
     <string name="cycle_consecutive_days">செயலில் நாட்கள்</string>
     <string name="theme">கருப்பொருள்</string>
-    <string name="default_">இயல்புநிலை</string>
     <string name="alternative">மாற்று</string>
     <string name="before_meal">உணவுக்கு முன்</string>
     <string name="after_meal">உணவுக்குப் பிறகு</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">பயன்பாடு அனைத்து நினைவூட்டல் நிகழ்வுகளையும் சேமிக்கிறது. பகுப்பாய்வுத் திரையில் உங்கள் கடந்த காலங்களை பகுப்பாய்வு செய்து உங்கள் வரலாற்றை கபாப் (மூன்று புள்ளிகள்) பட்டியல் வழியாக ஏற்றுமதி செய்யலாம். மருந்துகள் அல்லது நினைவூட்டல்கள் நீக்கப்பட்டாலும் அல்லது மறுபெயரிடப்பட்டாலும் வரலாறு இருக்கும்.</string>
     <string name="show_intro">பயன்பாட்டு அறிமுகத்தைக் காட்டு</string>
     <string name="are_you_sure_delete_reminder_event">நினைவூட்டல் நிகழ்வை நீக்குவது உறுதி?</string>
-    <string name="high">உயர்ந்த</string>
     <string name="notification_importance">அறிவிப்பு முன்னுரிமை</string>
     <string name="notification_settings_default">அறிவிப்பு அமைப்புகள் இயல்புநிலை முன்னுரிமை</string>
     <string name="notification_settings_high">அறிவிப்பு அமைப்புகள் அதிக முன்னுரிமை</string>
@@ -144,8 +138,6 @@
     <string name="interval_start_reminded">நினைவூட்டும்போது இடைவெளி தொடங்குகிறது</string>
     <string name="interval_start_processed">எடுக்கும்போது அல்லது தவிர்க்கும்போது இடைவெளி தொடங்குகிறது</string>
     <string name="invalid_input">தவறான உள்ளீடு</string>
-    <string name="out_of_stock_notification">%2$s மட்டுமே %1$s உள்ளன!\n விரைவில் மருந்தை மீண்டும் நிரப்புவதைக் கவனியுங்கள்.</string>
-    <string name="out_of_stock_notification_title">பங்கு நினைவூட்டலுக்கு வெளியே மருத்துவம்</string>
     <string name="medicine_stock">மருந்து பங்கு</string>
     <string name="amount">தொகை</string>
     <string name="reminder_threshold">நினைவூட்டல் வாசல்</string>
@@ -166,7 +158,6 @@
     <string name="hide_med_name">அறிவிப்பில் மருந்து பெயரை மறை</string>
     <string name="disable_widget">முகப்பு திரை விட்ஜெட்களை முடக்கு</string>
     <string name="disable_widget_summary">முகப்பு திரையில் விட்ஜெட்கள் முக்கிய மருந்து தகவலை காட்டாமல் தடுக்கவும்</string>
-    <string name="widget_disabled_privacy">தனியுரிமைக்காக விட்ஜெட்கள் முடக்கப்பட்டன — நினைவூட்டல்களைப் பார்க்க பயன்பாட்டைத் திறக்கவும்</string>
     <string name="re_raise_event">மீண்டும் உயர்த்தும் நிகழ்வு</string>
     <string name="notification_reminder_settings">அறிவிப்பு மற்றும் நினைவூட்டல் அமைப்புகள்</string>
     <string name="display_settings">காட்சி அமைப்புகள்</string>
@@ -178,7 +169,6 @@
     <string name="big_notifications">பெரிய அறிவிப்பு பொத்தான்கள்</string>
     <string name="please_wait">தயவுசெய்து காத்திருக்கவும்…</string>
     <string name="reminded">நினைவூட்டப்பட்டது</string>
-    <string name="all_taken">அனைத்தும் எடு (%s)</string>
     <string name="estimated_run_out_date">மதிப்பிடப்பட்ட தீர்ந்துபோகும் தேதி</string>
     <string name="create_calendar_entry">காலண்டர் உள்ளீட்டை உருவாக்கவும்</string>
     <string name="notes">குறிப்புகள்</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">குறிச்சொல் வடிப்பான் செயலில் உள்ளது. பொருந்தும் குறிச்சொற்கள் கொண்ட தரவு மட்டுமே ஏற்றுமதி செய்யப்படும்.</string>
     <string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string>
     <string name="expiration_settings">காலாவதி அமைப்புகள்</string>
-    <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
     <string name="remind_days_before_expiration">காலாவதியாகும் நாட்களுக்கு முன் நினைவூட்டு</string>
     <string name="medicine_stock_settings">மருந்து இருப்பு அமைப்புகள்</string>
     <string name="edit_medicine_stock_settings">மருந்து இருப்பு அமைப்புகளைத் திருத்து</string>
     <string name="clear_dates">தேதிகளை அழி</string>
     <string name="acknowledged">ஒப்புக்கொள்ளப்பட்டது</string>
-    <string name="refill_amount">மீள்நிரப்பு (%s)</string>
-    <string name="expiration_date_notification">மருந்து %1$s-க்கு காலாவதி தேதி %2$s உள்ளது.\nமருந்தை மாற்றுவதைக் கவனியுங்கள்.</string>
     <string name="select_all">அனைத்தையும் தேர்ந்தெடு</string>
     <string name="by_name">பெயர் மூலம்</string>
     <string name="by_creation_date_ascending">உருவாக்கிய தேதி மூலம் ஏறுவரிசை</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">சுணக்கத்திற்குப் பிறகு வீடு திரும்பும்போது மீண்டும் அறிவிக்கவும்</string>
     <string name="location_snooze_no_play_services">இடம் சார்ந்த சுணக்கம் Google Play Services தேவைப்படுகிறது, இது இந்த சாதனத்தில் கிடைக்கவில்லை</string>
     <string name="location_snooze_background_permission">வீடு திரும்பும்போது மீண்டும் அறிவிக்க, MedTimer-க்கு பின்னணியில் இடத்தை அணுக அனுமதிக்கவும்</string>
-    <string name="snooze_until_home">வீடு வரும் வரை சுணக்கம்</string>
     <string name="snooze_settings">சுணக்க அமைப்புகள்</string>
     <string name="home_location">வீட்டு இடம்</string>
     <string name="home_location_not_set">அமைக்கப்படவில்லை</string>

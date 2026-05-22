@@ -15,9 +15,6 @@
     <string name="confirm">Megerősít</string>
     <string name="are_you_sure_delete_medicine">Biztos törölni szeretnéd a gyógyszert?</string>
     <string name="no_reminders">Nincs emlékeztető beállítva</string>
-    <string name="notification_title">Gyógyszer emlékeztető</string>
-    <string name="recent_events">Legutóbbi események</string>
-    <string name="next_reminders">Következő emlékeztetők</string>
     <string name="version">Verzió %s</string>
     <string name="are_you_sure_delete_reminder">Biztosan törölni szeretnéd az emlékeztetőt?</string>
     <string name="clear_events">Teljes előzmény törlése</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Adag az új emlékeztetőhöz</string>
     <string name="cycle_consecutive_days">Aktív napok</string>
     <string name="theme">Téma</string>
-    <string name="default_">Alapértelmezett</string>
     <string name="alternative">Alternatíva</string>
     <string name="before_meal">étkezés előtt</string>
     <string name="after_meal">étkezés után</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Extra adag rögzítése</string>
     <string name="dismiss_notification_action">Művelet az értesítés elvetésekor</string>
     <string name="skip_reminder">Adag kihagyása</string>
-    <string name="snooze">Emlékeztetés később</string>
     <string name="snooze_duration">Újraemlékeztetés késleltetése</string>
     <string name="minutes_5">5 perc</string>
     <string name="minutes_10">10 perc</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">Az alkalmazás tárolja az összes emlékeztető eseményt. Az elmúlt adagjaidat az Elemzés képernyőn elemezheted, és történetedet a hárompontos menü segítségével exportálhatod. Az előzmények akkor is megmaradnak, ha a gyógyszereket vagy emlékeztetőket törlöd vagy módosítod.</string>
     <string name="show_intro">Alkalmazás bemutatása</string>
     <string name="are_you_sure_delete_reminder_event">Biztosan törölni szeretnéd az emlékeztető eseményt?</string>
-    <string name="high">Magas</string>
     <string name="notification_importance">Értesítési prioritás</string>
     <string name="notification_settings_default">Alapértelmezett értesítési prioritás beállítása</string>
     <string name="notification_settings_high">Magas értesítési prioritás beállítása</string>
@@ -145,8 +139,6 @@
     <string name="interval_start_reminded">Az idő az előző emlékeztetőtől számolva</string>
     <string name="interval_start_processed">Az idő a gyógyszer bevételétől vagy kihagyásától számolva</string>
     <string name="invalid_input">Érvénytelen érték</string>
-    <string name="out_of_stock_notification">Már csak %2$s maradt a(z) %1$s készletéből!\nTöltsd fel hamarosan.</string>
-    <string name="out_of_stock_notification_title">Gyógyszerkészlet fogyóban</string>
     <string name="medicine_stock">Gyógyszerkészlet</string>
     <string name="amount">Mennyiség</string>
     <string name="reminder_threshold">Figyelmeztetési mennyiség</string>
@@ -167,7 +159,6 @@
     <string name="hide_med_name">Gyógyszer neve ne jelenjen meg az értesítésekben</string>
     <string name="disable_widget">Kezdőképernyő-widgetek letiltása</string>
     <string name="disable_widget_summary">Megakadályozza, hogy a widgetek érzékeny gyógyszerinformációkat jelenítsenek meg a kezdőképernyőn</string>
-    <string name="widget_disabled_privacy">A widgetek adatvédelmi okokból le vannak tiltva — nyissa meg az alkalmazást az emlékeztetők megtekintéséhez</string>
     <string name="re_raise_event">Esemény megismétlése</string>
     <string name="notification_reminder_settings">Értesítési és emlékeztető beállítások</string>
     <string name="display_settings">Megjelenítési beállítások</string>
@@ -179,7 +170,6 @@
     <string name="big_notifications">Nagy méretű értesítési gombok</string>
     <string name="please_wait">Kérlek, várj…</string>
     <string name="reminded">Emlékeztetve</string>
-    <string name="all_taken">Minden bevéve (%s)</string>
     <string name="estimated_run_out_date">Várható elfogyási dátum</string>
     <string name="create_calendar_entry">Naptárbejegyzés létrehozása</string>
     <string name="notes">Megjegyzések</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
     <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
     <string name="expiration_settings">Lejárati beállítások</string>
-    <string name="expiration_reminder">Lejárati emlékeztető</string>
     <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
     <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>
     <string name="edit_medicine_stock_settings">Gyógyszerkészlet beállításainak szerkesztése</string>
     <string name="clear_dates">Dátumok törlése</string>
     <string name="acknowledged">Tudomásul véve</string>
-    <string name="refill_amount">Újratöltés (%s)</string>
-    <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
     <string name="select_all">Az összes kijelölése</string>
     <string name="by_name">Név szerint</string>
     <string name="by_creation_date_ascending">Növekvő a létrehozás dátuma szerint</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Újraértesítés hazaérkezéskor szundi után</string>
     <string name="location_snooze_no_play_services">A helyzet alapú szundi Google Play Services szolgáltatást igényel, amely nem érhető el ezen az eszközön</string>
     <string name="location_snooze_background_permission">Hazaérkezéskor történő újraértesítéshez engedélyezze a MedTimer számára a háttérben való helymeghatározást</string>
-    <string name="snooze_until_home">Szundi hazaérkezésig</string>
     <string name="snooze_settings">Szundi beállítások</string>
     <string name="home_location">Otthoni helyszín</string>
     <string name="home_location_not_set">Nincs beállítva</string>

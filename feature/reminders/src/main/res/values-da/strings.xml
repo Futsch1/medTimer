@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Medicinpåmindelse</string>
+    <string name="refill_amount">Genopfyldning (%s)</string>
+    <string name="out_of_stock_notification">Kun %2$s af %1$s tilbage!\nOvervej at genopfylde medicinen snart.</string>
+    <string name="expiration_date_notification">Medicinen %1$s udløber den %2$s.\nOvervej at udskifte den.</string>
+    <string name="widget_disabled_privacy">Widgets deaktiveret af hensyn til privatlivets fred — åbn appen for at se påmindelser</string>
+    <string name="recent_events">Seneste hændelser</string>
+    <string name="next_reminders">Næste påmindelser</string>
+    <string name="all_taken">Alle taget (%s)</string>
+</resources>

@@ -15,9 +15,6 @@
     <string name="confirm">Επιβεβαίωση</string>
     <string name="are_you_sure_delete_medicine">Σίγουρα θέλετε να διαγράψετε αυτή την αγωγή;</string>
     <string name="no_reminders">Δεν έχουν οριστεί υπενθυμίσεις</string>
-    <string name="notification_title">Υπενθύμιση φαρμ. αγωγής</string>
-    <string name="recent_events">Πρόσφατα συμβάντα</string>
-    <string name="next_reminders">Επόμενες υπενθυμίσεις</string>
     <string name="version">Έκδοση %s</string>
     <string name="are_you_sure_delete_reminder">Σίγουρα θέλετε να διαγράψετε αυτή την υπενθύμιση;</string>
     <string name="clear_events">Εκκαθάριση όλου του ιστορικού</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Δοσολογία για τη νέα υπενθύμιση</string>
     <string name="cycle_consecutive_days">Ημέρες ενεργής λήψης</string>
     <string name="theme">Θέμα</string>
-    <string name="default_">Προεπιλεγμένη</string>
     <string name="alternative">Εναλλακτικό</string>
     <string name="before_meal">πρίν το γεύμα</string>
     <string name="after_meal">μετά το γεύμα</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Καταχώρηση επιπρόσθετης δόσης</string>
     <string name="dismiss_notification_action">Ενέργεια κατά την παράλειψη μίας ειδοποίησης</string>
     <string name="skip_reminder">Παράλειψη δόσης</string>
-    <string name="snooze">Αναβολή</string>
     <string name="snooze_duration">Διάρκεια αναβολής</string>
     <string name="minutes_5">5 λεπτά</string>
     <string name="minutes_10">10 λεπτά</string>
@@ -103,7 +98,6 @@
     <string name="intro_analysis_description">Η εφαρμογή αποθηκεύει όλα τα συμβάντα υπενθυμίσεων. Μπορείτε να αναλύσετε τις προηγούμενες δόσεις σας στην οθόνη ανάλυσης και να εξάγετε το ιστορικό σας μέσω του μενού επιλογών (τρεις τελείες). Το ιστορικό θα παραμείνει διαθέσιμο, ακόμη και αν φαρμακευτικές αγωγές ή υπενθυμίσεις διαγραφούν ή μετονομαστούν.</string>
     <string name="show_intro">Προβολή εισαγωγικού οδηγού της εφαρμογής</string>
     <string name="are_you_sure_delete_reminder_event">Σίγουρα θέλετε να διαγράψετε το συμβάν υπενθύμισης;</string>
-    <string name="high">Υψηλή</string>
     <string name="notification_importance">Προτεραιότητα ειδοποίησης</string>
     <string name="notification_settings_default">Ρύθμιση ειδοποιήσεων προεπιλεγμένης προτεραιότητας</string>
     <string name="notification_settings_high">Ρύθμιση ειδοποιήσεων υψηλής προτεραιότητας</string>
@@ -144,8 +138,6 @@
     <string name="interval_start_reminded">Το χρονικό διάστημα ξεκινά με την ενεργοποίηση της υπενθύμισης</string>
     <string name="interval_start_processed">Το χρονικό διάστημα ξεκίνα όταν επισημανθεί ότι η αγωγή λήφθηκε ή παραλήφθηκε</string>
     <string name="invalid_input">Μη έγκυρη καταχώριση</string>
-    <string name="out_of_stock_notification">Μόνο %2$s από %1$s απομένουν!\nΕξετάστε την προοπτική για αναπλήρωση του φαρμάκου σύντομα.</string>
-    <string name="out_of_stock_notification_title">Υπενθύμιση εξάντλησης αποθέματος φαρμάκου</string>
     <string name="medicine_stock">Απόθεμα φαρμάκου</string>
     <string name="amount">Ποσότητα</string>
     <string name="reminder_threshold">Όριο αποθέματος για ενεργοποίηση υπενθύμισης</string>
@@ -165,7 +157,6 @@
     <string name="hide_med_name">Απόκρυψη ονομασίας φαρμάκου κατά την ειδοποίηση</string>
     <string name="disable_widget">Απενεργοποίηση γραφικών στοιχείων αρχικής οθόνης</string>
     <string name="disable_widget_summary">Αποτροπή εμφάνισης ευαίσθητων πληροφοριών φαρμάκων από γραφικά στοιχεία στην αρχική οθόνη</string>
-    <string name="widget_disabled_privacy">Τα γραφικά στοιχεία είναι απενεργοποιημένα για λόγους απορρήτου — ανοίξτε την εφαρμογή για προβολή υπενθυμίσεων</string>
     <string name="re_raise_event">Επανενεργοποίηση ειδοποίησης συμβάντος</string>
     <string name="notification_reminder_settings">Ρυθμίσεις ειδοποίησης και υπενθύμισης</string>
     <string name="display_settings">Ρυθμίσεις προβολής</string>
@@ -177,7 +168,6 @@
     <string name="big_notifications">Μεγεθυμένα πλήκτρα ειδοποιήσεων</string>
     <string name="please_wait">Παρακαλώ περιμένετε…</string>
     <string name="reminded">Έγινε υπενθύμιση</string>
-    <string name="all_taken">Έχουν ληφθεί όλα (%s)</string>
     <string name="estimated_run_out_date">Εκτιμώμενη ημερομηνία εξάντλησης αποθέματος</string>
     <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>
     <string name="variable_amount">Χειροκίνητη καταχώρηση της δόσης με τη λήψη της</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
     <string name="show_taken_time_in_overview">Ώρες λήψης αγωγών σε επισκόπηση</string>
     <string name="expiration_settings">Ρυθμίσεις λήξης</string>
-    <string name="expiration_reminder">Υπενθύμιση λήξης</string>
     <string name="remind_days_before_expiration">Εισάγετε τιμή για υπενθύμιση μέρες πριν από τη λήξη</string>
     <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>
     <string name="edit_medicine_stock_settings">Επεξεργασία ρυθμίσεων αποθέματος φαρμάκων</string>
     <string name="clear_dates">Εκκαθάριση ημερομηνιών</string>
     <string name="acknowledged">Αναγνωρίστηκε</string>
-    <string name="refill_amount">Αναπλήρωση (%s)</string>
-    <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηνία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
     <string name="select_all">Επιλογή όλων</string>
     <string name="by_name">Κατά όνομα</string>
     <string name="by_creation_date_ascending">Αύξουσα κατά ημερομηνία δημιουργίας</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Επανειδοποίηση κατά την άφιξη στο σπίτι μετά από αναβολή</string>
     <string name="location_snooze_no_play_services">Η αναβολή βάσει τοποθεσίας απαιτεί τις Υπηρεσίες Google Play, οι οποίες δεν είναι διαθέσιμες σε αυτή τη συσκευή</string>
     <string name="location_snooze_background_permission">Για επανειδοποίηση κατά την άφιξη στο σπίτι, επιτρέψτε στο MedTimer την πρόσβαση στην τοποθεσία στο παρασκήνιο</string>
-    <string name="snooze_until_home">Αναβολή έως επιστροφή στο σπίτι</string>
     <string name="snooze_settings">Ρυθμίσεις αναβολής</string>
     <string name="home_location">Τοποθεσία σπιτιού</string>
     <string name="home_location_not_set">Δεν έχει οριστεί</string>

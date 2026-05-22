@@ -15,10 +15,7 @@
     <string name="confirm">Bekreft</string>
     <string name="are_you_sure_delete_medicine">Er du sikker på at du vil slette dette legemiddelet?</string>
     <string name="no_reminders">Ingen påminnelser satt</string>
-    <string name="notification_title">Påminnelse om medisinering</string>
-    <string name="recent_events">Nylige hendelser</string>
     <string name="expiration_settings">Innstillinger for utløpsdato</string>
-    <string name="expiration_reminder">Påminnelse om utløpsdato</string>
     <string name="by_name">Etter navn</string>
     <string name="by_creation_date_ascending">Stigende etter opprettelsesdato</string>
     <string name="by_creation_date_descending">Synkende etter opprettelsesdato</string>
@@ -35,7 +32,6 @@
     <string name="location_snooze_summary">Varsle igjen ved hjemkomst etter snooze</string>
     <string name="location_snooze_no_play_services">Stedsbasert snooze krever Google Play Services, som ikke er tilgjengelig på denne enheten</string>
     <string name="location_snooze_background_permission">For å bli varslet ved hjemkomst, tillat MedTimer å få tilgang til plassering i bakgrunnen</string>
-    <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="snooze_settings">Snooze-innstillinger</string>
     <string name="home_location">Hjemsted</string>
     <string name="home_location_not_set">Ikke angitt</string>

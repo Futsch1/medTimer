@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Gyógyszer emlékeztető</string>
+    <string name="refill_amount">Újratöltés (%s)</string>
+    <string name="out_of_stock_notification">Már csak %2$s maradt a(z) %1$s készletéből!\nTöltsd fel hamarosan.</string>
+    <string name="expiration_date_notification">A(z) %1$s gyógyszer lejárati ideje: %2$s.\nFontolja meg a gyógyszer cseréjét.</string>
+    <string name="widget_disabled_privacy">A widgetek adatvédelmi okokból le vannak tiltva — nyissa meg az alkalmazást az emlékeztetők megtekintéséhez</string>
+    <string name="recent_events">Legutóbbi események</string>
+    <string name="next_reminders">Következő emlékeztetők</string>
+    <string name="all_taken">Minden bevéve (%s)</string>
+</resources>

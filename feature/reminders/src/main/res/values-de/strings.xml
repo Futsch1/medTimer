@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Erinnerung an ein Medikament</string>
+    <string name="refill_amount">Nachfüllen (%s)</string>
+    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
+    <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
+    <string name="widget_disabled_privacy">Widgets aus Datenschutzgründen deaktiviert — App öffnen, um Erinnerungen anzuzeigen</string>
+    <string name="recent_events">Kürzliche Ereignisse</string>
+    <string name="next_reminders">Nächste Erinnerungen</string>
+    <string name="all_taken">Alle eingenommen (%s)</string>
+</resources>

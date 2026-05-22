@@ -15,9 +15,6 @@
     <string name="confirm">Bestätigen</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
-    <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="recent_events">Kürzliche Ereignisse</string>
-    <string name="next_reminders">Nächste Erinnerungen</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
     <string name="clear_events">Gesamten Verlauf löschen</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="theme">Theme</string>
-    <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="before_meal">vor der Mahlzeit</string>
     <string name="after_meal">nach der Mahlzeit</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Zusätzliche Einnahme eintragen</string>
     <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
     <string name="skip_reminder">Überspringen</string>
-    <string name="snooze">Snooze</string>
     <string name="snooze_duration">Snooze Dauer</string>
     <string name="minutes_5">5 Minuten</string>
     <string name="minutes_10">10 Minuten</string>
@@ -103,7 +98,6 @@
     <string name="intro_analysis_description">Die App speichert alle Ereignisse. Sie können Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
-    <string name="high">Hoch</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
     <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
@@ -144,8 +138,6 @@
     <string name="interval_start_reminded">Intervall beginnt zum Zeitpunkt der Erinnerung</string>
     <string name="interval_start_processed">Intervall beginnt wenn eingenommen oder übersprungen</string>
     <string name="invalid_input">Ungültige Eingabe</string>
-    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
-    <string name="out_of_stock_notification_title">Erinnerung an Medikamentenvorrat</string>
     <string name="medicine_stock">Medikamentenvorrat</string>
     <string name="amount">Anzahl</string>
     <string name="reminder_threshold">Warnschwelle</string>
@@ -166,7 +158,6 @@
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
     <string name="disable_widget">Widgets auf dem Startbildschirm deaktivieren</string>
     <string name="disable_widget_summary">Verhindert, dass Widgets sensible Medikamenteninformationen auf dem Startbildschirm anzeigen</string>
-    <string name="widget_disabled_privacy">Widgets aus Datenschutzgründen deaktiviert — App öffnen, um Erinnerungen anzuzeigen</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
     <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
     <string name="display_settings">Anzeigeeinstellungen</string>
@@ -178,7 +169,6 @@
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
     <string name="please_wait">Bitte warten…</string>
     <string name="reminded">Erinnert</string>
-    <string name="all_taken">Alle eingenommen (%s)</string>
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>
     <string name="notes">Notizen</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Tag-Filter aktiv. Es werden nur Daten mit übereinstimmenden Tags exportiert.</string>
     <string name="show_taken_time_in_overview">Zeit der Einnahme in der Übersicht anzeigen</string>
     <string name="expiration_settings">Ablauf-Einstellungen</string>
-    <string name="expiration_reminder">Ablauf-Erinnerung</string>
     <string name="remind_days_before_expiration">Tage vor Ablauf erinnern</string>
     <string name="medicine_stock_settings">Medikamentenvorratseinstellungen</string>
     <string name="edit_medicine_stock_settings">Medikamentenvorratseinstellungen bearbeiten</string>
     <string name="clear_dates">Datumswerte löschen</string>
     <string name="acknowledged">Bestätigt</string>
-    <string name="refill_amount">Nachfüllen (%s)</string>
-    <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
     <string name="select_all">Alle auswählen</string>
     <string name="by_name">Nach Name</string>
     <string name="by_creation_date_ascending">Aufsteigend nach Erstellungsdatum</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach einem Snooze nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasierter Snooze erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>
     <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlauben Sie MedTimer den Hintergrundstandortzugriff</string>
-    <string name="snooze_until_home">Snooze bis zur Heimkehr</string>
     <string name="snooze_settings">Snooze-Einstellungen</string>
     <string name="home_location">Heimstandort</string>
     <string name="home_location_not_set">Nicht festgelegt</string>

@@ -20,7 +20,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import junit.framework.TestCase
 import org.hamcrest.Matchers.equalTo
@@ -311,7 +311,7 @@ class ReminderTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.x_circle)))
         )
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
         clickOn(com.futsch1.medtimer.core.ui.R.string.taken)

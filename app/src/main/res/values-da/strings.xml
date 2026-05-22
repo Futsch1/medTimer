@@ -10,9 +10,6 @@
     <string name="confirm">Bekræft</string>
     <string name="are_you_sure_delete_medicine">Er du sikker på, at du vil slette medicinen?</string>
     <string name="no_reminders">Ingen påmindelser angivet</string>
-    <string name="notification_title">Medicinpåmindelse</string>
-    <string name="recent_events">Seneste hændelser</string>
-    <string name="next_reminders">Næste påmindelser</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Er du sikker på, at du vil slette påmindelsen?</string>
     <string name="clear_events">Ryd al historik</string>
@@ -33,7 +30,6 @@
     <string name="create_reminder_dosage_hint">Dosis for ny påmindelse</string>
     <string name="cycle_consecutive_days">Aktive dage</string>
     <string name="theme">Tema</string>
-    <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="before_meal">før måltid</string>
     <string name="after_meal">efter måltid</string>
@@ -51,7 +47,6 @@
     <string name="log_additional_dose">Tilføj ekstra dosis</string>
     <string name="dismiss_notification_action">Handling ved afvisning af notifikation</string>
     <string name="skip_reminder">Spring dosis over</string>
-    <string name="snooze">Udsæt</string>
     <string name="snooze_duration">Udsættelsesvarighed</string>
     <string name="minutes_5">5 minutter</string>
     <string name="minutes_10">10 minutter</string>
@@ -99,7 +94,6 @@
     <string name="intro_analysis_description">Appen gemmer alle påmindelseshændelser. På analysesiden kan du gennemgå tidligere doser og eksportere historikken via menuen med tre prikker. Historikken bevares, selv hvis medicin eller påmindelser slettes eller omdøbes.</string>
     <string name="show_intro">Vis app-intro</string>
     <string name="are_you_sure_delete_reminder_event">Er du sikker på, at du vil slette påmindelseshændelsen?</string>
-    <string name="high">Høj</string>
     <string name="notification_importance">Notifikationsprioritet</string>
     <string name="notification_settings_default">Notifikationsindstillings standardprioritet</string>
     <string name="notification_settings_high">Notifikationsindstillings høj prioritet</string>
@@ -145,8 +139,6 @@
     <string name="add_reminder">Tilføj påmindelse</string>
     <string name="delete">Slet</string>
     <string name="time">Tid</string>
-    <string name="out_of_stock_notification">Kun %2$s af %1$s tilbage!\nOvervej at genopfylde medicinen snart.</string>
-    <string name="out_of_stock_notification_title">Påmindelse om lav medicinbeholdning</string>
     <string name="medicine_stock">Medicinbeholdning</string>
     <string name="amount">Mængde</string>
     <string name="reminder_threshold">Påmindelsesgrænse</string>
@@ -167,7 +159,6 @@
     <string name="hide_med_name">Skjul medicinnavn i notifikation</string>
     <string name="disable_widget">Deaktiver widgets på startskærmen</string>
     <string name="disable_widget_summary">Forhindre widgets i at vise følsomme medicin-oplysninger på startskærmen</string>
-    <string name="widget_disabled_privacy">Widgets deaktiveret af hensyn til privatlivets fred — åbn appen for at se påmindelser</string>
     <string name="re_raise_event">Genaktiver hændelse</string>
     <string name="notification_reminder_settings">Notifikations- og påmindelsesindstillinger</string>
     <string name="display_settings">Skærmindstillinger</string>
@@ -179,7 +170,6 @@
     <string name="big_notifications">Store notifikationsknapper</string>
     <string name="please_wait">Vent venligst…</string>
     <string name="reminded">Påmindet</string>
-    <string name="all_taken">Alle taget (%s)</string>
     <string name="estimated_run_out_date">Estimeret udløbsdato for lager</string>
     <string name="create_calendar_entry">Opret kalenderbegivenhed</string>
     <string name="notes">Noter</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Tagfilter aktivt. Kun data med matchende tags eksporteres.</string>
     <string name="show_taken_time_in_overview">Vis indtagelsestidspunkt i oversigten</string>
     <string name="expiration_settings">Indstillinger for udløbsdato</string>
-    <string name="expiration_reminder">Påmindelse om udløbsdato</string>
     <string name="remind_days_before_expiration">Mind om dage før udløb</string>
     <string name="medicine_stock_settings">Indstillinger for medicinlager</string>
     <string name="edit_medicine_stock_settings">Rediger indstillinger for medicinlager</string>
     <string name="clear_dates">Ryd datoer</string>
     <string name="acknowledged">Anerkendt</string>
-    <string name="refill_amount">Genopfyldning (%s)</string>
-    <string name="expiration_date_notification">Medicinen %1$s udløber den %2$s.\nOvervej at udskifte den.</string>
     <string name="select_all">Vælg alle</string>
     <string name="by_name">Efter navn</string>
     <string name="by_creation_date_ascending">Stigende efter oprettelsesdato</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Påmind igen ved hjemkomst efter udsættelse</string>
     <string name="location_snooze_no_play_services">Lokationsbaseret udsættelse kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
     <string name="location_snooze_background_permission">For at påminde igen ved hjemkomst skal MedTimer have adgang til din lokation i baggrunden</string>
-    <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="snooze_settings">Snooze-indstillinger</string>
     <string name="home_location">Hjemsted</string>
     <string name="home_location_not_set">Ikke angivet</string>

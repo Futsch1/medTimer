@@ -32,7 +32,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
@@ -165,7 +165,7 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.x_circle)))
         )
 
         // Now change to action taken on dismiss
@@ -194,7 +194,7 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
     }
 
@@ -547,13 +547,13 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
         assertCustomAssertionAtPosition(
             R.id.reminders,
             1,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
 
         AndroidTestHelper.longClickListItem(R.id.reminders, 0)
@@ -563,13 +563,13 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.x_circle)))
         )
         assertCustomAssertionAtPosition(
             R.id.reminders,
             1,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.x_circle)))
         )
     }
 
@@ -637,7 +637,7 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             1,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
 
         device.waitForIdle(2_000)
@@ -654,7 +654,7 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             2,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
         assertCustomAssertionAtPosition(
             R.id.reminders,

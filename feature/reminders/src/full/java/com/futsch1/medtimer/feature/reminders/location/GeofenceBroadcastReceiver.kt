@@ -1,0 +1,43 @@
+package com.futsch1.medtimer.feature.reminders.location
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingEvent
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class GeofenceBroadcastReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var locationSnoozeProcessor: LocationSnoozeProcessor
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
+
+    override fun onReceive(context: Context, intent: Intent) {
+        val event = GeofencingEvent.fromIntent(intent) ?: return
+        handleGeofencingEvent(event)
+    }
+
+    fun handleGeofencingEvent(event: GeofencingEvent) {
+        if (event.hasError()) {
+            Log.e(LogTags.LOCATION, "Geofence error code: ${event.errorCode}")
+            return
+        }
+        if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
+            applicationScope.launch {
+                locationSnoozeProcessor.processLocationSnooze()
+            }
+        }
+    }
+}

@@ -11,7 +11,6 @@
     <string name="invalid_input">Nieprawidłowe wprowadzenie</string>
     <string name="override_dnd">Zawsze odtwarzaj dźwięk powiadomienia</string>
     <string name="seven_days">7 dni</string>
-    <string name="recent_events">Ostatnie zdarzenia</string>
     <string name="active">Aktywne</string>
     <string name="wednesday">Środa</string>
     <string name="number_of_repetitions">Liczba powtórzeń</string>
@@ -20,7 +19,6 @@
     <string name="time">Czas</string>
     <string name="ok">OK</string>
     <string name="filter">Filtruj</string>
-    <string name="next_reminders">Kolejne przypomnienia</string>
     <string name="tab_medicine">Lekarstwa</string>
     <string name="medicine_name">Nazwa leku</string>
     <string name="add_reminder">Dodaj przypomnienie</string>
@@ -41,7 +39,6 @@
     <string name="create_reminder_dosage_hint">Dawkowanie dla nowego przypomnienia</string>
     <string name="cycle_consecutive_days">Aktywne dni</string>
     <string name="theme">Motyw</string>
-    <string name="default_">Domyślny</string>
     <string name="alternative">Alternatywny</string>
     <string name="before_meal">przed posiłkiem</string>
     <string name="after_meal">po posiłku</string>
@@ -59,7 +56,6 @@
     <string name="log_additional_dose">Zarejestruj dodatkową dawkę</string>
     <string name="dismiss_notification_action">Działanie przy odrzuceniu powiadomienia</string>
     <string name="skip_reminder">Pomiń dawkę</string>
-    <string name="snooze">Drzemka</string>
     <string name="snooze_duration">Czas drzemki</string>
     <string name="minutes_5">5 minut</string>
     <string name="minutes_15">15 minut</string>
@@ -93,7 +89,6 @@
     <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia dla różnych dawek, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub odstępach oraz ograniczone do określonych dni.</string>
     <string name="show_intro">Pokaż intro aplikacji</string>
     <string name="are_you_sure_delete_reminder_event">Czy na pewno chcesz usunąć wydarzenie przypomnienia?</string>
-    <string name="high">Wysoki</string>
     <string name="notification_importance">Priorytet powiadomień</string>
     <string name="calendar">Kalendarz</string>
     <string name="deactivate_all">Wyłącz wszystkie przypomnienia</string>
@@ -113,7 +108,6 @@
     <string name="minutes_string">Minut</string>
     <string name="hours_string">Godzin</string>
     <string name="create_reminder">Utwórz przypomnienie</string>
-    <string name="out_of_stock_notification_title">Przypomnienie o wyczerpaniu zapasów leków</string>
     <string name="medicine_stock">Zapasy leków</string>
     <string name="reminder_threshold">Próg przypomnienia</string>
     <string name="refill_size">Rozmiar uzupełnienia</string>
@@ -127,7 +121,6 @@
     <string name="intro_notification_description">Gdy nadejdzie termin przypomnienia, pojawi się powiadomienie, które umożliwi Ci oznaczenie dawki jako przyjętej (poprzez kliknięcie przycisku „PRZYJĘTO”), pominięcie jej (poprzez odrzucenie powiadomienia) lub ponowne wyświetlenie przypomnienia po pewnym czasie („DRZEMKA”).</string>
     <string name="tab_settings">Ustawienia</string>
     <string name="add_medicine">Dodaj lek</string>
-    <string name="notification_title">Przypomnienie o leku</string>
     <string name="dosage">Dawkowanie</string>
     <string name="no_reminders">Nie ustawiono przypomnień</string>
     <string name="interval_start_time">Czas rozpoczęcia</string>
@@ -142,10 +135,8 @@
     <string name="hide_med_name">Ukryj nazwę leku w powiadomieniu</string>
     <string name="disable_widget">Wyłącz widgety na ekranie głównym</string>
     <string name="disable_widget_summary">Zapobiegaj wyświetlaniu przez widgety wrażliwych informacji o lekach na ekranie głównym</string>
-    <string name="widget_disabled_privacy">Widgety wyłączone ze względu na prywatność — otwórz aplikację, aby wyświetlić przypomnienia</string>
     <string name="date">Data</string>
     <string name="exact_reminders_summary">Przypomnienia są zaplanowane na dokładny czas (zwiększa to zużycie baterii)</string>
-    <string name="out_of_stock_notification">Zostało tylko %2$s z %1$s!\nRozważ uzupełnienie leku wkrótce.</string>
     <string name="edit_event">Edytuj zdarzenie</string>
     <string name="period_start">Początek okresu</string>
     <string name="intro_overview_description">Na ekranie przeglądu możesz zobaczyć nadchodzące przypomnienia i ostatnie wydarzenia przypomnień. Wydarzenia przypomnień można edytować, przesuwając w prawo i usuwać, przesuwając w lewo.\n\nCo więcej, możesz ręcznie wprowadzić dodatkowe dawki jednego ze skonfigurowanych lub niestandardowych leków.</string>
@@ -180,7 +171,6 @@
     <string name="big_notifications">Duże przyciski powiadomień</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="reminded">Przypomniano</string>
-    <string name="all_taken">Przyjęto wszystko (%s)</string>
     <string name="estimated_run_out_date">Szacowana data wyczerpania</string>
     <string name="create_calendar_entry">Utwórz wpis w kalendarzu</string>
     <string name="notes">Notatki</string>
@@ -222,14 +212,11 @@
     <string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
     <string name="show_taken_time_in_overview">Pokaż godzinę przyjęcia w przeglądzie</string>
     <string name="expiration_settings">Ustawienia wygaśnięcia</string>
-    <string name="expiration_reminder">Przypomnienie o wygaśnięciu</string>
     <string name="remind_days_before_expiration">Przypomnij dni przed wygaśnięciem</string>
     <string name="medicine_stock_settings">Ustawienia zapasów leków</string>
     <string name="edit_medicine_stock_settings">Edytuj ustawienia zapasów leków</string>
     <string name="clear_dates">Wyczyść daty</string>
     <string name="acknowledged">Potwierdzono</string>
-    <string name="refill_amount">Uzupełnienie (%s)</string>
-    <string name="expiration_date_notification">Ważność %1$s kończy się %2$s.\nRozważ wymianę leku.</string>
     <string name="select_all">Zaznacz wszystko</string>
     <string name="by_name">Według nazwy</string>
     <string name="by_creation_date_ascending">Rosnąco według daty utworzenia</string>
@@ -247,7 +234,6 @@
     <string name="location_snooze_summary">Ponownie powiadom po przybyciu do domu po drzemce</string>
     <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga usług Google Play, które nie są dostępne na tym urządzeniu</string>
     <string name="location_snooze_background_permission">Aby ponownie otrzymywać powiadomienia po przybyciu do domu, zezwól MedTimer na dostęp do lokalizacji w tle</string>
-    <string name="snooze_until_home">Drzemka do powrotu do domu</string>
     <string name="snooze_settings">Ustawienia drzemki</string>
     <string name="home_location">Lokalizacja domowa</string>
     <string name="home_location_not_set">Nie ustawiono</string>

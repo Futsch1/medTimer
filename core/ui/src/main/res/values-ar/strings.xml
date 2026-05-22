@@ -73,4 +73,10 @@
     <string name="once_below_threshold">مرة واحدة عند الانخفاض عن الحد الأدنى</string>
     <string name="always_below_threshold">دائمًا عند الانخفاض عن الحد الأدنى</string>
     <string name="daily_below_threshold">يوميًا عندما يقل عن الحد الأدنى</string>
+    <string name="out_of_stock_notification_title">تذكير بنفاد مخزون الدواء</string>
+    <string name="snooze_until_home">تأجيل حتى العودة للمنزل</string>
+    <string name="default_">افتراضي</string>
+    <string name="high">مرتفع</string>
+    <string name="snooze">غفوة</string>
+    <string name="expiration_reminder">تذكير بانتهاء الصلاحية</string>
 </resources>

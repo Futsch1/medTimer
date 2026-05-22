@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Recordatorio de medicación</string>
+    <string name="refill_amount">Rellenar (%s)</string>
+    <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
+    <string name="expiration_date_notification">El medicamento %1$s caduca el %2$s.\nConsidere reemplazar el medicamento.</string>
+    <string name="widget_disabled_privacy">Widgets deshabilitados por privacidad — abre la aplicación para ver los recordatorios</string>
+    <string name="recent_events">Eventos recientes</string>
+    <string name="next_reminders">Siguientes recordatorios</string>
+    <string name="all_taken">Todas tomadas (%s)</string>
+</resources>

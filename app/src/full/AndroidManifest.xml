@@ -9,15 +9,4 @@
         android:minSdkVersion="29"
         tools:ignore="BackgroundLocationPolicy" />
 
-    <application android:icon="@mipmap/logo">
-        <receiver
-            android:name=".location.GeofenceBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.futsch1.medtimer.GEOFENCE_TRANSITION" />
-            </intent-filter>
-        </receiver>
-    </application>
-
 </manifest>

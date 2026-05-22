@@ -15,9 +15,6 @@
     <string name="confirm">Staðfesta</string>
     <string name="are_you_sure_delete_medicine">Ert þú viss um að þú viljir eyða þessu lyfi?</string>
     <string name="no_reminders">Engar áminningar</string>
-    <string name="notification_title">Áminning um lyfjatöku</string>
-    <string name="recent_events">Nýleg atvik</string>
-    <string name="next_reminders">Næstu áminningar</string>
     <string name="version">Útgáfa %s</string>
     <string name="are_you_sure_delete_reminder">Ertu viss um að þú viljir eyða áminningu?</string>
     <string name="clear_events">Hreinsa alla sögu</string>
@@ -37,7 +34,6 @@
     <string name="generate_test_data">Búa til prófunargögn</string>
     <string name="cycle_consecutive_days">Virkir dagar</string>
     <string name="theme">Þema</string>
-    <string name="default_">Sjálfgefið</string>
     <string name="alternative">Valkostur</string>
     <string name="before_meal">fyrir máltíð</string>
     <string name="after_meal">eftir máltíð</string>
@@ -55,7 +51,6 @@
     <string name="log_additional_dose">Skrá auka-lyfjatöku</string>
     <string name="dismiss_notification_action">Aðgerð þegar þú hunsar tilkynningu</string>
     <string name="skip_reminder">Sleppa skamti</string>
-    <string name="snooze">Snooze</string>
     <string name="snooze_duration">Snooze-tími</string>
     <string name="minutes_5">5 mínútur</string>
     <string name="minutes_10">10 mínútur</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">Forritið geymir allar áminningar. Þú getur skoðað fyrri skammta á greiningar-skjánum og flutt út lyfja-annál með því smella á punktana þrjá. Lyfja-annállinn verður geymdur þótt þú fjarlægir lyf eða eyðir áminningum.</string>
     <string name="show_intro">Sýna upplýsingar um forrit</string>
     <string name="are_you_sure_delete_reminder_event">Ertu viss um að þú viljir eyða þessari áminningu?</string>
-    <string name="high">Hátt</string>
     <string name="notification_importance">Forgangur tilkynninga</string>
     <string name="notification_settings_default">Sjálfgefinn forgangur tilkynninga</string>
     <string name="notification_settings_high">Tilkynningar með háan forgang</string>
@@ -145,8 +139,6 @@
     <string name="interval_start_reminded">Tímabil byrjar við áminningu</string>
     <string name="interval_start_processed">Tímabil hefst þegar tekið eða sleppt</string>
     <string name="invalid_input">Ógildur innsláttur</string>
-    <string name="out_of_stock_notification">Aðeins%2$s af %1$s eftir!\nHuga að áfyllingu.</string>
-    <string name="out_of_stock_notification_title">Áminning um að lyf sé ekki til</string>
     <string name="medicine_stock">Lyfjastaða</string>
     <string name="amount">Magn</string>
     <string name="duplicate">Afrita</string>
@@ -159,7 +151,6 @@
     <string name="location_snooze_summary">Tilkynna aftur við heimkomu eftir snooze</string>
     <string name="location_snooze_no_play_services">Staðsetningarbundið snooze krefst Google Play Services, sem er ekki tiltækt á þessum tæki</string>
     <string name="location_snooze_background_permission">Til að fá tilkynningu við heimkomu skaltu leyfa MedTimer að fá aðgang að staðsetningu í bakgrunni</string>
-    <string name="snooze_until_home">Snooze þar til heim</string>
     <string name="snooze_settings">Snooze-stillingar</string>
     <string name="home_location">Heimilisstaðsetning</string>
     <string name="home_location_not_set">Ekki stillt</string>

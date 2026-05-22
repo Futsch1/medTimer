@@ -58,4 +58,10 @@
     <string name="once_below_threshold">Una sola volta quando scende sotto la soglia</string>
     <string name="always_below_threshold">Sempre quando scende sotto la soglia</string>
     <string name="daily_below_threshold">Giornalmente sotto soglia</string>
+    <string name="out_of_stock_notification_title">Promemoria di esaurimento della scorta del farmaco</string>
+    <string name="snooze_until_home">Posticipa fino al ritorno a casa</string>
+    <string name="default_">Predefinito</string>
+    <string name="high">Alta</string>
+    <string name="snooze">Posticipa</string>
+    <string name="expiration_reminder">Promemoria di scadenza</string>
 </resources>

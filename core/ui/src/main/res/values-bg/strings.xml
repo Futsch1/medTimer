@@ -53,4 +53,10 @@
     <string name="once_below_threshold">Веднъж при падане под прага</string>
     <string name="always_below_threshold">Винаги, когато е под прага</string>
     <string name="daily_below_threshold">Ежедневно при под прага</string>
+    <string name="out_of_stock_notification_title">Напомняне за свършило лекарство</string>
+    <string name="snooze_until_home">Отлагане до завръщане вкъщи</string>
+    <string name="default_">По подразбиране</string>
+    <string name="high">Висок</string>
+    <string name="snooze">Отлагане</string>
+    <string name="expiration_reminder">Напомняне за изтичане на срока</string>
 </resources>

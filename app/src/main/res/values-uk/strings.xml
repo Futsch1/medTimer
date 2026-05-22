@@ -10,7 +10,6 @@
     <string name="dosage">Дозування</string>
     <string name="yes">Так</string>
     <string name="ok">ОК</string>
-    <string name="recent_events">Нещодавні події</string>
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
     <string name="show_notifications">Показувати сповіщення</string>
     <string name="twenty_four_hours">24 години</string>
@@ -18,7 +17,6 @@
     <string name="exact_reminders_summary">Нагадування заплановано на точний час (збільшує використання батареї)</string>
     <string name="generate_test_data">Згенерувати тестові дані</string>
     <string name="create_reminder_dosage_hint">Дозування для нового нагадування</string>
-    <string name="default_">Типові</string>
     <string name="alternative">Альтернативна</string>
     <string name="before_meal">до їди</string>
     <string name="time_before_meal">за Х хвилин до прийому їжі</string>
@@ -29,13 +27,10 @@
     <string name="restore_start">Це замінить усі налаштування ліків та/або подій нагадувань.\n\nПродовжити?</string>
     <string name="log_additional_dose">Записати додаткову дозу</string>
     <string name="skip_reminder">Пропустити дозу</string>
-    <string name="snooze">Відкласти</string>
     <string name="add_medicine">Додати ліки</string>
-    <string name="notification_title">Нагадування про ліки</string>
     <string name="cancel">Скасувати</string>
     <string name="are_you_sure_delete_medicine">Певнені, що хочете видалити ліки?</string>
     <string name="no_reminders">Нагадування не встановлено</string>
-    <string name="next_reminders">Наступне нагадування</string>
     <string name="select_color">Обрати колір</string>
     <string name="time_after">через Х годин після прийому їжі</string>
     <string name="app_version">Версія застосунку</string>
@@ -99,7 +94,6 @@
     <string name="intro_analysis_description">Додаток зберігає всі події нагадування. Ви можете проаналізувати свої минулі дози на екрані аналізу та експортувати історію за допомогою меню &amp;quot;кебаб&amp;quot; (три крапки). Історія збережеться, навіть якщо ліки або нагадування будуть видалені або перейменовані.</string>
     <string name="show_intro">Показати вступ до програми</string>
     <string name="are_you_sure_delete_reminder_event">Ви впевнені, що хочете видалити подію-нагадування?</string>
-    <string name="high">Високий</string>
     <string name="notification_importance">Пріоритет сповіщення</string>
     <string name="notification_settings_default">Налаштування сповіщень за замовчуванням Пріоритет за замовчуванням</string>
     <string name="notification_settings_high">Налаштування сповіщень з високим пріоритетом</string>
@@ -140,8 +134,6 @@
     <string name="interval_start_reminded">Відлік починається після нагадування</string>
     <string name="interval_start_processed">Відлік починається після прийому чи пропуску</string>
     <string name="invalid_input">Некоректне значення</string>
-    <string name="out_of_stock_notification">Залишилося %2$s доза %1$s!\nПоповніть запас ліків найближчим часом.</string>
-    <string name="out_of_stock_notification_title">Скінчилися ліки</string>
     <string name="medicine_stock">Запас медикаментів</string>
     <string name="amount">В наявності</string>
     <string name="reminder_threshold">Поріг нагадування</string>
@@ -168,7 +160,6 @@
     <string name="hide_med_name">Приховати назву препарату в сповіщенні</string>
     <string name="disable_widget">Вимкнути віджети головного екрану</string>
     <string name="disable_widget_summary">Заборонити віджетам відображати конфіденційну інформацію про ліки на головному екрані</string>
-    <string name="widget_disabled_privacy">Віджети вимкнено для захисту конфіденційності — відкрийте програму для перегляду нагадувань</string>
     <string name="re_raise_event">Повторно запустити подію</string>
     <string name="notification_reminder_settings">Налаштування сповіщень та нагадувань</string>
     <string name="display_settings">Налаштування відображення</string>
@@ -180,7 +171,6 @@
     <string name="big_notifications">Великі кнопки сповіщень</string>
     <string name="please_wait">Будь ласка, зачекайте…</string>
     <string name="reminded">Нагадано</string>
-    <string name="all_taken">Усе прийнято (%s)</string>
     <string name="estimated_run_out_date">Орієнтовна дата закінчення запасу</string>
     <string name="create_calendar_entry">Створити запис у календарі</string>
     <string name="notes">Нотатки</string>
@@ -222,14 +212,11 @@
     <string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
     <string name="show_taken_time_in_overview">Показати час прийому в огляді</string>
     <string name="expiration_settings">Налаштування терміну придатності</string>
-    <string name="expiration_reminder">Нагадування про термін придатності</string>
     <string name="remind_days_before_expiration">Нагадувати за дні до закінчення терміну придатності</string>
     <string name="medicine_stock_settings">Налаштування запасу ліків</string>
     <string name="edit_medicine_stock_settings">Редагувати налаштування запасу ліків</string>
     <string name="clear_dates">Очистити дати</string>
     <string name="acknowledged">Підтверджено</string>
-    <string name="refill_amount">Поповнити (%s)</string>
-    <string name="expiration_date_notification">Термін придатності ліків %1$s закінчується %2$s.\nРозгляньте можливість заміни ліків.</string>
     <string name="select_all">Вибрати все</string>
     <string name="by_name">За назвою</string>
     <string name="by_creation_date_ascending">За зростанням дати створення</string>
@@ -247,7 +234,6 @@
     <string name="location_snooze_summary">Повторно повідомити при поверненні додому після відкладення</string>
     <string name="location_snooze_no_play_services">Відкладення за місцезнаходженням вимагає Google Play Services, які недоступні на цьому пристрої</string>
     <string name="location_snooze_background_permission">Щоб отримувати сповіщення при поверненні додому, дозвольте MedTimer доступ до місцезнаходження у фоновому режимі</string>
-    <string name="snooze_until_home">Відкласти до повернення додому</string>
     <string name="snooze_settings">Налаштування відкладення</string>
     <string name="home_location">Домашнє місцезнаходження</string>
     <string name="home_location_not_set">Не задано</string>

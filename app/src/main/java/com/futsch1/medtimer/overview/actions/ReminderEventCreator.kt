@@ -7,7 +7,7 @@ import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
+import com.futsch1.medtimer.feature.reminders.ReminderNotificationProcessor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

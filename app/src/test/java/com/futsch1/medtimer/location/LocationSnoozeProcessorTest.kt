@@ -1,9 +1,9 @@
-package com.futsch1.medtimer.location
+package com.futsch1.medtimer.feature.reminders.location
 
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
-import com.futsch1.medtimer.reminders.AlarmProcessor
-import com.futsch1.medtimer.reminders.LocationSnoozeProcessor
+import com.futsch1.medtimer.feature.reminders.AlarmProcessor
+import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

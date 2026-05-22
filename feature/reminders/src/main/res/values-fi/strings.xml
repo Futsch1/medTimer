@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Lääkemuistutus</string>
+    <string name="refill_amount">Täyttö (%s)</string>
+    <string name="out_of_stock_notification">Enää %2$s jäljellä lääkettä %1$s!\nHarkitse lääkkeen täyttämistä pian.</string>
+    <string name="expiration_date_notification">Lääkkeen %1$s viimeinen käyttöpäivä on %2$s.\nHarkitse lääkkeen vaihtamista.</string>
+    <string name="widget_disabled_privacy">Widgetit poistettu käytöstä yksityisyydensuojan vuoksi — avaa sovellus nähdäksesi muistutukset</string>
+    <string name="recent_events">Viimeaikaiset tapahtumat</string>
+    <string name="next_reminders">Seuraavat muistutukset</string>
+    <string name="all_taken">Kaikki otettu (%s)</string>
+</resources>

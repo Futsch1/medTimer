@@ -15,9 +15,6 @@
     <string name="confirm">אישור</string>
     <string name="are_you_sure_delete_medicine">האם אתם בטוחים שאתם רוצים למחוק את התרופה?</string>
     <string name="no_reminders">לא הוגדרו התראות</string>
-    <string name="notification_title">תזכורת תרופות</string>
-    <string name="recent_events">אירועים אחרונים</string>
-    <string name="next_reminders">ההתראות הבאות</string>
     <string name="version">גרסה %s</string>
     <string name="are_you_sure_delete_reminder">האם אתם בטוחים שאתם רוצים למחוק את ההתראה?</string>
     <string name="clear_events">מחק את כל ההיסטוריה</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">מינון לתזכורת חדשה</string>
     <string name="cycle_consecutive_days">ימים פעילים</string>
     <string name="theme">ערכת נושא</string>
-    <string name="default_">ברירת מחדל</string>
     <string name="alternative">חלופה</string>
     <string name="before_meal">לפני האוכל</string>
     <string name="after_meal">אחרי האוכל</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">רשום מינון נוסף</string>
     <string name="dismiss_notification_action">פעולה בזמן סגירת התראה</string>
     <string name="skip_reminder">דלגו על מינון</string>
-    <string name="snooze">דחו</string>
     <string name="snooze_duration">משך זמן הדחייה</string>
     <string name="minutes_5">5 דקות</string>
     <string name="minutes_10">10 דקות</string>
@@ -101,7 +96,6 @@
     <string name="intro_medicine_description">תשתמשו בלשונית \"תרופות\" כדי ליצור את התרופות שאתם נוטלים ורוצים לקבל עליהן תזכורת. אתם יכולים להקצות תגים לתרופות ולהגדיר את המלאי שלהן.</string>
     <string name="show_intro">הראה מבוא לאפליקציה</string>
     <string name="are_you_sure_delete_reminder_event">האם אתם בטוחים שאתם רוצים למחוק את אירוע התזכורת?</string>
-    <string name="high">גבוה</string>
     <string name="notification_importance">עדיפות התראה</string>
     <string name="notification_settings_default">עדיפות ברירת מחדל של הגדרות התראה</string>
     <string name="notification_settings_high">עדיפות גבוהה בהגדרות ההתראה</string>
@@ -142,8 +136,6 @@
     <string name="interval_start_reminded">זמן תחילת מחזור לאחר תזכורת</string>
     <string name="interval_start_processed">מחזור מתחיל אחרי נטילה או דילוג</string>
     <string name="invalid_input">קלט לא חוקי</string>
-    <string name="out_of_stock_notification">נותרו רק %2$s מתוך %1$s!\nשקלו למלא מחדש את התרופות בקרוב.</string>
-    <string name="out_of_stock_notification_title">תזכורת לתרופות שלא במלאי</string>
     <string name="medicine_stock">מלאי תרופות</string>
     <string name="amount">כמות</string>
     <string name="reminder_threshold">סף תזכורת</string>
@@ -164,7 +156,6 @@
     <string name="hide_med_name">הסתר את שם התרופות בהתראה</string>
     <string name="disable_widget">השבת ווידג\'טים של מסך הבית</string>
     <string name="disable_widget_summary">מניעת הצגת מידע רגיש על תרופות על ידי ווידג\'טים במסך הבית</string>
-    <string name="widget_disabled_privacy">ווידג\'טים מושבתים לצורכי פרטיות — פתח את האפליקציה לצפייה בתזכורות</string>
     <string name="re_raise_event">הקפצו את האירוע</string>
     <string name="notification_reminder_settings">הגדרות תזכורות והתראות</string>
     <string name="display_settings">הגדרות תצוגה</string>
@@ -182,7 +173,6 @@
     <string name="big_notifications">כפתורי התראה גדולים</string>
     <string name="please_wait">אנא המתינו…</string>
     <string name="reminded">הוזכר</string>
-    <string name="all_taken">הכל נלקח (%s)</string>
     <string name="estimated_run_out_date">תאריך משוער לגמר המלאי</string>
     <string name="create_calendar_entry">צרו אירוע בלוח שנה</string>
     <string name="notes">פתקים</string>
@@ -221,14 +211,11 @@
     <string name="tag_filter_active">מסנן התגיות פעיל. רק נתונים עם תגיות תואמות ייוצאו.</string>
     <string name="show_taken_time_in_overview">הצג את שעת הנטילה בסקירה הכללית</string>
     <string name="expiration_settings">הגדרות תפוגה</string>
-    <string name="expiration_reminder">תזכורת תפוגה</string>
     <string name="remind_days_before_expiration">תזכורת ימים לפני תפוגה</string>
     <string name="medicine_stock_settings">הגדרות מלאי תרופות</string>
     <string name="edit_medicine_stock_settings">ערוך הגדרות מלאי תרופות</string>
     <string name="clear_dates">נקה תאריכים</string>
     <string name="acknowledged">אשר</string>
-    <string name="refill_amount">מילוי (%s)</string>
-    <string name="expiration_date_notification">התרופה %1$s תפוג ב%2$s.\nשיקלו להחליף את התרופה.</string>
     <string name="select_all">בחר הכל</string>
     <string name="by_name">לפי שם</string>
     <string name="by_creation_date_ascending">עולה לפי תאריך יצירה</string>
@@ -246,7 +233,6 @@
     <string name="location_snooze_summary">הודעה חוזרת עם החזרה הביתה לאחר דחייה</string>
     <string name="location_snooze_no_play_services">נודניק מבוסס מיקום דורש שירותי Google Play, שאינם זמינים במכשיר זה</string>
     <string name="location_snooze_background_permission">כדי לקבל הודעה חוזרת עם החזרה הביתה, אפשר ל-MedTimer גישה למיקום ברקע</string>
-    <string name="snooze_until_home">נודניק עד הבית</string>
     <string name="snooze_settings">הגדרות נודניק</string>
     <string name="home_location">מיקום הבית</string>
     <string name="home_location_not_set">לא הוגדר</string>

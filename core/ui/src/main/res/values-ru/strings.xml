@@ -59,4 +59,10 @@
     <string name="once_below_threshold">Один раз при падении ниже порога</string>
     <string name="always_below_threshold">Всегда, когда ниже порога</string>
     <string name="daily_below_threshold">Ежедневно при уровне ниже порогового</string>
+    <string name="out_of_stock_notification_title">Напоминание об отсутствии лекарств на складе</string>
+    <string name="snooze_until_home">Отложить до возвращения домой</string>
+    <string name="default_">По умолчанию</string>
+    <string name="high">Высокий</string>
+    <string name="snooze">Отложить</string>
+    <string name="expiration_reminder">Напоминание о сроке годности</string>
 </resources>

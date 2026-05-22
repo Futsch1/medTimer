@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Påminnelse om medicinering</string>
+    <string name="refill_amount">Fyll på (%s)</string>
+    <string name="out_of_stock_notification">Bara %2$s av %1$s kvar!\nKolla om du behöver förnya receptet.</string>
+    <string name="expiration_date_notification">Medicinen %1$s har ett utgångsdatum den %2$s.\nÖverväg att byta ut medicinen.</string>
+    <string name="widget_disabled_privacy">Widgets inaktiverade av integritetsskäl — öppna appen för att se påminnelser</string>
+    <string name="recent_events">Senaste händelserna</string>
+    <string name="next_reminders">Kommande påminnelser</string>
+    <string name="all_taken">Allt intaget (%s)</string>
+</resources>

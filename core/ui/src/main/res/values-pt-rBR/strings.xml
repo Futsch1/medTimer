@@ -58,4 +58,10 @@
     <string name="once_below_threshold">Uma vez quando abaixo do limite</string>
     <string name="always_below_threshold">Sempre quando abaixo do limite</string>
     <string name="daily_below_threshold">Diariamente abaixo do limite</string>
+    <string name="out_of_stock_notification_title">Lembrete de medicamento sem estoque</string>
+    <string name="snooze_until_home">Soneca até chegar em casa</string>
+    <string name="default_">Padrão</string>
+    <string name="high">Alta</string>
+    <string name="snooze">Adiar</string>
+    <string name="expiration_reminder">Lembrete de vencimento</string>
 </resources>

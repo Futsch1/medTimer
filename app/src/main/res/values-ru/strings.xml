@@ -15,9 +15,6 @@
     <string name="confirm">Подтвердить</string>
     <string name="are_you_sure_delete_medicine">Вы точно хотите удалить лекарство?</string>
     <string name="no_reminders">Не установлено напоминаний</string>
-    <string name="notification_title">Напоминание о лекарстве</string>
-    <string name="recent_events">Последние события</string>
-    <string name="next_reminders">Следующие напоминания</string>
     <string name="version">Версия %s</string>
     <string name="are_you_sure_delete_reminder">Вы точно хотите удалить напоминание?</string>
     <string name="clear_events">Очистить всю историю</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Доза для нового напоминания</string>
     <string name="cycle_consecutive_days">Активные дни</string>
     <string name="theme">Тема</string>
-    <string name="default_">По умолчанию</string>
     <string name="alternative">Альтернативная</string>
     <string name="before_meal">перед едой</string>
     <string name="after_meal">после еды</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Записать дополнительную дозу</string>
     <string name="dismiss_notification_action">Действие при закрытии уведомления</string>
     <string name="skip_reminder">Пропустить дозу</string>
-    <string name="snooze">Отложить</string>
     <string name="snooze_duration">Время, на которое нужно отложить</string>
     <string name="minutes_5">5 минут</string>
     <string name="minutes_10">10 минут</string>
@@ -105,7 +100,6 @@
     <string name="intro_analysis_description">Приложение сохраняет все события напоминаний. Вы можете проанализировать свои прошлые дозы на экране анализа и экспортировать свою историю через меню (три точки). История останется, даже если лекарства или напоминания будут удалены или переименованы.</string>
     <string name="show_intro">Показать описание приложения</string>
     <string name="are_you_sure_delete_reminder_event">Вы точно хотите удалить событие напоминания?</string>
-    <string name="high">Высокий</string>
     <string name="notification_importance">Приоритет напоминаний</string>
     <string name="notification_settings_default">Настройки уведомлений стандартного приоритета</string>
     <string name="notification_settings_high">Настройки уведомлений высокого приоритета</string>
@@ -146,8 +140,6 @@
     <string name="interval_start_reminded">Интервал начинается с момента напоминания</string>
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
     <string name="invalid_input">Недопустимый ввод</string>
-    <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
-    <string name="out_of_stock_notification_title">Напоминание об отсутствии лекарств на складе</string>
     <string name="medicine_stock">Запас медикаментов</string>
     <string name="amount">Сумма</string>
     <string name="reminder_threshold">Порог напоминания</string>
@@ -168,7 +160,6 @@
     <string name="hide_med_name">Скрыть название лекарства в уведомлении</string>
     <string name="disable_widget">Отключить виджеты главного экрана</string>
     <string name="disable_widget_summary">Запретить виджетам отображать конфиденциальную информацию о лекарствах на главном экране</string>
-    <string name="widget_disabled_privacy">Виджеты отключены для защиты конфиденциальности — откройте приложение для просмотра напоминаний</string>
     <string name="re_raise_event">Повторно вызвать событие</string>
     <string name="notification_reminder_settings">Настройки уведомлений и напоминаний</string>
     <string name="display_settings">Настройки дисплея</string>
@@ -180,7 +171,6 @@
     <string name="big_notifications">Большие кнопки уведомлений</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="reminded">Напомнили</string>
-    <string name="all_taken">Все принято (%s)</string>
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
     <string name="create_calendar_entry">Создать запись в календаре</string>
     <string name="notes">Заметки</string>
@@ -222,14 +212,11 @@
     <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
     <string name="show_taken_time_in_overview">Показать время приёма в обзоре</string>
     <string name="expiration_settings">Настройки срока годности</string>
-    <string name="expiration_reminder">Напоминание о сроке годности</string>
     <string name="remind_days_before_expiration">Напоминать за дни до истечения срока годности</string>
     <string name="medicine_stock_settings">Настройки запасов лекарств</string>
     <string name="edit_medicine_stock_settings">Изменить настройки запасов лекарств</string>
     <string name="clear_dates">Очистить даты</string>
     <string name="acknowledged">Подтверждено</string>
-    <string name="refill_amount">Пополнить (%s)</string>
-    <string name="expiration_date_notification">Срок годности лекарства %1$s истекает %2$s.\nРассмотрите возможность замены лекарства.</string>
     <string name="select_all">Выбрать все</string>
     <string name="by_name">По имени</string>
     <string name="by_creation_date_ascending">По возрастанию даты создания</string>
@@ -247,7 +234,6 @@
     <string name="location_snooze_summary">Повторно уведомить при возвращении домой после отсрочки</string>
     <string name="location_snooze_no_play_services">Отсрочка по местоположению требует Google Play Services, которые недоступны на этом устройстве</string>
     <string name="location_snooze_background_permission">Чтобы получать уведомления при возвращении домой, разрешите MedTimer доступ к местоположению в фоне</string>
-    <string name="snooze_until_home">Отложить до возвращения домой</string>
     <string name="snooze_settings">Настройки отложенных уведомлений</string>
     <string name="home_location">Домашнее местоположение</string>
     <string name="home_location_not_set">Не задано</string>

@@ -53,4 +53,10 @@
     <string name="once_below_threshold">Άπαξ, όταν υπολειφθεί του ορίου</string>
     <string name="always_below_threshold">Διαρκώς, όταν υπολειφθεί του ορίου</string>
     <string name="daily_below_threshold">Σε καθημερινή βάση, όταν υπολειφθεί του ορίου</string>
+    <string name="out_of_stock_notification_title">Υπενθύμιση εξάντλησης αποθέματος φαρμάκου</string>
+    <string name="snooze_until_home">Αναβολή έως επιστροφή στο σπίτι</string>
+    <string name="default_">Προεπιλεγμένη</string>
+    <string name="high">Υψηλή</string>
+    <string name="snooze">Αναβολή</string>
+    <string name="expiration_reminder">Υπενθύμιση λήξης</string>
 </resources>

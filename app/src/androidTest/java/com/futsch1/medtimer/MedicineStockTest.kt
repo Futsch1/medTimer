@@ -23,7 +23,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.equalTo
@@ -37,7 +37,7 @@ class MedicineStockTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun medicineStockTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
+        val notificationTitle = context.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title)
 
         AndroidTestHelper.createMedicine("Test")
         // Interval reminder (amount 3.5) 10 minutes from now
@@ -185,7 +185,7 @@ class MedicineStockTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         openNotification().use {
             device.wait(
-                Until.findObject(By.textContains(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))),
+                Until.findObject(By.textContains(context.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title).substring(0, 30))),
                 1_000
             )
             internalAssert(device.findObject(By.textContains("T******")) != null)
@@ -352,7 +352,7 @@ class MedicineStockTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.deleteButton)
@@ -441,7 +441,7 @@ class MedicineStockTest : BaseTestHelper() {
     fun dailyStockReminderTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
+        val notificationTitle = context.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title)
 
         AndroidTestHelper.createMedicine("Test")
 

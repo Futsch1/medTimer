@@ -63,4 +63,10 @@
     <string name="once_below_threshold">Разово, коли нижче порогу</string>
     <string name="always_below_threshold">Постійно, коли нижче порогу</string>
     <string name="daily_below_threshold">Щодня при нижче порогу</string>
+    <string name="out_of_stock_notification_title">Скінчилися ліки</string>
+    <string name="snooze_until_home">Відкласти до повернення додому</string>
+    <string name="default_">Типові</string>
+    <string name="high">Високий</string>
+    <string name="snooze">Відкласти</string>
+    <string name="expiration_reminder">Нагадування про термін придатності</string>
 </resources>

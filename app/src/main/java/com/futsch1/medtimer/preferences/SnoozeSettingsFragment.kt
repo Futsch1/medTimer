@@ -18,8 +18,8 @@ import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
 import com.futsch1.medtimer.core.domain.model.HomeLocation
-import com.futsch1.medtimer.location.GeofenceRegistrar
-import com.futsch1.medtimer.location.LocationProvider
+import com.futsch1.medtimer.feature.reminders.location.GeofenceRegistrar
+import com.futsch1.medtimer.feature.reminders.location.LocationProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale

@@ -26,11 +26,11 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.SystemTimeAccess
+import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.reminders.SystemTimeAccess
-import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -115,7 +115,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
         findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(modelData.amount, modelData.unit)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
         if (modelData.isOutOfStock()) {
-            findPreference<EditTextPreference>("amount")!!.setIcon(R.drawable.exclamation_triangle_fill)
+            findPreference<EditTextPreference>("amount")!!.setIcon(com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill)
         } else {
             findPreference<EditTextPreference>("amount")!!.icon = null
         }
@@ -177,7 +177,10 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
         val date = timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent =
-                createCalendarEventIntent("\uD83D\uDC8A " + context?.getString(R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name, date)
+                createCalendarEventIntent(
+                    "\uD83D\uDC8A " + context?.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name,
+                    date
+                )
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {

@@ -15,9 +15,6 @@
     <string name="confirm">确认</string>
     <string name="are_you_sure_delete_medicine">确定删除该药品吗？</string>
     <string name="no_reminders">未设置用药提醒</string>
-    <string name="notification_title">服药提醒</string>
-    <string name="recent_events">近期服药记录</string>
-    <string name="next_reminders">下次服药提醒</string>
     <string name="version">版本 %s</string>
     <string name="are_you_sure_delete_reminder">确定要删除该提醒吗？</string>
     <string name="clear_events">清除所有历史记录</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">请输入服药剂量</string>
     <string name="cycle_consecutive_days">连续服药提醒天数</string>
     <string name="theme">主题</string>
-    <string name="default_">默认</string>
     <string name="alternative">主题二</string>
     <string name="before_meal">饭前服用</string>
     <string name="after_meal">饭后服用</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">添加单次服药记录</string>
     <string name="dismiss_notification_action">忽略通知时的操作</string>
     <string name="skip_reminder">跳过本次服药</string>
-    <string name="snooze">稍后提醒</string>
     <string name="snooze_duration">稍后提醒时长</string>
     <string name="minutes_5">5 分钟</string>
     <string name="minutes_10">10 分钟</string>
@@ -102,7 +97,6 @@
     <string name="intro_analysis_description">所有服药记录储存于本地。您可以在“分析”页面中查看过去的用药情况，也可以通过 更多（三个点）菜单导出历史记录。即使药品、服药记录被删除或重命名，已导出的历史记录也会保留。</string>
     <string name="show_intro">查看使用说明</string>
     <string name="are_you_sure_delete_reminder_event">您确定要删除该服药记录吗？</string>
-    <string name="high">高</string>
     <string name="notification_importance">通知优先级</string>
     <string name="notification_settings_default">默认优先级通知设置</string>
     <string name="notification_settings_high">高优先级通知设置</string>
@@ -143,8 +137,6 @@
     <string name="interval_start_reminded">提醒后即计时下次间隔</string>
     <string name="interval_start_processed">服药或跳过后才计时下次间隔</string>
     <string name="invalid_input">无效输入</string>
-    <string name="out_of_stock_notification">%1$s 只剩下 %2$s 了！\n请考虑马上重新配药。</string>
-    <string name="out_of_stock_notification_title">药品低余量提醒</string>
     <string name="medicine_stock">药品余量</string>
     <string name="amount">数量</string>
     <string name="reminder_threshold">触发提醒数值</string>
@@ -165,7 +157,6 @@
     <string name="hide_med_name">在通知中隐藏药物名称</string>
     <string name="disable_widget">禁用主屏幕小部件</string>
     <string name="disable_widget_summary">防止小部件在主屏幕上显示敏感药物信息</string>
-    <string name="widget_disabled_privacy">小部件因隐私已禁用 — 打开应用程序查看提醒</string>
     <string name="re_raise_event">重新觸發該事件</string>
     <string name="notification_reminder_settings">通知和提醒设置</string>
     <string name="display_settings">显示设置</string>
@@ -177,7 +168,6 @@
     <string name="big_notifications">大通知按钮</string>
     <string name="please_wait">请稍候…</string>
     <string name="reminded">已提醒</string>
-    <string name="all_taken">都服用了 (%s)</string>
     <string name="estimated_run_out_date">预计用完日期</string>
     <string name="create_calendar_entry">创建日历条目</string>
     <string name="notes">笔记</string>
@@ -219,14 +209,11 @@
     <string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
     <string name="show_taken_time_in_overview">在概览中显示服药时间</string>
     <string name="expiration_settings">到期设置</string>
-    <string name="expiration_reminder">到期提醒</string>
     <string name="remind_days_before_expiration">在到期前几天提醒</string>
     <string name="medicine_stock_settings">药品库存设置</string>
     <string name="edit_medicine_stock_settings">编辑药品库存设置</string>
     <string name="clear_dates">清除日期</string>
     <string name="acknowledged">已确认</string>
-    <string name="refill_amount">补充 (%s)</string>
-    <string name="expiration_date_notification">药品 %1$s 过期日为 %2$s。\n请考虑更换药品。</string>
     <string name="select_all">全选</string>
     <string name="by_name">按名称</string>
     <string name="by_creation_date_ascending">按创建日期升序</string>
@@ -244,7 +231,6 @@
     <string name="location_snooze_summary">小睡后回家时重新提醒</string>
     <string name="location_snooze_no_play_services">基于位置的小睡需要 Google Play 服务，该服务在此设备上不可用</string>
     <string name="location_snooze_background_permission">要在回家时重新接收提醒，请允许 MedTimer 在后台访问位置</string>
-    <string name="snooze_until_home">小睡直到回家</string>
     <string name="snooze_settings">小睡设置</string>
     <string name="home_location">家庭位置</string>
     <string name="home_location_not_set">未设置</string>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Lembrete de medicamento</string>
+    <string name="refill_amount">Recarga (%s)</string>
+    <string name="out_of_stock_notification">Restam apenas %2$s de %1$s!\nConsidere repor o medicamento em breve.</string>
+    <string name="expiration_date_notification">O medicamento %1$s tem data de validade de %2$s.\nConsidere substituir o medicamento.</string>
+    <string name="widget_disabled_privacy">Widgets desativados por privacidade — abra o aplicativo para ver os lembretes</string>
+    <string name="recent_events">Eventos recentes</string>
+    <string name="next_reminders">Próximos lembretes</string>
+    <string name="all_taken">Todos tomados (%s)</string>
+</resources>

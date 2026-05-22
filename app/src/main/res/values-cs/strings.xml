@@ -15,9 +15,6 @@
     <string name="confirm">Potvrdit</string>
     <string name="are_you_sure_delete_medicine">Opravdu chcete smazat lék?</string>
     <string name="no_reminders">Nenastavena žádná připomenutí</string>
-    <string name="notification_title">Připomenutí léku</string>
-    <string name="recent_events">Nedávné události</string>
-    <string name="next_reminders">Další připomenutí</string>
     <string name="version">Verze %s</string>
     <string name="are_you_sure_delete_reminder">Opravdu chcete smazat připomenutí?</string>
     <string name="clear_events">Vymazat celou historii</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Dávka pro nové upozornění</string>
     <string name="cycle_consecutive_days">Aktivní dny</string>
     <string name="theme">Téma</string>
-    <string name="default_">Výchozí</string>
     <string name="alternative">Alternativní</string>
     <string name="before_meal">před jídlem</string>
     <string name="after_meal">po jídle</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Zaznamenat mimořádnou dávku</string>
     <string name="dismiss_notification_action">Akce při zrušení notifikace</string>
     <string name="skip_reminder">Přeskočit dávku</string>
-    <string name="snooze">Odložit</string>
     <string name="snooze_duration">Doba odložení</string>
     <string name="minutes_5">5 minut</string>
     <string name="minutes_10">10 minut</string>
@@ -112,7 +107,6 @@
     <string name="calendar">Kalendář</string>
     <string name="date">Datum</string>
     <string name="active">Aktivní</string>
-    <string name="high">Vysoká</string>
     <string name="period_start">Začátek období</string>
     <string name="period_end">Konec období</string>
     <string name="activate_all">Aktivovat všechna připomenutí</string>
@@ -147,8 +141,6 @@
     <string name="interval_start_reminded">Interval začne v době připomenutí</string>
     <string name="interval_start_processed">Interval začne v době užití nebo přeskočení</string>
     <string name="invalid_input">Neplatný vstup</string>
-    <string name="out_of_stock_notification">Zbývá pouze %2$s z %1$s!\nZvažte brzy doplnění léků.</string>
-    <string name="out_of_stock_notification_title">Připomenutí prázdných zásob léků</string>
     <string name="medicine_stock">Zásoba léků</string>
     <string name="amount">Množství</string>
     <string name="reminder_threshold">Mez připomenutí</string>
@@ -169,7 +161,6 @@
     <string name="hide_med_name">Skrýt jméno léku v notifikaci</string>
     <string name="disable_widget">Zakázat widgety na domovské obrazovce</string>
     <string name="disable_widget_summary">Zabránit widgetům zobrazovat citlivé informace o léčivech na domovské obrazovce</string>
-    <string name="widget_disabled_privacy">Widgety zakázány z důvodu ochrany soukromí — otevřete aplikaci pro zobrazení připomínek</string>
     <string name="re_raise_event">Znovu vyvolat událost</string>
     <string name="notification_reminder_settings">Nastavení notifikací a připomenutí</string>
     <string name="display_settings">Nastavení zobrazení</string>
@@ -181,7 +172,6 @@
     <string name="big_notifications">Velká tlačítka notifikace</string>
     <string name="please_wait">Prosím čekejte…</string>
     <string name="reminded">Připomenuto</string>
-    <string name="all_taken">Vše užito (%s)</string>
     <string name="estimated_run_out_date">Odhadované datum vyčerpání zásob</string>
     <string name="create_calendar_entry">Vytvořit položku kalendáře</string>
     <string name="notes">Poznámky</string>
@@ -222,14 +212,11 @@
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
     <string name="expiration_settings">Nastavení expirace</string>
-    <string name="expiration_reminder">Připomenutí expirace</string>
     <string name="remind_days_before_expiration">Připomenout dny před expirací</string>
     <string name="medicine_stock_settings">Nastavení zásob léků</string>
     <string name="edit_medicine_stock_settings">Upravit nastavení zásob léků</string>
     <string name="clear_dates">Vymazat data</string>
     <string name="acknowledged">Potvrzeno</string>
-    <string name="refill_amount">Doplnit (%s)</string>
-    <string name="expiration_date_notification">Lék %1$s expiruje %2$s.\nZvažte výměnu léku.</string>
     <string name="select_all">Vybrat vše</string>
     <string name="by_name">Podle jména</string>
     <string name="by_creation_date_ascending">Vzestupně podle data vytvoření</string>
@@ -247,7 +234,6 @@
     <string name="location_snooze_summary">Znovu upozornit po příchodu domů po odložení</string>
     <string name="location_snooze_no_play_services">Odložení na základě polohy vyžaduje Služby Google Play, které nejsou na tomto zařízení dostupné</string>
     <string name="location_snooze_background_permission">Aby vás MedTimer znovu upozornil po příchodu domů, povolte přístup k poloze na pozadí</string>
-    <string name="snooze_until_home">Odložit do příchodu domů</string>
     <string name="snooze_settings">Nastavení odložení</string>
     <string name="home_location">Domovská poloha</string>
     <string name="home_location_not_set">Nenastaveno</string>

@@ -15,9 +15,6 @@
     <string name="confirm">Conferma</string>
     <string name="are_you_sure_delete_medicine">Vuoi davvero eliminare il farmaco?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
-    <string name="notification_title">Promemoria farmaco</string>
-    <string name="recent_events">Eventi recenti</string>
-    <string name="next_reminders">Prossimi promemoria</string>
     <string name="version">Versione %s</string>
     <string name="are_you_sure_delete_reminder">Vuoi davvero eliminare il promemoria?</string>
     <string name="clear_events">Cancella tutta la cronologia</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Dose per il nuovo promemoria</string>
     <string name="cycle_consecutive_days">Giorni attivi</string>
     <string name="theme">Tema</string>
-    <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>
     <string name="before_meal">Prima dei pasti</string>
     <string name="after_meal">Dopo i pasti</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Registra la dose aggiuntiva</string>
     <string name="dismiss_notification_action">Azione per chiusura notifica</string>
     <string name="skip_reminder">Salta la dose</string>
-    <string name="snooze">Posticipa</string>
     <string name="snooze_duration">Durata del posticipo</string>
     <string name="minutes_5">5 minuti</string>
     <string name="minutes_10">10 minuti</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">L\'applicazione memorizza tutti gli eventi di promemoria. Puoi analizzare le dosi assunte nella schermata di Analisi ed esportare la cronologia tramite il menu con i tre puntini. La cronologia si conserva anche se i farmaci o i promemoria vengono eliminati o rinominati.</string>
     <string name="show_intro">Mostra l\'introduzione dell\'app</string>
     <string name="are_you_sure_delete_reminder_event">Vuoi davvero eliminare l\'evento di promemoria?</string>
-    <string name="high">Alta</string>
     <string name="notification_importance">Priorità della notifica</string>
     <string name="notification_settings_default">Notifica con priorità predefinita</string>
     <string name="notification_settings_high">Notifica ad alta priorità</string>
@@ -145,8 +139,6 @@
     <string name="interval_start_reminded">L\'intervallo inizia quando il farmaco viene ricordato</string>
     <string name="interval_start_processed">L\'intervallo inizia quando il farmaco viene preso o saltato</string>
     <string name="invalid_input">Inserimento non valido</string>
-    <string name="out_of_stock_notification">È rimasto solo il %2$s di %1$s!\nRicordati di effettuare presto una ricarica del farmaco.</string>
-    <string name="out_of_stock_notification_title">Promemoria di esaurimento della scorta del farmaco</string>
     <string name="medicine_stock">Scorta del farmaco</string>
     <string name="amount">Quantità</string>
     <string name="reminder_threshold">Soglia del promemoria</string>
@@ -167,7 +159,6 @@
     <string name="hide_med_name">Nasconde il nome del farmaco nella notifica</string>
     <string name="disable_widget">Disabilita i widget della schermata iniziale</string>
     <string name="disable_widget_summary">Impedisce ai widget di visualizzare informazioni sensibili sui farmaci nella schermata iniziale</string>
-    <string name="widget_disabled_privacy">Widget disabilitati per la privacy — apri l\'app per visualizzare i promemoria</string>
     <string name="re_raise_event">Rilancia l\'evento</string>
     <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
     <string name="display_settings">Impostazioni visualizzazione</string>
@@ -179,7 +170,6 @@
     <string name="big_notifications">Pulsanti di notifica grandi</string>
     <string name="please_wait">Attendere prego…</string>
     <string name="reminded">Ricordato</string>
-    <string name="all_taken">Tutti assunti (%s)</string>
     <string name="estimated_run_out_date">Data di esaurimento stimata</string>
     <string name="create_calendar_entry">Crea una voce di calendario</string>
     <string name="notes">Note</string>
@@ -221,14 +211,11 @@
     <string name="tag_filter_active">Filtro etichetta attivo. Verranno esportati solo i dati con etichette corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra nella panoramica l\'orario di assunzione</string>
     <string name="expiration_settings">Impostazioni di scadenza</string>
-    <string name="expiration_reminder">Promemoria di scadenza</string>
     <string name="remind_days_before_expiration">Promemoria giorni prima della scadenza</string>
     <string name="medicine_stock_settings">Impostazioni scorte medicinali</string>
     <string name="edit_medicine_stock_settings">Modifica impostazioni scorte medicinali</string>
     <string name="clear_dates">Cancella date</string>
     <string name="acknowledged">Confermato</string>
-    <string name="refill_amount">Ricarica (%s)</string>
-    <string name="expiration_date_notification">Il medicinale %1$s scade il %2$s\nValuta la possibilità di sostituirlo.</string>
     <string name="select_all">Seleziona tutto</string>
     <string name="by_name">Per nome</string>
     <string name="by_creation_date_ascending">Ascendente per data di creazione</string>
@@ -246,7 +233,6 @@
     <string name="location_snooze_summary">Rinotifica al rientro a casa dopo aver posticipato</string>
     <string name="location_snooze_no_play_services">Il posticipo basato sulla posizione richiede Google Play Services, che non è disponibile su questo dispositivo</string>
     <string name="location_snooze_background_permission">Per ricevere notifiche al rientro a casa, consenti a MedTimer di accedere alla posizione in background</string>
-    <string name="snooze_until_home">Posticipa fino al ritorno a casa</string>
     <string name="snooze_settings">Impostazioni del posticipo</string>
     <string name="home_location">Posizione di casa</string>
     <string name="home_location_not_set">Non impostata</string>

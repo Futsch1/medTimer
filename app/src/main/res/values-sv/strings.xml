@@ -30,9 +30,6 @@
     <string name="confirm">Godkänn</string>
     <string name="are_you_sure_delete_medicine">Är du säker på att du vill ta bort den här läkemedlet?</string>
     <string name="no_reminders">Inga påminnelser satta</string>
-    <string name="notification_title">Påminnelse om medicinering</string>
-    <string name="recent_events">Senaste händelserna</string>
-    <string name="next_reminders">Kommande påminnelser</string>
     <string name="version">Version %s</string>
     <string name="clear_events">Rensa all historik</string>
     <string name="are_you_sure_delete_events">Detta kommer att permanent radera hela din medicinhistorik. Denna åtgärd kan inte ångras.</string>
@@ -51,7 +48,6 @@
     <string name="create_reminder_dosage_hint">Dos för nya påminnelser</string>
     <string name="cycle_consecutive_days">Aktiva dagar</string>
     <string name="theme">Tema</string>
-    <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="before_meal">före måltid</string>
     <string name="after_meal">efter måltid</string>
@@ -69,7 +65,6 @@
     <string name="log_additional_dose">Logga ytterligare dos</string>
     <string name="dismiss_notification_action">Åtgärd när du avfärdar ett meddelande</string>
     <string name="skip_reminder">Hoppa dos</string>
-    <string name="snooze">Snooza</string>
     <string name="snooze_duration">Snooze-tid</string>
     <string name="minutes_5">5 minuter</string>
     <string name="minutes_10">10 minuter</string>
@@ -108,7 +103,6 @@
     <string name="intro_analysis_description">Appen lagrar alla händelsepåminnelserna. Du kan analysera dina tidigare doser på analysskärmen och exportera din historik via kebabmenyn (tre prickar). Historiken finns kvar även om läkemedel eller påminnelser raderas eller byter namn.</string>
     <string name="show_intro">Visa appintroduktion</string>
     <string name="are_you_sure_delete_reminder_event">Är du säker på att du vill ta bort händelsepåminnelsen?</string>
-    <string name="high">Hög</string>
     <string name="notification_importance">Aviseringsprioritet</string>
     <string name="notification_settings_default">Standardprioritet för aviseringsinställningar</string>
     <string name="notification_settings_high">Aviseringsinställningar med hög prioritet</string>
@@ -147,8 +141,6 @@
     <string name="interval_start_reminded">Intervallen startar när du blir påmind</string>
     <string name="interval_start_processed">Intervall startar när dosen tas eller hoppas över</string>
     <string name="invalid_input">Ogiltig inmatning</string>
-    <string name="out_of_stock_notification">Bara %2$s av %1$s kvar!\nKolla om du behöver förnya receptet.</string>
-    <string name="out_of_stock_notification_title">Påminnelse om att läkemedlet är slut i lager</string>
     <string name="medicine_stock">Lager av läkemedel</string>
     <string name="amount">Mängd</string>
     <string name="reminder_threshold">Påminnelse tröskelvärde</string>
@@ -166,7 +158,6 @@
     <string name="hide_med_name">Dölj läkemedelsnamn i avisering</string>
     <string name="disable_widget">Inaktivera widgets på startskärmen</string>
     <string name="disable_widget_summary">Förhindra widgets från att visa känslig läkemedelsinformation på startskärmen</string>
-    <string name="widget_disabled_privacy">Widgets inaktiverade av integritetsskäl — öppna appen för att se påminnelser</string>
     <string name="re_raise_event">Återskapa händelse</string>
     <string name="notification_reminder_settings">Inställningar för aviseringar och påminnelser</string>
     <string name="display_settings">Displayinställningar</string>
@@ -177,7 +168,6 @@
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
     <string name="reminded">Påmind</string>
-    <string name="all_taken">Allt intaget (%s)</string>
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
     <string name="create_calendar_entry">Skapa kalenderpost</string>
     <string name="notes">Anteckningar</string>
@@ -219,14 +209,11 @@
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
     <string name="show_taken_time_in_overview">Visa intagningstid i översikt</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
-    <string name="expiration_reminder">Påminnelse om utgångsdatum</string>
     <string name="remind_days_before_expiration">Påminn dagar före utgångsdatum</string>
     <string name="medicine_stock_settings">Inställningar för medicinlager</string>
     <string name="edit_medicine_stock_settings">Redigera inställningar för medicinlager</string>
     <string name="clear_dates">Rensa datum</string>
     <string name="acknowledged">Bekräftad</string>
-    <string name="refill_amount">Fyll på (%s)</string>
-    <string name="expiration_date_notification">Medicinen %1$s har ett utgångsdatum den %2$s.\nÖverväg att byta ut medicinen.</string>
     <string name="select_all">Välj alla</string>
     <string name="by_name">Efter namn</string>
     <string name="by_creation_date_ascending">Stigande efter skapelsedatum</string>
@@ -244,7 +231,6 @@
     <string name="location_snooze_summary">Meddela igen när du anländer hem efter snooze</string>
     <string name="location_snooze_no_play_services">Platsbaserad snooze kräver Google Play Services, som inte är tillgängligt på den här enheten</string>
     <string name="location_snooze_background_permission">För att meddelas vid hemkomst, tillåt MedTimer att komma åt plats i bakgrunden</string>
-    <string name="snooze_until_home">Snooze till hemkomst</string>
     <string name="snooze_settings">Snooze-inställningar</string>
     <string name="home_location">Hemplats</string>
     <string name="home_location_not_set">Inte inställd</string>

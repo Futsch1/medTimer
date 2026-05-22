@@ -58,4 +58,10 @@
     <string name="once_below_threshold">Una vez al caer por debajo del umbral</string>
     <string name="always_below_threshold">Siempre que esté por debajo del umbral</string>
     <string name="daily_below_threshold">Diariamente por debajo del umbral</string>
+    <string name="out_of_stock_notification_title">Recordatorio de medicamentos agotados</string>
+    <string name="snooze_until_home">Posponer hasta llegar a casa</string>
+    <string name="default_">Predeterminado</string>
+    <string name="high">Alta</string>
+    <string name="snooze">Posponer</string>
+    <string name="expiration_reminder">Recordatorio de vencimiento</string>
 </resources>

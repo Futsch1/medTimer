@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Připomenutí léku</string>
+    <string name="refill_amount">Doplnit (%s)</string>
+    <string name="out_of_stock_notification">Zbývá pouze %2$s z %1$s!\nZvažte brzy doplnění léků.</string>
+    <string name="expiration_date_notification">Lék %1$s expiruje %2$s.\nZvažte výměnu léku.</string>
+    <string name="widget_disabled_privacy">Widgety zakázány z důvodu ochrany soukromí — otevřete aplikaci pro zobrazení připomínek</string>
+    <string name="recent_events">Nedávné události</string>
+    <string name="next_reminders">Další připomenutí</string>
+    <string name="all_taken">Vše užito (%s)</string>
+</resources>

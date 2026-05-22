@@ -18,7 +18,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKE
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKEND_TIME
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalTime

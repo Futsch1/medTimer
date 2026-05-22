@@ -15,9 +15,6 @@
     <string name="confirm">Vahvista</string>
     <string name="are_you_sure_delete_medicine">Haluatko varmasti poistaa lääkkeen?</string>
     <string name="no_reminders">Ei muistutuksia</string>
-    <string name="notification_title">Lääkemuistutus</string>
-    <string name="recent_events">Viimeaikaiset tapahtumat</string>
-    <string name="next_reminders">Seuraavat muistutukset</string>
     <string name="version">Versio %s</string>
     <string name="are_you_sure_delete_reminder">Haluatko varmasti poistaa muistutuksen?</string>
     <string name="clear_events">Tyhjennä koko historia</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Annos uudelle muistutukselle</string>
     <string name="cycle_consecutive_days">Aktiiviset päivät</string>
     <string name="theme">Teema</string>
-    <string name="default_">Oletus</string>
     <string name="alternative">Vaihtoehtoinen</string>
     <string name="before_meal">ennen ateriaa</string>
     <string name="after_meal">aterian jälkeen</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Kirjaa lisäannos</string>
     <string name="dismiss_notification_action">Toiminto ilmoitusta hylättäessä</string>
     <string name="skip_reminder">Ohita annos</string>
-    <string name="snooze">Torkuta</string>
     <string name="snooze_duration">Torkutuksen kesto</string>
     <string name="minutes_5">5 minuuttia</string>
     <string name="minutes_10">10 minuuttia</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">Sovellus tallentaa kaikki muistutustapahtumat. Voit analysoida menneitä annoksiasi analyysinäytössä ja viedä historiasi kebab-valikon (kolme pistettä) kautta. Historia säilyy, vaikka lääkkeitä tai muistutuksia poistettaisiin tai nimettäisiin uudelleen.</string>
     <string name="show_intro">Näytä sovelluksen esittely</string>
     <string name="are_you_sure_delete_reminder_event">Haluatko varmasti poistaa muistutustapahtuman?</string>
-    <string name="high">Korkea</string>
     <string name="notification_importance">Ilmoituksen prioriteetti</string>
     <string name="notification_settings_default">Ilmoitusasetukset oletusprioriteetti</string>
     <string name="notification_settings_high">Ilmoitusasetukset korkea prioriteetti</string>
@@ -145,8 +139,6 @@
     <string name="interval_start_reminded">Väliaika alkaa muistuttaessa</string>
     <string name="interval_start_processed">Aikaväli alkaa ottaessa tai ohittaessa</string>
     <string name="invalid_input">Virheellinen syöte</string>
-    <string name="out_of_stock_notification">Enää %2$s jäljellä lääkettä %1$s!\nHarkitse lääkkeen täyttämistä pian.</string>
-    <string name="out_of_stock_notification_title">Muistutus lääkkeen loppumisesta</string>
     <string name="medicine_stock">Lääkevarasto</string>
     <string name="amount">Määrä</string>
     <string name="reminder_threshold">Muistutusraja</string>
@@ -167,7 +159,6 @@
     <string name="hide_med_name">Piilota lääkkeen nimi ilmoituksessa</string>
     <string name="disable_widget">Poista aloitusnäytön widgetit käytöstä</string>
     <string name="disable_widget_summary">Estä widgettejä näyttämästä arkaluonteisia lääketietoja aloitusnäytöllä</string>
-    <string name="widget_disabled_privacy">Widgetit poistettu käytöstä yksityisyydensuojan vuoksi — avaa sovellus nähdäksesi muistutukset</string>
     <string name="re_raise_event">Nosta tapahtuma uudelleen</string>
     <string name="notification_reminder_settings">Ilmoitus- ja muistutusasetukset</string>
     <string name="display_settings">Näyttöasetukset</string>
@@ -179,7 +170,6 @@
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
     <string name="please_wait">Odota, olkaa hyvä…</string>
     <string name="reminded">Muistutettu</string>
-    <string name="all_taken">Kaikki otettu (%s)</string>
     <string name="estimated_run_out_date">Arvioitu loppumispäivä</string>
     <string name="create_calendar_entry">Luo kalenterimerkintä</string>
     <string name="notes">Muistiinpanot</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
-    <string name="expiration_reminder">Vanhentumismuistutus</string>
     <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
     <string name="medicine_stock_settings">Lääkevaraston asetukset</string>
     <string name="edit_medicine_stock_settings">Muokkaa lääkevaraston asetuksia</string>
     <string name="clear_dates">Tyhjennä päivämäärät</string>
     <string name="acknowledged">Kuitattu</string>
-    <string name="refill_amount">Täyttö (%s)</string>
-    <string name="expiration_date_notification">Lääkkeen %1$s viimeinen käyttöpäivä on %2$s.\nHarkitse lääkkeen vaihtamista.</string>
     <string name="select_all">Valitse kaikki</string>
     <string name="by_name">Nimen mukaan</string>
     <string name="by_creation_date_ascending">Nouseva luontipäivämäärän mukaan</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Ilmoita uudelleen kotiin saapuessa torkutuksen jälkeen</string>
     <string name="location_snooze_no_play_services">Sijaintipohjainen torkku vaatii Google Play -palvelut, jotka eivät ole saatavilla tällä laitteella</string>
     <string name="location_snooze_background_permission">Jotta MedTimer voi ilmoittaa uudelleen kotiin saapuessa, salli sijaintipalvelujen käyttö taustalla</string>
-    <string name="snooze_until_home">Torkuta kotiin asti</string>
     <string name="snooze_settings">Torkku-asetukset</string>
     <string name="home_location">Kotisijainti</string>
     <string name="home_location_not_set">Ei asetettu</string>

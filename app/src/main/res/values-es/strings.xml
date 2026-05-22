@@ -15,9 +15,6 @@
     <string name="confirm">Confirmar</string>
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
-    <string name="notification_title">Recordatorio de medicación</string>
-    <string name="recent_events">Eventos recientes</string>
-    <string name="next_reminders">Siguientes recordatorios</string>
     <string name="version">Versión %s</string>
     <string name="are_you_sure_delete_reminder">¿Quieres eliminar el recordatorio?</string>
     <string name="clear_events">Borrar todo el historial</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Dosis para el nuevo recordatorio</string>
     <string name="cycle_consecutive_days">Días activos</string>
     <string name="theme">Tema</string>
-    <string name="default_">Predeterminado</string>
     <string name="alternative">Alternativo</string>
     <string name="before_meal">antes de la comida</string>
     <string name="after_meal">después de la comida</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Registrar dosis adicional</string>
     <string name="dismiss_notification_action">Acción al rechazar la notificación</string>
     <string name="skip_reminder">Omitir dosis</string>
-    <string name="snooze">Posponer</string>
     <string name="snooze_duration">Duración al posponer</string>
     <string name="minutes_5">5 minutos</string>
     <string name="minutes_10">10 minutos</string>
@@ -104,7 +99,6 @@
     <string name="intro_analysis_description">La aplicación almacena todos los recordatorios. Puedes analizar tus dosis anteriores en la pantalla de análisis y exportar tu historial a través del menú kebab (tres puntos). El historial se conservará aunque se eliminen o cambien de nombre los medicamentos o los recordatorios.</string>
     <string name="show_intro">Mostrar introducción de la aplicación</string>
     <string name="are_you_sure_delete_reminder_event">¿Está seguro de eliminar el recordatorio?</string>
-    <string name="high">Alta</string>
     <string name="notification_importance">Prioridad de notificación</string>
     <string name="notification_settings_default">Ajustes de notificación de prioridad predeterminada</string>
     <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
@@ -145,8 +139,6 @@
     <string name="interval_start_reminded">Intervalo comienza cuando se le recuerda</string>
     <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
     <string name="invalid_input">Entrada no válida</string>
-    <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
-    <string name="out_of_stock_notification_title">Recordatorio de medicamentos agotados</string>
     <string name="medicine_stock">Stock de medicamentos</string>
     <string name="amount">Cantidad</string>
     <string name="reminder_threshold">Umbral recordatorio</string>
@@ -167,7 +159,6 @@
     <string name="hide_med_name">Ocultar el nombre del medicamento en la notificación</string>
     <string name="disable_widget">Deshabilitar widgets de la pantalla de inicio</string>
     <string name="disable_widget_summary">Evitar que los widgets muestren información sensible sobre medicamentos en la pantalla de inicio</string>
-    <string name="widget_disabled_privacy">Widgets deshabilitados por privacidad — abre la aplicación para ver los recordatorios</string>
     <string name="re_raise_event">Volver a activar el evento</string>
     <string name="notification_reminder_settings">Configuración de notificaciones y recordatorios</string>
     <string name="display_settings">Configuración de la pantalla</string>
@@ -179,7 +170,6 @@
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="please_wait">Por favor, espere…</string>
     <string name="reminded">Recordado</string>
-    <string name="all_taken">Todas tomadas (%s)</string>
     <string name="estimated_run_out_date">Fecha estimada de agotamiento</string>
     <string name="create_calendar_entry">Crear entrada de calendario</string>
     <string name="notes">Notas</string>
@@ -221,14 +211,11 @@
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
     <string name="show_taken_time_in_overview">Mostrar hora de toma en el resumen</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
-    <string name="expiration_reminder">Recordatorio de vencimiento</string>
     <string name="remind_days_before_expiration">Recordar días antes del vencimiento</string>
     <string name="medicine_stock_settings">Configuración de existencias de medicamentos</string>
     <string name="edit_medicine_stock_settings">Editar configuración de existencias de medicamentos</string>
     <string name="clear_dates">Borrar fechas</string>
     <string name="acknowledged">Reconocido</string>
-    <string name="refill_amount">Rellenar (%s)</string>
-    <string name="expiration_date_notification">El medicamento %1$s caduca el %2$s.\nConsidere reemplazar el medicamento.</string>
     <string name="select_all">Seleccionar todo</string>
     <string name="by_name">Por nombre</string>
     <string name="by_creation_date_ascending">Ascendente por fecha de creación</string>
@@ -246,7 +233,6 @@
     <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
     <string name="location_snooze_no_play_services">Posponer según ubicación requiere los servicios de Google Play, que no están disponibles en este dispositivo</string>
     <string name="location_snooze_background_permission">Para recibir notificaciones al llegar a casa, permita que MedTimer acceda a la ubicación en segundo plano</string>
-    <string name="snooze_until_home">Posponer hasta llegar a casa</string>
     <string name="snooze_settings">Configuración de posposición</string>
     <string name="home_location">Ubicación de casa</string>
     <string name="home_location_not_set">No establecida</string>

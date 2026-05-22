@@ -1,0 +1,34 @@
+package com.futsch1.medtimer.feature.reminders
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+
+class ReminderNotificationChannel(
+    private val context: Context,
+    private val notificationManager: NotificationManager,
+    private val importance: Int,
+    private val nameId: Int
+) {
+    val id: String
+        get() = notificationChannel.id
+    private var notificationChannel: NotificationChannel =
+        getOrCreateChannel()
+
+    init {
+        notificationChannel.setBypassDnd(true)
+    }
+
+    private fun getOrCreateChannel(): NotificationChannel {
+        return notificationManager.getNotificationChannel(importance.toString()) ?: createChannel()
+    }
+
+    private fun createChannel(): NotificationChannel {
+        val notificationChannel =
+            NotificationChannel(importance.toString(), context.getString(nameId), importance)
+        notificationChannel.description = context.getString(R.string.notification_title)
+
+        notificationManager.createNotificationChannel(notificationChannel)
+        return notificationChannel
+    }
+}

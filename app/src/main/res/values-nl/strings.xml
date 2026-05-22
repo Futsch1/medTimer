@@ -15,9 +15,6 @@
     <string name="confirm">Bevestigen</string>
     <string name="are_you_sure_delete_medicine">Wil je de behandeling verwijderen?</string>
     <string name="no_reminders">Geen herinneringen</string>
-    <string name="notification_title">Herinneringen van de behandeling</string>
-    <string name="recent_events">Recente herinneringen</string>
-    <string name="next_reminders">Volgende herinneringen</string>
     <string name="version">Versie %s</string>
     <string name="are_you_sure_delete_reminder">Weet u zeker dat u de herinnering wilt verwijderen?</string>
     <string name="clear_events">Volledige geschiedenis wissen</string>
@@ -38,7 +35,6 @@
     <string name="create_reminder_dosage_hint">Dosering voor nieuwe herinnering</string>
     <string name="cycle_consecutive_days">Actieve dagen</string>
     <string name="theme">Thema</string>
-    <string name="default_">Standaard</string>
     <string name="alternative">Alternatief</string>
     <string name="before_meal">vóór de maaltijd</string>
     <string name="after_meal">na de maaltijd</string>
@@ -56,7 +52,6 @@
     <string name="log_additional_dose">Extra inname toevoegen</string>
     <string name="dismiss_notification_action">Actie bij het negeren van een melding</string>
     <string name="skip_reminder">Overslaan</string>
-    <string name="snooze">Sluimer</string>
     <string name="snooze_duration">Sluimertijd</string>
     <string name="minutes_5">5 minuten</string>
     <string name="minutes_10">10 minuten</string>
@@ -103,7 +98,6 @@
     <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als behandelingen of herinneringen worden verwijderd of een andere naam krijgen.</string>
     <string name="show_intro">Toon app intro</string>
     <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je de herinneringsgebeurtenis wilt verwijderen?</string>
-    <string name="high">Hoog</string>
     <string name="notification_importance">Prioriteit melding</string>
     <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
@@ -144,8 +138,6 @@
     <string name="interval_start_reminded">Interval begint wanneer eraan wordt herinnerd</string>
     <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
     <string name="invalid_input">Ongeldige invoer</string>
-    <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
-    <string name="out_of_stock_notification_title">Herinnering aan behandelingsvoorraad</string>
     <string name="medicine_stock">Behandelingsvoorraad</string>
     <string name="amount">Hoeveelheid</string>
     <string name="reminder_threshold">Herinnering drempel</string>
@@ -166,7 +158,6 @@
     <string name="hide_med_name">Verberg medicijnnaam in melding</string>
     <string name="disable_widget">Widgets op startscherm uitschakelen</string>
     <string name="disable_widget_summary">Voorkom dat widgets gevoelige medicatie-informatie weergeven op het startscherm</string>
-    <string name="widget_disabled_privacy">Widgets uitgeschakeld voor privacy — open de app om herinneringen te bekijken</string>
     <string name="re_raise_event">De gebeurtenis opnieuw activeren</string>
     <string name="notification_reminder_settings">Instellingen voor meldingen en herinneringen</string>
     <string name="display_settings">Weergave-instellingen</string>
@@ -178,7 +169,6 @@
     <string name="big_notifications">Grote meldingsknoppen</string>
     <string name="please_wait">Even geduld…</string>
     <string name="reminded">Herinnerd</string>
-    <string name="all_taken">Alles ingenomen (%s)</string>
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
     <string name="create_calendar_entry">Agenda-item maken</string>
     <string name="notes">Notities</string>
@@ -220,14 +210,11 @@
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
     <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
-    <string name="expiration_reminder">Herinnering voor vervaldatum</string>
     <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
     <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>
     <string name="edit_medicine_stock_settings">Instellingen medicijnvoorraad bewerken</string>
     <string name="clear_dates">Datums wissen</string>
     <string name="acknowledged">Bevestigd</string>
-    <string name="refill_amount">Bijvullen (%s)</string>
-    <string name="expiration_date_notification">Het medicijn %1$s heeft een vervaldatum van %2$s.\nOverweeg het medicijn te vervangen.</string>
     <string name="select_all">Alles selecteren</string>
     <string name="by_name">Op naam</string>
     <string name="by_creation_date_ascending">Oplopend op aanmaakdatum</string>
@@ -245,7 +232,6 @@
     <string name="location_snooze_summary">Opnieuw melden bij thuiskomst na sluimeren</string>
     <string name="location_snooze_no_play_services">Locatiegebaseerd sluimeren vereist Google Play Services, die niet beschikbaar zijn op dit apparaat</string>
     <string name="location_snooze_background_permission">Sta MedTimer toe op de achtergrond toegang te hebben tot de locatie om opnieuw te melden bij thuiskomst</string>
-    <string name="snooze_until_home">Sluimeren tot thuiskomst</string>
     <string name="snooze_settings">Sluimerinstellingen</string>
     <string name="home_location">Thuislocatie</string>
     <string name="home_location_not_set">Niet ingesteld</string>

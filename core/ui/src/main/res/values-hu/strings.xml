@@ -53,4 +53,10 @@
     <string name="once_below_threshold">Egyszer, ha a készlet alacsony</string>
     <string name="always_below_threshold">Mindig, ha a készlet alacsony</string>
     <string name="daily_below_threshold">Naponta a küszöbérték alatt</string>
+    <string name="out_of_stock_notification_title">Gyógyszerkészlet fogyóban</string>
+    <string name="snooze_until_home">Szundi hazaérkezésig</string>
+    <string name="default_">Alapértelmezett</string>
+    <string name="high">Magas</string>
+    <string name="snooze">Emlékeztetés később</string>
+    <string name="expiration_reminder">Lejárati emlékeztető</string>
 </resources>
