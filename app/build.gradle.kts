@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ApplicationExtension
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.androidx.room)
@@ -13,7 +15,7 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
-android {
+project.extensions.getByType<ApplicationExtension>().apply {
     namespace = "com.futsch1.medtimer"
     compileSdk = 36
 
