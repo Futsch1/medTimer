@@ -14,7 +14,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory

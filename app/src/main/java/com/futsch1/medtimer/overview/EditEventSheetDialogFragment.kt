@@ -17,7 +17,7 @@ import com.futsch1.medtimer.core.common.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderTime
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -189,8 +189,8 @@ class EditEventSheetDialogFragment : DialogFragment() {
     private fun configureTakenText(dialog: AppCompatDialog, status: ReminderEvent.ReminderStatus) {
         val takenText = dialog.requireViewById<TextView>(R.id.takenText)
         when (status) {
-            ReminderEvent.ReminderStatus.TAKEN -> takenText.setText(R.string.taken)
-            ReminderEvent.ReminderStatus.SKIPPED -> takenText.setText(R.string.skipped)
+            ReminderEvent.ReminderStatus.TAKEN -> takenText.setText(com.futsch1.medtimer.core.ui.R.string.taken)
+            ReminderEvent.ReminderStatus.SKIPPED -> takenText.setText(com.futsch1.medtimer.core.ui.R.string.skipped)
             ReminderEvent.ReminderStatus.ACKNOWLEDGED -> {
                 takenText.setText(R.string.acknowledged)
                 dialog.findViewById<TextInputLayout>(R.id.editEventAmountLayout)?.hint = ""

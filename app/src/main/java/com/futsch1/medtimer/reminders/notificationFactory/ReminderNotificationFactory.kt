@@ -10,8 +10,8 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 
 
@@ -43,7 +43,7 @@ abstract class ReminderNotificationFactory(
     init {
         val contentIntent: PendingIntent = getStartAppIntent()
 
-        builder.setSmallIcon(R.drawable.capsule)
+        builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.capsule)
         builder.setContentTitle(context.getString(R.string.notification_title))
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
@@ -112,7 +112,7 @@ abstract class ReminderNotificationFactory(
 
     private fun addSkippedAction() {
         builder.addAction(
-            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
+            R.drawable.x_circle, context.getString(com.futsch1.medtimer.core.ui.R.string.skipped), intents.pendingSkipped
         )
     }
 
@@ -133,7 +133,7 @@ abstract class ReminderNotificationFactory(
 
     private fun addTakenAction() {
         builder.addAction(
-            R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
+            R.drawable.check2_circle, context.getString(com.futsch1.medtimer.core.ui.R.string.taken), intents.pendingTaken
         )
     }
 }

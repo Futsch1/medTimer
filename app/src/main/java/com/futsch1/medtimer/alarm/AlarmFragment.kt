@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.LogTags.ALARM
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.reminders.notificationFactory.NotificationIntentBuilder

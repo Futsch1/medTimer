@@ -6,7 +6,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
+import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

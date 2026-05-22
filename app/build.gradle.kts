@@ -122,6 +122,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:ui"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Continu interval vanaf %1$s</string>
+    <string name="continuous_interval_reminder">Continue interval herinnering</string>
+    <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
+    <string name="cycle_reminder">Cyclische herinnering</string>
+    <string name="cycle_start_date">Start eerste cyclus</string>
+    <string name="daily_from_to">Dagelijks interval van %1$s tot %2$s</string>
+    <string name="day_of_month_limited">Beperkt tot sommige dagen van de maand</string>
+    <string name="every_day">Elke dag</string>
+    <string name="every_interval">Elke %s</string>
+    <string name="expiration_date">Vervaldatum</string>
+    <string name="expiration_date_reminder_help">Herinnert wanneer de vervaldatum van het medicijn is bereikt of een configureerbare tijd voor die datum.</string>
+    <string name="inactive">Inactief</string>
+    <string name="interval_time">Interval %s</string>
+    <string name="linked_reminder">Gekoppelde herinnering</string>
+    <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt ingenomen. Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
+    <string name="linked_reminder_summary">Na herinnering op %1$s</string>
+    <string name="medicine_stock_string">%1$s over</string>
+    <string name="out_of_stock_reminder">Voorraadherinnering</string>
+    <string name="out_of_stock_reminder_help">Herinnert wanneer het medicijn niet meer op voorraad is, hetzij na elke herinnering, eenmaal of eenmaal per dag.</string>
+    <string name="production_date">Productiedatum</string>
+    <string name="refill">Voorraad aanvullen</string>
+    <string name="skipped">Overgeslagen</string>
+    <string name="taken">Ingenomen</string>
+    <string name="time_based_reminder">Herinnering op basis van tijd</string>
+    <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
+    <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
+    <string name="windowed_interval_reminder">Herinnering met interval binnen een tijdvenster</string>
+    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9:00 uur tot 21:00 uur) waarbij de eerste herinnering altijd op de starttijd valt. Volgende herinneringen worden met vaste intervallen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag gereset.</string>
+    <plurals name="days">
+        <item quantity="one">dag</item>
+        <item quantity="other">dagen</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">uur</item>
+        <item quantity="other">uren</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minuut</item>
+        <item quantity="other">minuten</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d herinnering\n%2$s</item>
+        <item quantity="other">%1$d herinneringen\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">week</item>
+        <item quantity="other">weken</item>
+    </plurals>
+    <string name="once">Eenmaal</string>
+    <string name="daily">Dagelijks</string>
+    <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
+    <string name="always_below_threshold">Altijd wanneer onder drempel</string>
+    <string name="daily_below_threshold">Dagelijks onder drempel</string>
+</resources>

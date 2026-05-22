@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Kezdő időpont: %1$s</string>
+    <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
+    <string name="continuous_interval_reminder_help">Beállíthatsz egy kiválasztott időponttól induló, ismétlődő emlékeztetőt (pl. hat óránként). Az ismétlődés folytonos, nem veszi figyelembe a napszakot, és csak kézzel kapcsolható ki.</string>
+    <string name="cycle_reminder">Ciklikus emlékeztető</string>
+    <string name="cycle_start_date">Az első ciklus kezdete</string>
+    <string name="daily_from_to">Napi időablak: %1$s – %2$s</string>
+    <string name="day_of_month_limited">A hónap csak bizonyos napjain</string>
+    <string name="every_day">Minden nap</string>
+    <string name="every_interval">Minden %s</string>
+    <string name="expiration_date">Lejárati dátum</string>
+    <string name="expiration_date_reminder_help">Emlékeztet, amikor a gyógyszer lejárati ideje elérkezik, vagy egy beállítható idővel a dátum előtt.</string>
+    <string name="inactive">Inaktív</string>
+    <string name="interval_time">Időköz: %s</string>
+    <string name="linked_reminder">Kapcsolódó emlékeztető</string>
+    <string name="linked_reminder_help">A kapcsolódó emlékeztető egy olyan emlékeztető, ami egy másikat, meghatározott idővel követ. Hasznos olyan gyógyszerek esetén, amelyeket egymás után, meghatározott időközzel kell bevenni.</string>
+    <string name="linked_reminder_summary">A(z) %1$s emlékeztető után</string>
+    <string name="medicine_stock_string">%1$s maradt</string>
+    <string name="out_of_stock_reminder">Készletfigyelmeztetés</string>
+    <string name="out_of_stock_reminder_help">Emlékeztet, ha a gyógyszer elfogyott, minden emlékeztető után, egyszer, vagy naponta egyszer.</string>
+    <string name="production_date">Gyártási dátum</string>
+    <string name="refill">Raktárkészlet feltöltése</string>
+    <string name="skipped">Kihagyva</string>
+    <string name="taken">Bevéve</string>
+    <string name="time_based_reminder">Időpont alapú emlékeztető</string>
+    <string name="time_based_reminder_help">Válassz időpontot (pl. 8:00) és állíts be ismétlődést. Kiválaszthatod, hogy a hét és a hónap mely napjain kapj emlékeztetőt, vagy akár összetett szabályokat is beállíthatsz (pl. „minden 3. nap”).</string>
+    <string name="weekday_limited">Csak bizonyos hétköznapokra korlátozva</string>
+    <string name="windowed_interval_reminder">Időablakos ismétlődő emlékeztető</string>
+    <string name="windowed_interval_reminder_help">Állíts be egy napi időablakot (pl. 9:00–21:00), ahol az első emlékeztető mindig a kezdő időpontban jelenik meg. A következő emlékeztetők meghatározott időközönként érkeznek, amíg el nem érik a befejező időpontot. A minta másnap újraindul.</string>
+    <plurals name="days">
+        <item quantity="one">nap</item>
+        <item quantity="other">nap</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">óra</item>
+        <item quantity="other">óra</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">perc</item>
+        <item quantity="other">perc</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d emlékeztető\n%2$s</item>
+        <item quantity="other">%1$d emlékeztető\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">hét</item>
+        <item quantity="other">hét</item>
+    </plurals>
+    <string name="once">Egyszer</string>
+    <string name="daily">Naponta</string>
+    <string name="once_below_threshold">Egyszer, ha a készlet alacsony</string>
+    <string name="always_below_threshold">Mindig, ha a készlet alacsony</string>
+    <string name="daily_below_threshold">Naponta a küszöbérték alatt</string>
+</resources>

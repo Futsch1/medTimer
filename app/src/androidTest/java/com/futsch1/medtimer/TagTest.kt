@@ -146,7 +146,7 @@ class TagTest : BaseTestHelper() {
 
         openMenu()
         clickOn(R.string.deactivate_all)
-        assertContains(R.string.inactive)
+        assertContains(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         // Now, check that Else is not deactivated
         clickOn(R.id.tag_filter)
@@ -154,7 +154,7 @@ class TagTest : BaseTestHelper() {
         clickOn("Tag2")
         clickOn(R.id.ok)
 
-        assertNotContains(R.string.inactive)
+        assertNotContains(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         clickOn(R.id.tag_filter)
         clickOn("Tag2")

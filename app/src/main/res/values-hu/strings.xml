@@ -15,13 +15,7 @@
     <string name="confirm">Megerősít</string>
     <string name="are_you_sure_delete_medicine">Biztos törölni szeretnéd a gyógyszert?</string>
     <string name="no_reminders">Nincs emlékeztető beállítva</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d emlékeztető\n%2$s</item>
-        <item quantity="other">%1$d emlékeztető\n%2$s</item>
-    </plurals>
     <string name="notification_title">Gyógyszer emlékeztető</string>
-    <string name="taken">Bevéve</string>
-    <string name="skipped">Kihagyva</string>
     <string name="recent_events">Legutóbbi események</string>
     <string name="next_reminders">Következő emlékeztetők</string>
     <string name="version">Verzió %s</string>
@@ -83,11 +77,7 @@
     <string name="weekend_end_time">Befejezési idő</string>
     <string name="custom">Egyedi…</string>
     <string name="advanced_settings">Speciális beállítások</string>
-    <string name="every_day">Minden nap</string>
     <string name="cycle_pause_days">Szünetnapok</string>
-    <string name="cycle_start_date">Az első ciklus kezdete</string>
-    <string name="cycle_reminder">Ciklikus emlékeztető</string>
-    <string name="weekday_limited">Csak bizonyos hétköznapokra korlátozva</string>
     <string name="reminders">Emlékezők</string>
     <string name="sort">Rendezés</string>
     <string name="filter">Szűrés</string>
@@ -121,7 +111,6 @@
     <string name="calendar">Naptár</string>
     <string name="date">Dátum</string>
     <string name="active">Aktív</string>
-    <string name="inactive">Inaktív</string>
     <string name="period_start">Időszak kezdete</string>
     <string name="period_end">Időszak vége</string>
     <string name="activate_all">Az összes emlékeztető aktiválása</string>
@@ -131,7 +120,6 @@
     <string name="every_day_of_month">A hónap minden napja</string>
     <string name="on_day_of_month">A hónap %s. napján</string>
     <string name="never">Soha</string>
-    <string name="day_of_month_limited">A hónap csak bizonyos napjain</string>
     <string name="medicines_tab_description">Gyógyszerek fül</string>
     <string name="overview_tab_description">Áttekintés fül</string>
     <string name="statistics_tab_description">Statisztika fül</string>
@@ -145,45 +133,22 @@
     <string name="add_linked_reminder">Emlékeztető létrehozása a következő adaghoz</string>
     <string name="linked_reminder_delay">Idő a következő adagig</string>
     <string name="delay">Késleltetés</string>
-    <string name="linked_reminder_summary">A(z) %1$s emlékeztető után</string>
     <string name="delete_re_raise_event">Biztos törlöd az eseményt, hogy újra megkapd az emlékeztetőt?</string>
-    <string name="time_based_reminder">Időpont alapú emlékeztető</string>
     <string name="interval_based_reminder">Időközönként ismétlődő emlékeztető</string>
-    <plurals name="minutes">
-        <item quantity="one">perc</item>
-        <item quantity="other">perc</item>
-    </plurals>
     <string name="minutes_string">Perc</string>
-    <plurals name="hours">
-        <item quantity="one">óra</item>
-        <item quantity="other">óra</item>
-    </plurals>
     <string name="hours_string">Óra</string>
-    <plurals name="days">
-        <item quantity="one">nap</item>
-        <item quantity="other">nap</item>
-    </plurals>
     <string name="days_string">Nap</string>
-    <plurals name="weeks">
-        <item quantity="one">hét</item>
-        <item quantity="other">hét</item>
-    </plurals>
     <string name="weeks_string">Hét</string>
     <string name="create_reminder">Emlékeztető létrehozása</string>
     <string name="interval">Ismétlési idő</string>
     <string name="interval_start_time">Ismétlés kezdete</string>
     <string name="interval_start_reminded">Az idő az előző emlékeztetőtől számolva</string>
     <string name="interval_start_processed">Az idő a gyógyszer bevételétől vagy kihagyásától számolva</string>
-    <string name="every_interval">Minden %s</string>
     <string name="invalid_input">Érvénytelen érték</string>
-    <string name="once_below_threshold">Egyszer, ha a készlet alacsony</string>
-    <string name="always_below_threshold">Mindig, ha a készlet alacsony</string>
     <string name="out_of_stock_notification">Már csak %2$s maradt a(z) %1$s készletéből!\nTöltsd fel hamarosan.</string>
-    <string name="medicine_stock_string">%1$s maradt</string>
     <string name="out_of_stock_notification_title">Gyógyszerkészlet fogyóban</string>
     <string name="medicine_stock">Gyógyszerkészlet</string>
     <string name="amount">Mennyiség</string>
-    <string name="out_of_stock_reminder">Készletfigyelmeztetés</string>
     <string name="reminder_threshold">Figyelmeztetési mennyiség</string>
     <string name="refill_size">Újratöltés mennyisége</string>
     <string name="refill_now">Újratöltés most</string>
@@ -221,8 +186,6 @@
     <string name="automatically_taken">Automatikusan jelölje bevettként</string>
     <string name="high_and_alarm">Magas + Riasztás</string>
     <string name="enable_notification_alarm_dialog">Ahhoz, hogy az emlékeztetők riasztásként jelenjenek meg, engedélyezd ezt a MedTimer számára a következő menüben</string>
-    <string name="daily_from_to">Napi időablak: %1$s – %2$s</string>
-    <string name="continuous_from">Kezdő időpont: %1$s</string>
     <string name="reminder_status">Emlékeztető állapota</string>
     <string name="dosing_instructions">Bevételi útmutató</string>
     <string name="sample_instructions">Minta utasítások</string>
@@ -232,20 +195,12 @@
     <string name="remind_on_days_of_month">Emlékeztetés a hónap napjain</string>
     <string name="start_date">Kezdő dátum</string>
     <string name="end_date">Befejező dátum</string>
-    <string name="linked_reminder">Kapcsolódó emlékeztető</string>
-    <string name="windowed_interval_reminder">Időablakos ismétlődő emlékeztető</string>
-    <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
-    <string name="time_based_reminder_help">Válassz időpontot (pl. 8:00) és állíts be ismétlődést. Kiválaszthatod, hogy a hét és a hónap mely napjain kapj emlékeztetőt, vagy akár összetett szabályokat is beállíthatsz (pl. „minden 3. nap”).</string>
-    <string name="continuous_interval_reminder_help">Beállíthatsz egy kiválasztott időponttól induló, ismétlődő emlékeztetőt (pl. hat óránként). Az ismétlődés folytonos, nem veszi figyelembe a napszakot, és csak kézzel kapcsolható ki.</string>
-    <string name="windowed_interval_reminder_help">Állíts be egy napi időablakot (pl. 9:00–21:00), ahol az első emlékeztető mindig a kezdő időpontban jelenik meg. A következő emlékeztetők meghatározott időközönként érkeznek, amíg el nem érik a befejező időpontot. A minta másnap újraindul.</string>
-    <string name="linked_reminder_help">A kapcsolódó emlékeztető egy olyan emlékeztető, ami egy másikat, meghatározott idővel követ. Hasznos olyan gyógyszerek esetén, amelyeket egymás után, meghatározott időközzel kell bevenni.</string>
     <string name="add_linked_reminder_summary">Egy olyan emlékeztetőt hoz létre, amely a jelenlegi emlékeztető után, meghatározott idővel jelenik meg.</string>
     <string name="cyclic_reminder_summary">Egy olyan ismétlődést állít be, ahol egy választott dátumtól kezdődően, aktív és szünetelő napok váltják egymást. Az emlékeztető csak az aktív napokon küld értesítést. Használható pl. fogamzásgátló tabletta ütemezéséhez.</string>
     <string name="variable_amount_summary">Ha be van kapcsolva, a bevételekor felugrik egy ablak, ahol megadhatod az adagot.</string>
     <string name="automatically_taken_summary">Ha be van kapcsolva, az emlékeztető nem jelenik meg értesítésként, és automatikusan bevettként lesz jelölve (használható csak a készlet nyomon követésére).</string>
     <string name="reminder_status_summary">Az emlékeztetők lehetnek aktívak vagy inaktívak. Ha inaktívak, nem küldenek értesítést. Ezt beállíthatod fixen vagy dátumok alapján. Használható például gyógyszer adagcsökkentéshez.</string>
     <string name="further_settings">További beállítások</string>
-    <string name="interval_time">Időköz: %s</string>
     <string name="alarm_settings">Ébresztő beállításai</string>
     <string name="no_alarm_sound_when_silent">Nincs ébresztőhang némításkor</string>
     <string name="no_vibration_when_silent">Nincs rezgés némításkor</string>
@@ -264,17 +219,9 @@
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
     <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
     <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
-    <string name="refill">Raktárkészlet feltöltése</string>
     <string name="expiration_settings">Lejárati beállítások</string>
-    <string name="production_date">Gyártási dátum</string>
-    <string name="expiration_date">Lejárati dátum</string>
     <string name="expiration_reminder">Lejárati emlékeztető</string>
-    <string name="daily_below_threshold">Naponta a küszöbérték alatt</string>
     <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
-    <string name="out_of_stock_reminder_help">Emlékeztet, ha a gyógyszer elfogyott, minden emlékeztető után, egyszer, vagy naponta egyszer.</string>
-    <string name="expiration_date_reminder_help">Emlékeztet, amikor a gyógyszer lejárati ideje elérkezik, vagy egy beállítható idővel a dátum előtt.</string>
-    <string name="once">Egyszer</string>
-    <string name="daily">Naponta</string>
     <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>
     <string name="edit_medicine_stock_settings">Gyógyszerkészlet beállításainak szerkesztése</string>
     <string name="clear_dates">Dátumok törlése</string>

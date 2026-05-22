@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
+    <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
+    <string name="continuous_interval_reminder_help">Ξεκινήστε μια υπενθύμιση με βάση ένα χρονικό διάστημα (π.χ. κάθε 6 ώρες) από μια καθορισμένη στιγμή. Αυτό το μοτίβο θα είναι συνεχές, αγνοώντας τους περιορισμούς της ώρας της ημέρας, έως ότου απενεργοποιηθεί χειροκίνητα.</string>
+    <string name="cycle_reminder">Κυκλικές υπενθυμίσεις</string>
+    <string name="cycle_start_date">Έναρξη πρώτου κύκλου</string>
+    <string name="daily_from_to">Ημερήσιο διάστημα από %1$s έως %2$s</string>
+    <string name="day_of_month_limited">Περιορισμένο σε ορισμένες ημέρες του μήνα</string>
+    <string name="every_day">Κάθε μέρα</string>
+    <string name="every_interval">Κάθε %s</string>
+    <string name="expiration_date">Ημερομηνία λήξης</string>
+    <string name="expiration_date_reminder_help">Γίνεται υπενθύμιση με την επέλευση της ημερομηνίας λήξης του φαρμάκου ή σε κάποιον προσαρμόσιμο χρόνο πριν από την ημερομηνία αυτή.</string>
+    <string name="inactive">Μη ενεργή</string>
+    <string name="interval_time">Χρονικό διάστημα %s</string>
+    <string name="linked_reminder">Υπενθύμιση επακόλουθης αγωγής</string>
+    <string name="linked_reminder_help">Μια υπενθύμιση επακόλουθης αγωγής είναι μια υπενθύμιση που προγραμματίζεται μετά από ένα συγκεκριμένο χρονικό διάστημα από τη στιγμή που ενεργοποιείται η κύρια υπενθύμιση. Αυτό είναι χρήσιμο για φάρμακα που πρέπει να λαμβάνονται σε ακολουθία, με συγκεκριμένη καθυστέρηση μεταξύ τους.</string>
+    <string name="linked_reminder_summary">Μετά την υπενθύμιση των %1$s</string>
+    <string name="medicine_stock_string">%1$s απέμειναν</string>
+    <string name="out_of_stock_reminder">Υπενθύμιση εξάντλησης αποθέματος</string>
+    <string name="out_of_stock_reminder_help">Σας υπενθυμίζει όταν τα αποθέματα του φαρμάκου εξαντληθούν, είτε μετά από κάθε υπενθύμιση είτε μία φορά είτε μία φορά την ημέρα.</string>
+    <string name="production_date">Ημερομηνία παραγωγής</string>
+    <string name="refill">Αναπλήρωση αποθεμάτων</string>
+    <string name="skipped">Παραλείφθηκε</string>
+    <string name="taken">Ελήφθη</string>
+    <string name="time_based_reminder">Ειδοποίηση βάσει ώρας</string>
+    <string name="time_based_reminder_help">Ορίστε συγκεκριμένες ώρες (π.χ. 8:00 π.μ.) και διαμορφώστε ένα επαναλαμβανόμενο μοτίβο. Αυτό σας δίνει τη δυνατότητα ακριβούς ελέγχου για συγκεκριμένες ημέρες της εβδομάδας, ημέρες του μήνα, ή σύνθετων περιοδικών προγραμμάτων (όπως \"κάθε 3 ημέρες\").</string>
+    <string name="weekday_limited">Ισχύει μόνο για ορισμένες εργάσιμες ημέρες</string>
+    <string name="windowed_interval_reminder">Υπενθύμιση με χρονικό διάστημα εντός ενός καθορισμένου ημερήσιου χρονικού παραθύρου</string>
+    <string name="windowed_interval_reminder_help">Ορίστε ένα καθημερινό ενεργό παράθυρο (π.χ. 9:00 π.μ. έως 9:00 μ.μ.) όπου η πρώτη υπενθύμιση είναι πάντα στην ώρα έναρξης. Οι επόμενες υπενθυμίσεις ενεργοποιούνται σε σταθερά χρονικά διαστήματα μέχρι να επιτευχθεί η ώρα λήξης. Ολόκληρο το μοτίβο επαναφέρεται κάθε μέρα.</string>
+    <plurals name="days">
+        <item quantity="one">ημέρα</item>
+        <item quantity="other">ημέρες</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">ώρα</item>
+        <item quantity="other">ώρες</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">λεπτό</item>
+        <item quantity="other">λεπτά</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d υπενθύμιση\n%2$s</item>
+        <item quantity="other">%1$d υπενθυμίσεις\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">εβδομάδα</item>
+        <item quantity="other">εβδομάδες</item>
+    </plurals>
+    <string name="once">Μια φορά</string>
+    <string name="daily">Καθημερινά</string>
+    <string name="once_below_threshold">Άπαξ, όταν υπολειφθεί του ορίου</string>
+    <string name="always_below_threshold">Διαρκώς, όταν υπολειφθεί του ορίου</string>
+    <string name="daily_below_threshold">Σε καθημερινή βάση, όταν υπολειφθεί του ορίου</string>
+</resources>

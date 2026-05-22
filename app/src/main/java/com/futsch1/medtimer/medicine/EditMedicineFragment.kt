@@ -36,8 +36,8 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.medicine.dialogs.NewReminderTypeDialog
 import com.google.android.material.button.MaterialButton

@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.getIcon
+import com.futsch1.medtimer.core.ui.getIcon
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.take
 class ShowMedicineSheetDialogFragment : DialogFragment() {
 
     @javax.inject.Inject
-    lateinit var medicineStringFormatter: com.futsch1.medtimer.helpers.MedicineStringFormatter
+    lateinit var medicineStringFormatter: com.futsch1.medtimer.core.ui.MedicineStringFormatter
 
     private val viewModel: ShowMedicineViewModel by viewModels()
 

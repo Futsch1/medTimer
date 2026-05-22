@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.helpers.TableHelper
-import com.futsch1.medtimer.helpers.TimeFormatter
 import com.wwdablu.soumya.simplypdf.composers.properties.TableProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.TextProperties
 import com.wwdablu.soumya.simplypdf.composers.properties.cell.Cell

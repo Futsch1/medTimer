@@ -8,11 +8,11 @@ object TableHelper {
         context.getString(R.string.reminded),
         context.getString(R.string.name),
         context.getString(R.string.dosage),
-        context.getString(R.string.taken),
+        context.getString(com.futsch1.medtimer.core.ui.R.string.taken),
         context.getString(R.string.tags),
         context.getString(R.string.interval),
         context.getString(R.string.notes),
         "${context.getString(R.string.reminded)} (ISO 8601)",
-        "${context.getString(R.string.taken)} (ISO 8601)"
+        "${context.getString(com.futsch1.medtimer.core.ui.R.string.taken)} (ISO 8601)"
     )
 }

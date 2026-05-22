@@ -7,8 +7,8 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -43,7 +43,7 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
-        builder.setSmallIcon(R.drawable.ban)
+        builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.ban)
             .setContentTitle(context.getString(R.string.expiration_reminder))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)

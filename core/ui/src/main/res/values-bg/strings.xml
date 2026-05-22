@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
+    <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
+    <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>
+    <string name="cycle_reminder">Циклични напомняния</string>
+    <string name="cycle_start_date">Начало на първия цикъл</string>
+    <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
+    <string name="day_of_month_limited">Ограничаване до определени дни в месеца</string>
+    <string name="every_day">Всеки ден</string>
+    <string name="every_interval">Всеки %s</string>
+    <string name="expiration_date">Срок на годност</string>
+    <string name="expiration_date_reminder_help">Напомня, когато е достигнат срокът на годност на лекарството или конфигурируемо време преди тази дата.</string>
+    <string name="inactive">Неактивно</string>
+    <string name="interval_time">Интервал %s</string>
+    <string name="linked_reminder">Свързано напомняне</string>
+    <string name="linked_reminder_help">Свързаното напомняне е последващо напомняне, което се планира за определено време след предприемане на действие по основно напомняне (прието или отложено). Това е полезно за лекарства, които трябва да се приемат последователно, със специфично забавяне между тях.</string>
+    <string name="linked_reminder_summary">След напомняне в %1$s</string>
+    <string name="medicine_stock_string">Остават %1$s</string>
+    <string name="out_of_stock_reminder">Напомняне за отъствие на запас</string>
+    <string name="out_of_stock_reminder_help">Напомня, когато лекарството не е на склад, или след всяко напомняне, или веднъж, или веднъж на ден.</string>
+    <string name="production_date">Дата на производство</string>
+    <string name="refill">Допълване на запасите</string>
+    <string name="skipped">Пропуснато</string>
+    <string name="taken">Взето</string>
+    <string name="time_based_reminder">Напомняне с време</string>
+    <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
+    <string name="weekday_limited">Ограничено до определени дни</string>
+    <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
+    <string name="windowed_interval_reminder_help">Определете дневен активен прозорец (напр. от 9 до 21 ч.), в който първото напомняне винаги е в началния час. Последващите напомняния се задействат на определени интервали до достигане на крайния час. Пълният модел се нулира всеки ден.</string>
+    <plurals name="days">
+        <item quantity="one">ден</item>
+        <item quantity="other">дни</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">час</item>
+        <item quantity="other">часа</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">минута</item>
+        <item quantity="other">минути</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d напомняне\n%2$s</item>
+        <item quantity="other">%1$d напомняния\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">седмица</item>
+        <item quantity="other">седмици</item>
+    </plurals>
+    <string name="once">Веднъж</string>
+    <string name="daily">Ежедневно</string>
+    <string name="once_below_threshold">Веднъж при падане под прага</string>
+    <string name="always_below_threshold">Винаги, когато е под прага</string>
+    <string name="daily_below_threshold">Ежедневно при под прага</string>
+</resources>

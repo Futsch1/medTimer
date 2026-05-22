@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:ns0="http://schemas.android.com/tools">
+<resources>
     <string name="tab_settings">Настройки</string>
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
@@ -15,15 +15,7 @@
     <string name="confirm">Подтвердить</string>
     <string name="are_you_sure_delete_medicine">Вы точно хотите удалить лекарство?</string>
     <string name="no_reminders">Не установлено напоминаний</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d напоминание\n%2$s</item>
-        <item quantity="few">%1$d напоминания\n%2$s</item>
-        <item quantity="many">%1$d напоминаний\n%2$s</item>
-        <item quantity="other">%1$d напоминаний\n%2$s</item>
-    </plurals>
     <string name="notification_title">Напоминание о лекарстве</string>
-    <string name="taken">Принято</string>
-    <string name="skipped">Пропущено</string>
     <string name="recent_events">Последние события</string>
     <string name="next_reminders">Следующие напоминания</string>
     <string name="version">Версия %s</string>
@@ -85,11 +77,7 @@
     <string name="weekend_end_time">Время окончания</string>
     <string name="custom">Пользовательский…</string>
     <string name="advanced_settings">Продвинутые настройки</string>
-    <string name="every_day">Каждый день</string>
     <string name="cycle_pause_days">Дни паузы</string>
-    <string name="cycle_start_date">Дата начала цикла</string>
-    <string name="cycle_reminder">Цикличные напоминания</string>
-    <string name="weekday_limited">Ограничено до некоторых дней недели</string>
     <string name="reminders">Напоминания</string>
     <string name="filter">Фильтр</string>
     <string name="seven_days">7 дней</string>
@@ -124,7 +112,6 @@
     <string name="calendar">Календарь</string>
     <string name="date">Дата</string>
     <string name="active">Активный</string>
-    <string name="inactive">Неактивный</string>
     <string name="period_start">Начало периода</string>
     <string name="period_end">Конец периода</string>
     <string name="activate_all">Активируйте все напоминания</string>
@@ -134,7 +121,6 @@
     <string name="every_day_of_month">Каждый день месяца</string>
     <string name="on_day_of_month">В %s числа месяца</string>
     <string name="never">Никогда</string>
-    <string name="day_of_month_limited">Ограничено некоторыми днями месяца</string>
     <string name="medicines_tab_description">Вкладка "Лекарства</string>
     <string name="overview_tab_description">Вкладка "Обзор</string>
     <string name="statistics_tab_description">Вкладка Статистика</string>
@@ -148,49 +134,22 @@
     <string name="add_linked_reminder">Добавьте напоминание о следующей дозе</string>
     <string name="linked_reminder_delay">Задержка для следующей дозы</string>
     <string name="delay">Задержка</string>
-    <string name="linked_reminder_summary">После напоминания на %1$s</string>
     <string name="delete_re_raise_event">Хотите ли вы удалить это событие и снова поднять уведомление?</string>
-    <string name="time_based_reminder">Напоминание по времени</string>
     <string name="interval_based_reminder">Интервальное напоминание</string>
-    <plurals name="minutes">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">минута</item>
-        <item quantity="few">минуты</item>
-        <item quantity="many">минут</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">час</item>
-        <item quantity="few">часа</item>
-        <item quantity="many">часов</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
-        <item quantity="few">дня</item>
-        <item quantity="many">дней</item>
-    </plurals>
     <string name="minutes_string">Минуты</string>
     <string name="hours_string">Часы</string>
     <string name="days_string">Дни</string>
-    <plurals name="weeks">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">неделя</item>
-        <item quantity="few">недели</item>
-        <item quantity="many">недель</item>
-    </plurals>
     <string name="weeks_string">Недели</string>
     <string name="create_reminder">Создать напоминание</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Время начала интервала</string>
     <string name="interval_start_reminded">Интервал начинается с момента напоминания</string>
     <string name="interval_start_processed">Интервал начинается, когда он взят или пропущен</string>
-    <string name="every_interval">Каждый %s</string>
     <string name="invalid_input">Недопустимый ввод</string>
-    <string name="once_below_threshold">Один раз при падении ниже порога</string>
-    <string name="always_below_threshold">Всегда, когда ниже порога</string>
     <string name="out_of_stock_notification">Осталось всего %2$s от %1$s!\nПодумайте о том, чтобы пополнить запасы лекарства в ближайшее время.</string>
-    <string name="medicine_stock_string">Осталось %1$s</string>
     <string name="out_of_stock_notification_title">Напоминание об отсутствии лекарств на складе</string>
     <string name="medicine_stock">Запас медикаментов</string>
     <string name="amount">Сумма</string>
-    <string name="out_of_stock_reminder">Напоминание об отсутствии на складе</string>
     <string name="reminder_threshold">Порог напоминания</string>
     <string name="refill_size">Размер заправки</string>
     <string name="refill_now">Пополнить сейчас</string>
@@ -220,7 +179,6 @@
     <string name="sticky_on_lockscreen_summary">Напоминания нельзя скрыть с экрана блокировки, только из панели уведомлений\nПримечание. Некоторые умные часы могут больше не показывать уведомления</string>
     <string name="big_notifications">Большие кнопки уведомлений</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="interval_time">Интервал %s</string>
     <string name="reminded">Напомнили</string>
     <string name="all_taken">Все принято (%s)</string>
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
@@ -230,8 +188,6 @@
     <string name="sort">Сортировать</string>
     <string name="high_and_alarm">Высокий + тревога</string>
     <string name="enable_notification_alarm_dialog">Чтобы разрешить отображение напоминаний в качестве будильников, включите эту функцию для MedTimer в следующем меню</string>
-    <string name="daily_from_to">Ежедневный интервал от %1$s до %2$s</string>
-    <string name="continuous_from">Непрерывный интервал, начиная с %1$s</string>
     <string name="reminder_status">Статус напоминания</string>
     <string name="dosing_instructions">Инструкции по дозированию</string>
     <string name="sample_instructions">Заполнить примерными инструкциями</string>
@@ -241,13 +197,6 @@
     <string name="remind_on_days_of_month">Напоминать в дни месяца</string>
     <string name="start_date">Дата начала</string>
     <string name="end_date">Дата окончания</string>
-    <string name="windowed_interval_reminder">Напоминание об интервале в окне</string>
-    <string name="continuous_interval_reminder">Напоминание о непрерывном интервале</string>
-    <string name="time_based_reminder_help">Установите определенное время (например, 8:00) и настройте повторяющийся шаблон. Это обеспечивает точный контроль над определенными днями недели, днями месяца или сложными периодическими расписаниями (например, «каждые 3 дня»).</string>
-    <string name="continuous_interval_reminder_help">Начните напоминание на основе временного интервала (например, каждые 6 часов) с указанного момента. Этот шаблон является непрерывным, игнорируя ограничения по времени суток, пока не будет отключен вручную.</string>
-    <string name="windowed_interval_reminder_help">Определите ежедневное активное окно (например, с 9:00 до 21:00), в котором первое напоминание всегда приходится на время начала. Последующие напоминания срабатывают через фиксированные промежутки времени до тех пор, пока не будет достигнуто время окончания. Полный шаблон сбрасывается каждый день.</string>
-    <string name="linked_reminder">Связанное напоминание</string>
-    <string name="linked_reminder_help">Связанное напоминание — это последующее напоминание, которое планируется через определенное время после выполнения основного напоминания (принятого или отложенного). Это полезно для лекарств, которые необходимо принимать последовательно, с определенной задержкой между ними.</string>
     <string name="add_linked_reminder_summary">Создает последующее напоминание, которое планируется через определенное время после этого напоминания.</string>
     <string name="cyclic_reminder_summary">Настраивает повторяющийся шаблон активных и приостановленных дней, начиная с заданной даты. Напоминание будет вызывать уведомление только в активные дни. Используйте это для таких лекарств, как противозачаточные таблетки.</string>
     <string name="variable_amount_summary">Когда активно, при приеме напоминания отображается диалоговое окно для ввода дозировки.</string>
@@ -272,17 +221,9 @@
     <string name="interval_start_condition">Условие запуска интервала</string>
     <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
     <string name="show_taken_time_in_overview">Показать время приёма в обзоре</string>
-    <string name="refill">Пополнение запасов</string>
     <string name="expiration_settings">Настройки срока годности</string>
-    <string name="production_date">Дата производства</string>
-    <string name="expiration_date">Срок годности</string>
     <string name="expiration_reminder">Напоминание о сроке годности</string>
-    <string name="daily_below_threshold">Ежедневно при уровне ниже порогового</string>
     <string name="remind_days_before_expiration">Напоминать за дни до истечения срока годности</string>
-    <string name="out_of_stock_reminder_help">Напоминает, когда лекарство заканчивается, либо после каждого напоминания, либо один раз, либо один раз в день.</string>
-    <string name="expiration_date_reminder_help">Напоминает о наступлении срока годности лекарства или за настраиваемое время до этой даты.</string>
-    <string name="once">Один раз</string>
-    <string name="daily">Ежедневно</string>
     <string name="medicine_stock_settings">Настройки запасов лекарств</string>
     <string name="edit_medicine_stock_settings">Изменить настройки запасов лекарств</string>
     <string name="clear_dates">Очистить даты</string>

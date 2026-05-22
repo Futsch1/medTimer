@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.overview.ManualDose.ManualDoseEntry
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

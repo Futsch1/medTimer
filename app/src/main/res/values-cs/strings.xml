@@ -15,15 +15,7 @@
     <string name="confirm">Potvrdit</string>
     <string name="are_you_sure_delete_medicine">Opravdu chcete smazat lék?</string>
     <string name="no_reminders">Nenastavena žádná připomenutí</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d připomenutí\n%2$s</item>
-        <item quantity="few">%1$d připomenutí\n%2$s</item>
-        <item quantity="many">%1$d připomenutí\n%2$s</item>
-        <item quantity="other">%1$d připomenutí\n%2$s</item>
-    </plurals>
     <string name="notification_title">Připomenutí léku</string>
-    <string name="taken">Užito</string>
-    <string name="skipped">Přeskočeno</string>
     <string name="recent_events">Nedávné události</string>
     <string name="next_reminders">Další připomenutí</string>
     <string name="version">Verze %s</string>
@@ -85,11 +77,7 @@
     <string name="weekend_end_time">Čas konce</string>
     <string name="custom">Vlastní…</string>
     <string name="advanced_settings">Pokročilá nastavení</string>
-    <string name="every_day">Každý den</string>
     <string name="cycle_pause_days">Pozastavit dny</string>
-    <string name="cycle_start_date">Začátek prvního cyklu</string>
-    <string name="cycle_reminder">Opakované připomenutí</string>
-    <string name="weekday_limited">Omezeno na určité dny v týdnu</string>
     <string name="reminders">Připomenutí</string>
     <string name="sort">Seřadit</string>
     <string name="filter">Filtr</string>
@@ -125,7 +113,6 @@
     <string name="date">Datum</string>
     <string name="active">Aktivní</string>
     <string name="high">Vysoká</string>
-    <string name="inactive">Neaktivní</string>
     <string name="period_start">Začátek období</string>
     <string name="period_end">Konec období</string>
     <string name="activate_all">Aktivovat všechna připomenutí</string>
@@ -135,7 +122,6 @@
     <string name="every_day_of_month">Každý den v měsíci</string>
     <string name="on_day_of_month">%s. den v měsíci</string>
     <string name="never">Nikdy</string>
-    <string name="day_of_month_limited">Omezeno na některé dny v měsíci</string>
     <string name="medicines_tab_description">Záložka léky</string>
     <string name="overview_tab_description">Záložka přehled</string>
     <string name="statistics_tab_description">Záložka statistiky</string>
@@ -149,53 +135,22 @@
     <string name="add_linked_reminder">Přidat připomenutí pro navazující dávku</string>
     <string name="linked_reminder_delay">Zpoždění následující dávky</string>
     <string name="delay">Zpoždění</string>
-    <string name="linked_reminder_summary">Po připomenutí v %1$s</string>
     <string name="delete_re_raise_event">Chcete smazat tuto událost a znovu vyvolat notifikaci?</string>
-    <string name="time_based_reminder">Připomenutí založené na čase</string>
     <string name="interval_based_reminder">Připomenutí založené na intervalu</string>
-    <plurals name="minutes">
-        <item quantity="one">minuta</item>
-        <item quantity="few">minuty</item>
-        <item quantity="many">minut</item>
-        <item quantity="other">minut</item>
-    </plurals>
     <string name="minutes_string">Minuty</string>
-    <plurals name="hours">
-        <item quantity="one">hodina</item>
-        <item quantity="few">hodiny</item>
-        <item quantity="many">hodin</item>
-        <item quantity="other">hodin</item>
-    </plurals>
     <string name="hours_string">Hodiny</string>
-    <plurals name="days">
-        <item quantity="one">den</item>
-        <item quantity="few">dny</item>
-        <item quantity="many">dní</item>
-        <item quantity="other">dní</item>
-    </plurals>
     <string name="days_string">Dny</string>
-    <plurals name="weeks">
-        <item quantity="one">týden</item>
-        <item quantity="few">týdny</item>
-        <item quantity="many">týdnů</item>
-        <item quantity="other">týdnů</item>
-    </plurals>
     <string name="weeks_string">Týdny</string>
     <string name="create_reminder">Vytvořit připomenutí</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Čas začátku intervalu</string>
     <string name="interval_start_reminded">Interval začne v době připomenutí</string>
     <string name="interval_start_processed">Interval začne v době užití nebo přeskočení</string>
-    <string name="every_interval">Každých %s</string>
     <string name="invalid_input">Neplatný vstup</string>
-    <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
-    <string name="always_below_threshold">Vždy pod nastavenou mezí</string>
     <string name="out_of_stock_notification">Zbývá pouze %2$s z %1$s!\nZvažte brzy doplnění léků.</string>
-    <string name="medicine_stock_string">%1$s zbývá</string>
     <string name="out_of_stock_notification_title">Připomenutí prázdných zásob léků</string>
     <string name="medicine_stock">Zásoba léků</string>
     <string name="amount">Množství</string>
-    <string name="out_of_stock_reminder">Připomenutí vyčerpání zásob</string>
     <string name="reminder_threshold">Mez připomenutí</string>
     <string name="refill_size">Doplněné množství</string>
     <string name="refill_now">Doplnit teď</string>
@@ -225,7 +180,6 @@
     <string name="sticky_on_lockscreen_summary">Připomenutí nemohou být zrušena ze zamykací obrazovky, pouze z notifikační lišty\nUpozornění: Některé chytré hodinky nezobrazují notifikaci, pokud je toto povoleno</string>
     <string name="big_notifications">Velká tlačítka notifikace</string>
     <string name="please_wait">Prosím čekejte…</string>
-    <string name="interval_time">Interval %s</string>
     <string name="reminded">Připomenuto</string>
     <string name="all_taken">Vše užito (%s)</string>
     <string name="estimated_run_out_date">Odhadované datum vyčerpání zásob</string>
@@ -234,8 +188,6 @@
     <string name="automatically_taken">Automaticky označit jako užité</string>
     <string name="high_and_alarm">Vysoká + Alarm</string>
     <string name="enable_notification_alarm_dialog">Pro aktivaci zobrazení připomínek jako alarmy to povolte pro aplikaci MedTimer v následujícím menu</string>
-    <string name="daily_from_to">Denní interval od %1$s do %2$s</string>
-    <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="reminder_status">Stav připomenutí</string>
     <string name="dosing_instructions">Instrukce k dávce</string>
     <string name="sample_instructions">Vyplnit ukázkovými instrukcemi</string>
@@ -245,13 +197,6 @@
     <string name="remind_on_days_of_month">Připomenout ve dny v měsíci</string>
     <string name="start_date">Počáteční datum</string>
     <string name="end_date">Koncové datum</string>
-    <string name="linked_reminder">Propojené připomenutí</string>
-    <string name="windowed_interval_reminder">Intervalové připomenutí v rámci rozsahu</string>
-    <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
-    <string name="time_based_reminder_help">Nastavte specifické časy (např. 8 ráno) a nastavte režim opakování. To umožňuje přesnou kontrolu nad konkrétními dny v týdnu, dny v měsící nebo složitějšími plány (jako \"každé 3 dny\").</string>
-    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
-    <string name="windowed_interval_reminder_help">Definuje denní aktivní rozsah časů (např. od 9 ráno do 9 večer), kde je první připomenutí vždy v počáteční čas. Následná připomenutí se spustí v pevné intervaly, dokud není dosaženo koncového času. Další den začíná odznova.</string>
-    <string name="linked_reminder_help">Propojené připomenutí je navazující připomenutí, které je naplánováno po uplynutí určeného času po hlavním připomenutí. To je užitečné pro léky, které musí být užity v posloupnosti se specifickým odstupem mezi nimi.</string>
     <string name="add_linked_reminder_summary">Vytvoří navazující připomenutí, které je naplánováno na konkrétní časový odstup po tomto připomenutí.</string>
     <string name="cyclic_reminder_summary">Nastaví vzorec opakování aktivních a neaktivních dní počínaje zvoleným datem. Takové připomenutí způsobí notifikaci pouze v aktivní dny. Použítí např. pro antikoncepci.</string>
     <string name="variable_amount_summary">Pokud je aktivní, dialog pro vložení dávky je zobrazen v momentě zobrazení připomenutí.</string>
@@ -276,17 +221,9 @@
     <string name="interval_start_condition">Podmínka začátku intervalu</string>
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
-    <string name="refill">Doplnění zásob</string>
     <string name="expiration_settings">Nastavení expirace</string>
-    <string name="production_date">Datum výroby</string>
-    <string name="expiration_date">Datum expirace</string>
     <string name="expiration_reminder">Připomenutí expirace</string>
-    <string name="daily_below_threshold">Denně, pokud je pod nastavenou mezí</string>
     <string name="remind_days_before_expiration">Připomenout dny před expirací</string>
-    <string name="out_of_stock_reminder_help">Připomene, když lék došel, buď po každém připomenutí, jednorázově, nebo jednou denně.</string>
-    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo nastavitelného času před tímto datem.</string>
-    <string name="once">Jednou</string>
-    <string name="daily">Denně</string>
     <string name="medicine_stock_settings">Nastavení zásob léků</string>
     <string name="edit_medicine_stock_settings">Upravit nastavení zásob léků</string>
     <string name="clear_dates">Vymazat data</string>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="expiration_date">Utløpsdato</string>
+    <string name="production_date">Produksjonsdato</string>
+    <string name="skipped">Hoppet over</string>
+    <string name="taken">Tatt</string>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d påminnelse\n%2$s</item>
+        <item quantity="other">%1$d påminnelser\n%2$s</item>
+    </plurals>
+</resources>

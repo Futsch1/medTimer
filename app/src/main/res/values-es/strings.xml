@@ -15,14 +15,7 @@
     <string name="confirm">Confirmar</string>
     <string name="are_you_sure_delete_medicine">¿Quieres eliminar el medicamento?</string>
     <string name="no_reminders">Ningún recordatorio establecido</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d recordatorio\n%2$s</item>
-        <item quantity="many">%1$d recordatorios\n%2$s</item>
-        <item quantity="other">%1$d recordatorios\n%2$s</item>
-    </plurals>
     <string name="notification_title">Recordatorio de medicación</string>
-    <string name="taken">Tomado</string>
-    <string name="skipped">Omitido</string>
     <string name="recent_events">Eventos recientes</string>
     <string name="next_reminders">Siguientes recordatorios</string>
     <string name="version">Versión %s</string>
@@ -84,11 +77,7 @@
     <string name="weekend_end_time">Hora de fin</string>
     <string name="custom">Personalizado…</string>
     <string name="advanced_settings">Ajustes avanzados</string>
-    <string name="every_day">Todos los días</string>
     <string name="cycle_pause_days">Días de pausa</string>
-    <string name="cycle_start_date">Inicio del primer ciclo</string>
-    <string name="cycle_reminder">Recordatorios cíclicos</string>
-    <string name="weekday_limited">Limitado a algunos días laborables</string>
     <string name="reminders">Recordatorios</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 días</string>
@@ -122,7 +111,6 @@
     <string name="calendar">Calendario</string>
     <string name="date">Fecha</string>
     <string name="active">Activo</string>
-    <string name="inactive">Inactivo</string>
     <string name="period_start">Inicio del período</string>
     <string name="period_end">Fin de periodo</string>
     <string name="activate_all">Activar todos los recordatorios</string>
@@ -132,7 +120,6 @@
     <string name="every_day_of_month">Todos los días del mes</string>
     <string name="on_day_of_month">El %s del mes</string>
     <string name="never">Nunca</string>
-    <string name="day_of_month_limited">Limitado a algunos días del mes</string>
     <string name="medicines_tab_description">Pestaña de medicamentos</string>
     <string name="overview_tab_description">Pestaña de resumen</string>
     <string name="statistics_tab_description">Pestaña de estadísticas</string>
@@ -146,49 +133,22 @@
     <string name="add_linked_reminder">Añadir recordatorio para la siguiente dosis</string>
     <string name="linked_reminder_delay">Retraso para la siguiente dosis</string>
     <string name="delay">Retraso</string>
-    <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
     <string name="delete_re_raise_event">¿Desea eliminar este evento y volver a generar la notificación?</string>
-    <string name="time_based_reminder">Recordatorio basado en la hora</string>
     <string name="interval_based_reminder">Recordatorio por intervalos</string>
-    <plurals name="minutes">
-        <item quantity="one">minuto</item>
-        <item quantity="other">minutos</item>
-        <item quantity="many">minutos</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">hora</item>
-        <item quantity="other">horas</item>
-        <item quantity="many">horas</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">día</item>
-        <item quantity="other">días</item>
-        <item quantity="many">días</item>
-    </plurals>
     <string name="minutes_string">Minutos</string>
     <string name="hours_string">Horas</string>
     <string name="days_string">Días</string>
-    <plurals name="weeks">
-        <item quantity="one">semana</item>
-        <item quantity="other">semanas</item>
-        <item quantity="many">semanas</item>
-    </plurals>
     <string name="weeks_string">Semanas</string>
     <string name="create_reminder">Crear recordatorio</string>
     <string name="interval">Intervalo</string>
     <string name="interval_start_time">Hora de inicio del intervalo</string>
     <string name="interval_start_reminded">Intervalo comienza cuando se le recuerda</string>
     <string name="interval_start_processed">Intervalo comienza cuando se toma o se omite</string>
-    <string name="every_interval">Cada %s</string>
     <string name="invalid_input">Entrada no válida</string>
-    <string name="once_below_threshold">Una vez al caer por debajo del umbral</string>
-    <string name="always_below_threshold">Siempre que esté por debajo del umbral</string>
     <string name="out_of_stock_notification">¡Sólo quedan %2$s de %1$s!\nConsidere rellenar la medicina pronto.</string>
-    <string name="medicine_stock_string">%1$s restantes</string>
     <string name="out_of_stock_notification_title">Recordatorio de medicamentos agotados</string>
     <string name="medicine_stock">Stock de medicamentos</string>
     <string name="amount">Cantidad</string>
-    <string name="out_of_stock_reminder">Recordatorio de existencias</string>
     <string name="reminder_threshold">Umbral recordatorio</string>
     <string name="refill_size">Tamaño del recargar</string>
     <string name="refill_now">Recargar ahora</string>
@@ -218,7 +178,6 @@
     <string name="sticky_on_lockscreen_summary">Los recordatorios no se pueden descartar desde la pantalla de bloqueo, solo desde el panel de notificaciones\nNota: Es posible que algunos relojes inteligentes dejen de mostrar notificaciones si esta opción está activada</string>
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="please_wait">Por favor, espere…</string>
-    <string name="interval_time">Intervalo %s</string>
     <string name="reminded">Recordado</string>
     <string name="all_taken">Todas tomadas (%s)</string>
     <string name="estimated_run_out_date">Fecha estimada de agotamiento</string>
@@ -228,8 +187,6 @@
     <string name="sort">Ordenar</string>
     <string name="high_and_alarm">Alta + Alarma</string>
     <string name="enable_notification_alarm_dialog">Para poder mostrar los recordatorios como alarmas, active esta opción para MedTimer en el siguiente menú</string>
-    <string name="daily_from_to">Intervalo diario de %1$s a %2$s</string>
-    <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="reminder_status">Estado del recordatorio</string>
     <string name="dosing_instructions">Instrucciones de dosificación</string>
     <string name="sample_instructions">Rellenar con instrucciones de ejemplo</string>
@@ -239,13 +196,6 @@
     <string name="remind_on_days_of_month">Recordar los días del mes</string>
     <string name="start_date">Fecha de inicio</string>
     <string name="end_date">Fecha de finalización</string>
-    <string name="windowed_interval_reminder">Recordatorio de intervalo con ventana</string>
-    <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
-    <string name="time_based_reminder_help">Establezca horas específicas (p. ej., 8:00 a. m.) y configure un patrón recurrente. Esto permite un control preciso sobre días de la semana específicos, días del mes o programaciones periódicas complejas (como \'cada 3 días\').</string>
-    <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
-    <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) en la que el primer recordatorio siempre se envía a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta alcanzar la hora de finalización. El ciclo completo se restablece cada día.</string>
-    <string name="linked_reminder">Recordatorio vinculado</string>
-    <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se tome un recordatorio principal. Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
     <string name="add_linked_reminder_summary">Crea un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se genera este recordatorio.</string>
     <string name="cyclic_reminder_summary">Configura un patrón recurrente de días activos y en pausa a partir de una fecha determinada. El recordatorio solo generará una notificación en los días activos. Úselo para medicamentos como las píldoras anticonceptivas.</string>
     <string name="variable_amount_summary">Cuando está activo, se muestra un diálogo para introducir la dosis cuando se toma el recordatorio.</string>
@@ -270,17 +220,9 @@
     <string name="interval_start_condition">Condición de inicio de intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
     <string name="show_taken_time_in_overview">Mostrar hora de toma en el resumen</string>
-    <string name="refill">Reposición de existencias</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
-    <string name="production_date">Fecha de producción</string>
-    <string name="expiration_date">Fecha de vencimiento</string>
     <string name="expiration_reminder">Recordatorio de vencimiento</string>
-    <string name="daily_below_threshold">Diariamente por debajo del umbral</string>
     <string name="remind_days_before_expiration">Recordar días antes del vencimiento</string>
-    <string name="out_of_stock_reminder_help">Recuerda cuando el medicamento se agota, ya sea después de cada recordatorio, una vez o una vez al día.</string>
-    <string name="expiration_date_reminder_help">Recuerda cuando se alcanza la fecha de vencimiento del medicamento o un tiempo configurable antes de esa fecha.</string>
-    <string name="once">Una vez</string>
-    <string name="daily">Diariamente</string>
     <string name="medicine_stock_settings">Configuración de existencias de medicamentos</string>
     <string name="edit_medicine_stock_settings">Editar configuración de existencias de medicamentos</string>
     <string name="clear_dates">Borrar fechas</string>

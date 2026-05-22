@@ -15,13 +15,7 @@
     <string name="confirm">Потвърди</string>
     <string name="are_you_sure_delete_medicine">Наистина ли искате да изтриете лекарството?</string>
     <string name="no_reminders">Няма добавени напомняния</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d напомняне\n%2$s</item>
-        <item quantity="other">%1$d напомняния\n%2$s</item>
-    </plurals>
     <string name="notification_title">Напомняне за лекарство</string>
-    <string name="taken">Взето</string>
-    <string name="skipped">Пропуснато</string>
     <string name="recent_events">Последни събития</string>
     <string name="next_reminders">Следващи напомняния</string>
     <string name="version">Версия %s</string>
@@ -83,11 +77,7 @@
     <string name="weekend_end_time">Краен час</string>
     <string name="custom">Ръчно…</string>
     <string name="advanced_settings">Разширени настройки</string>
-    <string name="every_day">Всеки ден</string>
     <string name="cycle_pause_days">Дни за пауза</string>
-    <string name="cycle_start_date">Начало на първия цикъл</string>
-    <string name="cycle_reminder">Циклични напомняния</string>
-    <string name="weekday_limited">Ограничено до определени дни</string>
     <string name="reminders">Напомняния</string>
     <string name="sort">Сортиране</string>
     <string name="filter">Филтър</string>
@@ -119,7 +109,6 @@
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активно</string>
-    <string name="inactive">Неактивно</string>
     <string name="period_start">Начало на период</string>
     <string name="period_end">Край на период</string>
     <string name="activate_all">Активиране на всички напомняния</string>
@@ -129,7 +118,6 @@
     <string name="every_day_of_month">Всеки ден от месеца</string>
     <string name="on_day_of_month">На %s число от месеца</string>
     <string name="never">Никога</string>
-    <string name="day_of_month_limited">Ограничаване до определени дни в месеца</string>
     <string name="medicines_tab_description">Раздел „Лекарства</string>
     <string name="overview_tab_description">Раздел „Преглед</string>
     <string name="statistics_tab_description">Раздел Статистика</string>
@@ -143,43 +131,22 @@
     <string name="add_linked_reminder">Добавяне на напомняне за следващата доза</string>
     <string name="linked_reminder_delay">Забавяне на следващата доза</string>
     <string name="delay">Забавяне</string>
-    <string name="linked_reminder_summary">След напомняне в %1$s</string>
     <string name="delete_re_raise_event">Искате ли да изтриете събитието и да се включи отново известието?</string>
-    <string name="time_based_reminder">Напомняне с време</string>
     <string name="interval_based_reminder">Напомняне с интервал</string>
-    <plurals name="minutes">
-        <item quantity="one">минута</item>
-        <item quantity="other">минути</item>
-    </plurals>
     <string name="minutes_string">Минути</string>
-    <plurals name="hours">
-        <item quantity="one">час</item>
-        <item quantity="other">часа</item>
-    </plurals>
     <string name="hours_string">Часа</string>
-    <plurals name="days">
-        <item quantity="one">ден</item>
-        <item quantity="other">дни</item>
-    </plurals>
     <string name="days_string">Дни</string>
-    <plurals name="weeks">
-        <item quantity="one">седмица</item>
-        <item quantity="other">седмици</item>
-    </plurals>
     <string name="weeks_string">Седмици</string>
     <string name="create_reminder">Създаване на напомняне</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Начало на интервала</string>
     <string name="interval_start_reminded">Интервала започва с момента на напомнянето</string>
     <string name="interval_start_processed">Интервала започва при взимане или изпускане</string>
-    <string name="every_interval">Всеки %s</string>
     <string name="invalid_input">Невалиден вход</string>
     <string name="out_of_stock_notification">Остават само %2$s от %1$s!\nОбмислете скорошно попълване на запасите от лекарството.</string>
-    <string name="medicine_stock_string">Остават %1$s</string>
     <string name="out_of_stock_notification_title">Напомняне за свършило лекарство</string>
     <string name="medicine_stock">Запас от лекарство</string>
     <string name="amount">Количество</string>
-    <string name="out_of_stock_reminder">Напомняне за отъствие на запас</string>
     <string name="variable_amount">Въведете доза при прием</string>
     <string name="tags">Етикети</string>
     <string name="add_tag">Добавяне на етикет</string>
@@ -203,7 +170,6 @@
     <string name="sticky_on_lockscreen_summary">Напомнянията не могат да бъдат отхвърляни от заключения екран, а само от панела с известия\nЗабележка: Някои смарт часовници може повече да не показват известия</string>
     <string name="big_notifications">Големи бутони в известието</string>
     <string name="please_wait">Моля изчакайте…</string>
-    <string name="interval_time">Интервал %s</string>
     <string name="reminded">Напомнено</string>
     <string name="all_taken">Всичко е взето (%s)</string>
     <string name="estimated_run_out_date">Предполагаема дата на свършване</string>
@@ -214,16 +180,12 @@
     <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следващото меню</string>
     <string name="intro_overview_description">На екрана за преглед може да се видят бъдещите и последните напомняния. Напомнянията могат да бъдат променени чрез плъзгане вдясно и триене - вляво.\n\nОсвен това може да се добавят допълнителни дози от конфигурираните лекарства или друго.</string>
     <string name="intro_analysis_description">Приложението запазва всички напомняния. Може да се анализират миналите дози в екрана за анализ и да се експортира историята чрез кебаб менюто (трите точки). Историята ще остане дори при изтриване или преименуване на лекарствата или напомнянията.</string>
-    <string name="once_below_threshold">Веднъж при падане под прага</string>
-    <string name="always_below_threshold">Винаги, когато е под прага</string>
     <string name="reminder_threshold">Праг на напомнянията</string>
     <string name="refill_size">Размер на презареждането</string>
     <string name="refill_now">Презареди сега</string>
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>
     <string name="display_settings">Настройки на екрана</string>
-    <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
-    <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="reminder_status">Статус на напомнянето</string>
     <string name="dosing_instructions">Инструкции за дозиране</string>
     <string name="sample_instructions">Попълнете с примерни инструкции</string>
@@ -233,13 +195,6 @@
     <string name="remind_on_days_of_month">Напомняне в дни от месеца</string>
     <string name="start_date">Начална дата</string>
     <string name="end_date">Крайна дата</string>
-    <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
-    <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
-    <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
-    <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>
-    <string name="windowed_interval_reminder_help">Определете дневен активен прозорец (напр. от 9 до 21 ч.), в който първото напомняне винаги е в началния час. Последващите напомняния се задействат на определени интервали до достигане на крайния час. Пълният модел се нулира всеки ден.</string>
-    <string name="linked_reminder">Свързано напомняне</string>
-    <string name="linked_reminder_help">Свързаното напомняне е последващо напомняне, което се планира за определено време след предприемане на действие по основно напомняне (прието или отложено). Това е полезно за лекарства, които трябва да се приемат последователно, със специфично забавяне между тях.</string>
     <string name="add_linked_reminder_summary">Създава последващо напомняне, което се насрочва за определен период от време след задействането на това напомняне.</string>
     <string name="cyclic_reminder_summary">Конфигурира повтарящ се модел на активни и паузирани дни, започвайки от дадена дата. Напомнянето ще изпраща известие само в активните дни. Използвайте това за лекарства като противозачатъчни хапчета.</string>
     <string name="variable_amount_summary">Когато е активно, се показва диалогов прозорец за въвеждане на дозата, когато напомнянето е прието.</string>
@@ -264,17 +219,9 @@
     <string name="interval_start_condition">Условие за стартиране на интервала</string>
     <string name="tag_filter_active">Филтърът за етикети е активен. Ще бъдат експортирани само данни с съвпадащи етикети.</string>
     <string name="show_taken_time_in_overview">Покажи отнетото време в обзор</string>
-    <string name="refill">Допълване на запасите</string>
     <string name="expiration_settings">Настройки за изтичане на срока</string>
-    <string name="production_date">Дата на производство</string>
-    <string name="expiration_date">Срок на годност</string>
     <string name="expiration_reminder">Напомняне за изтичане на срока</string>
-    <string name="daily_below_threshold">Ежедневно при под прага</string>
     <string name="remind_days_before_expiration">Напомняне дни преди изтичане</string>
-    <string name="out_of_stock_reminder_help">Напомня, когато лекарството не е на склад, или след всяко напомняне, или веднъж, или веднъж на ден.</string>
-    <string name="expiration_date_reminder_help">Напомня, когато е достигнат срокът на годност на лекарството или конфигурируемо време преди тази дата.</string>
-    <string name="once">Веднъж</string>
-    <string name="daily">Ежедневно</string>
     <string name="medicine_stock_settings">Настройки на запасите от лекарства</string>
     <string name="edit_medicine_stock_settings">Редактиране на настройките на запасите от лекарства</string>
     <string name="clear_dates">Изчистване на датите</string>

@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.helpers
+package com.futsch1.medtimer.core.ui
 
 import android.content.Context
 import android.icu.text.MeasureFormat
@@ -9,7 +9,7 @@ import android.text.Spanned
 import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
-import com.futsch1.medtimer.R
+
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TintedImageSpan

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
+    <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
+    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
+    <string name="cycle_reminder">Opakované připomenutí</string>
+    <string name="cycle_start_date">Začátek prvního cyklu</string>
+    <string name="daily_from_to">Denní interval od %1$s do %2$s</string>
+    <string name="day_of_month_limited">Omezeno na některé dny v měsíci</string>
+    <string name="every_day">Každý den</string>
+    <string name="every_interval">Každých %s</string>
+    <string name="expiration_date">Datum expirace</string>
+    <string name="expiration_date_reminder_help">Připomene, když je dosaženo data expirace léku nebo nastavitelného času před tímto datem.</string>
+    <string name="inactive">Neaktivní</string>
+    <string name="interval_time">Interval %s</string>
+    <string name="linked_reminder">Propojené připomenutí</string>
+    <string name="linked_reminder_help">Propojené připomenutí je navazující připomenutí, které je naplánováno po uplynutí určeného času po hlavním připomenutí. To je užitečné pro léky, které musí být užity v posloupnosti se specifickým odstupem mezi nimi.</string>
+    <string name="linked_reminder_summary">Po připomenutí v %1$s</string>
+    <string name="medicine_stock_string">%1$s zbývá</string>
+    <string name="out_of_stock_reminder">Připomenutí vyčerpání zásob</string>
+    <string name="out_of_stock_reminder_help">Připomene, když lék došel, buď po každém připomenutí, jednorázově, nebo jednou denně.</string>
+    <string name="production_date">Datum výroby</string>
+    <string name="refill">Doplnění zásob</string>
+    <string name="skipped">Přeskočeno</string>
+    <string name="taken">Užito</string>
+    <string name="time_based_reminder">Připomenutí založené na čase</string>
+    <string name="time_based_reminder_help">Nastavte specifické časy (např. 8 ráno) a nastavte režim opakování. To umožňuje přesnou kontrolu nad konkrétními dny v týdnu, dny v měsící nebo složitějšími plány (jako \"každé 3 dny\").</string>
+    <string name="weekday_limited">Omezeno na určité dny v týdnu</string>
+    <string name="windowed_interval_reminder">Intervalové připomenutí v rámci rozsahu</string>
+    <string name="windowed_interval_reminder_help">Definuje denní aktivní rozsah časů (např. od 9 ráno do 9 večer), kde je první připomenutí vždy v počáteční čas. Následná připomenutí se spustí v pevné intervaly, dokud není dosaženo koncového času. Další den začíná odznova.</string>
+    <plurals name="days">
+        <item quantity="one">den</item>
+        <item quantity="few">dny</item>
+        <item quantity="many">dní</item>
+        <item quantity="other">dní</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">hodina</item>
+        <item quantity="few">hodiny</item>
+        <item quantity="many">hodin</item>
+        <item quantity="other">hodin</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minuta</item>
+        <item quantity="few">minuty</item>
+        <item quantity="many">minut</item>
+        <item quantity="other">minut</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d připomenutí\n%2$s</item>
+        <item quantity="few">%1$d připomenutí\n%2$s</item>
+        <item quantity="many">%1$d připomenutí\n%2$s</item>
+        <item quantity="other">%1$d připomenutí\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">týden</item>
+        <item quantity="few">týdny</item>
+        <item quantity="many">týdnů</item>
+        <item quantity="other">týdnů</item>
+    </plurals>
+    <string name="once">Jednou</string>
+    <string name="daily">Denně</string>
+    <string name="once_below_threshold">Jakmile klesne pod nastavenou mez</string>
+    <string name="always_below_threshold">Vždy pod nastavenou mezí</string>
+    <string name="daily_below_threshold">Denně, pokud je pod nastavenou mezí</string>
+</resources>

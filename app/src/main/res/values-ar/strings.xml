@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="taken">تم التناول</string>
-    <string name="skipped">تم التخطي</string>
     <string name="recent_events">الأحداث الأخيرة</string>
     <string name="next_reminders">التذكيرات القادمة</string>
     <string name="version">الإصدار %s</string>
@@ -25,14 +23,6 @@
     <string name="confirm">تأكيد</string>
     <string name="are_you_sure_delete_medicine">هل أنت متأكد من حذف الدواء؟</string>
     <string name="no_reminders">لم يتم تعيين تذكيرات</string>
-    <plurals name="sum_reminders">
-        <item quantity="zero">%1$d تذكير\n%2$s</item>
-        <item quantity="one">%1$d تذكير\n%2$s</item>
-        <item quantity="two">تذكيران\n%2$s</item>
-        <item quantity="few">%1$d تذكيرات\n%2$s</item>
-        <item quantity="many">%1$d تذكيرا\n%2$s</item>
-        <item quantity="other">%1$d تذكير\n%2$s</item>
-    </plurals>
     <string name="notification_title">تذكير دواء</string>
     <string name="twenty_four_hours">24 ساعة</string>
     <string name="two_days">يومان</string>
@@ -98,11 +88,7 @@
     <string name="weekend_end_time">وقت الانتهاء</string>
     <string name="custom">مخصّص…</string>
     <string name="advanced_settings">إعدادات متقدّمة</string>
-    <string name="every_day">كل يوم</string>
     <string name="cycle_pause_days">أيام التوقف</string>
-    <string name="cycle_start_date">بداية الدورة الأولى</string>
-    <string name="cycle_reminder">تذكيرات دورية</string>
-    <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
     <string name="reminders">التذكيرات</string>
     <string name="filter">تصفية</string>
     <string name="seven_days">7 أيام</string>
@@ -129,7 +115,6 @@
     <string name="calendar">التقويم</string>
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
-    <string name="inactive">غير نشط</string>
     <string name="period_start">بداية الفترة</string>
     <string name="period_end">نهاية الفترة</string>
     <string name="activate_all">فعِّل جميع التذكيرات</string>
@@ -139,7 +124,6 @@
     <string name="every_day_of_month">كل يوم من الشهر</string>
     <string name="on_day_of_month">في اليوم %s من الشهر</string>
     <string name="never">أبداً</string>
-    <string name="day_of_month_limited">مقيد بأيام معينة من الشهر</string>
     <string name="medicines_tab_description">علامة تبويب الأدوية</string>
     <string name="overview_tab_description">علامة تبويب النظرة العامة</string>
     <string name="statistics_tab_description">علامة تبويب الإحصائيات</string>
@@ -153,64 +137,25 @@
     <string name="add_linked_reminder">أضف تذكير للجرعة التالية</string>
     <string name="linked_reminder_delay">تأخير الجرعة التالية</string>
     <string name="delay">تأخير</string>
-    <string name="linked_reminder_summary">بعد التذكير في %1$s</string>
     <string name="delete_re_raise_event">هل تريد حذف هذا الحدث وإعادة إظهار الإشعار؟</string>
-    <string name="time_based_reminder">تذكير قائم على الوقت</string>
     <string name="interval_based_reminder">تذكير قائم على الفاصل الزمني</string>
-    <plurals name="minutes">
-        <item quantity="zero">دقيقة</item>
-        <item quantity="one">دقيقة</item>
-        <item quantity="two">دقيقتين</item>
-        <item quantity="few">دقائق</item>
-        <item quantity="many">دقيقة</item>
-        <item quantity="other">دقيقة</item>
-    </plurals>
     <string name="minutes_string">دقائق</string>
-    <plurals name="hours">
-        <item quantity="zero">ساعة</item>
-        <item quantity="one">ساعة</item>
-        <item quantity="two">ساعتان</item>
-        <item quantity="few">ساعات</item>
-        <item quantity="many">ساعة</item>
-        <item quantity="other">ساعة</item>
-    </plurals>
     <string name="hours_string">ساعات</string>
-    <plurals name="days">
-        <item quantity="zero">يوم</item>
-        <item quantity="one">يوم</item>
-        <item quantity="two">يومان</item>
-        <item quantity="few">أيام</item>
-        <item quantity="many">يوما</item>
-        <item quantity="other">يوم</item>
-    </plurals>
     <string name="days_string">أيام</string>
-    <plurals name="weeks">
-        <item quantity="zero">أسبوع</item>
-        <item quantity="one">أسبوع</item>
-        <item quantity="two">أسبوعان</item>
-        <item quantity="few">أسابيع</item>
-        <item quantity="many">أسبوعاً</item>
-        <item quantity="other">أسبوع</item>
-    </plurals>
     <string name="weeks_string">أسابيع</string>
     <string name="create_reminder">أنشئ تذكير</string>
     <string name="interval">الفاصل الزمني</string>
     <string name="interval_start_time">وقت بداية الفاصل الزمني</string>
     <string name="interval_start_reminded">يبدأ الفاصل الزمني عند التذكير</string>
     <string name="interval_start_processed">يبدأ الفاصل الزمني عند أخذه أو تخطيه</string>
-    <string name="every_interval">كل %s</string>
     <string name="invalid_input">إدخال غير صالح</string>
-    <string name="once_below_threshold">مرة واحدة عند الانخفاض عن الحد الأدنى</string>
-    <string name="always_below_threshold">دائمًا عند الانخفاض عن الحد الأدنى</string>
     <string name="out_of_stock_notification">تبقى %2$s فقط من %1$s!\nفكر في إعادة تعبئة الدواء قريبًا.</string>
-    <string name="medicine_stock_string">تبقى %1$s</string>
     <string name="out_of_stock_notification_title">تذكير بنفاد مخزون الدواء</string>
     <string name="medicine_stock">مخزون الدواء</string>
     <string name="sticky_on_lockscreen">تذكيرات ثابتة على شاشة القفل</string>
     <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات\nملاحظة: بعض الساعات الذكية قد لا تعرض الإشعارات إذا فُعِّل</string>
     <string name="big_notifications">أزرار إشعار كبيرة</string>
     <string name="amount">الكمية</string>
-    <string name="out_of_stock_reminder">تذكير بنفاد المخزون</string>
     <string name="reminder_threshold">حد التذكير</string>
     <string name="refill_size">حجم التعبئة</string>
     <string name="refill_now">أعد التعبئة الآن</string>
@@ -236,7 +181,6 @@
     <string name="use_relative_date_time_summary">عرض التاريخ/الوقت النسبي للتذكيرات</string>
     <string name="use_relative_date_time">التاريخ/الوقت النسبي</string>
     <string name="invalid_amount">يجب أن تحتوي الكمية على رقم لتفعيل تتبع مخزون الدواء لهذا التذكير.</string>
-    <string name="interval_time">فاصل %s</string>
     <string name="reminded">ذُكِر</string>
     <string name="all_taken">أخذت الكل (%s)</string>
     <string name="estimated_run_out_date">تاريخ النفاد التقديري</string>
@@ -246,8 +190,6 @@
     <string name="sort">فرز</string>
     <string name="high_and_alarm">إنذار عالي + إنذار</string>
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
-    <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
-    <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="reminder_status">حالة التذكير</string>
     <string name="dosing_instructions">تعليمات الجرعات</string>
     <string name="sample_instructions">املأ بتعليمات نموذجية</string>
@@ -257,13 +199,6 @@
     <string name="remind_on_days_of_month">تذكير في أيام الشهر</string>
     <string name="start_date">تاريخ البدء</string>
     <string name="end_date">تاريخ الانتهاء</string>
-    <string name="windowed_interval_reminder">تذكير بفاصل زمني محدد</string>
-    <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
-    <string name="time_based_reminder_help">عيّن أوقاتًا محددة (على سبيل المثال، 8:00 صباحًا) وقم بتكوين نمط متكرر. يتيح ذلك التحكم الدقيق في أيام الأسبوع المحددة أو أيام الشهر أو الجداول الدورية المعقدة (مثل \"كل 3 أيام\").</string>
-    <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>
-    <string name="windowed_interval_reminder_help">حدد نافذة نشطة يومية (على سبيل المثال، من 9:00 صباحًا إلى 9:00 مساءً) حيث يكون التذكير الأول دائمًا في وقت البدء. يتم إطلاق التذكيرات اللاحقة على فترات زمنية ثابتة حتى يتم الوصول إلى وقت الانتهاء. يتم إعادة تعيين النمط الكامل كل يوم.</string>
-    <string name="linked_reminder">تذكير مرتبط</string>
-    <string name="linked_reminder_help">التذكير المرتبط هو تذكير متابعة يتم جدولته بعد فترة زمنية معينة من ظهور تذكير أساسي. هذا مفيد للأدوية التي يجب تناولها بالتتابع، مع تأخير محدد بينها.</string>
     <string name="add_linked_reminder_summary">إنشاء تذكير متابعة يتم جدولته بعد فترة زمنية معينة من ظهور هذا التذكير.</string>
     <string name="cyclic_reminder_summary">يُكوِّن نمطًا متكررًا من الأيام النشطة وأيام الإيقاف المؤقت بدءًا من تاريخ معين. سيرسل التذكير إشعارًا فقط في الأيام النشطة. استخدم هذا لأدوية مثل حبوب منع الحمل.</string>
     <string name="variable_amount_summary">عندما يكون نشطًا، يظهر مربع حوار لإدخال الجرعة عند أخذ التذكير.</string>
@@ -288,17 +223,9 @@
     <string name="interval_start_condition">حالة بدء الفاصل الزمني</string>
     <string name="tag_filter_active">مرشح العلامات نشط. سيتم تصدير البيانات التي تحتوي على علامات مطابقة فقط.</string>
     <string name="show_taken_time_in_overview">عرض الوقت المستغرق في النظرة العامة</string>
-    <string name="refill">إعادة تعبئة المخزون</string>
     <string name="expiration_settings">إعدادات انتهاء الصلاحية</string>
-    <string name="production_date">تاريخ الإنتاج</string>
-    <string name="expiration_date">تاريخ انتهاء الصلاحية</string>
     <string name="expiration_reminder">تذكير بانتهاء الصلاحية</string>
-    <string name="daily_below_threshold">يوميًا عندما يقل عن الحد الأدنى</string>
     <string name="remind_days_before_expiration">تذكير بالأيام قبل انتهاء الصلاحية</string>
-    <string name="out_of_stock_reminder_help">يقوم بالتذكير عندما ينفد الدواء من المخزون، إما بعد كل تذكير أو مرة واحدة أو مرة واحدة يوميًا.</string>
-    <string name="expiration_date_reminder_help">يذكر عند الوصول إلى تاريخ انتهاء صلاحية الدواء أو في وقت قابل للتكوين قبل ذلك التاريخ.</string>
-    <string name="once">مرة واحدة</string>
-    <string name="daily">يوميًا</string>
     <string name="medicine_stock_settings">إعدادات مخزون الأدوية</string>
     <string name="edit_medicine_stock_settings">تعديل إعدادات مخزون الأدوية</string>
     <string name="clear_dates">مسح التواريخ</string>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
+    <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
+    <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>
+    <string name="cycle_reminder">Promemoria ciclico</string>
+    <string name="cycle_start_date">Inizio del primo ciclo</string>
+    <string name="daily_from_to">Intervallo giornaliero da %1$s a %2$s</string>
+    <string name="day_of_month_limited">Limitato ad alcuni giorni del mese</string>
+    <string name="every_day">Ogni giorno</string>
+    <string name="every_interval">Ogni %s</string>
+    <string name="expiration_date">Data di scadenza</string>
+    <string name="expiration_date_reminder_help">Ricorda quando la data di scadenza del medicinale è raggiunta o un tempo configurabile prima di tale data.</string>
+    <string name="inactive">Inattivo</string>
+    <string name="interval_time">Intervallo %s</string>
+    <string name="linked_reminder">Promemoria collegato</string>
+    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up, programmato un certo lasso di tempo dopo che l\'attivazione del promemoria principale. È utile per farmaci da assumere in sequenza, con una pausa specifica tra di loro.</string>
+    <string name="linked_reminder_summary">Dopo il promemoria a %1$s</string>
+    <string name="medicine_stock_string">%1$s rimaste</string>
+    <string name="out_of_stock_reminder">Promemoria di esaurimento delle scorte</string>
+    <string name="out_of_stock_reminder_help">Ricorda quando il medicinale è esaurito, dopo ogni promemoria, una volta o una volta al giorno.</string>
+    <string name="production_date">Data di produzione</string>
+    <string name="refill">Rifornimento scorte</string>
+    <string name="skipped">Saltato</string>
+    <string name="taken">Preso</string>
+    <string name="time_based_reminder">Promemoria basato sull\'orario</string>
+    <string name="time_based_reminder_help">Imposta orari fissi (ad es. 8:00) e configura modelli ricorrenti. Permette di scegliere i giorni della settimana, del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
+    <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
+    <string name="windowed_interval_reminder">Promemoria a intervalli con finestra temporale</string>
+    <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00–21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
+    <plurals name="days">
+        <item quantity="one">giorno</item>
+        <item quantity="other">giorni</item>
+        <item quantity="many">giorni</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">ora</item>
+        <item quantity="other">ore</item>
+        <item quantity="many">ore</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minuto</item>
+        <item quantity="other">minuti</item>
+        <item quantity="many">minuti</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d promemoria\n%2$s</item>
+        <item quantity="many">%1$d promemoria\n%2$s</item>
+        <item quantity="other">%1$d promemoria\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">settimana</item>
+        <item quantity="other">settimane</item>
+        <item quantity="many">settimane</item>
+    </plurals>
+    <string name="once">Una volta</string>
+    <string name="daily">Giornalmente</string>
+    <string name="once_below_threshold">Una sola volta quando scende sotto la soglia</string>
+    <string name="always_below_threshold">Sempre quando scende sotto la soglia</string>
+    <string name="daily_below_threshold">Giornalmente sotto soglia</string>
+</resources>

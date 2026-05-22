@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.helpers
+package com.futsch1.medtimer.core.ui
 
 import android.annotation.SuppressLint
 import android.content.Context

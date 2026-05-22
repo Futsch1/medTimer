@@ -25,7 +25,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.medicine.dialogs.NewReminderStockDialog
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
@@ -120,7 +120,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
             findPreference<EditTextPreference>("amount")!!.icon = null
         }
         if (modelData.hasExpired()) {
-            findPreference<Preference>("expiration_date")!!.setIcon(R.drawable.ban)
+            findPreference<Preference>("expiration_date")!!.setIcon(com.futsch1.medtimer.core.ui.R.drawable.ban)
         } else {
             findPreference<Preference>("expiration_date")!!.icon = null
         }

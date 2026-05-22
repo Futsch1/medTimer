@@ -15,13 +15,7 @@
     <string name="confirm">Onayla</string>
     <string name="are_you_sure_delete_medicine">İlacı silmek istediğinizden emin misiniz?</string>
     <string name="no_reminders">Hiç hatırlatıcı ayarlanmadı</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d hatırlatıcı\n%2$s</item>
-        <item quantity="other">%1$d hatırlatıcı\n%2$s</item>
-    </plurals>
     <string name="notification_title">İlaç hatırlatıcısı</string>
-    <string name="taken">Alındı</string>
-    <string name="skipped">Atlandı</string>
     <string name="recent_events">Son etkinlikler</string>
     <string name="next_reminders">Sonraki hatırlatıcılar</string>
     <string name="version">Versiyon %s</string>
@@ -83,11 +77,7 @@
     <string name="weekend_end_time">Bitiş saati</string>
     <string name="custom">Özel…</string>
     <string name="advanced_settings">Gelişmiş ayarlar</string>
-    <string name="every_day">Her gün</string>
     <string name="cycle_pause_days">Ara günleri</string>
-    <string name="cycle_start_date">İlk döngü başlangıcı</string>
-    <string name="cycle_reminder">Döngüsel hatırlatıcılar</string>
-    <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
     <string name="reminders">Hatırlatıcılar</string>
     <string name="filter">Filtre</string>
     <string name="seven_days">7 gün</string>
@@ -120,7 +110,6 @@
     <string name="calendar">Takvim</string>
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
-    <string name="inactive">Aktif değil</string>
     <string name="period_start">Dönem başlangıcı</string>
     <string name="period_end">Dönem sonu</string>
     <string name="activate_all">Tüm hatırlatıcıları etkinleştirin</string>
@@ -130,7 +119,6 @@
     <string name="every_day_of_month">Ayın her günü</string>
     <string name="on_day_of_month">Ayın %s inde</string>
     <string name="never">Asla</string>
-    <string name="day_of_month_limited">Ayın bazı günleri ile sınırlıdır</string>
     <string name="medicines_tab_description">İlaçlar sekmesi</string>
     <string name="overview_tab_description">Genel Bakış sekmesi</string>
     <string name="statistics_tab_description">İstatistik sekmesi</string>
@@ -144,45 +132,22 @@
     <string name="add_linked_reminder">Takip eden doz için hatırlatma ekleyin</string>
     <string name="linked_reminder_delay">Takip eden doz için gecikme</string>
     <string name="delay">Gecikme</string>
-    <string name="linked_reminder_summary">%1$s adresindeki hatırlatmadan sonra</string>
     <string name="delete_re_raise_event">Bu olayı silmek ve bildirimi yeniden yükseltmek istiyor musunuz?</string>
-    <string name="time_based_reminder">Zaman bazlı hatırlatma</string>
     <string name="interval_based_reminder">Aralık bazlı hatırlatma</string>
-    <plurals name="minutes">
-        <item quantity="one">dakika</item>
-        <item quantity="other">dakika</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">saat</item>
-        <item quantity="other">saat</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">gün</item>
-        <item quantity="other">gün</item>
-    </plurals>
     <string name="minutes_string">Dakika</string>
     <string name="hours_string">Saatler</string>
     <string name="days_string">Günler</string>
-    <plurals name="weeks">
-        <item quantity="one">hafta</item>
-        <item quantity="other">hafta</item>
-    </plurals>
     <string name="weeks_string">Haftalar</string>
     <string name="create_reminder">Hatırlatma oluşturun</string>
     <string name="interval">Aralık</string>
     <string name="interval_start_time">Aralık başlangıç zamanı</string>
     <string name="interval_start_reminded">Hatırlatıldığında aralık başlar</string>
     <string name="interval_start_processed">Aralık, alındığında veya atlandığında başlar</string>
-    <string name="every_interval">Her %s</string>
     <string name="invalid_input">Geçersiz giriş</string>
-    <string name="once_below_threshold">Eşiğin altına düştüğünde bir kez</string>
-    <string name="always_below_threshold">Her zaman eşiğin altında olduğunda</string>
     <string name="out_of_stock_notification">%1$s&amp;apos;dan sadece %2$s kaldı!\nİlacı yakında yeniden doldurmayı düşünün.</string>
-    <string name="medicine_stock_string">%1$s kaldı</string>
     <string name="out_of_stock_notification_title">İlaç stokta yok hatırlatması</string>
     <string name="medicine_stock">İlaç stoğu</string>
     <string name="amount">Miktar</string>
-    <string name="out_of_stock_reminder">Stokta yok hatırlatması</string>
     <string name="reminder_threshold">Hatırlatma eşiği</string>
     <string name="refill_size">Dolum boyutu</string>
     <string name="refill_now">Şimdi doldurun</string>
@@ -212,7 +177,6 @@
     <string name="sticky_on_lockscreen_summary">Hatırlatıcılar kilit ekranından kapatılamaz, yalnızca bildirim çekmecesinden kapatılabilir\nNot: Bazı akıllı saatler artık bildirimleri göstermeyebilir</string>
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
     <string name="please_wait">Lütfen bekleyin…</string>
-    <string name="interval_time">Aralık %s</string>
     <string name="reminded">Hatırlatıldı</string>
     <string name="all_taken">Hepsi alındı (%s)</string>
     <string name="estimated_run_out_date">Tahmini Bitiş Tarihi</string>
@@ -222,8 +186,6 @@
     <string name="sort">Sırala</string>
     <string name="high_and_alarm">Yüksek + Alarm</string>
     <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
-    <string name="daily_from_to">Günlük aralık %1$s ile %2$s arası</string>
-    <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="reminder_status">Hatırlatıcı durumu</string>
     <string name="dosing_instructions">Dozaj talimatları</string>
     <string name="sample_instructions">Örnek talimatlarla doldurun</string>
@@ -233,13 +195,6 @@
     <string name="remind_on_days_of_month">Ayın günlerinde hatırlat</string>
     <string name="start_date">Başlangıç tarihi</string>
     <string name="end_date">Bitiş tarihi</string>
-    <string name="windowed_interval_reminder">Pencereli aralık hatırlatıcısı</string>
-    <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
-    <string name="time_based_reminder_help">Belirli zamanları (örneğin sabah 8:00) ayarlayın ve tekrar eden bir desen yapılandırın. Bu, belirli hafta günleri, ayın günleri veya karmaşık periyodik programlar (\"her 3 günde bir\" gibi) üzerinde hassas kontrol sağlar.</string>
-    <string name="continuous_interval_reminder_help">Belirtilen bir andan itibaren bir zaman aralığına (örneğin her 6 saatte bir) dayalı bir hatırlatıcı başlatın. Bu desen, manuel olarak devre dışı bırakılana kadar günün saati kısıtlamalarını göz ardı ederek süreklidir.</string>
-    <string name="windowed_interval_reminder_help">İlk hatırlatıcının her zaman başlangıç saatinde olduğu günlük bir aktif pencere (örneğin sabah 9\'dan akşam 9\'a kadar) tanımlayın. Sonraki hatırlatıcılar, bitiş saatine ulaşılana kadar sabit aralıklarla tetiklenir. Tam desen her gün sıfırlanır.</string>
-    <string name="linked_reminder">Bağlantılı hatırlatıcı</string>
-    <string name="linked_reminder_help">Bağlantılı bir hatırlatıcı, birincil bir hatırlatıcıya işlem yapıldıktan (alındıktan veya ertelendikten) belirli bir süre sonra planlanan bir takip hatırlatıcısıdır. Bu, aralarında belirli bir gecikme ile sırayla alınması gereken ilaçlar için kullanışlıdır.</string>
     <string name="add_linked_reminder_summary">Bu hatırlatıcı tetiklendikten belirli bir süre sonra planlanan bir takip hatırlatıcısı oluşturur.</string>
     <string name="cyclic_reminder_summary">Belirli bir tarihten başlayarak aktif ve duraklatılmış günlerden oluşan yinelenen bir düzen yapılandırır. Hatırlatıcı yalnızca aktif günlerde bildirim gönderir. Doğum kontrol hapları gibi ilaçlar için bunu kullanın.</string>
     <string name="variable_amount_summary">Aktif olduğunda, hatırlatıcı alındığında dozu girmek için bir diyalog kutusu gösterilir.</string>
@@ -264,17 +219,9 @@
     <string name="interval_start_condition">Aralık başlangıç koşulu</string>
     <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
     <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
-    <string name="refill">Stok yenileme</string>
     <string name="expiration_settings">Son kullanma ayarları</string>
-    <string name="production_date">Üretim tarihi</string>
-    <string name="expiration_date">Son kullanma tarihi</string>
     <string name="expiration_reminder">Son kullanma hatırlatıcısı</string>
-    <string name="daily_below_threshold">Eşiğin altındayken günlük</string>
     <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
-    <string name="out_of_stock_reminder_help">İlaç stokta kalmadığında, her hatırlatmadan sonra, bir kez veya günde bir kez hatırlatır.</string>
-    <string name="expiration_date_reminder_help">İlacın son kullanma tarihi geldiğinde veya bu tarihten önce yapılandırılabilir bir zamanda hatırlatır.</string>
-    <string name="once">Bir kez</string>
-    <string name="daily">Günlük</string>
     <string name="medicine_stock_settings">İlaç stok ayarları</string>
     <string name="edit_medicine_stock_settings">İlaç stok ayarlarını düzenle</string>
     <string name="clear_dates">Tarihleri temizle</string>

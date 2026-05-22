@@ -221,8 +221,8 @@ class ReminderTest : BaseTestHelper() {
         Espresso.pressBack()
 
         var expectedString = context.getString(
-            R.string.every_interval,
-            "2 " + context.resources.getQuantityString(R.plurals.hours, 2)
+            com.futsch1.medtimer.core.ui.R.string.every_interval,
+            "2 " + context.resources.getQuantityString(com.futsch1.medtimer.core.ui.R.plurals.hours, 2)
         )
         assertCustomAssertionAtPosition(
             R.id.reminderList,
@@ -235,14 +235,14 @@ class ReminderTest : BaseTestHelper() {
         assertDisplayedAtPosition(R.id.reminderList, 1, R.id.editReminderTime, expectedString)
 
         expectedString = context.getString(
-            R.string.linked_reminder_summary,
+            com.futsch1.medtimer.core.ui.R.string.linked_reminder_summary,
             timeFormatter().toTimeString(reminder1Time)
         )
         assertDisplayedAtPosition(R.id.reminderList, 2, R.id.reminderCardLayout, expectedString)
 
         expectedString = context.getString(
-            R.string.every_interval,
-            "3 " + context.resources.getQuantityString(R.plurals.hours, 3)
+            com.futsch1.medtimer.core.ui.R.string.every_interval,
+            "3 " + context.resources.getQuantityString(com.futsch1.medtimer.core.ui.R.plurals.hours, 3)
         )
         assertCustomAssertionAtPosition(
             R.id.reminderList,
@@ -303,7 +303,7 @@ class ReminderTest : BaseTestHelper() {
         assertContains(R.id.editEventTakenDate, timeFormatter().toDateString(now))
         assertContains(R.id.editEventNotes, "")
 
-        clickOn(R.string.skipped)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.skipped)
         writeTo(R.id.editEventNotes, "Test notes")
         Espresso.pressBack()
 
@@ -314,7 +314,7 @@ class ReminderTest : BaseTestHelper() {
             matches(withTagValue(equalTo(R.drawable.x_circle)))
         )
         clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
-        clickOn(R.string.taken)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.taken)
         assertContains(R.id.editEventNotes, "Test notes")
 
         val newReminded = now.plusSeconds(60 * 60 * 24 + 120)
@@ -372,13 +372,13 @@ class ReminderTest : BaseTestHelper() {
         clickListItemChild(R.id.reminders, 0, R.id.stateButton)
         clickOn(R.id.takenButton)
 
-        assertNotContains(context.getString(R.string.interval_time, "0 min"))
+        assertNotContains(context.getString(com.futsch1.medtimer.core.ui.R.string.interval_time, "0 min"))
 
         clickListItemChild(R.id.reminders, 1, R.id.stateButton)
         clickOn(R.id.takenButton)
 
-        AndroidTestHelper.waitForText(context.getString(R.string.interval_time, "0 min"))
-        assertContains(context.getString(R.string.interval_time, "0 min"))
+        AndroidTestHelper.waitForText(context.getString(com.futsch1.medtimer.core.ui.R.string.interval_time, "0 min"))
+        assertContains(context.getString(com.futsch1.medtimer.core.ui.R.string.interval_time, "0 min"))
     }
 
     @Test
@@ -401,7 +401,7 @@ class ReminderTest : BaseTestHelper() {
 
             // Set active and pause days
             clickOn(R.id.openAdvancedSettings)
-            clickOn(R.string.cycle_reminder)
+            clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
             clickOn(R.string.cycle_consecutive_days)
             AndroidTestHelper.setValue(reminder!!.consecutiveDays.toString())
             clickOn(R.string.cycle_pause_days)
@@ -411,7 +411,7 @@ class ReminderTest : BaseTestHelper() {
             val cycleStart = Calendar.getInstance()
             // The month here is 7, not 8, since it is zero-indexed (so January is 0)
             cycleStart.set(2025, 7, 1)
-            clickOn(R.string.cycle_start_date)
+            clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_start_date)
             AndroidTestHelper.setDate(cycleStart.getTime())
 
             // Go back to medicines list

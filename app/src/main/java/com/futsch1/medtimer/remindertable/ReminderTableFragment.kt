@@ -15,7 +15,7 @@ import com.futsch1.medtimer.MedicineViewModel
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +50,7 @@ class ReminderTableFragment : Fragment() {
         val context = requireContext()
         adapter.setColumnHeaderItems(
             listOf(
-                context.getString(R.string.taken),
+                context.getString(com.futsch1.medtimer.core.ui.R.string.taken),
                 context.getString(R.string.name),
                 context.getString(R.string.dosage),
                 context.getString(R.string.reminded)

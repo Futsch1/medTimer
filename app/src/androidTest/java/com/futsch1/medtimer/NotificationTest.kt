@@ -175,7 +175,7 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.taken)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.taken)
         pressBack()
         pressBack()
 
@@ -292,7 +292,7 @@ class NotificationTest : BaseTestHelper() {
         openNotification().use {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
             device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            clickNotificationButton(device, getNotificationText(R.string.taken))
+            clickNotificationButton(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))
         }
 
         assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
@@ -343,7 +343,7 @@ class NotificationTest : BaseTestHelper() {
         openNotification().use {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext, 0)
             assertNotNull(device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000))
-            clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))
+            clickNotificationButton(device, InstrumentationRegistry.getInstrumentation().targetContext.getString(com.futsch1.medtimer.core.ui.R.string.taken))
         }
 
         assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
@@ -417,7 +417,7 @@ class NotificationTest : BaseTestHelper() {
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.taken)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.taken)
         pressBack()
         pressBack()
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
@@ -425,9 +425,9 @@ class NotificationTest : BaseTestHelper() {
             device.wait(Until.hasObject(By.pkg("com.android.systemui")), 2_000)
             val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
             internalAssert(notification != null)
-            makeNotificationExpanded(device, getNotificationText(R.string.skipped))
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
+            makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.skipped))
+            internalAssert(device.findObject(By.text(getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))) == null)
+            internalAssert(device.findObject(By.text(getNotificationText(com.futsch1.medtimer.core.ui.R.string.skipped))) != null)
             internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
             clickNotificationButton(device, getNotificationText(R.string.snooze))
         }
@@ -487,7 +487,7 @@ class NotificationTest : BaseTestHelper() {
 
         openNotification().use {
             device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))
             internalAssert(
                 device.wait(
                     Until.hasObject(By.res(packageName, "takenButton")),
@@ -539,7 +539,7 @@ class NotificationTest : BaseTestHelper() {
             val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
             assertNotNull(notification)
 
-            internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
+            internalAssert(clickNotificationButton(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken)))
         }
 
         navigateTo(MainMenu.OVERVIEW)
@@ -596,10 +596,13 @@ class NotificationTest : BaseTestHelper() {
         )
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        device.wait(Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken))), 2_000)
+        device.wait(
+            Until.findObject(By.desc(InstrumentationRegistry.getInstrumentation().targetContext.getString(com.futsch1.medtimer.core.ui.R.string.taken))),
+            2_000
+        )
 
         openNotification().use {
-            internalAssert(device.findObject(By.textContains(getNotificationText(R.string.taken))) == null)
+            internalAssert(device.findObject(By.textContains(getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))) == null)
         }
     }
 
@@ -684,7 +687,7 @@ class NotificationTest : BaseTestHelper() {
         device: UiDevice,
         context: Context
     ) {
-        val o1 = device.findObject(By.desc(context.getString(R.string.taken)))
+        val o1 = device.findObject(By.desc(context.getString(com.futsch1.medtimer.core.ui.R.string.taken)))
         while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
             try {
                 o1.click()

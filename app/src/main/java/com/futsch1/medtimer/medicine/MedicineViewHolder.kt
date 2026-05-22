@@ -19,10 +19,10 @@ import com.futsch1.medtimer.core.common.helpers.getActiveReminders
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.Tag
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.MedicineStringFormatter
-import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
-import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.MedicineStringFormatter
+import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
+import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.assisted.Assisted
@@ -74,7 +74,7 @@ class MedicineViewHolder @AssistedInject constructor(
             if (medicine.reminders.isEmpty()) {
                 remindersSummaryView.setText(R.string.no_reminders)
             } else {
-                remindersSummaryView.setText(R.string.inactive)
+                remindersSummaryView.setText(com.futsch1.medtimer.core.ui.R.string.inactive)
             }
         } else {
             activity.lifecycleScope.launch(dispatcher) {

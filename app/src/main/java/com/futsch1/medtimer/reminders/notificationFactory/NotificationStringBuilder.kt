@@ -3,11 +3,10 @@ package com.futsch1.medtimer.reminders.notificationFactory
 import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Tag
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationPart
 import java.util.stream.Collectors
@@ -55,7 +54,7 @@ class NotificationStringBuilder(
             builder.append(separatorChar)
             builder.append(
                 context.getString(
-                    R.string.medicine_stock_string,
+                    com.futsch1.medtimer.core.ui.R.string.medicine_stock_string,
                     MedicineHelper.formatAmount(medicine.amount, medicine.unit)
                 )
             )

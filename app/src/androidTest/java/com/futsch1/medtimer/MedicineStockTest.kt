@@ -274,7 +274,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.addReminder)
         clickOn(R.id.stockReminderCard)
         writeTo(R.id.editStockThreshold, "12")
-        clickOn(R.string.daily_below_threshold)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.daily_below_threshold)
         clickOn(R.id.editReminderTime)
         AndroidTestHelper.setTime(22, 0, false)
         clickOn(R.id.createReminder)
@@ -287,7 +287,7 @@ class MedicineStockTest : BaseTestHelper() {
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         openNotification().use {
             device.wait(Until.findObject(By.textContains(TEST_MED)), 5_000)
-            internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
+            internalAssert(clickNotificationButton(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken)))
         }
         device.waitForIdle(2_000)
 
@@ -309,7 +309,7 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         clickOn(R.id.openStockTracking)
         AndroidTestHelper.scrollDown()
-        clickOn(R.string.expiration_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
         AndroidTestHelper.scrollDown()
         clickOn(R.string.clear_dates)
@@ -330,7 +330,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickListItem(R.id.medicineList, 0)
         clickOn(R.id.openStockTracking)
         AndroidTestHelper.scrollDown()
-        clickOn(R.string.expiration_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
         pressBack()
 
@@ -453,7 +453,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.id.addReminder)
         clickOn(R.id.stockReminderCard)
         writeTo(R.id.editStockThreshold, "14")
-        clickOn(R.string.daily_below_threshold)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.daily_below_threshold)
         clickOn(R.id.editReminderTime)
         AndroidTestHelper.setTime(22, 0, false)
         clickOn(R.id.createReminder)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
+    <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
+    <string name="continuous_interval_reminder_help">Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Die Erinnerung wiederholt sich kontinuierlich in diesem Intervall.</string>
+    <string name="cycle_reminder">Zyklische Erinnerung</string>
+    <string name="cycle_start_date">Beginn des ersten Zyklus</string>
+    <string name="daily_from_to">Tägliches Intervall von %1$s bis %2$s</string>
+    <string name="day_of_month_limited">Auf manche Tage im Monat beschränkt</string>
+    <string name="every_day">Jeden Tag</string>
+    <string name="every_interval">Alle %s</string>
+    <string name="expiration_date">Ablaufdatum</string>
+    <string name="expiration_date_reminder_help">Erinnert, wenn das Verfallsdatum des Medikaments erreicht ist oder eine konfigurierbare Zeit vor diesem Datum.</string>
+    <string name="inactive">Inaktiv</string>
+    <string name="interval_time">Intervall %s</string>
+    <string name="linked_reminder">Verknüpfte Erinnerung</string>
+    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung ausgelöst wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
+    <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
+    <string name="medicine_stock_string">%1$s übrig</string>
+    <string name="out_of_stock_reminder">Vorratserinnerung</string>
+    <string name="out_of_stock_reminder_help">Erinnert, wenn das Medikament nicht mehr vorrätig ist, entweder nach jeder Erinnerung oder einmalig oder einmal pro Tag.</string>
+    <string name="production_date">Herstellungsdatum</string>
+    <string name="refill">Lagerauffüllung</string>
+    <string name="skipped">Übersprungen</string>
+    <string name="taken">Eingenommen</string>
+    <string name="time_based_reminder">Zeitbasierte Erinnerung</string>
+    <string name="time_based_reminder_help">Erinnert an einer bestimmten Zeit des Tages (z.B. 8:00 Uhr). Weiterhin kann die Erinnerung an bestimmten Wochentagen, Tagen des Monats oder über periodische Zeitpläne (wie \'alle 3 Tage\') ausgelöst werden.</string>
+    <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
+    <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
+    <string name="windowed_interval_reminder_help">Erinnert in einem täglich Zeitfenster (z.B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
+    <plurals name="days">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">Stunde</item>
+        <item quantity="other">Stunden</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">Minute</item>
+        <item quantity="other">Minuten</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d Erinnerung\n%2$s</item>
+        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">Woche</item>
+        <item quantity="other">Wochen</item>
+    </plurals>
+    <string name="once">Einmal</string>
+    <string name="daily">Täglich</string>
+    <string name="once_below_threshold">Einmal beim Erreichen des Schwellwerts</string>
+    <string name="always_below_threshold">Immer, wenn der Schwellwert unterschritten wird</string>
+    <string name="daily_below_threshold">Täglich bei Unterschreitung des Schwellenwerts</string>
+</resources>

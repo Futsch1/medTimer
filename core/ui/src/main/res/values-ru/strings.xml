@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns0="http://schemas.android.com/tools">
+    <string name="continuous_from">Непрерывный интервал, начиная с %1$s</string>
+    <string name="continuous_interval_reminder">Напоминание о непрерывном интервале</string>
+    <string name="continuous_interval_reminder_help">Начните напоминание на основе временного интервала (например, каждые 6 часов) с указанного момента. Этот шаблон является непрерывным, игнорируя ограничения по времени суток, пока не будет отключен вручную.</string>
+    <string name="cycle_reminder">Цикличные напоминания</string>
+    <string name="cycle_start_date">Дата начала цикла</string>
+    <string name="daily_from_to">Ежедневный интервал от %1$s до %2$s</string>
+    <string name="day_of_month_limited">Ограничено некоторыми днями месяца</string>
+    <string name="every_day">Каждый день</string>
+    <string name="every_interval">Каждый %s</string>
+    <string name="expiration_date">Срок годности</string>
+    <string name="expiration_date_reminder_help">Напоминает о наступлении срока годности лекарства или за настраиваемое время до этой даты.</string>
+    <string name="inactive">Неактивный</string>
+    <string name="interval_time">Интервал %s</string>
+    <string name="linked_reminder">Связанное напоминание</string>
+    <string name="linked_reminder_help">Связанное напоминание — это последующее напоминание, которое планируется через определенное время после выполнения основного напоминания (принятого или отложенного). Это полезно для лекарств, которые необходимо принимать последовательно, с определенной задержкой между ними.</string>
+    <string name="linked_reminder_summary">После напоминания на %1$s</string>
+    <string name="medicine_stock_string">Осталось %1$s</string>
+    <string name="out_of_stock_reminder">Напоминание об отсутствии на складе</string>
+    <string name="out_of_stock_reminder_help">Напоминает, когда лекарство заканчивается, либо после каждого напоминания, либо один раз, либо один раз в день.</string>
+    <string name="production_date">Дата производства</string>
+    <string name="refill">Пополнение запасов</string>
+    <string name="skipped">Пропущено</string>
+    <string name="taken">Принято</string>
+    <string name="time_based_reminder">Напоминание по времени</string>
+    <string name="time_based_reminder_help">Установите определенное время (например, 8:00) и настройте повторяющийся шаблон. Это обеспечивает точный контроль над определенными днями недели, днями месяца или сложными периодическими расписаниями (например, «каждые 3 дня»).</string>
+    <string name="weekday_limited">Ограничено до некоторых дней недели</string>
+    <string name="windowed_interval_reminder">Напоминание об интервале в окне</string>
+    <string name="windowed_interval_reminder_help">Определите ежедневное активное окно (например, с 9:00 до 21:00), в котором первое напоминание всегда приходится на время начала. Последующие напоминания срабатывают через фиксированные промежутки времени до тех пор, пока не будет достигнуто время окончания. Полный шаблон сбрасывается каждый день.</string>
+    <plurals name="days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="many">дней</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">час</item>
+        <item quantity="few">часа</item>
+        <item quantity="many">часов</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">минута</item>
+        <item quantity="few">минуты</item>
+        <item quantity="many">минут</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d напоминание\n%2$s</item>
+        <item quantity="few">%1$d напоминания\n%2$s</item>
+        <item quantity="many">%1$d напоминаний\n%2$s</item>
+        <item quantity="other">%1$d напоминаний\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">неделя</item>
+        <item quantity="few">недели</item>
+        <item quantity="many">недель</item>
+    </plurals>
+    <string name="once">Один раз</string>
+    <string name="daily">Ежедневно</string>
+    <string name="once_below_threshold">Один раз при падении ниже порога</string>
+    <string name="always_below_threshold">Всегда, когда ниже порога</string>
+    <string name="daily_below_threshold">Ежедневно при уровне ниже порогового</string>
+</resources>

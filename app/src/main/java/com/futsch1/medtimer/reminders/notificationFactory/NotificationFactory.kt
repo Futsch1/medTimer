@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.ReminderNotificationChannelManager
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.core.ui.MedicineIcons
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime

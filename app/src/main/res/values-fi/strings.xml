@@ -15,13 +15,7 @@
     <string name="confirm">Vahvista</string>
     <string name="are_you_sure_delete_medicine">Haluatko varmasti poistaa lääkkeen?</string>
     <string name="no_reminders">Ei muistutuksia</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d muistutus\n%2$s</item>
-        <item quantity="other">%1$d muistutusta\n%2$s</item>
-    </plurals>
     <string name="notification_title">Lääkemuistutus</string>
-    <string name="taken">Otettu</string>
-    <string name="skipped">Ohitettu</string>
     <string name="recent_events">Viimeaikaiset tapahtumat</string>
     <string name="next_reminders">Seuraavat muistutukset</string>
     <string name="version">Versio %s</string>
@@ -83,11 +77,7 @@
     <string name="weekend_end_time">Lopetusaika</string>
     <string name="custom">Mukautettu…</string>
     <string name="advanced_settings">Edistyneet asetukset</string>
-    <string name="every_day">Joka päivä</string>
     <string name="cycle_pause_days">Taukopäivät</string>
-    <string name="cycle_start_date">Ensimmäisen kierroksen alku</string>
-    <string name="cycle_reminder">Kiertävät muistutukset</string>
-    <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="reminders">Muistutukset</string>
     <string name="sort">Lajittelu</string>
     <string name="filter">Suodatus</string>
@@ -121,7 +111,6 @@
     <string name="calendar">Kalenteri</string>
     <string name="date">Päivämäärä</string>
     <string name="active">Aktiivinen</string>
-    <string name="inactive">Epäaktiivinen</string>
     <string name="period_start">Ajanjakson alku</string>
     <string name="period_end">Ajanjakson loppu</string>
     <string name="activate_all">Aktivoi kaikki muistutukset</string>
@@ -131,7 +120,6 @@
     <string name="every_day_of_month">Kuukauden jokaisena päivänä</string>
     <string name="on_day_of_month">Kuukauden %s päivänä</string>
     <string name="never">Ei koskaan</string>
-    <string name="day_of_month_limited">Rajoitettu joihinkin kuukauden päiviin</string>
     <string name="medicines_tab_description">Lääkevälilehti</string>
     <string name="overview_tab_description">Yleiskatsausvälilehti</string>
     <string name="statistics_tab_description">Tilastovälilehti</string>
@@ -145,45 +133,22 @@
     <string name="add_linked_reminder">Lisää muistutus seuraavalle annokselle</string>
     <string name="linked_reminder_delay">Viive seuraavalle annokselle</string>
     <string name="delay">Viive</string>
-    <string name="linked_reminder_summary">Muistutuksen jälkeen kello %1$s</string>
     <string name="delete_re_raise_event">Haluatko poistaa tämän tapahtuman ja nostaa ilmoituksen uudelleen?</string>
-    <string name="time_based_reminder">Aikapohjainen muistutus</string>
     <string name="interval_based_reminder">Väliaikapohjainen muistutus</string>
-    <plurals name="minutes">
-        <item quantity="one">minuutti</item>
-        <item quantity="other">minuuttia</item>
-    </plurals>
     <string name="minutes_string">Minuuttia</string>
-    <plurals name="hours">
-        <item quantity="one">tunti</item>
-        <item quantity="other">tuntia</item>
-    </plurals>
     <string name="hours_string">Tuntia</string>
-    <plurals name="days">
-        <item quantity="one">päivä</item>
-        <item quantity="other">päivää</item>
-    </plurals>
     <string name="days_string">Päivää</string>
-    <plurals name="weeks">
-        <item quantity="one">viikko</item>
-        <item quantity="other">viikkoa</item>
-    </plurals>
     <string name="weeks_string">Viikkoa</string>
     <string name="create_reminder">Luo muistutus</string>
     <string name="interval">Väliaika</string>
     <string name="interval_start_time">Väliajan aloitusaika</string>
     <string name="interval_start_reminded">Väliaika alkaa muistuttaessa</string>
     <string name="interval_start_processed">Aikaväli alkaa ottaessa tai ohittaessa</string>
-    <string name="every_interval">Joka %s</string>
     <string name="invalid_input">Virheellinen syöte</string>
-    <string name="once_below_threshold">Kerran pudottaessa alle rajan</string>
-    <string name="always_below_threshold">Aina ollessa alle rajan</string>
     <string name="out_of_stock_notification">Enää %2$s jäljellä lääkettä %1$s!\nHarkitse lääkkeen täyttämistä pian.</string>
-    <string name="medicine_stock_string">%1$s jäljellä</string>
     <string name="out_of_stock_notification_title">Muistutus lääkkeen loppumisesta</string>
     <string name="medicine_stock">Lääkevarasto</string>
     <string name="amount">Määrä</string>
-    <string name="out_of_stock_reminder">Muistutus loppumisesta</string>
     <string name="reminder_threshold">Muistutusraja</string>
     <string name="refill_size">Täydennyskoko</string>
     <string name="refill_now">Täydennä nyt</string>
@@ -213,7 +178,6 @@
     <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi ohittaa lukitusnäytöltä, ainoastaan ilmoituspaneelista\nHuomautus: Jotkin älykellot eivät ehkä enää näytä ilmoituksia</string>
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
     <string name="please_wait">Odota, olkaa hyvä…</string>
-    <string name="interval_time">Väliaika %s</string>
     <string name="reminded">Muistutettu</string>
     <string name="all_taken">Kaikki otettu (%s)</string>
     <string name="estimated_run_out_date">Arvioitu loppumispäivä</string>
@@ -222,8 +186,6 @@
     <string name="automatically_taken">Merkitse automaattisesti otetuksi</string>
     <string name="high_and_alarm">Korkea + Hälytys</string>
     <string name="enable_notification_alarm_dialog">Salliaksesi muistutusten näyttämisen hälytyksinä, ota tämä asetus käyttöön MedTimerille seuraavassa valikossa</string>
-    <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
-    <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="reminder_status">Muistutuksen tila</string>
     <string name="dosing_instructions">Annostusohjeet</string>
     <string name="sample_instructions">Täytä näyteohjeilla</string>
@@ -233,13 +195,6 @@
     <string name="remind_on_days_of_month">Muistuta kuukauden päivinä</string>
     <string name="start_date">Aloituspäivämäärä</string>
     <string name="end_date">Päättymispäivämäärä</string>
-    <string name="windowed_interval_reminder">Ikkunallinen intervallimuistutus</string>
-    <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
-    <string name="time_based_reminder_help">Aseta tietyt ajat (esim. klo 8.00) ja määritä toistuva kaava. Tämä mahdollistaa tarkan hallinnan tietyille viikonpäiville, kuukauden päiville tai monimutkaisille jaksollisille aikatauluille (kuten \"joka 3. päivä\").</string>
-    <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>
-    <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
-    <string name="linked_reminder">Linkitetty muistutus</string>
-    <string name="linked_reminder_help">Linkitetty muistutus on seurantamuistutus, joka ajoitetaan tietyn ajan kuluttua siitä, kun ensisijainen muistutus on kuitattu (joko otettu tai torkutettu). Tämä on hyödyllistä lääkkeille, jotka on otettava peräkkäin, ja joiden välillä on oltava tietty viive.</string>
     <string name="add_linked_reminder_summary">Luo seurantamuistutuksen, joka ajoitetaan tietyn ajan kuluttua tämän muistutuksen laukeamisesta.</string>
     <string name="cyclic_reminder_summary">Määrittää toistuvan aktiivisten ja tauotettujen päivien mallin tietystä päivämäärästä alkaen. Muistutus lähettää ilmoituksen vain aktiivisina päivinä. Käytä tätä esimerkiksi ehkäisypillereiden kaltaisiin lääkkeisiin.</string>
     <string name="variable_amount_summary">Kun toiminto on aktiivinen, annoksen syöttämistä varten näytetään valintaikkuna, kun muistutus otetaan.</string>
@@ -264,17 +219,9 @@
     <string name="interval_start_condition">Intervallin käynnistysehto</string>
     <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
-    <string name="refill">Varastotäydennys</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
-    <string name="production_date">Valmistuspäivä</string>
-    <string name="expiration_date">Vanhentumispäivä</string>
     <string name="expiration_reminder">Vanhentumismuistutus</string>
-    <string name="daily_below_threshold">Päivittäin, kun alle kynnyksen</string>
     <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
-    <string name="out_of_stock_reminder_help">Muistuttaa, kun lääke on loppu varastosta, joko jokaisen muistutuksen jälkeen, kerran tai kerran päivässä.</string>
-    <string name="expiration_date_reminder_help">Muistuttaa, kun lääkkeen viimeinen käyttöpäivä on saavutettu tai määritettävissä oleva aika ennen kyseistä päivämäärää.</string>
-    <string name="once">Kerran</string>
-    <string name="daily">Päivittäin</string>
     <string name="medicine_stock_settings">Lääkevaraston asetukset</string>
     <string name="edit_medicine_stock_settings">Muokkaa lääkevaraston asetuksia</string>
     <string name="clear_dates">Tyhjennä päivämäärät</string>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
+    <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
+    <string name="continuous_interval_reminder_help">Belirtilen bir andan itibaren bir zaman aralığına (örneğin her 6 saatte bir) dayalı bir hatırlatıcı başlatın. Bu desen, manuel olarak devre dışı bırakılana kadar günün saati kısıtlamalarını göz ardı ederek süreklidir.</string>
+    <string name="cycle_reminder">Döngüsel hatırlatıcılar</string>
+    <string name="cycle_start_date">İlk döngü başlangıcı</string>
+    <string name="daily_from_to">Günlük aralık %1$s ile %2$s arası</string>
+    <string name="day_of_month_limited">Ayın bazı günleri ile sınırlıdır</string>
+    <string name="every_day">Her gün</string>
+    <string name="every_interval">Her %s</string>
+    <string name="expiration_date">Son kullanma tarihi</string>
+    <string name="expiration_date_reminder_help">İlacın son kullanma tarihi geldiğinde veya bu tarihten önce yapılandırılabilir bir zamanda hatırlatır.</string>
+    <string name="inactive">Aktif değil</string>
+    <string name="interval_time">Aralık %s</string>
+    <string name="linked_reminder">Bağlantılı hatırlatıcı</string>
+    <string name="linked_reminder_help">Bağlantılı bir hatırlatıcı, birincil bir hatırlatıcıya işlem yapıldıktan (alındıktan veya ertelendikten) belirli bir süre sonra planlanan bir takip hatırlatıcısıdır. Bu, aralarında belirli bir gecikme ile sırayla alınması gereken ilaçlar için kullanışlıdır.</string>
+    <string name="linked_reminder_summary">%1$s adresindeki hatırlatmadan sonra</string>
+    <string name="medicine_stock_string">%1$s kaldı</string>
+    <string name="out_of_stock_reminder">Stokta yok hatırlatması</string>
+    <string name="out_of_stock_reminder_help">İlaç stokta kalmadığında, her hatırlatmadan sonra, bir kez veya günde bir kez hatırlatır.</string>
+    <string name="production_date">Üretim tarihi</string>
+    <string name="refill">Stok yenileme</string>
+    <string name="skipped">Atlandı</string>
+    <string name="taken">Alındı</string>
+    <string name="time_based_reminder">Zaman bazlı hatırlatma</string>
+    <string name="time_based_reminder_help">Belirli zamanları (örneğin sabah 8:00) ayarlayın ve tekrar eden bir desen yapılandırın. Bu, belirli hafta günleri, ayın günleri veya karmaşık periyodik programlar (\"her 3 günde bir\" gibi) üzerinde hassas kontrol sağlar.</string>
+    <string name="weekday_limited">Bazı haftaiçi günleri ile sınırlı</string>
+    <string name="windowed_interval_reminder">Pencereli aralık hatırlatıcısı</string>
+    <string name="windowed_interval_reminder_help">İlk hatırlatıcının her zaman başlangıç saatinde olduğu günlük bir aktif pencere (örneğin sabah 9\'dan akşam 9\'a kadar) tanımlayın. Sonraki hatırlatıcılar, bitiş saatine ulaşılana kadar sabit aralıklarla tetiklenir. Tam desen her gün sıfırlanır.</string>
+    <plurals name="days">
+        <item quantity="one">gün</item>
+        <item quantity="other">gün</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">saat</item>
+        <item quantity="other">saat</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">dakika</item>
+        <item quantity="other">dakika</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d hatırlatıcı\n%2$s</item>
+        <item quantity="other">%1$d hatırlatıcı\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">hafta</item>
+        <item quantity="other">hafta</item>
+    </plurals>
+    <string name="once">Bir kez</string>
+    <string name="daily">Günlük</string>
+    <string name="once_below_threshold">Eşiğin altına düştüğünde bir kez</string>
+    <string name="always_below_threshold">Her zaman eşiğin altında olduğunda</string>
+    <string name="daily_below_threshold">Eşiğin altındayken günlük</string>
+</resources>

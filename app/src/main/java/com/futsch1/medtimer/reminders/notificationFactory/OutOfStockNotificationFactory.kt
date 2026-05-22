@@ -8,7 +8,7 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.helpers.MedicineIcons
+import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -42,7 +42,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
-        builder.setSmallIcon(R.drawable.box_seam)
+        builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.box_seam)
             .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)
@@ -51,7 +51,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
             .setCategory(Notification.CATEGORY_REMINDER)
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
             .addAction(
-                R.drawable.cart2,
+                com.futsch1.medtimer.core.ui.R.drawable.cart2,
                 context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
                 intentBuilder.pendingRefill
             )

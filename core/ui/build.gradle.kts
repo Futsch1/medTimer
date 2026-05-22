@@ -1,0 +1,33 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace = "com.futsch1.medtimer.core.ui"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 28
+    }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+dependencies {
+    api(project(":core:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:datastore"))
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.icondialog)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+}

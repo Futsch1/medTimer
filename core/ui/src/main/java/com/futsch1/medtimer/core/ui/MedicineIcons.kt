@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.helpers
+package com.futsch1.medtimer.core.ui
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.DrawableCompat
-import com.futsch1.medtimer.R
+
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.maltaisn.icondialog.pack.IconDrawableLoader

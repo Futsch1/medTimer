@@ -90,8 +90,8 @@ class BasicUITest : BaseTestHelper() {
         cycleStart.set(2025, 1, 1)
         val cycleStartString =
             DateFormat.getDateInstance(DateFormat.SHORT).format(cycleStart.getTime())
-        clickOn(R.string.cycle_reminder)
-        clickOn(R.string.cycle_start_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_start_date)
         setDate(cycleStart.getTime())
         clickOn(R.string.cycle_consecutive_days)
         setValue("5")
@@ -113,7 +113,7 @@ class BasicUITest : BaseTestHelper() {
 
         clickOn(R.id.openAdvancedSettings)
 
-        clickOn(R.string.cycle_reminder)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
         assertContains(cycleStartString)
         assertContains("5")
         assertContains("6")

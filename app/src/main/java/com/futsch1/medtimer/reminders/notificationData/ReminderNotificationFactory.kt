@@ -6,7 +6,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.reminders.ReminderNotificationProcessor
 import javax.inject.Inject
 import javax.inject.Singleton

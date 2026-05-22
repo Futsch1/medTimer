@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders.notificationData
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import java.time.LocalTime
 import java.time.ZoneId
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
+    <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
+    <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>
+    <string name="cycle_reminder">تذكيرات دورية</string>
+    <string name="cycle_start_date">بداية الدورة الأولى</string>
+    <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
+    <string name="day_of_month_limited">مقيد بأيام معينة من الشهر</string>
+    <string name="every_day">كل يوم</string>
+    <string name="every_interval">كل %s</string>
+    <string name="expiration_date">تاريخ انتهاء الصلاحية</string>
+    <string name="expiration_date_reminder_help">يذكر عند الوصول إلى تاريخ انتهاء صلاحية الدواء أو في وقت قابل للتكوين قبل ذلك التاريخ.</string>
+    <string name="inactive">غير نشط</string>
+    <string name="interval_time">فاصل %s</string>
+    <string name="linked_reminder">تذكير مرتبط</string>
+    <string name="linked_reminder_help">التذكير المرتبط هو تذكير متابعة يتم جدولته بعد فترة زمنية معينة من ظهور تذكير أساسي. هذا مفيد للأدوية التي يجب تناولها بالتتابع، مع تأخير محدد بينها.</string>
+    <string name="linked_reminder_summary">بعد التذكير في %1$s</string>
+    <string name="medicine_stock_string">تبقى %1$s</string>
+    <string name="out_of_stock_reminder">تذكير بنفاد المخزون</string>
+    <string name="out_of_stock_reminder_help">يقوم بالتذكير عندما ينفد الدواء من المخزون، إما بعد كل تذكير أو مرة واحدة أو مرة واحدة يوميًا.</string>
+    <string name="production_date">تاريخ الإنتاج</string>
+    <string name="refill">إعادة تعبئة المخزون</string>
+    <string name="skipped">تم التخطي</string>
+    <string name="taken">تم التناول</string>
+    <string name="time_based_reminder">تذكير قائم على الوقت</string>
+    <string name="time_based_reminder_help">عيّن أوقاتًا محددة (على سبيل المثال، 8:00 صباحًا) وقم بتكوين نمط متكرر. يتيح ذلك التحكم الدقيق في أيام الأسبوع المحددة أو أيام الشهر أو الجداول الدورية المعقدة (مثل \"كل 3 أيام\").</string>
+    <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
+    <string name="windowed_interval_reminder">تذكير بفاصل زمني محدد</string>
+    <string name="windowed_interval_reminder_help">حدد نافذة نشطة يومية (على سبيل المثال، من 9:00 صباحًا إلى 9:00 مساءً) حيث يكون التذكير الأول دائمًا في وقت البدء. يتم إطلاق التذكيرات اللاحقة على فترات زمنية ثابتة حتى يتم الوصول إلى وقت الانتهاء. يتم إعادة تعيين النمط الكامل كل يوم.</string>
+    <plurals name="days">
+        <item quantity="zero">يوم</item>
+        <item quantity="one">يوم</item>
+        <item quantity="two">يومان</item>
+        <item quantity="few">أيام</item>
+        <item quantity="many">يوما</item>
+        <item quantity="other">يوم</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="zero">ساعة</item>
+        <item quantity="one">ساعة</item>
+        <item quantity="two">ساعتان</item>
+        <item quantity="few">ساعات</item>
+        <item quantity="many">ساعة</item>
+        <item quantity="other">ساعة</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="zero">دقيقة</item>
+        <item quantity="one">دقيقة</item>
+        <item quantity="two">دقيقتين</item>
+        <item quantity="few">دقائق</item>
+        <item quantity="many">دقيقة</item>
+        <item quantity="other">دقيقة</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="zero">%1$d تذكير\n%2$s</item>
+        <item quantity="one">%1$d تذكير\n%2$s</item>
+        <item quantity="two">تذكيران\n%2$s</item>
+        <item quantity="few">%1$d تذكيرات\n%2$s</item>
+        <item quantity="many">%1$d تذكيرا\n%2$s</item>
+        <item quantity="other">%1$d تذكير\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="zero">أسبوع</item>
+        <item quantity="one">أسبوع</item>
+        <item quantity="two">أسبوعان</item>
+        <item quantity="few">أسابيع</item>
+        <item quantity="many">أسبوعاً</item>
+        <item quantity="other">أسبوع</item>
+    </plurals>
+    <string name="once">مرة واحدة</string>
+    <string name="daily">يوميًا</string>
+    <string name="once_below_threshold">مرة واحدة عند الانخفاض عن الحد الأدنى</string>
+    <string name="always_below_threshold">دائمًا عند الانخفاض عن الحد الأدنى</string>
+    <string name="daily_below_threshold">يوميًا عندما يقل عن الحد الأدنى</string>
+</resources>

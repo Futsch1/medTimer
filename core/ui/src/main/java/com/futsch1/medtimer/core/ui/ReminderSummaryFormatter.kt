@@ -1,7 +1,7 @@
-package com.futsch1.medtimer.helpers
+package com.futsch1.medtimer.core.ui
 
 import android.content.Context
-import com.futsch1.medtimer.R
+
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.isReminderActive
 import com.futsch1.medtimer.core.domain.model.Reminder

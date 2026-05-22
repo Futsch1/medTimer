@@ -15,13 +15,7 @@
     <string name="confirm">Bevestigen</string>
     <string name="are_you_sure_delete_medicine">Wil je de behandeling verwijderen?</string>
     <string name="no_reminders">Geen herinneringen</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d herinnering\n%2$s</item>
-        <item quantity="other">%1$d herinneringen\n%2$s</item>
-    </plurals>
     <string name="notification_title">Herinneringen van de behandeling</string>
-    <string name="taken">Ingenomen</string>
-    <string name="skipped">Overgeslagen</string>
     <string name="recent_events">Recente herinneringen</string>
     <string name="next_reminders">Volgende herinneringen</string>
     <string name="version">Versie %s</string>
@@ -83,11 +77,7 @@
     <string name="weekend_end_time">Eindtijd</string>
     <string name="custom">Aangepast…</string>
     <string name="advanced_settings">Geavanceerde instellingen</string>
-    <string name="every_day">Elke dag</string>
     <string name="cycle_pause_days">Pauzedagen</string>
-    <string name="cycle_start_date">Start eerste cyclus</string>
-    <string name="cycle_reminder">Cyclische herinnering</string>
-    <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="reminders">Herinneringen</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 dagen</string>
@@ -120,7 +110,6 @@
     <string name="calendar">Kalender</string>
     <string name="date">Datum</string>
     <string name="active">Actief</string>
-    <string name="inactive">Inactief</string>
     <string name="period_start">Begin van de periode</string>
     <string name="period_end">Einde periode</string>
     <string name="activate_all">Alle herinneringen activeren</string>
@@ -130,7 +119,6 @@
     <string name="every_day_of_month">Elke dag van de maand</string>
     <string name="on_day_of_month">Op de %s van de maand</string>
     <string name="never">Nooit</string>
-    <string name="day_of_month_limited">Beperkt tot sommige dagen van de maand</string>
     <string name="medicines_tab_description">Tabblad Geneesmiddelen</string>
     <string name="overview_tab_description">Tabblad Overzicht</string>
     <string name="statistics_tab_description">Tabblad Statistieken</string>
@@ -144,45 +132,22 @@
     <string name="add_linked_reminder">Herinnering toevoegen voor volgende dosis</string>
     <string name="linked_reminder_delay">Vertraging voor volgende dosis</string>
     <string name="delay">Vertraging</string>
-    <string name="linked_reminder_summary">Na herinnering op %1$s</string>
     <string name="delete_re_raise_event">Wil je deze gebeurtenis verwijderen en de melding opnieuw verhogen?</string>
-    <string name="time_based_reminder">Herinnering op basis van tijd</string>
     <string name="interval_based_reminder">Herinnering op basis van intervallen</string>
-    <plurals name="minutes">
-        <item quantity="one">minuut</item>
-        <item quantity="other">minuten</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">uur</item>
-        <item quantity="other">uren</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">dag</item>
-        <item quantity="other">dagen</item>
-    </plurals>
     <string name="minutes_string">Minuten</string>
     <string name="hours_string">Uren</string>
     <string name="days_string">Dagen</string>
-    <plurals name="weeks">
-        <item quantity="one">week</item>
-        <item quantity="other">weken</item>
-    </plurals>
     <string name="weeks_string">Weken</string>
     <string name="create_reminder">Herinnering maken</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Starttijd interval</string>
     <string name="interval_start_reminded">Interval begint wanneer eraan wordt herinnerd</string>
     <string name="interval_start_processed">Interval begint wanneer genomen of overgeslagen</string>
-    <string name="every_interval">Elke %s</string>
     <string name="invalid_input">Ongeldige invoer</string>
-    <string name="once_below_threshold">Eenmaal bij het dalen onder de drempel</string>
-    <string name="always_below_threshold">Altijd wanneer onder drempel</string>
     <string name="out_of_stock_notification">Er is nog maar %2$s van %1$s over!\nOverweeg om het medicijn snel bij te vullen.</string>
-    <string name="medicine_stock_string">%1$s over</string>
     <string name="out_of_stock_notification_title">Herinnering aan behandelingsvoorraad</string>
     <string name="medicine_stock">Behandelingsvoorraad</string>
     <string name="amount">Hoeveelheid</string>
-    <string name="out_of_stock_reminder">Voorraadherinnering</string>
     <string name="reminder_threshold">Herinnering drempel</string>
     <string name="refill_size">Navulformaat</string>
     <string name="refill_now">Nu bijvullen</string>
@@ -212,7 +177,6 @@
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden genegeerd vanaf het vergrendelscherm, alleen vanuit de notificatielade\nOpmerking: sommige smartwatches tonen mogelijk geen meldingen meer</string>
     <string name="big_notifications">Grote meldingsknoppen</string>
     <string name="please_wait">Even geduld…</string>
-    <string name="interval_time">Interval %s</string>
     <string name="reminded">Herinnerd</string>
     <string name="all_taken">Alles ingenomen (%s)</string>
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
@@ -222,8 +186,6 @@
     <string name="sort">Sorteer</string>
     <string name="high_and_alarm">Hoog + Alarm</string>
     <string name="enable_notification_alarm_dialog">Om herinneringen als alarmen weer te geven, schakelt u dit in voor MedTimer in het volgende menu</string>
-    <string name="daily_from_to">Dagelijks interval van %1$s tot %2$s</string>
-    <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="reminder_status">Herinneringsstatus</string>
     <string name="dosing_instructions">Doseringsinstructies</string>
     <string name="sample_instructions">Vullen met voorbeeldsinstructies</string>
@@ -233,13 +195,6 @@
     <string name="remind_on_days_of_month">Herinneren op dagen van de maand</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Einddatum</string>
-    <string name="windowed_interval_reminder">Herinnering met interval binnen een tijdvenster</string>
-    <string name="continuous_interval_reminder">Continue interval herinnering</string>
-    <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
-    <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
-    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9:00 uur tot 21:00 uur) waarbij de eerste herinnering altijd op de starttijd valt. Volgende herinneringen worden met vaste intervallen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag gereset.</string>
-    <string name="linked_reminder">Gekoppelde herinnering</string>
-    <string name="linked_reminder_help">Een gekoppelde herinnering is een vervolgherinnering die een bepaalde tijd na een primaire herinnering wordt ingenomen. Dit is handig voor medicijnen die na elkaar moeten worden ingenomen, met een specifieke vertraging ertussen.</string>
     <string name="add_linked_reminder_summary">Creëert een vervolgherinnering die een bepaalde tijd na het afgaan van deze herinnering wordt gepland.</string>
     <string name="cyclic_reminder_summary">Configureert een terugkerend patroon van actieve en pauzedagen vanaf een bepaalde datum. De herinnering stuurt alleen een melding op actieve dagen. Gebruik dit voor medicijnen zoals de anticonceptiepil.</string>
     <string name="variable_amount_summary">Indien actief, wordt een dialoogvenster getoond om de dosering in te voeren wanneer de herinnering wordt ingenomen.</string>
@@ -264,17 +219,9 @@
     <string name="interval_start_condition">Interval startvoorwaarde</string>
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
     <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
-    <string name="refill">Voorraad aanvullen</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
-    <string name="production_date">Productiedatum</string>
-    <string name="expiration_date">Vervaldatum</string>
     <string name="expiration_reminder">Herinnering voor vervaldatum</string>
-    <string name="daily_below_threshold">Dagelijks onder drempel</string>
     <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
-    <string name="out_of_stock_reminder_help">Herinnert wanneer het medicijn niet meer op voorraad is, hetzij na elke herinnering, eenmaal of eenmaal per dag.</string>
-    <string name="expiration_date_reminder_help">Herinnert wanneer de vervaldatum van het medicijn is bereikt of een configureerbare tijd voor die datum.</string>
-    <string name="once">Eenmaal</string>
-    <string name="daily">Dagelijks</string>
     <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>
     <string name="edit_medicine_stock_settings">Instellingen medicijnvoorraad bewerken</string>
     <string name="clear_dates">Datums wissen</string>
