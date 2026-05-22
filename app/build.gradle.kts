@@ -157,6 +157,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
+     implementation(libs.hilt.android)
     "fullImplementation"(libs.play.services.location)
 
     testImplementation(libs.junit4)
@@ -177,8 +178,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
-
-    implementation(libs.hilt.android)
 
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
