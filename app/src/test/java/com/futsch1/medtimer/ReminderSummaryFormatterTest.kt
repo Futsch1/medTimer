@@ -1,5 +1,7 @@
 package com.futsch1.medtimer
 
+import android.app.AlarmManager
+import android.app.NotificationManager
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.UserPreferences
@@ -36,6 +38,12 @@ import kotlin.test.assertEquals
 class ReminderSummaryFormatterTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
+
+    @BindValue
+    val mockAlarmManager: AlarmManager = mock()
+
+    @BindValue
+    val mockNotificationManager: NotificationManager = mock()
 
     @BindValue
     val mockPreferenceDataSource: PreferencesDataSource = mock()
