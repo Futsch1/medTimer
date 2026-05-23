@@ -8,8 +8,8 @@ import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
+import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.database.toModel.toEntity
-import com.futsch1.medtimer.di.DatabaseModule
 import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
 import com.futsch1.medtimer.reminders.ScheduleNextReminderNotificationProcessor
