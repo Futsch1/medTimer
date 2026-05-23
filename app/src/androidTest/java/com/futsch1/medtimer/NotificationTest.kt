@@ -592,7 +592,7 @@ class NotificationTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.alarm)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.alarm)))
         )
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)

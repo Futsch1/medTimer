@@ -69,4 +69,6 @@
     <string name="high">Vysoká</string>
     <string name="snooze">Odložit</string>
     <string name="expiration_reminder">Připomenutí expirace</string>
+    <string name="medicine_name">Jméno léku</string>
+    <string name="app_url">MedTimer na GitHubu</string>
 </resources>

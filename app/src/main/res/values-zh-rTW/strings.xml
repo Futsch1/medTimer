@@ -4,7 +4,6 @@
     <string name="tab_overview">總覽</string>
     <string name="tab_medicine">藥品</string>
     <string name="add_medicine">新增藥物</string>
-    <string name="medicine_name">藥物名稱</string>
     <string name="add_reminder">新增提醒</string>
     <string name="delete">刪除</string>
     <string name="time">時間</string>
@@ -26,7 +25,6 @@
     <string name="three_days">3 天</string>
     <string name="color">顔色</string>
     <string name="select_color">選擇顔色</string>
-    <string name="app_url">GitHub 上的 MedTimer</string>
     <string name="exact_reminders">精確提醒</string>
     <string name="change_color_toast">請注意，顏色變更僅會影響未來的事件</string>
     <string name="exact_reminders_summary">提醒會在精確時間排程（將增加電池耗電）</string>

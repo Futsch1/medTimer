@@ -4,7 +4,6 @@
     <string name="tab_overview">主页</string>
     <string name="tab_medicine">药品</string>
     <string name="add_medicine">添加药品</string>
-    <string name="medicine_name">药品名称</string>
     <string name="add_reminder">新建提醒</string>
     <string name="delete">删除</string>
     <string name="time">时间</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 小时</string>
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
-    <string name="app_url">访问 MedTimer 的 Github 页面</string>
     <string name="color">标记颜色</string>
     <string name="select_color">自定义颜色</string>
     <string name="exact_reminders">精确时间提醒</string>

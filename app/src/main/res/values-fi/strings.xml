@@ -4,7 +4,6 @@
     <string name="tab_overview">Yleiskatsaus</string>
     <string name="tab_medicine">Lääkkeet</string>
     <string name="add_medicine">Lisää lääke</string>
-    <string name="medicine_name">Lääkkeen nimi</string>
     <string name="add_reminder">Lisää muistutus</string>
     <string name="delete">Poista</string>
     <string name="time">Aika</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 tuntia</string>
     <string name="two_days">2 päivää</string>
     <string name="three_days">3 päivää</string>
-    <string name="app_url">MedTimer GitHubissa</string>
     <string name="color">Väri</string>
     <string name="select_color">Valitse väri</string>
     <string name="exact_reminders">Tarkat muistutukset</string>

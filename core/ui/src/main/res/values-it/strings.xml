@@ -64,4 +64,6 @@
     <string name="high">Alta</string>
     <string name="snooze">Posticipa</string>
     <string name="expiration_reminder">Promemoria di scadenza</string>
+    <string name="medicine_name">Nome del farmaco</string>
+    <string name="app_url">MedTimer su GitHub</string>
 </resources>

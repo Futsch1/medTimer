@@ -59,4 +59,6 @@
     <string name="high">Magas</string>
     <string name="snooze">Emlékeztetés később</string>
     <string name="expiration_reminder">Lejárati emlékeztető</string>
+    <string name="medicine_name">Gyógyszer neve</string>
+    <string name="app_url">MedTimer a GitHubon</string>
 </resources>

@@ -23,7 +23,7 @@ fun OverviewState.toString(context: Context): String {
 
 fun OverviewState.getImage(): Int {
     return when (this) {
-        OverviewState.PENDING -> R.drawable.alarm
+        OverviewState.PENDING -> com.futsch1.medtimer.core.ui.R.drawable.alarm
         OverviewState.TAKEN -> com.futsch1.medtimer.core.ui.R.drawable.check2_circle
         OverviewState.SKIPPED -> com.futsch1.medtimer.core.ui.R.drawable.x_circle
         OverviewState.RAISED -> R.drawable.bell

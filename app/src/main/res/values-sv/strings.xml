@@ -19,7 +19,6 @@
     <string name="tab_overview">Översikt</string>
     <string name="tab_medicine">Läkemedel</string>
     <string name="add_medicine">Lägg till läkemedel</string>
-    <string name="medicine_name">Namn på läkemedel</string>
     <string name="add_reminder">Lägg till påminnelse</string>
     <string name="delete">Radera</string>
     <string name="time">Tid</string>
@@ -37,7 +36,6 @@
     <string name="twenty_four_hours">24 timmar</string>
     <string name="two_days">2 dagar</string>
     <string name="three_days">3 dagar</string>
-    <string name="app_url">MedTimer på GitHub</string>
     <string name="color">Färg</string>
     <string name="select_color">Välj färg</string>
     <string name="exact_reminders">Exakta påminnelser</string>

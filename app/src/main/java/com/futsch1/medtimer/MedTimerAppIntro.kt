@@ -35,7 +35,7 @@ class MedTimerAppIntro : AppIntro() {
         addSlide(
             getString(R.string.intro_welcome),
             getString(R.string.intro_welcome_description),
-            R.mipmap.logo
+            com.futsch1.medtimer.core.ui.R.mipmap.logo
         )
 
         addSlide(

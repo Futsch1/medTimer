@@ -59,4 +59,6 @@
     <string name="high">Korkea</string>
     <string name="snooze">Torkuta</string>
     <string name="expiration_reminder">Vanhentumismuistutus</string>
+    <string name="medicine_name">Lääkkeen nimi</string>
+    <string name="app_url">MedTimer GitHubissa</string>
 </resources>

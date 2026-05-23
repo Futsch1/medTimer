@@ -20,7 +20,6 @@
     <string name="ok">OK</string>
     <string name="filter">Filtruj</string>
     <string name="tab_medicine">Lekarstwa</string>
-    <string name="medicine_name">Nazwa leku</string>
     <string name="add_reminder">Dodaj przypomnienie</string>
     <string name="delete">Usuń</string>
     <string name="cancel">Anuluj</string>
@@ -130,7 +129,6 @@
     <string name="are_you_sure_delete_medicine">Czy na pewno chcesz usunąć ten lek?</string>
     <string name="intro_welcome_description">MedTimer to darmowa i otwartoźródłowa aplikacja przypominająca o zażyciu leków, która kładzie nacisk na prywatność.\n\nWymagane jest zezwolenie na wyświetlanie powiadomień przypominających o lekach.</string>
     <string name="clear_events">Wyczyść całą historię</string>
-    <string name="app_url">MedTimer na GitHubie</string>
     <string name="exact_reminders">Dokładne przypomnienia</string>
     <string name="hide_med_name">Ukryj nazwę leku w powiadomieniu</string>
     <string name="disable_widget">Wyłącz widgety na ekranie głównym</string>

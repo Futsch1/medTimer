@@ -59,4 +59,6 @@
     <string name="high">உயர்ந்த</string>
     <string name="snooze">உறக்கநிலை</string>
     <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
+    <string name="medicine_name">மருந்து பெயர்</string>
+    <string name="app_url">கிட்அப்பில் மெட்டிமர்</string>
 </resources>

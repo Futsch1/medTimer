@@ -79,4 +79,6 @@
     <string name="high">مرتفع</string>
     <string name="snooze">غفوة</string>
     <string name="expiration_reminder">تذكير بانتهاء الصلاحية</string>
+    <string name="medicine_name">اسم الدواء</string>
+    <string name="app_url">منبه الدواء على GitHub</string>
 </resources>

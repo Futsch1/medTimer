@@ -19,7 +19,6 @@
     <string name="twenty_four_hours">24 timer</string>
     <string name="two_days">2 dage</string>
     <string name="three_days">3 dage</string>
-    <string name="app_url">MedTimer på GitHub</string>
     <string name="color">Farve</string>
     <string name="select_color">Vælg farve</string>
     <string name="exact_reminders">Præcise påmindelser</string>
@@ -135,7 +134,6 @@
     <string name="interval_start_processed">Interval starter ved taget eller sprunget over</string>
     <string name="invalid_input">Ugyldigt input</string>
     <string name="add_medicine">Tilføj medicin</string>
-    <string name="medicine_name">Medicinnavn</string>
     <string name="add_reminder">Tilføj påmindelse</string>
     <string name="delete">Slet</string>
     <string name="time">Tid</string>

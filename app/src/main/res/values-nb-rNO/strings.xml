@@ -4,7 +4,6 @@
     <string name="tab_overview">Oversikt</string>
     <string name="tab_medicine">Legemiddel</string>
     <string name="add_medicine">Legg til legemiddel</string>
-    <string name="medicine_name">Navn på legemiddel</string>
     <string name="add_reminder">Legg til påminnelse</string>
     <string name="delete">Slett</string>
     <string name="time">Tid</string>

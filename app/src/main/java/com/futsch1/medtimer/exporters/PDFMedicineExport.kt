@@ -37,7 +37,10 @@ class PDFMedicineExport @AssistedInject constructor(
     override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
-        simplyPdfDocument.text.write(context.getString(R.string.app_name) + " - " + context.getString(R.string.medicine_data), biggestBoldProperties)
+        simplyPdfDocument.text.write(
+            context.getString(com.futsch1.medtimer.core.ui.R.string.app_name) + " - " + context.getString(R.string.medicine_data),
+            biggestBoldProperties
+        )
         simplyPdfDocument.text.write(timeFormatter.toDateTimeString(Instant.now()) + "\n", standardTextProperties)
 
         for (medicine in medicines) {

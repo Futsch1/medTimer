@@ -3,7 +3,6 @@
     <string name="enable_alarm_dialog">Щоб дозволити планування точних будильників, увімкніть цю опцію для MedTimer у наступному меню</string>
     <string name="tab_overview">Огляд</string>
     <string name="tab_medicine">Ліки</string>
-    <string name="medicine_name">Назва ліків</string>
     <string name="add_reminder">Додати нагадування</string>
     <string name="delete">Видалити</string>
     <string name="time">Час</string>
@@ -38,7 +37,6 @@
     <string name="change_color_toast">Зауважте, колір змінюють тільки майбутні події</string>
     <string name="tab_settings">Налаштування</string>
     <string name="confirm">Підтвердити</string>
-    <string name="app_url">MedTimer на GitHub</string>
     <string name="three_days">3 дні</string>
     <string name="clear_events">Очистити всю історію</string>
     <string name="are_you_sure_delete_events">Це безповоротно видалить всю історію прийому ліків. Цю дію не можна скасувати.</string>

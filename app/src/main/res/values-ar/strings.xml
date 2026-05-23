@@ -10,7 +10,6 @@
     <string name="tab_overview">نظرة عامة</string>
     <string name="tab_medicine">الأدوية</string>
     <string name="add_medicine">إضافة دواء</string>
-    <string name="medicine_name">اسم الدواء</string>
     <string name="add_reminder">إضافة تذكير</string>
     <string name="delete">حذف</string>
     <string name="time">الوقت</string>
@@ -39,7 +38,6 @@
     <string name="name">الاسم</string>
     <string name="please_wait">يُرجى الانتظار…</string>
     <string name="three_days">3 أيام</string>
-    <string name="app_url">منبه الدواء على GitHub</string>
     <string name="color">اللون</string>
     <string name="select_color">تحديد اللون</string>
     <string name="exact_reminders">تذكيرات دقيقة</string>

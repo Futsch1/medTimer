@@ -64,4 +64,6 @@
     <string name="high">Haut</string>
     <string name="snooze">Répéter</string>
     <string name="expiration_reminder">Rappel d\'expiration</string>
+    <string name="medicine_name">Nom du médicament</string>
+    <string name="app_url">MedTimer sur GitHub</string>
 </resources>

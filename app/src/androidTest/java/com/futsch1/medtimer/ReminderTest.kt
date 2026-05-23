@@ -487,7 +487,7 @@ class ReminderTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.alarm)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.alarm)))
         )
 
         val secondDay = DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
@@ -502,7 +502,7 @@ class ReminderTest : BaseTestHelper() {
             R.id.reminders,
             0,
             R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.alarm)))
+            matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.alarm)))
         )
     }
 

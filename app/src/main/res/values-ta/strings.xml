@@ -10,7 +10,6 @@
     <string name="tab_overview">கண்ணோட்டம்</string>
     <string name="tab_medicine">மருந்து</string>
     <string name="add_medicine">மருந்து சேர்க்கவும்</string>
-    <string name="medicine_name">மருந்து பெயர்</string>
     <string name="add_reminder">நினைவூட்டலைச் சேர்க்கவும்</string>
     <string name="delete">நீக்கு</string>
     <string name="time">நேரம்</string>
@@ -30,7 +29,6 @@
     <string name="twenty_four_hours">24 மணி நேரம்</string>
     <string name="two_days">2 நாட்கள்</string>
     <string name="three_days">3 நாட்கள்</string>
-    <string name="app_url">கிட்அப்பில் மெட்டிமர்</string>
     <string name="color">நிறம்</string>
     <string name="select_color">வண்ணத்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="exact_reminders">சரியான நினைவூட்டல்கள்</string>

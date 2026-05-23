@@ -4,7 +4,6 @@
     <string name="tab_overview">Обзор</string>
     <string name="tab_medicine">Лекарства</string>
     <string name="add_medicine">Добавить лекарство</string>
-    <string name="medicine_name">Название лекарства</string>
     <string name="add_reminder">Добавить напоминание</string>
     <string name="delete">Удалить</string>
     <string name="time">Время</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 часа</string>
     <string name="two_days">2 дня</string>
     <string name="three_days">3 дня</string>
-    <string name="app_url">MedTimer на GitHub</string>
     <string name="color">Цвет</string>
     <string name="select_color">Выбрать цвет</string>
     <string name="exact_reminders">Точные напоминания</string>

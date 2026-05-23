@@ -59,4 +59,6 @@
     <string name="high">Yüksek</string>
     <string name="snooze">Ertele</string>
     <string name="expiration_reminder">Son kullanma hatırlatıcısı</string>
+    <string name="medicine_name">İlaç adı</string>
+    <string name="app_url">MedTimer GitHub\'da</string>
 </resources>

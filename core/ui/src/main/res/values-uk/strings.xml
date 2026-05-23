@@ -69,4 +69,6 @@
     <string name="high">Високий</string>
     <string name="snooze">Відкласти</string>
     <string name="expiration_reminder">Нагадування про термін придатності</string>
+    <string name="medicine_name">Назва ліків</string>
+    <string name="app_url">MedTimer на GitHub</string>
 </resources>

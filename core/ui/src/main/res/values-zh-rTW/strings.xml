@@ -54,4 +54,6 @@
     <string name="high">高</string>
     <string name="snooze">延後提醒</string>
     <string name="expiration_reminder">到期提醒</string>
+    <string name="medicine_name">藥物名稱</string>
+    <string name="app_url">GitHub 上的 MedTimer</string>
 </resources>

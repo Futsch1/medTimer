@@ -39,4 +39,6 @@
     <string name="default_">Sjálfgefið</string>
     <string name="high">Hátt</string>
     <string name="snooze">Snooze</string>
+    <string name="medicine_name">Heiti lyfs</string>
+    <string name="app_url">MedTimer á GitHub</string>
 </resources>

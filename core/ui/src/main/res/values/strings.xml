@@ -59,4 +59,7 @@
     <string name="high">High</string>
     <string name="snooze">Snooze</string>
     <string name="expiration_reminder">Expiration reminder</string>
+    <string name="app_name" translatable="false">MedTimer</string>
+    <string name="medicine_name">Medicine name</string>
+    <string name="app_url">MedTimer on GitHub</string>
 </resources>

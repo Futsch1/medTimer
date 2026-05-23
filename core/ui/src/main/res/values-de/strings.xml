@@ -59,4 +59,6 @@
     <string name="high">Hoch</string>
     <string name="snooze">Snooze</string>
     <string name="expiration_reminder">Ablauf-Erinnerung</string>
+    <string name="medicine_name">Name des Medikaments</string>
+    <string name="app_url">MedTimer bei GitHub</string>
 </resources>

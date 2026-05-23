@@ -59,4 +59,6 @@
     <string name="high">Høj</string>
     <string name="snooze">Udsæt</string>
     <string name="expiration_reminder">Påmindelse om udløbsdato</string>
+    <string name="app_url">MedTimer på GitHub</string>
+    <string name="medicine_name">Medicinnavn</string>
 </resources>

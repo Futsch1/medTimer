@@ -69,4 +69,6 @@
     <string name="high">Wysoki</string>
     <string name="snooze">Drzemka</string>
     <string name="expiration_reminder">Przypomnienie o wygaśnięciu</string>
+    <string name="medicine_name">Nazwa leku</string>
+    <string name="app_url">MedTimer na GitHubie</string>
 </resources>

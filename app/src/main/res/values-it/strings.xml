@@ -4,7 +4,6 @@
     <string name="tab_overview">Panoramica</string>
     <string name="tab_medicine">Farmaci</string>
     <string name="add_medicine">Aggiungi un farmaco</string>
-    <string name="medicine_name">Nome del farmaco</string>
     <string name="add_reminder">Aggiungi un promemoria</string>
     <string name="delete">Elimina</string>
     <string name="time">Orario</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 ore</string>
     <string name="two_days">2 giorni</string>
     <string name="three_days">3 giorni</string>
-    <string name="app_url">MedTimer su GitHub</string>
     <string name="color">Colore</string>
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>

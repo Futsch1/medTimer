@@ -4,7 +4,6 @@
     <string name="tab_overview">ראיה כללית</string>
     <string name="tab_medicine">תרופות</string>
     <string name="add_medicine">הוסיפו תרופה</string>
-    <string name="medicine_name">שם תרופה</string>
     <string name="add_reminder">הוסיפו תזכורת</string>
     <string name="delete">מחיקה</string>
     <string name="time">זמן</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 שעות</string>
     <string name="two_days">יומיים</string>
     <string name="three_days">3 ימים</string>
-    <string name="app_url">מדטיימר בGithub</string>
     <string name="color">צבע</string>
     <string name="select_color">בחרו צבע</string>
     <string name="exact_reminders">התראות מדוייקות</string>

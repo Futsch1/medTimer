@@ -105,7 +105,7 @@ class ManualDose @AssistedInject constructor(
             tags = entry.tags
         )
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
+            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
                 .textSink { name: String ->
                     entry.baseName = name
                     getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)

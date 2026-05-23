@@ -4,7 +4,6 @@
     <string name="cancel">Cancelar</string>
     <string name="tab_overview">Visão Geral</string>
     <string name="tab_medicine">Medicamento</string>
-    <string name="medicine_name">Nome do medicamento</string>
     <string name="add_reminder">Adicionar lembrete</string>
     <string name="time">Horário</string>
     <string name="dosage">Dosagem</string>
@@ -22,7 +21,6 @@
     <string name="show_notifications">Mostrar notificações</string>
     <string name="twenty_four_hours">24 horas</string>
     <string name="three_days">3 dias</string>
-    <string name="app_url">MedTimer no GitHub</string>
     <string name="color">Cor</string>
     <string name="select_color">Selecionar cor</string>
     <string name="exact_reminders">Lembretes exatos</string>

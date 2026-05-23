@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_overview">Overview</string>
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
-    <string name="medicine_name">Medicine name</string>
     <string name="add_reminder">Add reminder</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
@@ -25,7 +23,6 @@
     <string name="twenty_four_hours">24 hours</string>
     <string name="two_days">2 days</string>
     <string name="three_days">3 days</string>
-    <string name="app_url">MedTimer on GitHub</string>
     <string name="color">Color</string>
     <string name="select_color">Select color</string>
     <string name="exact_reminders">Exact reminders</string>

@@ -4,7 +4,6 @@
     <string name="tab_overview">Přehled</string>
     <string name="tab_medicine">Léky</string>
     <string name="add_medicine">Přidat lék</string>
-    <string name="medicine_name">Jméno léku</string>
     <string name="add_reminder">Přidat připomenutí</string>
     <string name="delete">Smazat</string>
     <string name="time">Čas</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 hodin</string>
     <string name="two_days">2 dny</string>
     <string name="three_days">3 dny</string>
-    <string name="app_url">MedTimer na GitHubu</string>
     <string name="color">Barva</string>
     <string name="select_color">Vybrat barvu</string>
     <string name="exact_reminders">Přesná připomenutí</string>

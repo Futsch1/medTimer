@@ -59,4 +59,6 @@
     <string name="high">Hoog</string>
     <string name="snooze">Sluimer</string>
     <string name="expiration_reminder">Herinnering voor vervaldatum</string>
+    <string name="medicine_name">Naam van de behandeling</string>
+    <string name="app_url">MedTimer op GitHub</string>
 </resources>

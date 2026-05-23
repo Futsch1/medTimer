@@ -4,7 +4,6 @@
     <string name="tab_overview">Yfirlit</string>
     <string name="tab_medicine">Lyf</string>
     <string name="add_medicine">Bæta við lyfi</string>
-    <string name="medicine_name">Heiti lyfs</string>
     <string name="add_reminder">Bæta við athugasemd</string>
     <string name="delete">Eyða</string>
     <string name="time">Tími</string>
@@ -24,7 +23,6 @@
     <string name="twenty_four_hours">24 tímar</string>
     <string name="two_days">2 dagar</string>
     <string name="three_days">3 dagar</string>
-    <string name="app_url">MedTimer á GitHub</string>
     <string name="color">Litur</string>
     <string name="select_color">Velja lit</string>
     <string name="exact_reminders">Nákvæmar tilkynningar</string>

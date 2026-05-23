@@ -59,4 +59,6 @@
     <string name="high">Υψηλή</string>
     <string name="snooze">Αναβολή</string>
     <string name="expiration_reminder">Υπενθύμιση λήξης</string>
+    <string name="medicine_name">Όνομα φαρμακευτικής αγωγής</string>
+    <string name="app_url">Το MedTimer στο GitHub</string>
 </resources>
