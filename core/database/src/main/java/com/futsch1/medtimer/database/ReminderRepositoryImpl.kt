@@ -49,7 +49,7 @@ class ReminderRepositoryImpl(
         reminderDao[reminderId]?.let { reminderDao.delete(it) }
     }
 
-    suspend fun deleteAll() {
+    override suspend fun deleteAll() {
         reminderDao.deleteAll()
     }
 }

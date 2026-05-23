@@ -68,7 +68,7 @@ class MedicineRepositoryImpl(
         medicineDao.update(moveMedicine.medicine)
     }
 
-    suspend fun deleteAll() {
+    override suspend fun deleteAll() {
         medicineDao.deleteAll()
     }
 }

@@ -13,4 +13,5 @@ interface ReminderRepository {
     suspend fun update(reminder: Reminder)
     suspend fun updateAll(reminders: List<Reminder>)
     suspend fun delete(reminderId: Int)
+    suspend fun deleteAll()
 }
