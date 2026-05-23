@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.di
+package com.futsch1.medtimer.database.di
 
 import android.content.Context
 import androidx.room.Room

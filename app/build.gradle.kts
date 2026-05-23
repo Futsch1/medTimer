@@ -1,8 +1,5 @@
-import com.android.build.api.dsl.ApplicationExtension
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.androidx.room)
     alias(libs.plugins.triplet.play)
     alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
@@ -15,7 +12,7 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
-project.extensions.getByType<ApplicationExtension>().apply {
+android {
     namespace = "com.futsch1.medtimer"
     compileSdk = 36
 
@@ -122,15 +119,11 @@ project.extensions.getByType<ApplicationExtension>().apply {
         disable.add("AndroidGradlePluginVersion")
         disable.add("OldTargetApi")
     }
-    sourceSets {
-        getByName("main") {
-            assets.directories.add("$projectDir/schemas")
-        }
-    }
 }
 
 dependencies {
     implementation(project(":core:domain"))
+    implementation(project(":core:database"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)
@@ -165,7 +158,6 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.robolectric)
-    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.hilt.android.testing)
 
     androidTestImplementation(kotlin("test-junit"))
@@ -179,9 +171,11 @@ dependencies {
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
 
+    implementation(libs.hilt.android)
+
     ksp(libs.androidx.room.compiler)
+
     ksp(libs.hilt.compiler)
-    kspTest(libs.androidx.room.compiler)
     kspTest(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
