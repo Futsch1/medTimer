@@ -199,7 +199,7 @@ sonar {
         property("sonar.android.lint.report", "build/reports/lint-results-fullDebug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
+            "build/reports/jacoco/JacocoFullDebugCodeCoverage/JacocoFullDebugCodeCoverage.xml"
         )
     }
 }
