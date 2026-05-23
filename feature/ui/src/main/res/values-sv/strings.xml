@@ -164,7 +164,6 @@
     <string name="invalid_amount">Mängden måste innehålla ett nummer för att möjliggöra lagerspårning av läkemdel för denna påminnelse.</string>
     <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avvisas från låsskärmen, endast från meddelandefältet\nObs: Vissa smartklockor kanske inte längre visar aviseringar</string>
     <string name="big_notifications">Stora aviseringsknappar</string>
-    <string name="please_wait">Var god vänta…</string>
     <string name="reminded">Påmind</string>
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
     <string name="create_calendar_entry">Skapa kalenderpost</string>

@@ -71,4 +71,5 @@
     <string name="expiration_reminder">Нагадування про термін придатності</string>
     <string name="medicine_name">Назва ліків</string>
     <string name="app_url">MedTimer на GitHub</string>
+    <string name="please_wait">Будь ласка, зачекайте…</string>
 </resources>

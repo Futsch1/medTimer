@@ -164,7 +164,6 @@
     <string name="sticky_on_lockscreen">Επίμονες υπενθυμίσεις στην οθόνη κλειδώματος</string>
     <string name="sticky_on_lockscreen_summary">Οι υπενθυμίσεις δεν θα μπορούν να απορριφθούν από την οθόνη κλειδώματος, παρά μόνο από τη γραμμή ειδοποιήσεων\nΣημείωση: Ορισμένα έξυπνα ρολόγια ενδέχεται να μην εμφανίζουν πλέον τις ειδοποιήσεις, αν ενεργοποιηθεί</string>
     <string name="big_notifications">Μεγεθυμένα πλήκτρα ειδοποιήσεων</string>
-    <string name="please_wait">Παρακαλώ περιμένετε…</string>
     <string name="reminded">Έγινε υπενθύμιση</string>
     <string name="estimated_run_out_date">Εκτιμώμενη ημερομηνία εξάντλησης αποθέματος</string>
     <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>

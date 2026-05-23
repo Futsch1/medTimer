@@ -56,4 +56,5 @@
     <string name="expiration_reminder">到期提醒</string>
     <string name="medicine_name">藥物名稱</string>
     <string name="app_url">GitHub 上的 MedTimer</string>
+    <string name="please_wait">請稍候…</string>
 </resources>

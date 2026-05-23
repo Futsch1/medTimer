@@ -66,4 +66,5 @@
     <string name="expiration_reminder">Promemoria di scadenza</string>
     <string name="medicine_name">Nome del farmaco</string>
     <string name="app_url">MedTimer su GitHub</string>
+    <string name="please_wait">Attendere prego…</string>
 </resources>

@@ -167,7 +167,6 @@
     <string name="sticky_on_lockscreen">Постійні нагадування на екрані блокування</string>
     <string name="sticky_on_lockscreen_summary">Нагадування не можна закрити з екрана блокування - лише зі шторки сповіщень\nПримітка: Деякі смарт-годинники можуть не показувати сповіщення, якщо цю опцію увімкнено</string>
     <string name="big_notifications">Великі кнопки сповіщень</string>
-    <string name="please_wait">Будь ласка, зачекайте…</string>
     <string name="reminded">Нагадано</string>
     <string name="estimated_run_out_date">Орієнтовна дата закінчення запасу</string>
     <string name="create_calendar_entry">Створити запис у календарі</string>

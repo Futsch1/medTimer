@@ -166,7 +166,6 @@
     <string name="sticky_on_lockscreen">Pysyvät muistutukset lukitusnäytöllä</string>
     <string name="sticky_on_lockscreen_summary">Muistutuksia ei voi ohittaa lukitusnäytöltä, ainoastaan ilmoituspaneelista\nHuomautus: Jotkin älykellot eivät ehkä enää näytä ilmoituksia</string>
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
-    <string name="please_wait">Odota, olkaa hyvä…</string>
     <string name="reminded">Muistutettu</string>
     <string name="estimated_run_out_date">Arvioitu loppumispäivä</string>
     <string name="create_calendar_entry">Luo kalenterimerkintä</string>

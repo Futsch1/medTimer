@@ -165,7 +165,6 @@
     <string name="sticky_on_lockscreen">Aanhoudende herinneringen op het vergrendelscherm</string>
     <string name="sticky_on_lockscreen_summary">Herinneringen kunnen niet worden genegeerd vanaf het vergrendelscherm, alleen vanuit de notificatielade\nOpmerking: sommige smartwatches tonen mogelijk geen meldingen meer</string>
     <string name="big_notifications">Grote meldingsknoppen</string>
-    <string name="please_wait">Even geduld…</string>
     <string name="reminded">Herinnerd</string>
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
     <string name="create_calendar_entry">Agenda-item maken</string>

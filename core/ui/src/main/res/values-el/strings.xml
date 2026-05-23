@@ -61,4 +61,5 @@
     <string name="expiration_reminder">Υπενθύμιση λήξης</string>
     <string name="medicine_name">Όνομα φαρμακευτικής αγωγής</string>
     <string name="app_url">Το MedTimer στο GitHub</string>
+    <string name="please_wait">Παρακαλώ περιμένετε…</string>
 </resources>

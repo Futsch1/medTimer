@@ -71,4 +71,5 @@
     <string name="expiration_reminder">Připomenutí expirace</string>
     <string name="medicine_name">Jméno léku</string>
     <string name="app_url">MedTimer na GitHubu</string>
+    <string name="please_wait">Prosím čekejte…</string>
 </resources>

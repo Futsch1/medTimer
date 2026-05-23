@@ -165,7 +165,6 @@
     <string name="sticky_on_lockscreen">鎖定畫面持續性提醒</string>
     <string name="sticky_on_lockscreen_summary">提醒無法在鎖定螢幕上關閉，只能在通知抽屜中關閉\n注意：如果啟用，某些智慧手錶可能不再顯示通知</string>
     <string name="big_notifications">大型通知按鈕</string>
-    <string name="please_wait">請稍候…</string>
     <string name="reminded">已提醒</string>
     <string name="estimated_run_out_date">預估用罄日期</string>
     <string name="create_calendar_entry">建立行事曆項目</string>

@@ -165,7 +165,6 @@
     <string name="sticky_on_lockscreen">Dauerhafte Erinnerungen auf dem Sperrbildschirm</string>
     <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht vom Sperrbildschirm, sondern nur aus der Benachrichtigungsleiste ausgeblendet werden\nHinweis: Einige Smartwatches zeigen Benachrichtigungen möglicherweise nicht mehr an</string>
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
-    <string name="please_wait">Bitte warten…</string>
     <string name="reminded">Erinnert</string>
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>

@@ -165,7 +165,6 @@
     <string name="sticky_on_lockscreen">Kilit ekranında kalıcı hatırlatıcılar</string>
     <string name="sticky_on_lockscreen_summary">Hatırlatıcılar kilit ekranından kapatılamaz, yalnızca bildirim çekmecesinden kapatılabilir\nNot: Bazı akıllı saatler artık bildirimleri göstermeyebilir</string>
     <string name="big_notifications">Büyük bildirim düğmeleri</string>
-    <string name="please_wait">Lütfen bekleyin…</string>
     <string name="reminded">Hatırlatıldı</string>
     <string name="estimated_run_out_date">Tahmini Bitiş Tarihi</string>
     <string name="create_calendar_entry">Takvim girişi oluştur</string>

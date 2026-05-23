@@ -62,4 +62,5 @@
     <string name="app_name" translatable="false">MedTimer</string>
     <string name="medicine_name">Medicine name</string>
     <string name="app_url">MedTimer on GitHub</string>
+    <string name="please_wait">Please wait…</string>
 </resources>

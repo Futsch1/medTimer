@@ -71,4 +71,5 @@
     <string name="expiration_reminder">Przypomnienie o wygaśnięciu</string>
     <string name="medicine_name">Nazwa leku</string>
     <string name="app_url">MedTimer na GitHubie</string>
+    <string name="please_wait">Proszę czekać…</string>
 </resources>

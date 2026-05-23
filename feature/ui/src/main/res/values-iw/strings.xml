@@ -169,7 +169,6 @@
     <string name="intro_analysis_description">האפליקציה שומרת את כל אירועי התזכורות. תוכלו לנתח את המנות הקודמות שלכם במסך הניתוח ולייצא את ההיסטוריה דרך תפריט הקבאב (שלוש הנקודות). ההיסטוריה תישאר גם אם תרופות או תזכורות נמחקו או החליפו שם.</string>
     <string name="sticky_on_lockscreen_summary">לא ניתן להסיר תזכורות ממסך הנעילה ניתן לעשות זאת רק ממגירת ההתראות\nהערה: ייתכן שחלק מהשעונים החכמים כבר לא יציגו התראות במידה ופעילה</string>
     <string name="big_notifications">כפתורי התראה גדולים</string>
-    <string name="please_wait">אנא המתינו…</string>
     <string name="reminded">הוזכר</string>
     <string name="estimated_run_out_date">תאריך משוער לגמר המלאי</string>
     <string name="create_calendar_entry">צרו אירוע בלוח שנה</string>

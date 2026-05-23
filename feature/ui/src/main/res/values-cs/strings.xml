@@ -168,7 +168,6 @@
     <string name="sticky_on_lockscreen">Trvalá připomenutí na zamykací obrazovce</string>
     <string name="sticky_on_lockscreen_summary">Připomenutí nemohou být zrušena ze zamykací obrazovky, pouze z notifikační lišty\nUpozornění: Některé chytré hodinky nezobrazují notifikaci, pokud je toto povoleno</string>
     <string name="big_notifications">Velká tlačítka notifikace</string>
-    <string name="please_wait">Prosím čekejte…</string>
     <string name="reminded">Připomenuto</string>
     <string name="estimated_run_out_date">Odhadované datum vyčerpání zásob</string>
     <string name="create_calendar_entry">Vytvořit položku kalendáře</string>

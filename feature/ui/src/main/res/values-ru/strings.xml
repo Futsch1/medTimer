@@ -167,7 +167,6 @@
     <string name="sticky_on_lockscreen">Постоянные напоминания на экране блокировки</string>
     <string name="sticky_on_lockscreen_summary">Напоминания нельзя скрыть с экрана блокировки, только из панели уведомлений\nПримечание. Некоторые умные часы могут больше не показывать уведомления</string>
     <string name="big_notifications">Большие кнопки уведомлений</string>
-    <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="reminded">Напомнили</string>
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
     <string name="create_calendar_entry">Создать запись в календаре</string>

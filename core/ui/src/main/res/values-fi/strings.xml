@@ -61,4 +61,5 @@
     <string name="expiration_reminder">Vanhentumismuistutus</string>
     <string name="medicine_name">Lääkkeen nimi</string>
     <string name="app_url">MedTimer GitHubissa</string>
+    <string name="please_wait">Odota, olkaa hyvä…</string>
 </resources>

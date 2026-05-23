@@ -166,7 +166,6 @@
     <string name="sticky_on_lockscreen">Tartós emlékeztetők zárolt képernyőn</string>
     <string name="sticky_on_lockscreen_summary">Az emlékeztetőket nem lehet elvetni a lezárási képernyőről, csak az értesítési fiókból\nMegjegyzés: Előfordulhat, hogy egyes okosórák már nem jelenítik meg az értesítéseket</string>
     <string name="big_notifications">Nagy méretű értesítési gombok</string>
-    <string name="please_wait">Kérlek, várj…</string>
     <string name="reminded">Emlékeztetve</string>
     <string name="estimated_run_out_date">Várható elfogyási dátum</string>
     <string name="create_calendar_entry">Naptárbejegyzés létrehozása</string>

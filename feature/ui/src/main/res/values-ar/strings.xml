@@ -36,7 +36,6 @@
         <item quantity="other">آخر %1$d يوم</item>
     </plurals>
     <string name="name">الاسم</string>
-    <string name="please_wait">يُرجى الانتظار…</string>
     <string name="three_days">3 أيام</string>
     <string name="color">اللون</string>
     <string name="select_color">تحديد اللون</string>

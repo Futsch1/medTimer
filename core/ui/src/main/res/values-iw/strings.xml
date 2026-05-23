@@ -66,4 +66,5 @@
     <string name="expiration_reminder">תזכורת תפוגה</string>
     <string name="medicine_name">שם תרופה</string>
     <string name="app_url">מדטיימר בGithub</string>
+    <string name="please_wait">אנא המתינו…</string>
 </resources>

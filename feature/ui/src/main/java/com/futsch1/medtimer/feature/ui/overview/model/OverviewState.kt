@@ -13,7 +13,7 @@ enum class OverviewState {
 
 fun OverviewState.toString(context: Context): String {
     return when (this) {
-        OverviewState.PENDING -> context.getString(R.string.please_wait)
+        OverviewState.PENDING -> context.getString(com.futsch1.medtimer.core.ui.R.string.please_wait)
         OverviewState.TAKEN -> context.getString(com.futsch1.medtimer.core.ui.R.string.taken)
         OverviewState.SKIPPED -> context.getString(com.futsch1.medtimer.core.ui.R.string.skipped)
         OverviewState.RAISED -> context.getString(R.string.reminded)

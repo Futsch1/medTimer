@@ -166,7 +166,6 @@
     <string name="sticky_on_lockscreen">Promemoria persistenti sulla schermata di blocco</string>
     <string name="sticky_on_lockscreen_summary">I promemoria non possono essere ignorati dalla schermata di blocco, ma solo dall\'area delle notifiche\nNota: alcuni smartwatch potrebbero non visualizzare le notifiche, se abilitati</string>
     <string name="big_notifications">Pulsanti di notifica grandi</string>
-    <string name="please_wait">Attendere prego…</string>
     <string name="reminded">Ricordato</string>
     <string name="estimated_run_out_date">Data di esaurimento stimata</string>
     <string name="create_calendar_entry">Crea una voce di calendario</string>

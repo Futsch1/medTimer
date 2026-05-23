@@ -61,4 +61,5 @@
     <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
     <string name="medicine_name">மருந்து பெயர்</string>
     <string name="app_url">கிட்அப்பில் மெட்டிமர்</string>
+    <string name="please_wait">தயவுசெய்து காத்திருக்கவும்…</string>
 </resources>
