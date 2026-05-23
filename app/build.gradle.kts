@@ -8,10 +8,6 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
 android {
     namespace = "com.futsch1.medtimer"
     compileSdk = 36
@@ -49,8 +45,8 @@ android {
 
     buildTypes {
         release {
-            @Suppress("kotlin:S7204") // Does not make sense for open source apps
-            isMinifyEnabled = false
+            @Suppress("kotlin:S7204")
+            isMinifyEnabled = false // NOSONAR - Does not make sense for open source apps
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -150,7 +146,8 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
-     implementation(libs.hilt.android)
+    implementation(libs.hilt.android)
+
     "fullImplementation"(libs.play.services.location)
 
     testImplementation(libs.junit4)
@@ -170,8 +167,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
-
-    implementation(libs.hilt.android)
 
     ksp(libs.androidx.room.compiler)
 

@@ -28,7 +28,7 @@ abstract class AdvancedReminderPreferencesFragment(
         requireArguments: Bundle
     ): ModelDataStore<Reminder> {
         val modelDataId = requireArguments.getInt("reminderId")
-        val modelData = reminderRepository.get(modelDataId)!!
+        val modelData = reminderRepository[modelDataId]!!
 
         return reminderDataStoreFactory.create(modelData)
     }

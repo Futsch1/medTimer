@@ -4,7 +4,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import kotlinx.coroutines.flow.Flow
 
 interface MedicineRepository {
-    suspend fun get(medicineId: Int): Medicine?
+    suspend operator fun get(medicineId: Int): Medicine?
     fun getFlow(medicineId: Int): Flow<Medicine?>
     suspend fun getAll(): List<Medicine>
     fun getAllFlow(): Flow<List<Medicine>>
@@ -15,5 +15,4 @@ interface MedicineRepository {
     suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): Medicine?
     suspend fun getHighestSortOrder(): Double
     suspend fun move(fromPosition: Int, toPosition: Int)
-    suspend fun deleteAll()
 }

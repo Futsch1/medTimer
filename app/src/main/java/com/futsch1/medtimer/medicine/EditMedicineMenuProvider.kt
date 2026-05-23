@@ -71,14 +71,14 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     }
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.get(oldMedicineId)!!
+        val oldFullMedicine = medicineRepository[oldMedicineId] ?: return
         for (oldTag in oldFullMedicine.tags) {
             tagRepository.addMedicineTag(newMedicineId, oldTag.id)
         }
     }
 
     private suspend fun duplicateIncludingReminders() {
-        val fullMedicine = medicineRepository.get(medicine.id)!!
+        val fullMedicine = medicineRepository[medicine.id] ?: return
         val oldMedicineId = medicine.id
         val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
         for (reminder in fullMedicine.reminders) {

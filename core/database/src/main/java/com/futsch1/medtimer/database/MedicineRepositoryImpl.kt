@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 class MedicineRepositoryImpl(
     private val medicineDao: MedicineDao
 ) : MedicineRepository {
-    override suspend fun get(medicineId: Int): Medicine? {
+    override suspend operator fun get(medicineId: Int): Medicine? {
         return medicineDao.getFull(medicineId)?.toModel()
     }
 
@@ -32,7 +32,7 @@ class MedicineRepositoryImpl(
     }
 
     override suspend fun delete(medicineId: Int) {
-        medicineDao.get(medicineId)?.let { medicineDao.delete(it) }
+        medicineDao[medicineId]?.let { medicineDao.delete(it) }
     }
 
     override suspend fun update(medicine: Medicine) {
@@ -68,7 +68,7 @@ class MedicineRepositoryImpl(
         medicineDao.update(moveMedicine.medicine)
     }
 
-    override suspend fun deleteAll() {
+    suspend fun deleteAll() {
         medicineDao.deleteAll()
     }
 }

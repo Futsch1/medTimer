@@ -122,11 +122,11 @@ class ReminderSummaryFormatter @Inject constructor(
 
     private suspend fun linkedReminderString(reminder: Reminder): String {
         val delays = mutableListOf<String>()
-        var current = reminderRepository.get(reminder.linkedReminderId) ?: return "?"
+        var current = reminderRepository[reminder.linkedReminderId] ?: return "?"
 
         while (current.reminderType == ReminderType.LINKED) {
             delays.add(timeFormatter.toTimeString(current.time))
-            current = reminderRepository.get(current.linkedReminderId) ?: return "?"
+            current = reminderRepository[current.linkedReminderId] ?: return "?"
         }
 
         val base = context.getString(
@@ -143,7 +143,7 @@ class ReminderSummaryFormatter @Inject constructor(
 
         while (current.reminderType == ReminderType.LINKED) {
             delays.add(timeFormatter.toTimeString(current.time))
-            val source = reminderRepository.get(current.linkedReminderId) ?: return "?"
+            val source = reminderRepository[current.linkedReminderId] ?: return "?"
             current = source
         }
 

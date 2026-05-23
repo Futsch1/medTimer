@@ -65,7 +65,7 @@ class ReminderEventRepositoryImpl(
         reminderEventDao.createAll(reminderEvents.map { it.toEntity() })
     }
 
-    override suspend fun get(reminderEventId: Int): ReminderEvent? {
+    override suspend operator fun get(reminderEventId: Int): ReminderEvent? {
         return reminderEventDao.get(reminderEventId)?.toModel()
     }
 
@@ -73,8 +73,8 @@ class ReminderEventRepositoryImpl(
         return reminderEventDao.getFlow(reminderEventId).map { it?.toModel() }
     }
 
-    override suspend fun get(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
-        return reminderEventDao.get(reminderId, remindedTimestamp)?.toModel()
+    override suspend operator fun get(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
+        return reminderEventDao[reminderId, remindedTimestamp]?.toModel()
     }
 
     override suspend fun update(reminderEvent: ReminderEvent) {

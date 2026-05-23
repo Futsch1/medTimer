@@ -59,7 +59,7 @@ class MedicinesMenu @Inject constructor(
         applicationScope.launch {
             if (this@MedicinesMenu::medicines.isInitialized) {
                 for (medicine in medicines) {
-                    val localMedicine = medicineRepository.get(medicine.id) ?: return@launch
+                    val localMedicine = medicineRepository[medicine.id] ?: return@launch
                     setRemindersActive(localMedicine.reminders, reminderRepository, active)
                 }
             }

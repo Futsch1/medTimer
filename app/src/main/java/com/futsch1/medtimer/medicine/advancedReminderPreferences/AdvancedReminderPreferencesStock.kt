@@ -70,7 +70,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         findPreference<Preference>("medicine_expiration_date")?.isVisible = modelData.reminderType == ReminderType.EXPIRATION_DATE
 
         this.lifecycleScope.launch(ioDispatcher) {
-            val medicine = medicineRepository.get(modelData.medicineRelId) ?: return@launch
+            val medicine = medicineRepository[modelData.medicineRelId] ?: return@launch
             this.launch(mainDispatcher) {
                 findPreference<Preference>("medicine_stock")?.summary =
                     MedicineHelper.formatAmount(medicine.amount, medicine.unit)
