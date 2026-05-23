@@ -12,7 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
-import com.futsch1.medtimer.helpers.getMaterialColor
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment

@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
-import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

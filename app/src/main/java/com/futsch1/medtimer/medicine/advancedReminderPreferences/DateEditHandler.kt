@@ -2,7 +2,7 @@ package com.futsch1.medtimer.medicine.advancedReminderPreferences
 
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.Preference
-import com.futsch1.medtimer.helpers.DatePickerDialogFactory
+import com.futsch1.medtimer.core.common.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.helpers.TimeFormatter
 import java.time.LocalDate
 import javax.inject.Inject

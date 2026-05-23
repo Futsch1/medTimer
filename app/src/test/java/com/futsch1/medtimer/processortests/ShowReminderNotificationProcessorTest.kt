@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.common.di.DatastoreModule
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -16,7 +17,6 @@ import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
-import com.futsch1.medtimer.di.DatastoreModule
 import com.futsch1.medtimer.di.TimeAccessModule
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.preferences.PreferencesDataSource
@@ -120,11 +120,11 @@ class ShowReminderNotificationProcessorTest {
     val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = mock()
 
     @BindValue
-    @com.futsch1.medtimer.di.DefaultPreferences
+    @com.futsch1.medtimer.core.common.di.DefaultPreferences
     val boundDefaultSharedPreferences: SharedPreferences = mock()
 
     @BindValue
-    @com.futsch1.medtimer.di.MedTimerPreferencess
+    @com.futsch1.medtimer.core.common.di.MedTimerPreferencess
     val boundMedTimerSharedPreferences: SharedPreferences = mock()
 
     @Inject

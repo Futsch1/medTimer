@@ -2,9 +2,9 @@ package com.futsch1.medtimer.reminders
 
 import android.content.Context
 import android.content.Intent
-import com.futsch1.medtimer.ActivityCodes
 import com.futsch1.medtimer.MainActivity
-import com.futsch1.medtimer.ProcessorCode
+import com.futsch1.medtimer.core.common.ActivityCodes
+import com.futsch1.medtimer.core.common.ProcessorCode
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import kotlin.time.Duration

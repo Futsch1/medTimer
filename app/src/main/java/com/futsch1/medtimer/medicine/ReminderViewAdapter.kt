@@ -3,9 +3,9 @@ package com.futsch1.medtimer.medicine
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
+import com.futsch1.medtimer.core.common.helpers.IdlingListAdapter
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
-import com.futsch1.medtimer.helpers.IdlingListAdapter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

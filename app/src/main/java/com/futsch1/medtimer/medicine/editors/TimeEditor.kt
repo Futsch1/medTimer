@@ -2,10 +2,10 @@ package com.futsch1.medtimer.medicine.editors
 
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.core.common.helpers.TimeHelper
+import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.TimeHelper
-import com.futsch1.medtimer.helpers.TimePickerDialogFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.TimeFormat
 import dagger.assisted.Assisted

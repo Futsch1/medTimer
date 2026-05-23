@@ -3,7 +3,7 @@ package com.futsch1.medtimer.overview
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
-import com.futsch1.medtimer.helpers.IdlingListAdapter
+import com.futsch1.medtimer.core.common.helpers.IdlingListAdapter
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.model.OverviewEvent

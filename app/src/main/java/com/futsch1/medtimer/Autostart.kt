@@ -4,7 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.location.GeofenceRegistrar
 import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver

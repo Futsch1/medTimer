@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.database.backup
 
 import android.util.Log
-import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.core.common.LogTags
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
