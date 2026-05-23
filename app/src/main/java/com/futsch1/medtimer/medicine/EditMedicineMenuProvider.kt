@@ -55,7 +55,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         MedicinesMenu.setupMenu(menu, R.id.duplicate) {
             fragment.lifecycleScope.launch(dispatcher) {
                 val oldMedicineId = medicine.id
-                val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
+                val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
                 assignTags(oldMedicineId, newMedicineId)
             }
             navController.navigateUp()
@@ -63,8 +63,8 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         MedicinesMenu.setupMenu(menu, R.id.duplicate_including_reminders) {
             fragment.lifecycleScope.launch {
                 duplicateIncludingReminders()
+                navController.navigateUp()
             }
-            navController.navigateUp()
         }
         setupDeleteMenu(menu)
         setupLinksMenu(menu)
@@ -80,7 +80,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     private suspend fun duplicateIncludingReminders() {
         val fullMedicine = medicineRepository.get(medicine.id)!!
         val oldMedicineId = medicine.id
-        val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
+        val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
         for (reminder in fullMedicine.reminders) {
             reminderRepository.create(reminder.copy(id = 0, medicineRelId = newMedicineId))
         }
