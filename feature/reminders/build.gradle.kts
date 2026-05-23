@@ -10,6 +10,9 @@ android {
 
     defaultConfig {
         minSdk = 28
+        // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
+        @Suppress("DEPRECATION")
+        resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
     }
     flavorDimensions += "distribution"
     productFlavors {
@@ -20,6 +23,14 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+    lint {
+        abortOnError = true
+        warningsAsErrors = true
+        disable.add("IconLocation")
+        disable.add("GradleDependency")
+        disable.add("AndroidGradlePluginVersion")
+        disable.add("OldTargetApi")
     }
 }
 
