@@ -2,9 +2,9 @@ package com.futsch1.medtimer.location
 
 import android.Manifest
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.GeofencingClient

@@ -11,6 +11,7 @@ import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper.secondsSinceEpochToLocalDate
 import com.futsch1.medtimer.core.common.helpers.addDividerToSpan
 import com.futsch1.medtimer.core.common.helpers.addImageToSpan
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
@@ -19,7 +20,6 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.overview.model.getImage
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel

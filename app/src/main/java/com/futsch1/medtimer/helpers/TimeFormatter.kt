@@ -6,8 +6,8 @@ import android.text.format.DateFormat
 import android.text.format.DateUtils
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderTime
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.ParseException
 import java.time.DateTimeException

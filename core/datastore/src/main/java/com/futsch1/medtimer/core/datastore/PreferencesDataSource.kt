@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.preferences
+package com.futsch1.medtimer.core.datastore
 
 import android.content.SharedPreferences
 import android.net.Uri
@@ -6,7 +6,7 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceDataStore
 import com.futsch1.medtimer.core.common.di.ApplicationScope
-import com.futsch1.medtimer.core.common.di.DefaultPreferences
+import com.futsch1.medtimer.core.datastore.di.DefaultPreferences
 import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.HomeLocation

@@ -2,9 +2,10 @@ package com.futsch1.medtimer.reminders
 
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.location.GeofenceRegistrar
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.reminders.notificationData.toPendingSnooze
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -37,7 +38,7 @@ open class SnoozeProcessor @Inject constructor(
         Log.d(LogTags.REMINDER, "Snoozing reminder until home: $reminderNotificationData")
 
         alarmProcessor.cancelPendingReminderNotifications(reminderNotificationData)
-        persistentDataDataSource.addPendingLocationSnooze(reminderNotificationData)
+        persistentDataDataSource.addPendingLocationSnooze(reminderNotificationData.toPendingSnooze())
         geofenceRegistrar.registerHomeGeofence()
         notificationProcessor.cancelNotification(reminderNotificationData.notificationId)
     }

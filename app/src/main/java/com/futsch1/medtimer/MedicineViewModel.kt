@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.MedicineToTag
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -11,7 +12,6 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.medicine.tags.TagFilterStore
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

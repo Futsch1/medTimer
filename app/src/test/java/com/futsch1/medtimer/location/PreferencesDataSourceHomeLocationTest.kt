@@ -2,8 +2,8 @@ package com.futsch1.medtimer.location
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.HomeLocation
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

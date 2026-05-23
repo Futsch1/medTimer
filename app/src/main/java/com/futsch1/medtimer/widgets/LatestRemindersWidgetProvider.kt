@@ -3,7 +3,7 @@ package com.futsch1.medtimer.widgets
 import android.content.Context
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

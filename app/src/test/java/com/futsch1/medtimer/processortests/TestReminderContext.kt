@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.text.SpannableStringBuilder
 import com.futsch1.medtimer.core.common.ActivityCodes
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.UserPreferences
@@ -22,8 +24,6 @@ import com.futsch1.medtimer.database.ReminderEntity
 import com.futsch1.medtimer.database.ReminderEventEntity
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.mockito.ArgumentMatchers.anyInt

@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.overview.model
 
 import android.text.Spanned
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 
 abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataSource) {
     abstract val id: Int

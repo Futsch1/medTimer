@@ -2,8 +2,8 @@ package com.futsch1.medtimer.reminders.notificationFactory
 
 import android.app.PendingIntent
 import android.content.Context
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.getCustomSnoozeActionIntent
 import com.futsch1.medtimer.reminders.getLocationSnoozeIntent
 import com.futsch1.medtimer.reminders.getSkippedActionIntent

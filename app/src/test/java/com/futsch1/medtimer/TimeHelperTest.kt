@@ -4,9 +4,9 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.os.LocaleList
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

@@ -34,12 +34,12 @@ import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
 import com.futsch1.medtimer.core.common.helpers.hasBiometrics
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.overview.VariableAmountHandler
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.android.material.bottomnavigation.BottomNavigationView

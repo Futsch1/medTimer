@@ -3,7 +3,9 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.SharedPreferences
-import com.futsch1.medtimer.core.common.di.DatastoreModule
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.di.DatastoreModule
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -20,8 +22,6 @@ import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.di.TimeAccessModule
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.RefillProcessor
 import com.futsch1.medtimer.reminders.TimeAccess
 import com.futsch1.medtimer.reminders.notificationData.ProcessedNotificationData
@@ -116,11 +116,11 @@ class RefillProcessorTest {
     val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = mock()
 
     @BindValue
-    @com.futsch1.medtimer.core.common.di.DefaultPreferences
+    @com.futsch1.medtimer.core.datastore.di.DefaultPreferences
     val boundDefaultSharedPreferences: SharedPreferences = mock()
 
     @BindValue
-    @com.futsch1.medtimer.core.common.di.MedTimerPreferencess
+    @com.futsch1.medtimer.core.datastore.di.MedTimerPreferences
     val boundMedTimerSharedPreferences: SharedPreferences = mock()
 
     @Inject

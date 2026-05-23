@@ -21,6 +21,8 @@ import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -28,8 +30,6 @@ import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.ActionsMenu
 import com.futsch1.medtimer.overview.actions.MultipleActions
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.preferences.PreferencesDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.CoroutineDispatcher

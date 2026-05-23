@@ -14,10 +14,11 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.helpers.safeStartActivity
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.EXACT_REMINDERS
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.OVERRIDE_DND
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
-import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
-import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
