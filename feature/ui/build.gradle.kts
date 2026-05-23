@@ -38,6 +38,16 @@ android {
     }
 }
 
+// This module has no instrumented tests (the suite lives in :app). Its androidTest
+// APK transitively pulls in :feature:reminders layouts that reference :app-provided
+// resources (theme, icons), which a standalone test APK cannot link. Disable the
+// androidTest variant rather than build a pointless, broken test APK.
+androidComponents {
+    beforeVariants(selector().all()) {
+        it.androidTest.enable = false
+    }
+}
+
 dependencies {
     api(project(":core:domain"))
     implementation(project(":core:common"))
