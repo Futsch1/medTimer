@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.medicine.stockSettings
 
+import com.futsch1.medtimer.core.common.helpers.ModelDataViewModel
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.helpers.ModelDataViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

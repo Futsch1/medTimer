@@ -23,11 +23,11 @@ import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
 import com.androidplot.xy.XYPlot
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.dpToPx
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.helpers.dpToPx
-import com.futsch1.medtimer.helpers.getMaterialColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.filterNotNull

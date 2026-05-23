@@ -3,6 +3,7 @@ package com.futsch1.medtimer.helpers
 import android.text.Editable
 import android.text.TextWatcher
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.google.android.material.textfield.TextInputEditText
 
 class AmountTextWatcher(private val textEditInputEditText: TextInputEditText) : TextWatcher {

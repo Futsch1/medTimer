@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import com.futsch1.medtimer.LogTags
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
 import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData

@@ -5,7 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.helpers.MedicineIcons
 import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.preferences.PreferencesDataSource

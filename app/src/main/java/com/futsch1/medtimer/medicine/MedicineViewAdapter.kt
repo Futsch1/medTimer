@@ -4,10 +4,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.IdlingListAdapter
+import com.futsch1.medtimer.core.common.helpers.SwipeHelper.MovedCallback
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.helpers.IdlingListAdapter
-import com.futsch1.medtimer.helpers.SwipeHelper.MovedCallback
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

@@ -13,8 +13,8 @@ import androidx.core.net.toUri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.helpers.safeStartActivity
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.EXACT_REMINDERS
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.OVERRIDE_DND
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN

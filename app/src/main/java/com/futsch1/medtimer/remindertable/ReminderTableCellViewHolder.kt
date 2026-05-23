@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.getMaterialColor
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 
 class ReminderTableCellViewHolder(view: View) : AbstractViewHolder(view) {
     val textView: TextView = view.findViewById(R.id.tableCellTextView)

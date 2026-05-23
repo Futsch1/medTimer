@@ -5,13 +5,13 @@ import android.net.Uri
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceDataStore
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.DefaultPreferences
 import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.DefaultPreferences
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted

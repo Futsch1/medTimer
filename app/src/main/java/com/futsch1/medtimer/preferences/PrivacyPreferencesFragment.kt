@@ -6,7 +6,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.hasBiometrics
+import com.futsch1.medtimer.core.common.helpers.hasBiometrics
 import com.futsch1.medtimer.preferences.PreferencesDataSource.Companion.SECURE_WINDOW
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

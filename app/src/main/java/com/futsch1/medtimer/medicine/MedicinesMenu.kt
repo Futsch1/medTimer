@@ -5,13 +5,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.MenuProvider
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
-import com.futsch1.medtimer.helpers.setRemindersActive
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

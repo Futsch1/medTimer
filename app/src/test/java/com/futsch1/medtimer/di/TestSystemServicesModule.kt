@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.os.PowerManager
 import android.os.Vibrator
 import android.view.inputmethod.InputMethodManager
+import com.futsch1.medtimer.core.common.di.SystemServicesModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

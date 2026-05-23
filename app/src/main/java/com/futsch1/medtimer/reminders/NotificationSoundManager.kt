@@ -3,7 +3,7 @@ package com.futsch1.medtimer.reminders
 import android.app.NotificationManager
 import android.media.AudioManager
 import android.os.Build
-import com.futsch1.medtimer.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.preferences.PreferencesDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

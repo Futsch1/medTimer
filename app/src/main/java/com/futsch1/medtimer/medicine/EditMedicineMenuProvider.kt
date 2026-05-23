@@ -7,14 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.futsch1.medtimer.OptionsMenu
 import com.futsch1.medtimer.R
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
-import com.futsch1.medtimer.di.Dispatcher
-import com.futsch1.medtimer.di.MedTimerDispatchers
 import com.futsch1.medtimer.helpers.DeleteHelper
-import com.futsch1.medtimer.helpers.EntityEditOptionsMenu
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -125,7 +125,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch {
             val reminders = reminderRepository.getAll(medicine.id)
-            com.futsch1.medtimer.helpers.setRemindersActive(reminders, reminderRepository, active)
+            com.futsch1.medtimer.core.common.helpers.setRemindersActive(reminders, reminderRepository, active)
         }
     }
 

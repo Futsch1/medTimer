@@ -1,10 +1,10 @@
 package com.futsch1.medtimer.medicine.stockSettings
 
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.di.ApplicationScope
-import com.futsch1.medtimer.helpers.MedicineHelper
-import com.futsch1.medtimer.helpers.ModelDataStore
 import com.futsch1.medtimer.helpers.TimeFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

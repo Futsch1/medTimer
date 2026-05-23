@@ -7,6 +7,8 @@ import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.core.view.setPadding
 import com.futsch1.medtimer.BuildConfig
+import com.futsch1.medtimer.core.common.helpers.dpToPx
+import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
