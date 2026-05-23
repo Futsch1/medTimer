@@ -190,7 +190,7 @@ class MedicineStockTest : BaseTestHelper() {
             )
             internalAssert(device.findObject(By.textContains("T******")) != null)
             internalAssert(device.findObject(By.textContains("TestMed")) == null)
-            clickNotificationButton(device, getNotificationText(R.string.refill_amount, "100"))
+            clickNotificationButton(device, getNotificationText(com.futsch1.medtimer.feature.reminders.R.string.refill_amount, "100"))
         }
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
@@ -300,7 +300,7 @@ class MedicineStockTest : BaseTestHelper() {
     fun expirationDateTest() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val notificationTitle = context.getString(R.string.expiration_reminder)
+        val notificationTitle = context.getString(com.futsch1.medtimer.core.ui.R.string.expiration_reminder)
 
         val expirationTime = Calendar.getInstance()
         val day = expirationTime.get(Calendar.DAY_OF_MONTH)

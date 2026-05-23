@@ -384,7 +384,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.snooze)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.snooze)
         pressBack()
         pressBack()
 
@@ -428,8 +428,8 @@ class NotificationTest : BaseTestHelper() {
             makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.skipped))
             internalAssert(device.findObject(By.text(getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))) == null)
             internalAssert(device.findObject(By.text(getNotificationText(com.futsch1.medtimer.core.ui.R.string.skipped))) != null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-            clickNotificationButton(device, getNotificationText(R.string.snooze))
+            internalAssert(device.findObject(By.text(getNotificationText(com.futsch1.medtimer.core.ui.R.string.snooze))) != null)
+            clickNotificationButton(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.snooze))
         }
 
         assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
@@ -629,7 +629,7 @@ class NotificationTest : BaseTestHelper() {
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
 
-        var o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+        var o = device.wait(Until.findObject(By.text(context.getString(com.futsch1.medtimer.core.ui.R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         clickTakenOnAlarmScreen(device, context)
 
@@ -645,7 +645,7 @@ class NotificationTest : BaseTestHelper() {
         device.sleep()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
-        o = device.wait(Until.findObject(By.text(context.getString(R.string.snooze))), timeToNotify * 4)
+        o = device.wait(Until.findObject(By.text(context.getString(com.futsch1.medtimer.core.ui.R.string.snooze))), timeToNotify * 4)
         internalAssert(o != null)
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         clickTakenOnAlarmScreen(device, context)
@@ -688,7 +688,7 @@ class NotificationTest : BaseTestHelper() {
         context: Context
     ) {
         val o1 = device.findObject(By.desc(context.getString(com.futsch1.medtimer.core.ui.R.string.taken)))
-        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
+        while (device.findObject(By.text(context.getString(com.futsch1.medtimer.core.ui.R.string.snooze))) != null) {
             try {
                 o1.click()
             } catch (_: StaleObjectException) {
