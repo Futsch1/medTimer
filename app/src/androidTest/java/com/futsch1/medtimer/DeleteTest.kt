@@ -15,23 +15,23 @@ class DeleteTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun testDelete() {
         openMenu()
-        clickOn(R.string.generate_test_data)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.generate_test_data)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(R.id.medicineList, 0)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
 
         openMenu()
-        clickOn(R.string.delete)
-        clickOn(R.string.yes)
-        assertListItemCount(R.id.medicineList, 3)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.delete)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.yes)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.medicineList, 3)
 
-        clickListItem(R.id.medicineList, 2)
-        clickListItemChild(R.id.reminderList, 1, R.id.openAdvancedSettings)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
         openMenu()
-        clickOn(R.string.delete)
-        clickOn(R.string.yes)
-        assertListItemCount(R.id.reminderList, 1)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.delete)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.yes)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1)
     }
 }

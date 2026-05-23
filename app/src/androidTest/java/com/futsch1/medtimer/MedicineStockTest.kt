@@ -43,64 +43,64 @@ class MedicineStockTest : BaseTestHelper() {
         // Interval reminder (amount 3.5) 10 minutes from now
         AndroidTestHelper.createIntervalReminder("Of the pills 3.5 are to be taken", 10)
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("")
-        clickOn(R.string.refill_size)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.refill_size)
         setValue("")
         pressBack()
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10.5")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
-        clickOn(R.string.refill_size)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.refill_size)
         setValue("10.8")
         pressBack()
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.stockReminderCard)
-        writeTo(R.id.editStockThreshold, "4")
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, "4")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
         // Mark reminder as taken, no out of stock reminder expected (7 left)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark reminder as skipped (10.5 left)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.skippedButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedButton)
         checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark reminder as taken again, no out of stock reminder expected (7 left)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
         checkNotificationWithTitle(device, notificationTitle, false)
 
         // Mark next instance as taken, out of stock reminder expected (3.5 left)
-        clickListItemChild(R.id.reminders, 1, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 1, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
         checkNotificationWithTitle(device, notificationTitle, true, dismiss = false, additionalExpectedString = "3.5")
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        assertContains(R.id.medicineName, "⚠")
-        assertContains(R.id.medicineName, "pills")
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "⚠")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "pills")
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(3.5, "pills"))
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickOn(R.id.logManualDose)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
         clickListItem(null, 1)
         writeTo(android.R.id.input, "12")
         clickDialogPositiveButton()
@@ -108,17 +108,17 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.refill_now)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.refill_now)
 
         assertDisplayed(MedicineHelper.formatAmount(10.8, "pills"))
         pressBack()
         pressBack()
 
-        assertContains(R.id.medicineName, MedicineHelper.formatAmount(10.8, "pills"))
-        assertNotContains(R.id.medicineName, "⚠")
-        assertContains(R.id.medicineName, "pills")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, MedicineHelper.formatAmount(10.8, "pills"))
+        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "⚠")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "pills")
     }
 
     private fun checkNotificationWithTitle(
@@ -154,33 +154,33 @@ class MedicineStockTest : BaseTestHelper() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         openMenu()
-        clickOn(R.string.tab_settings)
-        clickOn(R.string.privacy_settings)
-        clickOn(R.string.hide_med_name)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.tab_settings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.privacy_settings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.hide_med_name)
 
         AndroidTestHelper.createMedicine("TestMed")
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("120")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
         AndroidTestHelper.scrollDown()
-        clickOn(R.string.refill_size)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.refill_size)
         setValue("100")
         pressBack()
 
         AndroidTestHelper.createIntervalReminder("So many pills - 130", 10)
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.stockReminderCard)
-        writeTo(R.id.editStockThreshold, "0")
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, "0")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         openNotification().use {
@@ -195,8 +195,8 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(100.0, "pills"))
     }
 
@@ -205,23 +205,23 @@ class MedicineStockTest : BaseTestHelper() {
     fun reminderAmountWarningTest() {
         AndroidTestHelper.createMedicine("Test")
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10.5")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
         pressBack()
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.stockReminderCard)
-        writeTo(R.id.editStockThreshold, "4")
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, "4")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.timeBasedCard)
-        writeTo(R.id.editAmount, "something")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, "something")
 
-        assertErrorDisplayed(R.id.editAmount, R.string.invalid_amount)
+        assertErrorDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, com.futsch1.medtimer.feature.ui.R.string.invalid_amount)
     }
 
     @Test
@@ -229,14 +229,14 @@ class MedicineStockTest : BaseTestHelper() {
     fun bigStockAmounts() {
         AndroidTestHelper.createMedicine("Test")
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10005")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
 
         pressBack()
-        clickOn(R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, "pills"))
         assertDisplayed("---")
     }
@@ -247,12 +247,12 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("3", LocalTime.of(1, 0))
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10")
         assertDisplayed(timeFormatter().localDateToString(LocalDate.now().plusDays(4)))
 
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("13")
         assertDisplayed(timeFormatter().localDateToString(LocalDate.now().plusDays(5)))
     }
@@ -263,24 +263,24 @@ class MedicineStockTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         openMenu()
-        clickOn(R.string.tab_settings)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.combine_notifications)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.tab_settings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.display_settings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.combine_notifications)
 
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder("3", LocalTime.of(22, 0))
         AndroidTestHelper.createReminder("2", LocalTime.of(22, 0))
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.stockReminderCard)
-        writeTo(R.id.editStockThreshold, "12")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, "12")
         clickOn(com.futsch1.medtimer.core.ui.R.string.daily_below_threshold)
-        clickOn(R.id.editReminderTime)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
         AndroidTestHelper.setTime(22, 0, false)
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10")
         pressBack()
 
@@ -291,7 +291,7 @@ class MedicineStockTest : BaseTestHelper() {
         }
         device.waitForIdle(2_000)
 
-        clickOn(R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed("5")
     }
 
@@ -307,19 +307,19 @@ class MedicineStockTest : BaseTestHelper() {
         expirationTime.set(Calendar.DAY_OF_MONTH, day + 7)
 
         AndroidTestHelper.createMedicine("Test")
-        clickOn(R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         AndroidTestHelper.scrollDown()
         clickOn(com.futsch1.medtimer.core.ui.R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
         AndroidTestHelper.scrollDown()
-        clickOn(R.string.clear_dates)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.clear_dates)
 
         pressBack()
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.expirationDateReminderCard)
-        writeTo(R.id.editExpirationDaysBefore, "10")
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.expirationDateReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editExpirationDaysBefore, "10")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
@@ -327,8 +327,8 @@ class MedicineStockTest : BaseTestHelper() {
         checkNotificationWithTitle(device, notificationTitle, false)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         AndroidTestHelper.scrollDown()
         clickOn(com.futsch1.medtimer.core.ui.R.string.expiration_date)
         AndroidTestHelper.setDate(expirationTime.time)
@@ -337,29 +337,29 @@ class MedicineStockTest : BaseTestHelper() {
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
         assertCustomAssertionAtPosition(
-            R.id.reminders,
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
             0,
-            R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
+            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            matches(withTagValue(equalTo(com.futsch1.medtimer.feature.ui.R.drawable.bell)))
         )
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        assertDisplayed(R.id.acknowledgedButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.acknowledgedButton)
         pressBack()
 
         checkNotificationWithTitle(device, notificationTitle, expected = true, dismiss = true)
 
         assertCustomAssertionAtPosition(
-            R.id.reminders,
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
             0,
-            R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton,
             matches(withTagValue(equalTo(com.futsch1.medtimer.core.ui.R.drawable.check2_circle)))
         )
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.deleteButton)
-        clickOn(R.string.yes)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.yes)
 
         checkNotificationWithTitle(device, notificationTitle, false)
-        assertListItemCount(R.id.reminders, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
     }
 
     @Test
@@ -368,34 +368,34 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("2", LocalTime.of(20, 0))
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.deleteButton)
-        clickOn(R.string.yes)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.yes)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
     }
 
@@ -405,34 +405,34 @@ class MedicineStockTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("2", LocalTime.of(20, 0))
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10")
-        clickOn(R.string.unit)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.unit)
         setValue("pills")
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
         pressBack()
         pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.reraiseButton)
-        clickOn(R.string.yes)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.reraiseButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.yes)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        clickOn(R.id.openStockTracking)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
     }
 
@@ -445,18 +445,18 @@ class MedicineStockTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine("Test")
 
-        clickOn(R.id.openStockTracking)
-        clickOn(R.string.amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.amount)
         setValue("10.5")
         pressBack()
 
-        clickOn(R.id.addReminder)
-        clickOn(R.id.stockReminderCard)
-        writeTo(R.id.editStockThreshold, "14")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, "14")
         clickOn(com.futsch1.medtimer.core.ui.R.string.daily_below_threshold)
-        clickOn(R.id.editReminderTime)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
         AndroidTestHelper.setTime(22, 0, false)
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
         checkNotificationWithTitle(device, notificationTitle, false)
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)

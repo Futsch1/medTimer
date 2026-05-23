@@ -41,8 +41,9 @@ import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.helpers.TextInputDialogBuilder
-import com.futsch1.medtimer.overview.VariableAmountHandler
+import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
+import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
+import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -180,7 +181,9 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         setSupportActionBar(findViewById(R.id.toolbar))
         appBarConfiguration = AppBarConfiguration.Builder(
-            R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment
+            com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
+            com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
+            com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
         )
             .build()
         setupActionBarWithNavController(this, navController, appBarConfiguration!!)
@@ -195,7 +198,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         bottomNavigationView.setOnItemSelectedListener { item: MenuItem? ->
-            navController.popBackStack(R.id.preferencesFragment, true)
+            navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
             onNavDestinationSelected(item!!, navController)
             true
         }
@@ -250,8 +253,8 @@ class MainActivity : AppCompatActivity() {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
                 if (reminderNotificationData.valid) {
                     TextInputDialogBuilder(this)
-                        .title(R.string.snooze_duration)
-                        .hint(R.string.minutes_string)
+                        .title(com.futsch1.medtimer.feature.ui.R.string.snooze_duration)
+                        .hint(com.futsch1.medtimer.feature.ui.R.string.minutes_string)
                         .initialText("")
                         .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
                         .textSink { snoozeTime: String? ->

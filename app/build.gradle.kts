@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.triplet.play)
-    alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.ksp)
@@ -124,6 +123,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:ui"))
     implementation(project(":feature:reminders"))
+    implementation(project(":feature:ui"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)

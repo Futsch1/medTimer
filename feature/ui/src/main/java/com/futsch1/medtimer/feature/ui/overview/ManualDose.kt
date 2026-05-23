@@ -1,0 +1,247 @@
+package com.futsch1.medtimer.feature.ui.overview
+
+import android.content.Context
+import android.content.DialogInterface
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.TimeHelper
+import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.core.common.helpers.isReminderActive
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.ui.MedicineViewModel
+import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.stream.Collectors
+
+class ManualDose @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted private val medicineViewModel: MedicineViewModel,
+    @Assisted private val activity: FragmentActivity,
+    @Assisted private val date: LocalDate,
+    private val persistentDataDataSource: PersistentDataDataSource,
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val manualDoseListEntryAdapterFactory: ManualDoseListEntryAdapter.Factory,
+    private val reminderEventRepository: ReminderEventRepository,
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
+) {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            context: Context,
+            medicineViewModel: MedicineViewModel,
+            activity: FragmentActivity,
+            date: LocalDate
+        ): ManualDose
+    }
+
+    suspend fun logManualDose() {
+        val medicines = medicineViewModel.medicines.value
+        val entries = getManualDoseEntries(medicines)
+        val adapter = manualDoseListEntryAdapterFactory.create(context, R.layout.manual_dose_list_entry, entries)
+
+        withContext(mainDispatcher) {
+            MaterialAlertDialogBuilder(context)
+                .setAdapter(adapter) { _: DialogInterface?, which: Int ->
+                    startLogProcess(entries[which])
+                }
+                .setTitle(R.string.log_additional_dose)
+                .show()
+        }
+    }
+
+    private fun getManualDoseEntries(medicines: List<Medicine>?): List<ManualDoseEntry> {
+        val entries: MutableList<ManualDoseEntry> = ArrayList()
+
+        entries.add(ManualDoseEntry(context.getString(R.string.custom)))
+        addCustomDoses(entries)
+        if (medicines != null) {
+            for (medicine in medicines) {
+                val entry = ManualDoseEntry(medicine, null)
+                entries.add(entry)
+                addInactiveReminders(medicine, entries)
+            }
+        }
+        return entries
+    }
+
+    private fun addCustomDoses(
+        entries: MutableList<ManualDoseEntry>
+    ) {
+        val lastCustomDose = lastCustomDose
+        if (lastCustomDose.first.isNotBlank()) {
+            entries.add(ManualDoseEntry(lastCustomDose.first))
+            if (lastCustomDose.second.isNotBlank()) {
+                entries.add(ManualDoseEntry(lastCustomDose.first, lastCustomDose.second))
+            }
+        }
+    }
+
+    private fun startLogProcess(entry: ManualDoseEntry) {
+        // Manual dose is not assigned to an existing reminder
+        val reminderEvent = ReminderEvent.default().copy(
+            reminderId = -1,
+            status = ReminderEvent.ReminderStatus.TAKEN,
+            medicineName = entry.baseName,
+            color = entry.color,
+            useColor = entry.useColor,
+            iconId = entry.iconId,
+            tags = entry.tags
+        )
+        if (reminderEvent.medicineName == context.getString(R.string.custom)) {
+            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
+                .textSink { name: String ->
+                    entry.baseName = name
+                    getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)
+                }.show()
+        } else {
+            if (entry.amount == null || entry.medicineId == -1) {
+                getAmountAndContinue(reminderEvent, entry)
+            } else {
+                getTimeAndLog(reminderEvent.copy(amount = entry.amount), entry.medicineId)
+            }
+        }
+    }
+
+    private var lastCustomDose: Pair<String, String>
+        get() {
+            val name = persistentDataDataSource.data.value.lastCustomDose
+            val amount = persistentDataDataSource.data.value.lastCustomDoseAmount
+            return Pair(name, amount)
+        }
+        set(lastCustomDose) {
+            persistentDataDataSource.setLastCustomDose(lastCustomDose.first)
+            persistentDataDataSource.setLastCustomDoseAmount(lastCustomDose.second)
+        }
+
+    private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
+        val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
+            .textSink { amount: String? ->
+                if (entry.medicineId == -1) {
+                    lastCustomDose = Pair(entry.baseName, amount!!)
+                }
+                getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
+            }
+        if (!entry.amount.isNullOrBlank()) {
+            dialogBuilder.initialText(entry.amount)
+        }
+        dialogBuilder.show()
+    }
+
+    private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
+        val localDateTime = LocalTime.now()
+        timePickerDialogFactory.create(localDateTime) { minutes: Int ->
+            val remindedInstant: Instant = TimeHelper.instantFromDateAndMinutes(minutes, date)
+            activity.lifecycleScope.launch {
+                reminderEventRepository.create(
+                    reminderEvent.copy(
+                        remindedTimestamp = remindedInstant,
+                        processedTimestamp = remindedInstant
+                    )
+                )
+            }
+
+            if (medicineId == -1) {
+                return@create
+            }
+
+            val amount = MedicineHelper.parseAmount(reminderEvent.amount)
+            if (amount != null) {
+                ReminderProcessorBroadcastReceiver.requestStockHandling(context, amount, medicineId, remindedInstant.epochSecond)
+            }
+        }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+    }
+
+    class ManualDoseEntry {
+        var baseName: String
+        lateinit var name: String
+        val color: Int
+        val useColor: Boolean
+        val amount: String?
+        val iconId: Int
+        val medicineId: Int
+        val tags: List<String>
+
+        constructor(name: String, amount: String? = null) {
+            this.baseName = name
+            this.color = 0
+            this.useColor = false
+            this.amount = amount
+            this.iconId = 0
+            this.medicineId = -1
+            this.tags = ArrayList()
+            amendName()
+        }
+
+        constructor(medicine: Medicine, amount: String?) {
+            this.baseName = medicine.name
+            this.color = medicine.color
+            this.useColor = medicine.useColor
+            this.amount = amount
+            this.iconId = medicine.iconId
+            this.medicineId = medicine.id
+            this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
+            amendName()
+        }
+
+        private fun amendName() {
+            if (!amount.isNullOrBlank()) {
+                this.name = "${this.baseName} ($amount)"
+            } else {
+                this.name = this.baseName
+            }
+        }
+
+        override fun toString(): String = name
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || javaClass != other.javaClass) return false
+            val that = other as ManualDoseEntry
+            return name == that.name
+        }
+
+        override fun hashCode(): Int {
+            var result = color
+            result = 31 * result + useColor.hashCode()
+            result = 31 * result + iconId
+            result = 31 * result + medicineId
+            result = 31 * result + baseName.hashCode()
+            result = 31 * result + name.hashCode()
+            result = 31 * result + (amount?.hashCode() ?: 0)
+            result = 31 * result + tags.hashCode()
+            return result
+        }
+
+    }
+
+    companion object {
+        private fun addInactiveReminders(
+            medicine: Medicine,
+            entries: MutableList<ManualDoseEntry>
+        ) {
+            for (reminder in medicine.reminders) {
+                val entry = ManualDoseEntry(medicine, reminder.amount)
+                if (!isReminderActive(reminder) && !entries.contains(entry)) {
+                    entries.add(entry)
+                }
+            }
+        }
+    }
+}

@@ -27,29 +27,29 @@ class MedicineHandlingTest : BaseTestHelper() {
 
         pressBack()
 
-        assertDisplayedAtPosition(R.id.medicineList, 0, R.id.medicineName, TEST_MED_1)
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_1)
 
-        onView(withId(R.id.medicineList)).perform(drag(0, 1))
-        assertDisplayedAtPosition(R.id.medicineList, 0, R.id.medicineName, TEST_MED_2)
-        clickListItem(R.id.medicineList, 0)
-        writeTo(R.id.editMedicineName, TEST_MED_2 + "_")
+        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(0, 1))
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_2)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, TEST_MED_2 + "_")
         pressBack()
-        assertDisplayedAtPosition(R.id.medicineList, 0, R.id.medicineName, TEST_MED_2 + '_')
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_2 + '_')
 
-        onView(withId(R.id.medicineList)).perform(drag(1, 0))
-        assertDisplayedAtPosition(R.id.medicineList, 0, R.id.medicineName, TEST_MED_1)
-        onView(withId(R.id.medicineList)).perform(drag(0, 1))
+        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(1, 0))
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_1)
+        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(0, 1))
 
         AndroidTestHelper.createMedicine(TEST_MED_3)
         pressBack()
 
-        assertDisplayedAtPosition(R.id.medicineList, 2, R.id.medicineName, TEST_MED_3)
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
 
         openMenu()
-        clickOn(R.string.sort)
-        clickOn(R.string.by_name)
-        assertDisplayedAtPosition(R.id.medicineList, 0, R.id.medicineName, TEST_MED_3)
-        assertDisplayedAtPosition(R.id.medicineList, 1, R.id.medicineName, TEST_MED_1)
-        assertDisplayedAtPosition(R.id.medicineList, 2, R.id.medicineName, TEST_MED_2 + '_')
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.sort)
+        clickOn(com.futsch1.medtimer.feature.ui.R.string.by_name)
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_1)
+        assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_2 + '_')
     }
 }

@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,39 +34,39 @@ class MedTimerAppIntro : AppIntro() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         addSlide(
-            getString(R.string.intro_welcome),
-            getString(R.string.intro_welcome_description),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_welcome),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_welcome_description),
             com.futsch1.medtimer.core.ui.R.mipmap.logo
         )
 
         addSlide(
-            getString(R.string.tab_medicine),
-            getString(R.string.intro_medicine_description),
-            R.drawable.intro_medicine
+            getString(com.futsch1.medtimer.feature.ui.R.string.tab_medicine),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_medicine_description),
+            com.futsch1.medtimer.feature.ui.R.drawable.intro_medicine
         )
 
         addSlide(
-            getString(R.string.reminders),
-            getString(R.string.intro_reminder_description),
-            R.drawable.intro_reminder
+            getString(com.futsch1.medtimer.feature.ui.R.string.reminders),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_reminder_description),
+            com.futsch1.medtimer.feature.ui.R.drawable.intro_reminder
         )
 
         addSlide(
-            getString(R.string.show_notifications),
-            getString(R.string.intro_notification_description),
-            R.drawable.intro_notification
+            getString(com.futsch1.medtimer.feature.ui.R.string.show_notifications),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_notification_description),
+            com.futsch1.medtimer.feature.ui.R.drawable.intro_notification
         )
 
         addSlide(
-            getString(R.string.tab_overview),
-            getString(R.string.intro_overview_description),
-            R.drawable.intro_overview
+            getString(com.futsch1.medtimer.feature.ui.R.string.tab_overview),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_overview_description),
+            com.futsch1.medtimer.feature.ui.R.drawable.intro_overview
         )
 
         addSlide(
-            getString(R.string.analysis),
-            getString(R.string.intro_analysis_description),
-            R.drawable.intro_analysis
+            getString(com.futsch1.medtimer.feature.ui.R.string.analysis),
+            getString(com.futsch1.medtimer.feature.ui.R.string.intro_analysis_description),
+            com.futsch1.medtimer.feature.ui.R.drawable.intro_analysis
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
