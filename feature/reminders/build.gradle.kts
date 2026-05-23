@@ -34,6 +34,16 @@ android {
     }
 }
 
+// This module has no instrumented tests (the suite lives in :app), and its
+// notification/alarm/widget layouts reference :app-provided resources (theme,
+// icons, app name), so a standalone androidTest APK cannot link them. Disable
+// the androidTest variant rather than build a pointless, broken test APK.
+androidComponents {
+    beforeVariants(selector().all()) {
+        it.androidTest.enable = false
+    }
+}
+
 dependencies {
     api(project(":core:domain"))
     implementation(project(":core:common"))
