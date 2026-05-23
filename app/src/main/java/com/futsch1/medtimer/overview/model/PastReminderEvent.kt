@@ -4,7 +4,7 @@ import android.text.Spanned
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.helpers.ReminderStringFormatter
+import com.futsch1.medtimer.core.ui.ReminderStringFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

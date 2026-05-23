@@ -1,7 +1,7 @@
 package com.futsch1.medtimer
 
-import com.futsch1.medtimer.helpers.Interval
-import com.futsch1.medtimer.helpers.IntervalUnit
+import com.futsch1.medtimer.core.ui.Interval
+import com.futsch1.medtimer.core.ui.IntervalUnit
 import org.junit.Test
 import kotlin.test.assertEquals
 

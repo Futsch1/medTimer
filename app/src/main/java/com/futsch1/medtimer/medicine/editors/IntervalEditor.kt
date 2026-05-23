@@ -3,8 +3,8 @@ package com.futsch1.medtimer.medicine.editors
 import android.annotation.SuppressLint
 import androidx.core.widget.doAfterTextChanged
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.Interval
-import com.futsch1.medtimer.helpers.IntervalUnit
+import com.futsch1.medtimer.core.ui.Interval
+import com.futsch1.medtimer.core.ui.IntervalUnit
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout

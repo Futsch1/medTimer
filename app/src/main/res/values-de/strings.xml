@@ -4,7 +4,6 @@
     <string name="tab_overview">Übersicht</string>
     <string name="tab_medicine">Medikamente</string>
     <string name="add_medicine">Medikament hinzufügen</string>
-    <string name="medicine_name">Name des Medikaments</string>
     <string name="add_reminder">Erinnerung hinzufügen</string>
     <string name="delete">Löschen</string>
     <string name="time">Zeit</string>
@@ -15,15 +14,6 @@
     <string name="confirm">Bestätigen</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d Erinnerung\n%2$s</item>
-        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
-    </plurals>
-    <string name="notification_title">Erinnerung an ein Medikament</string>
-    <string name="taken">Eingenommen</string>
-    <string name="skipped">Übersprungen</string>
-    <string name="recent_events">Kürzliche Ereignisse</string>
-    <string name="next_reminders">Nächste Erinnerungen</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Erinnerung wirklich löschen?</string>
     <string name="clear_events">Gesamten Verlauf löschen</string>
@@ -33,7 +23,6 @@
     <string name="twenty_four_hours">24 Stunden</string>
     <string name="two_days">2 Tage</string>
     <string name="three_days">3 Tage</string>
-    <string name="app_url">MedTimer bei GitHub</string>
     <string name="color">Farbe</string>
     <string name="select_color">Farbe auswählen</string>
     <string name="exact_reminders">Exakte Erinnerungen</string>
@@ -44,7 +33,6 @@
     <string name="create_reminder_dosage_hint">Dosierung für neue Erinnerung</string>
     <string name="cycle_consecutive_days">Tage aktiv</string>
     <string name="theme">Theme</string>
-    <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="before_meal">vor der Mahlzeit</string>
     <string name="after_meal">nach der Mahlzeit</string>
@@ -62,7 +50,6 @@
     <string name="log_additional_dose">Zusätzliche Einnahme eintragen</string>
     <string name="dismiss_notification_action">Aktion beim Verwerfen einer Benachrichtigung</string>
     <string name="skip_reminder">Überspringen</string>
-    <string name="snooze">Snooze</string>
     <string name="snooze_duration">Snooze Dauer</string>
     <string name="minutes_5">5 Minuten</string>
     <string name="minutes_10">10 Minuten</string>
@@ -83,11 +70,7 @@
     <string name="weekend_end_time">Endzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
-    <string name="every_day">Jeden Tag</string>
     <string name="cycle_pause_days">Tage Pause</string>
-    <string name="cycle_start_date">Beginn des ersten Zyklus</string>
-    <string name="cycle_reminder">Zyklische Erinnerung</string>
-    <string name="weekday_limited">Auf manche Wochentage beschränkt</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 Tage</string>
@@ -113,14 +96,12 @@
     <string name="intro_analysis_description">Die App speichert alle Ereignisse. Sie können Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
-    <string name="high">Hoch</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
     <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
     <string name="calendar">Kalender</string>
     <string name="date">Date</string>
     <string name="active">Aktiv</string>
-    <string name="inactive">Inaktiv</string>
     <string name="period_start">Beginn der Zeitspanne</string>
     <string name="period_end">Ende der Zeitspanne</string>
     <string name="activate_all">Alle Erinnerungen aktivieren</string>
@@ -130,7 +111,6 @@
     <string name="every_day_of_month">Jeden Tag im Monat</string>
     <string name="on_day_of_month">Am %s des Monats</string>
     <string name="never">Niemals</string>
-    <string name="day_of_month_limited">Auf manche Tage im Monat beschränkt</string>
     <string name="medicines_tab_description">Registerkarte Medikamente</string>
     <string name="overview_tab_description">Registerkarte Übersicht</string>
     <string name="statistics_tab_description">Registerkarte Statistik</string>
@@ -144,45 +124,20 @@
     <string name="add_linked_reminder">Verknüpfte Erinnerung hinzufügen</string>
     <string name="linked_reminder_delay">Verzögerung der verknüpften Erinnerung</string>
     <string name="delay">Verzögerung</string>
-    <string name="linked_reminder_summary">Nach Erinnerung um %1$s</string>
     <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
-    <string name="time_based_reminder">Zeitbasierte Erinnerung</string>
     <string name="interval_based_reminder">Intervallbasierte Erinnerung</string>
-    <plurals name="minutes">
-        <item quantity="one">Minute</item>
-        <item quantity="other">Minuten</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">Stunde</item>
-        <item quantity="other">Stunden</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">Tag</item>
-        <item quantity="other">Tage</item>
-    </plurals>
     <string name="minutes_string">Minuten</string>
     <string name="hours_string">Stunden</string>
     <string name="days_string">Tage</string>
-    <plurals name="weeks">
-        <item quantity="one">Woche</item>
-        <item quantity="other">Wochen</item>
-    </plurals>
     <string name="weeks_string">Wochen</string>
     <string name="create_reminder">Erinnerung erstellen</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>
     <string name="interval_start_reminded">Intervall beginnt zum Zeitpunkt der Erinnerung</string>
     <string name="interval_start_processed">Intervall beginnt wenn eingenommen oder übersprungen</string>
-    <string name="every_interval">Alle %s</string>
     <string name="invalid_input">Ungültige Eingabe</string>
-    <string name="once_below_threshold">Einmal beim Erreichen des Schwellwerts</string>
-    <string name="always_below_threshold">Immer, wenn der Schwellwert unterschritten wird</string>
-    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
-    <string name="medicine_stock_string">%1$s übrig</string>
-    <string name="out_of_stock_notification_title">Erinnerung an Medikamentenvorrat</string>
     <string name="medicine_stock">Medikamentenvorrat</string>
     <string name="amount">Anzahl</string>
-    <string name="out_of_stock_reminder">Vorratserinnerung</string>
     <string name="reminder_threshold">Warnschwelle</string>
     <string name="refill_size">Packungsgröße</string>
     <string name="refill_now">Jetzt nachfüllen</string>
@@ -201,7 +156,6 @@
     <string name="hide_med_name">Medikamentenname in Benachrichtigung ausblenden</string>
     <string name="disable_widget">Widgets auf dem Startbildschirm deaktivieren</string>
     <string name="disable_widget_summary">Verhindert, dass Widgets sensible Medikamenteninformationen auf dem Startbildschirm anzeigen</string>
-    <string name="widget_disabled_privacy">Widgets aus Datenschutzgründen deaktiviert — App öffnen, um Erinnerungen anzuzeigen</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
     <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
     <string name="display_settings">Anzeigeeinstellungen</string>
@@ -212,9 +166,7 @@
     <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht vom Sperrbildschirm, sondern nur aus der Benachrichtigungsleiste ausgeblendet werden\nHinweis: Einige Smartwatches zeigen Benachrichtigungen möglicherweise nicht mehr an</string>
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
     <string name="please_wait">Bitte warten…</string>
-    <string name="interval_time">Intervall %s</string>
     <string name="reminded">Erinnert</string>
-    <string name="all_taken">Alle eingenommen (%s)</string>
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
     <string name="create_calendar_entry">Kalendereintrag erstellen</string>
     <string name="notes">Notizen</string>
@@ -222,8 +174,6 @@
     <string name="sort">Sortieren</string>
     <string name="high_and_alarm">Hoch + Alarm</string>
     <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktivieren Sie dies für MedTimer im folgenden Menü</string>
-    <string name="daily_from_to">Tägliches Intervall von %1$s bis %2$s</string>
-    <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
     <string name="reminder_status">Erinnerungsstatus</string>
     <string name="dosing_instructions">Dosierungsanweisungen</string>
     <string name="sample_instructions">Beispielanweisungen einsetzen</string>
@@ -233,13 +183,6 @@
     <string name="remind_on_days_of_month">An Tagen des Monats erinnern</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Enddatum</string>
-    <string name="windowed_interval_reminder">Erinnerung mit Intervall in Zeitfenster</string>
-    <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
-    <string name="time_based_reminder_help">Erinnert an einer bestimmten Zeit des Tages (z.B. 8:00 Uhr). Weiterhin kann die Erinnerung an bestimmten Wochentagen, Tagen des Monats oder über periodische Zeitpläne (wie \'alle 3 Tage\') ausgelöst werden.</string>
-    <string name="continuous_interval_reminder_help">Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Die Erinnerung wiederholt sich kontinuierlich in diesem Intervall.</string>
-    <string name="windowed_interval_reminder_help">Erinnert in einem täglich Zeitfenster (z.B. 9:00 bis 21:00 Uhr), in dem die erste Erinnerung zur Startzeit erfolgt. Nachfolgende Erinnerungen werden in festen Intervallen ausgelöst, bis die Endzeit erreicht ist.</string>
-    <string name="linked_reminder">Verknüpfte Erinnerung</string>
-    <string name="linked_reminder_help">Eine verknüpfte Erinnerung ist eine Folgeerinnerung, die eine bestimmte Zeit nach einer anderen Erinnerung ausgelöst wird. Dies ist nützlich für Medikamente, die mit einer bestimmten Verzögerung nacheinander eingenommen werden müssen.</string>
     <string name="add_linked_reminder_summary">Erstellt eine Folgeerinnerung, die eine bestimmte Zeit nach dieser Erinnerung ausgelöst wird.</string>
     <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung wird nur an aktiven Tagen ausgelöst. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
     <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
@@ -264,23 +207,12 @@
     <string name="interval_start_condition">Intervallstartbedingung</string>
     <string name="tag_filter_active">Tag-Filter aktiv. Es werden nur Daten mit übereinstimmenden Tags exportiert.</string>
     <string name="show_taken_time_in_overview">Zeit der Einnahme in der Übersicht anzeigen</string>
-    <string name="refill">Lagerauffüllung</string>
     <string name="expiration_settings">Ablauf-Einstellungen</string>
-    <string name="production_date">Herstellungsdatum</string>
-    <string name="expiration_date">Ablaufdatum</string>
-    <string name="expiration_reminder">Ablauf-Erinnerung</string>
-    <string name="daily_below_threshold">Täglich bei Unterschreitung des Schwellenwerts</string>
     <string name="remind_days_before_expiration">Tage vor Ablauf erinnern</string>
-    <string name="out_of_stock_reminder_help">Erinnert, wenn das Medikament nicht mehr vorrätig ist, entweder nach jeder Erinnerung oder einmalig oder einmal pro Tag.</string>
-    <string name="expiration_date_reminder_help">Erinnert, wenn das Verfallsdatum des Medikaments erreicht ist oder eine konfigurierbare Zeit vor diesem Datum.</string>
-    <string name="once">Einmal</string>
-    <string name="daily">Täglich</string>
     <string name="medicine_stock_settings">Medikamentenvorratseinstellungen</string>
     <string name="edit_medicine_stock_settings">Medikamentenvorratseinstellungen bearbeiten</string>
     <string name="clear_dates">Datumswerte löschen</string>
     <string name="acknowledged">Bestätigt</string>
-    <string name="refill_amount">Nachfüllen (%s)</string>
-    <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
     <string name="select_all">Alle auswählen</string>
     <string name="by_name">Nach Name</string>
     <string name="by_creation_date_ascending">Aufsteigend nach Erstellungsdatum</string>
@@ -298,7 +230,6 @@
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach einem Snooze nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasierter Snooze erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>
     <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlauben Sie MedTimer den Hintergrundstandortzugriff</string>
-    <string name="snooze_until_home">Snooze bis zur Heimkehr</string>
     <string name="snooze_settings">Snooze-Einstellungen</string>
     <string name="home_location">Heimstandort</string>
     <string name="home_location_not_set">Nicht festgelegt</string>

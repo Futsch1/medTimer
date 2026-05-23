@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="cycle_reminder">Endurteknar áminningar</string>
+    <string name="cycle_start_date">Fyrsta umferð</string>
+    <string name="day_of_month_limited">Takmarkað við nokkra daga mánaðar</string>
+    <string name="every_day">Alla daga</string>
+    <string name="every_interval">Hvern %s</string>
+    <string name="inactive">Óvirk</string>
+    <string name="linked_reminder_summary">Eftir áminningu um %1$s</string>
+    <string name="medicine_stock_string">%1$s eftir</string>
+    <string name="skipped">Sleppt</string>
+    <string name="taken">Tekið</string>
+    <string name="time_based_reminder">Tímatengdar áminningar</string>
+    <string name="weekday_limited">Takmarkað við ákveðna vikudaga</string>
+    <plurals name="days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">dagur</item>
+        <item quantity="other">dagar</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" tools:ignore="ImpliedQuantity">klukkustund</item>
+        <item quantity="other">klukkustundir</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one" tools:ignore="ImpliedQuantity">mínúta</item>
+        <item quantity="other">mínútur</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d áminning\n%2$s</item>
+        <item quantity="other">%1$d áminningar\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one" tools:ignore="ImpliedQuantity">vika</item>
+        <item quantity="other">vikur</item>
+    </plurals>
+    <string name="once_below_threshold">Einu sinni ef neðan þröskulds</string>
+    <string name="always_below_threshold">Alltaf ef neðan þröskulds</string>
+    <string name="out_of_stock_notification_title">Áminning um að lyf sé ekki til</string>
+    <string name="snooze_until_home">Snooze þar til heim</string>
+    <string name="default_">Sjálfgefið</string>
+    <string name="high">Hátt</string>
+    <string name="snooze">Snooze</string>
+    <string name="medicine_name">Heiti lyfs</string>
+    <string name="app_url">MedTimer á GitHub</string>
+</resources>

@@ -6,8 +6,8 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.helpers.MedicineStringFormatter
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.MedicineStringFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.schedulertests.TestHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
@@ -78,7 +78,7 @@ class MedicineHelperTest {
 
         val formatter = MedicineStringFormatter(contextMock, preferencesDataSource, timeFormatterMock)
 
-        `when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
+        `when`(contextMock.getString(eq(com.futsch1.medtimer.core.ui.R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->
                 "${invocation.getArgument(1, String::class.java)} left"
             }

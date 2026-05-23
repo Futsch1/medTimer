@@ -17,11 +17,11 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.overview.model.PastReminderEvent
 import com.futsch1.medtimer.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.overview.model.getImage
-import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.SchedulingSimulator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher

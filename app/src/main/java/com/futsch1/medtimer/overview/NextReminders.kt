@@ -10,8 +10,8 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
+import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.feature.reminders.scheduling.ReminderScheduler
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate

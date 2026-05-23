@@ -16,8 +16,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.R
-import com.futsch1.medtimer.helpers.MedicineIcons
-import com.futsch1.medtimer.helpers.ViewColorHelper
+import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.overview.actions.Actions
 import com.futsch1.medtimer.overview.actions.ActionsFactory
 import com.futsch1.medtimer.overview.actions.Button

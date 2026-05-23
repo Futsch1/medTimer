@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Υπενθύμιση φαρμ. αγωγής</string>
+    <string name="refill_amount">Αναπλήρωση (%s)</string>
+    <string name="out_of_stock_notification">Μόνο %2$s από %1$s απομένουν!\nΕξετάστε την προοπτική για αναπλήρωση του φαρμάκου σύντομα.</string>
+    <string name="expiration_date_notification">Το φάρμακο %1$s έχει ημερομηνία λήξης %2$s.\nΕξετάστε το ενδεχόμενο αντικατάστασης του φαρμάκου.</string>
+    <string name="widget_disabled_privacy">Τα γραφικά στοιχεία είναι απενεργοποιημένα για λόγους απορρήτου — ανοίξτε την εφαρμογή για προβολή υπενθυμίσεων</string>
+    <string name="recent_events">Πρόσφατα συμβάντα</string>
+    <string name="next_reminders">Επόμενες υπενθυμίσεις</string>
+    <string name="all_taken">Έχουν ληφθεί όλα (%s)</string>
+</resources>

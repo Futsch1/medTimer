@@ -3,30 +3,19 @@
     <string name="enable_alarm_dialog">Щоб дозволити планування точних будильників, увімкніть цю опцію для MedTimer у наступному меню</string>
     <string name="tab_overview">Огляд</string>
     <string name="tab_medicine">Ліки</string>
-    <string name="medicine_name">Назва ліків</string>
     <string name="add_reminder">Додати нагадування</string>
     <string name="delete">Видалити</string>
     <string name="time">Час</string>
     <string name="dosage">Дозування</string>
     <string name="yes">Так</string>
     <string name="ok">ОК</string>
-    <string name="taken">Прийнято</string>
-    <string name="skipped">Пропущено</string>
-    <string name="recent_events">Нещодавні події</string>
     <string name="are_you_sure_delete_reminder">Ви впевнені що хочете видалити нагадування?</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few">%1$d нагадування\n%2$s</item>
-        <item quantity="many">%1$d нагадування\n%2$s</item>
-        <item quantity="other">%1$d нагадування\n%2$s</item>
-    </plurals>
     <string name="show_notifications">Показувати сповіщення</string>
     <string name="twenty_four_hours">24 години</string>
     <string name="exact_reminders">Точні нагадування</string>
     <string name="exact_reminders_summary">Нагадування заплановано на точний час (збільшує використання батареї)</string>
     <string name="generate_test_data">Згенерувати тестові дані</string>
     <string name="create_reminder_dosage_hint">Дозування для нового нагадування</string>
-    <string name="default_">Типові</string>
     <string name="alternative">Альтернативна</string>
     <string name="before_meal">до їди</string>
     <string name="time_before_meal">за Х хвилин до прийому їжі</string>
@@ -37,13 +26,10 @@
     <string name="restore_start">Це замінить усі налаштування ліків та/або подій нагадувань.\n\nПродовжити?</string>
     <string name="log_additional_dose">Записати додаткову дозу</string>
     <string name="skip_reminder">Пропустити дозу</string>
-    <string name="snooze">Відкласти</string>
     <string name="add_medicine">Додати ліки</string>
-    <string name="notification_title">Нагадування про ліки</string>
     <string name="cancel">Скасувати</string>
     <string name="are_you_sure_delete_medicine">Певнені, що хочете видалити ліки?</string>
     <string name="no_reminders">Нагадування не встановлено</string>
-    <string name="next_reminders">Наступне нагадування</string>
     <string name="select_color">Обрати колір</string>
     <string name="time_after">через Х годин після прийому їжі</string>
     <string name="app_version">Версія застосунку</string>
@@ -51,7 +37,6 @@
     <string name="change_color_toast">Зауважте, колір змінюють тільки майбутні події</string>
     <string name="tab_settings">Налаштування</string>
     <string name="confirm">Підтвердити</string>
-    <string name="app_url">MedTimer на GitHub</string>
     <string name="three_days">3 дні</string>
     <string name="clear_events">Очистити всю історію</string>
     <string name="are_you_sure_delete_events">Це безповоротно видалить всю історію прийому ліків. Цю дію не можна скасувати.</string>
@@ -85,12 +70,8 @@
     <string name="weekend_end_time">Час завершення</string>
     <string name="custom">Користувацьке…</string>
     <string name="advanced_settings">Розширені налаштування</string>
-    <string name="every_day">Щодня</string>
     <string name="cycle_pause_days">Призупинити дні</string>
-    <string name="cycle_start_date">Початок першого циклу</string>
-    <string name="cycle_reminder">Циклічні нагадування</string>
     <string name="reminders">Нагадування</string>
-    <string name="weekday_limited">Обмежується деякими будніми днями</string>
     <string name="filter">Фільтр</string>
     <string name="seven_days">7 днів</string>
     <string name="analysis">Аналітика</string>
@@ -111,14 +92,12 @@
     <string name="intro_analysis_description">Додаток зберігає всі події нагадування. Ви можете проаналізувати свої минулі дози на екрані аналізу та експортувати історію за допомогою меню &amp;quot;кебаб&amp;quot; (три крапки). Історія збережеться, навіть якщо ліки або нагадування будуть видалені або перейменовані.</string>
     <string name="show_intro">Показати вступ до програми</string>
     <string name="are_you_sure_delete_reminder_event">Ви впевнені, що хочете видалити подію-нагадування?</string>
-    <string name="high">Високий</string>
     <string name="notification_importance">Пріоритет сповіщення</string>
     <string name="notification_settings_default">Налаштування сповіщень за замовчуванням Пріоритет за замовчуванням</string>
     <string name="notification_settings_high">Налаштування сповіщень з високим пріоритетом</string>
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активний</string>
-    <string name="inactive">Неактивний</string>
     <string name="period_start">Початок менструації</string>
     <string name="period_end">Кінець менструації</string>
     <string name="activate_all">Активувати всі нагадування</string>
@@ -128,7 +107,6 @@
     <string name="every_day_of_month">Кожного дня</string>
     <string name="on_day_of_month">У ці дні: %s</string>
     <string name="never">Ніколи</string>
-    <string name="day_of_month_limited">Обмежено деякими днями</string>
     <string name="medicines_tab_description">Огляд ліків</string>
     <string name="overview_tab_description">Оглянути календар</string>
     <string name="statistics_tab_description">Статистика</string>
@@ -142,62 +120,29 @@
     <string name="add_linked_reminder">Нагадати про наступну дозу</string>
     <string name="linked_reminder_delay">Інтервал наступної дози</string>
     <string name="delay">Затримка до</string>
-    <string name="linked_reminder_summary">Після нагадування в %1$s</string>
     <string name="delete_re_raise_event">Ви хочете видалити цю подію і повторно підняти сповіщення?</string>
-    <string name="time_based_reminder">Нагадування за розкладом</string>
     <string name="interval_based_reminder">Інтервальне нагадування</string>
     <string name="minutes_string">Хвилини</string>
     <string name="hours_string">Години</string>
     <string name="days_string">Дні</string>
-    <plurals name="weeks">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">тиждень</item>
-        <item quantity="other">тижні</item>
-        <item quantity="few">тижні</item>
-        <item quantity="many">тижнів</item>
-    </plurals>
     <string name="weeks_string">Тижні</string>
     <string name="create_reminder">Створити нагадування</string>
     <string name="interval">Інтервал</string>
     <string name="interval_start_time">Початок інтервалу</string>
     <string name="interval_start_reminded">Відлік починається після нагадування</string>
     <string name="interval_start_processed">Відлік починається після прийому чи пропуску</string>
-    <string name="every_interval">Кожні %s</string>
     <string name="invalid_input">Некоректне значення</string>
-    <string name="once_below_threshold">Разово, коли нижче порогу</string>
-    <string name="always_below_threshold">Постійно, коли нижче порогу</string>
-    <string name="out_of_stock_notification">Залишилося %2$s доза %1$s!\nПоповніть запас ліків найближчим часом.</string>
-    <string name="medicine_stock_string">Залишилося %1$s</string>
-    <string name="out_of_stock_notification_title">Скінчилися ліки</string>
     <string name="medicine_stock">Запас медикаментів</string>
     <string name="amount">В наявності</string>
-    <string name="out_of_stock_reminder">Нагадування про відсутність ліків</string>
     <string name="reminder_threshold">Поріг нагадування</string>
     <string name="refill_size">Додати</string>
     <string name="refill_now">Поповнити</string>
     <string name="variable_amount">Вказати дозування при прийомі</string>
-    <plurals name="minutes">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">хвилина</item>
-        <item quantity="other">хвилини</item>
-        <item quantity="few">хвилини</item>
-        <item quantity="many">хвилин</item>
-    </plurals>
     <plurals name="last_n_days">
         <item quantity="one" ns0:ignore="ImpliedQuantity">Останні 24 години</item>
         <item quantity="other">Останні %1$d дні</item>
         <item quantity="few">Останні %1$d дні</item>
         <item quantity="many">Останні %1$d днів</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">година</item>
-        <item quantity="other">години</item>
-        <item quantity="few">години</item>
-        <item quantity="many">годин</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
-        <item quantity="other">дні</item>
-        <item quantity="few">дні</item>
-        <item quantity="many">днів</item>
     </plurals>
     <string name="tags">Теги</string>
     <string name="add_tag">Додати тег</string>
@@ -213,7 +158,6 @@
     <string name="hide_med_name">Приховати назву препарату в сповіщенні</string>
     <string name="disable_widget">Вимкнути віджети головного екрану</string>
     <string name="disable_widget_summary">Заборонити віджетам відображати конфіденційну інформацію про ліки на головному екрані</string>
-    <string name="widget_disabled_privacy">Віджети вимкнено для захисту конфіденційності — відкрийте програму для перегляду нагадувань</string>
     <string name="re_raise_event">Повторно запустити подію</string>
     <string name="notification_reminder_settings">Налаштування сповіщень та нагадувань</string>
     <string name="display_settings">Налаштування відображення</string>
@@ -224,9 +168,7 @@
     <string name="sticky_on_lockscreen_summary">Нагадування не можна закрити з екрана блокування - лише зі шторки сповіщень\nПримітка: Деякі смарт-годинники можуть не показувати сповіщення, якщо цю опцію увімкнено</string>
     <string name="big_notifications">Великі кнопки сповіщень</string>
     <string name="please_wait">Будь ласка, зачекайте…</string>
-    <string name="interval_time">Інтервал %s</string>
     <string name="reminded">Нагадано</string>
-    <string name="all_taken">Усе прийнято (%s)</string>
     <string name="estimated_run_out_date">Орієнтовна дата закінчення запасу</string>
     <string name="create_calendar_entry">Створити запис у календарі</string>
     <string name="notes">Нотатки</string>
@@ -234,8 +176,6 @@
     <string name="sort">Сортування</string>
     <string name="high_and_alarm">Високий + Тривога</string>
     <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
-    <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
-    <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="reminder_status">Статус нагадування</string>
     <string name="dosing_instructions">Інструкції з дозування</string>
     <string name="sample_instructions">Заповнити зразками інструкцій</string>
@@ -245,13 +185,6 @@
     <string name="remind_on_days_of_month">Нагадувати у дні місяця</string>
     <string name="start_date">Дата початку</string>
     <string name="end_date">Дата закінчення</string>
-    <string name="windowed_interval_reminder">Нагадування з інтервалом у вікні</string>
-    <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
-    <string name="time_based_reminder_help">Встановіть певний час (наприклад, 8:00 ранку) і налаштуйте повторюваний шаблон. Це дозволяє точно контролювати певні дні тижня, дні місяця або складні періодичні розклади (наприклад, «кожні 3 дні»).</string>
-    <string name="continuous_interval_reminder_help">Почніть нагадування на основі часового інтервалу (наприклад, кожні 6 годин) із зазначеного моменту. Цей шаблон є безперервним, ігноруючи обмеження часу доби, доки не буде деактивовано вручну.</string>
-    <string name="windowed_interval_reminder_help">Визначити щоденне активне вікно (наприклад, з 9:00 до 21:00), де перше нагадування завжди спрацьовує на початку цього періоду. Наступні нагадування з’являються з фіксованим інтервалом, доки не буде досягнуто кінця активного вікна. Увесь шаблон скидається щодня.</string>
-    <string name="linked_reminder">Пов\'язане нагадування</string>
-    <string name="linked_reminder_help">Пов’язане нагадування - це додаткове нагадування, яке заплановане через певний проміжок часу після основного. Це корисно для ліків, які потрібно приймати послідовно, з чітко визначеною затримкою між прийомами.</string>
     <string name="add_linked_reminder_summary">Створює наступне нагадування, яке планується через певний проміжок часу після спрацювання цього нагадування.</string>
     <string name="cyclic_reminder_summary">Налаштовує повторюваний патерн активних і призупинених днів, починаючи з заданої дати. Нагадування надсилатиме сповіщення лише в активні дні. Використовуйте це для ліків, таких як протизаплідні таблетки.</string>
     <string name="variable_amount_summary">Коли активно, при прийомі нагадування відображається діалогове вікно для введення дози.</string>
@@ -276,23 +209,12 @@
     <string name="interval_start_condition">Умова запуску інтервалу</string>
     <string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
     <string name="show_taken_time_in_overview">Показати час прийому в огляді</string>
-    <string name="refill">Поповнення запасів</string>
     <string name="expiration_settings">Налаштування терміну придатності</string>
-    <string name="production_date">Дата виробництва</string>
-    <string name="expiration_date">Термін придатності</string>
-    <string name="expiration_reminder">Нагадування про термін придатності</string>
-    <string name="daily_below_threshold">Щодня при нижче порогу</string>
     <string name="remind_days_before_expiration">Нагадувати за дні до закінчення терміну придатності</string>
-    <string name="out_of_stock_reminder_help">Нагадує, коли ліки закінчуються, або після кожного нагадування, або один раз, або один раз на день.</string>
-    <string name="expiration_date_reminder_help">Нагадує, коли настає термін придатності ліків або за налаштований час до цієї дати.</string>
-    <string name="once">Один раз</string>
-    <string name="daily">Щодня</string>
     <string name="medicine_stock_settings">Налаштування запасу ліків</string>
     <string name="edit_medicine_stock_settings">Редагувати налаштування запасу ліків</string>
     <string name="clear_dates">Очистити дати</string>
     <string name="acknowledged">Підтверджено</string>
-    <string name="refill_amount">Поповнити (%s)</string>
-    <string name="expiration_date_notification">Термін придатності ліків %1$s закінчується %2$s.\nРозгляньте можливість заміни ліків.</string>
     <string name="select_all">Вибрати все</string>
     <string name="by_name">За назвою</string>
     <string name="by_creation_date_ascending">За зростанням дати створення</string>
@@ -310,7 +232,6 @@
     <string name="location_snooze_summary">Повторно повідомити при поверненні додому після відкладення</string>
     <string name="location_snooze_no_play_services">Відкладення за місцезнаходженням вимагає Google Play Services, які недоступні на цьому пристрої</string>
     <string name="location_snooze_background_permission">Щоб отримувати сповіщення при поверненні додому, дозвольте MedTimer доступ до місцезнаходження у фоновому режимі</string>
-    <string name="snooze_until_home">Відкласти до повернення додому</string>
     <string name="snooze_settings">Налаштування відкладення</string>
     <string name="home_location">Домашнє місцезнаходження</string>
     <string name="home_location_not_set">Не задано</string>

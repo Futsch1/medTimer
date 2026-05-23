@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">MedTimer</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_overview">Overview</string>
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
-    <string name="medicine_name">Medicine name</string>
     <string name="add_reminder">Add reminder</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
@@ -16,15 +14,6 @@
     <string name="confirm">Confirm</string>
     <string name="are_you_sure_delete_medicine">Are you sure to delete the medicine?</string>
     <string name="no_reminders">No reminders set</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d reminder\n%2$s</item>
-        <item quantity="other">%1$d reminders\n%2$s</item>
-    </plurals>
-    <string name="notification_title">Medicine reminder</string>
-    <string name="taken">Taken</string>
-    <string name="skipped">Skipped</string>
-    <string name="recent_events">Recent events</string>
-    <string name="next_reminders">Next reminders</string>
     <string name="version">Version %s</string>
     <string name="are_you_sure_delete_reminder">Are you sure to delete the reminder?</string>
     <string name="clear_events">Clear all history</string>
@@ -34,7 +23,6 @@
     <string name="twenty_four_hours">24 hours</string>
     <string name="two_days">2 days</string>
     <string name="three_days">3 days</string>
-    <string name="app_url">MedTimer on GitHub</string>
     <string name="color">Color</string>
     <string name="select_color">Select color</string>
     <string name="exact_reminders">Exact reminders</string>
@@ -50,7 +38,6 @@
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="cycle_consecutive_days">Active days</string>
     <string name="theme">Theme</string>
-    <string name="default_">Default</string>
     <string name="alternative">Alternative</string>
     <string name="before_meal">before the meal</string>
     <string name="after_meal">after the meal</string>
@@ -68,7 +55,6 @@
     <string name="log_additional_dose">Log additional dose</string>
     <string name="dismiss_notification_action">Action when dismissing notification</string>
     <string name="skip_reminder">Skip dose</string>
-    <string name="snooze">Snooze</string>
     <string name="snooze_duration">Snooze duration</string>
     <string name="minutes_5">5 minutes</string>
     <string name="minutes_10">10 minutes</string>
@@ -89,11 +75,7 @@
     <string name="weekend_end_time">End time</string>
     <string name="custom">Custom…</string>
     <string name="advanced_settings">Advanced settings</string>
-    <string name="every_day">Every day</string>
     <string name="cycle_pause_days">Pause days</string>
-    <string name="cycle_start_date">First cycle start</string>
-    <string name="cycle_reminder">Cyclic reminder</string>
-    <string name="weekday_limited">Limited to some weekdays</string>
     <string name="reminders">Reminders</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
@@ -120,14 +102,12 @@
     <string name="intro_analysis_description">The app stores all reminder events. You can analyze your past doses in the analysis screen and export your history via the kebab (three dots) menu. The history will stay even if medicines or reminders are deleted or renamed.</string>
     <string name="show_intro">Show app intro</string>
     <string name="are_you_sure_delete_reminder_event">Are you sure to delete the reminder event?</string>
-    <string name="high">High</string>
     <string name="notification_importance">Notification priority</string>
     <string name="notification_settings_default">Notification settings default priority</string>
     <string name="notification_settings_high">Notification settings high priority</string>
     <string name="calendar">Calendar</string>
     <string name="date">Date</string>
     <string name="active">Active</string>
-    <string name="inactive">Inactive</string>
     <string name="period_start">Period start</string>
     <string name="period_end">Period end</string>
     <string name="activate_all">Activate all reminders</string>
@@ -137,7 +117,6 @@
     <string name="every_day_of_month">Every day of the month</string>
     <string name="on_day_of_month">On the %s of the month</string>
     <string name="never">Never</string>
-    <string name="day_of_month_limited">Limited to some days of the month</string>
     <string name="medicines_tab_description">Medicines tab</string>
     <string name="overview_tab_description">Overview tab</string>
     <string name="statistics_tab_description">Statistics tab</string>
@@ -151,47 +130,20 @@
     <string name="add_linked_reminder">Add reminder for following dose</string>
     <string name="linked_reminder_delay">Delay for following dose</string>
     <string name="delay">Delay</string>
-    <string name="linked_reminder_summary">After reminder at %1$s</string>
     <string name="delete_re_raise_event">Do you want to delete this event and re-raise the notification?</string>
-    <string name="preview_next_reminders_widget_line" translatable="false">12:00: 1 Selen (200 µg)</string>
-    <string name="preview_latest_reminders_widget_line" translatable="false">12:00: Taken 1 Selen (200 µg)</string>
-    <string name="time_based_reminder">Time based reminder</string>
     <string name="interval_based_reminder">Interval based reminder</string>
-    <plurals name="minutes">
-        <item quantity="one">minute</item>
-        <item quantity="other">minutes</item>
-    </plurals>
     <string name="minutes_string">Minutes</string>
-    <plurals name="hours">
-        <item quantity="one">hour</item>
-        <item quantity="other">hours</item>
-    </plurals>
     <string name="hours_string">Hours</string>
-    <plurals name="days">
-        <item quantity="one">day</item>
-        <item quantity="other">days</item>
-    </plurals>
     <string name="days_string">Days</string>
-    <plurals name="weeks">
-        <item quantity="one">week</item>
-        <item quantity="other">weeks</item>
-    </plurals>
     <string name="weeks_string">Weeks</string>
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>
     <string name="interval_start_reminded">Interval starts when reminded</string>
     <string name="interval_start_processed">Interval starts when taken or skipped</string>
-    <string name="every_interval">Every %s</string>
     <string name="invalid_input">Invalid input</string>
-    <string name="once_below_threshold">Once when falling below threshold</string>
-    <string name="always_below_threshold">Always when below threshold</string>
-    <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
-    <string name="medicine_stock_string">%1$s left</string>
-    <string name="out_of_stock_notification_title">Medicine out of stock reminder</string>
     <string name="medicine_stock">Medicine stock</string>
     <string name="amount">Amount</string>
-    <string name="out_of_stock_reminder">Out of stock reminder</string>
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
@@ -211,7 +163,6 @@
     <string name="hide_med_name">Hide medication name in notification</string>
     <string name="disable_widget">Disable home screen widgets</string>
     <string name="disable_widget_summary">Prevent widgets from displaying sensitive medication information on the home screen</string>
-    <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
     <string name="snooze_settings">Snooze settings</string>
@@ -230,17 +181,13 @@
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer\nNote: Some smartwatches may no display notifications if enabled</string>
     <string name="big_notifications">Big notification buttons</string>
     <string name="please_wait">Please wait…</string>
-    <string name="interval_time">Interval %s</string>
     <string name="reminded">Reminded</string>
-    <string name="all_taken">All taken (%s)</string>
     <string name="estimated_run_out_date">Estimated run out date</string>
     <string name="create_calendar_entry">Create calendar entry</string>
     <string name="notes">Notes</string>
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
-    <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
-    <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="reminder_status">Reminder status</string>
     <string name="dosing_instructions">Dosing instructions</string>
     <string name="sample_instructions">Fill with sample instructions</string>
@@ -250,13 +197,6 @@
     <string name="remind_on_days_of_month">Remind on days of month</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
-    <string name="linked_reminder">Linked reminder</string>
-    <string name="windowed_interval_reminder">Windowed interval reminder</string>
-    <string name="continuous_interval_reminder">Continuous interval reminder</string>
-    <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
-    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
-    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9:00 AM to 9:00 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
-    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is raised. This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
     <string name="add_linked_reminder_summary">Creates a follow-up reminder that is scheduled a certain amount of time after this reminder is raised.</string>
     <string name="cyclic_reminder_summary">Configures a recurring pattern of active and paused days starting from a given date. The reminder will only raise a notification on active days. Use this for meds like birth control pills.</string>
     <string name="variable_amount_summary">When active, a dialog to enter the dosage is shown when the reminder is taken.</string>
@@ -282,25 +222,14 @@
     <string name="interval_start_condition">Interval start condition</string>
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
-    <string name="refill">Stock refill</string>
     <string name="expiration_settings">Expiration settings</string>
-    <string name="production_date">Production date</string>
-    <string name="expiration_date">Expiration date</string>
-    <string name="expiration_reminder">Expiration reminder</string>
-    <string name="daily_below_threshold">Daily when below threshold</string>
     <string name="remind_days_before_expiration">Remind days before expiration</string>
-    <string name="out_of_stock_reminder_help">Reminds when the medicine is out of stock, either after every reminder or once or once per day.</string>
-    <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
-    <string name="once">Once</string>
-    <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
     <string name="monthly">Monthly</string>
     <string name="medicine_stock_settings">Medicine stock settings</string>
     <string name="edit_medicine_stock_settings">Edit medicine stock settings</string>
     <string name="clear_dates">Clear dates</string>
     <string name="acknowledged">Acknowledged</string>
-    <string name="refill_amount">Refill (%s)</string>
-    <string name="expiration_date_notification">The medicine %1$s expires on %2$s.\nConsider replacing the medicine.</string>
     <string name="select_all">Select all</string>
     <string name="by_name">By name</string>
     <string name="by_creation_date_ascending">Ascending by creation date</string>
@@ -312,5 +241,4 @@
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
-    <string name="snooze_until_home">Snooze until home</string>
 </resources>

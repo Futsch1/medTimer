@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.location
+package com.futsch1.medtimer.feature.reminders.location
 
 import android.Manifest
 import androidx.test.core.app.ApplicationProvider

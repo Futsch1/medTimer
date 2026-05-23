@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns0="http://schemas.android.com/tools">
+    <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
+    <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
+    <string name="continuous_interval_reminder_help">Почніть нагадування на основі часового інтервалу (наприклад, кожні 6 годин) із зазначеного моменту. Цей шаблон є безперервним, ігноруючи обмеження часу доби, доки не буде деактивовано вручну.</string>
+    <string name="cycle_reminder">Циклічні нагадування</string>
+    <string name="cycle_start_date">Початок першого циклу</string>
+    <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
+    <string name="day_of_month_limited">Обмежено деякими днями</string>
+    <string name="every_day">Щодня</string>
+    <string name="every_interval">Кожні %s</string>
+    <string name="expiration_date">Термін придатності</string>
+    <string name="expiration_date_reminder_help">Нагадує, коли настає термін придатності ліків або за налаштований час до цієї дати.</string>
+    <string name="inactive">Неактивний</string>
+    <string name="interval_time">Інтервал %s</string>
+    <string name="linked_reminder">Пов\'язане нагадування</string>
+    <string name="linked_reminder_help">Пов’язане нагадування - це додаткове нагадування, яке заплановане через певний проміжок часу після основного. Це корисно для ліків, які потрібно приймати послідовно, з чітко визначеною затримкою між прийомами.</string>
+    <string name="linked_reminder_summary">Після нагадування в %1$s</string>
+    <string name="medicine_stock_string">Залишилося %1$s</string>
+    <string name="out_of_stock_reminder">Нагадування про відсутність ліків</string>
+    <string name="out_of_stock_reminder_help">Нагадує, коли ліки закінчуються, або після кожного нагадування, або один раз, або один раз на день.</string>
+    <string name="production_date">Дата виробництва</string>
+    <string name="refill">Поповнення запасів</string>
+    <string name="skipped">Пропущено</string>
+    <string name="taken">Прийнято</string>
+    <string name="time_based_reminder">Нагадування за розкладом</string>
+    <string name="time_based_reminder_help">Встановіть певний час (наприклад, 8:00 ранку) і налаштуйте повторюваний шаблон. Це дозволяє точно контролювати певні дні тижня, дні місяця або складні періодичні розклади (наприклад, «кожні 3 дні»).</string>
+    <string name="weekday_limited">Обмежується деякими будніми днями</string>
+    <string name="windowed_interval_reminder">Нагадування з інтервалом у вікні</string>
+    <string name="windowed_interval_reminder_help">Визначити щоденне активне вікно (наприклад, з 9:00 до 21:00), де перше нагадування завжди спрацьовує на початку цього періоду. Наступні нагадування з’являються з фіксованим інтервалом, доки не буде досягнуто кінця активного вікна. Увесь шаблон скидається щодня.</string>
+    <plurals name="days">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
+        <item quantity="other">дні</item>
+        <item quantity="few">дні</item>
+        <item quantity="many">днів</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">година</item>
+        <item quantity="other">години</item>
+        <item quantity="few">години</item>
+        <item quantity="many">годин</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">хвилина</item>
+        <item quantity="other">хвилини</item>
+        <item quantity="few">хвилини</item>
+        <item quantity="many">хвилин</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d нагадування\n%2$s</item>
+        <item quantity="few">%1$d нагадування\n%2$s</item>
+        <item quantity="many">%1$d нагадування\n%2$s</item>
+        <item quantity="other">%1$d нагадування\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one" ns0:ignore="ImpliedQuantity">тиждень</item>
+        <item quantity="other">тижні</item>
+        <item quantity="few">тижні</item>
+        <item quantity="many">тижнів</item>
+    </plurals>
+    <string name="once">Один раз</string>
+    <string name="daily">Щодня</string>
+    <string name="once_below_threshold">Разово, коли нижче порогу</string>
+    <string name="always_below_threshold">Постійно, коли нижче порогу</string>
+    <string name="daily_below_threshold">Щодня при нижче порогу</string>
+    <string name="out_of_stock_notification_title">Скінчилися ліки</string>
+    <string name="snooze_until_home">Відкласти до повернення додому</string>
+    <string name="default_">Типові</string>
+    <string name="high">Високий</string>
+    <string name="snooze">Відкласти</string>
+    <string name="expiration_reminder">Нагадування про термін придатності</string>
+    <string name="medicine_name">Назва ліків</string>
+    <string name="app_url">MedTimer на GitHub</string>
+</resources>

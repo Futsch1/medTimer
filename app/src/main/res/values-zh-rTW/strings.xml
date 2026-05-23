@@ -4,7 +4,6 @@
     <string name="tab_overview">總覽</string>
     <string name="tab_medicine">藥品</string>
     <string name="add_medicine">新增藥物</string>
-    <string name="medicine_name">藥物名稱</string>
     <string name="add_reminder">新增提醒</string>
     <string name="delete">刪除</string>
     <string name="time">時間</string>
@@ -14,15 +13,7 @@
     <string name="cancel">取消</string>
     <string name="confirm">確定</string>
     <string name="are_you_sure_delete_medicine">您確定要刪除此藥品嗎？</string>
-    <plurals name="sum_reminders">
-        <item quantity="other">共有 %1$d 個提醒\n%2$s</item>
-    </plurals>
     <string name="no_reminders">未設定提醒</string>
-    <string name="notification_title">用藥提醒</string>
-    <string name="skipped">已略過</string>
-    <string name="taken">已服用</string>
-    <string name="recent_events">近期事件</string>
-    <string name="next_reminders">接下來的提醒</string>
     <string name="version">版本 %s</string>
     <string name="clear_events">清除所有歷史記錄</string>
     <string name="are_you_sure_delete_reminder">您確定要刪除此提醒嗎？</string>
@@ -34,14 +25,12 @@
     <string name="three_days">3 天</string>
     <string name="color">顔色</string>
     <string name="select_color">選擇顔色</string>
-    <string name="app_url">GitHub 上的 MedTimer</string>
     <string name="exact_reminders">精確提醒</string>
     <string name="change_color_toast">請注意，顏色變更僅會影響未來的事件</string>
     <string name="exact_reminders_summary">提醒會在精確時間排程（將增加電池耗電）</string>
     <string name="enable_alarm_dialog">若要允許排程精確提醒，請在以下選單中為 MedTimer 啟用此設定</string>
     <string name="generate_test_data">產生測試資料</string>
     <string name="theme">主題</string>
-    <string name="default_">預設</string>
     <string name="create_reminder_dosage_hint">新提醒的劑量</string>
     <string name="cycle_consecutive_days">啟用日</string>
     <string name="alternative">替代方案</string>
@@ -60,7 +49,6 @@
     <string name="log_additional_dose">記錄額外劑量</string>
     <string name="dismiss_notification_action">關閉通知時的動作</string>
     <string name="skip_reminder">略過劑量</string>
-    <string name="snooze">延後提醒</string>
     <string name="minutes_5">5 分鐘</string>
     <string name="minutes_10">10 分鐘</string>
     <string name="minutes_15">15 分鐘</string>
@@ -81,10 +69,7 @@
     <string name="weekend_start_time">開始時間</string>
     <string name="weekend_end_time">結束時間</string>
     <string name="advanced_settings">進階設定</string>
-    <string name="every_day">每天</string>
     <string name="cycle_pause_days">暫停日</string>
-    <string name="cycle_start_date">首次循環開始</string>
-    <string name="weekday_limited">僅限特定平日</string>
     <string name="reminders">提醒</string>
     <string name="sort">排序</string>
     <string name="filter">篩選</string>
@@ -107,7 +92,6 @@
     <string name="intro_reminder_description">選擇一個藥品以編輯其詳細資料，並為你需要服用的不同劑量建立提醒。\n\n提醒可以根據時間或間隔設定，並可限定於特定的日期。</string>
     <string name="intro_notification_description">當提醒到期時，會出現一則通知，你可以選擇將該劑量標記為已服用（按下「已服用」按鈕）、略過（關閉通知），或在一段時間後再次提醒（「延後」）。</string>
     <string name="intro_analysis_description">此應用程式會儲存所有的提醒事件。你可以在分析畫面中檢視過去的服藥紀錄，並透過右上角的選單（三個點）匯出歷史資料。即使藥品或提醒被刪除或重新命名，歷史紀錄仍會保留。</string>
-    <string name="high">高</string>
     <string name="notification_importance">通知優先權</string>
     <string name="are_you_sure_delete_reminder_event">您確定要刪除這個提醒事件嗎？</string>
     <string name="notification_settings_default">通知設定預設優先權</string>
@@ -118,7 +102,6 @@
     <string name="calendar">行事曆</string>
     <string name="date">日期</string>
     <string name="active">啟動</string>
-    <string name="inactive">未啟用</string>
     <string name="period_start">期間開始</string>
     <string name="period_end">期間結束</string>
     <string name="activate_all">啟用所有提醒</string>
@@ -128,7 +111,6 @@
     <string name="every_day_of_month">每個月的每一天</string>
     <string name="on_day_of_month">在每個月的第 %s 天</string>
     <string name="never">永不</string>
-    <string name="day_of_month_limited">僅限特定的月日</string>
     <string name="medicines_tab_description">藥品分頁</string>
     <string name="previous_month">上個月</string>
     <string name="overview_tab_description">總覽分頁</string>
@@ -142,41 +124,20 @@
     <string name="add_linked_reminder">為後續劑量新增提醒</string>
     <string name="linked_reminder_delay">後續劑量延遲</string>
     <string name="delay">延遲</string>
-    <string name="linked_reminder_summary">在 %1$s 的提醒之後</string>
     <string name="delete_re_raise_event">您要刪除此事件並重新顯示通知嗎？</string>
-    <plurals name="minutes">
-        <item quantity="other">分鐘</item>
-    </plurals>
     <string name="minutes_string">分鐘</string>
-    <plurals name="hours">
-        <item quantity="other">小時</item>
-    </plurals>
     <string name="hours_string">小時</string>
-    <plurals name="days">
-        <item quantity="other">天</item>
-    </plurals>
-    <string name="time_based_reminder">時間型提醒</string>
     <string name="interval_based_reminder">間隔型提醒</string>
     <string name="days_string">天</string>
-    <plurals name="weeks">
-        <item quantity="other">週</item>
-    </plurals>
     <string name="weeks_string">週</string>
     <string name="create_reminder">建立提醒</string>
     <string name="interval">間隔</string>
     <string name="interval_start_time">間隔開始時間</string>
     <string name="interval_start_reminded">在提醒發出時開始</string>
     <string name="interval_start_processed">在已服用或路過時時開始</string>
-    <string name="every_interval">每 %s</string>
     <string name="invalid_input">輸入無效</string>
-    <string name="once_below_threshold">當低於閾值時提醒一次</string>
-    <string name="always_below_threshold">只要低於閾值就持續提醒</string>
-    <string name="out_of_stock_notification">只剩下 %1$s 的 %2$s！\n請儘快補充藥品。</string>
-    <string name="medicine_stock_string">剩餘 %1$s</string>
     <string name="amount">數量</string>
-    <string name="out_of_stock_notification_title">藥品庫存不足提醒</string>
     <string name="medicine_stock">藥品庫存</string>
-    <string name="out_of_stock_reminder">庫存不足提醒</string>
     <string name="reminder_threshold">提醒閾值</string>
     <string name="refill_size">補充數量</string>
     <string name="refill_now">立即補充</string>
@@ -195,7 +156,6 @@
     <string name="hide_med_name">在通知中隱藏藥品名稱</string>
     <string name="disable_widget">停用主畫面小工具</string>
     <string name="disable_widget_summary">防止小工具在主畫面顯示敏感的藥物資訊</string>
-    <string name="widget_disabled_privacy">小工具因隱私已停用 — 開啟應用程式查看提醒</string>
     <string name="re_raise_event">重新顯示事件</string>
     <string name="notification_reminder_settings">通知與提醒設定</string>
     <string name="display_settings">顯示設定</string>
@@ -206,17 +166,13 @@
     <string name="sticky_on_lockscreen_summary">提醒無法在鎖定螢幕上關閉，只能在通知抽屜中關閉\n注意：如果啟用，某些智慧手錶可能不再顯示通知</string>
     <string name="big_notifications">大型通知按鈕</string>
     <string name="please_wait">請稍候…</string>
-    <string name="interval_time">間隔 %s</string>
     <string name="reminded">已提醒</string>
-    <string name="all_taken">全部已服用（%s）</string>
     <string name="estimated_run_out_date">預估用罄日期</string>
     <string name="create_calendar_entry">建立行事曆項目</string>
     <string name="notes">備註</string>
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>
     <string name="enable_notification_alarm_dialog">若要將提醒以鬧鐘形式顯示，請在以下選單中為 MedTimer 啟用此設定</string>
-    <string name="daily_from_to">每日間隔從 %1$s 到 %2$s</string>
-    <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="reminder_status">提醒狀態</string>
     <string name="dosing_instructions">劑量說明</string>
     <string name="sample_instructions">填寫範例說明</string>
@@ -226,14 +182,6 @@
     <string name="remind_on_days_of_month">在每月的特定日期提醒</string>
     <string name="start_date">開始日期</string>
     <string name="end_date">結束日期</string>
-    <string name="cycle_reminder">重複提醒</string>
-    <string name="windowed_interval_reminder">窗口間隔提醒</string>
-    <string name="continuous_interval_reminder">連續間隔提醒</string>
-    <string name="time_based_reminder_help">設定特定時間（例如上午 8:00）並設定重複模式。這樣可以精確控制特定的工作日、月份中的日期或複雜的週期性排程（例如“每 3 天”）。</string>
-    <string name="continuous_interval_reminder_help">從指定時間點開始，根據時間間隔（例如每 6 小時）啟動提醒。此模式是連續的，忽略一天中的時間限制，直到手動停用為止。</string>
-    <string name="windowed_interval_reminder_help">定義每日活動窗口（例如上午 9 點至晚上 9 點），其中第一個提醒總是在開始時間。後續提醒會以固定間隔觸發，直到達到結束時間。整個模式每天重置。</string>
-    <string name="linked_reminder">連結提醒</string>
-    <string name="linked_reminder_help">連結提醒是在主要提醒觸發後，經過一段時間後安排的後續提醒。這對於需要依序服用、且每次服用之間需間隔特定時間的藥物特別有用。</string>
     <string name="add_linked_reminder_summary">在此提醒觸發後的一段時間安排後續提醒。</string>
     <string name="cyclic_reminder_summary">從給定日期開始，設定一個由啟用日和暫停日組成的重複模式。提醒只會在啟用日發出通知。此功能可用於避孕藥等藥物。</string>
     <string name="variable_amount_summary">啟用後，在服用提醒時會顯示一個對話框以輸入劑量。</string>
@@ -258,23 +206,12 @@
     <string name="interval_start_condition">間隔開始條件</string>
     <string name="tag_filter_active">標籤篩選已啟用。僅會匯出具有相符標籤的資料。</string>
     <string name="show_taken_time_in_overview">在總覽中顯示服用時間</string>
-    <string name="refill">庫存補充</string>
     <string name="expiration_settings">到期設定</string>
-    <string name="production_date">生產日期</string>
-    <string name="expiration_date">到期日期</string>
-    <string name="expiration_reminder">到期提醒</string>
-    <string name="daily_below_threshold">低於閾值時每日提醒</string>
     <string name="remind_days_before_expiration">在到期前幾天提醒</string>
-    <string name="out_of_stock_reminder_help">在藥物缺貨時提醒，可以在每次提醒後提醒，也可以只提醒一次，或每天提醒一次。</string>
-    <string name="expiration_date_reminder_help">在達到藥物有效期或在有效期前的可配置時間提醒。</string>
-    <string name="once">一次</string>
-    <string name="daily">每日</string>
     <string name="medicine_stock_settings">藥品庫存設定</string>
     <string name="edit_medicine_stock_settings">編輯藥品庫存設定</string>
     <string name="clear_dates">清除日期</string>
     <string name="acknowledged">已確認</string>
-    <string name="refill_amount">補充 (%s)</string>
-    <string name="expiration_date_notification">藥品 %1$s 將於 %2$s 到期。\n請考慮更換藥品。</string>
     <string name="select_all">全選</string>
     <string name="by_name">按名稱</string>
     <string name="by_creation_date_ascending">按創建日期升序</string>
@@ -292,7 +229,6 @@
     <string name="location_snooze_summary">小睡後回家時重新提醒</string>
     <string name="location_snooze_no_play_services">基於位置的小睡需要 Google Play 服務，該服務在此裝置上不可用</string>
     <string name="location_snooze_background_permission">要在回家時重新接收提醒，請允許 MedTimer 在背景存取位置</string>
-    <string name="snooze_until_home">小睡直到回家</string>
     <string name="snooze_settings">小睡設定</string>
     <string name="home_location">家庭位置</string>
     <string name="home_location_not_set">未設定</string>

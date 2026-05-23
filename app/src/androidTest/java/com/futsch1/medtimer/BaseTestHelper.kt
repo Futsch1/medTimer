@@ -13,8 +13,8 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.di.TimeFormatterEntryPoint
-import com.futsch1.medtimer.helpers.TimeFormatter
 import com.futsch1.medtimer.utilities.grantAppPermission
 import dagger.hilt.android.EntryPointAccessors
 import org.junit.Before

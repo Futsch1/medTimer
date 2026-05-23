@@ -14,8 +14,8 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.ui.Interval
 import com.futsch1.medtimer.helpers.AmountTextWatcher
-import com.futsch1.medtimer.helpers.Interval
 import com.futsch1.medtimer.medicine.editors.DateTimeEditor
 import com.futsch1.medtimer.medicine.editors.IntervalEditor
 import com.futsch1.medtimer.medicine.editors.TimeEditor

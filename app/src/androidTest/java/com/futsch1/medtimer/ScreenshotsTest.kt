@@ -55,7 +55,7 @@ class ScreenshotsTest : BaseTestHelper() {
         clickOn(R.id.skippedButton)
 
         openNotification().use {
-            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))
             Screengrab.screenshot("5")
         }
 

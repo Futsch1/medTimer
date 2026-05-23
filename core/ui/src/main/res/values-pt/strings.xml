@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
+    <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
+    <string name="continuous_interval_reminder_help">Inicie um lembrete com base em um intervalo de tempo (por exemplo, a cada 6 horas) a partir de um momento especificado. Este padrão é contínuo, ignorando as restrições de horário do dia, até ser desativado manualmente.</string>
+    <string name="cycle_reminder">Lembrete cíclico</string>
+    <string name="cycle_start_date">Início do primeiro ciclo</string>
+    <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
+    <string name="day_of_month_limited">Limitado a alguns dias do mês</string>
+    <string name="every_day">Diariamente</string>
+    <string name="every_interval">Cada %s</string>
+    <string name="expiration_date">Data de vencimento</string>
+    <string name="expiration_date_reminder_help">Lembra quando a data de validade do medicamento é atingida ou um tempo configurável antes dessa data.</string>
+    <string name="inactive">Inativo</string>
+    <string name="interval_time">Intervalo %s</string>
+    <string name="linked_reminder">Lembrete vinculado</string>
+    <string name="linked_reminder_help">Um lembrete vinculado é um lembrete de acompanhamento que é agendado um certo tempo depois que um lembrete principal é acionado. Isso é útil para medicamentos que precisam ser tomados em sequência, com um atraso específico entre eles.</string>
+    <string name="linked_reminder_summary">Após o lembrete em %1$s</string>
+    <string name="medicine_stock_string">%1$s restantes</string>
+    <string name="out_of_stock_reminder">Lembrete de estoque esgotado</string>
+    <string name="out_of_stock_reminder_help">Lembra quando o medicamento está em falta, seja após cada lembrete, uma vez ou uma vez ao dia.</string>
+    <string name="production_date">Data de produção</string>
+    <string name="refill">Reabastecimento de estoque</string>
+    <string name="skipped">Pulado</string>
+    <string name="taken">Tomado</string>
+    <string name="time_based_reminder">Lembrete baseado em horário</string>
+    <string name="time_based_reminder_help">Defina horários específicos (por exemplo, 8:00) e configure um padrão recorrente. Isso permite um controle preciso sobre dias específicos da semana, dias do mês ou programações periódicas complexas (como \'a cada 3 dias\').</string>
+    <string name="weekday_limited">Limitado a alguns dias da semana</string>
+    <string name="windowed_interval_reminder">Lembrete de intervalo com janela</string>
+    <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
+    <plurals name="days">
+        <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
+        <item quantity="many">dias</item>
+        <item quantity="other">dias</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
+        <item quantity="many">horas</item>
+        <item quantity="other">horas</item>
+    </plurals>
+    <plurals name="minutes" tools:ignore="ImpliedQuantity">
+        <item quantity="one">minuto</item>
+        <item quantity="many">minutos</item>
+        <item quantity="other">minutos</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d lembrete\n%2$s</item>
+        <item quantity="many">%1$d lembretes\n%2$s</item>
+        <item quantity="other">%1$d lembretes\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one" tools:ignore="ImpliedQuantity">semana</item>
+        <item quantity="many">semanas</item>
+        <item quantity="other">semanas</item>
+    </plurals>
+    <string name="once">Uma vez</string>
+    <string name="daily">Diariamente</string>
+    <string name="once_below_threshold">Uma vez quando abaixo do limite</string>
+    <string name="always_below_threshold">Sempre quando abaixo do limite</string>
+    <string name="daily_below_threshold">Diariamente abaixo do limite</string>
+    <string name="out_of_stock_notification_title">Lembrete de medicamento sem estoque</string>
+    <string name="snooze_until_home">Soneca até chegar a casa</string>
+    <string name="default_">Padrão</string>
+    <string name="high">Alta</string>
+    <string name="snooze">Adiar</string>
+    <string name="expiration_reminder">Lembrete de vencimento</string>
+    <string name="medicine_name">Nome do medicamento</string>
+    <string name="app_url">MedTimer no GitHub</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
+    <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
+    <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>
+    <string name="cycle_reminder">Kiertävät muistutukset</string>
+    <string name="cycle_start_date">Ensimmäisen kierroksen alku</string>
+    <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
+    <string name="day_of_month_limited">Rajoitettu joihinkin kuukauden päiviin</string>
+    <string name="every_day">Joka päivä</string>
+    <string name="every_interval">Joka %s</string>
+    <string name="expiration_date">Vanhentumispäivä</string>
+    <string name="expiration_date_reminder_help">Muistuttaa, kun lääkkeen viimeinen käyttöpäivä on saavutettu tai määritettävissä oleva aika ennen kyseistä päivämäärää.</string>
+    <string name="inactive">Epäaktiivinen</string>
+    <string name="interval_time">Väliaika %s</string>
+    <string name="linked_reminder">Linkitetty muistutus</string>
+    <string name="linked_reminder_help">Linkitetty muistutus on seurantamuistutus, joka ajoitetaan tietyn ajan kuluttua siitä, kun ensisijainen muistutus on kuitattu (joko otettu tai torkutettu). Tämä on hyödyllistä lääkkeille, jotka on otettava peräkkäin, ja joiden välillä on oltava tietty viive.</string>
+    <string name="linked_reminder_summary">Muistutuksen jälkeen kello %1$s</string>
+    <string name="medicine_stock_string">%1$s jäljellä</string>
+    <string name="out_of_stock_reminder">Muistutus loppumisesta</string>
+    <string name="out_of_stock_reminder_help">Muistuttaa, kun lääke on loppu varastosta, joko jokaisen muistutuksen jälkeen, kerran tai kerran päivässä.</string>
+    <string name="production_date">Valmistuspäivä</string>
+    <string name="refill">Varastotäydennys</string>
+    <string name="skipped">Ohitettu</string>
+    <string name="taken">Otettu</string>
+    <string name="time_based_reminder">Aikapohjainen muistutus</string>
+    <string name="time_based_reminder_help">Aseta tietyt ajat (esim. klo 8.00) ja määritä toistuva kaava. Tämä mahdollistaa tarkan hallinnan tietyille viikonpäiville, kuukauden päiville tai monimutkaisille jaksollisille aikatauluille (kuten \"joka 3. päivä\").</string>
+    <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
+    <string name="windowed_interval_reminder">Ikkunallinen intervallimuistutus</string>
+    <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
+    <plurals name="days">
+        <item quantity="one">päivä</item>
+        <item quantity="other">päivää</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">tunti</item>
+        <item quantity="other">tuntia</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minuutti</item>
+        <item quantity="other">minuuttia</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d muistutus\n%2$s</item>
+        <item quantity="other">%1$d muistutusta\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">viikko</item>
+        <item quantity="other">viikkoa</item>
+    </plurals>
+    <string name="once">Kerran</string>
+    <string name="daily">Päivittäin</string>
+    <string name="once_below_threshold">Kerran pudottaessa alle rajan</string>
+    <string name="always_below_threshold">Aina ollessa alle rajan</string>
+    <string name="daily_below_threshold">Päivittäin, kun alle kynnyksen</string>
+    <string name="out_of_stock_notification_title">Muistutus lääkkeen loppumisesta</string>
+    <string name="snooze_until_home">Torkuta kotiin asti</string>
+    <string name="default_">Oletus</string>
+    <string name="high">Korkea</string>
+    <string name="snooze">Torkuta</string>
+    <string name="expiration_reminder">Vanhentumismuistutus</string>
+    <string name="medicine_name">Lääkkeen nimi</string>
+    <string name="app_url">MedTimer GitHubissa</string>
+</resources>

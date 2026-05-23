@@ -27,7 +27,7 @@ import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.filterNotNull
@@ -123,12 +123,12 @@ class ChartsFragment : Fragment() {
     }
 
     private fun setupTakenSkippedCharts(takenSkippedChartView: PieChart, takenSkippedTotalChartView: PieChart) {
-        segmentTakenPeriod = Segment(requireContext().getString(R.string.taken), 0)
-        segmentSkippedPeriod = Segment(requireContext().getString(R.string.skipped), 0)
+        segmentTakenPeriod = Segment(requireContext().getString(com.futsch1.medtimer.core.ui.R.string.taken), 0)
+        segmentSkippedPeriod = Segment(requireContext().getString(com.futsch1.medtimer.core.ui.R.string.skipped), 0)
         setupPieChart(takenSkippedChartView, segmentTakenPeriod, segmentSkippedPeriod)
 
-        segmentTakenTotal = Segment(requireContext().getString(R.string.taken), 0)
-        segmentSkippedTotal = Segment(requireContext().getString(R.string.skipped), 0)
+        segmentTakenTotal = Segment(requireContext().getString(com.futsch1.medtimer.core.ui.R.string.taken), 0)
+        segmentSkippedTotal = Segment(requireContext().getString(com.futsch1.medtimer.core.ui.R.string.skipped), 0)
         setupPieChart(takenSkippedTotalChartView, segmentTakenTotal, segmentSkippedTotal)
     }
 
@@ -184,8 +184,8 @@ class ChartsFragment : Fragment() {
         pieChart.setTitle(title)
 
         val totalValue = taken + skipped
-        setupPieSegment(segmentTaken, taken, totalValue, R.string.taken)
-        setupPieSegment(segmentSkipped, skipped, totalValue, R.string.skipped)
+        setupPieSegment(segmentTaken, taken, totalValue, com.futsch1.medtimer.core.ui.R.string.taken)
+        setupPieSegment(segmentSkipped, skipped, totalValue, com.futsch1.medtimer.core.ui.R.string.skipped)
         pieChart.redraw()
     }
 

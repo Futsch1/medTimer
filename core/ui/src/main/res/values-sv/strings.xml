@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
+    <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
+    <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
+    <string name="cycle_reminder">Återkommande påminnelser</string>
+    <string name="cycle_start_date">Första cykelstart</string>
+    <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
+    <string name="day_of_month_limited">Begränsad till några dagar i månaden</string>
+    <string name="every_day">Varje dag</string>
+    <string name="every_interval">Varje %s</string>
+    <string name="expiration_date">Utgångsdatum</string>
+    <string name="expiration_date_reminder_help">Påminner när medicinens utgångsdatum har nåtts eller en konfigurerbar tid före det datumet.</string>
+    <string name="inactive">Inaktiv</string>
+    <string name="interval_time">Intervall %s</string>
+    <string name="linked_reminder">Länkad påminnelse</string>
+    <string name="linked_reminder_help">En kopplad påminnelse är en som schemaläggs en viss tid efter att en första påminnelse har åtgärdats (antingen tagits eller skjutits upp). En sådan är bra för mediciner som måste tas i följd, med en bestämd tid mellan gångerna.</string>
+    <string name="linked_reminder_summary">Efter påminnelse på %1$s</string>
+    <string name="medicine_stock_string">%1$s kvar</string>
+    <string name="out_of_stock_reminder">Påminnelse om slut i lager</string>
+    <string name="out_of_stock_reminder_help">Påminner när medicinen är slut i lager, antingen efter varje påminnelse, en gång eller en gång om dagen.</string>
+    <string name="production_date">Produktionsdatum</string>
+    <string name="refill">Lagerpåfyllning</string>
+    <string name="skipped">Överhoppad</string>
+    <string name="taken">Tagen</string>
+    <string name="time_based_reminder">Tidsbaserad påminnelse</string>
+    <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
+    <string name="weekday_limited">Begränsad till vissa veckodagar</string>
+    <string name="windowed_interval_reminder">Fönsterintervallpåminnelse</string>
+    <string name="windowed_interval_reminder_help">Definiera ett bestämd tidsintervall per dag (t.ex. 09:00 till 21:00) där den första påminnelsen alltid kommer vid starttiden. Senare påminnelser kommer med bestämda intervall fram till sluttiden. Mönstret börjar om varje dag.</string>
+    <plurals name="days">
+        <item quantity="one">dag</item>
+        <item quantity="other">dagar</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">timme</item>
+        <item quantity="other">timmar</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minut</item>
+        <item quantity="other">minuter</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d påminnelse\n%2$s</item>
+        <item quantity="other">%1$d påminnelser\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">vecka</item>
+        <item quantity="other">veckor</item>
+    </plurals>
+    <string name="once">En gång</string>
+    <string name="daily">Dagligen</string>
+    <string name="once_below_threshold">En gång när tröskelvärdet underskrids</string>
+    <string name="always_below_threshold">Alltid när under tröskelvärdet</string>
+    <string name="daily_below_threshold">Dagligen under tröskelvärdet</string>
+    <string name="out_of_stock_notification_title">Påminnelse om att läkemedlet är slut i lager</string>
+    <string name="snooze_until_home">Snooze till hemkomst</string>
+    <string name="default_">Standard</string>
+    <string name="high">Hög</string>
+    <string name="snooze">Snooza</string>
+    <string name="expiration_reminder">Påminnelse om utgångsdatum</string>
+    <string name="medicine_name">Namn på läkemedel</string>
+    <string name="app_url">MedTimer på GitHub</string>
+</resources>

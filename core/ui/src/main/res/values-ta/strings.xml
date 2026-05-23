@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">தொடர்ச்சியான இடைவெளி %1$s இலிருந்து தொடங்குகிறது</string>
+    <string name="continuous_interval_reminder">தொடர்ச்சியான இடைவெளி நினைவூட்டல்</string>
+    <string name="continuous_interval_reminder_help">ஒரு குறிப்பிட்ட தருணத்திலிருந்து ஒரு நேர இடைவெளியின் அடிப்படையில் (எ.கா., ஒவ்வொரு 6 மணி நேரத்திற்கும்) ஒரு நினைவூட்டலைத் தொடங்கவும். இந்த முறை தொடர்ச்சியானது, দিনের நேரக் கட்டுப்பாடுகளைப் புறக்கணித்து, கைமுறையாக செயலிழக்கப்படும் வரை.</string>
+    <string name="cycle_reminder">சுழற்சி நினைவூட்டல்கள்</string>
+    <string name="cycle_start_date">முதல் சுழற்சி தொடக்க</string>
+    <string name="daily_from_to">தினசரி இடைவெளி %1$s முதல் %2$s வரை</string>
+    <string name="day_of_month_limited">மாதத்தின் சில நாட்களுக்கு மட்டுமே</string>
+    <string name="every_day">தினமும்</string>
+    <string name="every_interval">ஒவ்வொரு %s</string>
+    <string name="expiration_date">காலாவதி தேதி</string>
+    <string name="expiration_date_reminder_help">மருந்தின் காலாவதி தேதியை அடைந்ததும் அல்லது அந்தத் தேதிக்கு ముందు உள்ளமைக்கக்கூடிய நேரத்திலும் நினைவூட்டுகிறது.</string>
+    <string name="inactive">செயலற்றது</string>
+    <string name="interval_time">இடைவெளி %s</string>
+    <string name="linked_reminder">இணைக்கப்பட்ட நினைவூட்டல்</string>
+    <string name="linked_reminder_help">இணைக்கப்பட்ட நினைவூட்டல் என்பது ஒரு முதன்மை நினைவூட்டல் செயல்படுத்தப்பட்ட (எடுக்கப்பட்ட அல்லது உறக்கநிலையில் வைக்கப்பட்ட) பிறகு ஒரு குறிப்பிட்ட நேரத்திற்குப் பிறகு திட்டமிடப்பட்ட ஒரு தொடர் நினைவூட்டல் ஆகும். இது தொடர்ச்சியாக எடுத்துக்கொள்ளப்பட வேண்டிய மருந்துகளுக்கு பயனுள்ளதாக இருக்கும், அவற்றுக்கிடையே ஒரு குறிப்பிட்ட தாமதத்துடன்.</string>
+    <string name="linked_reminder_summary">%1$s இல் நினைவூட்டலுக்குப் பிறகு</string>
+    <string name="medicine_stock_string">%1$s இடது</string>
+    <string name="out_of_stock_reminder">பங்கு நினைவூட்டலுக்கு வெளியே</string>
+    <string name="out_of_stock_reminder_help">மருந்து கையிருப்பில் இல்லாதபோது, ஒவ்வொரு நினைவூட்டலுக்குப் பிறகும், ஒரு முறை அல்லது ஒரு நாளைக்கு ஒரு முறை நினைவூட்டுகிறது.</string>
+    <string name="production_date">உற்பத்தி தேதி</string>
+    <string name="refill">பொருள் நிரப்புதல்</string>
+    <string name="skipped">தவிர்க்கப்பட்டது</string>
+    <string name="taken">எடுக்கப்பட்டது</string>
+    <string name="time_based_reminder">நேர அடிப்படையிலான நினைவூட்டல்</string>
+    <string name="time_based_reminder_help">குறிப்பிட்ட நேரங்களை அமைக்கவும் (எ.கா., காலை 8:00) மற்றும் மீண்டும் மீண்டும் வரும் வடிவத்தை உள்ளமைக்கவும். இது குறிப்பிட்ட வார நாட்கள், மாதத்தின் நாட்கள் அல்லது சிக்கலான கால அட்டவணைகள் (\'ஒவ்வொரு 3 நாட்களுக்கும்\' போன்ற) மீது துல்லியமான கட்டுப்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="weekday_limited">சில வார நாட்களுக்கு மட்டுமே</string>
+    <string name="windowed_interval_reminder">சாளர இடைவெளி நினைவூட்டல்</string>
+    <string name="windowed_interval_reminder_help">ஒரு தினசரி செயலில் உள்ள சாளரத்தை வரையறுக்கவும் (எ.கா., காலை 9 மணி முதல் இரவு 9 மணி வரை), இதில் முதல் நினைவூட்டல் எப்போதும் தொடக்க நேரத்தில் இருக்கும். முடிவு நேரத்தை அடையும் வரை அடுத்தடுத்த நினைவூட்டல்கள் நிலையான இடைவெளியில் தூண்டப்படும். முழு வடிவமும் ஒவ்வொரு நாளும் மீட்டமைக்கப்படும்.</string>
+    <plurals name="days">
+        <item quantity="one">நாள்</item>
+        <item quantity="other">நாட்கள்</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">மணிநேரம்</item>
+        <item quantity="other">மணிநேரங்கள்</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">நிமிடம்</item>
+        <item quantity="other">நிமிடங்கள்</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d நினைவூட்டல்\n %2$s</item>
+        <item quantity="other">%1$d நினைவூட்டல்கள்\n %2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">வாரம்</item>
+        <item quantity="other">வாரங்கள்</item>
+    </plurals>
+    <string name="once">ஒரு முறை</string>
+    <string name="daily">தினசரி</string>
+    <string name="once_below_threshold">ஒருமுறை வாசலுக்கு கீழே விழும்போது</string>
+    <string name="always_below_threshold">எப்போதும் வாசலுக்கு கீழே இருக்கும்போது</string>
+    <string name="daily_below_threshold">தினசரி வாசலுக்குக் கீழே இருக்கும்போது</string>
+    <string name="out_of_stock_notification_title">பங்கு நினைவூட்டலுக்கு வெளியே மருத்துவம்</string>
+    <string name="snooze_until_home">வீடு வரும் வரை சுணக்கம்</string>
+    <string name="default_">இயல்புநிலை</string>
+    <string name="high">உயர்ந்த</string>
+    <string name="snooze">உறக்கநிலை</string>
+    <string name="expiration_reminder">காலாவதி நினைவூட்டல்</string>
+    <string name="medicine_name">மருந்து பெயர்</string>
+    <string name="app_url">கிட்அப்பில் மெட்டிமர்</string>
+</resources>

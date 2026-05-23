@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Medicine reminder</string>
+    <string name="refill_amount">Refill (%s)</string>
+    <string name="out_of_stock_notification">Only %2$s of %1$s left!\nConsider refilling the medicine soon.</string>
+    <string name="expiration_date_notification">The medicine %1$s expires on %2$s.\nConsider replacing the medicine.</string>
+    <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
+    <string name="recent_events">Recent events</string>
+    <string name="next_reminders">Next reminders</string>
+    <string name="all_taken">All taken (%s)</string>
+    <string name="preview_next_reminders_widget_line" translatable="false">12:00: 1 Selen (200 µg)</string>
+    <string name="preview_latest_reminders_widget_line" translatable="false">12:00: Taken 1 Selen (200 µg)</string>
+</resources>

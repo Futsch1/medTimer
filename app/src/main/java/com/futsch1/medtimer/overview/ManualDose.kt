@@ -16,8 +16,8 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -105,7 +105,7 @@ class ManualDose @AssistedInject constructor(
             tags = entry.tags
         )
         if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.medicine_name)
+            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
                 .textSink { name: String ->
                     entry.baseName = name
                     getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)

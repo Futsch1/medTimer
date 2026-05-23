@@ -13,9 +13,9 @@ import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.common.helpers.isReminderActive
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.helpers.Interval
-import com.futsch1.medtimer.helpers.ReminderSummaryFormatter
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.Interval
+import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.medicine.LinkedReminderHandling
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -86,7 +86,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         menuProvider.reminder = modelData
 
         findPreference<Preference>("reminder_status")?.summary =
-            requireContext().getString(if (isReminderActive(modelData)) R.string.active else R.string.inactive)
+            requireContext().getString(if (isReminderActive(modelData)) R.string.active else com.futsch1.medtimer.core.ui.R.string.inactive)
         findPreference<Preference>("interval")?.summary = Interval(modelData.time).toTranslatedString(requireContext())
         findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(modelData)
         findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(modelData)
@@ -106,7 +106,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
 
     private fun getWeekdaysSummary(reminder: Reminder): String {
         return if (reminder.days.isEmpty() || reminder.days.size == 7) {
-            requireContext().getString(R.string.every_day)
+            requireContext().getString(com.futsch1.medtimer.core.ui.R.string.every_day)
         } else {
             reminder.days.joinToString(", ") { it.getDisplayName(TextStyle.FULL, requireContext().resources.configuration.locales[0]) }
         }

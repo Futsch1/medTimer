@@ -29,7 +29,6 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.futsch1.medtimer.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
@@ -38,10 +37,12 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.database.backup.BackupManager
+import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.overview.VariableAmountHandler
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">连续间隔从 %1$s</string>
+    <string name="continuous_interval_reminder">连续间隔提醒</string>
+    <string name="continuous_interval_reminder_help">从指定时刻开始，根据时间间隔（例如，每 6 小时）启动提醒。此模式是连续的，忽略一天中的时间限制，直到手动停用。</string>
+    <string name="cycle_reminder">循环提醒</string>
+    <string name="cycle_start_date">周期提醒开始日期</string>
+    <string name="daily_from_to">每日间隔从 %1$s 到 %2$s</string>
+    <string name="day_of_month_limited">一个月中的某几天</string>
+    <string name="every_day">每天（按周设置）</string>
+    <string name="every_interval">每 %s</string>
+    <string name="expiration_date">到期日期</string>
+    <string name="expiration_date_reminder_help">在达到药物有效期或在有效期前的可配置时间提醒。</string>
+    <string name="inactive">关闭提醒</string>
+    <string name="interval_time">间隔 %s</string>
+    <string name="linked_reminder">关联提醒</string>
+    <string name="linked_reminder_help">关联提醒是在主提醒解除后一定时间安排的后续提醒。这对于需要按顺序服用的药物非常有用，它们之间有特定的延迟。</string>
+    <string name="linked_reminder_summary">于 %1$s 之后提醒</string>
+    <string name="medicine_stock_string">还剩 %1$s</string>
+    <string name="out_of_stock_reminder">低余量提醒</string>
+    <string name="out_of_stock_reminder_help">在药物缺货时提醒，可以在每次提醒后提醒，也可以只提醒一次，或每天提醒一次。</string>
+    <string name="production_date">生产日期</string>
+    <string name="refill">库存补货</string>
+    <string name="skipped">已跳过</string>
+    <string name="taken">已服用</string>
+    <string name="time_based_reminder">定时提醒</string>
+    <string name="time_based_reminder_help">设置特定时间（例如，上午 8:00）并配置重复模式。这样可以精确控制特定的工作日、月份的日期或复杂的周期性计划（例如“每 3 天”）。</string>
+    <string name="weekday_limited">一周中的某几天</string>
+    <string name="windowed_interval_reminder">窗口间隔提醒</string>
+    <string name="windowed_interval_reminder_help">定义一个每日活动窗口（例如，上午 9 点到晚上 9 点），其中第一个提醒总是在开始时间。后续提醒会以固定的时间间隔触发，直到到达结束时间。整个模式每天都会重置。</string>
+    <plurals name="days">
+        <item quantity="other">天</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="other">小时</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="other">分钟</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="other">共有 %1$d 条提醒\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="other">周</item>
+    </plurals>
+    <string name="once">一次</string>
+    <string name="daily">每日</string>
+    <string name="once_below_threshold">低于设定值时提醒一次</string>
+    <string name="always_below_threshold">低于设定值时总是提醒</string>
+    <string name="daily_below_threshold">低于阈值时每日提醒</string>
+    <string name="out_of_stock_notification_title">药品低余量提醒</string>
+    <string name="snooze_until_home">小睡直到回家</string>
+    <string name="default_">默认</string>
+    <string name="high">高</string>
+    <string name="snooze">稍后提醒</string>
+    <string name="expiration_reminder">到期提醒</string>
+    <string name="medicine_name">药品名称</string>
+    <string name="app_url">访问 MedTimer 的 Github 页面</string>
+</resources>

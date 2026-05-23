@@ -14,7 +14,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.helpers.TimeFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.medicine.stockSettings.setupAmountEdit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

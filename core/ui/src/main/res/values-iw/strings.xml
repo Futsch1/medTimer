@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
+    <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
+    <string name="continuous_interval_reminder_help">התחילו תזכורת על בסיס מרווח זמן (למשל, כל 6 שעות) מנקודת זמן מסוימת. דפוס זה הוא רציף, ומתעלם מהמגבלות של שעת היום, עד לכיבוי ידני.</string>
+    <string name="cycle_reminder">תזכורת מחזורית</string>
+    <string name="cycle_start_date">תחילת סבב ראשון</string>
+    <string name="daily_from_to">מחזור יומי בין %1$s ל%2$s</string>
+    <string name="day_of_month_limited">מוגבל לחלק מימי השבוע</string>
+    <string name="every_day">כל יום</string>
+    <string name="every_interval">כל %s</string>
+    <string name="expiration_date">תאריך תפוגה</string>
+    <string name="expiration_date_reminder_help">מזכיר כאשר מגיעים לתאריך התפוגה של התרופה או זמן שניתן להגדרה לפני תאריך זה.</string>
+    <string name="inactive">לא פעיל</string>
+    <string name="interval_time">מחזור %s</string>
+    <string name="linked_reminder">תזכורת מקושרת</string>
+    <string name="linked_reminder_help">תזכורת מקושרת היא תזכורת המשך שמתוזמנת כמות זמן מסוימת לאחר שהתרחשה תזכורת ראשית. זהם, שימושי לתרופות שצריך ליטול בסדר מסוים, עם דחייה ספציפית ביניהן.</string>
+    <string name="linked_reminder_summary">אחרי תזכורת ב%1$s</string>
+    <string name="medicine_stock_string">נותרו %1$s</string>
+    <string name="out_of_stock_reminder">תזכורת מחוץ למלאי</string>
+    <string name="out_of_stock_reminder_help">מזכיר כאשר התרופה אזלה מהמלאי, או לאחר כל תזכורת, או פעם אחת, או פעם ביום.</string>
+    <string name="production_date">תאריך ייצור</string>
+    <string name="refill">מילוי מלאי</string>
+    <string name="skipped">דולגה</string>
+    <string name="taken">נלקחה</string>
+    <string name="time_based_reminder">תזכורת מבוססת זמן</string>
+    <string name="time_based_reminder_help">קבעו שעות מסוימות (למשל, 8:00) והגדירו דפוס חזרה. זה מאפשר שליטה מדויקת על ימי השבוע הספציפיים, ימים בחודש או לוחות מחזוריים מורכבים (כמו \'כל 3 ימים\').</string>
+    <string name="weekday_limited">מוגבל לימים מסויימים בשבוע</string>
+    <string name="windowed_interval_reminder">חלון תזכורת מחזורי</string>
+    <string name="windowed_interval_reminder_help">הגדירו חלון פעיל יומי (למשל, 9:00 עד 21:00) שבו התזכורת הראשונה תמיד בשעת הפתיחה. תזכורות הבאות מופעלות במרווחים קבועים עד שהשעה הסופית מגיעה. הדפוס המלא מתאפס בכל יום.</string>
+    <plurals name="days">
+        <item quantity="one">יום</item>
+        <item quantity="two">יומיים</item>
+        <item quantity="other">ימים</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">שעה</item>
+        <item quantity="two">שעתיים</item>
+        <item quantity="other">שעות</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">דקה</item>
+        <item quantity="two">דקות</item>
+        <item quantity="other">דקות</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d התראה\n%2$s</item>
+        <item quantity="two">%1$d התראות\n%2$s</item>
+        <item quantity="other">%1$d התראות\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">שבוע</item>
+        <item quantity="two">שבועיים</item>
+        <item quantity="other">שבועות</item>
+    </plurals>
+    <string name="once">פעם אחת</string>
+    <string name="daily">יומי</string>
+    <string name="once_below_threshold">פעם אחת כשיורד מתחת לסף</string>
+    <string name="always_below_threshold">כל הזמן כשמתחת לסף</string>
+    <string name="daily_below_threshold">יומי מתחת לסף</string>
+    <string name="out_of_stock_notification_title">תזכורת לתרופות שלא במלאי</string>
+    <string name="snooze_until_home">נודניק עד הבית</string>
+    <string name="default_">ברירת מחדל</string>
+    <string name="high">גבוה</string>
+    <string name="snooze">דחו</string>
+    <string name="expiration_reminder">תזכורת תפוגה</string>
+    <string name="medicine_name">שם תרופה</string>
+    <string name="app_url">מדטיימר בGithub</string>
+</resources>

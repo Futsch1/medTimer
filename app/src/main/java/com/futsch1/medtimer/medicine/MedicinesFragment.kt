@@ -146,7 +146,7 @@ class MedicinesFragment : Fragment() {
             val textInputLayout = TextInputLayout(requireContext())
             val editText = TextInputEditText(requireContext())
             editText.setLayoutParams(LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
-            editText.setHint(R.string.medicine_name)
+            editText.setHint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
             editText.setSingleLine()
             editText.setId(R.id.medicineName)
             if (!BuildConfig.DEBUG) {

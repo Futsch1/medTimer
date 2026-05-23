@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="continuous_from">Continuous interval starting from %1$s</string>
+    <string name="continuous_interval_reminder">Continuous interval reminder</string>
+    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
+    <string name="cycle_reminder">Cyclic reminder</string>
+    <string name="cycle_start_date">First cycle start</string>
+    <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
+    <string name="day_of_month_limited">Limited to some days of the month</string>
+    <string name="every_day">Every day</string>
+    <string name="every_interval">Every %s</string>
+    <string name="expiration_date">Expiration date</string>
+    <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
+    <string name="inactive">Inactive</string>
+    <string name="interval_time">Interval %s</string>
+    <string name="linked_reminder">Linked reminder</string>
+    <string name="linked_reminder_help">A linked reminder is a follow-up reminder that is scheduled a certain amount of time after a primary reminder is raised. This is useful for medications that need to be taken in sequence, with a specific delay between them.</string>
+    <string name="linked_reminder_summary">After reminder at %1$s</string>
+    <string name="medicine_stock_string">%1$s left</string>
+    <string name="out_of_stock_reminder">Out of stock reminder</string>
+    <string name="out_of_stock_reminder_help">Reminds when the medicine is out of stock, either after every reminder or once or once per day.</string>
+    <string name="production_date">Production date</string>
+    <string name="refill">Stock refill</string>
+    <string name="skipped">Skipped</string>
+    <string name="taken">Taken</string>
+    <string name="time_based_reminder">Time based reminder</string>
+    <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
+    <string name="weekday_limited">Limited to some weekdays</string>
+    <string name="windowed_interval_reminder">Windowed interval reminder</string>
+    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9:00 AM to 9:00 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <plurals name="days">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">hour</item>
+        <item quantity="other">hours</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+    <plurals name="sum_reminders">
+        <item quantity="one">%1$d reminder\n%2$s</item>
+        <item quantity="other">%1$d reminders\n%2$s</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">week</item>
+        <item quantity="other">weeks</item>
+    </plurals>
+    <string name="once">Once</string>
+    <string name="daily">Daily</string>
+    <string name="once_below_threshold">Once when falling below threshold</string>
+    <string name="always_below_threshold">Always when below threshold</string>
+    <string name="daily_below_threshold">Daily when below threshold</string>
+    <string name="out_of_stock_notification_title">Medicine out of stock reminder</string>
+    <string name="snooze_until_home">Snooze until home</string>
+    <string name="default_">Default</string>
+    <string name="high">High</string>
+    <string name="snooze">Snooze</string>
+    <string name="expiration_reminder">Expiration reminder</string>
+    <string name="app_name" translatable="false">MedTimer</string>
+    <string name="medicine_name">Medicine name</string>
+    <string name="app_url">MedTimer on GitHub</string>
+</resources>

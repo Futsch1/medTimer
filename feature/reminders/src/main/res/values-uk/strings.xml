@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Нагадування про ліки</string>
+    <string name="refill_amount">Поповнити (%s)</string>
+    <string name="out_of_stock_notification">Залишилося %2$s доза %1$s!\nПоповніть запас ліків найближчим часом.</string>
+    <string name="expiration_date_notification">Термін придатності ліків %1$s закінчується %2$s.\nРозгляньте можливість заміни ліків.</string>
+    <string name="widget_disabled_privacy">Віджети вимкнено для захисту конфіденційності — відкрийте програму для перегляду нагадувань</string>
+    <string name="recent_events">Нещодавні події</string>
+    <string name="next_reminders">Наступне нагадування</string>
+    <string name="all_taken">Усе прийнято (%s)</string>
+</resources>

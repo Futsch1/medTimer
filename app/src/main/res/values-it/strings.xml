@@ -4,7 +4,6 @@
     <string name="tab_overview">Panoramica</string>
     <string name="tab_medicine">Farmaci</string>
     <string name="add_medicine">Aggiungi un farmaco</string>
-    <string name="medicine_name">Nome del farmaco</string>
     <string name="add_reminder">Aggiungi un promemoria</string>
     <string name="delete">Elimina</string>
     <string name="time">Orario</string>
@@ -15,16 +14,6 @@
     <string name="confirm">Conferma</string>
     <string name="are_you_sure_delete_medicine">Vuoi davvero eliminare il farmaco?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d promemoria\n%2$s</item>
-        <item quantity="many">%1$d promemoria\n%2$s</item>
-        <item quantity="other">%1$d promemoria\n%2$s</item>
-    </plurals>
-    <string name="notification_title">Promemoria farmaco</string>
-    <string name="taken">Preso</string>
-    <string name="skipped">Saltato</string>
-    <string name="recent_events">Eventi recenti</string>
-    <string name="next_reminders">Prossimi promemoria</string>
     <string name="version">Versione %s</string>
     <string name="are_you_sure_delete_reminder">Vuoi davvero eliminare il promemoria?</string>
     <string name="clear_events">Cancella tutta la cronologia</string>
@@ -34,7 +23,6 @@
     <string name="twenty_four_hours">24 ore</string>
     <string name="two_days">2 giorni</string>
     <string name="three_days">3 giorni</string>
-    <string name="app_url">MedTimer su GitHub</string>
     <string name="color">Colore</string>
     <string name="select_color">Seleziona il colore</string>
     <string name="exact_reminders">Promemoria esatti</string>
@@ -45,7 +33,6 @@
     <string name="create_reminder_dosage_hint">Dose per il nuovo promemoria</string>
     <string name="cycle_consecutive_days">Giorni attivi</string>
     <string name="theme">Tema</string>
-    <string name="default_">Predefinito</string>
     <string name="alternative">Alternativo</string>
     <string name="before_meal">Prima dei pasti</string>
     <string name="after_meal">Dopo i pasti</string>
@@ -63,7 +50,6 @@
     <string name="log_additional_dose">Registra la dose aggiuntiva</string>
     <string name="dismiss_notification_action">Azione per chiusura notifica</string>
     <string name="skip_reminder">Salta la dose</string>
-    <string name="snooze">Posticipa</string>
     <string name="snooze_duration">Durata del posticipo</string>
     <string name="minutes_5">5 minuti</string>
     <string name="minutes_10">10 minuti</string>
@@ -84,11 +70,7 @@
     <string name="weekend_end_time">Ora di fine</string>
     <string name="custom">Personalizzato…</string>
     <string name="advanced_settings">Impostazioni avanzate</string>
-    <string name="every_day">Ogni giorno</string>
     <string name="cycle_pause_days">Giorni di pausa</string>
-    <string name="cycle_start_date">Inizio del primo ciclo</string>
-    <string name="cycle_reminder">Promemoria ciclico</string>
-    <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="reminders">Promemoria</string>
     <string name="filter">Filtro</string>
     <string name="seven_days">7 giorni</string>
@@ -115,14 +97,12 @@
     <string name="intro_analysis_description">L\'applicazione memorizza tutti gli eventi di promemoria. Puoi analizzare le dosi assunte nella schermata di Analisi ed esportare la cronologia tramite il menu con i tre puntini. La cronologia si conserva anche se i farmaci o i promemoria vengono eliminati o rinominati.</string>
     <string name="show_intro">Mostra l\'introduzione dell\'app</string>
     <string name="are_you_sure_delete_reminder_event">Vuoi davvero eliminare l\'evento di promemoria?</string>
-    <string name="high">Alta</string>
     <string name="notification_importance">Priorità della notifica</string>
     <string name="notification_settings_default">Notifica con priorità predefinita</string>
     <string name="notification_settings_high">Notifica ad alta priorità</string>
     <string name="calendar">Calendario</string>
     <string name="date">Data</string>
     <string name="active">Attivo</string>
-    <string name="inactive">Inattivo</string>
     <string name="period_start">Inizio del periodo</string>
     <string name="period_end">Fine del periodo</string>
     <string name="activate_all">Attiva tutti i promemoria</string>
@@ -132,7 +112,6 @@
     <string name="every_day_of_month">Ogni giorno del mese</string>
     <string name="on_day_of_month">Il %s del mese</string>
     <string name="never">Mai</string>
-    <string name="day_of_month_limited">Limitato ad alcuni giorni del mese</string>
     <string name="medicines_tab_description">Scheda Farmaci</string>
     <string name="overview_tab_description">Scheda Panoramica</string>
     <string name="statistics_tab_description">Scheda Statistiche</string>
@@ -146,49 +125,20 @@
     <string name="add_linked_reminder">Promemoria per la dose successiva</string>
     <string name="linked_reminder_delay">Ritardo per la dose successiva</string>
     <string name="delay">Ritardo</string>
-    <string name="linked_reminder_summary">Dopo il promemoria a %1$s</string>
     <string name="delete_re_raise_event">Vuoi eliminare questo evento e mostrare nuovamente la notifica?</string>
-    <string name="time_based_reminder">Promemoria basato sull\'orario</string>
     <string name="interval_based_reminder">Promemoria basato su intervalli</string>
-    <plurals name="minutes">
-        <item quantity="one">minuto</item>
-        <item quantity="other">minuti</item>
-        <item quantity="many">minuti</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">ora</item>
-        <item quantity="other">ore</item>
-        <item quantity="many">ore</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">giorno</item>
-        <item quantity="other">giorni</item>
-        <item quantity="many">giorni</item>
-    </plurals>
     <string name="minutes_string">Minuti</string>
     <string name="hours_string">Ore</string>
     <string name="days_string">Giorni</string>
-    <plurals name="weeks">
-        <item quantity="one">settimana</item>
-        <item quantity="other">settimane</item>
-        <item quantity="many">settimane</item>
-    </plurals>
     <string name="weeks_string">Settimane</string>
     <string name="create_reminder">Crea il promemoria</string>
     <string name="interval">Intervallo</string>
     <string name="interval_start_time">Orario di inizio dell\'intervallo</string>
     <string name="interval_start_reminded">L\'intervallo inizia quando il farmaco viene ricordato</string>
     <string name="interval_start_processed">L\'intervallo inizia quando il farmaco viene preso o saltato</string>
-    <string name="every_interval">Ogni %s</string>
     <string name="invalid_input">Inserimento non valido</string>
-    <string name="once_below_threshold">Una sola volta quando scende sotto la soglia</string>
-    <string name="always_below_threshold">Sempre quando scende sotto la soglia</string>
-    <string name="out_of_stock_notification">È rimasto solo il %2$s di %1$s!\nRicordati di effettuare presto una ricarica del farmaco.</string>
-    <string name="medicine_stock_string">%1$s rimaste</string>
-    <string name="out_of_stock_notification_title">Promemoria di esaurimento della scorta del farmaco</string>
     <string name="medicine_stock">Scorta del farmaco</string>
     <string name="amount">Quantità</string>
-    <string name="out_of_stock_reminder">Promemoria di esaurimento delle scorte</string>
     <string name="reminder_threshold">Soglia del promemoria</string>
     <string name="refill_size">Quantità della ricarica</string>
     <string name="refill_now">Ricarica</string>
@@ -207,7 +157,6 @@
     <string name="hide_med_name">Nasconde il nome del farmaco nella notifica</string>
     <string name="disable_widget">Disabilita i widget della schermata iniziale</string>
     <string name="disable_widget_summary">Impedisce ai widget di visualizzare informazioni sensibili sui farmaci nella schermata iniziale</string>
-    <string name="widget_disabled_privacy">Widget disabilitati per la privacy — apri l\'app per visualizzare i promemoria</string>
     <string name="re_raise_event">Rilancia l\'evento</string>
     <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
     <string name="display_settings">Impostazioni visualizzazione</string>
@@ -218,9 +167,7 @@
     <string name="sticky_on_lockscreen_summary">I promemoria non possono essere ignorati dalla schermata di blocco, ma solo dall\'area delle notifiche\nNota: alcuni smartwatch potrebbero non visualizzare le notifiche, se abilitati</string>
     <string name="big_notifications">Pulsanti di notifica grandi</string>
     <string name="please_wait">Attendere prego…</string>
-    <string name="interval_time">Intervallo %s</string>
     <string name="reminded">Ricordato</string>
-    <string name="all_taken">Tutti assunti (%s)</string>
     <string name="estimated_run_out_date">Data di esaurimento stimata</string>
     <string name="create_calendar_entry">Crea una voce di calendario</string>
     <string name="notes">Note</string>
@@ -228,8 +175,6 @@
     <string name="sort">Ordinamento</string>
     <string name="high_and_alarm">Alta + Allarme</string>
     <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attiva questa opzione per MedTimer nel seguente menu</string>
-    <string name="daily_from_to">Intervallo giornaliero da %1$s a %2$s</string>
-    <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="reminder_status">Stato del promemoria</string>
     <string name="dosing_instructions">Istruzioni di dosaggio</string>
     <string name="sample_instructions">Usa istruzioni pre-compilate</string>
@@ -239,13 +184,6 @@
     <string name="remind_on_days_of_month">Ricorda nei giorni del mese</string>
     <string name="start_date">Data d\'inizio</string>
     <string name="end_date">Data di fine</string>
-    <string name="windowed_interval_reminder">Promemoria a intervalli con finestra temporale</string>
-    <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
-    <string name="time_based_reminder_help">Imposta orari fissi (ad es. 8:00) e configura modelli ricorrenti. Permette di scegliere i giorni della settimana, del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
-    <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>
-    <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00–21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
-    <string name="linked_reminder">Promemoria collegato</string>
-    <string name="linked_reminder_help">Un promemoria collegato è un promemoria di follow-up, programmato un certo lasso di tempo dopo che l\'attivazione del promemoria principale. È utile per farmaci da assumere in sequenza, con una pausa specifica tra di loro.</string>
     <string name="add_linked_reminder_summary">Crea un promemoria di follow-up, programmato un certo lasso di tempo dopo l\'attivazione di questo promemoria.</string>
     <string name="cyclic_reminder_summary">Configura un modello ricorrente di giorni attivi e di pausa a partire da una data specifica. Il promemoria invia una notifica solo nei giorni attivi. È utile per farmaci come le pillole anticoncezionali.</string>
     <string name="variable_amount_summary">Quando è attiva, al momento dell\'assunzione del farmaco viene mostrata una finestra di dialogo per inserire il dosaggio.</string>
@@ -270,23 +208,12 @@
     <string name="interval_start_condition">Condizione di inizio dell\'intervallo</string>
     <string name="tag_filter_active">Filtro etichetta attivo. Verranno esportati solo i dati con etichette corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra nella panoramica l\'orario di assunzione</string>
-    <string name="refill">Rifornimento scorte</string>
     <string name="expiration_settings">Impostazioni di scadenza</string>
-    <string name="production_date">Data di produzione</string>
-    <string name="expiration_date">Data di scadenza</string>
-    <string name="expiration_reminder">Promemoria di scadenza</string>
-    <string name="daily_below_threshold">Giornalmente sotto soglia</string>
     <string name="remind_days_before_expiration">Promemoria giorni prima della scadenza</string>
-    <string name="out_of_stock_reminder_help">Ricorda quando il medicinale è esaurito, dopo ogni promemoria, una volta o una volta al giorno.</string>
-    <string name="expiration_date_reminder_help">Ricorda quando la data di scadenza del medicinale è raggiunta o un tempo configurabile prima di tale data.</string>
-    <string name="once">Una volta</string>
-    <string name="daily">Giornalmente</string>
     <string name="medicine_stock_settings">Impostazioni scorte medicinali</string>
     <string name="edit_medicine_stock_settings">Modifica impostazioni scorte medicinali</string>
     <string name="clear_dates">Cancella date</string>
     <string name="acknowledged">Confermato</string>
-    <string name="refill_amount">Ricarica (%s)</string>
-    <string name="expiration_date_notification">Il medicinale %1$s scade il %2$s\nValuta la possibilità di sostituirlo.</string>
     <string name="select_all">Seleziona tutto</string>
     <string name="by_name">Per nome</string>
     <string name="by_creation_date_ascending">Ascendente per data di creazione</string>
@@ -304,7 +231,6 @@
     <string name="location_snooze_summary">Rinotifica al rientro a casa dopo aver posticipato</string>
     <string name="location_snooze_no_play_services">Il posticipo basato sulla posizione richiede Google Play Services, che non è disponibile su questo dispositivo</string>
     <string name="location_snooze_background_permission">Per ricevere notifiche al rientro a casa, consenti a MedTimer di accedere alla posizione in background</string>
-    <string name="snooze_until_home">Posticipa fino al ritorno a casa</string>
     <string name="snooze_settings">Impostazioni del posticipo</string>
     <string name="home_location">Posizione di casa</string>
     <string name="home_location_not_set">Non impostata</string>

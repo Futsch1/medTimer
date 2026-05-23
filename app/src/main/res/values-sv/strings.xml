@@ -19,7 +19,6 @@
     <string name="tab_overview">Översikt</string>
     <string name="tab_medicine">Läkemedel</string>
     <string name="add_medicine">Lägg till läkemedel</string>
-    <string name="medicine_name">Namn på läkemedel</string>
     <string name="add_reminder">Lägg till påminnelse</string>
     <string name="delete">Radera</string>
     <string name="time">Tid</string>
@@ -30,15 +29,6 @@
     <string name="confirm">Godkänn</string>
     <string name="are_you_sure_delete_medicine">Är du säker på att du vill ta bort den här läkemedlet?</string>
     <string name="no_reminders">Inga påminnelser satta</string>
-    <plurals name="sum_reminders">
-        <item quantity="one">%1$d påminnelse\n%2$s</item>
-        <item quantity="other">%1$d påminnelser\n%2$s</item>
-    </plurals>
-    <string name="notification_title">Påminnelse om medicinering</string>
-    <string name="taken">Tagen</string>
-    <string name="skipped">Överhoppad</string>
-    <string name="recent_events">Senaste händelserna</string>
-    <string name="next_reminders">Kommande påminnelser</string>
     <string name="version">Version %s</string>
     <string name="clear_events">Rensa all historik</string>
     <string name="are_you_sure_delete_events">Detta kommer att permanent radera hela din medicinhistorik. Denna åtgärd kan inte ångras.</string>
@@ -46,7 +36,6 @@
     <string name="twenty_four_hours">24 timmar</string>
     <string name="two_days">2 dagar</string>
     <string name="three_days">3 dagar</string>
-    <string name="app_url">MedTimer på GitHub</string>
     <string name="color">Färg</string>
     <string name="select_color">Välj färg</string>
     <string name="exact_reminders">Exakta påminnelser</string>
@@ -57,7 +46,6 @@
     <string name="create_reminder_dosage_hint">Dos för nya påminnelser</string>
     <string name="cycle_consecutive_days">Aktiva dagar</string>
     <string name="theme">Tema</string>
-    <string name="default_">Standard</string>
     <string name="alternative">Alternativ</string>
     <string name="before_meal">före måltid</string>
     <string name="after_meal">efter måltid</string>
@@ -75,7 +63,6 @@
     <string name="log_additional_dose">Logga ytterligare dos</string>
     <string name="dismiss_notification_action">Åtgärd när du avfärdar ett meddelande</string>
     <string name="skip_reminder">Hoppa dos</string>
-    <string name="snooze">Snooza</string>
     <string name="snooze_duration">Snooze-tid</string>
     <string name="minutes_5">5 minuter</string>
     <string name="minutes_10">10 minuter</string>
@@ -96,11 +83,7 @@
     <string name="weekend_end_time">Sluttid</string>
     <string name="custom">Anpassa…</string>
     <string name="advanced_settings">Avancerade inställnignar</string>
-    <string name="every_day">Varje dag</string>
     <string name="cycle_pause_days">Pausdagar</string>
-    <string name="cycle_start_date">Första cykelstart</string>
-    <string name="cycle_reminder">Återkommande påminnelser</string>
-    <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="reminders">Påminnelser</string>
     <string name="filter">Filter</string>
     <string name="seven_days">7 dagar</string>
@@ -118,14 +101,12 @@
     <string name="intro_analysis_description">Appen lagrar alla händelsepåminnelserna. Du kan analysera dina tidigare doser på analysskärmen och exportera din historik via kebabmenyn (tre prickar). Historiken finns kvar även om läkemedel eller påminnelser raderas eller byter namn.</string>
     <string name="show_intro">Visa appintroduktion</string>
     <string name="are_you_sure_delete_reminder_event">Är du säker på att du vill ta bort händelsepåminnelsen?</string>
-    <string name="high">Hög</string>
     <string name="notification_importance">Aviseringsprioritet</string>
     <string name="notification_settings_default">Standardprioritet för aviseringsinställningar</string>
     <string name="notification_settings_high">Aviseringsinställningar med hög prioritet</string>
     <string name="calendar">Kalender</string>
     <string name="date">Datum</string>
     <string name="active">Aktiv</string>
-    <string name="inactive">Inaktiv</string>
     <string name="period_start">Periodstart</string>
     <string name="period_end">Periodslut</string>
     <string name="activate_all">Aktivera alla påminnelser</string>
@@ -135,7 +116,6 @@
     <string name="every_day_of_month">Varje dag i månaden</string>
     <string name="on_day_of_month">På den %s dagen i månaden</string>
     <string name="never">Aldrig</string>
-    <string name="day_of_month_limited">Begränsad till några dagar i månaden</string>
     <string name="medicines_tab_description">Läkemdelsflik</string>
     <string name="overview_tab_description">Översiktsflik</string>
     <string name="statistics_tab_description">Statistikflik</string>
@@ -147,45 +127,20 @@
     <string name="time_between_repetitions">Tid mellan upprepningar</string>
     <string name="repeat_reminders_summary">Upprepar automatiskt en påminnelse tills den markeras som tagen eller överhoppad</string>
     <string name="add_linked_reminder">Lägg till påminnelse för kommande dos</string>
-    <string name="linked_reminder_summary">Efter påminnelse på %1$s</string>
     <string name="delete_re_raise_event">Vill du ta bort den här händelsen och skapa en ny?</string>
-    <string name="time_based_reminder">Tidsbaserad påminnelse</string>
     <string name="interval_based_reminder">Intervalbaserad påminnelse</string>
-    <plurals name="minutes">
-        <item quantity="one">minut</item>
-        <item quantity="other">minuter</item>
-    </plurals>
     <string name="minutes_string">Minuter</string>
-    <plurals name="hours">
-        <item quantity="one">timme</item>
-        <item quantity="other">timmar</item>
-    </plurals>
     <string name="hours_string">Timmar</string>
-    <plurals name="days">
-        <item quantity="one">dag</item>
-        <item quantity="other">dagar</item>
-    </plurals>
     <string name="days_string">Dagar</string>
-    <plurals name="weeks">
-        <item quantity="one">vecka</item>
-        <item quantity="other">veckor</item>
-    </plurals>
     <string name="weeks_string">Veckor</string>
     <string name="create_reminder">Skapa påminnelse</string>
     <string name="interval">Intervall</string>
     <string name="interval_start_time">Starttid för intervall</string>
     <string name="interval_start_reminded">Intervallen startar när du blir påmind</string>
     <string name="interval_start_processed">Intervall startar när dosen tas eller hoppas över</string>
-    <string name="every_interval">Varje %s</string>
     <string name="invalid_input">Ogiltig inmatning</string>
-    <string name="once_below_threshold">En gång när tröskelvärdet underskrids</string>
-    <string name="always_below_threshold">Alltid när under tröskelvärdet</string>
-    <string name="out_of_stock_notification">Bara %2$s av %1$s kvar!\nKolla om du behöver förnya receptet.</string>
-    <string name="medicine_stock_string">%1$s kvar</string>
-    <string name="out_of_stock_notification_title">Påminnelse om att läkemedlet är slut i lager</string>
     <string name="medicine_stock">Lager av läkemedel</string>
     <string name="amount">Mängd</string>
-    <string name="out_of_stock_reminder">Påminnelse om slut i lager</string>
     <string name="reminder_threshold">Påminnelse tröskelvärde</string>
     <string name="refill_size">Refillstorlek</string>
     <string name="refill_now">Fyll på nu</string>
@@ -201,7 +156,6 @@
     <string name="hide_med_name">Dölj läkemedelsnamn i avisering</string>
     <string name="disable_widget">Inaktivera widgets på startskärmen</string>
     <string name="disable_widget_summary">Förhindra widgets från att visa känslig läkemedelsinformation på startskärmen</string>
-    <string name="widget_disabled_privacy">Widgets inaktiverade av integritetsskäl — öppna appen för att se påminnelser</string>
     <string name="re_raise_event">Återskapa händelse</string>
     <string name="notification_reminder_settings">Inställningar för aviseringar och påminnelser</string>
     <string name="display_settings">Displayinställningar</string>
@@ -211,9 +165,7 @@
     <string name="sticky_on_lockscreen_summary">Påminnelser kan inte avvisas från låsskärmen, endast från meddelandefältet\nObs: Vissa smartklockor kanske inte längre visar aviseringar</string>
     <string name="big_notifications">Stora aviseringsknappar</string>
     <string name="please_wait">Var god vänta…</string>
-    <string name="interval_time">Intervall %s</string>
     <string name="reminded">Påmind</string>
-    <string name="all_taken">Allt intaget (%s)</string>
     <string name="estimated_run_out_date">Beräknat slutdatum</string>
     <string name="create_calendar_entry">Skapa kalenderpost</string>
     <string name="notes">Anteckningar</string>
@@ -221,8 +173,6 @@
     <string name="sort">Sortera</string>
     <string name="high_and_alarm">Hög + Larm</string>
     <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
-    <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
-    <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="reminder_status">Påminnelsestatus</string>
     <string name="dosing_instructions">Doseringsanvisningar</string>
     <string name="sample_instructions">Fyll i med exempelinstruktioner</string>
@@ -232,13 +182,6 @@
     <string name="remind_on_days_of_month">Påminn om månadens dagar</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Slutdatum</string>
-    <string name="windowed_interval_reminder">Fönsterintervallpåminnelse</string>
-    <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
-    <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
-    <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
-    <string name="windowed_interval_reminder_help">Definiera ett bestämd tidsintervall per dag (t.ex. 09:00 till 21:00) där den första påminnelsen alltid kommer vid starttiden. Senare påminnelser kommer med bestämda intervall fram till sluttiden. Mönstret börjar om varje dag.</string>
-    <string name="linked_reminder">Länkad påminnelse</string>
-    <string name="linked_reminder_help">En kopplad påminnelse är en som schemaläggs en viss tid efter att en första påminnelse har åtgärdats (antingen tagits eller skjutits upp). En sådan är bra för mediciner som måste tas i följd, med en bestämd tid mellan gångerna.</string>
     <string name="add_linked_reminder_summary">Skapar en uppföljningspåminnelse som schemaläggs en viss tid efter att denna påminnelse har utlösts.</string>
     <string name="cyclic_reminder_summary">Konfigurerar ett återkommande mönster av aktiva och pausade dagar från ett angivet datum. Påminnelsen kommer endast att skicka en avisering på aktiva dagar. Använd detta för mediciner som p-piller.</string>
     <string name="variable_amount_summary">När den är aktiv visas en dialogruta för att ange dosen när påminnelsen tas.</string>
@@ -263,23 +206,12 @@
     <string name="interval_start_condition">Intervallets startvillkor</string>
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
     <string name="show_taken_time_in_overview">Visa intagningstid i översikt</string>
-    <string name="refill">Lagerpåfyllning</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
-    <string name="production_date">Produktionsdatum</string>
-    <string name="expiration_date">Utgångsdatum</string>
-    <string name="expiration_reminder">Påminnelse om utgångsdatum</string>
-    <string name="daily_below_threshold">Dagligen under tröskelvärdet</string>
     <string name="remind_days_before_expiration">Påminn dagar före utgångsdatum</string>
-    <string name="out_of_stock_reminder_help">Påminner när medicinen är slut i lager, antingen efter varje påminnelse, en gång eller en gång om dagen.</string>
-    <string name="expiration_date_reminder_help">Påminner när medicinens utgångsdatum har nåtts eller en konfigurerbar tid före det datumet.</string>
-    <string name="once">En gång</string>
-    <string name="daily">Dagligen</string>
     <string name="medicine_stock_settings">Inställningar för medicinlager</string>
     <string name="edit_medicine_stock_settings">Redigera inställningar för medicinlager</string>
     <string name="clear_dates">Rensa datum</string>
     <string name="acknowledged">Bekräftad</string>
-    <string name="refill_amount">Fyll på (%s)</string>
-    <string name="expiration_date_notification">Medicinen %1$s har ett utgångsdatum den %2$s.\nÖverväg att byta ut medicinen.</string>
     <string name="select_all">Välj alla</string>
     <string name="by_name">Efter namn</string>
     <string name="by_creation_date_ascending">Stigande efter skapelsedatum</string>
@@ -297,7 +229,6 @@
     <string name="location_snooze_summary">Meddela igen när du anländer hem efter snooze</string>
     <string name="location_snooze_no_play_services">Platsbaserad snooze kräver Google Play Services, som inte är tillgängligt på den här enheten</string>
     <string name="location_snooze_background_permission">För att meddelas vid hemkomst, tillåt MedTimer att komma åt plats i bakgrunden</string>
-    <string name="snooze_until_home">Snooze till hemkomst</string>
     <string name="snooze_settings">Snooze-inställningar</string>
     <string name="home_location">Hemplats</string>
     <string name="home_location_not_set">Inte inställd</string>

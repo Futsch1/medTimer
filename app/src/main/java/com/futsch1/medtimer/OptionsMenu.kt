@@ -37,10 +37,10 @@ import com.futsch1.medtimer.exporters.Export
 import com.futsch1.medtimer.exporters.Export.ExporterException
 import com.futsch1.medtimer.exporters.PDFEventExport
 import com.futsch1.medtimer.exporters.PDFMedicineExport
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.helpers.ExportBackupPath.getExportFilename
 import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.medicine.tags.TagsFragment
-import com.futsch1.medtimer.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_title">Напомняне за лекарство</string>
+    <string name="refill_amount">Допълване (%s)</string>
+    <string name="out_of_stock_notification">Остават само %2$s от %1$s!\nОбмислете скорошно попълване на запасите от лекарството.</string>
+    <string name="expiration_date_notification">Лекарството %1$s има срок на годност %2$s.\nПомислете за подмяна на лекарството.</string>
+    <string name="widget_disabled_privacy">Приспособленията са деактивирани поради поверителност — отворете приложението за напомняния</string>
+    <string name="recent_events">Последни събития</string>
+    <string name="next_reminders">Следващи напомняния</string>
+    <string name="all_taken">Всичко е взето (%s)</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="expiration_reminder">
+        <item>@string/once</item>
+        <item>@string/daily</item>
+    </string-array>
+    <string-array name="stock_reminder">
+        <item>@string/once_below_threshold</item>
+        <item>@string/always_below_threshold</item>
+        <item>@string/daily_below_threshold</item>
+    </string-array>
+</resources>
