@@ -17,7 +17,7 @@ class ExportBackupTest : BaseTestHelper() {
     @AllowFlaky(attempts = 1)
     fun testTriggerExport() {
         openMenu()
-        clickOn(R.string.generate_test_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         clickOn(R.id.tag_filter)
@@ -25,27 +25,27 @@ class ExportBackupTest : BaseTestHelper() {
         pressBack()
 
         openMenu()
-        clickOn(R.string.event_data)
-        clickOn(R.string.export_csv)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.event_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.export_csv)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
-        clickOn(R.string.event_data)
-        clickOn(R.string.export_pdf)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.event_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.export_pdf)
         device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
-        clickOn(R.string.medicine_data)
-        clickOn(R.string.export_csv)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.medicine_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.export_csv)
         device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
 
         openMenu()
-        clickOn(R.string.medicine_data)
-        clickOn(R.string.export_pdf)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.medicine_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.export_pdf)
         device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
         device.pressBack()
     }
@@ -54,10 +54,10 @@ class ExportBackupTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun testTriggerBackup() {
         openMenu()
-        clickOn(R.string.generate_test_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
 
         openMenu()
-        clickOn(R.string.backup)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.backup)
 
         clickListItem(-1, 2)
         clickDialogPositiveButton()

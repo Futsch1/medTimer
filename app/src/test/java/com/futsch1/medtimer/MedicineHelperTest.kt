@@ -2,12 +2,12 @@ package com.futsch1.medtimer
 
 import android.content.Context
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.helpers.MedicineStringFormatter
-import com.futsch1.medtimer.helpers.TimeFormatter
-import com.futsch1.medtimer.preferences.PreferencesDataSource
+import com.futsch1.medtimer.core.ui.MedicineStringFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.schedulertests.TestHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
@@ -21,6 +21,7 @@ import org.robolectric.annotation.Config
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import com.futsch1.medtimer.core.ui.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])

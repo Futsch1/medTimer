@@ -1,0 +1,93 @@
+package com.futsch1.medtimer.feature.ui.medicine.tags
+
+import android.app.ActionBar.LayoutParams
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.RecyclerView
+import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.button.MaterialButton
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+
+
+class TagsFragment @AssistedInject constructor(
+    @Assisted private val tagDataProvider: TagDataProvider
+) :
+    DialogFragment() {
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(tagDataProvider: TagDataProvider): TagsFragment
+    }
+
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
+
+        recyclerView = view.findViewById(R.id.tags)
+        recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
+        recyclerView.adapter = tagDataProvider.getAdapter()
+
+        val okButton = view.findViewById<MaterialButton>(R.id.ok)
+        okButton.setOnClickListener {
+            dismiss()
+        }
+
+        setupAddTag(view)
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        recyclerView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            requireView().post { if (isAdded) capDialogHeight(requireView()) }
+        }
+    }
+
+    private fun capDialogHeight(view: View) {
+        val maxHeight = (resources.displayMetrics.heightPixels * 0.8f).toInt()
+        if (view.height > maxHeight) {
+            val nonRecyclerHeight = view.height - recyclerView.height
+            val targetHeight = maxHeight - nonRecyclerHeight
+            if (recyclerView.height != targetHeight) {
+                recyclerView.updateLayoutParams { height = targetHeight }
+            }
+        }
+        requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    }
+
+    private fun setupAddTag(view: View) {
+        val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
+        if (!tagDataProvider.canAddTag()) {
+            addTagButton.visibility = View.GONE
+            return
+        }
+
+        addTagButton.visibility = View.VISIBLE
+        addTagButton.setOnClickListener {
+            TextInputDialogBuilder(requireContext())
+                .title(com.futsch1.medtimer.core.ui.R.string.add_tag)
+                .hint(com.futsch1.medtimer.core.ui.R.string.name)
+                .textSink { tagName: String? ->
+                    if (!tagName.isNullOrBlank()) {
+                        tagDataProvider.addTag(tagName)
+                    }
+                }
+                .show()
+        }
+    }
+}

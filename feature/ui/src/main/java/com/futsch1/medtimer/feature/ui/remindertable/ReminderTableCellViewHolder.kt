@@ -1,0 +1,38 @@
+package com.futsch1.medtimer.feature.ui.remindertable
+
+import android.graphics.Paint
+import android.view.View
+import android.widget.TextView
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
+import com.futsch1.medtimer.core.common.helpers.getMaterialColor
+import com.futsch1.medtimer.feature.ui.R
+
+class ReminderTableCellViewHolder(view: View) : AbstractViewHolder(view) {
+    val textView: TextView = view.findViewById(R.id.tableCellTextView)
+
+    init {
+        textView.setTextColor(
+            view.context.getMaterialColor(
+                com.google.android.material.R.attr.colorOnSecondaryContainer,
+                "TableView"
+            )
+        )
+        textView.isClickable = false
+        textView.paintFlags = textView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+    }
+
+    fun setupEditButton(clickListener: OnEditClickListener?) {
+        if (clickListener == null) {
+            textView.isClickable = false
+            textView.paintFlags = textView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+            return
+        }
+
+        textView.setOnClickListener { clickListener.onEditClick() }
+        textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+    }
+
+    fun interface OnEditClickListener {
+        fun onEditClick()
+    }
+}

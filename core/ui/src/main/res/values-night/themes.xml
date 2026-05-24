@@ -1,0 +1,34 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Dark.NoActionBar">
+        <item name="preferenceTheme">@style/MaterialPreferenceThemeOverlay</item>
+    </style>
+
+    <style name="MaterialPreferenceThemeOverlay" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+    </style>
+
+    <style name="Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_switch</item>
+    </style>
+    <style name="Theme.MedTimer2" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@android:color/background_dark</item>
+        <item name="colorSurfaceContainer">@android:color/background_dark</item>
+        <item name="elevationOverlayColor">@android:color/background_dark</item>
+    </style>
+    <style name="Theme.MedTimer.WidgetContainer" parent="Theme.MedTimer.WidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="medtimerWidgetPadding">6dp</item>
+    </style>
+
+    <style name="Theme.MedTimer.WidgetContainerParent" parent="Theme.Material3.DynamicColors.Dark">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="medtimerWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="medtimerWidgetInnerRadius">8dp</item>
+    </style>
+</resources>

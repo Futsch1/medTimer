@@ -3,7 +3,7 @@ package com.futsch1.medtimer.processortests
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
-import com.futsch1.medtimer.core.common.di.DatastoreModule
+import com.futsch1.medtimer.core.datastore.di.DatastoreModule
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
@@ -11,8 +11,8 @@ import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.database.toModel.toEntity
-import com.futsch1.medtimer.di.TimeAccessModule
-import com.futsch1.medtimer.reminders.ScheduleNextReminderNotificationProcessor
+import com.futsch1.medtimer.feature.reminders.ScheduleNextReminderNotificationProcessor
+import com.futsch1.medtimer.feature.reminders.di.TimeAccessModule
 import com.futsch1.medtimer.schedulertests.TestHelper
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -70,13 +70,13 @@ class ScheduleNextReminderNotificationProcessorTest {
         reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
-    val boundPreferencesDataSource: com.futsch1.medtimer.preferences.PreferencesDataSource = reminderContext.preferencesDataSourceMock
+    val boundPreferencesDataSource: com.futsch1.medtimer.core.datastore.PreferencesDataSource = reminderContext.preferencesDataSourceMock
 
     @BindValue
-    val boundPersistentDataDataSource: com.futsch1.medtimer.preferences.PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
+    val boundPersistentDataDataSource: com.futsch1.medtimer.core.datastore.PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
 
     @BindValue
-    val boundTimeAccess: com.futsch1.medtimer.reminders.TimeAccess = object : com.futsch1.medtimer.reminders.TimeAccess {
+    val boundTimeAccess: com.futsch1.medtimer.feature.reminders.TimeAccess = object : com.futsch1.medtimer.feature.reminders.TimeAccess {
         override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
         override fun localDate(): java.time.LocalDate = reminderContext.localDate
         override fun now(): java.time.Instant = reminderContext.instant
@@ -107,11 +107,11 @@ class ScheduleNextReminderNotificationProcessorTest {
     val boundBackupRepository: com.futsch1.medtimer.core.domain.repository.BackupRepository = org.mockito.Mockito.mock()
 
     @BindValue
-    @com.futsch1.medtimer.core.common.di.DefaultPreferences
+    @com.futsch1.medtimer.core.datastore.di.DefaultPreferences
     val boundDefaultSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
 
     @BindValue
-    @com.futsch1.medtimer.core.common.di.MedTimerPreferencess
+    @com.futsch1.medtimer.core.datastore.di.MedTimerPreferences
     val boundMedTimerSharedPreferences: android.content.SharedPreferences = org.mockito.Mockito.mock()
 
     @Inject

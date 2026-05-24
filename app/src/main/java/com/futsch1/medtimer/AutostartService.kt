@@ -5,11 +5,12 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.preferences.PersistentDataDataSource
-import com.futsch1.medtimer.reminders.getShowReminderNotificationIntent
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.getShowReminderNotificationIntent
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -51,7 +52,7 @@ class AutostartService @Inject constructor(
 
     private fun isLocationSnoozePending(
         reminderEvent: ReminderEvent,
-        pendingLocationSnoozes: List<ReminderNotificationData>
+        pendingLocationSnoozes: List<PendingSnooze>
     ): Boolean {
         return pendingLocationSnoozes.any { it.reminderEventIds.contains(reminderEvent.reminderEventId) }
     }

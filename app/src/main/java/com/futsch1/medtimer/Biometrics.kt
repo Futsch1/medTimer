@@ -21,6 +21,7 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import com.futsch1.medtimer.core.ui.R
 
 
 class Biometrics @AssistedInject constructor(

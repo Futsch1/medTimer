@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.triplet.play)
-    alias(libs.plugins.androidx.navigation.safeargs)
     id("jacoco")
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.ksp)
@@ -121,6 +120,10 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:database"))
     implementation(project(":core:common"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:ui"))
+    implementation(project(":feature:reminders"))
+    implementation(project(":feature:ui"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)
@@ -147,9 +150,6 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
-    implementation(libs.hilt.android)
-
-    "fullImplementation"(libs.play.services.location)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -157,6 +157,7 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.robolectric)
     testImplementation(libs.hilt.android.testing)
+    "testFullImplementation"(libs.play.services.location)
 
     androidTestImplementation(kotlin("test-junit"))
     androidTestImplementation(libs.androidx.test.junit)

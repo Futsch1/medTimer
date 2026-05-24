@@ -2,7 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import com.futsch1.medtimer.database.MedicineEntity
 import com.futsch1.medtimer.database.toModel.toEntity
-import com.futsch1.medtimer.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
 import java.time.Instant
 

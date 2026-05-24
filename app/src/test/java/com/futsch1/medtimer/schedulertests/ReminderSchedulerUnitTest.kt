@@ -1,11 +1,11 @@
 package com.futsch1.medtimer.schedulertests
 
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.preferences.PreferencesDataSource
-import com.futsch1.medtimer.reminders.TimeAccess
-import com.futsch1.medtimer.reminders.scheduling.ReminderScheduler
+import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.feature.reminders.scheduling.ReminderScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.mockito.Mockito
