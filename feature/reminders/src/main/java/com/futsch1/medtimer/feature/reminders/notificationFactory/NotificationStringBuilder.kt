@@ -10,6 +10,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationPart
 import java.util.stream.Collectors
+import com.futsch1.medtimer.core.ui.R
 
 class NotificationStringBuilder(
     private val context: Context,
@@ -54,7 +55,7 @@ class NotificationStringBuilder(
             builder.append(separatorChar)
             builder.append(
                 context.getString(
-                    com.futsch1.medtimer.core.ui.R.string.medicine_stock_string,
+                    R.string.medicine_stock_string,
                     MedicineHelper.formatAmount(medicine.amount, medicine.unit)
                 )
             )

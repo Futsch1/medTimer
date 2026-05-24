@@ -12,6 +12,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
+import com.futsch1.medtimer.core.ui.R
 
 
 class CalendarTest : BaseTestHelper() {
@@ -19,7 +20,7 @@ class CalendarTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun calendarTest() {
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
+        clickOn(R.string.generate_test_data)
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
@@ -48,7 +49,7 @@ class CalendarTest : BaseTestHelper() {
     fun testDeletedEventNotInCalendarView() {
         // Create event
         clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.custom)
+        clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
         clickDialogPositiveButton(false)
         clickDialogPositiveButton()

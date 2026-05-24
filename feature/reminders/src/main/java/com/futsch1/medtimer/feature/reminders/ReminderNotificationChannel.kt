@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.reminders
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import com.futsch1.medtimer.core.ui.R
 
 class ReminderNotificationChannel(
     private val context: Context,
@@ -26,7 +27,7 @@ class ReminderNotificationChannel(
     private fun createChannel(): NotificationChannel {
         val notificationChannel =
             NotificationChannel(importance.toString(), context.getString(nameId), importance)
-        notificationChannel.description = context.getString(com.futsch1.medtimer.core.ui.R.string.notification_title)
+        notificationChannel.description = context.getString(R.string.notification_title)
 
         notificationManager.createNotificationChannel(notificationChannel)
         return notificationChannel

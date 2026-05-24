@@ -21,6 +21,7 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import com.futsch1.medtimer.core.ui.R
 
 
 class Biometrics @AssistedInject constructor(
@@ -49,12 +50,12 @@ class Biometrics @AssistedInject constructor(
     // only valid on API 30+.
     private val biometricPromptInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.login))
+            .setTitle(context.getString(R.string.login))
             .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
             .build()
     } else {
         BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.login))
+            .setTitle(context.getString(R.string.login))
             .setAllowedAuthenticators(BIOMETRIC_STRONG)
             .setNegativeButtonText(context.getString(android.R.string.cancel))
             .build()
@@ -62,7 +63,7 @@ class Biometrics @AssistedInject constructor(
 
     private val deviceCredentialPromptInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         BiometricPrompt.PromptInfo.Builder()
-            .setTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.login))
+            .setTitle(context.getString(R.string.login))
             .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
             .build()
     } else {

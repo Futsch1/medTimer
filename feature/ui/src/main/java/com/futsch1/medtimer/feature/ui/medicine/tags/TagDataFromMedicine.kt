@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.core.domain.repository.TagRepository
-import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,7 +40,7 @@ class TagDataFromMedicine @AssistedInject constructor(
             }
         }
     }, { it: TagWithState ->
-        DeleteHelper.deleteItem(fragment.requireContext(), com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_tag, {
+        DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
             fragment.lifecycleScope.launch {
                 tagRepository.delete(it.tag)
             }

@@ -10,7 +10,7 @@ import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.material.timepicker.TimeFormat
@@ -36,8 +36,8 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     fun addLinkedReminder(fragmentActivity: FragmentActivity) {
-        TextInputDialogBuilder(fragmentActivity).title(com.futsch1.medtimer.core.ui.R.string.add_linked_reminder)
-            .hint(com.futsch1.medtimer.core.ui.R.string.create_reminder_dosage_hint).textSink { amount: String? ->
+        TextInputDialogBuilder(fragmentActivity).title(R.string.add_linked_reminder)
+            .hint(R.string.create_reminder_dosage_hint).textSink { amount: String? ->
                 this.createReminder(
                     fragmentActivity,
                     amount!!
@@ -55,7 +55,7 @@ class LinkedReminderHandling @AssistedInject constructor(
             linkedReminderId = reminder.id
         )
 
-        timePickerDialogFactory.create(0, 0, com.futsch1.medtimer.core.ui.R.string.linked_reminder_delay, TimeFormat.CLOCK_24H) { minutes: Int ->
+        timePickerDialogFactory.create(0, 0, R.string.linked_reminder_delay, TimeFormat.CLOCK_24H) { minutes: Int ->
             coroutineScope.launch {
                 reminderRepository.create(linkedReminder.copy(time = ReminderTime(minutes, isDuration = true)))
                 fragmentActivity.supportFragmentManager.popBackStack()
@@ -64,7 +64,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     }
 
     fun deleteReminder(context: Context, postYesAction: () -> Unit, postNoAction: () -> Unit) {
-        DeleteHelper.deleteItem(context, com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_reminder, {
+        DeleteHelper.deleteItem(context, R.string.are_you_sure_delete_reminder, {
             coroutineScope.launch(dispatcher) {
                 internalDelete(reminder)
                 Handler(Looper.getMainLooper()).post(postYesAction)

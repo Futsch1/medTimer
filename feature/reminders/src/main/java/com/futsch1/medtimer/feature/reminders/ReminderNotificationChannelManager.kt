@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.reminders
 import android.app.NotificationManager
 import android.content.Context
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.ui.R
 
 class ReminderNotificationChannelManager {
     companion object {
@@ -42,7 +43,7 @@ class ReminderNotificationChannelManager {
                 context,
                 notificationManager,
                 notificationImportance.value,
-                if (notificationImportance == Medicine.NotificationImportance.HIGH) com.futsch1.medtimer.core.ui.R.string.high else com.futsch1.medtimer.core.ui.R.string.default_
+                if (notificationImportance == Medicine.NotificationImportance.HIGH) R.string.high else R.string.default_
             )
         }
     }

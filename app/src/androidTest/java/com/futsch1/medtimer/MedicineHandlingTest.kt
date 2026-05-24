@@ -11,6 +11,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.RecyclerViewDragAction.drag
 import org.junit.Test
+import com.futsch1.medtimer.core.ui.R
 
 const val TEST_MED_1 = "Test"
 const val TEST_MED_2 = "Test2"
@@ -46,8 +47,8 @@ class MedicineHandlingTest : BaseTestHelper() {
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.sort)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.by_name)
+        clickOn(R.string.sort)
+        clickOn(R.string.by_name)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_1)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_2 + '_')

@@ -13,6 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.roundToInt
+import com.futsch1.medtimer.core.ui.R
 
 class TextInputDialogBuilder(
     private val context: Context
@@ -79,10 +80,10 @@ class TextInputDialogBuilder(
 
         val dialog = MaterialAlertDialogBuilder(context)
             .setView(textInputLayout)
-            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _: DialogInterface?, _: Int ->
+            .setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
                 editText.text?.let { textSink?.consumeText(it.toString()) }
             }
-            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { dialog: DialogInterface, _: Int ->
+            .setNegativeButton(R.string.cancel) { dialog: DialogInterface, _: Int ->
                 cancelCallback?.cancel()
                 dialog.dismiss()
             }

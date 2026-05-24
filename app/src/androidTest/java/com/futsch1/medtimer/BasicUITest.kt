@@ -32,6 +32,7 @@ import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
+import com.futsch1.medtimer.core.ui.R
 
 
 class BasicUITest : BaseTestHelper() {
@@ -43,15 +44,15 @@ class BasicUITest : BaseTestHelper() {
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.dosing_instructions)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.sample_instructions)
+        clickOn(R.string.dosing_instructions)
+        clickOn(R.string.sample_instructions)
         clickListItem(position = 0)
 
         Espresso.pressBack()
         Espresso.pressBack()
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        assertContains(com.futsch1.medtimer.core.ui.R.string.before_meal)
+        assertContains(R.string.before_meal)
         Espresso.pressBack()
 
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, " 2 ")
@@ -61,7 +62,7 @@ class BasicUITest : BaseTestHelper() {
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.duplicate)
+        clickOn(R.string.duplicate)
         Espresso.pressBack()
 
         assertContains(com.futsch1.medtimer.feature.ui.R.id.remindersSummary, ";")
@@ -90,21 +91,21 @@ class BasicUITest : BaseTestHelper() {
         cycleStart.set(2025, 1, 1)
         val cycleStartString =
             DateFormat.getDateInstance(DateFormat.SHORT).format(cycleStart.getTime())
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_start_date)
+        clickOn(R.string.cycle_reminder)
+        clickOn(R.string.cycle_start_date)
         setDate(cycleStart.getTime())
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_consecutive_days)
+        clickOn(R.string.cycle_consecutive_days)
         setValue("5")
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_pause_days)
+        clickOn(R.string.cycle_pause_days)
         setValue("6")
         Espresso.pressBack()
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.remind_on_weekdays)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.monday)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.tuesday)
+        clickOn(R.string.remind_on_weekdays)
+        clickOn(R.string.monday)
+        clickOn(R.string.tuesday)
         clickDialogPositiveButton()
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.remind_on_days_of_month)
+        clickOn(R.string.remind_on_days_of_month)
         clickOn("1")
         clickOn("3")
         clickDialogPositiveButton()
@@ -113,19 +114,19 @@ class BasicUITest : BaseTestHelper() {
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
+        clickOn(R.string.cycle_reminder)
         assertContains(cycleStartString)
         assertContains("5")
         assertContains("6")
         Espresso.pressBack()
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.remind_on_weekdays)
-        assertUnchecked(com.futsch1.medtimer.core.ui.R.string.monday)
-        assertUnchecked(com.futsch1.medtimer.core.ui.R.string.tuesday)
-        assertChecked(com.futsch1.medtimer.core.ui.R.string.wednesday)
+        clickOn(R.string.remind_on_weekdays)
+        assertUnchecked(R.string.monday)
+        assertUnchecked(R.string.tuesday)
+        assertChecked(R.string.wednesday)
         clickDialogPositiveButton()
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.remind_on_days_of_month)
+        clickOn(R.string.remind_on_days_of_month)
         assertChecked("1")
         assertUnchecked("2")
         assertChecked("3")
@@ -167,14 +168,14 @@ class BasicUITest : BaseTestHelper() {
     fun appIntro() {
         openMenu()
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.show_intro)
+        clickOn(R.string.show_intro)
 
-        assertDisplayed(com.futsch1.medtimer.core.ui.R.string.intro_welcome)
-        assertDisplayed(com.futsch1.medtimer.core.ui.R.string.intro_welcome_description)
+        assertDisplayed(R.string.intro_welcome)
+        assertDisplayed(R.string.intro_welcome_description)
 
         clickOn(com.github.appintro.R.id.skip)
 
-        assertDisplayed(com.futsch1.medtimer.core.ui.R.string.tab_overview)
+        assertDisplayed(R.string.tab_overview)
     }
 
     @Test

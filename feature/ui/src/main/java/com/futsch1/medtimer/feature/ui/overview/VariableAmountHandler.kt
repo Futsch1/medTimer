@@ -10,7 +10,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
-import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class VariableAmountHandler @Inject constructor(
 
             TextInputDialogBuilder(activity)
                 .title(reminderNotificationPart.medicine.name)
-                .hint(com.futsch1.medtimer.core.ui.R.string.dosage)
+                .hint(R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {

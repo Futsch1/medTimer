@@ -24,6 +24,7 @@ import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
 import java.util.concurrent.atomic.AtomicReference
+import com.futsch1.medtimer.core.ui.R
 
 
 class ScreenshotsTest : BaseTestHelper() {
@@ -41,7 +42,7 @@ class ScreenshotsTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
+        clickOn(R.string.generate_test_data)
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer)
         internalAssert(device.findObject(By.textContains("Some note")) != null)
@@ -55,7 +56,7 @@ class ScreenshotsTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedButton)
 
         openNotification().use {
-            makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
             Screengrab.screenshot("5")
         }
 

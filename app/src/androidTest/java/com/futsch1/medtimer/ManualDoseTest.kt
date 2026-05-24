@@ -17,6 +17,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.hamcrest.Matchers.hasToString
 import org.junit.Test
+import com.futsch1.medtimer.core.ui.R
 
 private const val TEST_13_ = "Test (13)"
 
@@ -25,7 +26,7 @@ class ManualDoseTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun testManualDose() {
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
+        clickOn(R.string.generate_test_data)
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
@@ -39,7 +40,7 @@ class ManualDoseTest : BaseTestHelper() {
         assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Ginseng (200mg) (12)")
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.custom)
+        clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
         clickDialogPositiveButton(false)
         clickDialogPositiveButton()
@@ -66,7 +67,7 @@ class ManualDoseTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
+        clickOn(R.string.deactivate_all)
 
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
@@ -84,8 +85,8 @@ class ManualDoseTest : BaseTestHelper() {
 
         // Disable reminder
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.active)
+        clickOn(R.string.reminder_status)
+        clickOn(R.string.active)
 
         // Create manual dose of the disabled reminder
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
@@ -103,7 +104,7 @@ class ManualDoseTest : BaseTestHelper() {
 
         // Check that re-raise is not shown
         BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        assertNotDisplayed(com.futsch1.medtimer.core.ui.R.string.re_raise_event)
+        assertNotDisplayed(R.string.re_raise_event)
     }
 
 }

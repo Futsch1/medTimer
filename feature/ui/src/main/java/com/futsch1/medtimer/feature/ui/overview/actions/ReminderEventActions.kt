@@ -12,7 +12,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
@@ -108,7 +108,7 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper.deleteItem(fragmentActivity, com.futsch1.medtimer.core.ui.R.string.delete_re_raise_event, {
+        DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 undoStock(reminderEvent)
                 reminderEventRepository.delete(reminderEvent)
@@ -124,7 +124,7 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
-        DeleteHelper.deleteItem(fragmentActivity, com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_reminder_event, {
+        DeleteHelper.deleteItem(fragmentActivity, R.string.are_you_sure_delete_reminder_event, {
             fragmentActivity.lifecycleScope.launch {
                 undoStock(reminderEvent)
                 reminderEventRepository.update(reminderEvent.copy(status = ReminderEvent.ReminderStatus.DELETED, stockHandled = false))

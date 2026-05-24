@@ -21,6 +21,7 @@ import org.robolectric.annotation.Config
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import com.futsch1.medtimer.core.ui.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
@@ -78,7 +79,7 @@ class MedicineHelperTest {
 
         val formatter = MedicineStringFormatter(contextMock, preferencesDataSource, timeFormatterMock)
 
-        `when`(contextMock.getString(eq(com.futsch1.medtimer.core.ui.R.string.medicine_stock_string), anyString()))
+        `when`(contextMock.getString(eq(R.string.medicine_stock_string), anyString()))
             .thenAnswer { invocation ->
                 "${invocation.getArgument(1, String::class.java)} left"
             }

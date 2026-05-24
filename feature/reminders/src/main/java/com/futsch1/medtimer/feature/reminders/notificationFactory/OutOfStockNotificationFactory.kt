@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.ui.MedicineIcons
-import com.futsch1.medtimer.feature.reminders.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -36,14 +36,14 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
 
         val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)
         val notificationMessage = context.getString(
-            com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification,
+            R.string.out_of_stock_notification,
             medicineNameString,
             formatAmount(medicine.amount, medicine.unit)
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
-        builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.box_seam)
-            .setContentTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title))
+        builder.setSmallIcon(R.drawable.box_seam)
+            .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)
             .setContentIntent(contentIntent)
@@ -51,8 +51,8 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
             .setCategory(Notification.CATEGORY_REMINDER)
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
             .addAction(
-                com.futsch1.medtimer.core.ui.R.drawable.cart2,
-                context.getString(com.futsch1.medtimer.core.ui.R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
+                R.drawable.cart2,
+                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
                 intentBuilder.pendingRefill
             )
     }

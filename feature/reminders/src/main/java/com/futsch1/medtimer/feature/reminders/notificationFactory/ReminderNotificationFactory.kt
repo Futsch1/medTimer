@@ -10,7 +10,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.R
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 
@@ -43,8 +43,8 @@ abstract class ReminderNotificationFactory(
     init {
         val contentIntent: PendingIntent = getStartAppIntent()
 
-        builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.capsule)
-        builder.setContentTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.notification_title))
+        builder.setSmallIcon(R.drawable.capsule)
+        builder.setContentTitle(context.getString(R.string.notification_title))
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
         builder.setContentIntent(contentIntent)
@@ -112,13 +112,13 @@ abstract class ReminderNotificationFactory(
 
     private fun addSkippedAction() {
         builder.addAction(
-            com.futsch1.medtimer.core.ui.R.drawable.x_circle, context.getString(com.futsch1.medtimer.core.ui.R.string.skipped), intents.pendingSkipped
+            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
         )
     }
 
     private fun addSnoozeAction() {
         builder.addAction(
-            com.futsch1.medtimer.core.ui.R.drawable.hourglass_split, context.getString(com.futsch1.medtimer.core.ui.R.string.snooze), intents.pendingSnooze
+            R.drawable.hourglass_split, context.getString(R.string.snooze), intents.pendingSnooze
         )
     }
 
@@ -126,14 +126,14 @@ abstract class ReminderNotificationFactory(
         val pendingIntent = intents.pendingLocationSnooze
         if (pendingIntent != null) {
             builder.addAction(
-                com.futsch1.medtimer.core.ui.R.drawable.geo_alt_fill, context.getString(com.futsch1.medtimer.core.ui.R.string.snooze_until_home), pendingIntent
+                R.drawable.geo_alt_fill, context.getString(R.string.snooze_until_home), pendingIntent
             )
         }
     }
 
     private fun addTakenAction() {
         builder.addAction(
-            com.futsch1.medtimer.core.ui.R.drawable.check2_circle, context.getString(com.futsch1.medtimer.core.ui.R.string.taken), intents.pendingTaken
+            R.drawable.check2_circle, context.getString(R.string.taken), intents.pendingTaken
         )
     }
 }
