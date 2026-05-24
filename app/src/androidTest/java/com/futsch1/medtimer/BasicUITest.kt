@@ -32,6 +32,7 @@ import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
+import com.futsch1.medtimer.core.ui.R
 
 
 class BasicUITest : BaseTestHelper() {
@@ -41,7 +42,7 @@ class BasicUITest : BaseTestHelper() {
         createMedicine(" Test ")
         createReminder("1", LocalTime.of(18, 0))
 
-        clickOn(R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
         clickOn(R.string.dosing_instructions)
         clickOn(R.string.sample_instructions)
@@ -50,28 +51,28 @@ class BasicUITest : BaseTestHelper() {
         Espresso.pressBack()
         Espresso.pressBack()
 
-        clickOn(R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         assertContains(R.string.before_meal)
         Espresso.pressBack()
 
-        writeTo(R.id.editAmount, " 2 ")
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, " 2 ")
         Espresso.pressBack()
 
-        clickListItem(R.id.medicineList, 0)
-        assertDisplayed(R.id.editAmount, "2")
-        clickOn(R.id.openAdvancedSettings)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         openMenu()
         clickOn(R.string.duplicate)
         Espresso.pressBack()
 
-        assertContains(R.id.remindersSummary, ";")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.remindersSummary, ";")
 
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_2)
 
         navigateTo(MainMenu.MEDICINES)
-        clickListItem(R.id.medicineList, 0)
-        writeTo(R.id.editMedicineName, " Test2 ")
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, " Test2 ")
         Espresso.pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
@@ -84,14 +85,14 @@ class BasicUITest : BaseTestHelper() {
         createMedicine("Test")
         createReminder("1", LocalTime.of(12, 0))
 
-        clickOn(R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
         val cycleStart = Calendar.getInstance()
         cycleStart.set(2025, 1, 1)
         val cycleStartString =
             DateFormat.getDateInstance(DateFormat.SHORT).format(cycleStart.getTime())
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_start_date)
+        clickOn(R.string.cycle_reminder)
+        clickOn(R.string.cycle_start_date)
         setDate(cycleStart.getTime())
         clickOn(R.string.cycle_consecutive_days)
         setValue("5")
@@ -111,9 +112,9 @@ class BasicUITest : BaseTestHelper() {
 
         Espresso.pressBack()
 
-        clickOn(R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
-        clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
+        clickOn(R.string.cycle_reminder)
         assertContains(cycleStartString)
         assertContains("5")
         assertContains("6")
@@ -140,26 +141,26 @@ class BasicUITest : BaseTestHelper() {
         // Test saving notes
         val notes = "Contains catnip\n\nmeow :3"
 
-        clickOn(R.id.openNotes)
-        writeTo(R.id.notes, notes)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
         closeKeyboard()
-        clickOn(R.id.confirmSaveNotes)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
 
         Espresso.pressBack()
-        clickListItem(R.id.medicineList, 0)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
 
         // Check if the note is saved
-        clickOn(R.id.openNotes)
-        assertDisplayed(R.id.notes, notes)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
 
         // Test cancelling saving notes
-        clearText(R.id.notes)
+        clearText(com.futsch1.medtimer.feature.ui.R.id.notes)
         closeKeyboard()
-        clickOn(R.id.cancelSaveNotes)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
 
         // Check that the note is unmodified
-        clickOn(R.id.openNotes)
-        assertDisplayed(R.id.notes, notes)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
     }
 
     @Test
@@ -188,40 +189,40 @@ class BasicUITest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_2)
 
-        clickOn(R.id.filterRaised)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
         assertContains(TEST_2)
-        clickOn(R.id.filterRaised)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
 
         assertContains(TEST_2)
 
-        clickOn(R.id.filterTaken)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
         assertNotContains(TEST_2)
-        clickOn(R.id.filterTaken)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
 
         assertContains(TEST_2)
 
         clickListItemChild(
-            R.id.reminders, 0, R.id.stateButton
+            com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton
         )
-        clickOn(R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
-        clickOn(R.id.filterTaken)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
         assertContains(TEST_2)
-        clickOn(R.id.filterTaken)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
 
         assertContains(TEST_2)
 
-        clickOn(R.id.filterRaised)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
         assertNotContains(TEST_2)
-        clickOn(R.id.filterRaised)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
 
-        clickOn(R.id.filterSkipped)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterSkipped)
         assertNotContains(TEST_2)
-        clickOn(R.id.filterSkipped)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterSkipped)
 
-        clickOn(R.id.filterScheduled)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
         assertNotContains(TEST_2)
-        clickOn(R.id.filterScheduled)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
 
         navigateTo(MainMenu.MEDICINES)
         clickOn("Test")
@@ -231,7 +232,7 @@ class BasicUITest : BaseTestHelper() {
 
         assertContains("Test (1)")
 
-        clickOn(R.id.filterScheduled)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
         assertContains("Test (1)")
     }
 
@@ -247,21 +248,21 @@ class BasicUITest : BaseTestHelper() {
 
         navigateTo(MainMenu.MEDICINES)
 
-        clickOn(R.id.overviewFragment)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
 
         val view = AtomicReference<View>()
         view.set(
-            baristaRule.activityTestRule.getActivity().findViewById(R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
         )
 
         var currentDay = view.get().findViewWithTag<TextView>("selected")
         internalAssert(currentDay.getText() == secondDay)
 
-        clickOn(R.id.overviewFragment)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
 
         navigateTo(MainMenu.OVERVIEW)
         view.set(
-            baristaRule.activityTestRule.getActivity().findViewById(R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
         )
         currentDay = view.get().findViewWithTag("selected")
         internalAssert(currentDay.getText() == today)

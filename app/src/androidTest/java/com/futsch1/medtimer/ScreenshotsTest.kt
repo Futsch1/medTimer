@@ -24,6 +24,7 @@ import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
 import java.util.concurrent.atomic.AtomicReference
+import com.futsch1.medtimer.core.ui.R
 
 
 class ScreenshotsTest : BaseTestHelper() {
@@ -43,63 +44,63 @@ class ScreenshotsTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.generate_test_data)
 
-        clickListItemChild(R.id.reminders, 0, R.id.overviewContentContainer)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer)
         internalAssert(device.findObject(By.textContains("Some note")) != null)
         Espresso.pressBack()
 
-        clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
-        clickListItemChild(R.id.reminders, 2, R.id.stateButton)
-        clickOn(R.id.takenButton)
-        clickListItemChild(R.id.reminders, 3, R.id.stateButton)
-        clickOn(R.id.skippedButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedButton)
 
         openNotification().use {
-            makeNotificationExpanded(device, getNotificationText(com.futsch1.medtimer.core.ui.R.string.taken))
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
             Screengrab.screenshot("5")
         }
 
-        clickListItemChild(R.id.reminders, 4, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         Screengrab.screenshot("1")
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         Screengrab.screenshot("2")
 
-        Espresso.onView(ViewMatchers.withId(R.id.medicineList)).perform(
+        Espresso.onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 0, ViewActions.click()
             )
         )
         Screengrab.screenshot("3")
 
-        clickListItemChild(R.id.reminderList, 0, R.id.openAdvancedSettings)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("4")
 
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
-        clickOn(R.id.chartChip)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.chartChip)
         Screengrab.screenshot("6")
 
-        clickOn(R.id.timeSpinner)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeSpinner)
 
         clickListItem(position = 1)
 
-        clickOn(R.id.tableChip)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.tableChip)
         Screengrab.screenshot("7")
 
         clickListItem(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView, 1)
 
         val tableView = AtomicReference<TableView>()
         tableView.set(
-            baristaRule.activityTestRule.getActivity().findViewById(R.id.reminder_table)
+            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.reminder_table)
         )
 
         var view = tableView.get().cellRecyclerView.findViewWithTag<TextView>("medicineName")
         TestCase.assertEquals("Selen (200 µg)", view.getText())
 
-        Espresso.onView(ViewMatchers.withId(R.id.filter))
+        Espresso.onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.filter))
             .perform(ViewActions.replaceText("B"), ViewActions.closeSoftKeyboard())
 
         view = tableView.get().cellRecyclerView.findViewWithTag("medicineName")
@@ -107,7 +108,7 @@ class ScreenshotsTest : BaseTestHelper() {
 
         clickOn(com.google.android.material.R.id.text_input_end_icon)
 
-        clickOn(R.id.calendarChip)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.calendarChip)
         Screengrab.screenshot("8")
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)

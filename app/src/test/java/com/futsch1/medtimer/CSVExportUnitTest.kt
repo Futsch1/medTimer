@@ -14,10 +14,10 @@ import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.exporters.CSVEventExport
-import com.futsch1.medtimer.exporters.CSVMedicineExport
-import com.futsch1.medtimer.exporters.Export.ExporterException
-import com.futsch1.medtimer.medicine.LinkedReminderAlgorithms
+import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport
+import com.futsch1.medtimer.feature.ui.exporters.CSVMedicineExport
+import com.futsch1.medtimer.feature.ui.exporters.Export.ExporterException
+import com.futsch1.medtimer.feature.ui.medicine.LinkedReminderAlgorithms
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

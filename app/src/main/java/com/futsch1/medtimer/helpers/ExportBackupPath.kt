@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.helpers
 
-import com.futsch1.medtimer.exporters.Export
+import com.futsch1.medtimer.feature.ui.exporters.Export
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 

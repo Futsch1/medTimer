@@ -14,10 +14,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.futsch1.medtimer.core.ui.R
 
 @AndroidEntryPoint
 class MedTimerAppIntro : AppIntro() {
@@ -35,7 +37,7 @@ class MedTimerAppIntro : AppIntro() {
         addSlide(
             getString(R.string.intro_welcome),
             getString(R.string.intro_welcome_description),
-            com.futsch1.medtimer.core.ui.R.mipmap.logo
+            R.mipmap.logo
         )
 
         addSlide(

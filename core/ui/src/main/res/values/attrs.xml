@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WidgetAttrs">
+        <attr name="medtimerWidgetPadding" format="dimension" />
+        <attr name="medtimerWidgetInnerRadius" format="dimension" />
+        <attr name="medtimerWidgetRadius" format="dimension" />
+    </declare-styleable>
+</resources>

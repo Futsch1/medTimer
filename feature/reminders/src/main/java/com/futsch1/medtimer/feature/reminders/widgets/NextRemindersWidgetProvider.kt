@@ -18,7 +18,7 @@ class NextRemindersWidgetProvider @Inject constructor() : WidgetProvider() {
     override fun getWidgetImpl(context: Context): WidgetImpl {
         val lineProvider = if (preferencesDataSource.preferences.value.disableWidget) {
             WidgetLineProvider { line, _ ->
-                if (line == 0) SpannableStringBuilder(context.getString(R.string.widget_disabled_privacy))
+                if (line == 0) SpannableStringBuilder(context.getString(com.futsch1.medtimer.core.ui.R.string.widget_disabled_privacy))
                 else SpannableStringBuilder()
             }
         } else {

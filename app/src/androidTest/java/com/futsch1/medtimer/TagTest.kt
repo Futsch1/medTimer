@@ -32,15 +32,15 @@ class TagTest : BaseTestHelper() {
     fun tagHandling() {
         createMedicine("Test")
 
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
 
         addTag(NEW_TAG)
         assertContains(NEW_TAG)
         assertChecked(NEW_TAG)
 
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertContains(NEW_TAG)
         assertChecked(NEW_TAG)
 
@@ -50,7 +50,7 @@ class TagTest : BaseTestHelper() {
 
         clickOn(ANOTHER_TAG)
         assertUnchecked(ANOTHER_TAG)
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         pressBack()
 
@@ -59,27 +59,27 @@ class TagTest : BaseTestHelper() {
 
         createMedicine("Test 2")
 
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertUnchecked(NEW_TAG)
         assertUnchecked(ANOTHER_TAG)
-        onView(withId(R.id.tags)).perform(
+        onView(withId(com.futsch1.medtimer.feature.ui.R.id.tags)).perform(
             actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 1,
                 removeChip()
             )
         )
         clickDialogPositiveButton()
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertNotContains(ANOTHER_TAG)
         clickOn(NEW_TAG)
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         openMenu()
-        clickOn(R.string.duplicate)
-        clickListItem(R.id.medicineList, 2)
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.duplicate)
+        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertChecked(NEW_TAG)
     }
 
@@ -87,15 +87,15 @@ class TagTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun medicineVisibility() {
         createMedicine("Test")
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         addTag("Tag1")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
         pressBack()
 
         createMedicine("Else")
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         addTag("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
         pressBack()
 
         assertContains("Test")
@@ -105,7 +105,7 @@ class TagTest : BaseTestHelper() {
         clickOn("Tag1")
         assertChecked("Tag1")
         assertUnchecked("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         assertContains("Test")
         assertNotContains("Else")
@@ -115,7 +115,7 @@ class TagTest : BaseTestHelper() {
         clickOn("Tag2")
         assertUnchecked("Tag1")
         assertChecked("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         assertNotContains("Test")
         assertContains("Else")
@@ -125,70 +125,70 @@ class TagTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
         createMedicine("Test")
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         addTag("Tag1")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
         createIntervalReminder("Amount1", 60)
         pressBack()
         pressBack()
 
         createMedicine("Else")
-        clickOn(R.id.openTags)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         addTag("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
         createIntervalReminder("Amount2", 60)
         pressBack()
 
         // First, deactivate all of Test
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         openMenu()
-        clickOn(R.string.deactivate_all)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
         assertContains(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         // Now, check that Else is not deactivated
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
         clickOn("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         assertNotContains(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         clickOn(R.id.tag_filter)
         clickOn("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         // And activate Test again
         openMenu()
-        clickOn(R.string.activate_all)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.activate_all)
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 0, R.id.stateButton)
-        clickOn(R.id.takenButton)
-        BaristaListInteractions.clickListItemChild(R.id.reminders, 1, R.id.stateButton)
-        clickOn(R.id.takenButton)
+        BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 1, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        assertContains(R.id.reminderText, "Amount1")
-        assertNotContains(R.id.reminderText, "Amount2")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount1")
+        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount2")
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
         clickOn("Tag2")
-        clickOn(R.id.ok)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        assertNotContains(R.id.reminderText, "Amount1")
-        assertContains(R.id.reminderText, "Amount2")
+        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount1")
+        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount2")
     }
 
     private fun addTag(tagName: String) {
-        clickOn(R.id.addTag)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addTag)
         writeTo(android.R.id.input, tagName)
         clickDialogPositiveButton()
     }

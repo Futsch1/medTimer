@@ -29,18 +29,18 @@ import java.util.Locale
 object AndroidTestHelper {
     @JvmStatic
     fun createReminder(amount: String, time: LocalTime?) {
-        clickOn(R.id.addReminder)
-        clickOn(R.id.timeBasedCard)
-        writeTo(R.id.editAmount, amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, amount)
         closeKeyboard()
 
         if (time != null) {
-            clickOn(R.id.editReminderTime)
+            clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
             setTime(time.hour, time.minute, false)
         }
         closeKeyboard()
 
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
     }
 
     fun setTime(hour: Int, minute: Int, isDeltaTime: Boolean) {
@@ -121,23 +121,23 @@ object AndroidTestHelper {
 
     @JvmStatic
     fun createIntervalReminder(amount: String, intervalMinutes: Int) {
-        clickOn(R.id.addReminder)
-        clickOn(R.id.continuousIntervalCard)
-        writeTo(R.id.editAmount, amount)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, amount)
 
-        clickOn(R.id.intervalMinutes)
-        writeTo(R.id.editIntervalTime, intervalMinutes.toString())
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalMinutes)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, intervalMinutes.toString())
 
         closeKeyboard()
-        clickOn(R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
     }
 
     @JvmStatic
     fun createMedicine(name: String) {
         navigateTo(MainMenu.MEDICINES)
 
-        clickOn(R.id.addMedicine)
-        writeTo(R.id.medicineName, name)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.addMedicine)
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.medicineName, name)
 
         clickDialogPositiveButton()
     }
@@ -145,7 +145,11 @@ object AndroidTestHelper {
     @JvmStatic
     fun navigateTo(mainMenu: MainMenu) {
         val menuIds =
-            intArrayOf(R.id.overviewFragment, R.id.medicinesFragment, R.id.statisticsFragment)
+            intArrayOf(
+                com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
+                com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
+                com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
+            )
         clickOn(menuIds[mainMenu.ordinal])
         clickOn(menuIds[mainMenu.ordinal])
     }

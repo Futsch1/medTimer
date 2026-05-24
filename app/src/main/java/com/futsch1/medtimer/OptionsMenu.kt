@@ -31,16 +31,18 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
-import com.futsch1.medtimer.exporters.CSVEventExport
-import com.futsch1.medtimer.exporters.CSVMedicineExport
-import com.futsch1.medtimer.exporters.Export
-import com.futsch1.medtimer.exporters.Export.ExporterException
-import com.futsch1.medtimer.exporters.PDFEventExport
-import com.futsch1.medtimer.exporters.PDFMedicineExport
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.feature.ui.MedicineViewModel
+import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
+import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport
+import com.futsch1.medtimer.feature.ui.exporters.CSVMedicineExport
+import com.futsch1.medtimer.feature.ui.exporters.Export
+import com.futsch1.medtimer.feature.ui.exporters.Export.ExporterException
+import com.futsch1.medtimer.feature.ui.exporters.PDFEventExport
+import com.futsch1.medtimer.feature.ui.exporters.PDFMedicineExport
+import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromPreferences
+import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.futsch1.medtimer.helpers.ExportBackupPath.getExportFilename
-import com.futsch1.medtimer.medicine.tags.TagDataFromPreferences
-import com.futsch1.medtimer.medicine.tags.TagsFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -79,8 +81,8 @@ class OptionsMenu @AssistedInject constructor(
     private lateinit var backupManager: BackupManager
 
     @AssistedFactory
-    fun interface Factory {
-        fun create(
+    interface Factory : OptionsMenuFactory {
+        override fun create(
             fragment: Fragment,
             navController: NavController,
             hideFilter: Boolean,
@@ -144,7 +146,7 @@ class OptionsMenu @AssistedInject constructor(
         val item = menu.findItem(R.id.settings)
         item.setOnMenuItemClickListener { _: MenuItem? ->
             try {
-                navController.navigate(R.id.action_global_preferencesFragment)
+                navController.navigate(com.futsch1.medtimer.feature.ui.R.id.action_global_preferencesFragment)
                 return@setOnMenuItemClickListener true
             } catch (_: IllegalStateException) {
                 return@setOnMenuItemClickListener false
@@ -154,7 +156,7 @@ class OptionsMenu @AssistedInject constructor(
 
     private fun setupVersion() {
         val item = menu.findItem(R.id.version)
-        item.title = context.getString(R.string.version, BuildConfig.VERSION_NAME)
+        item.title = context.getString(com.futsch1.medtimer.core.ui.R.string.version, BuildConfig.VERSION_NAME)
     }
 
     private fun setupAppURL() {
@@ -170,16 +172,16 @@ class OptionsMenu @AssistedInject constructor(
         val item = menu.findItem(R.id.clear_events)
         item.setOnMenuItemClickListener { _ ->
             val builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(R.string.confirm)
-            builder.setMessage(R.string.are_you_sure_delete_events)
+            builder.setTitle(com.futsch1.medtimer.core.ui.R.string.confirm)
+            builder.setMessage(com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_events)
             builder.setCancelable(false)
-            builder.setPositiveButton(R.string.yes) { _, _ ->
+            builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
                     reminderEventRepository.deleteAll()
                     requestScheduleNextNotification(context)
                 }
             }
-            builder.setNegativeButton(R.string.cancel) { _, _ -> }
+            builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }
             builder.show()
             true
         }
@@ -266,7 +268,7 @@ class OptionsMenu @AssistedInject constructor(
     private suspend fun eventExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
         val reminderEvents: List<ReminderEvent> =
@@ -281,7 +283,7 @@ class OptionsMenu @AssistedInject constructor(
     private suspend fun medicineExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
         val medicines: List<Medicine> = medicineViewModel.filterMedicines(medicineRepository.getAll())
@@ -308,9 +310,9 @@ class OptionsMenu @AssistedInject constructor(
         fragment.viewLifecycleOwner.lifecycleScope.launch {
             medicineViewModel.validTagIds.collect { validTagIds ->
                 if (validTagIds.isNullOrEmpty()) {
-                    item.setIcon(R.drawable.tag)
+                    item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag)
                 } else {
-                    item.setIcon(R.drawable.tag_fill)
+                    item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag_fill)
                 }
             }
         }
@@ -322,7 +324,7 @@ class OptionsMenu @AssistedInject constructor(
             export.export(csvFile)
             FileHelper.shareFile(context, csvFile)
         } catch (_: ExporterException) {
-            Toast.makeText(context, R.string.export_failed, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.export_failed, Toast.LENGTH_LONG).show()
         }
     }
 
