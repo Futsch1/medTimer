@@ -104,7 +104,7 @@ class BackupManager @AssistedInject constructor(
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
         alertDialogBuilder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
-            lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
+            lifecycleOwner.lifecycleScope.launch {
                 performBackup(checkedItems)
             }
         }

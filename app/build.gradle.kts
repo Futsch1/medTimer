@@ -193,6 +193,7 @@ tasks.withType<JavaCompile> {
 }
 sonar {
     properties {
+        property("sonar.projectName", "MedTimer")
         property("sonar.projectKey", "Futsch1_medTimer")
         property("sonar.organization", "futsch1")
         property("sonar.host.url", "https://sonarcloud.io")
