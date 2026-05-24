@@ -30,7 +30,7 @@ abstract class MedicineDao {
     abstract suspend fun getAll(): List<FullMedicineEntity>
 
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
-    abstract suspend fun get(medicineId: Int): MedicineEntity?
+    abstract suspend operator fun get(medicineId: Int): MedicineEntity?
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")

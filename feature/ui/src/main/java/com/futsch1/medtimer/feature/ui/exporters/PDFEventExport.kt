@@ -15,8 +15,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
 import java.util.LinkedList
@@ -26,7 +24,6 @@ class PDFEventExport @AssistedInject constructor(
     @Assisted private val reminderEvents: List<ReminderEvent>,
     @Assisted fragmentManager: FragmentManager,
     @param:ApplicationContext private val context: Context,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     private val timeFormatter: TimeFormatter
 ) : Export(fragmentManager) {
 
@@ -62,9 +59,7 @@ class PDFEventExport @AssistedInject constructor(
         simplyPdfDocument.text.write(timeFormatter.toDateTimeString(Instant.now()) + "\n", standardTextProperties)
         simplyPdfDocument.table.draw(rows, tableProperties)
 
-        withContext(ioDispatcher) {
-            simplyPdfDocument.finish()
-        }
+        simplyPdfDocument.finish()
     }
 
     private fun getHeader(columnWidths: IntArray): LinkedList<Cell> {

@@ -35,7 +35,7 @@ class Biometrics @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             activity: FragmentActivity,
             @Assisted("onSuccess") successCallback: () -> Unit,

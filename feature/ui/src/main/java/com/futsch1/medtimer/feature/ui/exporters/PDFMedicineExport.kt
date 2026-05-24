@@ -13,8 +13,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
 import kotlin.time.ExperimentalTime
@@ -53,9 +51,7 @@ class PDFMedicineExport @AssistedInject constructor(
             }
         }
 
-        withContext(Dispatchers.IO) {
-            simplyPdfDocument.finish()
-        }
+        simplyPdfDocument.finish()
     }
 
     private suspend fun exportMedicine(simplyPdfDocument: SimplyPdfDocument, activeReminders: List<com.futsch1.medtimer.core.domain.model.Reminder>) {

@@ -38,12 +38,11 @@ class MedicineViewHolder @AssistedInject constructor(
     private val medicineStringFormatter: MedicineStringFormatter,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     private val medicineIcons: MedicineIcons,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_medicine, parent, false)) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(parent: ViewGroup, activity: FragmentActivity): MedicineViewHolder
     }
 
@@ -77,7 +76,7 @@ class MedicineViewHolder @AssistedInject constructor(
                 remindersSummaryView.setText(com.futsch1.medtimer.core.ui.R.string.inactive)
             }
         } else {
-            activity.lifecycleScope.launch(dispatcher) {
+            activity.lifecycleScope.launch {
                 val summary = reminderSummaryFormatter.formatRemindersSummary(activeReminders)
                 withContext(mainDispatcher) { remindersSummaryView.text = summary }
             }

@@ -28,7 +28,7 @@ class AdvancedReminderSettingsMenuProvider @AssistedInject constructor(
 ) : MenuProvider {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(fragment: Fragment): AdvancedReminderSettingsMenuProvider
     }
 

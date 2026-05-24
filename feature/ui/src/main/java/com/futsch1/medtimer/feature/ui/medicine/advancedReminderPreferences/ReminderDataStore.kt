@@ -29,7 +29,7 @@ class ReminderDataStore @AssistedInject constructor(
 ) : ModelDataStore<Reminder>() {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(reminder: Reminder): ReminderDataStore
     }
 

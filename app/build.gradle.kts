@@ -44,8 +44,8 @@ android {
 
     buildTypes {
         release {
-            @Suppress("kotlin:S7204") // Does not make sense for open source apps
-            isMinifyEnabled = false
+            @Suppress("kotlin:S7204")
+            isMinifyEnabled = false // NOSONAR - Does not make sense for open source apps
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -150,6 +150,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
+    implementation(libs.hilt.android)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -170,8 +171,7 @@ dependencies {
     androidTestImplementation(libs.barista)
     androidTestUtil(libs.androidx.test.orchestrator)
 
-    implementation(libs.hilt.android)
-
+    ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     kspTest(libs.hilt.compiler)
 
@@ -193,6 +193,7 @@ tasks.withType<JavaCompile> {
 }
 sonar {
     properties {
+        property("sonar.projectName", "MedTimer")
         property("sonar.projectKey", "Futsch1_medTimer")
         property("sonar.organization", "futsch1")
         property("sonar.host.url", "https://sonarcloud.io")
@@ -200,7 +201,7 @@ sonar {
         property("sonar.android.lint.report", "build/reports/lint-results-fullDebug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml"
+            "build/reports/jacoco/JacocoFullDebugCodeCoverage/JacocoFullDebugCodeCoverage.xml"
         )
     }
 }

@@ -183,10 +183,8 @@ class NotificationSettingsFragment : PreferencesFragment() {
     }
 
     private fun resumeExactReminders() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                resetBooleanPreferenceAndReload(EXACT_REMINDERS)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            resetBooleanPreferenceAndReload(EXACT_REMINDERS)
         }
     }
 

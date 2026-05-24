@@ -190,22 +190,22 @@ class OptionsMenu @AssistedInject constructor(
     private fun setupExport() {
         var item = menu.findItem(R.id.export_csv)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(ioDispatcher) { eventExport(true) }
+            fragment.lifecycleScope.launch { eventExport(true) }
             true
         }
         item = menu.findItem(R.id.export_pdf)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(ioDispatcher) { eventExport(false) }
+            fragment.lifecycleScope.launch { eventExport(false) }
             true
         }
         item = menu.findItem(R.id.export_medicine_csv)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(true) }
+            fragment.lifecycleScope.launch { medicineExport(true) }
             true
         }
         item = menu.findItem(R.id.export_medicine_pdf)
         item.setOnMenuItemClickListener { _ ->
-            fragment.lifecycleScope.launch(ioDispatcher) { medicineExport(false) }
+            fragment.lifecycleScope.launch { medicineExport(false) }
             true
         }
     }
@@ -259,7 +259,7 @@ class OptionsMenu @AssistedInject constructor(
                         // Intentionally empty, do nothing
                     }
                 } else {
-                    medicineViewModel.validTagIds.value = setOf()
+                     medicineViewModel.clearTagFilter()
                 }
             }
         }

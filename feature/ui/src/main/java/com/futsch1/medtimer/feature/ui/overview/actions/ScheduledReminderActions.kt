@@ -22,7 +22,7 @@ class ScheduledReminderActions @AssistedInject constructor(
 ) : Actions {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(event: ScheduledReminderEvent, fragmentActivity: FragmentActivity): ScheduledReminderActions
     }
 

@@ -85,13 +85,13 @@ class ReminderNotificationData(
             return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)?.toList() ?: listOf()
         }
 
-        fun getReminderEventIds(bundle: Bundle): MutableList<Int> {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)?.toMutableList() ?: mutableListOf()
+        fun getReminderEventIds(bundle: Bundle): List<Int> {
+            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)?.toMutableList() ?: listOf()
         }
 
         fun fromArrays(
             reminderIds: List<Int>,
-            reminderEventIds: MutableList<Int>,
+            reminderEventIds: List<Int>,
             remindInstant: Instant,
             notificationId: Int = -1
         ): ReminderNotificationData {
@@ -118,7 +118,7 @@ class ReminderNotificationData(
 
         fun fromReminderEvent(reminderEvent: ReminderEvent): ReminderNotificationData {
             val reminderIds = listOf(reminderEvent.reminderId)
-            val reminderEventIds = mutableListOf(reminderEvent.reminderEventId)
+            val reminderEventIds = listOf(reminderEvent.reminderEventId)
             return ReminderNotificationData(
                 reminderEvent.remindedTimestamp, reminderIds, reminderEventIds
             )

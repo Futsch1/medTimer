@@ -5,7 +5,7 @@ hilt = "2.59.2"
 navigation-safe-args = "2.9.8"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
-sonarqube = "7.2.3.7755"
+sonarqube = "7.3.0.8198"
 ksp = "2.3.8"
 
 # AndroidX

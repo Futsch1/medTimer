@@ -18,7 +18,7 @@ interface ReminderDao {
     suspend fun getAll(medicineId: Int): List<ReminderEntity>
 
     @Query("SELECT * FROM Reminder WHERE reminderId = :reminderId")
-    suspend fun get(reminderId: Int): ReminderEntity?
+    suspend operator fun get(reminderId: Int): ReminderEntity?
 
     @Query("SELECT * FROM Reminder WHERE reminderId = :reminderId")
     fun getFlow(reminderId: Int): Flow<ReminderEntity?>

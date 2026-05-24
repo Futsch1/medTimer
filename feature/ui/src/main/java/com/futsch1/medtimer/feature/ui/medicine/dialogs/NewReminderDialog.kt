@@ -42,7 +42,7 @@ class NewReminderDialog @AssistedInject constructor(
     private val inputMethodManager: InputMethodManager
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderDialog
     }
 

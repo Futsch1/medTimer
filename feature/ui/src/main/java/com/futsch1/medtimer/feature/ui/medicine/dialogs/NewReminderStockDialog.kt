@@ -36,7 +36,7 @@ class NewReminderStockDialog @AssistedInject constructor(
     private val timeEditorFactory: TimeEditor.Factory
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderStockDialog
     }
 

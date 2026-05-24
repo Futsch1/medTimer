@@ -24,7 +24,7 @@ class TimeEditor @AssistedInject constructor(
     private val timeFormatter: TimeFormatter
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             fragmentActivity: FragmentActivity,
             timeEdit: TextInputEditText,

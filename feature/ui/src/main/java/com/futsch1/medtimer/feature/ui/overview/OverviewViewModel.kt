@@ -38,7 +38,7 @@ class OverviewViewModel @AssistedInject constructor(
     private data class FilterState(val activeFilters: Set<OverviewFilter>, val day: LocalDate, val tick: Long)
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             reminderEvents: Flow<List<ReminderEvent>>,
             scheduledReminders: SharedFlow<List<ScheduledReminder>>

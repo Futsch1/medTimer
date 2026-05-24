@@ -32,7 +32,7 @@ class ReminderTableCellViewHolder(view: View) : AbstractViewHolder(view) {
         textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
-    interface OnEditClickListener {
+    fun interface OnEditClickListener {
         fun onEditClick()
     }
 }

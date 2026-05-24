@@ -13,7 +13,7 @@ class MultipleActions @AssistedInject constructor(
 ) : Actions {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(events: List<OverviewEvent>, fragmentActivity: FragmentActivity): MultipleActions
     }
 

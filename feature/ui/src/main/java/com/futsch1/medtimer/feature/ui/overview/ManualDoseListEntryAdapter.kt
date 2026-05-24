@@ -22,7 +22,7 @@ class ManualDoseListEntryAdapter @AssistedInject constructor(
 ) : ArrayAdapter<ManualDoseEntry>(context, resource, entries) {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(context: Context, resource: Int, entries: List<ManualDoseEntry>): ManualDoseListEntryAdapter
     }
 

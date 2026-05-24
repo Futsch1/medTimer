@@ -31,7 +31,7 @@ class LinkedReminderHandling @AssistedInject constructor(
     private val timePickerDialogFactory: TimePickerDialogFactory
 ) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(reminder: Reminder, coroutineScope: CoroutineScope): LinkedReminderHandling
     }
 

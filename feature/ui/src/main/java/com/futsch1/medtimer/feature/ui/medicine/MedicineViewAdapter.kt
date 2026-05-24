@@ -13,7 +13,6 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Collections
 
@@ -22,12 +21,11 @@ class MedicineViewAdapter @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     private val medicineRepository: MedicineRepository,
     private val medicineViewHolderFactory: MedicineViewHolder.Factory,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) :
     IdlingListAdapter<Medicine, MedicineViewHolder>(MedicineDiff()), MovedCallback {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(activity: FragmentActivity): MedicineViewAdapter
     }
 
@@ -61,7 +59,7 @@ class MedicineViewAdapter @AssistedInject constructor(
 
     override fun onMoveCompleted(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
-            activity.lifecycleScope.launch(dispatcher) {
+            activity.lifecycleScope.launch {
                 medicineRepository.move(fromPosition, toPosition)
             }
         }

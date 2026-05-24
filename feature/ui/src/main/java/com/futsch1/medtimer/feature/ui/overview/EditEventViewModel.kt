@@ -10,7 +10,6 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -31,7 +29,6 @@ class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderEventRepository: ReminderEventRepository,
     private val timeFormatter: TimeFormatter,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     companion object {
@@ -42,9 +39,18 @@ class EditEventViewModel @Inject constructor(
     private val zoneId = ZoneId.systemDefault()
     private var storedEvent: ReminderEvent? = null
 
-    val medicineName = MutableStateFlow("")
-    val amount = MutableStateFlow("")
-    val notes = MutableStateFlow("")
+    private val _medicineName = MutableStateFlow("")
+    val medicineName: StateFlow<String> = _medicineName.asStateFlow()
+
+    private val _amount = MutableStateFlow("")
+    val amount: StateFlow<String> = _amount.asStateFlow()
+
+    private val _notes = MutableStateFlow("")
+    val notes: StateFlow<String> = _notes.asStateFlow()
+
+    fun setMedicineName(value: String) { _medicineName.value = value }
+    fun setAmount(value: String) { _amount.value = value }
+    fun setNotes(value: String) { _notes.value = value }
 
     var status: ReminderEvent.ReminderStatus? = null
 
@@ -98,9 +104,9 @@ class EditEventViewModel @Inject constructor(
                 .first()
                 .let { event ->
                     storedEvent = event
-                    medicineName.value = event.medicineName
-                    amount.value = event.amount
-                    notes.value = event.notes
+                    _medicineName.value = event.medicineName
+                    _amount.value = event.amount
+                    _notes.value = event.notes
                     status = when (event.status) {
                         ReminderEvent.ReminderStatus.TAKEN -> ReminderEvent.ReminderStatus.TAKEN
                         ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> ReminderEvent.ReminderStatus.SKIPPED
@@ -115,21 +121,21 @@ class EditEventViewModel @Inject constructor(
         }
     }
 
-    suspend fun updateEvent() {
-        val event = storedEvent ?: return
-        val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
-        val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
+    fun updateEvent() {
+        viewModelScope.launch {
+            val event = storedEvent ?: return@launch
+            val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
+            val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
 
-        val updatedEvent = event.copy(
-            medicineName = medicineName.value,
-            amount = amount.value,
-            notes = notes.value,
-            remindedTimestamp = remindedTimestamp,
-            processedTimestamp = processedTimestamp,
-            status = status ?: event.status
-        )
+            val updatedEvent = event.copy(
+                medicineName = medicineName.value,
+                amount = amount.value,
+                notes = notes.value,
+                remindedTimestamp = remindedTimestamp,
+                processedTimestamp = processedTimestamp,
+                status = status ?: event.status
+            )
 
-        withContext(ioDispatcher) {
             reminderEventRepository.update(updatedEvent)
         }
     }

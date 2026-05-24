@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class OptionsMenuModule {
+fun interface OptionsMenuModule {
     @Binds
-    abstract fun bindOptionsMenuFactory(factory: OptionsMenu.Factory): OptionsMenuFactory
+    fun bindOptionsMenuFactory(factory: OptionsMenu.Factory): OptionsMenuFactory
 }

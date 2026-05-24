@@ -44,7 +44,7 @@ class NotificationProcessor @Inject constructor(
         Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
         val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in processedNotificationData.reminderEventIds) {
-            val reminderEvent = reminderEventRepository.get(reminderEventId)
+            val reminderEvent = reminderEventRepository[reminderEventId]
 
             if (reminderEvent != null) {
                 reminderEventsToUpdate.add(reminderEvent)
@@ -101,8 +101,7 @@ class NotificationProcessor @Inject constructor(
             return
         }
 
-        val remainingRepeats = reminderEventRepository
-            .get(reminderNotificationData.reminderEventIds[0])
+        val remainingRepeats = reminderEventRepository[reminderNotificationData.reminderEventIds[0]]
             ?.remainingRepeats ?: return
 
         if (remainingRepeats != 0) {
@@ -145,7 +144,7 @@ class NotificationProcessor @Inject constructor(
         if (!reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
         ) {
-            val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return false
+            val reminder = reminderRepository[reminderEvent.reminderId] ?: return false
             var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return false
             if (status == ReminderEvent.ReminderStatus.SKIPPED) {
                 amount = -amount

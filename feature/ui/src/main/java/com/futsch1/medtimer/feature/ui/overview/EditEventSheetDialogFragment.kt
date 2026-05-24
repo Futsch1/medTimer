@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -84,51 +83,10 @@ class EditEventSheetDialogFragment : DialogFragment() {
         editEventNotes = editEventSheetDialog.requireViewById(R.id.editEventNotes)
         editEventToggleGroup = editEventSheetDialog.requireViewById(R.id.editEventToggleGroup)
 
-        // Text fields: flow sets initial value; doAfterTextChanged writes back.
-        // Guard prevents setText from firing when the EditText already has the same text,
-        // which would otherwise reset the cursor position.
-        viewModel.medicineName.onEach { if (editEventName.text.toString() != it) editEventName.setText(it) }.launchIn(lifecycleScope)
-        editEventName.doAfterTextChanged { viewModel.medicineName.value = it?.toString() ?: "" }
-
-        viewModel.amount.onEach { if (editEventAmount.text.toString() != it) editEventAmount.setText(it) }.launchIn(lifecycleScope)
-        editEventAmount.doAfterTextChanged { viewModel.amount.value = it?.toString() ?: "" }
-
-        viewModel.notes.onEach { if (editEventNotes.text.toString() != it) editEventNotes.setText(it) }.launchIn(lifecycleScope)
-        editEventNotes.doAfterTextChanged { viewModel.notes.value = it?.toString() ?: "" }
-
-        // Time/date display strings: reactive to picker changes
-        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }
-            .launchIn(lifecycleScope)
-        setupTimePicker(editEventRemindedTimestamp, { viewModel.remindedMinutes }, { viewModel.remindedMinutes = it })
-
-        viewModel.remindedDateString.onEach { if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
-        setupDatePicker(editEventRemindedDate, { viewModel.remindedDate }, { viewModel.remindedDate = it })
-
-        // Status-dependent UI: runs once when actual status arrives
-        viewModel.reminderStatus.filterNotNull().take(1).onEach { status ->
-            configureTakenText(editEventSheetDialog, status)
-            if (status != ReminderEvent.ReminderStatus.RAISED) {
-                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }
-                    .launchIn(lifecycleScope)
-                setupTimePicker(editEventTakenTimestamp, { viewModel.processedMinutes }, { viewModel.processedMinutes = it })
-
-                viewModel.processedDateString.onEach { if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
-                setupDatePicker(editEventTakenDate, { viewModel.processedDate }, { viewModel.processedDate = it })
-            } else {
-                editEventTakenTimestamp.visibility = View.GONE
-                editEventTakenDate.visibility = View.GONE
-            }
-            setupToggleGroup(status)
-        }.launchIn(lifecycleScope)
-
-        editEventToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) {
-                viewModel.status = if (checkedId == R.id.takenToggleButton)
-                    ReminderEvent.ReminderStatus.TAKEN
-                else
-                    ReminderEvent.ReminderStatus.SKIPPED
-            }
-        }
+        setupTextFieldBindings()
+        setupRemindedTimeDateFields()
+        setupStatusDependentUI(editEventSheetDialog)
+        setupToggleGroupListener()
 
         editEventSheetDialog.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar)?.setNavigationOnClickListener {
             editEventSheetDialog.dismiss()
@@ -137,10 +95,56 @@ class EditEventSheetDialogFragment : DialogFragment() {
         return editEventSheetDialog
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        requireActivity().lifecycleScope.launch {
-            viewModel.updateEvent()
+    private fun setupTextFieldBindings() {
+        viewModel.medicineName.onEach { if (editEventName.text.toString() != it) editEventName.setText(it) }.launchIn(lifecycleScope)
+        editEventName.doAfterTextChanged { viewModel.setMedicineName(it?.toString() ?: "") }
+
+        viewModel.amount.onEach { if (editEventAmount.text.toString() != it) editEventAmount.setText(it) }.launchIn(lifecycleScope)
+        editEventAmount.doAfterTextChanged { viewModel.setAmount(it?.toString() ?: "") }
+
+        viewModel.notes.onEach { if (editEventNotes.text.toString() != it) editEventNotes.setText(it) }.launchIn(lifecycleScope)
+        editEventNotes.doAfterTextChanged { viewModel.setNotes(it?.toString() ?: "") }
+    }
+
+    private fun setupRemindedTimeDateFields() {
+        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }
+            .launchIn(lifecycleScope)
+        setupTimePicker(editEventRemindedTimestamp, { viewModel.remindedMinutes }, { viewModel.remindedMinutes = it })
+
+        viewModel.remindedDateString.onEach { if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
+        setupDatePicker(editEventRemindedDate, { viewModel.remindedDate }, { viewModel.remindedDate = it })
+    }
+
+    private fun setupStatusDependentUI(editEventSheetDialog: AppCompatDialog) {
+        viewModel.reminderStatus.filterNotNull().take(1).onEach { status ->
+            configureTakenText(editEventSheetDialog, status)
+            if (status != ReminderEvent.ReminderStatus.RAISED) {
+                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }
+                    .launchIn(lifecycleScope)
+                setupTimePicker(editEventTakenTimestamp, { viewModel.processedMinutes }, { viewModel.processedMinutes = it })
+                viewModel.processedDateString.onEach { if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
+                setupDatePicker(editEventTakenDate, { viewModel.processedDate }, { viewModel.processedDate = it })
+            } else {
+                editEventTakenTimestamp.visibility = View.GONE
+                editEventTakenDate.visibility = View.GONE
+            }
+            setupToggleGroup(status)
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun setupToggleGroupListener() {
+        editEventToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                viewModel.status = if (checkedId == R.id.takenToggleButton)
+                    ReminderEvent.ReminderStatus.TAKEN
+                else
+                    ReminderEvent.ReminderStatus.SKIPPED
+            }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        viewModel.updateEvent()
         super.onDismiss(dialog)
     }
 

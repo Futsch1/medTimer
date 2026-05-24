@@ -33,7 +33,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
 ) : EntityEditOptionsMenu {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(
             medicine: Medicine,
             fragment: EditMedicineFragment,
@@ -55,32 +55,32 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         MedicinesMenu.setupMenu(menu, R.id.duplicate) {
             fragment.lifecycleScope.launch(dispatcher) {
                 val oldMedicineId = medicine.id
-                val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
+                val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
                 assignTags(oldMedicineId, newMedicineId)
             }
             navController.navigateUp()
         }
         MedicinesMenu.setupMenu(menu, R.id.duplicate_including_reminders) {
-            fragment.lifecycleScope.launch(dispatcher) {
+            fragment.lifecycleScope.launch {
                 duplicateIncludingReminders()
+                navController.navigateUp()
             }
-            navController.navigateUp()
         }
         setupDeleteMenu(menu)
         setupLinksMenu(menu)
     }
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.get(oldMedicineId)!!
+        val oldFullMedicine = medicineRepository[oldMedicineId] ?: return
         for (oldTag in oldFullMedicine.tags) {
             tagRepository.addMedicineTag(newMedicineId, oldTag.id)
         }
     }
 
     private suspend fun duplicateIncludingReminders() {
-        val fullMedicine = medicineRepository.get(medicine.id)!!
+        val fullMedicine = medicineRepository[medicine.id] ?: return
         val oldMedicineId = medicine.id
-        val newMedicineId = medicineRepository.create(medicine.copy(id = 0)).toInt()
+        val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
         for (reminder in fullMedicine.reminders) {
             reminderRepository.create(reminder.copy(id = 0, medicineRelId = newMedicineId))
         }
@@ -94,7 +94,6 @@ class EditMedicineMenuProvider @AssistedInject constructor(
                 com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_medicine,
                 {
                     fragment.lifecycleScope.launch {
-
                         medicineRepository.delete(medicine.id)
                         navController.navigateUp()
                     }
@@ -124,7 +123,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     }
 
     private fun setRemindersActive(active: Boolean) {
-        fragment.lifecycleScope.launch(dispatcher) {
+        fragment.lifecycleScope.launch {
             val reminders = reminderRepository.getAll(medicine.id)
             com.futsch1.medtimer.core.common.helpers.setRemindersActive(reminders, reminderRepository, active)
         }

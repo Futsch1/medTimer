@@ -35,7 +35,7 @@ interface ReminderEventDao {
     suspend fun getLastN(reminderId: Int, limit: Int): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId AND remindedTimestamp = :remindedTimestamp")
-    suspend fun get(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
+    suspend operator fun get(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
 
     @Insert
     suspend fun create(reminderEvent: ReminderEventEntity): Long

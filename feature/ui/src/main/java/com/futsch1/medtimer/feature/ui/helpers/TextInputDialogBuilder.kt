@@ -52,9 +52,7 @@ class TextInputDialogBuilder(
     fun inputType(inputType: Int) = apply { this.inputType = inputType }
 
     fun show() {
-        if (hasBeenShown) {
-            throw IllegalStateException("TextInputDialogBuilder can only be used once")
-        }
+        check(!hasBeenShown) { "TextInputDialogBuilder can only be used once" }
 
         hasBeenShown = true
 

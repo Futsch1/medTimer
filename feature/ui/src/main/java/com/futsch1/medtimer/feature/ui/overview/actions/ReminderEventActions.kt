@@ -33,7 +33,7 @@ class ReminderEventActions @AssistedInject constructor(
 ) : Actions {
 
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(event: PastReminderEvent, fragmentActivity: FragmentActivity): ReminderEventActions
     }
 
@@ -119,7 +119,7 @@ class ReminderEventActions @AssistedInject constructor(
 
     private suspend fun undoStock(reminderEvent: ReminderEvent) {
         val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
-        val reminder = reminderRepository.get(reminderEvent.reminderId) ?: return
+        val reminder = reminderRepository[reminderEvent.reminderId] ?: return
         medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
     }
 

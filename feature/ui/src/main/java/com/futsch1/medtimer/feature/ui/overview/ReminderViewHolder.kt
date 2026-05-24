@@ -182,7 +182,7 @@ class ReminderViewHolder(
             // Set the circular layout angle for the anchor view
             val anchor = view.findViewById<View>(button.anchorId)
             val layoutParams = anchor.layoutParams as ConstraintLayout.LayoutParams
-            val angles = angleLists[visibleButtons.size]!!
+            val angles = angleLists[visibleButtons.size] ?: return false
             layoutParams.circleAngle = angles[anglesIndex++]
             anchor.layoutParams = layoutParams
         }

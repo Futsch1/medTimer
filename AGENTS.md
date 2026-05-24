@@ -83,6 +83,10 @@ long time. CI handles them.
 
 The build must pass `assembleDebug` and `lint` before merging.
 
+### Fix pipeline issues
+
+To fix pipeline issues, use the `gh` command line tool to access GitHub Actions logs.
+
 ## Architecture
 
 - **Database layer**: Room (`MedicineDao`, `MedicineRepository`). Entity classes are suffixed `Entity` (e.g. `ReminderEventEntity`, `MedicineEntity`).

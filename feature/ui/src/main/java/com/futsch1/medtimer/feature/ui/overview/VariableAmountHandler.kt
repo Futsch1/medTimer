@@ -14,7 +14,6 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
 
@@ -27,9 +26,7 @@ class VariableAmountHandler @Inject constructor(
     suspend fun show(activity: AppCompatActivity, intent: Intent) {
         val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
 
-        val reminderNotification = withContext(ioDispatcher) {
-            reminderNotificationFactory.create(reminderNotificationData)
-        } ?: return
+        val reminderNotification = reminderNotificationFactory.create(reminderNotificationData) ?: return
 
         val reminderEvents = mutableListOf<ReminderEvent>()
 
@@ -54,7 +51,7 @@ class VariableAmountHandler @Inject constructor(
                     }
                 }
                 .cancelCallback {
-                    activity.lifecycleScope.launch(ioDispatcher) {
+                    activity.lifecycleScope.launch {
                         touchReminderEvent(reminderNotificationPart.reminderEvent)
                     }
                 }

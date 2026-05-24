@@ -16,7 +16,7 @@ class ReminderViewAdapter @AssistedInject constructor(
     private val reminderViewHolderFactory: ReminderViewHolder.Factory
 ) : IdlingListAdapter<Reminder, ReminderViewHolder>(ReminderDiff()) {
     @AssistedFactory
-    interface Factory {
+    fun interface Factory {
         fun create(fragmentActivity: FragmentActivity): ReminderViewAdapter
     }
 

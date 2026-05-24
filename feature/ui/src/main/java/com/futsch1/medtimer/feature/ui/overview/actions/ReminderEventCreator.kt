@@ -18,18 +18,17 @@ class ReminderEventCreator @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent = withContext(ioDispatcher) {
-        val existingReminderEvent = reminderEventRepository.get(scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond)
+    suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
+        val existingReminderEvent = reminderEventRepository[scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond]
         if (existingReminderEvent != null) {
-            return@withContext existingReminderEvent
+            return existingReminderEvent
         }
 
-        val reminder = reminderRepository.get(scheduledReminder.reminder.id) ?: scheduledReminder.reminder
+        val reminder = reminderRepository[scheduledReminder.reminder.id] ?: scheduledReminder.reminder
         val newReminderEvent = ReminderNotificationProcessor.buildReminderEvent(
             reminderTimeStamp, scheduledReminder.medicine, reminder, reminderEventRepository, timeFormatter
         )
-        return@withContext reminderEventRepository.create(newReminderEvent)
+        return reminderEventRepository.create(newReminderEvent)
     }
 }
