@@ -150,6 +150,7 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
+    implementation(libs.hilt.android)
 
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
@@ -171,7 +172,6 @@ dependencies {
     androidTestUtil(libs.androidx.test.orchestrator)
 
     ksp(libs.androidx.room.compiler)
-
     ksp(libs.hilt.compiler)
     kspTest(libs.hilt.compiler)
 
