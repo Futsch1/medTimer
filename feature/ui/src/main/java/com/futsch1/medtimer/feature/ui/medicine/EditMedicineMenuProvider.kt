@@ -91,7 +91,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
         menu.findItem(R.id.delete_medicine).setOnMenuItemClickListener { _: MenuItem? ->
             DeleteHelper.deleteItem(
                 navController.context,
-                R.string.are_you_sure_delete_medicine,
+                com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_medicine,
                 {
                     fragment.lifecycleScope.launch {
 

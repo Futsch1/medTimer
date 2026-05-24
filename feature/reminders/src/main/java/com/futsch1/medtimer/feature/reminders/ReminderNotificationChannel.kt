@@ -26,7 +26,7 @@ class ReminderNotificationChannel(
     private fun createChannel(): NotificationChannel {
         val notificationChannel =
             NotificationChannel(importance.toString(), context.getString(nameId), importance)
-        notificationChannel.description = context.getString(R.string.notification_title)
+        notificationChannel.description = context.getString(com.futsch1.medtimer.core.ui.R.string.notification_title)
 
         notificationManager.createNotificationChannel(notificationChannel)
         return notificationChannel

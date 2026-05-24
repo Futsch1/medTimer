@@ -10,7 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditIntervalDialog(context: Context, reminder: Reminder, private val intervalUpdatedCallback: (Int) -> Unit) {
     private val dialog = MaterialAlertDialogBuilder(context)
-        .setTitle(R.string.interval)
+        .setTitle(com.futsch1.medtimer.core.ui.R.string.interval)
         .setPositiveButton(android.R.string.ok) { _, _ -> intervalUpdatedCallback(intervalEditor.getMinutes()) }
         .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
         .setView(R.layout.include_edit_interval)

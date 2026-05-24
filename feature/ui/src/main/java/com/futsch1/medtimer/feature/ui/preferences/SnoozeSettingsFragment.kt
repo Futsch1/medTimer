@@ -78,7 +78,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue == true) {
                 if (!geofenceRegistrar.isLocationServiceAvailable()) {
-                    showInfoDialog(R.string.location_snooze_no_play_services)
+                    showInfoDialog(com.futsch1.medtimer.core.ui.R.string.location_snooze_no_play_services)
                     return@OnPreferenceChangeListener false
                 }
                 requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -111,20 +111,20 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     private fun fetchCurrentLocationAndConfirm() {
         var cancelLocation: (() -> Unit)? = null
         val progressDialog: AlertDialog = MaterialAlertDialogBuilder(requireActivity())
-            .setMessage(R.string.determining_location)
+            .setMessage(com.futsch1.medtimer.core.ui.R.string.determining_location)
             .setCancelable(false)
-            .setNegativeButton(R.string.cancel) { _, _ -> cancelLocation?.invoke() }
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> cancelLocation?.invoke() }
             .show()
 
         cancelLocation = locationProvider.getCurrentLocation(
             onSuccess = { location ->
                 if (isAdded) progressDialog.dismiss()
                 if (location != null) showSetHomeLocationDialog(location)
-                else showInfoDialog(R.string.home_location_error)
+                else showInfoDialog(com.futsch1.medtimer.core.ui.R.string.home_location_error)
             },
             onFailure = {
                 if (isAdded) progressDialog.dismiss()
-                showInfoDialog(R.string.home_location_error)
+                showInfoDialog(com.futsch1.medtimer.core.ui.R.string.home_location_error)
             }
         )
     }
@@ -133,8 +133,8 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         val lat = String.format(Locale.US, "%.5f", location.latitude)
         val lon = String.format(Locale.US, "%.5f", location.longitude)
         MaterialAlertDialogBuilder(requireActivity())
-            .setMessage(getString(R.string.set_home_location_confirm, lat, lon))
-            .setPositiveButton(R.string.ok) { _, _ ->
+            .setMessage(getString(com.futsch1.medtimer.core.ui.R.string.set_home_location_confirm, lat, lon))
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
                 preferencesDataSource.saveHomeLocation(HomeLocation(location.latitude, location.longitude))
                 updateLocationPrefsVisibility(true)
                 if (preferencesDataSource.preferences.value.homeLocation != null && !geofenceRegistrar.registerHomeGeofence(
@@ -145,7 +145,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
                     onGeofenceRegistrationFailed()
                 }
             }
-            .setNegativeButton(R.string.cancel, null)
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel, null)
             .show()
     }
 
@@ -155,8 +155,8 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         val hasHomeLocation = preferencesDataSource.preferences.value.homeLocation != null
 
         homeLocPref.isVisible = locationSnoozeEnabled
-        homeLocPref.summary = if (hasHomeLocation) getString(R.string.home_location_set)
-        else getString(R.string.home_location_not_set)
+        homeLocPref.summary = if (hasHomeLocation) getString(com.futsch1.medtimer.core.ui.R.string.home_location_set)
+        else getString(com.futsch1.medtimer.core.ui.R.string.home_location_not_set)
 
         mapPref.isVisible = locationSnoozeEnabled && hasHomeLocation
     }
@@ -165,18 +165,18 @@ class SnoozeSettingsFragment : PreferencesFragment() {
         if (!isAdded) return
         MaterialAlertDialogBuilder(requireActivity())
             .setMessage(messageRes)
-            .setPositiveButton(R.string.ok, null)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok, null)
             .show()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun showBackgroundLocationRationale() {
         MaterialAlertDialogBuilder(requireActivity())
-            .setMessage(R.string.location_snooze_background_permission)
-            .setPositiveButton(R.string.ok) { _, _ ->
+            .setMessage(com.futsch1.medtimer.core.ui.R.string.location_snooze_background_permission)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
                 requestBackgroundLocationLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
-            .setNegativeButton(R.string.cancel) { _, _ ->
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ ->
                 resetLocationSnooze()
             }
             .show()
@@ -195,7 +195,7 @@ class SnoozeSettingsFragment : PreferencesFragment() {
     }
 
     private fun onGeofenceRegistrationFailed() {
-        showInfoDialog(R.string.location_snooze_no_play_services)
+        showInfoDialog(com.futsch1.medtimer.core.ui.R.string.location_snooze_no_play_services)
         resetLocationSnooze()
     }
 

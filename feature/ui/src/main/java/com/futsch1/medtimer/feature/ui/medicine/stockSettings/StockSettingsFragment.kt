@@ -184,7 +184,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {
-                Toast.makeText(context, R.string.no_calendar_app, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.no_calendar_app, Toast.LENGTH_SHORT).show()
             }
         }
     }

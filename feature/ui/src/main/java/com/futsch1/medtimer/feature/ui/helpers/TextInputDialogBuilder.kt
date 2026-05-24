@@ -79,10 +79,10 @@ class TextInputDialogBuilder(
 
         val dialog = MaterialAlertDialogBuilder(context)
             .setView(textInputLayout)
-            .setPositiveButton(com.futsch1.medtimer.feature.ui.R.string.ok) { _: DialogInterface?, _: Int ->
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _: DialogInterface?, _: Int ->
                 editText.text?.let { textSink?.consumeText(it.toString()) }
             }
-            .setNegativeButton(com.futsch1.medtimer.feature.ui.R.string.cancel) { dialog: DialogInterface, _: Int ->
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { dialog: DialogInterface, _: Int ->
                 cancelCallback?.cancel()
                 dialog.dismiss()
             }

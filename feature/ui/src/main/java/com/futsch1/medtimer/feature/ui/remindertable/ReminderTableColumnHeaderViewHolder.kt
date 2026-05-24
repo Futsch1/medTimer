@@ -76,12 +76,12 @@ class ReminderTableColumnHeaderViewHolder(itemView: View, tableView: ITableView)
         when (sortState) {
             SortState.ASCENDING -> {
                 columnHeaderSortButton.setVisibility(View.VISIBLE)
-                columnHeaderSortButton.setImageResource(R.drawable.sort_up)
+                columnHeaderSortButton.setImageResource(com.futsch1.medtimer.core.ui.R.drawable.sort_up)
             }
 
             SortState.DESCENDING -> {
                 columnHeaderSortButton.setVisibility(View.VISIBLE)
-                columnHeaderSortButton.setImageResource(R.drawable.sort_down)
+                columnHeaderSortButton.setImageResource(com.futsch1.medtimer.core.ui.R.drawable.sort_down)
             }
 
             else -> {

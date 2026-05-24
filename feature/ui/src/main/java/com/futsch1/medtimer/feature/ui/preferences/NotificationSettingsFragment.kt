@@ -131,12 +131,12 @@ class NotificationSettingsFragment : PreferencesFragment() {
     private fun showExactReminderDialog() {
         if (!alarmManager.canScheduleExactAlarms()) {
             val builder = MaterialAlertDialogBuilder(requireActivity())
-            builder.setMessage(R.string.enable_alarm_dialog)
-            builder.setPositiveButton(R.string.ok) { _, _ ->
+            builder.setMessage(com.futsch1.medtimer.core.ui.R.string.enable_alarm_dialog)
+            builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
                 safeStartActivity(context, intent)
             }
-            builder.setNegativeButton(R.string.cancel) { _, _ ->
+            builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ ->
                 try {
                     resetBooleanPreferenceAndReload(EXACT_REMINDERS)
                 } catch (_: IllegalStateException) {
@@ -165,13 +165,13 @@ class NotificationSettingsFragment : PreferencesFragment() {
     private fun showDndPermissions() {
         if (!notificationManager.isNotificationPolicyAccessGranted) {
             val builder = MaterialAlertDialogBuilder(requireActivity())
-            builder.setMessage(R.string.enable_dnd_dialog)
-            builder.setPositiveButton(R.string.ok) { _, _ ->
+            builder.setMessage(com.futsch1.medtimer.core.ui.R.string.enable_dnd_dialog)
+            builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
                 startActivity(intent)
             }
 
-            builder.setNegativeButton(R.string.cancel) { _, _ -> cancelOverrideDnd() }
+            builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> cancelOverrideDnd() }
             builder.show()
         }
     }

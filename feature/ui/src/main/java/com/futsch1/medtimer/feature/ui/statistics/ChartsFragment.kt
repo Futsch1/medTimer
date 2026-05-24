@@ -177,9 +177,9 @@ class ChartsFragment : Fragment() {
         days: Int
     ) {
         val title = if (days != 0) {
-            requireContext().resources.getQuantityString(R.plurals.last_n_days, days, days)
+            requireContext().resources.getQuantityString(com.futsch1.medtimer.core.ui.R.plurals.last_n_days, days, days)
         } else {
-            requireContext().getString(R.string.total)
+            requireContext().getString(com.futsch1.medtimer.core.ui.R.string.total)
         }
         pieChart.setTitle(title)
 

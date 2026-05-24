@@ -38,9 +38,9 @@ class CSVMedicineExport @AssistedInject constructor(
             withContext(ioDispatcher) {
                 FileWriter(file).use { csvFile ->
                     val headerTexts = listOf(
-                        context.getString(R.string.tab_medicine),
-                        context.getString(R.string.dosage),
-                        context.getString(R.string.time)
+                        context.getString(com.futsch1.medtimer.core.ui.R.string.tab_medicine),
+                        context.getString(com.futsch1.medtimer.core.ui.R.string.dosage),
+                        context.getString(com.futsch1.medtimer.core.ui.R.string.time)
                     )
                     csvFile.write(java.lang.String.join(";", headerTexts) + "\n")
                     for (medicine in medicines) {
@@ -62,7 +62,7 @@ class CSVMedicineExport @AssistedInject constructor(
             val line = String.format(
                 "%s;%s;%s\n",
                 medicine.name,
-                if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount,
+                if (reminder.variableAmount) context.getString(com.futsch1.medtimer.core.ui.R.string.variable_amount) else reminder.amount,
                 reminderSummaryFormatter.formatExportReminderSummary(reminder)
             )
             withContext(ioDispatcher) {
@@ -76,7 +76,7 @@ class CSVMedicineExport @AssistedInject constructor(
                         "%s;%s;%s\n",
                         medicine.name,
                         "",
-                        context.getString(R.string.no_reminders)
+                        context.getString(com.futsch1.medtimer.core.ui.R.string.no_reminders)
                     )
                 )
             }

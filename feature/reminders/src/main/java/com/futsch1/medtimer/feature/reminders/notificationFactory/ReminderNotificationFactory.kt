@@ -44,7 +44,7 @@ abstract class ReminderNotificationFactory(
         val contentIntent: PendingIntent = getStartAppIntent()
 
         builder.setSmallIcon(com.futsch1.medtimer.core.ui.R.drawable.capsule)
-        builder.setContentTitle(context.getString(R.string.notification_title))
+        builder.setContentTitle(context.getString(com.futsch1.medtimer.core.ui.R.string.notification_title))
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         builder.setCategory(android.app.Notification.CATEGORY_REMINDER)
         builder.setContentIntent(contentIntent)
@@ -118,7 +118,7 @@ abstract class ReminderNotificationFactory(
 
     private fun addSnoozeAction() {
         builder.addAction(
-            R.drawable.hourglass_split, context.getString(com.futsch1.medtimer.core.ui.R.string.snooze), intents.pendingSnooze
+            com.futsch1.medtimer.core.ui.R.drawable.hourglass_split, context.getString(com.futsch1.medtimer.core.ui.R.string.snooze), intents.pendingSnooze
         )
     }
 

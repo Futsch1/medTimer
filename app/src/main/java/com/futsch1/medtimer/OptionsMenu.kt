@@ -156,7 +156,7 @@ class OptionsMenu @AssistedInject constructor(
 
     private fun setupVersion() {
         val item = menu.findItem(R.id.version)
-        item.title = context.getString(com.futsch1.medtimer.feature.ui.R.string.version, BuildConfig.VERSION_NAME)
+        item.title = context.getString(com.futsch1.medtimer.core.ui.R.string.version, BuildConfig.VERSION_NAME)
     }
 
     private fun setupAppURL() {
@@ -172,16 +172,16 @@ class OptionsMenu @AssistedInject constructor(
         val item = menu.findItem(R.id.clear_events)
         item.setOnMenuItemClickListener { _ ->
             val builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(com.futsch1.medtimer.feature.ui.R.string.confirm)
-            builder.setMessage(com.futsch1.medtimer.feature.ui.R.string.are_you_sure_delete_events)
+            builder.setTitle(com.futsch1.medtimer.core.ui.R.string.confirm)
+            builder.setMessage(com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_events)
             builder.setCancelable(false)
-            builder.setPositiveButton(com.futsch1.medtimer.feature.ui.R.string.yes) { _, _ ->
+            builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
                     reminderEventRepository.deleteAll()
                     requestScheduleNextNotification(context)
                 }
             }
-            builder.setNegativeButton(com.futsch1.medtimer.feature.ui.R.string.cancel) { _, _ -> }
+            builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }
             builder.show()
             true
         }
@@ -268,7 +268,7 @@ class OptionsMenu @AssistedInject constructor(
     private suspend fun eventExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, com.futsch1.medtimer.feature.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
         val reminderEvents: List<ReminderEvent> =
@@ -283,7 +283,7 @@ class OptionsMenu @AssistedInject constructor(
     private suspend fun medicineExport(isCSV: Boolean) {
         if (medicineViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, com.futsch1.medtimer.feature.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
             }
         }
         val medicines: List<Medicine> = medicineViewModel.filterMedicines(medicineRepository.getAll())
@@ -310,9 +310,9 @@ class OptionsMenu @AssistedInject constructor(
         fragment.viewLifecycleOwner.lifecycleScope.launch {
             medicineViewModel.validTagIds.collect { validTagIds ->
                 if (validTagIds.isNullOrEmpty()) {
-                    item.setIcon(com.futsch1.medtimer.feature.ui.R.drawable.tag)
+                    item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag)
                 } else {
-                    item.setIcon(com.futsch1.medtimer.feature.ui.R.drawable.tag_fill)
+                    item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag_fill)
                 }
             }
         }
@@ -324,7 +324,7 @@ class OptionsMenu @AssistedInject constructor(
             export.export(csvFile)
             FileHelper.shareFile(context, csvFile)
         } catch (_: ExporterException) {
-            Toast.makeText(context, com.futsch1.medtimer.feature.ui.R.string.export_failed, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.export_failed, Toast.LENGTH_LONG).show()
         }
     }
 

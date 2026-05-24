@@ -64,7 +64,7 @@ class NewReminderStockDialog @AssistedInject constructor(
 
     private fun setupEditExpirationDaysBefore() {
         val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
-        textInputLayout.suffixText = activity.getString(R.string.days_string)
+        textInputLayout.suffixText = activity.getString(com.futsch1.medtimer.core.ui.R.string.days_string)
     }
 
     private fun setupEditStockThreshold() {
@@ -147,12 +147,12 @@ class NewReminderStockDialog @AssistedInject constructor(
                 }
 
                 if (!canCreate) {
-                    Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, com.futsch1.medtimer.core.ui.R.string.invalid_input, Toast.LENGTH_SHORT).show()
                 } else {
                     reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,
-                        R.string.successfully_created_reminder,
+                        com.futsch1.medtimer.core.ui.R.string.successfully_created_reminder,
                         Toast.LENGTH_LONG
                     ).show()
                     dialog.dismiss()

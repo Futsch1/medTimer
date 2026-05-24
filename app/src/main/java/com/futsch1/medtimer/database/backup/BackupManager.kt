@@ -79,11 +79,11 @@ class BackupManager @AssistedInject constructor(
             item = menu.findItem(R.id.restore_backup)
             item.setOnMenuItemClickListener { _ ->
                 MaterialAlertDialogBuilder(context)
-                    .setTitle(com.futsch1.medtimer.feature.ui.R.string.restore)
-                    .setMessage(com.futsch1.medtimer.feature.ui.R.string.restore_start)
+                    .setTitle(com.futsch1.medtimer.core.ui.R.string.restore)
+                    .setMessage(com.futsch1.medtimer.core.ui.R.string.restore_start)
                     .setCancelable(true)
-                    .setPositiveButton(com.futsch1.medtimer.feature.ui.R.string.ok) { _, _ -> openBackup() }
-                    .setNegativeButton(com.futsch1.medtimer.feature.ui.R.string.cancel) { _, _ -> }.show()
+                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> openBackup() }
+                    .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }.show()
                 true
             }
 
@@ -97,13 +97,13 @@ class BackupManager @AssistedInject constructor(
 
     private fun selectBackupType() {
         val alertDialogBuilder = MaterialAlertDialogBuilder(context)
-        alertDialogBuilder.setTitle(com.futsch1.medtimer.feature.ui.R.string.backup)
+        alertDialogBuilder.setTitle(com.futsch1.medtimer.core.ui.R.string.backup)
         val checkedItems = booleanArrayOf(true, true)
         alertDialogBuilder.setMultiChoiceItems(
-            com.futsch1.medtimer.feature.ui.R.array.backup_types,
+            com.futsch1.medtimer.core.ui.R.array.backup_types,
             checkedItems
         ) { _: DialogInterface?, which: Int, isChecked: Boolean -> checkedItems[which] = isChecked }
-        alertDialogBuilder.setPositiveButton(com.futsch1.medtimer.feature.ui.R.string.ok) { _, _ ->
+        alertDialogBuilder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
             lifecycleOwner.lifecycleScope.launch(ioDispatcher) {
                 performBackup(checkedItems)
             }
@@ -113,11 +113,11 @@ class BackupManager @AssistedInject constructor(
 
     private fun selectAutomaticBackupInterval() {
         val currentInterval = preferencesDataSource.preferences.value.automaticBackupInterval
-        val options = context.resources.getStringArray(com.futsch1.medtimer.feature.ui.R.array.automatic_backup_options)
+        val options = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.automatic_backup_options)
         val checkedItem = currentInterval.ordinal
 
         MaterialAlertDialogBuilder(context)
-            .setTitle(com.futsch1.medtimer.feature.ui.R.string.automatic_backup)
+            .setTitle(com.futsch1.medtimer.core.ui.R.string.automatic_backup)
             .setSingleChoiceItems(options, checkedItem) { dialog, which ->
                 val selectedValue = BackupInterval.entries[which]
                 preferencesDataSource.setAutomaticBackupInterval(selectedValue)
@@ -127,7 +127,7 @@ class BackupManager @AssistedInject constructor(
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton(com.futsch1.medtimer.feature.ui.R.string.cancel, null)
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel, null)
             .show()
     }
 
@@ -195,7 +195,7 @@ class BackupManager @AssistedInject constructor(
             FileHelper.shareFile(context, file)
         } else {
             lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, com.futsch1.medtimer.feature.ui.R.string.backup_failed, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.backup_failed, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -228,8 +228,8 @@ class BackupManager @AssistedInject constructor(
                 }
 
                 MaterialAlertDialogBuilder(context)
-                    .setMessage(if (restoreSuccessful) com.futsch1.medtimer.feature.ui.R.string.restore_successful else com.futsch1.medtimer.feature.ui.R.string.restore_failed)
-                    .setPositiveButton(com.futsch1.medtimer.feature.ui.R.string.ok) { _, _ -> }
+                    .setMessage(if (restoreSuccessful) com.futsch1.medtimer.core.ui.R.string.restore_successful else com.futsch1.medtimer.core.ui.R.string.restore_failed)
+                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
                     .show()
             }
         }
@@ -313,9 +313,9 @@ class BackupManager @AssistedInject constructor(
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
             if (success) {
                 persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
-                Toast.makeText(context, context.getString(com.futsch1.medtimer.feature.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(context, com.futsch1.medtimer.feature.ui.R.string.backup_failed, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.backup_failed, Toast.LENGTH_LONG).show()
             }
         }
     }

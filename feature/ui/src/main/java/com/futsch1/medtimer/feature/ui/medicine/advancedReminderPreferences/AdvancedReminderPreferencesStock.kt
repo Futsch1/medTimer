@@ -77,7 +77,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
                 findPreference<Preference>("medicine_expiration_date")?.summary = if (medicine.expirationDate != LocalDate.EPOCH) {
                     timeFormatter.localDateToString(medicine.expirationDate)
                 } else {
-                    context?.getString(R.string.never)
+                    context?.getString(com.futsch1.medtimer.core.ui.R.string.never)
                 }
                 this@AdvancedReminderPreferencesStockFragment.medicine = medicine
             }

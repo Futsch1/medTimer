@@ -80,8 +80,8 @@ class TagsFragment @AssistedInject constructor(
         addTagButton.visibility = View.VISIBLE
         addTagButton.setOnClickListener {
             TextInputDialogBuilder(requireContext())
-                .title(R.string.add_tag)
-                .hint(R.string.name)
+                .title(com.futsch1.medtimer.core.ui.R.string.add_tag)
+                .hint(com.futsch1.medtimer.core.ui.R.string.name)
                 .textSink { tagName: String? ->
                     if (!tagName.isNullOrBlank()) {
                         tagDataProvider.addTag(tagName)

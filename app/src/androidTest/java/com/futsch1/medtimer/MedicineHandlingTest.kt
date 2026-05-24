@@ -46,8 +46,8 @@ class MedicineHandlingTest : BaseTestHelper() {
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.sort)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.by_name)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.sort)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.by_name)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_3)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_1)
         assertDisplayedAtPosition(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2, com.futsch1.medtimer.feature.ui.R.id.medicineName, TEST_MED_2 + '_')

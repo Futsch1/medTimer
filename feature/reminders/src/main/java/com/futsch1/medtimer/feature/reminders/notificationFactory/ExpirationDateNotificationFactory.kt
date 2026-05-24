@@ -37,7 +37,7 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
 
         val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)
         val notificationMessage = context.resources.getString(
-            R.string.expiration_date_notification,
+            com.futsch1.medtimer.core.ui.R.string.expiration_date_notification,
             medicineNameString,
             timeFormatter.localDateToString(medicine.expirationDate)
         )

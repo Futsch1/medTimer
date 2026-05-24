@@ -16,7 +16,7 @@ fun OverviewState.toString(context: Context): String {
         OverviewState.PENDING -> context.getString(com.futsch1.medtimer.core.ui.R.string.please_wait)
         OverviewState.TAKEN -> context.getString(com.futsch1.medtimer.core.ui.R.string.taken)
         OverviewState.SKIPPED -> context.getString(com.futsch1.medtimer.core.ui.R.string.skipped)
-        OverviewState.RAISED -> context.getString(R.string.reminded)
+        OverviewState.RAISED -> context.getString(com.futsch1.medtimer.core.ui.R.string.reminded)
         OverviewState.LOCATION -> context.getString(com.futsch1.medtimer.core.ui.R.string.snooze_until_home)
     }
 }
@@ -26,7 +26,7 @@ fun OverviewState.getImage(): Int {
         OverviewState.PENDING -> com.futsch1.medtimer.core.ui.R.drawable.alarm
         OverviewState.TAKEN -> com.futsch1.medtimer.core.ui.R.drawable.check2_circle
         OverviewState.SKIPPED -> com.futsch1.medtimer.core.ui.R.drawable.x_circle
-        OverviewState.RAISED -> R.drawable.bell
+        OverviewState.RAISED -> com.futsch1.medtimer.core.ui.R.drawable.bell
         OverviewState.LOCATION -> com.futsch1.medtimer.core.ui.R.drawable.geo_alt_fill
     }
 }

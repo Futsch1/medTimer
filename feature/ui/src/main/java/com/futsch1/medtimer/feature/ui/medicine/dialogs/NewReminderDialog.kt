@@ -193,12 +193,12 @@ class NewReminderDialog @AssistedInject constructor(
                     reminderRepository.create(updatedReminder)
                     Toast.makeText(
                         activity,
-                        R.string.successfully_created_reminder,
+                        com.futsch1.medtimer.core.ui.R.string.successfully_created_reminder,
                         Toast.LENGTH_LONG
                     ).show()
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(activity, R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, com.futsch1.medtimer.core.ui.R.string.invalid_input, Toast.LENGTH_SHORT).show()
                 }
             }
         }

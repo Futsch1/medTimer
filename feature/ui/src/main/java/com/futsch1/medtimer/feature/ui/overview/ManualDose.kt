@@ -61,7 +61,7 @@ class ManualDose @AssistedInject constructor(
                 .setAdapter(adapter) { _: DialogInterface?, which: Int ->
                     startLogProcess(entries[which])
                 }
-                .setTitle(R.string.log_additional_dose)
+                .setTitle(com.futsch1.medtimer.core.ui.R.string.log_additional_dose)
                 .show()
         }
     }
@@ -69,7 +69,7 @@ class ManualDose @AssistedInject constructor(
     private fun getManualDoseEntries(medicines: List<Medicine>?): List<ManualDoseEntry> {
         val entries: MutableList<ManualDoseEntry> = ArrayList()
 
-        entries.add(ManualDoseEntry(context.getString(R.string.custom)))
+        entries.add(ManualDoseEntry(context.getString(com.futsch1.medtimer.core.ui.R.string.custom)))
         addCustomDoses(entries)
         if (medicines != null) {
             for (medicine in medicines) {
@@ -104,8 +104,8 @@ class ManualDose @AssistedInject constructor(
             iconId = entry.iconId,
             tags = entry.tags
         )
-        if (reminderEvent.medicineName == context.getString(R.string.custom)) {
-            TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
+        if (reminderEvent.medicineName == context.getString(com.futsch1.medtimer.core.ui.R.string.custom)) {
+            TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
                 .textSink { name: String ->
                     entry.baseName = name
                     getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)
@@ -131,7 +131,7 @@ class ManualDose @AssistedInject constructor(
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
-        val dialogBuilder = TextInputDialogBuilder(context).title(R.string.log_additional_dose).hint(R.string.dosage)
+        val dialogBuilder = TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.dosage)
             .textSink { amount: String? ->
                 if (entry.medicineId == -1) {
                     lastCustomDose = Pair(entry.baseName, amount!!)

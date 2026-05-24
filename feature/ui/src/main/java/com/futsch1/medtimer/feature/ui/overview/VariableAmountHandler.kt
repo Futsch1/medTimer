@@ -41,7 +41,7 @@ class VariableAmountHandler @Inject constructor(
 
             TextInputDialogBuilder(activity)
                 .title(reminderNotificationPart.medicine.name)
-                .hint(R.string.dosage)
+                .hint(com.futsch1.medtimer.core.ui.R.string.dosage)
                 .initialText(reminderNotificationPart.reminder.amount)
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {

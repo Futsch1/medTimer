@@ -77,7 +77,7 @@ class TagTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.duplicate)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.duplicate)
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertChecked(NEW_TAG)
@@ -145,7 +145,7 @@ class TagTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.deactivate_all)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
         assertContains(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         // Now, check that Else is not deactivated
@@ -162,7 +162,7 @@ class TagTest : BaseTestHelper() {
 
         // And activate Test again
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.activate_all)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.activate_all)
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
 

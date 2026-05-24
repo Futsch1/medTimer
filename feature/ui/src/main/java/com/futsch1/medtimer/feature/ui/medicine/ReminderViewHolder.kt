@@ -96,7 +96,7 @@ class ReminderViewHolder @AssistedInject constructor(
 
     private fun setupLongPress() {
         itemView.setOnCreateContextMenuListener { menu, _, _ ->
-            menu.add(R.string.delete).setOnMenuItemClickListener {
+            menu.add(com.futsch1.medtimer.core.ui.R.string.delete).setOnMenuItemClickListener {
                 linkedReminderHandlingFactory.create(reminder, fragmentActivity.lifecycleScope).deleteReminder(
                     fragmentActivity,
                     { }, { }
@@ -108,11 +108,11 @@ class ReminderViewHolder @AssistedInject constructor(
 
     private fun setupTimeEditor() {
         if (reminder.usesTimeInMinutes) {
-            @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay
+            @StringRes val textId = if (reminder.reminderType != ReminderType.LINKED) com.futsch1.medtimer.core.ui.R.string.time else com.futsch1.medtimer.core.ui.R.string.delay
             editTimeLayout.setHint(textId)
             timeEditor = timeEditorFactory.create(fragmentActivity, editTime, reminder.time.minutes, { _ ->
 
-            }, if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null)
+            }, if (reminder.reminderType == ReminderType.LINKED) com.futsch1.medtimer.core.ui.R.string.linked_reminder_delay else null)
         } else {
             editTimeLayout.visibility = View.GONE
         }
@@ -140,7 +140,7 @@ class ReminderViewHolder @AssistedInject constructor(
     private fun setupTypeIcon() {
         val builder = MaterialAlertDialogBuilder(itemView.context)
             .setTitle(reminder.reminderType.getTitle())
-            .setMessage(reminder.reminderType.getHelp()).setIcon(reminder.reminderType.getIcon()).setPositiveButton(R.string.ok, null)
+            .setMessage(reminder.reminderType.getHelp()).setIcon(reminder.reminderType.getIcon()).setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok, null)
         reminderTypeIcon.setImageResource(reminder.reminderType.getIcon())
         reminderTypeIcon.setOnClickListener { _: View? -> builder.create().show() }
     }

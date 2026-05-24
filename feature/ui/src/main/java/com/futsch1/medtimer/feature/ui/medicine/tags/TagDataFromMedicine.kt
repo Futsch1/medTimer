@@ -40,7 +40,7 @@ class TagDataFromMedicine @AssistedInject constructor(
             }
         }
     }, { it: TagWithState ->
-        DeleteHelper.deleteItem(fragment.requireContext(), R.string.are_you_sure_delete_tag, {
+        DeleteHelper.deleteItem(fragment.requireContext(), com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_tag, {
             fragment.lifecycleScope.launch {
                 tagRepository.delete(it.tag)
             }

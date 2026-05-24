@@ -36,7 +36,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
 
         val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)
         val notificationMessage = context.getString(
-            R.string.out_of_stock_notification,
+            com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification,
             medicineNameString,
             formatAmount(medicine.amount, medicine.unit)
         )
@@ -52,7 +52,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
             .addAction(
                 com.futsch1.medtimer.core.ui.R.drawable.cart2,
-                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
+                context.getString(com.futsch1.medtimer.core.ui.R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
                 intentBuilder.pendingRefill
             )
     }

@@ -53,17 +53,17 @@ class IntervalEditor(
 
     private fun setSuffix(unit: IntervalUnit) {
         timeEditLayout.suffixText = when (unit) {
-            IntervalUnit.MINUTES -> timeEditLayout.context.getString(R.string.minutes_string)
-            IntervalUnit.HOURS -> timeEditLayout.context.getString(R.string.hours_string)
-            IntervalUnit.DAYS -> timeEditLayout.context.getString(R.string.days_string)
-            IntervalUnit.WEEKS -> timeEditLayout.context.getString(R.string.weeks_string)
+            IntervalUnit.MINUTES -> timeEditLayout.context.getString(com.futsch1.medtimer.core.ui.R.string.minutes_string)
+            IntervalUnit.HOURS -> timeEditLayout.context.getString(com.futsch1.medtimer.core.ui.R.string.hours_string)
+            IntervalUnit.DAYS -> timeEditLayout.context.getString(com.futsch1.medtimer.core.ui.R.string.days_string)
+            IntervalUnit.WEEKS -> timeEditLayout.context.getString(com.futsch1.medtimer.core.ui.R.string.weeks_string)
         }
     }
 
     private fun validate() {
         val minutes = getMinutesRaw()
         if (minutes > maxMinutes) {
-            timeEdit.error = timeEdit.context.getString(R.string.invalid_input)
+            timeEdit.error = timeEdit.context.getString(com.futsch1.medtimer.core.ui.R.string.invalid_input)
         } else {
             timeEdit.error = null
         }

@@ -7,10 +7,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 object DeleteHelper {
     fun deleteItem(context: Context, messageStringId: Int, yesClicked: () -> Unit, noClicked: () -> Unit) {
         val builder = MaterialAlertDialogBuilder(context)
-        builder.setTitle(R.string.confirm)
+        builder.setTitle(com.futsch1.medtimer.core.ui.R.string.confirm)
         builder.setMessage(messageStringId)
-        builder.setPositiveButton(R.string.yes) { _, _ -> yesClicked() }
-        builder.setNegativeButton(R.string.cancel) { _, _ -> noClicked() }
+        builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.yes) { _, _ -> yesClicked() }
+        builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> noClicked() }
         builder.setOnCancelListener { _ -> noClicked() }
         builder.show()
     }

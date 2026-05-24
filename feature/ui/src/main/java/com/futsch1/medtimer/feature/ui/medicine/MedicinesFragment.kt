@@ -136,7 +136,7 @@ class MedicinesFragment : Fragment() {
     private fun deleteItem(context: Context, itemId: Long, adapterPosition: Int) {
         DeleteHelper.deleteItem(
             context,
-            R.string.are_you_sure_delete_medicine,
+            com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_medicine,
             { lifecycleScope.launch { medicineRepository.delete(itemId.toInt()) } },
             { adapter.notifyItemChanged(adapterPosition) })
     }
@@ -166,8 +166,8 @@ class MedicinesFragment : Fragment() {
     private fun getAlertBuilder(textInputLayout: TextInputLayout?, editText: TextInputEditText): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(requireContext())
             .setView(textInputLayout)
-            .setTitle(R.string.add_medicine)
-            .setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
+            .setTitle(com.futsch1.medtimer.core.ui.R.string.add_medicine)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _: DialogInterface?, _: Int ->
                 val text = editText.getText() ?: return@setPositiveButton
 
                 lifecycleScope.launch(dispatcher) {
@@ -177,7 +177,7 @@ class MedicinesFragment : Fragment() {
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }
             }
-            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { dialog, _ -> dialog.dismiss() }
     }
 
     private fun navigateToMedicineId(medicineId: Int) {

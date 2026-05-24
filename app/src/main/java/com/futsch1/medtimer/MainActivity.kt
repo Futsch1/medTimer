@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         // Select theme
         if (preferencesDataSource.preferences.value.theme == ThemeSetting.ALTERNATIVE) {
-            setTheme(R.style.Theme_MedTimer2)
+            setTheme(com.futsch1.medtimer.core.ui.R.style.Theme_MedTimer2)
         }
 
         // Screen capture
@@ -253,8 +253,8 @@ class MainActivity : AppCompatActivity() {
                 val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
                 if (reminderNotificationData.valid) {
                     TextInputDialogBuilder(this)
-                        .title(com.futsch1.medtimer.feature.ui.R.string.snooze_duration)
-                        .hint(com.futsch1.medtimer.feature.ui.R.string.minutes_string)
+                        .title(com.futsch1.medtimer.core.ui.R.string.snooze_duration)
+                        .hint(com.futsch1.medtimer.core.ui.R.string.minutes_string)
                         .initialText("")
                         .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
                         .textSink { snoozeTime: String? ->

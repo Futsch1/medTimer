@@ -124,14 +124,14 @@ class ReminderDataStore @AssistedInject constructor(
     override fun getStringSet(key: String?, defValues: Set<String?>?): Set<String?>? {
         return when (key) {
             "remind_on_weekdays" -> {
-                val dayStrings = context.resources.getStringArray(R.array.one_to_seven)
+                val dayStrings = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.one_to_seven)
                 DayOfWeek.entries.mapIndexedNotNull { i, dow ->
                     if (dow in modelData.days || modelData.days.isEmpty()) dayStrings[i] else null
                 }.toSet()
             }
 
             "remind_on_days" -> {
-                val dayStrings = context.resources.getStringArray(R.array.days_of_month)
+                val dayStrings = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.days_of_month)
                 dayStrings.indices
                     .filter { i -> (i + 1) in modelData.activeDaysOfMonth }
                     .map { i -> dayStrings[i] }
@@ -145,7 +145,7 @@ class ReminderDataStore @AssistedInject constructor(
     override fun putStringSet(key: String?, values: Set<String?>?) {
         when (key) {
             "remind_on_weekdays" -> {
-                val dayStrings = context.resources.getStringArray(R.array.one_to_seven)
+                val dayStrings = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.one_to_seven)
                 val allDays = values?.isEmpty() == true
                 modelData = modelData.copy(
                     days = DayOfWeek.entries.filterIndexed { i, _ ->
@@ -155,7 +155,7 @@ class ReminderDataStore @AssistedInject constructor(
             }
 
             "remind_on_days" -> {
-                val dayStrings = context.resources.getStringArray(R.array.days_of_month)
+                val dayStrings = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.days_of_month)
                 modelData = modelData.copy(
                     activeDaysOfMonth = if (values?.isEmpty() == true) {
                         (1..31).toList()

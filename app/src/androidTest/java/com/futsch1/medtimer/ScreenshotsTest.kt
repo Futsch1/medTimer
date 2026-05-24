@@ -41,7 +41,7 @@ class ScreenshotsTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.generate_test_data)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer)
         internalAssert(device.findObject(By.textContains("Some note")) != null)

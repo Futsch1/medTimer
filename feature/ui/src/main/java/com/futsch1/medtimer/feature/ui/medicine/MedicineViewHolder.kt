@@ -72,7 +72,7 @@ class MedicineViewHolder @AssistedInject constructor(
         val activeReminders: List<Reminder> = getActiveReminders(medicine)
         if (activeReminders.isEmpty()) {
             if (medicine.reminders.isEmpty()) {
-                remindersSummaryView.setText(R.string.no_reminders)
+                remindersSummaryView.setText(com.futsch1.medtimer.core.ui.R.string.no_reminders)
             } else {
                 remindersSummaryView.setText(com.futsch1.medtimer.core.ui.R.string.inactive)
             }
@@ -104,7 +104,7 @@ class MedicineViewHolder @AssistedInject constructor(
             tags.addView(createTagChip(tag.name, isChecked = true))
         }
         if (overflowCount > 0) {
-            tags.addView(createTagChip(itemView.context.getString(R.string.more_tags, overflowCount), isChecked = false))
+            tags.addView(createTagChip(itemView.context.getString(com.futsch1.medtimer.core.ui.R.string.more_tags, overflowCount), isChecked = false))
         }
     }
 

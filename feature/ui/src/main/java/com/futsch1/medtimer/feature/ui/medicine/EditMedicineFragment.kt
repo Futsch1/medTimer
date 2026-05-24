@@ -258,7 +258,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             ColorPickerDialog(requireContext(), requireActivity(), color) { newColor ->
                 color = newColor
                 ViewColorHelper.setButtonBackground(colorButton, color)
-                Toast.makeText(requireContext(), R.string.change_color_toast, Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), com.futsch1.medtimer.core.ui.R.string.change_color_toast, Toast.LENGTH_LONG).show()
             }
         }
         colorButton.visibility = if (useColor) View.VISIBLE else View.GONE
@@ -266,7 +266,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun setupNotificationImportance(medicine: Medicine) {
         val notificationImportance = fragmentView.findViewById<Spinner>(R.id.notificationImportance)
-        val importanceTexts = this.resources.getStringArray(R.array.notification_importance)
+        val importanceTexts = this.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.notification_importance)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
         val index = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
             0
@@ -400,15 +400,15 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
         val context = requireContext()
         val dialog = MaterialAlertDialogBuilder(context)
-            .setMessage(R.string.enable_notification_alarm_dialog)
-            .setPositiveButton(R.string.ok) { _, _ ->
+            .setMessage(com.futsch1.medtimer.core.ui.R.string.enable_notification_alarm_dialog)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
                 val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
                     data = "package:${context.packageName}".toUri()
                 }
                 safeStartActivity(context, intent)
             }
 
-            .setNegativeButton(R.string.cancel) { _, _ ->
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ ->
                 // Intentionally empty
             }.create()
 

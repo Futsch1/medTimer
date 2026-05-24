@@ -192,7 +192,7 @@ class EditEventSheetDialogFragment : DialogFragment() {
             ReminderEvent.ReminderStatus.TAKEN -> takenText.setText(com.futsch1.medtimer.core.ui.R.string.taken)
             ReminderEvent.ReminderStatus.SKIPPED -> takenText.setText(com.futsch1.medtimer.core.ui.R.string.skipped)
             ReminderEvent.ReminderStatus.ACKNOWLEDGED -> {
-                takenText.setText(R.string.acknowledged)
+                takenText.setText(com.futsch1.medtimer.core.ui.R.string.acknowledged)
                 dialog.findViewById<TextInputLayout>(R.id.editEventAmountLayout)?.hint = ""
             }
 

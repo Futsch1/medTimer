@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="notification_title">Áminning um lyfjatöku</string>
-    <string name="out_of_stock_notification">Aðeins%2$s af %1$s eftir!\nHuga að áfyllingu.</string>
-    <string name="recent_events">Nýleg atvik</string>
-    <string name="next_reminders">Næstu áminningar</string>
-</resources>

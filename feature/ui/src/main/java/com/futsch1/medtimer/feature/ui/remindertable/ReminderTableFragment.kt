@@ -51,9 +51,9 @@ class ReminderTableFragment : Fragment() {
         adapter.setColumnHeaderItems(
             listOf(
                 context.getString(com.futsch1.medtimer.core.ui.R.string.taken),
-                context.getString(R.string.name),
-                context.getString(R.string.dosage),
-                context.getString(R.string.reminded)
+                context.getString(com.futsch1.medtimer.core.ui.R.string.name),
+                context.getString(com.futsch1.medtimer.core.ui.R.string.dosage),
+                context.getString(com.futsch1.medtimer.core.ui.R.string.reminded)
             )
         )
         viewLifecycleOwner.lifecycleScope.launch {

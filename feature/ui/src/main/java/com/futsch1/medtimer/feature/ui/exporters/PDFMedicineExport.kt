@@ -38,7 +38,7 @@ class PDFMedicineExport @AssistedInject constructor(
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 
         simplyPdfDocument.text.write(
-            context.getString(com.futsch1.medtimer.core.ui.R.string.app_name) + " - " + context.getString(R.string.medicine_data),
+            context.getString(com.futsch1.medtimer.core.ui.R.string.app_name) + " - " + context.getString(com.futsch1.medtimer.core.ui.R.string.medicine_data),
             biggestBoldProperties
         )
         simplyPdfDocument.text.write(timeFormatter.toDateTimeString(Instant.now()) + "\n", standardTextProperties)
@@ -49,7 +49,7 @@ class PDFMedicineExport @AssistedInject constructor(
             if (activeReminders.isNotEmpty()) {
                 exportMedicine(simplyPdfDocument, activeReminders)
             } else {
-                simplyPdfDocument.text.write(context.getString(R.string.no_reminders), standardTextProperties)
+                simplyPdfDocument.text.write(context.getString(com.futsch1.medtimer.core.ui.R.string.no_reminders), standardTextProperties)
             }
         }
 
@@ -65,7 +65,7 @@ class PDFMedicineExport @AssistedInject constructor(
                 continue
             }
             val firstLine =
-                context.getString(R.string.dosage) + ": " + if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount
+                context.getString(com.futsch1.medtimer.core.ui.R.string.dosage) + ": " + if (reminder.variableAmount) context.getString(com.futsch1.medtimer.core.ui.R.string.variable_amount) else reminder.amount
             val secondLine = reminderSummaryFormatter.formatExportReminderSummary(reminder)
 
             simplyPdfDocument.text.write(firstLine + "\n" + secondLine, bulletTextProperties)

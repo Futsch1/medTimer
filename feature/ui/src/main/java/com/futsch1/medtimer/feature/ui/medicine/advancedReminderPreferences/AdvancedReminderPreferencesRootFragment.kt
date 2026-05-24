@@ -86,21 +86,21 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         menuProvider.reminder = modelData
 
         findPreference<Preference>("reminder_status")?.summary =
-            requireContext().getString(if (isReminderActive(modelData)) R.string.active else com.futsch1.medtimer.core.ui.R.string.inactive)
+            requireContext().getString(if (isReminderActive(modelData)) com.futsch1.medtimer.core.ui.R.string.active else com.futsch1.medtimer.core.ui.R.string.inactive)
         findPreference<Preference>("interval")?.summary = Interval(modelData.time).toTranslatedString(requireContext())
         findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(modelData)
         findPreference<Preference>("remind_on_days")?.summary = getDaysSummary(modelData)
         findPreference<Preference>("interval_start")?.summary =
-            requireContext().getString(if (modelData.intervalStartsFromProcessed) R.string.interval_start_processed else R.string.interval_start_reminded)
+            requireContext().getString(if (modelData.intervalStartsFromProcessed) com.futsch1.medtimer.core.ui.R.string.interval_start_processed else com.futsch1.medtimer.core.ui.R.string.interval_start_reminded)
         findPreference<Preference>("interval_type")?.summary = reminderSummaryFormatter.getIntervalTypeSummary(modelData)
         findPreference<Preference>("cyclic_reminder")?.summary = reminderSummaryFormatter.getCyclicReminderString(modelData)
     }
 
     private fun getDaysSummary(reminder: Reminder): String {
         return if (reminder.activeDaysOfMonth.isEmpty() || reminder.activeDaysOfMonth.size == 31) {
-            requireContext().getString(R.string.every_day_of_month)
+            requireContext().getString(com.futsch1.medtimer.core.ui.R.string.every_day_of_month)
         } else {
-            requireContext().getString(R.string.on_day_of_month, reminder.activeDaysOfMonth.joinToString(", "))
+            requireContext().getString(com.futsch1.medtimer.core.ui.R.string.on_day_of_month, reminder.activeDaysOfMonth.joinToString(", "))
         }
     }
 

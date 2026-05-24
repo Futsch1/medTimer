@@ -28,7 +28,7 @@ class AmountTextWatcher(private val textEditInputEditText: TextInputEditText) : 
     override fun afterTextChanged(s: Editable?) {
         if (MedicineHelper.parseAmount(s.toString()) == null) {
             textEditInputEditText.error =
-                textEditInputEditText.context.getString(R.string.invalid_amount)
+                textEditInputEditText.context.getString(com.futsch1.medtimer.core.ui.R.string.invalid_amount)
         }
     }
 

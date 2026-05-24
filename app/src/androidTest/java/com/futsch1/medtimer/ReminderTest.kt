@@ -49,8 +49,8 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.active)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.active)
 
         Espresso.pressBack()
         Espresso.pressBack()
@@ -62,8 +62,8 @@ class ReminderTest : BaseTestHelper() {
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.active)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.active)
 
         Espresso.pressBack()
         Espresso.pressBack()
@@ -75,9 +75,9 @@ class ReminderTest : BaseTestHelper() {
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.period_start)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.start_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.period_start)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.start_date)
         AndroidTestHelper.setDate(futureTime.getTime())
 
         Espresso.pressBack()
@@ -89,9 +89,9 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.period_end)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.end_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.period_end)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.end_date)
         AndroidTestHelper.setDate(pastTime.getTime())
 
         Espresso.pressBack()
@@ -103,10 +103,10 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.start_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.start_date)
         AndroidTestHelper.setDate(pastTime.getTime())
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.end_date)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.end_date)
         AndroidTestHelper.setDate(futureTime.getTime())
 
         Espresso.pressBack()
@@ -128,11 +128,11 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createIntervalReminder("1", 180)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.interval_start_time)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.interval_start_time)
         AndroidTestHelper.setDate(futureTime.getTime())
         AndroidTestHelper.setTime(futureTime.get(Calendar.HOUR_OF_DAY), futureTime.get(Calendar.MINUTE), false)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.reminder_status)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.active)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.reminder_status)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.active)
 
         Espresso.pressBack()
         Espresso.pressBack()
@@ -140,7 +140,7 @@ class ReminderTest : BaseTestHelper() {
 
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.activate_all)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.activate_all)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         assertContains(DateFormat.getDateInstance(DateFormat.SHORT).format(nowTime.getTime()))
@@ -154,20 +154,20 @@ class ReminderTest : BaseTestHelper() {
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.add_linked_reminder)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.add_linked_reminder)
         clickDialogPositiveButton()
         AndroidTestHelper.setTime(0, 1, true)
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.add_linked_reminder)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.add_linked_reminder)
         clickDialogPositiveButton()
         AndroidTestHelper.setTime(0, 2, true)
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.delete)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.delete)
         clickDialogPositiveButton()
 
         // Check that the reminder list is empty
@@ -187,7 +187,7 @@ class ReminderTest : BaseTestHelper() {
 
         // Linked reminder (amount 2) 30 minutes later
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.add_linked_reminder)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.add_linked_reminder)
         writeTo(android.R.id.input, "2")
         clickDialogPositiveButton()
 
@@ -402,9 +402,9 @@ class ReminderTest : BaseTestHelper() {
             // Set active and pause days
             clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
             clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_reminder)
-            clickOn(com.futsch1.medtimer.feature.ui.R.string.cycle_consecutive_days)
+            clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_consecutive_days)
             AndroidTestHelper.setValue(reminder!!.consecutiveDays.toString())
-            clickOn(com.futsch1.medtimer.feature.ui.R.string.cycle_pause_days)
+            clickOn(com.futsch1.medtimer.core.ui.R.string.cycle_pause_days)
             AndroidTestHelper.setValue(reminder.pauseDays.toString())
 
             // Set cycle start date of the reminder
@@ -442,7 +442,7 @@ class ReminderTest : BaseTestHelper() {
             clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
             clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
             openMenu()
-            clickOn(com.futsch1.medtimer.feature.ui.R.string.delete)
+            clickOn(com.futsch1.medtimer.core.ui.R.string.delete)
             clickDialogPositiveButton()
         }
     }
@@ -451,15 +451,15 @@ class ReminderTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun weekendMode() {
         openMenu()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.tab_settings)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.weekend_mode)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.active)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.days_string)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.friday)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.tab_settings)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.weekend_mode)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.active)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.days_string)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.friday)
         clickDialogPositiveButton()
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.weekend_start_time)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.weekend_start_time)
         AndroidTestHelper.setTime(19, 0, false)
-        clickOn(com.futsch1.medtimer.feature.ui.R.string.weekend_end_time)
+        clickOn(com.futsch1.medtimer.core.ui.R.string.weekend_end_time)
         AndroidTestHelper.setTime(21, 0, false)
 
         AndroidTestHelper.createMedicine("Test")
