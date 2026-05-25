@@ -306,4 +306,5 @@
     <string name="show_home_location_on_map">Visa hemplats på karta</string>
     <string name="set_home_location_confirm">Ange hemplats till\n%1$s, %2$s?</string>
     <string name="home_location_error">Det gick inte att fastställa din aktuella plats</string>
+    <string name="linked_reminder_delay">Fördröjning för följande dos</string>
 </resources>
