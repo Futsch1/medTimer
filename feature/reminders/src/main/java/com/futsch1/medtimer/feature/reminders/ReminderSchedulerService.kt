@@ -6,9 +6,11 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +18,13 @@ import javax.inject.Inject
 class ReminderSchedulerService : LifecycleService() {
     @Inject
     lateinit var medicineRepository: MedicineRepository
+
+    @Inject
+    lateinit var commandBus: ReminderCommandBus
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()
@@ -49,6 +58,8 @@ class ReminderSchedulerService : LifecycleService() {
     }
 
     private fun scheduleRequest() {
-        requestScheduleNextNotification(this)
+        applicationScope.launch {
+            commandBus.scheduleNextNotification()
+        }
     }
 }

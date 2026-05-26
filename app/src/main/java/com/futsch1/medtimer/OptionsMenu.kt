@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
@@ -31,7 +32,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport
@@ -48,6 +49,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -70,7 +72,9 @@ class OptionsMenu @AssistedInject constructor(
     private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
-    val tagsFragmentFactory: TagsFragment.Factory
+    val tagsFragmentFactory: TagsFragment.Factory,
+    private val commandBus: ReminderCommandBus,
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) : EntityEditOptionsMenu {
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent>
@@ -178,7 +182,7 @@ class OptionsMenu @AssistedInject constructor(
             builder.setPositiveButton(com.futsch1.medtimer.core.ui.R.string.yes) { _, _ ->
                 fragment.lifecycleScope.launch {
                     reminderEventRepository.deleteAll()
-                    requestScheduleNextNotification(context)
+                    applicationScope.launch { commandBus.scheduleNextNotification() }
                 }
             }
             builder.setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }
@@ -221,7 +225,7 @@ class OptionsMenu @AssistedInject constructor(
                 fragment.lifecycleScope.launch(ioDispatcher) {
                     databaseManager.deleteAll()
                     generateTestDataFactory.create(menuItem === itemWithEvents).generateTestMedicine()
-                    requestScheduleNextNotification(context)
+                    applicationScope.launch { commandBus.scheduleNextNotification() }
                     idlingResource.setIdle()
                 }
                 true

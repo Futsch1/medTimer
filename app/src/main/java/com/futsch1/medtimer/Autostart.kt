@@ -7,7 +7,7 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.location.GeofenceRegistrar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +31,9 @@ class Autostart : BroadcastReceiver() {
     lateinit var persistentDataDataSource: PersistentDataDataSource
 
     @Inject
+    lateinit var commandBus: ReminderCommandBus
+
+    @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
     override fun onReceive(context: Context, intent: Intent) {
@@ -49,7 +52,7 @@ class Autostart : BroadcastReceiver() {
                 geofenceRegistrar.registerHomeGeofence()
             }
             Log.i(LogTags.AUTOSTART, "Requesting reschedule")
-            ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(context)
+            commandBus.scheduleNextNotification()
         }
     }
 }

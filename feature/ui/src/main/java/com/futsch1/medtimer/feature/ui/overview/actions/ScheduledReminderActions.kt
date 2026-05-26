@@ -2,15 +2,20 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
+import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 
@@ -18,7 +23,9 @@ class ScheduledReminderActions @AssistedInject constructor(
     @Assisted val event: ScheduledReminderEvent,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderEventCreator: ReminderEventCreator,
-    private val timePickerDialogFactory: TimePickerDialogFactory
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val commandBus: ReminderCommandBus,
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) : Actions {
 
     @AssistedFactory
@@ -71,18 +78,27 @@ class ScheduledReminderActions @AssistedInject constructor(
                 fragmentActivity.lifecycleScope.launch {
                     val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, reminderTimeStamp)
                     val reminderNotificationData = ReminderNotificationData.fromReminderEvent(reminderEvent)
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
+                    applicationScope.launch { commandBus.showReminderNotification(reminderNotificationData) }
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private suspend fun processFutureReminder(scheduledReminder: ScheduledReminder, taken: Boolean) {
         val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, scheduledReminder.reminder, reminderEvent, taken)
+        if (taken && scheduledReminder.reminder.variableAmount) {
+            fragmentActivity.startActivity(
+                getVariableAmountActivityIntent(fragmentActivity, ReminderNotificationData.fromReminderEvent(reminderEvent))
+            )
+        } else {
+            val data = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
+            val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
+            applicationScope.launch { commandBus.markReminderEvents(data, status) }
+        }
     }
 
     private suspend fun processStockAcknowledged(scheduledReminder: ScheduledReminder) {
         val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, reminderEvent)
+        val data = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
+        applicationScope.launch { commandBus.markReminderEvents(data, ReminderEvent.ReminderStatus.ACKNOWLEDGED) }
     }
 }
