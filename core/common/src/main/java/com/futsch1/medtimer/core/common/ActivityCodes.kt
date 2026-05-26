@@ -23,7 +23,8 @@ enum class ProcessorCode(val action: String) {
     ShowReminderNotification("com.futsch1.medtimer.SHOW_REMINDER_NOTIFICATION"),
     StockHandling("com.futsch1.medtimer.STOCK_HANDLING"),
     Schedule("com.futsch1.medtimer.SCHEDULE"),
-    LocationSnooze("com.futsch1.medtimer.LOCATION_SNOOZE");
+    LocationSnooze("com.futsch1.medtimer.LOCATION_SNOOZE"),
+    GeofenceEntered("com.futsch1.medtimer.GEOFENCE_TRANSITION");
 
     companion object {
         private val actionMap = entries.associateBy { it.action }

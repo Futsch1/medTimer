@@ -1,65 +1,69 @@
-package com.futsch1.medtimer.feature.reminders.location
+package com.futsch1.medtimer.location
 
-import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.common.ProcessorCode
+import com.futsch1.medtimer.core.location.GeofenceBroadcastReceiver
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class GeofenceBroadcastReceiverTest {
-    private lateinit var locationSnoozeProcessor: LocationSnoozeProcessor
+    private lateinit var application: Application
     private lateinit var receiver: GeofenceBroadcastReceiver
 
     @Before
     fun setUp() {
-        locationSnoozeProcessor = mock()
+        application = ApplicationProvider.getApplicationContext()
         receiver = GeofenceBroadcastReceiver()
-        receiver.locationSnoozeProcessor = locationSnoozeProcessor
-        receiver.applicationScope = CoroutineScope(Dispatchers.Unconfined)
     }
 
     @Test
-    fun enterTransitionTriggersProcessing() {
+    fun enterTransitionForwardsBroadcastToRemindersReceiver() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(false)
         whenever(event.geofenceTransition).thenReturn(Geofence.GEOFENCE_TRANSITION_ENTER)
 
-        receiver.handleGeofencingEvent(event)
+        receiver.handleGeofencingEvent(application, event)
 
-        runBlocking { verify(locationSnoozeProcessor).processLocationSnooze() }
+        val forwarded = shadowOf(application).broadcastIntents.lastOrNull()
+        assertEquals(ProcessorCode.GeofenceEntered.action, forwarded?.action)
+        assertEquals(
+            "com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver",
+            forwarded?.component?.className
+        )
     }
 
     @Test
-    fun exitTransitionDoesNotTriggerProcessing() {
+    fun exitTransitionDoesNotForward() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(false)
         whenever(event.geofenceTransition).thenReturn(Geofence.GEOFENCE_TRANSITION_EXIT)
 
-        receiver.handleGeofencingEvent(event)
+        receiver.handleGeofencingEvent(application, event)
 
-        runBlocking { verify(locationSnoozeProcessor, never()).processLocationSnooze() }
+        assertNull(shadowOf(application).broadcastIntents.lastOrNull())
     }
 
     @Test
-    fun errorEventDoesNotTriggerProcessing() {
+    fun errorEventDoesNotForward() {
         val event = mock<GeofencingEvent>()
         whenever(event.hasError()).thenReturn(true)
         whenever(event.errorCode).thenReturn(1)
 
-        receiver.handleGeofencingEvent(event)
+        receiver.handleGeofencingEvent(application, event)
 
-        runBlocking { verify(locationSnoozeProcessor, never()).processLocationSnooze() }
+        assertNull(shadowOf(application).broadcastIntents.lastOrNull())
     }
 }

@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.location.GeofenceRegistrar
+import com.futsch1.medtimer.core.location.GeofenceRegistrar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

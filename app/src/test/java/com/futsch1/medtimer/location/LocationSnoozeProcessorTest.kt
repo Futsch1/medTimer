@@ -1,7 +1,8 @@
-package com.futsch1.medtimer.feature.reminders.location
+package com.futsch1.medtimer.location
 
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
+import com.futsch1.medtimer.core.location.GeofenceRegistrar
 import com.futsch1.medtimer.feature.reminders.AlarmProcessor
 import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
 import kotlinx.coroutines.runBlocking
