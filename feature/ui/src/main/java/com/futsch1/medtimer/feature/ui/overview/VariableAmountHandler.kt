@@ -7,11 +7,10 @@ import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.NotificationProcessor
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
-import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 class VariableAmountHandler @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
-    private val notificationProcessor: NotificationProcessor,
+    private val commandBus: ReminderCommandBus,
     private val reminderNotificationFactory: ReminderNotificationFactory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
@@ -29,11 +28,8 @@ class VariableAmountHandler @Inject constructor(
 
         val reminderNotification = reminderNotificationFactory.create(reminderNotificationData) ?: return
 
-        val reminderEvents = mutableListOf<ReminderEvent>()
-
         for (reminderNotificationPart in reminderNotification.reminderNotificationParts.reversed()) {
             if (!reminderNotificationPart.reminder.variableAmount) {
-                reminderEvents.add(reminderNotificationPart.reminderEvent)
                 continue
             }
 
@@ -44,9 +40,11 @@ class VariableAmountHandler @Inject constructor(
                 .textSink { amountLocal: String? ->
                     amountLocal?.let {
                         activity.lifecycleScope.launch(ioDispatcher) {
-                            notificationProcessor.setReminderEventStatus(
-                                ReminderEvent.ReminderStatus.TAKEN,
-                                listOf(reminderNotificationPart.reminderEvent.copy(amount = it))
+                            val event = reminderNotificationPart.reminderEvent
+                            reminderEventRepository.update(event.copy(amount = it))
+                            commandBus.markReminderEvents(
+                                listOf(event.reminderEventId),
+                                ReminderEvent.ReminderStatus.TAKEN
                             )
                         }
                     }

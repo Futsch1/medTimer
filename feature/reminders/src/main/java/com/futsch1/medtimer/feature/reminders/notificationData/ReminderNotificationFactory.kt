@@ -7,7 +7,7 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.ReminderNotificationProcessor
+import com.futsch1.medtimer.feature.reminders.buildReminderEvent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,7 +48,7 @@ open class ReminderNotificationFactory @Inject constructor(
             }
 
             if (reminderEvent == null) {
-                val newEvent = ReminderNotificationProcessor.buildReminderEvent(
+                val newEvent = buildReminderEvent(
                     reminderNotificationData.remindInstant.epochSecond, medicine, reminder, reminderEventRepository, timeFormatter
                 )
                 reminderEvent = reminderEventRepository.create(newEvent.copy(remainingRepeats = numberOfRepeats))
