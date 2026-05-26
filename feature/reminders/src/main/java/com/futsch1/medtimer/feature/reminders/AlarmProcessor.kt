@@ -10,6 +10,8 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.notificationData.toPendingIntent
+import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
 import com.futsch1.medtimer.feature.reminders.widgets.WidgetUpdateReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
@@ -41,7 +43,7 @@ class AlarmProcessor @Inject constructor(
             return false
         }
 
-        scheduleAlarm(scheduledReminderNotificationData.remindInstant, scheduledReminderNotificationData.getPendingIntent(context))
+        scheduleAlarm(scheduledReminderNotificationData.remindInstant, scheduledReminderNotificationData.toPendingIntent(context))
 
         Log.i(
             LogTags.REMINDER,
@@ -69,12 +71,12 @@ class AlarmProcessor @Inject constructor(
                 String.format("Show reminder notification now: %s", reminderNotificationData)
             )
             val reminderIntent = getReminderAction(context)
-            reminderNotificationData.toIntent(reminderIntent)
+            reminderNotificationData.writeTo(reminderIntent)
             context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
             return false
         }
 
-        scheduleAlarm(reminderNotificationData.remindInstant, reminderNotificationData.getPendingIntent(context))
+        scheduleAlarm(reminderNotificationData.remindInstant, reminderNotificationData.toPendingIntent(context))
 
         Log.i(
             LogTags.REMINDER,

@@ -1,13 +1,7 @@
 package com.futsch1.medtimer.feature.reminders.notificationData
 
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
-import com.futsch1.medtimer.feature.reminders.getReminderAction
 import java.time.Instant
 
 class ReminderNotificationData(
@@ -46,48 +40,11 @@ class ReminderNotificationData(
         )
     }
 
-    fun getPendingIntent(context: Context): PendingIntent {
-        val reminderIntent = getReminderAction(context)
-        toIntent(reminderIntent)
-        return PendingIntent.getBroadcast(context, reminderEventIds[0], reminderIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-    }
-
-    fun toIntent(intent: Intent) {
-        intent.putExtra(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds.toIntArray())
-        intent.putExtra(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
-        intent.putExtra(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
-        intent.putExtra(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
-    }
-
     override fun toString(): String {
         return "rIDs $reminderIds rEIDs $reminderEventIds nID $notificationId @ $remindInstant"
     }
 
-    fun toBundle(bundle: Bundle) {
-        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST, reminderIds.toIntArray())
-        bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
-        bundle.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
-        bundle.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
-    }
-
     companion object {
-
-        fun fromBundle(bundle: Bundle): ReminderNotificationData {
-            val reminderIds = getReminderIds(bundle)
-            val reminderEventIds = getReminderEventIds(bundle)
-            val remindInstant = Instant.ofEpochSecond(bundle.getLong(ActivityCodes.EXTRA_REMIND_INSTANT))
-            val notificationId = bundle.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1)
-
-            return fromArrays(reminderIds, reminderEventIds, remindInstant, notificationId)
-        }
-
-        fun getReminderIds(bundle: Bundle): List<Int> {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_ID_LIST)?.toList() ?: listOf()
-        }
-
-        fun getReminderEventIds(bundle: Bundle): List<Int> {
-            return bundle.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)?.toMutableList() ?: listOf()
-        }
 
         fun fromArrays(
             reminderIds: List<Int>,

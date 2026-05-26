@@ -44,7 +44,7 @@ import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
-                val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
+                val reminderNotificationData = intent.extras!!.toReminderNotificationData()
                 if (reminderNotificationData.valid) {
                     TextInputDialogBuilder(this)
                         .title(com.futsch1.medtimer.core.ui.R.string.snooze_duration)

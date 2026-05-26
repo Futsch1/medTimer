@@ -13,7 +13,6 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
@@ -79,8 +78,9 @@ class ReminderEventActions @AssistedInject constructor(
             when (button) {
                 Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
                 Button.ACKNOWLEDGED -> {
-                    val data = ProcessedNotificationData(listOf(event.reminderEvent.reminderEventId))
-                    applicationScope.launch { commandBus.markReminderEvents(data, ReminderEvent.ReminderStatus.ACKNOWLEDGED) }
+                    applicationScope.launch {
+                        commandBus.markReminderEvents(listOf(event.reminderEvent.reminderEventId), ReminderEvent.ReminderStatus.ACKNOWLEDGED)
+                    }
                 }
 
                 else -> Unit
@@ -113,9 +113,8 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        val data = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
         val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
-        applicationScope.launch { commandBus.markReminderEvents(data, status) }
+        applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), status) }
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {

@@ -9,7 +9,6 @@ import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import javax.inject.Inject
 
 class RefillProcessor @Inject constructor(
@@ -19,11 +18,11 @@ class RefillProcessor @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess
 ) {
-    suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
-        val reminderEvent = reminderEventRepository.fetch(processedNotificationData.reminderEventIds[0])
+    suspend fun processRefill(reminderEventIds: List<Int>) {
+        if (reminderEventIds.isEmpty()) return
+        val reminderEvent = reminderEventRepository.fetch(reminderEventIds[0])
         val reminder = reminderEvent?.let { reminderRepository.fetch(it.reminderId) }
         reminder?.let { processRefill(it.medicineRelId, reminderEvent) }
-
     }
 
     suspend fun processRefill(medicineId: Int?, reminderEvent: ReminderEvent? = null) {
@@ -37,7 +36,7 @@ class RefillProcessor @Inject constructor(
 
         if (reminderEvent != null) {
             notificationProcessor.processReminderEventsInNotification(
-                ProcessedNotificationData.fromReminderEvents(listOf(reminderEvent)),
+                listOf(reminderEvent.reminderEventId),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )
         }

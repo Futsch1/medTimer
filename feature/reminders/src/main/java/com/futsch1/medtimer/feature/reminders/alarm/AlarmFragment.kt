@@ -15,6 +15,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.R
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.feature.reminders.notificationFactory.NotificationStringBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,7 @@ class AlarmFragment(
 
         val bundle = requireArguments()
 
-        reminderNotificationData = ReminderNotificationData.fromBundle(bundle)
+        reminderNotificationData = bundle.toReminderNotificationData()
     }
 
     override fun onCreateView(

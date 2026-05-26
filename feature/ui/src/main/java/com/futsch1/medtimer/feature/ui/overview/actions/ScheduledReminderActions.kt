@@ -9,7 +9,6 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
 import dagger.assisted.Assisted
@@ -90,15 +89,13 @@ class ScheduledReminderActions @AssistedInject constructor(
                 getVariableAmountActivityIntent(fragmentActivity, ReminderNotificationData.fromReminderEvent(reminderEvent))
             )
         } else {
-            val data = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
             val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
-            applicationScope.launch { commandBus.markReminderEvents(data, status) }
+            applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), status) }
         }
     }
 
     private suspend fun processStockAcknowledged(scheduledReminder: ScheduledReminder) {
         val reminderEvent = reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
-        val data = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
-        applicationScope.launch { commandBus.markReminderEvents(data, ReminderEvent.ReminderStatus.ACKNOWLEDGED) }
+        applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), ReminderEvent.ReminderStatus.ACKNOWLEDGED) }
     }
 }

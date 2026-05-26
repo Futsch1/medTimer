@@ -15,6 +15,7 @@ import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.effectiveHighestImportance
 import com.futsch1.medtimer.feature.reminders.notificationData.effectiveShowAsAlarm
+import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
 
 
 abstract class ReminderNotificationFactory(
@@ -87,7 +88,7 @@ abstract class ReminderNotificationFactory(
 
     override fun create(): android.app.Notification {
         build()
-        reminderNotification.reminderNotificationData.toBundle(builder.extras)
+        reminderNotification.reminderNotificationData.writeTo(builder.extras)
         return builder.build()
     }
 

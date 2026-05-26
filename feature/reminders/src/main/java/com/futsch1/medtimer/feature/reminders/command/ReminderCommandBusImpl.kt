@@ -8,7 +8,6 @@ import com.futsch1.medtimer.feature.reminders.ScheduleNextReminderNotificationPr
 import com.futsch1.medtimer.feature.reminders.ShowReminderNotificationProcessor
 import com.futsch1.medtimer.feature.reminders.SnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.StockHandlingProcessor
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
@@ -48,8 +47,8 @@ class ReminderCommandBusImpl @Inject constructor(
         snoozeProcessor.processLocationSnooze(data)
     }
 
-    override suspend fun markReminderEvents(data: ProcessedNotificationData, status: ReminderEvent.ReminderStatus) {
-        notificationProcessor.processReminderEventsInNotification(data, status)
+    override suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {
+        notificationProcessor.processReminderEventsInNotification(reminderEventIds, status)
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
@@ -61,7 +60,7 @@ class ReminderCommandBusImpl @Inject constructor(
         refillProcessor.processRefill(medicineId)
     }
 
-    override suspend fun processRefill(data: ProcessedNotificationData) {
-        refillProcessor.processRefill(data)
+    override suspend fun processRefill(reminderEventIds: List<Int>) {
+        refillProcessor.processRefill(reminderEventIds)
     }
 }

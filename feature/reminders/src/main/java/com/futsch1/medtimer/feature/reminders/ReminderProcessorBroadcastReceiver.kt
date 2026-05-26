@@ -11,8 +11,8 @@ import com.futsch1.medtimer.core.common.ProcessorCode
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.notificationData.reminderEventIdsFromBundle
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,37 +49,37 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     private suspend fun dispatch(action: ProcessorCode, intent: Intent) {
         when (action) {
             ProcessorCode.Dismissed -> commandBus.markReminderEvents(
-                ProcessedNotificationData.fromBundle(intent.extras!!),
+                reminderEventIdsFromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.SKIPPED
             )
 
             ProcessorCode.Taken -> commandBus.markReminderEvents(
-                ProcessedNotificationData.fromBundle(intent.extras!!),
+                reminderEventIdsFromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.TAKEN
             )
 
             ProcessorCode.Acknowledged -> commandBus.markReminderEvents(
-                ProcessedNotificationData.fromBundle(intent.extras!!),
+                reminderEventIdsFromBundle(intent.extras!!),
                 ReminderEvent.ReminderStatus.ACKNOWLEDGED
             )
 
             ProcessorCode.Snooze -> commandBus.snooze(
-                ReminderNotificationData.fromBundle(intent.extras!!),
+                intent.extras!!.toReminderNotificationData(),
                 intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, 0).toDuration(DurationUnit.SECONDS)
             )
 
             ProcessorCode.Reminder -> commandBus.showReminders(
-                ReminderNotificationData.fromBundle(intent.extras ?: Bundle())
+                (intent.extras ?: Bundle()).toReminderNotificationData()
             )
 
             ProcessorCode.ShowReminderNotification -> commandBus.showReminderNotification(
-                ReminderNotificationData.fromBundle(intent.extras!!)
+                intent.extras!!.toReminderNotificationData()
             )
 
             ProcessorCode.Refill -> if (intent.hasExtra(ActivityCodes.EXTRA_MEDICINE_ID)) {
                 commandBus.processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
             } else {
-                commandBus.processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
+                commandBus.processRefill(reminderEventIdsFromBundle(intent.extras!!))
             }
 
             ProcessorCode.StockHandling -> commandBus.processStockHandling(
@@ -91,7 +91,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             ProcessorCode.Schedule -> commandBus.scheduleNextNotification()
 
             ProcessorCode.LocationSnooze -> commandBus.processLocationSnooze(
-                ReminderNotificationData.fromBundle(intent.extras ?: Bundle())
+                (intent.extras ?: Bundle()).toReminderNotificationData()
             )
         }
     }

@@ -10,6 +10,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,7 @@ class VariableAmountHandler @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend fun show(activity: AppCompatActivity, intent: Intent) {
-        val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
+        val reminderNotificationData = intent.extras!!.toReminderNotificationData()
 
         val reminderNotification = reminderNotificationFactory.create(reminderNotificationData) ?: return
 
