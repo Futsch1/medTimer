@@ -1,9 +1,13 @@
 # medTimer — Agent Guide
 
+Terse, machine-facing summary for AI coding assistants.
+For the detailed conventions — coding style, architecture, testing, AI usage, docs — read [`docs/guidelines/`](docs/guidelines/README.md).
+When this file and the guidelines disagree, the guidelines win; flag the drift in your PR.
+
 ## Project Overview
 
-medTimer is an Android medication reminder app (Kotlin, minSdk 28, targetSdk 36).
-Package: `com.futsch1.medtimer`
+medTimer is an Android medication reminder app (Kotlin, `compileSdk = 36`, `minSdk = 28`, JDK 21).
+Package: `com.futsch1.medtimer`.
 
 ## Build Variants
 
@@ -17,36 +21,28 @@ The app has two product flavors on the `distribution` dimension:
 Flavor-specific source sets:
 
 - `app/src/full/` — GMS implementations (`GmsGeofenceRegistrar`, `GmsLocationProvider`, `GeofenceBroadcastReceiver`) and the flavor manifest (location
-  permissions + broadcast receiver)
-- `app/src/foss/` — No-op stubs (`NoOpGeofenceRegistrar`, `NoOpLocationProvider`)
-- `app/src/testFull/` — Unit tests that import GMS classes (`GeofenceRegistrarTest`, `GeofenceBroadcastReceiverTest`)
+  permissions + broadcast receiver).
+- `app/src/foss/` — No-op stubs (`NoOpGeofenceRegistrar`, `NoOpLocationProvider`).
+- `app/src/testFull/` — Unit tests that import GMS classes (`GeofenceRegistrarTest`, `GeofenceBroadcastReceiverTest`).
+
+See [`docs/guidelines/kotlin-android.md`](docs/guidelines/kotlin-android.md#flavor-split--full-vs-foss) for the discipline.
 
 ## Repository Layout
 
 ```
-app/src/main/java/com/futsch1/medtimer/
-  database/          Room entities, DAOs, repository, mapper functions
-  model/             Clean domain model classes (in-progress refactor)
-    reminderevent/   Sealed ReminderEvent hierarchy + subclasses
-  overview/          Overview fragment, ViewModel, actions, model wrappers
-  reminders/         Scheduling, notification processing, alarm management
-  medicine/          Medicine editing UI, stock management
-  statistics/        Statistics fragment and calendar view
-  remindertable/     Sortable/filterable reminder table
-  exporters/         CSV and PDF export
-  helpers/           Utility classes (time formatting, string formatting)
-  preferences/       Persistent preferences and data sources
-  widgets/           Home-screen widgets
-  location/          GeofenceRegistrar and LocationProvider interfaces
-  di/                Hilt dependency injection modules (GsonModule + flavor LocationModules)
-
-app/src/full/        Full-flavor sources (GMS geofencing implementations)
-app/src/foss/        FOSS-flavor sources (no-op geofencing stubs)
-app/src/test/        JVM unit tests shared across flavors (Robolectric, Mockito, JUnit 4)
-app/src/testFull/    JVM unit tests specific to the full flavor (require GMS classes)
-app/src/androidTest/ Instrumented UI tests (Espresso, Barista, UIAutomator)
-app/schemas/         Room database migration schemas
+app/                  Application module
+core/common/          Pure-Kotlin utilities
+core/domain/          Domain models + repository interfaces (no Android deps)
+core/database/        Room entities, DAOs, repository impls, entity↔model mappers
+core/datastore/       DataStore preferences
+core/ui/              Shared resources (strings, drawables, themes, navigation graphs); Compose theme will live here too
+feature/reminders/    Reminder scheduling, notification processing
+feature/ui/           Overview UI
+app/schemas/          Room database migration schemas
 ```
+
+Architectural rules and module dependency direction: [`docs/guidelines/kotlin-android.md`](docs/guidelines/kotlin-android.md#architecture--mvvm--hilt).
+**`*Entity` types from `:core:database` must not appear in any other module's API** — depend on the clean models in `core/domain/model/`.
 
 ## Build Commands
 
@@ -71,6 +67,7 @@ app/schemas/         Room database migration schemas
 
 **Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally, only on explicit request** — instrumented tests require an emulator and take a very
 long time. CI handles them.
+See [`docs/guidelines/testing.md`](docs/guidelines/testing.md) for testing conventions.
 
 ## CI / GitHub Actions
 
@@ -87,29 +84,20 @@ The build must pass `assembleDebug` and `lint` before merging.
 
 To fix pipeline issues, use the `gh` command line tool to access GitHub Actions logs.
 
-## Architecture
+## Conventions — quick reference
 
-- **Database layer**: Room (`MedicineDao`, `MedicineRepository`). Entity classes are suffixed `Entity` (e.g. `ReminderEventEntity`, `MedicineEntity`).
-- **Domain model layer** (`model/`): Clean Kotlin data/sealed classes, no Room annotations.
-- **DI**: Hilt throughout. ViewModels use `@HiltViewModel`. Singletons use `@Singleton`.
-- **Reactive data**: Kotlin `Flow` / `StateFlow` / `SharedFlow`. No LiveData.
-- **Navigation**: Jetpack Navigation component with Safe Args.
+Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liners:
 
-## Code Style
-
-- Kotlin only; no new Java files
-- Lint is strict: fix warnings, do not suppress without justification
-- Uses SonarQube as additional static code analysis
-- Standard Kotlin Code Style with line length set to 160 characters
-
-## Translations
-
-- When adding or changing strings in one of the language files, consider the translation to all other languages the app supports (`localeFilters` in
-  `app/build.gradle.kts`)
-- Escape `'` with a single `\`
-- Use `\n` for newline
-
-## Testing
-
-- Prefer unit tests to Android tests, since the latter are often flaky and take a long time to run
-- Tests are important for this app, if implementing a feature or a bugfix, a test driven approach is preferred
+- **Code style:** Kotlin only (no new Java); Android Lint and SonarQube are enforced; Kotlin official style, 160-char line length. → [
+  `kotlin-android.md`](docs/guidelines/kotlin-android.md#enforcement-source-of-truth)
+- **Architecture:** MVVM + Hilt; `Flow` / `StateFlow` / `SharedFlow` (no LiveData); Navigation component with Safe Args. → [
+  `kotlin-android.md`](docs/guidelines/kotlin-android.md#architecture--mvvm--hilt)
+- **Compose:** target standard for new UI, not yet adopted; per-screen migration via `ComposeView`. → [`jetpack-compose.md`](docs/guidelines/jetpack-compose.md)
+- **Testing:** prefer JVM unit tests over instrumented; test-driven for bug fixes and features. → [`testing.md`](docs/guidelines/testing.md)
+- **Translations:** consider all locales when changing strings; escape `'` as `\'`; use `\n` for newline. → [
+  `kotlin-android.md`](docs/guidelines/kotlin-android.md#translations)
+- **AI assistance:** Room migrations and dependency/AGP/Kotlin upgrades are "Ask first"; never commit signing keys or paste real user medication data into
+  prompts; add `Co-Authored-By: Claude <noreply@anthropic.com>` for substantial AI contributions. → [
+  `ai-assisted-development.md`](docs/guidelines/ai-assisted-development.md)
+- **Commits:** `#<issue-number> <short description>` for issue-linked work; branches `<issue-number>-<kebab-description>`. → [
+  `ai-assisted-development.md`](docs/guidelines/ai-assisted-development.md#attribution-and-commits)

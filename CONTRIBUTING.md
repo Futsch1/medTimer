@@ -40,3 +40,9 @@ Before opening the pull request, make sure that the code compiles, the unit test
 run successfully and that there are no new SonarQube issues introduced.
 
 It is also recommended to add specific tests for the new code.
+
+## Development guidelines
+
+The canonical coding, testing, documentation, and AI-assistance standards live in [`docs/guidelines/`](docs/guidelines/README.md).
+Read the relevant guide before your first non-trivial contribution — the [`kotlin-android.md`](docs/guidelines/kotlin-android.md) and [
+`testing.md`](docs/guidelines/testing.md) guides cover the architectural and testing rules that PR reviews check against.
