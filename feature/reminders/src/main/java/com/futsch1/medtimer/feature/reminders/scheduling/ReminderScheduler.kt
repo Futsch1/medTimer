@@ -4,7 +4,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 
 class ReminderScheduler(private val timeAccess: TimeAccess, private val dataSource: PreferencesDataSource) {
     fun schedule(medicines: List<Medicine>, reminderEvents: List<ReminderEvent>): List<ScheduledReminder> {

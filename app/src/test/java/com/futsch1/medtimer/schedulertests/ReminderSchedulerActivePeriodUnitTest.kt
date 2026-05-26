@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.Instant

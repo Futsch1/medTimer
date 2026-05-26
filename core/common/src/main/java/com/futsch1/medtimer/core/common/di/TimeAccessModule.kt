@@ -1,7 +1,7 @@
-package com.futsch1.medtimer.feature.reminders.di
+package com.futsch1.medtimer.core.common.di
 
-import com.futsch1.medtimer.feature.reminders.SystemTimeAccess
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.SystemTimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -4,6 +4,7 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.IdlingResourcesPool
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository

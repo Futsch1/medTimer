@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import java.time.Instant

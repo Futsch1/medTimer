@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.feature.reminders
+package com.futsch1.medtimer.core.common.time
 
 import java.time.Instant
 import java.time.LocalDate

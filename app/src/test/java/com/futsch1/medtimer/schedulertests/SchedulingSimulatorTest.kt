@@ -6,7 +6,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
