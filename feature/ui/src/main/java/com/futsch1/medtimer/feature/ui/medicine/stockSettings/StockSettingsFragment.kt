@@ -94,7 +94,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
 
     override suspend fun getDataStore(requireArguments: Bundle): ModelDataStore<Medicine> {
         val entityId = requireArguments.getInt("medicineId")
-        val entity = medicineRepository[entityId]!!
+        val entity = medicineRepository.fetch(entityId)!!
         return medicineDataStoreFactory.create(entity)
     }
 
@@ -152,7 +152,7 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
         medicineId: Int,
         currentAmount: Double? = null
     ): LocalDate? {
-        var medicine = medicineRepository[medicineId] ?: return null
+        var medicine = medicineRepository.fetch(medicineId) ?: return null
 
         if (currentAmount != null) {
             medicine = medicine.copy(amount = currentAmount)

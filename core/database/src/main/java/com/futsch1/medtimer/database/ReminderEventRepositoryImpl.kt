@@ -65,16 +65,16 @@ class ReminderEventRepositoryImpl(
         reminderEventDao.createAll(reminderEvents.map { it.toEntity() })
     }
 
-    override suspend operator fun get(reminderEventId: Int): ReminderEvent? {
-        return reminderEventDao.get(reminderEventId)?.toModel()
+    override suspend fun fetch(reminderEventId: Int): ReminderEvent? {
+        return reminderEventDao.fetch(reminderEventId)?.toModel()
     }
 
     override fun getFlow(reminderEventId: Int): Flow<ReminderEvent?> {
         return reminderEventDao.getFlow(reminderEventId).map { it?.toModel() }
     }
 
-    override suspend operator fun get(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
-        return reminderEventDao[reminderId, remindedTimestamp]?.toModel()
+    override suspend fun fetch(reminderId: Int, remindedTimestamp: Long): ReminderEvent? {
+        return reminderEventDao.fetch(reminderId, remindedTimestamp)?.toModel()
     }
 
     override suspend fun update(reminderEvent: ReminderEvent) {

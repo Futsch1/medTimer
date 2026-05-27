@@ -140,7 +140,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         setupSwiping(recyclerView)
 
         lifecycleScope.launch(ioDispatcher) {
-            val medicine = medicineRepository[getMedicineId()] ?: return@launch
+            val medicine = medicineRepository.fetch(getMedicineId()) ?: return@launch
 
             this@EditMedicineFragment.medicine = medicine
 
@@ -347,7 +347,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun deleteItem(itemId: Long, adapterPosition: Int) {
         lifecycleScope.launch(ioDispatcher) {
-            val reminder = reminderRepository[itemId.toInt()]
+            val reminder = reminderRepository.fetch(itemId.toInt())
             if (reminder != null) {
                 withContext(mainDispatcher) {
                     linkedReminderHandlingFactory.create(reminder, lifecycleScope).deleteReminder(requireContext(), { }, {

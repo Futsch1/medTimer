@@ -4,7 +4,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import kotlinx.coroutines.flow.Flow
 
 interface MedicineRepository {
-    suspend operator fun get(medicineId: Int): Medicine?
+    suspend fun fetch(medicineId: Int): Medicine?
     fun getFlow(medicineId: Int): Flow<Medicine?>
     suspend fun getAll(): List<Medicine>
     fun getAllFlow(): Flow<List<Medicine>>

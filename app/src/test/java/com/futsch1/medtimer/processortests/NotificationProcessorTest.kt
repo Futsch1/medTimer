@@ -126,11 +126,11 @@ class NotificationProcessorTest {
 
             val parts = mutableListOf<ReminderNotificationPart>()
             for (i in reminderNotificationData.reminderIds.indices) {
-                val reminder = testReminderContext.repositoryFakes.reminderRepositoryMock.get(reminderNotificationData.reminderIds[i])
+                val reminder = testReminderContext.repositoryFakes.reminderRepositoryMock.fetch(reminderNotificationData.reminderIds[i])
                     ?: return null
-                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.get(reminder.medicineRelId)
+                val medicine = testReminderContext.repositoryFakes.medicineRepositoryMock.fetch(reminder.medicineRelId)
                     ?: return null
-                val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.get(reminderNotificationData.reminderEventIds[i])
+                val event = testReminderContext.repositoryFakes.reminderEventRepositoryMock.fetch(reminderNotificationData.reminderEventIds[i])
                     ?: return null
                 parts.add(ReminderNotificationPart(reminder, event, medicine))
             }

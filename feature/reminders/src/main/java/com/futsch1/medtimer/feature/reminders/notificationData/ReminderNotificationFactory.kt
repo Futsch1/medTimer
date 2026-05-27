@@ -29,22 +29,22 @@ open class ReminderNotificationFactory @Inject constructor(
         val numberOfRepeats = preferencesDataSource.preferences.value.numberOfRepetitions
         val newReminderEventIds = mutableListOf<Int>()
         for (i in reminderNotificationData.reminderIds.indices) {
-            val reminder = reminderRepository[reminderNotificationData.reminderIds[i]]
+            val reminder = reminderRepository.fetch(reminderNotificationData.reminderIds[i])
             if (reminder == null) {
                 Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderNotificationData.reminderIds[i]))
                 return null
             }
 
-            val medicine = medicineRepository[reminder.medicineRelId]
+            val medicine = medicineRepository.fetch(reminder.medicineRelId)
             if (medicine == null) {
                 Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
                 return null
             }
 
             var reminderEvent = if (reminderNotificationData.reminderEventIds[i] != 0) {
-                reminderEventRepository[reminderNotificationData.reminderEventIds[i]]
+                reminderEventRepository.fetch(reminderNotificationData.reminderEventIds[i])
             } else {
-                reminderEventRepository[reminder.id, reminderNotificationData.remindInstant.epochSecond]
+                reminderEventRepository.fetch(reminder.id, reminderNotificationData.remindInstant.epochSecond)
             }
 
             if (reminderEvent == null) {

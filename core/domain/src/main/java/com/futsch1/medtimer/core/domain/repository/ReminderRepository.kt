@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ReminderRepository {
     fun getAllFlow(medicineId: Int): Flow<List<Reminder>>
     suspend fun getAll(medicineId: Int): List<Reminder>
-    suspend operator fun get(reminderId: Int): Reminder?
+    suspend fun fetch(reminderId: Int): Reminder?
     fun getFlow(reminderId: Int): Flow<Reminder?>
     suspend fun getLinked(reminderId: Int): List<Reminder>
     suspend fun create(reminder: Reminder): Int

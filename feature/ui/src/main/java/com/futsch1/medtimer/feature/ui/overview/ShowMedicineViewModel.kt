@@ -53,12 +53,12 @@ class ShowMedicineViewModel @Inject constructor(
     init {
         val userPreferences = preferencesDataSource.preferences.value
         viewModelScope.launch(ioDispatcher) {
-            val reminder = reminderRepository[reminderId]
+            val reminder = reminderRepository.fetch(reminderId)
             if (reminder == null) {
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
-            val medicine = medicineRepository[reminder.medicineRelId]
+            val medicine = medicineRepository.fetch(reminder.medicineRelId)
             if (medicine == null) {
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch

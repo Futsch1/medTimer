@@ -17,9 +17,9 @@ interface ReminderEventRepository {
     suspend fun getLast(reminderId: Int): ReminderEvent?
     suspend fun create(reminderEvent: ReminderEvent): ReminderEvent
     suspend fun createAll(reminderEvents: List<ReminderEvent>)
-    suspend operator fun get(reminderEventId: Int): ReminderEvent?
+    suspend fun fetch(reminderEventId: Int): ReminderEvent?
     fun getFlow(reminderEventId: Int): Flow<ReminderEvent?>
-    suspend operator fun get(reminderId: Int, remindedTimestamp: Long): ReminderEvent?
+    suspend fun fetch(reminderId: Int, remindedTimestamp: Long): ReminderEvent?
     suspend fun update(reminderEvent: ReminderEvent)
     suspend fun updateAll(reminderEvents: List<ReminderEvent>)
     suspend fun delete(reminderEvent: ReminderEvent)

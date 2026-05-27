@@ -47,7 +47,7 @@ class RepositoryFakes {
     init {
         // MedicineRepository mocks
         `when`(runBlocking { medicineRepositoryMock.getAll() }).thenAnswer { buildMedicines() }
-        `when`(runBlocking { medicineRepositoryMock.get(anyInt()) }).thenAnswer { buildMedicines().firstOrNull { m -> m.id == it.arguments[0] } }
+        `when`(runBlocking { medicineRepositoryMock.fetch(anyInt()) }).thenAnswer { buildMedicines().firstOrNull { m -> m.id == it.arguments[0] } }
         `when`(runBlocking { medicineRepositoryMock.update(any()) }).thenAnswer {
             val medicine = it.arguments[0] as com.futsch1.medtimer.core.domain.model.Medicine
             val index = medicines.indexOfFirst { m -> m.medicineId == medicine.id }
@@ -55,11 +55,11 @@ class RepositoryFakes {
         }
 
         // ReminderRepository mocks
-        `when`(runBlocking { reminderRepositoryMock.get(anyInt()) }).thenAnswer { reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel() }
+        `when`(runBlocking { reminderRepositoryMock.fetch(anyInt()) }).thenAnswer { reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel() }
 
         // ReminderEventRepository mocks
         `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
-        `when`(runBlocking { reminderEventRepositoryMock.get(anyInt()) }).thenAnswer {
+        `when`(runBlocking { reminderEventRepositoryMock.fetch(anyInt()) }).thenAnswer {
             reminderEvents.firstOrNull { r -> r.reminderEventId == it.arguments[0] }?.toModel()
         }
         `when`(runBlocking { reminderEventRepositoryMock.create(any()) }).thenAnswer {

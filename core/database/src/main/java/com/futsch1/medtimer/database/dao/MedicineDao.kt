@@ -15,7 +15,7 @@ abstract class MedicineDao {
 
     @Transaction
     open suspend fun decreaseStock(medicineId: Int, decreaseAmount: Double): FullMedicineEntity? {
-        val medicine = get(medicineId) ?: return null
+        val medicine = fetch(medicineId) ?: return null
         medicine.amount = maxOf(0.0, medicine.amount - decreaseAmount)
         update(medicine)
         return getFull(medicineId)
@@ -30,7 +30,7 @@ abstract class MedicineDao {
     abstract suspend fun getAll(): List<FullMedicineEntity>
 
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
-    abstract suspend operator fun get(medicineId: Int): MedicineEntity?
+    abstract suspend fun fetch(medicineId: Int): MedicineEntity?
 
     @Transaction
     @Query("SELECT * FROM Medicine WHERE medicineId = :medicineId")
