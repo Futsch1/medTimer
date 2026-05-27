@@ -11,8 +11,9 @@ medTimer is an Android medication reminder app (Kotlin, `compileSdk = 36`, `minS
       Room, translations.
     - [`jetpack-compose.md`](../docs/guidelines/jetpack-compose.md) — Compose conventions (target standard; Compose not yet adopted).
     - [`testing.md`](../docs/guidelines/testing.md) — JVM unit, instrumented, fuzz, and Compose testing.
-    - [`ai-assisted-development.md`](../docs/guidelines/ai-assisted-development.md) — boundaries, secrets, attribution.
     - [`documentation-guidelines.md`](../docs/guidelines/documentation-guidelines.md) — docs-as-code, Diátaxis, style.
+
+  AI-specific hygiene (boundaries, secrets, attribution) lives in [`AGENTS.md` → AI hygiene](../AGENTS.md#ai-hygiene).
 
 When this file and the guidelines disagree, the guidelines win.
 
@@ -43,7 +44,8 @@ Pause and ask the human before:
 ./gradlew lint
 ```
 
-Do not run `connectedAndroidTest` locally — instrumented tests are CI-only.
+When you add or change an instrumented test, run that single test locally against an emulator
+(`./gradlew :app:connectedFullDebugAndroidTest --tests <FQN>`). Do not run the full `connectedAndroidTest` suite locally — CI handles the broader matrix.
 
 ## Commits and attribution
 

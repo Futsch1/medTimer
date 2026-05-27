@@ -212,7 +212,7 @@ Room infrastructure lives in `:core:database`.
 - Schemas are emitted to `app/schemas/` and **committed**.
   They are the migration audit trail; review the schema diff in any PR that changes an entity.
 - New migrations need a Room migration class and a corresponding `AutoMigration` only when the schema allows it.
-  **Migration changes are an "Ask first" item — see [ai-assisted-development.md](ai-assisted-development.md).** They are user-visible and effectively
+  **Migration changes are an "Ask first" item — see [`AGENTS.md` → AI hygiene](../../AGENTS.md#ai-hygiene).** They are user-visible and effectively
   irreversible once shipped.
 - Repository interfaces in `:core:domain` are the seam: outside `:core:database`, depend on `MedicineRepository`, never on `MedicineRepositoryImpl` or any DAO.
 

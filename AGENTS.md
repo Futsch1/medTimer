@@ -1,7 +1,8 @@
 # medTimer — Agent Guide
 
 Terse, machine-facing summary for AI coding assistants.
-For the detailed conventions — coding style, architecture, testing, AI usage, docs — read [`docs/guidelines/`](docs/guidelines/README.md).
+For the detailed conventions — coding style, architecture, testing, docs — read [`docs/guidelines/`](docs/guidelines/README.md).
+AI-specific hygiene (boundaries, secrets, attribution) lives in this file under [AI hygiene](#ai-hygiene).
 When this file and the guidelines disagree, the guidelines win; flag the drift in your PR.
 
 ## Project Overview
@@ -65,8 +66,9 @@ Architectural rules and module dependency direction: [`docs/guidelines/kotlin-an
 ./gradlew jacocoFullDebugCodeCoverage
 ```
 
-**Do not run `connectedAndroidTest` or `JacocoDebugCodeCoverage` locally, only on explicit request** — instrumented tests require an emulator and take a very
-long time. CI handles them.
+**Instrumented tests:** when you add or change one, run *just that test* locally against an emulator before pushing
+(e.g. `./gradlew :app:connectedFullDebugAndroidTest --tests <FQN>`). **Do not run the full `connectedAndroidTest` suite or `JacocoDebugCodeCoverage` locally**
+— they need an emulator and take far too long. CI handles the broader matrix.
 See [`docs/guidelines/testing.md`](docs/guidelines/testing.md) for testing conventions.
 
 ## CI / GitHub Actions
@@ -96,8 +98,33 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
 - **Testing:** prefer JVM unit tests over instrumented; test-driven for bug fixes and features. → [`testing.md`](docs/guidelines/testing.md)
 - **Translations:** consider all locales when changing strings; escape `'` as `\'`; use `\n` for newline. → [
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#translations)
-- **AI assistance:** Room migrations and dependency/AGP/Kotlin upgrades are "Ask first"; never commit signing keys or paste real user medication data into
-  prompts; add `Co-Authored-By: Claude <noreply@anthropic.com>` for substantial AI contributions. → [
-  `ai-assisted-development.md`](docs/guidelines/ai-assisted-development.md)
-- **Commits:** `#<issue-number> <short description>` for issue-linked work; branches `<issue-number>-<kebab-description>`. → [
-  `ai-assisted-development.md`](docs/guidelines/ai-assisted-development.md#attribution-and-commits)
+
+## AI hygiene
+
+**Never:**
+
+- Commit secrets — keystores (`*.jks`), `keystore.properties`, Play / Firebase service-account JSONs, `fastlane/*.json` upload credentials, `local.properties`.
+  Only `*.example` templates belong in git; CI signs releases via GitHub Actions secrets.
+- Put real user medication data into a prompt or any external service.
+  Use synthetic data ("Vitamin X 500 mg", "Medicine A") in prompts, tests, and examples.
+- `@Suppress` or weaken an Android Lint / SonarQube finding to make code "pass" — fix the underlying issue.
+  If a suppression is genuinely needed, comment *why* and reference the rule.
+- Add a dependency the agent "remembered" without verifying group/artifact, that it's maintained, and that it's pinned via `gradle/libs.versions.toml`.
+
+**Ask first** (get a human decision before proceeding):
+
+- Room schema changes or new migrations — `app/schemas/` is user-visible and effectively irreversible once shipped.
+- Dependency / AGP / Kotlin / KSP / Hilt upgrades, especially across majors.
+
+**Privacy:**
+
+- Don't log medication data, and don't ask the agent to "print stored reminders to debug" — reproduce with fabricated data.
+- Exported CSV/PDF artifacts and `adb backup` output are user data — keep them out of bug reports, test fixtures, and commits.
+
+**Commits** (soft conventions for AI-assisted work; deviate freely for quick personal iterations):
+
+- Prefer `#<issue-number> <short description>` for issue-linked work; sentence-case otherwise.
+  Match the surrounding branch history.
+- Branches typically follow `<issue-number>-<kebab-description>` when tied to an issue.
+- For **substantial** AI contributions (a full feature, function, or the bulk of a change), add a `Co-Authored-By: Claude <noreply@anthropic.com>` trailer.
+  Trivial completions don't need attribution; the human is always the primary author.

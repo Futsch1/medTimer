@@ -71,7 +71,7 @@ Keep technical terms and identifiers in English even when discussing localizatio
 
 ## Links and naming
 
-- File names are **kebab-case** (`jetpack-compose.md`, `ai-assisted-development.md`).
+- File names are **kebab-case** (`jetpack-compose.md`, `kotlin-android.md`).
 - Dated artifacts use an ISO date suffix: `name-YYYY-MM-DD.md`.
   These are snapshots — add a new dated file rather than rewriting history.
 - Keep relative links valid when reorganizing: after moving files, re-resolve every inbound link.
@@ -81,7 +81,7 @@ Keep technical terms and identifiers in English even when discussing localizatio
 - When a doc is superseded, **move it to `docs/archive/`** with a one-line pointer to its replacement — don't delete history, and don't leave stale guidance
   live.
 - Date-stamp evidence docs and don't edit them after the fact; supersede instead.
-- **No secrets or real user data in docs** — same rule as code (see [ai-assisted-development.md](ai-assisted-development.md)).
+- **No secrets or real user data in docs** — same rule as code (see [`AGENTS.md` → AI hygiene](../../AGENTS.md#ai-hygiene)).
   Reference config keys by name, never paste real values.
 - Each guide carries a `_Last reviewed: YYYY-MM-DD._` footer; bump it when you revisit the content and re-confirm the linked sources.
 
