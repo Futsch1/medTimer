@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -45,7 +45,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CalendarFragment : Fragment() {
     @Inject
-    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
+    lateinit var simulatedRemindersRepository: SimulatedReminders
 
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private lateinit var calendarView: CalendarView

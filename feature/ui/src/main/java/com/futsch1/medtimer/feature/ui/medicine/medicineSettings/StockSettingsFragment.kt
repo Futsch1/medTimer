@@ -18,7 +18,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
@@ -41,7 +41,7 @@ class StockSettingsFragment : MedicinePreferences(
     listOf("stock_unit")
 ) {
     @Inject
-    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
+    lateinit var simulatedRemindersRepository: SimulatedReminders
 
     @Inject
     lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory

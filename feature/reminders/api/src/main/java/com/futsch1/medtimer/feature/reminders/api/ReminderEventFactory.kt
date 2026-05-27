@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.feature.reminders
+package com.futsch1.medtimer.feature.reminders.api
 
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
@@ -7,16 +7,16 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.scheduling.CyclesHelper
 import java.time.Instant
+import java.time.LocalDate
 
 suspend fun buildReminderEvent(
     remindedTimeStamp: Long,
     medicine: Medicine,
     reminder: Reminder,
     reminderEventRepository: ReminderEventRepository,
-    timeFormatter: TimeFormatter
+    formatExpirationDate: (LocalDate) -> String
 ): ReminderEvent {
     val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
     val amount = when (reminder.reminderType) {
@@ -25,7 +25,7 @@ suspend fun buildReminderEvent(
         }
 
         ReminderType.EXPIRATION_DATE -> {
-            timeFormatter.localDateToString(medicine.expirationDate)
+            formatExpirationDate(medicine.expirationDate)
         }
 
         else -> {

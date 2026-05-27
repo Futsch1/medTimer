@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,7 +31,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     @Assisted val tagFilterViewModel: TagFilterViewModel,
     private val medicineIcons: MedicineIcons,
     private val medicineStringFormatter: MedicineStringFormatter,
-    private val simulatedRemindersRepository: SimulatedRemindersRepository,
+    private val simulatedRemindersRepository: SimulatedReminders,
     @Dispatcher(MedTimerDispatchers.IO) ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 

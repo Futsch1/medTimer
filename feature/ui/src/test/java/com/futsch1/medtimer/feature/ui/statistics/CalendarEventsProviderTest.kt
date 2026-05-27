@@ -10,7 +10,7 @@ import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -38,7 +38,7 @@ class CalendarEventsProviderTest {
     private val medicineRepository: MedicineRepository = mock()
     private val reminderEventRepository: ReminderEventRepository = mock()
     private val preferencesDataSource: PreferencesDataSource = mock()
-    private val simulatedRemindersRepository: SimulatedRemindersRepository = mock()
+    private val simulatedRemindersRepository: SimulatedReminders = mock()
 
     private val simulatedRemindersFlow = MutableStateFlow<List<SimulatedReminder>>(emptyList())
 

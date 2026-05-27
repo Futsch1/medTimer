@@ -11,7 +11,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
@@ -47,7 +47,7 @@ class OverviewViewModel @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
     medicineRepository: MedicineRepository,
     reminderEventRepository: ReminderEventRepository,
-    private val simulatedRemindersRepository: SimulatedRemindersRepository,
+    private val simulatedRemindersRepository: SimulatedReminders,
     private val reminderEventFactory: PastReminderEvent.Factory,
     private val simulatedReminderEventFactory: SimulatedReminderEvent.Factory,
     @Assisted private val tagFilterViewModel: TagFilterViewModel
