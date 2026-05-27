@@ -50,7 +50,7 @@ desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
 
 # Coroutines
-kotlinx-coroutines = "1.9.0"
+kotlinx-coroutines = "1.11.0"
 
 [libraries]
 # AndroidX
