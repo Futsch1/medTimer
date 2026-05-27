@@ -11,7 +11,7 @@ import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
+import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

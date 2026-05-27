@@ -11,9 +11,9 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
 

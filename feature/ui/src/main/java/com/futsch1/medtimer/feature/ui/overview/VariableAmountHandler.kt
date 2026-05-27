@@ -8,9 +8,9 @@ import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch

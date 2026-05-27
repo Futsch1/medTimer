@@ -15,7 +15,7 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

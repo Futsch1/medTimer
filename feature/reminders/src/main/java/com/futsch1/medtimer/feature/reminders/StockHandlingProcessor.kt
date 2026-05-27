@@ -6,7 +6,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import dagger.Lazy
 import java.time.Instant
 import javax.inject.Inject

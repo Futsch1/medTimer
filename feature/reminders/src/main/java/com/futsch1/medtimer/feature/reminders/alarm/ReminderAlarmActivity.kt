@@ -18,8 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.feature.reminders.R
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch

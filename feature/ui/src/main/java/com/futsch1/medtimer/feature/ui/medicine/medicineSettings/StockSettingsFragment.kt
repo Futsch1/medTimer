@@ -19,7 +19,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog

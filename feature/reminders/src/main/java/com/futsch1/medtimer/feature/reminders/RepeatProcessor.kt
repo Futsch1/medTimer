@@ -4,7 +4,7 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import javax.inject.Inject
 import kotlin.time.Duration
 

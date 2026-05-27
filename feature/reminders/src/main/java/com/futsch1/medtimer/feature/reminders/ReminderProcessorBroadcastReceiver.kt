@@ -10,9 +10,9 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.ProcessorCode
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.notificationData.reminderEventIdsFromBundle
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.notificationData.reminderEventIdsFromBundle
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

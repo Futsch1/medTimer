@@ -31,7 +31,7 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport

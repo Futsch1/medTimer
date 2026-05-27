@@ -3,8 +3,8 @@ package com.futsch1.medtimer.feature.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import javax.inject.Inject
 
 /**

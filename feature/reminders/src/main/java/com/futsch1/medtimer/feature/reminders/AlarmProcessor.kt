@@ -10,9 +10,9 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.toPendingIntent
-import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
+import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
 import com.futsch1.medtimer.feature.reminders.widgets.WidgetUpdateReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant

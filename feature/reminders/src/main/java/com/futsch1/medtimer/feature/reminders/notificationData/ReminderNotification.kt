@@ -4,6 +4,7 @@ import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import java.time.LocalTime
 import java.time.ZoneId
 

@@ -10,7 +10,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

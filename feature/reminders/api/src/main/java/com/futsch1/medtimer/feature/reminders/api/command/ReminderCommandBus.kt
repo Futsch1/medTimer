@@ -1,16 +1,16 @@
-package com.futsch1.medtimer.feature.reminders.command
+package com.futsch1.medtimer.feature.reminders.api.command
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import kotlin.time.Duration
 
 /**
  * Typed in-process entry point for reminder-feature commands.
  *
  * Callers depend on this interface to trigger reminder work without going through the
- * [com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver] intent
- * round-trip. The receiver itself still exists for OS-reentry (AlarmManager, notification
- * action buttons, geofence transitions) and forwards parsed intents to this bus.
+ * intent round-trip. The receiver inside the impl module still exists for OS-reentry
+ * (AlarmManager, notification action buttons, geofence transitions) and forwards parsed
+ * intents to this bus.
  */
 interface ReminderCommandBus {
     suspend fun scheduleNextNotification()

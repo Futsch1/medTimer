@@ -1,11 +1,8 @@
-package com.futsch1.medtimer.feature.reminders.notificationData
+package com.futsch1.medtimer.feature.reminders.api.notificationData
 
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.futsch1.medtimer.core.common.ActivityCodes
-import com.futsch1.medtimer.feature.reminders.getReminderAction
 import java.time.Instant
 
 fun ReminderNotificationData.writeTo(intent: Intent) {
@@ -20,17 +17,6 @@ fun ReminderNotificationData.writeTo(bundle: Bundle) {
     bundle.putIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST, reminderEventIds.toIntArray())
     bundle.putLong(ActivityCodes.EXTRA_REMIND_INSTANT, remindInstant.epochSecond)
     bundle.putInt(ActivityCodes.EXTRA_NOTIFICATION_ID, notificationId)
-}
-
-fun ReminderNotificationData.toPendingIntent(context: Context): PendingIntent {
-    val reminderIntent = getReminderAction(context)
-    writeTo(reminderIntent)
-    return PendingIntent.getBroadcast(
-        context,
-        reminderEventIds[0],
-        reminderIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
 }
 
 fun Bundle.toReminderNotificationData(): ReminderNotificationData {

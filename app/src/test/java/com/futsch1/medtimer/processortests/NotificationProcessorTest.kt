@@ -13,7 +13,7 @@ import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationPart
 import dagger.hilt.android.testing.BindValue

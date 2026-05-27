@@ -13,9 +13,9 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.getVariableAmountActivityIntent
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import kotlinx.coroutines.CoroutineScope

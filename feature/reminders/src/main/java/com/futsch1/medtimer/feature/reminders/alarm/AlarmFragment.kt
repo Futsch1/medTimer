@@ -13,9 +13,9 @@ import com.futsch1.medtimer.core.common.LogTags.ALARM
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.R
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationFactory.NotificationIntentBuilder
 import com.futsch1.medtimer.feature.reminders.notificationFactory.NotificationStringBuilder
 import dagger.hilt.android.AndroidEntryPoint

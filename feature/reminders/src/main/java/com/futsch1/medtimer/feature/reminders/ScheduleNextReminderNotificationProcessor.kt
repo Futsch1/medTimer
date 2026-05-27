@@ -6,8 +6,8 @@ import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.feature.reminders.scheduling.ReminderScheduler
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.scheduling.ReminderScheduler
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject

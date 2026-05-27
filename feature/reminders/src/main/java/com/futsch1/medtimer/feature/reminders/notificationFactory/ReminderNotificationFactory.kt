@@ -12,10 +12,10 @@ import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
+import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.channelForHighestImportance
 import com.futsch1.medtimer.feature.reminders.notificationData.effectiveShowAsAlarm
-import com.futsch1.medtimer.feature.reminders.notificationData.writeTo
 
 
 abstract class ReminderNotificationFactory(
