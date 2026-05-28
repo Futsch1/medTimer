@@ -105,8 +105,9 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
 
 - Commit secrets — keystores (`*.jks`), `keystore.properties`, Play / Firebase service-account JSONs, `fastlane/*.json` upload credentials, `local.properties`.
   Only `*.example` templates belong in git; CI signs releases via GitHub Actions secrets.
-- Put real user medication data into a prompt or any external service.
-  Use synthetic data ("Vitamin X 500 mg", "Medicine A") in prompts, tests, and examples.
+- Externalize real user medication data — no prompts, no external services, no log statements, no `print stored reminders to debug` shortcuts.
+  Use synthetic data ("Vitamin X 500 mg", "Medicine A") in prompts, tests, examples, and bug reproductions.
+- Commit, fixture, or attach to bug reports any exported CSV/PDF artifacts or `adb backup` output — they contain user medication data.
 - `@Suppress` or weaken an Android Lint / SonarQube finding to make code "pass" — fix the underlying issue.
   If a suppression is genuinely needed, comment *why* and reference the rule.
 - Add a dependency the agent "remembered" without verifying group/artifact, that it's maintained, and that it's pinned via `gradle/libs.versions.toml`.
@@ -115,11 +116,6 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
 
 - Room schema changes or new migrations — `app/schemas/` is user-visible and effectively irreversible once shipped.
 - Dependency / AGP / Kotlin / KSP / Hilt upgrades, especially across majors.
-
-**Privacy:**
-
-- Don't log medication data, and don't ask the agent to "print stored reminders to debug" — reproduce with fabricated data.
-- Exported CSV/PDF artifacts and `adb backup` output are user data — keep them out of bug reports, test fixtures, and commits.
 
 **Commits** (soft conventions for AI-assisted work; deviate freely for quick personal iterations):
 
