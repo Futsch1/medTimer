@@ -69,7 +69,7 @@ class CalendarEventsViewModel @Inject constructor(
             reminderEvents = reminderEventRepository.getLastDays(pastDays.toInt())
             allMedicines = medicineRepository.getAll()
             if (medicineId > 0) {
-                medicine = medicineRepository[medicineId]
+                medicine = medicineRepository.fetch(medicineId)
                 allMedicines =
                     allMedicines.filter { medicine -> medicine.id == medicineId }
             }

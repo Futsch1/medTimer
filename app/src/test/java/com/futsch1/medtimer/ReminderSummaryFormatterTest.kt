@@ -122,10 +122,10 @@ class ReminderSummaryFormatterTest {
         var sourceReminder = Reminder.default()
         val sourceSourceReminder = Reminder.default()
         runBlocking {
-            `when`(mockReminderRepository[2]).thenReturn(sourceReminder)
+            `when`(mockReminderRepository.fetch(2)).thenReturn(sourceReminder)
         }
         runBlocking {
-            `when`(mockReminderRepository[3]).thenReturn(sourceSourceReminder)
+            `when`(mockReminderRepository.fetch(3)).thenReturn(sourceSourceReminder)
         }
 
         val reminder = Reminder.default().copy(linkedReminderId = 2)
@@ -136,7 +136,7 @@ class ReminderSummaryFormatterTest {
 
         sourceReminder = sourceReminder.copy(linkedReminderId = 3, time = ReminderTime(3, isDuration = true))
         runBlocking {
-            `when`(mockReminderRepository[2]).thenReturn(sourceReminder)
+            `when`(mockReminderRepository.fetch(2)).thenReturn(sourceReminder)
         }
         runBlocking {
             assertEquals("After reminder at 8:00 AM + 0:03", formatter.formatReminderSummary(reminder))
@@ -159,8 +159,8 @@ class ReminderSummaryFormatterTest {
         val reminder2 = Reminder.default().copy(id = 2, time = ReminderTime(63, isDuration = true), linkedReminderId = 1)
         val reminder3 = Reminder.default().copy(id = 3, time = ReminderTime(144, isDuration = true), linkedReminderId = 2)
 
-        `when`(mockReminderRepository[2]).thenReturn(reminder2)
-        `when`(mockReminderRepository[1]).thenReturn(reminder)
+        `when`(mockReminderRepository.fetch(2)).thenReturn(reminder2)
+        `when`(mockReminderRepository.fetch(1)).thenReturn(reminder)
 
         assertEquals(
             "3 reminders\n" +

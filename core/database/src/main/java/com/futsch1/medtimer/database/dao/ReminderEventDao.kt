@@ -20,7 +20,7 @@ interface ReminderEventDao {
     suspend fun getAllLimited(fromTimestamp: Long, statusValues: List<ReminderEntityStatus>): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId = :reminderEventId")
-    suspend fun get(reminderEventId: Int): ReminderEventEntity?
+    suspend fun fetch(reminderEventId: Int): ReminderEventEntity?
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderEventId = :reminderEventId")
     fun getFlow(reminderEventId: Int): Flow<ReminderEventEntity?>
@@ -35,7 +35,7 @@ interface ReminderEventDao {
     suspend fun getLastN(reminderId: Int, limit: Int): List<ReminderEventEntity>
 
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId AND remindedTimestamp = :remindedTimestamp")
-    suspend operator fun get(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
+    suspend fun fetch(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
 
     @Insert
     suspend fun create(reminderEvent: ReminderEventEntity): Long
@@ -57,7 +57,7 @@ interface ReminderEventDao {
 
     @Transaction
     suspend fun decreaseRepeats(reminderEventId: Int) {
-        val reminderEvent = get(reminderEventId) ?: return
+        val reminderEvent = fetch(reminderEventId) ?: return
         if (reminderEvent.remainingRepeats > 0) {
             reminderEvent.remainingRepeats -= 1
             update(reminderEvent)

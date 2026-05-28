@@ -20,8 +20,8 @@ class RefillProcessor @Inject constructor(
     private val timeAccess: TimeAccess
 ) {
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
-        val reminderEvent = reminderEventRepository[processedNotificationData.reminderEventIds[0]]
-        val reminder = reminderEvent?.let { reminderRepository[it.reminderId] }
+        val reminderEvent = reminderEventRepository.fetch(processedNotificationData.reminderEventIds[0])
+        val reminder = reminderEvent?.let { reminderRepository.fetch(it.reminderId) }
         reminder?.let { processRefill(it.medicineRelId, reminderEvent) }
 
     }
@@ -30,7 +30,7 @@ class RefillProcessor @Inject constructor(
         if (medicineId == null) {
             return
         }
-        val medicine = medicineRepository[medicineId] ?: return
+        val medicine = medicineRepository.fetch(medicineId) ?: return
 
         val refillEvent = processRefillInternal(medicine, medicineRepository)
         reminderEventRepository.create(refillEvent)

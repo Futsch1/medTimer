@@ -21,8 +21,8 @@ class ReminderRepositoryImpl(
         return reminderDao.getAll(medicineId).map { it.toModel() }
     }
 
-    override suspend operator fun get(reminderId: Int): Reminder? {
-        return reminderDao[reminderId]?.toModel()
+    override suspend fun fetch(reminderId: Int): Reminder? {
+        return reminderDao.fetch(reminderId)?.toModel()
     }
 
     override fun getFlow(reminderId: Int): Flow<Reminder?> {
@@ -46,7 +46,7 @@ class ReminderRepositoryImpl(
     }
 
     override suspend fun delete(reminderId: Int) {
-        reminderDao[reminderId]?.let { reminderDao.delete(it) }
+        reminderDao.fetch(reminderId)?.let { reminderDao.delete(it) }
     }
 
     override suspend fun deleteAll() {
