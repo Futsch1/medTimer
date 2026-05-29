@@ -48,13 +48,6 @@ data class SortableTableRow(
     val cells: ImmutableList<SortableTableCell>,
 )
 
-/**
- * A hand-rolled sortable, filterable table. Tapping a sortable column header sorts by it (toggling
- * ascending/descending); the filter field keeps rows whose any cell text contains the query. Both
- * are local UI state; the filtered+sorted view is derived during composition from [rows].
- *
- * Replaces the View-based `evrencoskun:TableView`.
- */
 @Composable
 fun SortableTable(
     columns: ImmutableList<SortableTableColumn>,

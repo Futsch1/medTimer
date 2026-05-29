@@ -4,16 +4,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.Tag
 import javax.inject.Inject
 
-/**
- * Filters reminder events by the active tag filter.
- *
- * The filter is the set of selected tag IDs (as persisted in `PersistentData.filterTags`) resolved
- * against the current [Tag] list — `ReminderEvent.tags` holds tag *names*, so IDs are mapped to names
- * first. An empty selection means "no filter" and all events pass.
- *
- * Lifted out of `MedicineViewModel.getFilteredEvents` so the Statistics screen can reuse tag filtering
- * without depending on another ViewModel.
- */
+// Lifted out of MedicineViewModel so the Statistics screen can reuse tag filtering without a ViewModel dependency.
 class TagEventFilter @Inject constructor() {
     fun filter(
         events: List<ReminderEvent>,

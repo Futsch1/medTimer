@@ -17,12 +17,7 @@ import com.futsch1.medtimer.feature.ui.overview.EditEventSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-/**
- * Hosts the Compose Statistics screen in a [ComposeView]. The Navigation graph and bottom-nav item
- * are unchanged. The only interop seam is [onEditEvent], which opens the existing
- * [EditEventSheetDialogFragment]. The toolbar options menu (which owns the tag filter the Reminder
- * Table observes via persisted `filterTags`) is preserved.
- */
+// The options menu persists filterTags; StatisticsScreenViewModel reads them via PersistentDataDataSource.
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private val viewModel: StatisticsScreenViewModel by viewModels()

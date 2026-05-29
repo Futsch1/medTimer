@@ -41,10 +41,7 @@ import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
 import com.patrykandpatrick.vico.compose.pie.data.pieSeries
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
 
-/**
- * The Charts view: two taken/skipped pie charts (selected range + all-time total) and a per-day
- * stacked bar chart of medicine intake, all rendered with Vico. Tag-independent (Charts ignore tags).
- */
+// Tag-independent: tag filtering applies to the Table only, not to Charts.
 @Composable
 fun ChartsContent(state: ChartsState, modifier: Modifier = Modifier) {
     Column(

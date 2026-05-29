@@ -11,10 +11,6 @@ import com.futsch1.medtimer.core.ui.component.SortableTableRow
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-/**
- * The Reminder Table view: a [SortableTable] of (tag-filtered) reminder events. Rows are produced by
- * the ViewModel; tapping a row opens the edit-event sheet via [onEditEvent] (row id = reminderEventId).
- */
 @Composable
 fun ReminderTable(
     rows: ImmutableList<SortableTableRow>,

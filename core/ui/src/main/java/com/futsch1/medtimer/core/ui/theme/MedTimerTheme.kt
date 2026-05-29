@@ -9,13 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-/**
- * The single Compose theme for medTimer, wrapping [MaterialExpressiveTheme].
- *
- * Mirrors the app's XML theme (`Theme.Material3.DynamicColors`): dynamic color on API 31+, falling
- * back to the Kotlin-defined static [LightColorScheme] / [DarkColorScheme] below 31 or when dynamic
- * color is turned off.
- */
+// Mirrors the app's XML Theme.Material3.DynamicColors: dynamic color on API 31+, static fallback below.
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MedTimerTheme(

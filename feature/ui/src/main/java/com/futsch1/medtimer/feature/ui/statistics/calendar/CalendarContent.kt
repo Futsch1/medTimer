@@ -37,14 +37,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-/**
- * The Calendar view: a month calendar (Kizitonwose `:compose`) marking days that have reminder events,
- * with a read-only detail panel for the selected day. The detail [Spanned][CharSequence] is rendered
- * via [AndroidView] + [TextView] to preserve the inline medicine icons.
- *
- * [dayEvents] is keyed by date (built by `CalendarEventsViewModel` for all medicines over the window).
- * Window matches the legacy view: the previous three months through the current month.
- */
+// AndroidView wraps a TextView because Compose Text cannot render the Spanned medicine-icon formatting.
 @Composable
 fun CalendarContent(
     dayEvents: Map<LocalDate, CharSequence>,

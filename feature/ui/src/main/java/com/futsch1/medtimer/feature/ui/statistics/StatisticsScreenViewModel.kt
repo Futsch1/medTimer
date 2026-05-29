@@ -24,11 +24,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Owns the Statistics screen's shared state: the active view (persisted by ordinal), the Analysis
- * range (persisted; drives the Charts only), the Charts state, and the tag-filtered Reminder Table
- * rows. The Calendar is handled separately by `CalendarEventsViewModel`.
- */
 @HiltViewModel
 class StatisticsScreenViewModel @Inject constructor(
     private val statisticsProvider: StatisticsProvider,
