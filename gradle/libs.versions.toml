@@ -24,7 +24,6 @@ material = "1.14.0"
 color-picker = "3.1.0"
 simply-pdf = "2.1.1"
 gson = "2.14.0"
-androidplot = "1.5.11"
 appintro = "6.3.1"
 calendar = "2.10.1"
 icondialog = "3.3.0"
@@ -52,6 +51,16 @@ documentfile = "1.1.0"
 # Coroutines
 kotlinx-coroutines = "1.11.0"
 
+# Compose
+compose-bom = "2026.05.00"
+# material3 is hand-pinned to the 1.5.0-alpha line (overriding the BOM) because MaterialExpressiveTheme
+# is still internal on the stable 1.4.x line; revert to BOM-managed once Expressive ships stable.
+material3-expressive = "1.5.0-alpha20"
+vico = "3.1.0"
+kotlinx-collections-immutable = "0.4.0"
+# Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
+kotlin-compose-compiler = "2.2.10"
+
 [libraries]
 # AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -73,8 +82,6 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 color-picker = { module = "com.github.martin-stone:hsv-alpha-color-picker-android", version.ref = "color-picker" }
 simply-pdf = { module = "com.github.wwdablu:SimplyPDF", version.ref = "simply-pdf" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-tableview = { module = "com.github.evrencoskun:TableView", version = "v0.8.9.4" }
-androidplot = { module = "com.androidplot:androidplot-core", version.ref = "androidplot" }
 appintro = { module = "com.github.AppIntro:AppIntro", version.ref = "appintro" }
 calendar = { module = "com.kizitonwose.calendar:view", version.ref = "calendar" }
 icondialog = { module = "com.maltaisn:icondialog", version.ref = "icondialog" }
@@ -111,6 +118,21 @@ androidx-documentfile = { group = "androidx.documentfile", name = "documentfile"
 # Coroutines
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 
+# Compose (versions managed by the BOM unless an explicit version.ref is given)
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3-expressive" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-ktx" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
+vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
+calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "calendar" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
@@ -125,3 +147,4 @@ triplet-play = { id = "com.github.triplet.play", version.ref = "triplet-play" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin-compose-compiler" }

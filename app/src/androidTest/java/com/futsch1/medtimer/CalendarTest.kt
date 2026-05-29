@@ -9,6 +9,9 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
@@ -40,7 +43,10 @@ class CalendarTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.calendarChip)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        device.findObject(By.text(context.getString(R.string.calendar)))?.click()
+        AndroidTestHelper.waitForIdle(500)
         assertContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Selen (200 µg)")
     }
 
@@ -64,7 +70,10 @@ class CalendarTest : BaseTestHelper() {
 
         // Check that the event is not listed in the calendar view
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.calendarChip)
+        val device2 = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context2 = InstrumentationRegistry.getInstrumentation().targetContext
+        device2.findObject(By.text(context2.getString(R.string.calendar)))?.click()
+        AndroidTestHelper.waitForIdle(500)
         assertNotContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Test")
     }
 }

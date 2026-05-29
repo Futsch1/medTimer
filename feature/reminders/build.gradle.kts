@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.futsch1.medtimer.feature.reminders"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 28

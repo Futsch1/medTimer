@@ -61,43 +61,47 @@ and the [Compose architecture guide](https://developer.android.com/develop/ui/co
   Leaf composables are stateless: they take state in via parameters and report events via lambdas.
   Stateful wrappers live one level up.
 
-## Screen pattern — stateful `Screen` + stateless `ScreenContent`
+## Screen pattern — stateful `Screen` + stateless `Screen` (overloaded)
 
-Every screen is split in two:
+Every screen is split into two overloads of the same name, disambiguated by their parameter sets:
 
 ```kotlin
-// Stateful: pulls state from the ViewModel, exposes events as lambdas.
+// Stateful overload: pulls state from the ViewModel; the Fragment calls this one.
 @Composable
 fun OverviewScreen(
+    viewModel: OverviewViewModel,
+    onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = hiltViewModel(),
 ) {
-    OverviewScreenContent(
+    // Collect any non-snapshot sources (e.g. a secondary ViewModel's Flow) here with produceState.
+    OverviewScreen(
         state = viewModel.state,
         onMarkTaken = viewModel::onMarkTaken,
         onSnooze = viewModel::onSnooze,
+        onEditEvent = onEditEvent,
         modifier = modifier,
     )
 }
 
-// Stateless: takes the rendered state + lambdas. Pure function of its inputs.
+// Stateless overload: pure function of its inputs — the @Preview and test target.
 @Composable
-fun OverviewScreenContent(
+fun OverviewScreen(
     state: OverviewScreenState,
     onMarkTaken: (ReminderId) -> Unit,
     onSnooze: (ReminderId) -> Unit,
+    onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
-) { /* … */
-}
+) { /* … */ }
 ```
 
-- **`@Preview` and screenshot tests target the stateless `*Content` composable** — that is the unit you can render with fabricated state (construct a
-  `MutableOverviewScreenState` and pass it as `OverviewScreenState`).
-- **The stateful `Screen` composable is the only place `hiltViewModel()` is called.**
+- **Both overloads share the same name.** The Kotlin compiler distinguishes them by parameter types; callers pass either a ViewModel (stateful) or a state object (stateless/preview).
+- **`@Preview` and tests target the stateless overload** — construct a `MutableOverviewScreenState` and pass it as `OverviewScreenState`.
+- **The stateful overload is the only place ViewModel references live.**
   Don't reach for a ViewModel from a leaf composable.
-- The stateless half should not import the ViewModel type.
+- The stateless overload must not import the ViewModel type.
 - `state` is the screen's state-holder interface ([next section](#state-holders)); the composable reads its properties directly. No
   `collectAsStateWithLifecycle()` is needed — Compose snapshot state is already reactive.
+- When the stateful overload needs additional data from a secondary source (e.g. a second ViewModel's `Flow`), collect it with `produceState` at the top of the stateful overload and pass the resulting value as a parameter to the stateless overload.
 
 ## State holders
 
@@ -307,4 +311,4 @@ In brief:
   and [Material 3 Expressive](https://developer.android.com/develop/ui/compose/designsystems/material3/expressive).
 - [Now in Android](https://github.com/android/nowinandroid) — reference patterns for Hilt + Compose + multi-module.
 
-_Last reviewed: 2026-05-26 · Compose: target standard, not yet adopted._
+_Last reviewed: 2026-05-29 · Compose: adopted on the Statistics screen (StatisticsFragment → ComposeView); remaining screens still use XML layouts + Fragments._

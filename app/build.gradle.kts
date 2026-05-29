@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.futsch1.medtimer"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
@@ -138,8 +138,6 @@ dependencies {
     implementation(libs.color.picker)
     implementation(libs.simply.pdf)
     implementation(libs.gson)
-    implementation(libs.tableview)
-    implementation(libs.androidplot)
     implementation(libs.appintro)
     implementation(libs.calendar)
     implementation(libs.icondialog)

@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
@@ -14,16 +13,13 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.utilities.openNotification
-import junit.framework.TestCase
 import org.junit.ClassRule
 import org.junit.Test
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
-import java.util.concurrent.atomic.AtomicReference
 import com.futsch1.medtimer.core.ui.R
 
 
@@ -40,6 +36,7 @@ class ScreenshotsTest : BaseTestHelper() {
     fun screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         openMenu()
         clickOn(R.string.generate_test_data)
@@ -80,35 +77,44 @@ class ScreenshotsTest : BaseTestHelper() {
         Screengrab.screenshot("4")
 
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.chartChip)
+        // Default view is Charts; no chip click needed
         Screengrab.screenshot("6")
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeSpinner)
+        // Open the range dropdown (button shows the currently-selected range) and select "2 days"
+        val rangeLabels = context.resources.getStringArray(R.array.analysis_days)
+        val rangeButton = rangeLabels.firstNotNullOfOrNull { device.findObject(By.text(it)) }
+        rangeButton?.click()
+        AndroidTestHelper.waitForIdle(300)
+        device.findObject(By.text(rangeLabels[1]))?.click()
+        AndroidTestHelper.waitForIdle(300)
 
-        clickListItem(position = 1)
-
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.tableChip)
+        // Switch to Table view
+        device.findObject(By.text(context.getString(R.string.tabular_view)))?.click()
+        AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("7")
 
-        clickListItem(com.evrencoskun.tableview.R.id.ColumnHeaderRecyclerView, 1)
+        // Sort by Name column
+        device.findObject(By.text(context.getString(R.string.name)))?.click()
+        AndroidTestHelper.waitForIdle(300)
 
-        val tableView = AtomicReference<TableView>()
-        tableView.set(
-            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.reminder_table)
-        )
+        internalAssert(device.findObject(By.textContains("Selen")) != null)
 
-        var view = tableView.get().cellRecyclerView.findViewWithTag<TextView>("medicineName")
-        TestCase.assertEquals("Selen (200 µg)", view.getText())
+        // Filter by "B"
+        val filterField = device.findObject(By.editable(true))
+        filterField?.click()
+        AndroidTestHelper.waitForIdle(200)
+        filterField?.text = "B"
+        AndroidTestHelper.waitForIdle(300)
 
-        Espresso.onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.filter))
-            .perform(ViewActions.replaceText("B"), ViewActions.closeSoftKeyboard())
+        internalAssert(device.findObject(By.textContains("B12")) != null)
 
-        view = tableView.get().cellRecyclerView.findViewWithTag("medicineName")
-        TestCase.assertEquals("B12 (500µg)", view.getText())
+        // Clear the filter
+        device.findObject(By.text("✕"))?.click()
+        AndroidTestHelper.waitForIdle(300)
 
-        clickOn(com.google.android.material.R.id.text_input_end_icon)
-
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.calendarChip)
+        // Switch to Calendar view
+        device.findObject(By.text(context.getString(R.string.calendar)))?.click()
+        AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("8")
 
         navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)

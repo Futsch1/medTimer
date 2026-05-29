@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
-import com.androidplot.xy.SimpleXYSeries
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.normalizeMedicineName
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -10,24 +9,6 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 class StatisticsProvider @Inject constructor(private val reminderEventRepository: ReminderEventRepository) {
-    companion object {
-        private fun calculateDataEntries(
-            days: Int,
-            medicineToDayCount: Map<String, IntArray>
-        ): List<SimpleXYSeries> {
-            if (medicineToDayCount.isEmpty()) {
-                return listOf()
-            }
-
-            val data = mutableListOf<SimpleXYSeries>()
-            for ((name, counts) in medicineToDayCount) {
-                val xValues = (days - 1 downTo 0).map { LocalDate.now().toEpochDay() - it }
-                val yValues = (days - 1 downTo 0).map { counts.getOrElse(it) { 0 } }
-                data.add(SimpleXYSeries(xValues, yValues, name))
-            }
-            return data
-        }
-    }
 
     suspend fun getTakenSkippedData(days: Int): TakenSkipped {
         val reminderEvents = reminderEventRepository.getAllWithoutDeleted()
@@ -56,9 +37,25 @@ class StatisticsProvider @Inject constructor(private val reminderEventRepository
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date)
     }
 
-    suspend fun getLastDaysReminders(days: Int): List<SimpleXYSeries> {
+    suspend fun getLastDaysReminders(days: Int): MedicinePerDayData {
         val medicineToDayCount = calculateMedicineToDayMap(days)
         return calculateDataEntries(days, medicineToDayCount)
+    }
+
+    private fun calculateDataEntries(
+        days: Int,
+        medicineToDayCount: Map<String, IntArray>
+    ): MedicinePerDayData {
+        if (medicineToDayCount.isEmpty()) {
+            return MedicinePerDayData(emptyList(), emptyList())
+        }
+
+        val today = LocalDate.now().toEpochDay()
+        val epochDays = (days - 1 downTo 0).map { today - it }
+        val series = medicineToDayCount.map { (name, counts) ->
+            MedicineDaySeries(name, (days - 1 downTo 0).map { counts.getOrElse(it) { 0 } })
+        }
+        return MedicinePerDayData(epochDays, series)
     }
 
     private suspend fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {

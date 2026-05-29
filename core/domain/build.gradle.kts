@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.futsch1.medtimer.core.domain"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 28
