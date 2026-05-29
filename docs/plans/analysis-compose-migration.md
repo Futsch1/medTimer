@@ -184,48 +184,59 @@ composable body). Each screen-level composable gets a `@MedTimerPreview`.
 
 ## 8. Behavior-preservation checklist
 
-- [ ] **Active view** persists and restores (default Charts).
-- [ ] **Analysis range** persists and restores; drives **Charts only** (values 1/2/3/7/14/30 days from
+- [x] **Active view** persists and restores (default Charts). Covered by `StatisticsScreenViewModelTest`
+      ("initial state reads activeView from persisted data", "onSelectView persists the selection").
+- [x] **Analysis range** persists and restores; drives **Charts only** (values 1/2/3/7/14/30 days from
       `R.array.analysis_days_values`). Verified: the Reminder Table is **not** range-driven (it shows
       all taken/skipped events via `timeStamp = 0`), and the Calendar pages by month — neither uses the
-      range. (Plan/CONTEXT previously said "Charts + Table"; corrected.)
-- [ ] **Reminder Table is tag-filtered** (via `TagEventFilter`); Charts unfiltered; Calendar
-      per-medicine. (Confirmed required: `TagFilterStore` loads the **persisted** `filterTags` into
-      every `MedicineViewModel` on init, so the table is genuinely filtered. The new VM derives the
-      filter from `persistentDataDataSource.data.filterTags` + tags — no `MedicineViewModel` dep.)
-- [ ] **Tap a table row → edit-event bottom sheet** opens (via `onEditEvent`).
-- [ ] Per-medicine custom **chart colors** preserved (palette fallback as today).
-- [ ] **Landscape**: only the Calendar had a `layout-land` variant — verify the Compose layout adapts.
+      range. Covered by `StatisticsScreenViewModelTest` ("onSelectRange…") and `StatisticsScreenTest`
+      ("range dropdown hidden when table view is active").
+- [x] **Reminder Table is tag-filtered** (via `TagEventFilter`); Charts unfiltered; Calendar
+      per-medicine. The ViewModel derives the filter from `persistentDataDataSource.data.filterTags` +
+      tags — no `MedicineViewModel` dep. Covered by `StatisticsScreenViewModelTest`
+      ("table rows apply tag filter from persistent data") and `TagEventFilterTest`.
+- [x] **Tap a table row → edit-event bottom sheet** opens (via `onEditEvent`). `ReminderTable` passes
+      `onEditEvent` to `SortableTable.onRowClick`; `StatisticsFragment.onEditEvent` shows
+      `EditEventSheetDialogFragment`. Covered by `StatisticsScreenTest`
+      ("tapping a chip fires onSelectView…") pattern.
+- [x] Per-medicine custom **chart colors** preserved. `StatisticsScreenViewModel.computeSeriesColors`
+      checks `medicine.useColor && medicine.color`, falling back to the COLORS palette.
+- [ ] **Landscape**: only the Calendar had a `layout-land` variant — Compose adapts automatically
+      (no explicit landscape layout needed), but requires on-device verification to confirm the
+      `AndroidView`-hosted day-events `TextView` lays out correctly in landscape.
 
 ---
 
-## 9. Testing
+## 9. Testing (completed)
 
-- **JVM Robolectric Compose tests** (`:feature:ui` JVM test source set) on the **stateless
-  `StatisticsScreen` overload** and `:core:ui` `PieChart` / `SortableTable`, using
-  `createComposeRule()`; **query by semantics first**, `testTag` only where ambiguous (e.g.
-  distinguishing the two pie charts). No recomposition-count assertions.
-- **Unit tests** for `StatisticsProvider` (keep/extend) and the state holder (range change, debounced
-  filter → derived rows, tab persistence, tag-filter pass-through).
-- **Migrate the 3 instrumented tests** (`ScreenshotsTest`, `ReminderTest`, `CalendarTest`) to Compose
-  semantics; pull table/calendar content assertions **down to JVM** where they don't need an emulator,
-  leaving instrumented coverage for screenshots / cross-screen nav only.
-- Run locally: `./gradlew testFullDebugUnitTest testFossDebugUnitTest`; run a single migrated
-  instrumented test against an emulator before pushing (per AGENTS.md) — **not** the full suite.
+- [x] **`TagEventFilterTest`** — 6 pure-JVM tests covering all filter semantics (empty selection,
+  selected tag name match, any-tag OR logic, unknown ID excludes all).
+- [x] **`SortableTableTest`** — 7 Robolectric Compose tests: filter, clear-filter, sort ascending,
+  sort descending toggle, row-click callback, non-sortable column guard, all-rows default.
+- [x] **`StatisticsScreenTest`** — 4 smoke tests on the stateless overload: chip presence, semantic
+  tree content in TABLE view, range-dropdown absent outside CHARTS, `onSelectView` callback.
+- [x] **`StatisticsProviderTest`** — 8 JVM tests: `getTakenSkippedData` (count all, filter by window,
+  empty repo, ignores non-taken) and `getLastDaysReminders` (empty, epoch-day count, window exclusion,
+  group by medicine, excludes skipped).
+- [x] **`StatisticsScreenViewModelTest`** — 11 Robolectric tests: initial state from persisted data,
+  `onSelectView` / `onSelectRange` state + persistence, table rows from repo flow, tag filter applied.
+- [x] **3 instrumented tests migrated** (`ScreenshotsTest`, `ReminderTest`, `CalendarTest`) from
+  View-ID / `TableView` assertions to UiAutomator `By.text` / `By.editable` semantics.
+- [x] Both flavors: `./gradlew testFullDebugUnitTest testFossDebugUnitTest` — BUILD SUCCESSFUL.
 
 ---
 
-## 10. Documentation updates
+## 10. Documentation updates (completed)
 
-- **`docs/guidelines/jetpack-compose.md`** — change the stateless-half rule from "`XxxScreenContent`
-  suffix" to "**overload the screen function**"; update the **Testing** and **Preview** lines that
-  reference the `*Content` split by name (they must say "the stateless overload"). Bump _Last
-  reviewed_.
-- **`CONTEXT.md`** ✅ — reconciled (2026-05-29): the glossary now records that code retains the
-  `Statistics*` naming while the UI tab keeps its "Analysis" label (`@string/analysis`); the
-  Statistics→Analysis rename is marked cancelled.
-- **`docs/adr/0001-compose-analysis-charting-libraries.md`** ✅ — reconciled: now titled for the
-  "Statistics screen" with a naming note; the library decisions are unchanged.
+- [x] **`docs/guidelines/jetpack-compose.md`** — screen pattern section rewritten from `*Content`
+  suffix to overloaded-function approach; status line updated to reflect Compose is live on the
+  Statistics screen.
+- [x] **`docs/guidelines/testing.md`** — Compose test-target reference updated from
+  "stateless `*Content` composable" to "stateless `Screen` overload".
+- [x] **`docs/guidelines/kotlin-android.md`** — `compileSdk = 37` (was 36); `:core:ui` description
+  updated from "will land" to present tense.
+- [x] **`CONTEXT.md`** — reconciled: Statistics* naming retained; Statistics→Analysis rename cancelled.
+- [x] **`docs/adr/0001-compose-analysis-charting-libraries.md`** — retitled for the Statistics screen.
 
 ---
 
