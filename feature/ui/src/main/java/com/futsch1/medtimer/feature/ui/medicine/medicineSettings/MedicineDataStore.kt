@@ -30,6 +30,7 @@ class MedicineDataStore @AssistedInject constructor(
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when (key) {
             "use_color" -> modelData.useColor
+            "cannot_be_skipped" -> modelData.cannotBeSkipped
             else -> defValue
         }
     }
@@ -37,6 +38,7 @@ class MedicineDataStore @AssistedInject constructor(
     override fun putBoolean(key: String?, value: Boolean) {
         when (key) {
             "use_color" -> modelData = modelData.copy(useColor = value)
+            "cannot_be_skipped" -> modelData = modelData.copy(cannotBeSkipped = value)
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)
