@@ -36,7 +36,7 @@ class AlarmProcessorTest {
                 reminderContext.alarmManagerMock,
                 timeAccess,
                 reminderContext.preferencesDataSourceMock
-            ).setAlarmForReminderNotification(
+            ).setSecondaryAlarm(
                 processedNotificationData
             )
         }
