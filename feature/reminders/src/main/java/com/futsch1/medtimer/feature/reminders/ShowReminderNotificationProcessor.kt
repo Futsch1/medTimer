@@ -1,11 +1,9 @@
 package com.futsch1.medtimer.feature.reminders
 
 import android.app.NotificationManager
-import android.content.Context
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /**
@@ -16,7 +14,6 @@ import javax.inject.Inject
  * the actual notification scheduling to [AlarmProcessor].
  */
 class ShowReminderNotificationProcessor @Inject constructor(
-    @param:ApplicationContext private val context: Context,
     private val alarmProcessor: AlarmProcessor,
     private val notificationProcessor: NotificationProcessor,
     private val notificationManager: NotificationManager
@@ -26,7 +23,7 @@ class ShowReminderNotificationProcessor @Inject constructor(
 
         // Check if given notification ID is already active
         if (!isNotificationActive(reminderNotificationData)) {
-            alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
+            alarmProcessor.setSecondaryAlarm(reminderNotificationData)
         }
     }
 
