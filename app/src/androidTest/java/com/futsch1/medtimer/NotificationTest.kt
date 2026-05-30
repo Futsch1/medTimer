@@ -742,6 +742,68 @@ class NotificationTest : BaseTestHelper() {
         }
     }
 
+    @Test
+    @AllowFlaky(attempts = 1)
+    fun noSkippedButton() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val packageName = device.currentPackageName
+
+        AndroidTestHelper.createMedicine(TEST_MED)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickOn(R.string.medicine_cannot_be_skipped)
+        pressBack()
+        AndroidTestHelper.createIntervalReminder("1", 120)
+        pressBack()
+
+        openNotification().use {
+            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
+            internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
+            internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) == null)
+            dismissNotification(notification)
+        }
+
+        navigateTo(MainMenu.OVERVIEW)
+        assertCustomAssertionAtPosition(
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            0,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            matches(withTagValue(equalTo(R.drawable.bell)))
+        )
+
+        openMenu()
+        clickOn(R.string.tab_settings)
+        clickOn(R.string.display_settings)
+        clickOn(R.string.big_notifications)
+        pressBack()
+
+        navigateTo(MainMenu.MEDICINES)
+
+        AndroidTestHelper.createMedicine(TEST_MED_2)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickOn(R.string.medicine_cannot_be_skipped)
+        pressBack()
+        AndroidTestHelper.createIntervalReminder("1", 120)
+
+        openNotification().use {
+            device.wait(Until.findObject(By.textContains(TEST_MED_2)), 2_000)
+            makeNotificationExpanded(device, getNotificationText(R.string.taken))
+            internalAssert(
+                device.wait(
+                    Until.hasObject(By.res(packageName, "takenButton")),
+                    2000
+                )
+            )
+            internalAssert(
+                device.findObject(By.res(packageName, "skippedButton")) == null
+            )
+            internalAssert(
+                device.findObject(By.res(packageName, "snoozeButton")) != null
+            )
+        }
+    }
+
     private fun clickTakenOnAlarmScreen(
         device: UiDevice,
         context: Context

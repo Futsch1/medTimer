@@ -27,7 +27,8 @@ class NotificationIntentBuilder @AssistedInject constructor(
         fun create(reminderNotification: ReminderNotification): NotificationIntentBuilder
     }
 
-    val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
+    val processedNotificationData =
+        ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
 
     val pendingSnooze = getSnoozePendingIntent()
     val pendingLocationSnooze = getLocationSnoozePendingIntent()
@@ -38,10 +39,14 @@ class NotificationIntentBuilder @AssistedInject constructor(
     val pendingDismiss = getDismissPendingIntent()
 
     private fun getTakenPendingIntent(): PendingIntent {
-        val anyAskForAmount = reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
+        val anyAskForAmount =
+            reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
 
         return if (anyAskForAmount) {
-            val notifyTaken = getVariableAmountActivityIntent(context, reminderNotification.reminderNotificationData)
+            val notifyTaken = getVariableAmountActivityIntent(
+                context,
+                reminderNotification.reminderNotificationData
+            )
             PendingIntent.getActivity(
                 context,
                 reminderNotification.reminderNotificationData.notificationId,
@@ -59,7 +64,10 @@ class NotificationIntentBuilder @AssistedInject constructor(
         }
     }
 
-    private fun getSkippedPendingIntent(): PendingIntent {
+    private fun getSkippedPendingIntent(): PendingIntent? {
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.cannotBeSkipped }) {
+            return null
+        }
         val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
         return PendingIntent.getBroadcast(
             context,
@@ -76,14 +84,21 @@ class NotificationIntentBuilder @AssistedInject constructor(
             val snooze = getCustomSnoozeActionIntent(
                 context, reminderNotification.reminderNotificationData
             )
-            PendingIntent.getActivity(context, reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                snooze,
+                PendingIntent.FLAG_IMMUTABLE
+            )
         } else {
             val snooze = getSnoozeIntent(
                 context, reminderNotification.reminderNotificationData, snoozeDuration
             )
             PendingIntent.getBroadcast(
                 context,
-                reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                reminderNotification.reminderNotificationData.notificationId,
+                snooze,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
     }
@@ -96,14 +111,16 @@ class NotificationIntentBuilder @AssistedInject constructor(
         val snooze = getLocationSnoozeIntent(context, reminderNotification.reminderNotificationData)
         return PendingIntent.getBroadcast(
             context,
-            reminderNotification.reminderNotificationData.notificationId, snooze, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            reminderNotification.reminderNotificationData.notificationId,
+            snooze,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
     private fun getDismissPendingIntent(): PendingIntent {
         return when (preferencesDataSource.preferences.value.dismissNotificationAction) {
             DismissNotificationAction.SKIP -> {
-                pendingSkipped
+                pendingSkipped ?: pendingSnooze
             }
 
             DismissNotificationAction.SNOOZE -> {
