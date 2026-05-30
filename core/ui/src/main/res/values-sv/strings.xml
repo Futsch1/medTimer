@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
@@ -307,4 +307,4 @@
     <string name="set_home_location_confirm">Ange hemplats till\n%1$s, %2$s?</string>
     <string name="home_location_error">Det gick inte att fastställa din aktuella plats</string>
     <string name="linked_reminder_delay">Fördröjning för följande dos</string>
-</resources>
+<string name="exact_reminders_warning_title">Exakta påminnelser är inaktiverade</string><string name="exact_reminders_warning_summary">Påminnelser kan visas några minuter senare än planerat. Om du behöver exakta påminnelser (på bekostnad av något ökad batteriförbrukning) aktiverar du detta i aviseringsinställningarna.</string></resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
@@ -31,27 +31,22 @@
     <plurals name="days">
         <item quantity="one">día</item>
         <item quantity="other">días</item>
-        <item quantity="many">días</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">hora</item>
         <item quantity="other">horas</item>
-        <item quantity="many">horas</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">minuto</item>
         <item quantity="other">minutos</item>
-        <item quantity="many">minutos</item>
     </plurals>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d recordatorio\n%2$s</item>
-        <item quantity="many">%1$d recordatorios\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">semana</item>
         <item quantity="other">semanas</item>
-        <item quantity="many">semanas</item>
     </plurals>
     <string name="once">Una vez</string>
     <string name="daily">Diariamente</string>
@@ -156,7 +151,6 @@
     <string name="total">Total</string>
     <plurals name="last_n_days">
         <item quantity="one">Últimas 24 horas</item>
-        <item quantity="many">Últimos %1$d días</item>
         <item quantity="other">Últimos %1$d días</item>
     </plurals>
     <string name="name">Nombre</string>
@@ -313,4 +307,6 @@
     <string name="show_home_location_on_map">Mostrar ubicación de casa en el mapa</string>
     <string name="set_home_location_confirm">¿Establecer ubicación de casa en\n%1$s, %2$s?</string>
     <string name="home_location_error">No se pudo determinar tu ubicación actual</string>
+    <string name="exact_reminders_warning_title">Los recordatorios exactos están desactivados</string>
+    <string name="exact_reminders_warning_summary">Los recordatorios pueden activarse unos minutos más tarde de lo programado. Si necesita recordatorios exactos (a costa de un ligero aumento del consumo de batería), actívelo en la configuración de notificaciones.</string>
 </resources>

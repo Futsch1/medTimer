@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
@@ -31,26 +31,31 @@
     <plurals name="days">
         <item quantity="one">יום</item>
         <item quantity="two">יומיים</item>
+        <item quantity="many">ימים</item>
         <item quantity="other">ימים</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">שעה</item>
         <item quantity="two">שעתיים</item>
+        <item quantity="many">שעות</item>
         <item quantity="other">שעות</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">דקה</item>
         <item quantity="two">דקות</item>
+        <item quantity="many">דקות</item>
         <item quantity="other">דקות</item>
     </plurals>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d התראה\n%2$s</item>
         <item quantity="two">%1$d התראות\n%2$s</item>
+        <item quantity="many">%1$d התראות\n%2$s</item>
         <item quantity="other">%1$d התראות\n%2$s</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">שבוע</item>
         <item quantity="two">שבועיים</item>
+        <item quantity="many">שבועות</item>
         <item quantity="other">שבועות</item>
     </plurals>
     <string name="once">פעם אחת</string>
@@ -158,6 +163,7 @@
     <plurals name="last_n_days">
         <item quantity="one">24 שעות אחרונות</item>
         <item quantity="two">יומיים אחרונים</item>
+        <item quantity="many">%1$d ימים אחרונים</item>
         <item quantity="other">%1$d ימים אחרונים</item>
     </plurals>
     <string name="name">שם</string>
@@ -313,4 +319,4 @@
     <string name="show_home_location_on_map">הצג מיקום בית על המפה</string>
     <string name="set_home_location_confirm">להגדיר את מיקום הבית ל-\n%1$s, %2$s?</string>
     <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
-</resources>
+<string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string><string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string></resources>

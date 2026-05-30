@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
@@ -307,4 +307,4 @@
     <string name="show_home_location_on_map">Εμφάνιση τοποθεσίας σπιτιού στον χάρτη</string>
     <string name="set_home_location_confirm">Ορισμός τοποθεσίας σπιτιού σε\n%1$s, %2$s;</string>
     <string name="home_location_error">Δεν ήταν δυνατός ο προσδιορισμός της τρέχουσας τοποθεσίας σας</string>
-</resources>
+<string name="exact_reminders_warning_title">Οι ακριβείς υπενθυμίσεις είναι απενεργοποιημένες</string><string name="exact_reminders_warning_summary">Οι υπενθυμίσεις ενδέχεται να εμφανιστούν μερικά λεπτά αργότερα από το προγραμματισμένο. Αν χρειάζεστε ακριβείς υπενθυμίσεις (με ελαφρώς αυξημένη κατανάλωση μπαταρίας), ενεργοποιήστε αυτήν την επιλογή στις ρυθμίσεις ειδοποιήσεων.</string></resources>

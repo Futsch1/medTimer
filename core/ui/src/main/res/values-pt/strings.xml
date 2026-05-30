@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
@@ -30,27 +30,22 @@
     <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
     <plurals name="days">
         <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
-        <item quantity="many">dias</item>
         <item quantity="other">dias</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
-        <item quantity="many">horas</item>
         <item quantity="other">horas</item>
     </plurals>
     <plurals name="minutes" tools:ignore="ImpliedQuantity">
         <item quantity="one">minuto</item>
-        <item quantity="many">minutos</item>
         <item quantity="other">minutos</item>
     </plurals>
     <plurals name="sum_reminders">
         <item quantity="one">%1$d lembrete\n%2$s</item>
-        <item quantity="many">%1$d lembretes\n%2$s</item>
         <item quantity="other">%1$d lembretes\n%2$s</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one" tools:ignore="ImpliedQuantity">semana</item>
-        <item quantity="many">semanas</item>
         <item quantity="other">semanas</item>
     </plurals>
     <string name="once">Uma vez</string>
@@ -146,7 +141,6 @@
     <string name="thirty_days">30 dias</string>
     <plurals name="last_n_days">
         <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
-        <item quantity="many">Últimos %1$d dias</item>
         <item quantity="other">Últimos %1$d dias</item>
     </plurals>
     <string name="name">Nome</string>
@@ -313,4 +307,6 @@
     <string name="show_home_location_on_map">Mostrar localização de casa no mapa</string>
     <string name="set_home_location_confirm">Definir localização de casa para\n%1$s, %2$s?</string>
     <string name="home_location_error">Não foi possível determinar a sua localização atual</string>
+    <string name="exact_reminders_warning_title">Lembretes exatos estão desativados</string>
+    <string name="exact_reminders_warning_summary">Os lembretes podem ser acionados alguns minutos depois do horário agendado. Se precisar de lembretes exatos (com um pequeno aumento no consumo de bateria), ative isso nas configurações de notificação.</string>
 </resources>

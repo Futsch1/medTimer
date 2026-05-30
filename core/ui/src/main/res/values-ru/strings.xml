@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="continuous_from">Непрерывный интервал, начиная с %1$s</string>
     <string name="continuous_interval_reminder">Напоминание о непрерывном интервале</string>
@@ -315,4 +315,4 @@
     <string name="show_home_location_on_map">Показать домашнее местоположение на карте</string>
     <string name="set_home_location_confirm">Задать домашнее местоположение:\n%1$s, %2$s?</string>
     <string name="home_location_error">Не удалось определить ваше текущее местоположение</string>
-</resources>
+<string name="exact_reminders_warning_title">Точные напоминания отключены</string><string name="exact_reminders_warning_summary">Напоминания могут срабатывать на несколько минут позже запланированного. Если вам нужны точные напоминания (за счёт незначительного увеличения расхода батареи), включите это в настройках уведомлений.</string></resources>
