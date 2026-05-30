@@ -27,6 +27,22 @@ class MedicineDataStore @AssistedInject constructor(
 
     override val modelDataId: Int get() = modelData.id
 
+    override fun getBoolean(key: String?, defValue: Boolean): Boolean {
+        return when (key) {
+            "use_color" -> modelData.useColor
+            else -> defValue
+        }
+    }
+
+    override fun putBoolean(key: String?, value: Boolean) {
+        when (key) {
+            "use_color" -> modelData = modelData.copy(useColor = value)
+        }
+        coroutineScope.launch {
+            medicineRepository.update(modelData)
+        }
+    }
+
     override fun getString(key: String?, defValue: String?): String? {
         return when (key) {
             "amount" -> MedicineHelper.formatAmount(modelData.amount, "")
@@ -34,6 +50,12 @@ class MedicineDataStore @AssistedInject constructor(
             "stock_refill_size" -> MedicineHelper.formatAmount(modelData.refillSize, "")
             "production_date" -> timeFormatter.localDateToString(modelData.productionDate)
             "expiration_date" -> timeFormatter.localDateToString(modelData.expirationDate)
+            "notification_importance" -> if (modelData.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
+                "0"
+            } else {
+                if (modelData.showNotificationAsAlarm) "2" else "1"
+            }
+
             else -> defValue
         }
     }
@@ -52,6 +74,28 @@ class MedicineDataStore @AssistedInject constructor(
 
             "expiration_date" -> modelData =
                 modelData.copy(expirationDate = timeFormatter.stringToLocalDate(value!!)!!)
+
+            "notification_importance" -> modelData =
+                modelData.copy(
+                    notificationImportance = if (value == "0") Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
+                    showNotificationAsAlarm = value == "2"
+                )
+        }
+        coroutineScope.launch {
+            medicineRepository.update(modelData)
+        }
+    }
+
+    override fun getInt(key: String?, defValue: Int): Int {
+        return when (key) {
+            "color" -> modelData.color
+            else -> defValue
+        }
+    }
+
+    override fun putInt(key: String?, value: Int) {
+        when (key) {
+            "color" -> modelData = modelData.copy(color = value)
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)

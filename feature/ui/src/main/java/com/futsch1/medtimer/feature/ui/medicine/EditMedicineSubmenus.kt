@@ -25,6 +25,7 @@ class EditMedicineSubmenus @AssistedInject constructor(
     }
 
     enum class Submenu {
+        SETTINGS,
         NOTES,
         TAGS,
         STOCK_TRACKING,
@@ -33,16 +34,31 @@ class EditMedicineSubmenus @AssistedInject constructor(
 
     fun open(submenu: Submenu, navController: NavController) {
         when (submenu) {
+            Submenu.SETTINGS -> {
+                val action =
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineSettingsFragment(
+                        medicine.id
+                    )
+                try {
+                    navController.navigate(action)
+                } catch (_: IllegalArgumentException) {
+                    // Intentionally empty
+                }
+            }
+
             Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
-                val tagDataFromMedicine = tagDataFromMedicineFactory.create(editMedicineFragment, medicine.id)
+                val tagDataFromMedicine =
+                    tagDataFromMedicineFactory.create(editMedicineFragment, medicine.id)
                 val dialog: DialogFragment = tagsFragmentFactory.create(tagDataFromMedicine)
                 dialog.show(editMedicineFragment.getParentFragmentManager(), "tags")
             }
 
             Submenu.STOCK_TRACKING -> {
                 val action =
-                    EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(medicine.id)
+                    EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(
+                        medicine.id
+                    )
                 try {
                     navController.navigate(action)
                 } catch (_: IllegalArgumentException) {

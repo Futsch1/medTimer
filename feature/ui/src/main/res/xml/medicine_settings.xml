@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SwitchPreferenceCompat
         android:title="@string/color"
-        app:key="color" />
+        app:key="use_color" />
     <Preference
         android:title="@string/select_color"
-        android:icon="@drawable/palette"
-        app:key="select_color"
-        android:dependency="color" />
+        android:icon="@drawable/palette_fill"
+        app:key="color"
+        android:dependency="use_color" />
     <ListPreference
         app:icon="@drawable/arrow_up_circle"
-        app:key="priority"
+        app:key="notification_importance"
         app:title="@string/notification_importance"
         android:entries="@array/notification_importance"
         android:entryValues="@array/values_0_to_2" />

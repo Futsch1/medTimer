@@ -48,10 +48,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:id="@+id/medicineMenuButtons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openMedicineSettings"
@@ -62,9 +62,12 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/gear"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openTags" />
+                    app:iconPadding="0dp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openNotes"
@@ -75,9 +78,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/journal_text"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openTags" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openTags"
@@ -88,9 +89,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/tag"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openStockTracking" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openStockTracking"
@@ -101,9 +100,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/box_seam"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openCalendar" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openCalendar"
@@ -114,9 +111,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/calendar_week"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:iconPadding="0dp" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

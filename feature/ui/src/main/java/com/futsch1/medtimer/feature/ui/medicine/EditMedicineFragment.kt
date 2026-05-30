@@ -1,21 +1,11 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
-import android.app.NotificationManager
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -30,20 +20,15 @@ import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.core.common.helpers.SwipeHelper
-import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
-import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.feature.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.dialogs.ColorPickerDialog
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTypeDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
@@ -83,9 +68,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var newReminderTypeDialogFactory: NewReminderTypeDialog.Factory
 
     @Inject
-    lateinit var notificationManager: NotificationManager
-
-    @Inject
     lateinit var editMedicineSubmenusFactory: EditMedicineSubmenus.Factory
 
     @Inject
@@ -112,10 +94,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     var iconId: Int = 0
     private lateinit var adapter: ReminderViewAdapter
-    private lateinit var enableColor: MaterialSwitch
-    private lateinit var colorButton: MaterialButton
-    private var color = 0
-    private lateinit var notificationImportance: Spinner
     private lateinit var selectIconButton: MaterialButton
     var notes: String = ""
 
@@ -132,10 +110,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         val navController = findNavController()
 
         setupSelectIcon()
-        enableColor = fragmentView.findViewById(R.id.enableColor)
-        colorButton = fragmentView.findViewById(R.id.selectColor)
-        notificationImportance = fragmentView.findViewById(R.id.notificationImportance)
-
         val recyclerView = setupMedicineList()
         setupSwiping(recyclerView)
 
@@ -195,8 +169,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     }
 
     private fun onMedicineLoaded(medicine: Medicine) {
-
-        color = medicine.color
         iconId = medicine.iconId
         notes = medicine.notes
 
@@ -208,10 +180,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         val subMenus = editMedicineSubmenusFactory.create(this, medicine)
 
         selectIconButton.setIcon(medicineIcons.getIconDrawable(iconId))
-        setupEnableColor(medicine.useColor)
-        setupColorButton(medicine.useColor)
 
-        setupNotificationImportance(medicine)
+        setupMedicineSettings(subMenus)
         setupNotesButton(subMenus)
         setupOpenCalendarButton(subMenus)
         setupStockButton(subMenus)
@@ -245,49 +215,14 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         }
     }
 
-    private fun setupEnableColor(useColor: Boolean) {
-        enableColor.setChecked(useColor)
-        enableColor.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            colorButton.visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun setupColorButton(useColor: Boolean) {
-        ViewColorHelper.setButtonBackground(colorButton, color)
-        colorButton.setOnClickListener {
-            ColorPickerDialog(requireContext(), requireActivity(), color) { newColor ->
-                color = newColor
-                ViewColorHelper.setButtonBackground(colorButton, color)
-                Toast.makeText(requireContext(), com.futsch1.medtimer.core.ui.R.string.change_color_toast, Toast.LENGTH_LONG).show()
-            }
-        }
-        colorButton.visibility = if (useColor) View.VISIBLE else View.GONE
-    }
-
-    private fun setupNotificationImportance(medicine: Medicine) {
-        val notificationImportance = fragmentView.findViewById<Spinner>(R.id.notificationImportance)
-        val importanceTexts = this.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.notification_importance)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, importanceTexts)
-        val index = if (medicine.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
-            0
-        } else {
-            if (medicine.showNotificationAsAlarm) 2 else 1
-        }
-
-        notificationImportance.setAdapter(arrayAdapter)
-
-        notificationImportance.setSelection(index)
-        notificationImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 2) {
-                    return
-                }
-                showEnablePermissionsDialog(notificationManager)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Intentionally empty
-            }
+    private fun setupMedicineSettings(subMenus: EditMedicineSubmenus) {
+        val openMedicineSettings =
+            fragmentView.findViewById<MaterialButton>(R.id.openMedicineSettings)
+        openMedicineSettings.setOnClickListener {
+            subMenus.open(
+                EditMedicineSubmenus.Submenu.SETTINGS,
+                findNavController(openMedicineSettings)
+            )
         }
     }
 
@@ -308,7 +243,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private fun setupStockButton(subMenus: EditMedicineSubmenus) {
         val openStockTracking = fragmentView.findViewById<MaterialButton>(R.id.openStockTracking)
         openStockTracking.setOnClickListener {
-            subMenus.open(EditMedicineSubmenus.Submenu.STOCK_TRACKING, findNavController(openStockTracking))
+            subMenus.open(
+                EditMedicineSubmenus.Submenu.STOCK_TRACKING,
+                findNavController(openStockTracking)
+            )
         }
     }
 
@@ -350,9 +288,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             val reminder = reminderRepository.fetch(itemId.toInt())
             if (reminder != null) {
                 withContext(mainDispatcher) {
-                    linkedReminderHandlingFactory.create(reminder, lifecycleScope).deleteReminder(requireContext(), { }, {
-                        adapter.notifyItemChanged(adapterPosition)
-                    })
+                    linkedReminderHandlingFactory.create(reminder, lifecycleScope)
+                        .deleteReminder(requireContext(), { }, {
+                            adapter.notifyItemChanged(adapterPosition)
+                        })
                 }
             }
         }
@@ -360,13 +299,10 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun buildMedicine(): Medicine? {
         return medicine?.copy(
-            name = fragmentView.findViewById<EditText>(R.id.editMedicineName).getText().toString().trim(),
-            useColor = enableColor.isChecked,
-            color = color,
+            name = fragmentView.findViewById<EditText>(R.id.editMedicineName).text.toString()
+                .trim(),
             iconId = iconId,
             notes = notes,
-            notificationImportance = if (notificationImportance.selectedItemPosition == 0) Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
-            showNotificationAsAlarm = notificationImportance.selectedItemPosition == 2
         )
     }
 
@@ -393,25 +329,4 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         selectIconButton.setIcon(medicineIcons.getIconDrawable(iconId))
     }
 
-    fun showEnablePermissionsDialog(notificationManager: NotificationManager) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || notificationManager.canUseFullScreenIntent()) {
-            return
-        }
-
-        val context = requireContext()
-        val dialog = MaterialAlertDialogBuilder(context)
-            .setMessage(com.futsch1.medtimer.core.ui.R.string.enable_notification_alarm_dialog)
-            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
-                val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
-                    data = "package:${context.packageName}".toUri()
-                }
-                safeStartActivity(context, intent)
-            }
-
-            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ ->
-                // Intentionally empty
-            }.create()
-
-        dialog.show()
-    }
 }
