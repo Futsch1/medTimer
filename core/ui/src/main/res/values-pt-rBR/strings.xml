@@ -28,25 +28,30 @@
     <string name="weekday_limited">Limitado a alguns dias da semana</string>
     <string name="windowed_interval_reminder">Lembrete de intervalo com janela</string>
     <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
-    <plurals name="days">
+    <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
         <item quantity="other">dias</item>
+        <item quantity="many">dias</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">hora</item>
         <item quantity="other">horas</item>
+        <item quantity="many">horas</item>
     </plurals>
-    <plurals name="minutes" tools:ignore="ImpliedQuantity">
+    <plurals name="minutes" tools:ignore="UnusedQuantity,ImpliedQuantity">
         <item quantity="one">minuto</item>
         <item quantity="other">minutos</item>
+        <item quantity="many">minutos</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="UnusedQuantity">
         <item quantity="one">%1$d lembrete\n%2$s</item>
+        <item quantity="many">%1$d lembretes\n%2$s</item>
         <item quantity="other">%1$d lembretes\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">semana</item>
         <item quantity="other">semanas</item>
+        <item quantity="many">semanas</item>
     </plurals>
     <string name="once">Uma vez</string>
     <string name="daily">Diariamente</string>
@@ -139,8 +144,9 @@
     <string name="tabular_view">Visualização em tabela</string>
     <string name="fourteen_days">14 dias</string>
     <string name="thirty_days">30 dias</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">Últimas 24 horas</item>
+        <item quantity="many">Últimos %1$d dias</item>
         <item quantity="other">Últimos %1$d dias</item>
     </plurals>
     <string name="name">Nome</string>

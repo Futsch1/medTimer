@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
     <string name="continuous_interval_reminder_help">התחילו תזכורת על בסיס מרווח זמן (למשל, כל 6 שעות) מנקודת זמן מסוימת. דפוס זה הוא רציף, ומתעלם מהמגבלות של שעת היום, עד לכיבוי ידני.</string>
@@ -28,34 +28,29 @@
     <string name="weekday_limited">מוגבל לימים מסויימים בשבוע</string>
     <string name="windowed_interval_reminder">חלון תזכורת מחזורי</string>
     <string name="windowed_interval_reminder_help">הגדירו חלון פעיל יומי (למשל, 9:00 עד 21:00) שבו התזכורת הראשונה תמיד בשעת הפתיחה. תזכורות הבאות מופעלות במרווחים קבועים עד שהשעה הסופית מגיעה. הדפוס המלא מתאפס בכל יום.</string>
-    <plurals name="days">
+    <plurals name="days" tools:ignore="MissingQuantity">
         <item quantity="one">יום</item>
         <item quantity="two">יומיים</item>
-        <item quantity="many">ימים</item>
         <item quantity="other">ימים</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" tools:ignore="MissingQuantity">
         <item quantity="one">שעה</item>
         <item quantity="two">שעתיים</item>
-        <item quantity="many">שעות</item>
         <item quantity="other">שעות</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="minutes" tools:ignore="MissingQuantity">
         <item quantity="one">דקה</item>
         <item quantity="two">דקות</item>
-        <item quantity="many">דקות</item>
         <item quantity="other">דקות</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
         <item quantity="one">%1$d התראה\n%2$s</item>
         <item quantity="two">%1$d התראות\n%2$s</item>
-        <item quantity="many">%1$d התראות\n%2$s</item>
         <item quantity="other">%1$d התראות\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" tools:ignore="MissingQuantity">
         <item quantity="one">שבוע</item>
         <item quantity="two">שבועיים</item>
-        <item quantity="many">שבועות</item>
         <item quantity="other">שבועות</item>
     </plurals>
     <string name="once">פעם אחת</string>
@@ -160,10 +155,9 @@
     <string name="fourteen_days">14 ימים</string>
     <string name="thirty_days">30 ימים</string>
     <string name="total">סך הכל</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" tools:ignore="MissingQuantity">
         <item quantity="one">24 שעות אחרונות</item>
         <item quantity="two">יומיים אחרונים</item>
-        <item quantity="many">%1$d ימים אחרונים</item>
         <item quantity="other">%1$d ימים אחרונים</item>
     </plurals>
     <string name="name">שם</string>
