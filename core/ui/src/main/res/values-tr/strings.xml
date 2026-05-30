@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
@@ -307,4 +307,4 @@
     <string name="show_home_location_on_map">Ev konumunu haritada göster</string>
     <string name="set_home_location_confirm">Ev konumunu şu şekilde ayarla:\n%1$s, %2$s?</string>
     <string name="home_location_error">Mevcut konumunuz belirlenemedi</string>
-</resources>
+<string name="exact_reminders_warning_title">Tam hatırlatıcılar devre dışı</string><string name="exact_reminders_warning_summary">Hatırlatıcılar planlanandan birkaç dakika geç gönderilebilir. Tam hatırlatıcılara ihtiyaç duyuyorsanız (biraz daha fazla pil tüketimi pahasına), bunu bildirim ayarlarından etkinleştirebilirsiniz.</string></resources>

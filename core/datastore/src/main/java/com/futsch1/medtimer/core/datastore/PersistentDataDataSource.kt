@@ -71,6 +71,10 @@ class PersistentDataDataSource @Inject constructor(
         defaultSharedPreferences.edit { putBoolean(BATTERY_WARNING_SHOWN, batteryWarningShown) }
     }
 
+    fun setExactRemindersWarningShown(bool: Boolean) {
+        defaultSharedPreferences.edit { putBoolean(EXACT_REMINDERS_WARNING_SHOWN, bool) }
+    }
+
     fun setLastAutomaticBackup(localDate: LocalDate) {
         defaultSharedPreferences.edit { putString(LAST_AUTOMATIC_BACKUP, localDate.toString()) }
     }
@@ -165,6 +169,7 @@ class PersistentDataDataSource @Inject constructor(
             },
             analysisDays = defaultSharedPreferences.getInt(ANALYSIS_DAYS, default.analysisDays),
             batteryWarningShown = defaultSharedPreferences.getBoolean(BATTERY_WARNING_SHOWN, default.batteryWarningShown),
+            exactRemindersWarningShown = defaultSharedPreferences.getBoolean(EXACT_REMINDERS_WARNING_SHOWN, default.exactRemindersWarningShown),
             introShown = defaultSharedPreferences.getBoolean(INTRO_SHOWN, default.introShown),
             lastAutomaticBackup = LocalDate.parse(defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null) ?: default.lastAutomaticBackup.toString()),
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),
@@ -181,6 +186,7 @@ class PersistentDataDataSource @Inject constructor(
         const val ACTIVE_STATISTICS_FRAGMENT = "active_statistics_fragment"
         const val ANALYSIS_DAYS = "analysis_days"
         const val BATTERY_WARNING_SHOWN = "battery_warning_dismissed"
+        const val EXACT_REMINDERS_WARNING_SHOWN = "exact_reminders_warning_shown"
         const val INTRO_SHOWN = "intro_shown"
         const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
         const val NOTIFICATION_ID = "notificationId"

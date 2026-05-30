@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
     <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>
@@ -28,27 +28,27 @@
     <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="windowed_interval_reminder">Promemoria a intervalli con finestra temporale</string>
     <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00–21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
-    <plurals name="days">
+    <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one">giorno</item>
         <item quantity="other">giorni</item>
         <item quantity="many">giorni</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" tools:ignore="UnusedQuantity">
         <item quantity="one">ora</item>
         <item quantity="other">ore</item>
         <item quantity="many">ore</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="minutes" tools:ignore="UnusedQuantity">
         <item quantity="one">minuto</item>
         <item quantity="other">minuti</item>
         <item quantity="many">minuti</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="UnusedQuantity">
         <item quantity="one">%1$d promemoria\n%2$s</item>
         <item quantity="many">%1$d promemoria\n%2$s</item>
         <item quantity="other">%1$d promemoria\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" tools:ignore="UnusedQuantity">
         <item quantity="one">settimana</item>
         <item quantity="other">settimane</item>
         <item quantity="many">settimane</item>
@@ -154,7 +154,7 @@
     <string name="fourteen_days">14 giorni</string>
     <string name="thirty_days">30 giorni</string>
     <string name="total">Totale</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" tools:ignore="UnusedQuantity">
         <item quantity="one">Ultime 24 ore</item>
         <item quantity="many">Ultimi %1$d giorni</item>
         <item quantity="other">Ultimi %1$d giorni</item>
@@ -313,4 +313,6 @@
     <string name="show_home_location_on_map">Mostra posizione di casa sulla mappa</string>
     <string name="set_home_location_confirm">Impostare la posizione di casa su\n%1$s, %2$s?</string>
     <string name="home_location_error">Impossibile determinare la posizione attuale</string>
+    <string name="exact_reminders_warning_title">I promemoria esatti sono disabilitati</string>
+    <string name="exact_reminders_warning_summary">I promemoria potrebbero essere attivati alcuni minuti dopo il previsto. Se hai bisogno di promemoria esatti (a costo di un leggero aumento del consumo della batteria), abilitalo nelle impostazioni delle notifiche.</string>
 </resources>

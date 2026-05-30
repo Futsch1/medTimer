@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
@@ -331,4 +331,6 @@
     <string name="show_home_location_on_map">عرض الموقع المنزلي على الخريطة</string>
     <string name="set_home_location_confirm">تعيين الموقع المنزلي إلى\n%1$s، %2$s؟</string>
     <string name="home_location_error">تعذّر تحديد موقعك الحالي</string>
+    <string name="exact_reminders_warning_title">التذكيرات الدقيقة معطّلة</string>
+    <string name="exact_reminders_warning_summary">قد تظهر التذكيرات بعد دقائق قليلة من الموعد المحدد. إذا كنت بحاجة إلى تذكيرات دقيقة (على حساب زيادة طفيفة في استهلاك البطارية)، فعّل هذا في إعدادات الإشعارات.</string>
 </resources>
