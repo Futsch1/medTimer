@@ -166,7 +166,7 @@
         android:label="@string/alarm_settings" />
     <fragment
         android:id="@+id/stockSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.stockSettings.StockSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.medicine.medicineSettings.StockSettingsFragment"
         android:label="@string/medicine_stock_settings">
         <argument
             android:name="medicineId"

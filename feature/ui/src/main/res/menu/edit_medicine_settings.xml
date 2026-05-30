@@ -1,6 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item
+            android:id="@+id/openMedicineSettings"
+            android:icon="@drawable/gear"
+            android:title="@string/further_settings" />
+        <item
             android:id="@+id/openNotes"
             android:icon="@drawable/journal_text"
             android:title="@string/notes" />

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:title="@string/color"
+        app:key="color" />
+    <Preference
+        android:title="@string/select_color"
+        android:icon="@drawable/palette"
+        app:key="select_color"
+        android:dependency="color" />
+    <ListPreference
+        app:icon="@drawable/arrow_up_circle"
+        app:key="priority"
+        app:title="@string/notification_importance"
+        android:entries="@array/notification_importance"
+        android:entryValues="@array/values_0_to_2" />
+</androidx.preference.PreferenceScreen>

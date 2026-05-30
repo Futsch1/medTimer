@@ -1,7 +1,6 @@
-package com.futsch1.medtimer.feature.ui.medicine.stockSettings
+package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import android.content.ActivityNotFoundException
-import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -9,20 +8,15 @@ import android.text.method.DigitsKeyListener
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
-import com.futsch1.medtimer.core.common.helpers.ModelDataPreferencesFragment
-import com.futsch1.medtimer.core.common.helpers.ModelDataStore
-import com.futsch1.medtimer.core.common.helpers.ModelDataViewModel
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
@@ -39,7 +33,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
+class StockSettingsFragment : MedicinePreferences(
     R.xml.stock_settings,
     mapOf(
     ),
@@ -47,9 +41,6 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
     ),
     listOf("stock_unit")
 ) {
-    @Inject
-    lateinit var medicineRepository: MedicineRepository
-
     @Inject
     lateinit var reminderEventRepository: ReminderEventRepository
 
@@ -66,19 +57,24 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
     lateinit var timeFormatter: TimeFormatter
 
     @Inject
-    lateinit var medicineDataStoreFactory: MedicineDataStore.Factory
-
-    @Inject
     lateinit var timeAccess: SystemTimeAccess
-
-    private val stockMedicineViewModel: StockMedicineViewModel by viewModels()
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
             "stock_refill_now" to { _, _ -> refillNow() },
-            "production_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
-            "expiration_date" to { activity, preference -> dateEditHandler.show(activity, preference) },
+            "production_date" to { activity, preference ->
+                dateEditHandler.show(
+                    activity,
+                    preference
+                )
+            },
+            "expiration_date" to { activity, preference ->
+                dateEditHandler.show(
+                    activity,
+                    preference
+                )
+            },
             "clear_dates" to { _, _ ->
                 // TODO: direct store usage in UI code; all non-UI logic should be delegated to the viewmodel
                 dataStore.putLong("production_date", 0)
@@ -92,14 +88,6 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
             }
         )
 
-    override suspend fun getDataStore(requireArguments: Bundle): ModelDataStore<Medicine> {
-        val entityId = requireArguments.getInt("medicineId")
-        val entity = medicineRepository.fetch(entityId)!!
-        return medicineDataStoreFactory.create(entity)
-    }
-
-    override fun getEntityViewModel(): ModelDataViewModel<Medicine> = stockMedicineViewModel
-
     override fun customSetup(modelData: Medicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
@@ -112,8 +100,10 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
 
         calculateRunOutDate(modelData)
 
-        findPreference<EditTextPreference>("amount")!!.summary = MedicineHelper.formatAmount(modelData.amount, modelData.unit)
-        findPreference<EditTextPreference>("stock_refill_size")!!.summary = MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
+        findPreference<EditTextPreference>("amount")!!.summary =
+            MedicineHelper.formatAmount(modelData.amount, modelData.unit)
+        findPreference<EditTextPreference>("stock_refill_size")!!.summary =
+            MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
         if (modelData.isOutOfStock()) {
             findPreference<EditTextPreference>("amount")!!.setIcon(com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill)
         } else {
@@ -124,23 +114,28 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
         } else {
             findPreference<Preference>("expiration_date")!!.icon = null
         }
-        findPreference<Preference>("production_date")!!.summary = if (modelData.productionDate != LocalDate.EPOCH) {
-            timeFormatter.localDateToString(modelData.productionDate)
-        } else {
-            ""
-        }
-        findPreference<Preference>("expiration_date")!!.summary = if (modelData.expirationDate != LocalDate.EPOCH) {
-            timeFormatter.localDateToString(modelData.expirationDate)
-        } else {
-            ""
-        }
+        findPreference<Preference>("production_date")!!.summary =
+            if (modelData.productionDate != LocalDate.EPOCH) {
+                timeFormatter.localDateToString(modelData.productionDate)
+            } else {
+                ""
+            }
+        findPreference<Preference>("expiration_date")!!.summary =
+            if (modelData.expirationDate != LocalDate.EPOCH) {
+                timeFormatter.localDateToString(modelData.expirationDate)
+            } else {
+                ""
+            }
     }
 
     private fun calculateRunOutDate(medicine: Medicine) {
         this.lifecycleScope.launch(ioDispatcher) {
             val runOutDate = estimateStockRunOutDate(medicine.id, medicine.amount)
 
-            val runOutString = if (runOutDate != null && context != null) timeFormatter.localDateToString(runOutDate) else "---"
+            val runOutString =
+                if (runOutDate != null && context != null) timeFormatter.localDateToString(
+                    runOutDate
+                ) else "---"
 
             withContext(mainDispatcher) {
                 findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
@@ -158,8 +153,14 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
             medicine = medicine.copy(amount = currentAmount)
         }
         val recentReminders =
-            reminderEventRepository.getForScheduling(listOf(medicine)).filter { it.status != ReminderEvent.ReminderStatus.RAISED }
-        val schedulingSimulator = SchedulingSimulator(listOf(medicine), recentReminders, timeAccess, preferencesDataSource)
+            reminderEventRepository.getForScheduling(listOf(medicine))
+                .filter { it.status != ReminderEvent.ReminderStatus.RAISED }
+        val schedulingSimulator = SchedulingSimulator(
+            listOf(medicine),
+            recentReminders,
+            timeAccess,
+            preferencesDataSource
+        )
         val endDate = LocalDate.now().plusDays(365 * 2)
         var runOutDate: LocalDate? = null
 
@@ -174,7 +175,8 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
     }
 
     private fun addToCalendar() {
-        val date = timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
+        val date =
+            timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
         if (date != null) {
             val intent =
                 createCalendarEventIntent(
@@ -184,7 +186,11 @@ class StockSettingsFragment : ModelDataPreferencesFragment<Medicine>(
             try {
                 startActivity(intent)
             } catch (_: ActivityNotFoundException) {
-                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.no_calendar_app, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    com.futsch1.medtimer.core.ui.R.string.no_calendar_app,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

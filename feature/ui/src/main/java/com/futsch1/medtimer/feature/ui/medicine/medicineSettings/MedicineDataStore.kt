@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.feature.ui.medicine.stockSettings
+package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
@@ -40,11 +40,18 @@ class MedicineDataStore @AssistedInject constructor(
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            "amount" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(amount = it) }
+            "amount" -> MedicineHelper.parseAmount(value)
+                ?.let { modelData = modelData.copy(amount = it) }
+
             "stock_unit" -> modelData = modelData.copy(unit = value!!)
-            "stock_refill_size" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(refillSize = it) }
-            "production_date" -> modelData = modelData.copy(productionDate = timeFormatter.stringToLocalDate(value!!)!!)
-            "expiration_date" -> modelData = modelData.copy(expirationDate = timeFormatter.stringToLocalDate(value!!)!!)
+            "stock_refill_size" -> MedicineHelper.parseAmount(value)
+                ?.let { modelData = modelData.copy(refillSize = it) }
+
+            "production_date" -> modelData =
+                modelData.copy(productionDate = timeFormatter.stringToLocalDate(value!!)!!)
+
+            "expiration_date" -> modelData =
+                modelData.copy(expirationDate = timeFormatter.stringToLocalDate(value!!)!!)
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)
@@ -53,8 +60,11 @@ class MedicineDataStore @AssistedInject constructor(
 
     override fun putLong(key: String?, value: Long) {
         when (key) {
-            "production_date" -> modelData = modelData.copy(productionDate = LocalDate.ofEpochDay(value))
-            "expiration_date" -> modelData = modelData.copy(expirationDate = LocalDate.ofEpochDay(value))
+            "production_date" -> modelData =
+                modelData.copy(productionDate = LocalDate.ofEpochDay(value))
+
+            "expiration_date" -> modelData =
+                modelData.copy(expirationDate = LocalDate.ofEpochDay(value))
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)
