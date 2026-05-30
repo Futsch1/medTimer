@@ -315,4 +315,5 @@
     <string name="backup_successful_to">Automatic backup successful: %s</string>
     <string name="exact_reminders_warning_title">Exact reminders are disabled</string>
     <string name="exact_reminders_warning_summary">Reminders might be raised a few minutes later than scheduled. If you need exact reminders (at the cost of slightly increased battery consumption), enable this in the notification settings.</string>
+    <string name="medicine_settings">Medicine settings</string>
 </resources>

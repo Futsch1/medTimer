@@ -188,7 +188,8 @@
     </fragment>
     <fragment
         android:id="@+id/medicineSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.medicineSettings.MedicineSettingsFragment">
+        android:name="com.futsch1.medtimer.feature.ui.medicine.medicineSettings.MedicineSettingsFragment"
+        android:label="@string/medicine_settings">
         <argument
             android:name="medicineId"
             app:argType="integer" />

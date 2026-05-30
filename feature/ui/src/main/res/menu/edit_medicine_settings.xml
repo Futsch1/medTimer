@@ -3,7 +3,7 @@
         <item
             android:id="@+id/openMedicineSettings"
             android:icon="@drawable/gear"
-            android:title="@string/further_settings" />
+            android:title="@string/medicine_settings" />
         <item
             android:id="@+id/openNotes"
             android:icon="@drawable/journal_text"

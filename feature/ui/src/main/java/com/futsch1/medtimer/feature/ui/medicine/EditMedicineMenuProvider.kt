@@ -108,6 +108,7 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     private fun setupLinksMenu(menu: Menu) {
         val subMenus = editMedicineSubmenusFactory.create(fragment, medicine)
         val idToSubmenu: Map<Int, EditMedicineSubmenus.Submenu> = mapOf(
+            R.id.openMedicineSettings to EditMedicineSubmenus.Submenu.SETTINGS,
             R.id.openCalendar to EditMedicineSubmenus.Submenu.CALENDAR,
             R.id.openStockTracking to EditMedicineSubmenus.Submenu.STOCK_TRACKING,
             R.id.openTags to EditMedicineSubmenus.Submenu.TAGS,
@@ -125,7 +126,11 @@ class EditMedicineMenuProvider @AssistedInject constructor(
     private fun setRemindersActive(active: Boolean) {
         fragment.lifecycleScope.launch {
             val reminders = reminderRepository.getAll(medicine.id)
-            com.futsch1.medtimer.core.common.helpers.setRemindersActive(reminders, reminderRepository, active)
+            com.futsch1.medtimer.core.common.helpers.setRemindersActive(
+                reminders,
+                reminderRepository,
+                active
+            )
         }
     }
 
