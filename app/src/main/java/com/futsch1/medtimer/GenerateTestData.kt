@@ -135,7 +135,8 @@ class GenerateTestData @AssistedInject constructor(
                 expirationDate = LocalDate.now().plusDays(7),
                 sortOrder = sortOrder,
                 tags = emptyList(),
-                reminders = reminders.map { it.toReminder(0).toModel() }
+                reminders = reminders.map { it.toReminder(0).toModel() },
+                cannotBeSkipped = false
             )
         }
     }

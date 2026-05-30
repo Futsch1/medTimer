@@ -20,27 +20,49 @@ import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
     entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
-    version = 22,
-    autoMigrations = [AutoMigration(from = 1, to = 2, spec = AutoMigration1To2::class), AutoMigration(from = 2, to = 3), AutoMigration(
+    version = 23,
+    autoMigrations = [AutoMigration(
+        from = 1,
+        to = 2,
+        spec = AutoMigration1To2::class
+    ), AutoMigration(from = 2, to = 3), AutoMigration(
         from = 3,
         to = 4
-    ), AutoMigration(from = 4, to = 5), AutoMigration(from = 5, to = 6, spec = AutoMigration5To6::class), AutoMigration(
+    ), AutoMigration(from = 4, to = 5), AutoMigration(
+        from = 5,
+        to = 6,
+        spec = AutoMigration5To6::class
+    ), AutoMigration(
         from = 6,
         to = 7
-    ), AutoMigration(from = 7, to = 8), AutoMigration(from = 8, to = 9), AutoMigration(from = 9, to = 10), AutoMigration(
+    ), AutoMigration(from = 7, to = 8), AutoMigration(from = 8, to = 9), AutoMigration(
+        from = 9,
+        to = 10
+    ), AutoMigration(
         from = 10,
         to = 11
-    ), AutoMigration(from = 11, to = 12), AutoMigration(from = 12, to = 13), AutoMigration(from = 13, to = 14), AutoMigration(
+    ), AutoMigration(from = 11, to = 12), AutoMigration(
+        from = 12,
+        to = 13
+    ), AutoMigration(from = 13, to = 14), AutoMigration(
         from = 14,
         to = 15
-    ), AutoMigration(from = 15, to = 16), AutoMigration(from = 16, to = 17, spec = AutoMigration16To17::class), AutoMigration(
+    ), AutoMigration(from = 15, to = 16), AutoMigration(
+        from = 16,
+        to = 17,
+        spec = AutoMigration16To17::class
+    ), AutoMigration(
         from = 17,
         to = 18
     ), AutoMigration(from = 18, to = 19), AutoMigration(from = 19, to = 20), AutoMigration(
         from = 20,
         to = 21,
         spec = AutoMigration20To21::class
-    ), AutoMigration(from = 21, to = 22, spec = AutoMigration21To22::class)],
+    ), AutoMigration(
+        from = 21,
+        to = 22,
+        spec = AutoMigration21To22::class
+    ), AutoMigration(from = 22, to = 23)],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
@@ -52,10 +74,18 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     abstract fun reminderEventDao(): ReminderEventDao
     abstract fun tagDao(): TagDao
 
-    @RenameColumn(fromColumnName = "raisedTimestamp", toColumnName = "remindedTimestamp", tableName = "ReminderEvent")
+    @RenameColumn(
+        fromColumnName = "raisedTimestamp",
+        toColumnName = "remindedTimestamp",
+        tableName = "ReminderEvent"
+    )
     internal class AutoMigration1To2 : AutoMigrationSpec
 
-    @RenameColumn(fromColumnName = "daysBetweenReminders", toColumnName = "pauseDays", tableName = "Reminder")
+    @RenameColumn(
+        fromColumnName = "daysBetweenReminders",
+        toColumnName = "pauseDays",
+        tableName = "Reminder"
+    )
     internal class AutoMigration5To6 : AutoMigrationSpec {
         override fun onPostMigrate(db: SupportSQLiteDatabase) {
             super.onPostMigrate(db)
