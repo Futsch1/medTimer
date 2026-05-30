@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">தொடர்ச்சியான இடைவெளி %1$s இலிருந்து தொடங்குகிறது</string>
     <string name="continuous_interval_reminder">தொடர்ச்சியான இடைவெளி நினைவூட்டல்</string>
@@ -307,4 +307,4 @@
     <string name="show_home_location_on_map">வீட்டு இடத்தை வரைபடத்தில் காட்டு</string>
     <string name="set_home_location_confirm">வீட்டு இடத்தை\n%1$s, %2$s ஆக அமைக்கவா?</string>
     <string name="home_location_error">உங்கள் தற்போதைய இடத்தை தீர்மானிக்க முடியவில்லை</string>
-</resources>
+<string name="exact_reminders_warning_title">துல்லியமான நினைவூட்டல்கள் முடக்கப்பட்டுள்ளன</string><string name="exact_reminders_warning_summary">நினைவூட்டல்கள் திட்டமிட்ட நேரத்தை விட சில நிமிடங்கள் தாமதமாக அனுப்பப்படலாம். துல்லியமான நினைவூட்டல்கள் தேவைப்பட்டால் (சற்று அதிகரிக்கும் பேட்டரி நுகர்வுக்கு ஈடாக), அறிவிப்பு அமைப்புகளில் இதை இயக்கவும்.</string></resources>

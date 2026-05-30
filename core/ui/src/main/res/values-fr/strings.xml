@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="continuous_from">Intervalle continu à partir de %1$s</string>
     <string name="continuous_interval_reminder">Rappel à intervalle continu</string>
@@ -28,27 +28,27 @@
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="windowed_interval_reminder">Rappel d\'intervalle fenêtré</string>
     <string name="windowed_interval_reminder_help">Définissez une fenêtre active quotidienne (par exemple, de 9 h à 21 h) où le premier rappel est toujours à l\'heure de début. Les rappels suivants se déclenchent à intervalles fixes jusqu\'à ce que l\'heure de fin soit atteinte. Le schéma complet se réinitialise chaque jour.</string>
-    <plurals name="days">
+    <plurals name="days" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">jour</item>
         <item quantity="other">jours</item>
         <item quantity="many">jours</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">heure</item>
         <item quantity="other">heures</item>
         <item quantity="many">heures</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="minutes" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">minute</item>
         <item quantity="other">minute</item>
         <item quantity="many">minutes</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" ns0:ignore="UnusedQuantity">
         <item quantity="one">%1$d rappel\n%2$s</item>
         <item quantity="many">%1$d rappels\n%2$s</item>
         <item quantity="other">%1$d rappels\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">semaine</item>
         <item quantity="other">semaines</item>
         <item quantity="many">semaines</item>
@@ -154,7 +154,7 @@
     <string name="fourteen_days">14 jours</string>
     <string name="thirty_days">30 jours</string>
     <string name="total">Total</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">Dernières 24 heures</item>
         <item quantity="many">Derniers %1$d jours</item>
         <item quantity="other">Derniers %1$d jours</item>
@@ -313,4 +313,6 @@
     <string name="show_home_location_on_map">Afficher la position du domicile sur la carte</string>
     <string name="set_home_location_confirm">Définir la position du domicile à\n%1$s, %2$s ?</string>
     <string name="home_location_error">Impossible de déterminer votre position actuelle</string>
+    <string name="exact_reminders_warning_title">Les rappels exacts sont désactivés</string>
+    <string name="exact_reminders_warning_summary">Les rappels peuvent être déclenchés quelques minutes après l&amp;apos;heure prévue. Si vous avez besoin de rappels exacts (au prix d&amp;apos;une légère augmentation de la consommation de batterie), activez cette option dans les paramètres de notification.</string>
 </resources>

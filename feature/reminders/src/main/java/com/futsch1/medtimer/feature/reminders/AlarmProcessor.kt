@@ -24,59 +24,74 @@ class AlarmProcessor @Inject constructor(
 ) {
     private val exactReminders: Boolean = preferencesDataSource.preferences.value.exactReminders
 
-    suspend fun setAlarmForReminderNotification(scheduledReminderNotificationData: ReminderNotificationData, reminderNotificationProcessor: ReminderNotificationProcessor? = null): Boolean {
-        val originalInstant = scheduledReminderNotificationData.remindInstant
-        scheduledReminderNotificationData.remindInstant = adjustTimestamp(timeAccess, originalInstant)
-
-        alarmManager.cancel(
-            PendingIntent.getBroadcast(
-                context, 0,
-                getReminderAction(context),
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        )
-        for (reminderEventId in scheduledReminderNotificationData.reminderEventIds) {
-            if (reminderEventId != 0) {
-                cancelPendingReminderNotifications(reminderEventId)
-            }
-        }
+    // Slot 0 — owns the next-scheduled-reminder alarm.
+    // AlarmManager.set with same PendingIntent atomically replaces, so no explicit cancel.
+    suspend fun setNextReminderAlarm(
+        scheduledReminderNotificationData: ReminderNotificationData,
+        reminderNotificationProcessor: ReminderNotificationProcessor
+    ): Boolean {
+        scheduledReminderNotificationData.remindInstant = adjustTimestamp(timeAccess, scheduledReminderNotificationData.remindInstant)
 
         if (!scheduledReminderNotificationData.remindInstant.isAfter(timeAccess.now())) {
             Log.i(
                 LogTags.REMINDER,
-                String.format(
-                    "Show reminder notification now: %s",
-                    scheduledReminderNotificationData
-                )
+                String.format("Show reminder notification now: %s", scheduledReminderNotificationData)
             )
-            if (reminderNotificationProcessor == null) {
-                val reminderIntent = getReminderAction(context)
-                scheduledReminderNotificationData.toIntent(reminderIntent)
-                context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
-            } else {
-                reminderNotificationProcessor.processReminders(scheduledReminderNotificationData)
-            }
+            reminderNotificationProcessor.processReminders(scheduledReminderNotificationData)
             return false
         }
 
-        val pendingIntent = scheduledReminderNotificationData.getPendingIntent(context)
-        if (canScheduleExactAlarms()) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-        } else {
-            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledReminderNotificationData.remindInstant.toEpochMilli(), pendingIntent)
-        }
+        scheduleAlarm(scheduledReminderNotificationData.remindInstant, scheduledReminderNotificationData.getPendingIntent(context))
 
         Log.i(
             LogTags.REMINDER,
-            String.format(
-                "Set alarm for reminder notification: %s",
-                scheduledReminderNotificationData
-            )
+            String.format("Set alarm for reminder notification: %s", scheduledReminderNotificationData)
         )
 
         updateNextReminderWidget()
 
         return true
+    }
+
+    // Per-event slots — snooze/repeat/show/location-snooze. Leaves slot 0 untouched.
+    fun setSecondaryAlarm(reminderNotificationData: ReminderNotificationData): Boolean {
+        reminderNotificationData.remindInstant = adjustTimestamp(timeAccess, reminderNotificationData.remindInstant)
+
+        for (reminderEventId in reminderNotificationData.reminderEventIds) {
+            if (reminderEventId != 0) {
+                cancelPendingReminderNotifications(reminderEventId)
+            }
+        }
+
+        if (!reminderNotificationData.remindInstant.isAfter(timeAccess.now())) {
+            Log.i(
+                LogTags.REMINDER,
+                String.format("Show reminder notification now: %s", reminderNotificationData)
+            )
+            val reminderIntent = getReminderAction(context)
+            reminderNotificationData.toIntent(reminderIntent)
+            context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
+            return false
+        }
+
+        scheduleAlarm(reminderNotificationData.remindInstant, reminderNotificationData.getPendingIntent(context))
+
+        Log.i(
+            LogTags.REMINDER,
+            String.format("Set secondary alarm for reminder notification: %s", reminderNotificationData)
+        )
+
+        updateNextReminderWidget()
+
+        return true
+    }
+
+    private fun scheduleAlarm(instant: Instant, pendingIntent: PendingIntent) {
+        if (canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, instant.toEpochMilli(), pendingIntent)
+        } else {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, instant.toEpochMilli(), pendingIntent)
+        }
     }
 
     fun cancelNextReminder() {

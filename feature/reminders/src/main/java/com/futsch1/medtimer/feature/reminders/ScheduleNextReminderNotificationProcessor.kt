@@ -51,7 +51,7 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
                     else listOf(scheduledReminders[0])
                 )
 
-                futureReminderScheduled = alarmProcessor.setAlarmForReminderNotification(data, reminderNotificationProcessor)
+                futureReminderScheduled = alarmProcessor.setNextReminderAlarm(data, reminderNotificationProcessor)
             }
         }
     }

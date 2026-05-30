@@ -12,11 +12,11 @@ class LocationSnoozeProcessor @Inject constructor(
     private val persistentDataDataSource: PersistentDataDataSource,
     private val geofenceRegistrar: GeofenceRegistrar
 ) {
-    suspend fun processLocationSnooze() {
+    fun processLocationSnooze() {
         val pending = persistentDataDataSource.getPendingLocationSnoozes()
         Log.d(LogTags.REMINDER, "In home location, restoring ${pending.size} snoozed reminders")
         for (data in pending) {
-            alarmProcessor.setAlarmForReminderNotification(data.toReminderNotificationData())
+            alarmProcessor.setSecondaryAlarm(data.toReminderNotificationData())
         }
         persistentDataDataSource.clearAllPendingLocationSnoozes()
         geofenceRegistrar.unregisterHomeGeofence()

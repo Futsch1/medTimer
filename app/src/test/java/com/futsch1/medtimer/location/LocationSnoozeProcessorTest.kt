@@ -9,7 +9,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.isNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
@@ -41,7 +40,7 @@ class LocationSnoozeProcessorTest {
 
         runBlocking { processor.processLocationSnooze() }
 
-        runBlocking { verify(alarmProcessor, never()).setAlarmForReminderNotification(any(), isNull()) }
+        runBlocking { verify(alarmProcessor, never()).setSecondaryAlarm(any()) }
         verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
@@ -54,7 +53,7 @@ class LocationSnoozeProcessorTest {
 
         runBlocking { processor.processLocationSnooze() }
 
-        runBlocking { verify(alarmProcessor, times(1)).setAlarmForReminderNotification(any(), isNull()) }
+        runBlocking { verify(alarmProcessor, times(1)).setSecondaryAlarm(any()) }
         verify(persistentDataDataSource).clearAllPendingLocationSnoozes()
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
@@ -70,7 +69,7 @@ class LocationSnoozeProcessorTest {
 
         runBlocking { processor.processLocationSnooze() }
 
-        runBlocking { verify(alarmProcessor, times(3)).setAlarmForReminderNotification(any(), isNull()) }
+        runBlocking { verify(alarmProcessor, times(3)).setSecondaryAlarm(any()) }
         verify(geofenceRegistrar).unregisterHomeGeofence()
     }
 }
