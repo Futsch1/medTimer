@@ -61,6 +61,17 @@ jobs:
       - name: Run FOSS unit tests
         run: ./gradlew testFossDebugUnitTest
 
+      # The fuzzing step above runs :app's full-flavor tests with include("**/*FuzzTest.class"), so the
+      # normal full-only unit tests (e.g. app/src/testFull GMS tests) run nowhere else. Run them here
+      # without -Dfuzzing, which reverts to exclude("**/*FuzzTest.class").
+      - name: Run full unit tests
+        run: ./gradlew testFullDebugUnitTest
+
+      # The flavored test tasks above only exist in modules with the full/foss flavors (:app, :feature:*).
+      # The flavor-agnostic library modules (:core:*) name their tests testDebugUnitTest, so run them too.
+      - name: Run library module unit tests
+        run: ./gradlew testDebugUnitTest
+
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@e89f39f1abbbd05b1113a29cf4db69e7540cae5a # v2.37.0
         with:
@@ -107,6 +118,8 @@ jobs:
             app/build/reports/jacoco/JacocoDebugCodeCoverage/html
             app/build/reports/tests/testFullDebugUnitTest
             app/build/reports/tests/testFossDebugUnitTest
+            core/ui/build/reports/tests/testDebugUnitTest
+            core/database/build/reports/tests/testDebugUnitTest
             app/build/reports/androidTest/connected/fullDebug
             app/build/reports/lint-results-fullDebug.html
             app/build/outputs/androidTest-results
