@@ -33,6 +33,7 @@ data class UserPreferences(
     val overrideDnd: Boolean,
     val stickyOnLockscreen: Boolean,
     val dismissNotificationAction: DismissNotificationAction,
+    val cannotSkipReminders: Boolean,
     // Display settings
     val bigNotifications: Boolean,
     val combineNotifications: Boolean,
@@ -71,6 +72,7 @@ data class UserPreferences(
                 overrideDnd = false,
                 stickyOnLockscreen = false,
                 dismissNotificationAction = DismissNotificationAction.SKIP,
+                cannotSkipReminders = false,
                 bigNotifications = false,
                 combineNotifications = false,
                 useRelativeDateTime = false,

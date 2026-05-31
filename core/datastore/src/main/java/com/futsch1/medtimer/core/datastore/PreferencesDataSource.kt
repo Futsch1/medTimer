@@ -49,7 +49,12 @@ class PreferencesDataSource @Inject constructor(
     }
 
     fun setAutomaticBackupInterval(backupInterval: BackupInterval) {
-        sharedPreferences.edit { putString(AUTOMATIC_BACKUP_INTERVAL, backupInterval.ordinal.toString()) }
+        sharedPreferences.edit {
+            putString(
+                AUTOMATIC_BACKUP_INTERVAL,
+                backupInterval.ordinal.toString()
+            )
+        }
     }
 
     fun setAutomaticBackupDirectory(uri: Uri) {
@@ -106,24 +111,43 @@ class PreferencesDataSource @Inject constructor(
         val default = UserPreferences.default()
         return UserPreferences(
             weekendStartTime = LocalTime.of(
-                sharedPreferences.getInt(WEEKEND_START_TIME, default.weekendStartTime.toSecondOfDay() / 60) / 60,
-                sharedPreferences.getInt(WEEKEND_START_TIME, default.weekendStartTime.toSecondOfDay() / 60) % 60
+                sharedPreferences.getInt(
+                    WEEKEND_START_TIME,
+                    default.weekendStartTime.toSecondOfDay() / 60
+                ) / 60,
+                sharedPreferences.getInt(
+                    WEEKEND_START_TIME,
+                    default.weekendStartTime.toSecondOfDay() / 60
+                ) % 60
             ),
             weekendEndTime = LocalTime.of(
-                sharedPreferences.getInt(WEEKEND_TIME, default.weekendEndTime.toSecondOfDay() / 60) / 60,
-                sharedPreferences.getInt(WEEKEND_TIME, default.weekendEndTime.toSecondOfDay() / 60) % 60
+                sharedPreferences.getInt(
+                    WEEKEND_TIME,
+                    default.weekendEndTime.toSecondOfDay() / 60
+                ) / 60,
+                sharedPreferences.getInt(
+                    WEEKEND_TIME,
+                    default.weekendEndTime.toSecondOfDay() / 60
+                ) % 60
             ),
             weekendMode = sharedPreferences.getBoolean(WEEKEND_MODE, default.weekendMode),
-            weekendDays = sharedPreferences.getStringSet(WEEKEND_DAYS, default.weekendDays) ?: emptySet(),
+            weekendDays = sharedPreferences.getStringSet(WEEKEND_DAYS, default.weekendDays)
+                ?: emptySet(),
             exactReminders = sharedPreferences.getBoolean(EXACT_REMINDERS, default.exactReminders),
-            repeatReminders = sharedPreferences.getBoolean(REPEAT_REMINDERS, default.repeatReminders),
+            repeatReminders = sharedPreferences.getBoolean(
+                REPEAT_REMINDERS,
+                default.repeatReminders
+            ),
             numberOfRepetitions = sharedPreferences.getString(
                 NUMBER_OF_REPETITIONS,
                 default.numberOfRepetitions.toString()
             )
                 ?.toInt()
                 ?: 3,
-            repeatDelay = (sharedPreferences.getString(REPEAT_DELAY, default.repeatDelay.inWholeMinutes.toString())
+            repeatDelay = (sharedPreferences.getString(
+                REPEAT_DELAY,
+                default.repeatDelay.inWholeMinutes.toString()
+            )
                 ?.toInt()
                 ?: 10).toDuration(DurationUnit.MINUTES),
             snoozeDuration = (sharedPreferences.getString(
@@ -133,15 +157,34 @@ class PreferencesDataSource @Inject constructor(
                 ?.toInt()
                 ?: 15).toDuration(DurationUnit.MINUTES),
             overrideDnd = sharedPreferences.getBoolean(OVERRIDE_DND, default.overrideDnd),
-            stickyOnLockscreen = sharedPreferences.getBoolean(STICKY_ON_LOCKSCREEN, default.stickyOnLockscreen),
-            dismissNotificationAction = when (sharedPreferences.getString(DISMISS_NOTIFICATION_ACTION, "0")) {
+            stickyOnLockscreen = sharedPreferences.getBoolean(
+                STICKY_ON_LOCKSCREEN,
+                default.stickyOnLockscreen
+            ),
+            dismissNotificationAction = when (sharedPreferences.getString(
+                DISMISS_NOTIFICATION_ACTION,
+                "0"
+            )) {
                 "0" -> DismissNotificationAction.SKIP
                 "1" -> DismissNotificationAction.SNOOZE
                 else -> DismissNotificationAction.TAKE
             },
-            bigNotifications = sharedPreferences.getBoolean(BIG_NOTIFICATIONS, default.bigNotifications),
-            combineNotifications = sharedPreferences.getBoolean(COMBINE_NOTIFICATIONS, default.combineNotifications),
-            useRelativeDateTime = sharedPreferences.getBoolean(USE_RELATIVE_DATE_TIME, default.useRelativeDateTime),
+            cannotSkipReminders = sharedPreferences.getBoolean(
+                CANNOT_SKIP_REMINDERS,
+                default.cannotSkipReminders
+            ),
+            bigNotifications = sharedPreferences.getBoolean(
+                BIG_NOTIFICATIONS,
+                default.bigNotifications
+            ),
+            combineNotifications = sharedPreferences.getBoolean(
+                COMBINE_NOTIFICATIONS,
+                default.combineNotifications
+            ),
+            useRelativeDateTime = sharedPreferences.getBoolean(
+                USE_RELATIVE_DATE_TIME,
+                default.useRelativeDateTime
+            ),
             showTakenTimeInOverview = sharedPreferences.getBoolean(
                 SHOW_TAKEN_TIME_IN_OVERVIEW,
                 default.showTakenTimeInOverview
@@ -151,16 +194,26 @@ class PreferencesDataSource @Inject constructor(
                 "0" -> ThemeSetting.DEFAULT
                 else -> ThemeSetting.ALTERNATIVE
             },
-            hideMedicineName = sharedPreferences.getBoolean(HIDE_MED_NAME, default.hideMedicineName),
-            appAuthentication = sharedPreferences.getBoolean(APP_AUTHENTICATION, default.appAuthentication),
+            hideMedicineName = sharedPreferences.getBoolean(
+                HIDE_MED_NAME,
+                default.hideMedicineName
+            ),
+            appAuthentication = sharedPreferences.getBoolean(
+                APP_AUTHENTICATION,
+                default.appAuthentication
+            ),
             useSecureWindow = sharedPreferences.getBoolean(SECURE_WINDOW, default.useSecureWindow),
             disableWidget = sharedPreferences.getBoolean(DISABLE_WIDGET, default.disableWidget),
-            alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.toUri() ?: default.alarmRingtone,
+            alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.toUri()
+                ?: default.alarmRingtone,
             noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
                 NO_ALARM_SOUND_WHEN_SILENT,
                 default.noAlarmSoundWhenSilent
             ),
-            noVibrationWhenSilent = sharedPreferences.getBoolean(NO_VIBRATION_WHEN_SILENT, default.noVibrationWhenSilent),
+            noVibrationWhenSilent = sharedPreferences.getBoolean(
+                NO_VIBRATION_WHEN_SILENT,
+                default.noVibrationWhenSilent
+            ),
             automaticBackupInterval = sharedPreferences.getString(AUTOMATIC_BACKUP_INTERVAL, "0")
                 .let { v ->
                     when (v) {
@@ -171,8 +224,14 @@ class PreferencesDataSource @Inject constructor(
                         else -> BackupInterval.entries[v?.toIntOrNull() ?: 0]
                     }
                 },
-            automaticBackupDirectory = sharedPreferences.getString(AUTOMATIC_BACKUP_DIRECTORY, default.automaticBackupDirectory.toString())?.toUri(),
-            locationBasedSnooze = sharedPreferences.getBoolean(LOCATION_SNOOZE_ENABLED, default.locationBasedSnooze),
+            automaticBackupDirectory = sharedPreferences.getString(
+                AUTOMATIC_BACKUP_DIRECTORY,
+                default.automaticBackupDirectory.toString()
+            )?.toUri(),
+            locationBasedSnooze = sharedPreferences.getBoolean(
+                LOCATION_SNOOZE_ENABLED,
+                default.locationBasedSnooze
+            ),
             homeLocation = getHomeLocation()
         )
     }
@@ -197,6 +256,7 @@ class PreferencesDataSource @Inject constructor(
         const val STICKY_ON_LOCKSCREEN = "sticky_on_lockscreen"
         const val BIG_NOTIFICATIONS = "big_notifications"
         const val DISMISS_NOTIFICATION_ACTION = "dismiss_notification_action"
+        const val CANNOT_SKIP_REMINDERS = "cannot_skip_reminders"
         const val ALARM_RINGTONE = "alarm_ringtone"
         const val NO_ALARM_SOUND_WHEN_SILENT = "no_alarm_sound_when_silent"
         const val NO_VIBRATION_WHEN_SILENT = "no_vibration_when_silent"

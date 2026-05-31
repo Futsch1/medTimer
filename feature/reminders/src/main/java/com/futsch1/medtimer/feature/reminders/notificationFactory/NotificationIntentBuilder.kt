@@ -65,7 +65,8 @@ class NotificationIntentBuilder @AssistedInject constructor(
     }
 
     private fun getSkippedPendingIntent(): PendingIntent? {
-        if (reminderNotification.reminderNotificationParts.any { it.medicine.cannotBeSkipped }) {
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.cannotBeSkipped } ||
+            preferencesDataSource.preferences.value.cannotSkipReminders) {
             return null
         }
         val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
