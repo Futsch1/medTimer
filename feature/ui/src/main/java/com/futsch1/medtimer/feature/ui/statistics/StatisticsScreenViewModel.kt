@@ -10,14 +10,10 @@ import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
-import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.core.ui.component.SortableTableCell
-import com.futsch1.medtimer.core.ui.component.SortableTableRow
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
+import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTablePresenter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,21 +27,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsScreenViewModel @Inject constructor(
-    private val statisticsProvider: StatisticsProvider,
-    private val chartsPresenter: ChartsPresenter,
-    private val calendarEventsProvider: CalendarEventsProvider,
-    private val medicineRepository: MedicineRepository,
-    private val reminderEventRepository: ReminderEventRepository,
-    private val tagRepository: TagRepository,
+    statisticsProvider: StatisticsProvider,
+    chartsPresenter: ChartsPresenter,
+    reminderTablePresenter: ReminderTablePresenter,
+    calendarEventsProvider: CalendarEventsProvider,
+    medicineRepository: MedicineRepository,
+    reminderEventRepository: ReminderEventRepository,
+    tagRepository: TagRepository,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val tagEventFilter: TagEventFilter,
-    private val timeFormatter: TimeFormatter,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    tagEventFilter: TagEventFilter,
+    @Dispatcher(MedTimerDispatchers.IO) ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _state = MutableStatisticsScreenState()
     val state: StatisticsScreenState get() = _state
 
+    // The single source of truth for the Analysis range. The snapshot the dropdown reads
+    // (_state.analysisDays) is a one-way projection of this flow, so the UI value and the value the
+    // charts aggregate over cannot drift apart — there is nothing to hand-sync.
     private val analysisDays = MutableStateFlow(persistentDataDataSource.data.value.analysisDays)
 
     // One shared read of the taken/skipped reminder events feeds charts, table, and calendar — the
@@ -55,12 +54,55 @@ class StatisticsScreenViewModel @Inject constructor(
         .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        val data = persistentDataDataSource.data.value
-        _state.activeView = data.activeStatisticsFragment
-        _state.analysisDays = data.analysisDays
-        observeCharts()
-        observeTableRows()
-        observeCalendar()
+        _state.activeView = persistentDataDataSource.data.value.activeStatisticsFragment
+        _state.analysisDays = analysisDays.value
+
+        // Mirror the range flow into the snapshot the dropdown reads — the only writer of
+        // _state.analysisDays besides the init seed, both projecting the same flow.
+        viewModelScope.launch {
+            analysisDays.collect { _state.analysisDays = it }
+        }
+
+        // Recompute whenever the reminder events change or the selected range changes, so adding an
+        // event refreshes the charts without a manual reload.
+        viewModelScope.launch {
+            combine(reminderEvents, analysisDays) { events, days ->
+                val data = statisticsProvider.aggregate(events, days)
+                // First custom color wins if names somehow collide — matches the prior firstOrNull lookup.
+                val medicineColorsByName = medicineRepository.getAll()
+                    .filter { it.useColor }
+                    .reversed()
+                    .associate { it.name to it.color }
+                chartsPresenter.present(data, medicineColorsByName, days)
+            }
+                .flowOn(ioDispatcher)
+                .collect { _state.charts = it }
+        }
+
+        // The reminder table shows all taken/skipped events, tag-filtered, then presented as rows.
+        viewModelScope.launch {
+            combine(
+                reminderEvents,
+                persistentDataDataSource.data,
+                tagRepository.getAllFlow(),
+            ) { events, persistent, tags ->
+                val selectedTagIds = persistent.filterTags.mapNotNull { it.toIntOrNull() }.toSet()
+                reminderTablePresenter.present(tagEventFilter.filter(events, selectedTagIds, tags))
+            }
+                .flowOn(ioDispatcher)
+                .collect { _state.tableRows = it }
+        }
+
+        // The provider turns the shared event flow into a stream of structured month events; we just
+        // render each emission. It re-reads its own time window (getLastDays), so the events payload
+        // is only a change trigger — hence the shared flow is handed over, not its values.
+        viewModelScope.launch {
+            calendarEventsProvider
+                .structuredEventsFlow(reminderEvents, ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS)
+                .map { it.toImmutableMap() }
+                .flowOn(ioDispatcher)
+                .collect { _state.calendarDayEvents = it }
+        }
     }
 
     fun onSelectView(view: StatisticFragment) {
@@ -69,74 +111,9 @@ class StatisticsScreenViewModel @Inject constructor(
     }
 
     fun onSelectRange(days: Int) {
-        if (days == _state.analysisDays) return
-        _state.analysisDays = days
+        if (days == analysisDays.value) return
         persistentDataDataSource.setAnalysisDays(days)
         analysisDays.value = days
-    }
-
-    private fun observeCharts() {
-        // Recompute whenever the reminder events change or the selected range changes — same reactive
-        // pattern as observeTableRows, so adding an event refreshes the charts without a manual reload.
-        viewModelScope.launch {
-            combine(reminderEvents, analysisDays) { events, days -> buildChartsState(events, days) }
-                .flowOn(ioDispatcher)
-                .collect { _state.charts = it }
-        }
-    }
-
-    private suspend fun buildChartsState(events: List<ReminderEvent>, days: Int): ChartsState {
-        val data = statisticsProvider.aggregate(events, days)
-        // First custom color wins if names somehow collide — matches the prior firstOrNull lookup.
-        val medicineColorsByName = medicineRepository.getAll()
-            .filter { it.useColor }
-            .reversed()
-            .associate { it.name to it.color }
-        return chartsPresenter.present(data, medicineColorsByName, days)
-    }
-
-    private fun observeCalendar() {
-        // The calendar shows past + scheduled reminders; recompute on event changes so it stays in
-        // sync with the rest of the screen. The emitted list is just a change trigger — the provider
-        // reads its own time-windowed slice (getLastDays), which differs from the charts query.
-        viewModelScope.launch {
-            reminderEvents
-                .map { calendarEventsProvider.getStructuredEvents(ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS).toImmutableMap() }
-                .flowOn(ioDispatcher)
-                .collect { _state.calendarDayEvents = it }
-        }
-    }
-
-    private fun observeTableRows() {
-        viewModelScope.launch {
-            combine(
-                reminderEvents,
-                persistentDataDataSource.data,
-                tagRepository.getAllFlow(),
-            ) { events, persistent, tags ->
-                val selectedTagIds = persistent.filterTags.mapNotNull { it.toIntOrNull() }.toSet()
-                tagEventFilter.filter(events, selectedTagIds, tags).map { it.toTableRow() }.toImmutableList()
-            }
-                .flowOn(ioDispatcher)
-                .collect { _state.tableRows = it }
-        }
-    }
-
-    private fun ReminderEvent.toTableRow(): SortableTableRow {
-        val takenText = if (status == ReminderEvent.ReminderStatus.TAKEN) {
-            timeFormatter.toDateTimeString(processedTimestamp)
-        } else {
-            "-"
-        }
-        return SortableTableRow(
-            id = reminderEventId.toLong(),
-            cells = persistentListOf(
-                SortableTableCell(takenText, processedTimestamp),
-                SortableTableCell(medicineName),
-                SortableTableCell(amount),
-                SortableTableCell(timeFormatter.toDateTimeString(remindedTimestamp), remindedTimestamp),
-            ),
-        )
     }
 
     companion object {

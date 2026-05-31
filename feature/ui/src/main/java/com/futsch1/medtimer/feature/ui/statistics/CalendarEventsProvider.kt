@@ -10,6 +10,8 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,6 +34,18 @@ class CalendarEventsProvider @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
 ) {
+
+    // The calendar isn't backed by a reactive query — getStructuredEvents reads a fixed window on each
+    // call. This adapts a change [trigger] (e.g. the screen's shared reminder-events flow) into the
+    // reactive shape the screen collects, so callers no longer fake reactivity around a suspend read.
+    // The trigger's value is ignored: the window (getLastDays) is re-read in full on every emission.
+    fun structuredEventsFlow(
+        trigger: Flow<*>,
+        medicineId: Int,
+        pastMonths: Int,
+        futureMonths: Int,
+    ): Flow<Map<LocalDate, List<CalendarDayEvent>>> =
+        trigger.map { getStructuredEvents(medicineId, pastMonths, futureMonths) }
 
     suspend fun getStructuredEvents(
         medicineId: Int,
@@ -81,7 +95,7 @@ class CalendarEventsProvider @Inject constructor(
             }
             val day = reminderEvent.remindedTimestamp.atZone(zone).toLocalDate()
             if (day >= startDay && (selectedMedicine == null ||
-                    selectedMedicine.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))
+                        selectedMedicine.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))
             ) {
                 target.getOrPut(day) { mutableListOf() }.add(CalendarEntry.Past(reminderEvent))
             }

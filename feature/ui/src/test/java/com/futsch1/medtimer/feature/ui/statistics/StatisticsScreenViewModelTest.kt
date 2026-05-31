@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
-import com.futsch1.medtimer.core.common.di.Dispatcher
-import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -13,6 +11,7 @@ import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
+import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTablePresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,12 +25,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -51,6 +50,7 @@ class StatisticsScreenViewModelTest {
     private val tagEventFilter = TagEventFilter()
     private val timeFormatter: TimeFormatter = mock()
     private val chartsPresenter = ChartsPresenter(timeFormatter)
+    private val reminderTablePresenter = ReminderTablePresenter(timeFormatter)
 
     private val dataFlow = MutableStateFlow(PersistentData.default())
     private val eventsFlow = MutableStateFlow<List<ReminderEvent>>(emptyList())
@@ -73,10 +73,10 @@ class StatisticsScreenViewModelTest {
                 total = StatisticsProvider.TakenSkipped(0, 0),
             )
         )
+        whenever(calendarEventsProvider.structuredEventsFlow(any(), any(), any(), any())).thenReturn(flowOf(emptyMap()))
         // Suspend functions must be stubbed from inside a coroutine context
         runBlocking {
             whenever(medicineRepository.getAll()).thenReturn(emptyList())
-            whenever(calendarEventsProvider.getStructuredEvents(any(), any(), any())).thenReturn(emptyMap())
         }
 
         viewModel = buildViewModel()
@@ -196,13 +196,13 @@ class StatisticsScreenViewModelTest {
     private fun buildViewModel() = StatisticsScreenViewModel(
         statisticsProvider = statisticsProvider,
         chartsPresenter = chartsPresenter,
+        reminderTablePresenter = reminderTablePresenter,
         calendarEventsProvider = calendarEventsProvider,
         medicineRepository = medicineRepository,
         reminderEventRepository = reminderEventRepository,
         tagRepository = tagRepository,
         persistentDataDataSource = persistentDataDataSource,
         tagEventFilter = tagEventFilter,
-        timeFormatter = timeFormatter,
         ioDispatcher = testDispatcher,
     )
 }
