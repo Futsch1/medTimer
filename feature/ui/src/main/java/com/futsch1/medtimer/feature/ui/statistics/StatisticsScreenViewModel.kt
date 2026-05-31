@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -16,21 +14,25 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.component.SortableTableCell
 import com.futsch1.medtimer.core.ui.component.SortableTableRow
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
+import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsScreenViewModel @Inject constructor(
     private val statisticsProvider: StatisticsProvider,
+    private val chartsPresenter: ChartsPresenter,
     private val calendarEventsProvider: CalendarEventsProvider,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
@@ -45,6 +47,12 @@ class StatisticsScreenViewModel @Inject constructor(
     val state: StatisticsScreenState get() = _state
 
     private val analysisDays = MutableStateFlow(persistentDataDataSource.data.value.analysisDays)
+
+    // One shared read of the taken/skipped reminder events feeds charts, table, and calendar — the
+    // Room flow is cold, so subscribing per view would spin up three independent DB observers.
+    private val reminderEvents = reminderEventRepository
+        .getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped)
+        .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         val data = persistentDataDataSource.data.value
@@ -70,12 +78,8 @@ class StatisticsScreenViewModel @Inject constructor(
     private fun observeCharts() {
         // Recompute whenever the reminder events change or the selected range changes — same reactive
         // pattern as observeTableRows, so adding an event refreshes the charts without a manual reload.
-        // The events the flow emits are the ones we aggregate: one read feeds every series.
         viewModelScope.launch {
-            combine(
-                reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped),
-                analysisDays,
-            ) { events, days -> buildChartsState(events, days) }
+            combine(reminderEvents, analysisDays) { events, days -> buildChartsState(events, days) }
                 .flowOn(ioDispatcher)
                 .collect { _state.charts = it }
         }
@@ -83,28 +87,12 @@ class StatisticsScreenViewModel @Inject constructor(
 
     private suspend fun buildChartsState(events: List<ReminderEvent>, days: Int): ChartsState {
         val data = statisticsProvider.aggregate(events, days)
-        val seriesColors = computeSeriesColors(data.perDay)
-        return ChartsState(
-            perDay = data.perDay,
-            dayLabels = data.perDay.epochDays.map { timeFormatter.daysSinceEpochToDateString(it) }.toImmutableList(),
-            seriesColors = seriesColors.toImmutableList(),
-            takenPeriod = data.period.taken,
-            skippedPeriod = data.period.skipped,
-            takenTotal = data.total.taken,
-            skippedTotal = data.total.skipped,
-            days = days,
-        )
-    }
-
-    private suspend fun computeSeriesColors(data: MedicinePerDayData): List<Int> {
-        val allMedicines = medicineRepository.getAll()
-        var colorIndex = 0
-        return data.series.map { series ->
-            allMedicines
-                .firstOrNull { it.name == series.medicineName && it.useColor }
-                ?.color
-                ?: COLORS[colorIndex++ % COLORS.size].toArgb()
-        }
+        // First custom color wins if names somehow collide — matches the prior firstOrNull lookup.
+        val medicineColorsByName = medicineRepository.getAll()
+            .filter { it.useColor }
+            .reversed()
+            .associate { it.name to it.color }
+        return chartsPresenter.present(data, medicineColorsByName, days)
     }
 
     private fun observeCalendar() {
@@ -112,7 +100,7 @@ class StatisticsScreenViewModel @Inject constructor(
         // sync with the rest of the screen. The emitted list is just a change trigger — the provider
         // reads its own time-windowed slice (getLastDays), which differs from the charts query.
         viewModelScope.launch {
-            reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped)
+            reminderEvents
                 .map { calendarEventsProvider.getStructuredEvents(ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS).toImmutableMap() }
                 .flowOn(ioDispatcher)
                 .collect { _state.calendarDayEvents = it }
@@ -122,7 +110,7 @@ class StatisticsScreenViewModel @Inject constructor(
     private fun observeTableRows() {
         viewModelScope.launch {
             combine(
-                reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped),
+                reminderEvents,
                 persistentDataDataSource.data,
                 tagRepository.getAllFlow(),
             ) { events, persistent, tags ->
@@ -155,25 +143,5 @@ class StatisticsScreenViewModel @Inject constructor(
         private const val ALL_MEDICINES = -1
         private const val CALENDAR_PAST_MONTHS = 3
         private const val CALENDAR_FUTURE_MONTHS = 0
-
-        private val COLORS = listOf(
-            Color(0xFF003F5C),
-            Color(0xFF2F4B7C),
-            Color(0xFF665191),
-            Color(0xFFA05195),
-            Color(0xFFD45087),
-            Color(0xFFF95D6A),
-            Color(0xFFFF7C43),
-            Color(0xFFFFA600),
-            Color(0xFF004C6D),
-            Color(0xFF295D7D),
-            Color(0xFF436F8E),
-            Color(0xFF5B829F),
-            Color(0xFF7295B0),
-            Color(0xFF89A8C2),
-            Color(0xFFA1BCD4),
-            Color(0xFFB8D0E6),
-            Color(0xFFD0E5F8),
-        )
     }
 }

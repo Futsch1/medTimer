@@ -12,6 +12,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
+import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +50,7 @@ class StatisticsScreenViewModelTest {
     private val persistentDataDataSource: PersistentDataDataSource = mock()
     private val tagEventFilter = TagEventFilter()
     private val timeFormatter: TimeFormatter = mock()
+    private val chartsPresenter = ChartsPresenter(timeFormatter)
 
     private val dataFlow = MutableStateFlow(PersistentData.default())
     private val eventsFlow = MutableStateFlow<List<ReminderEvent>>(emptyList())
@@ -193,6 +195,7 @@ class StatisticsScreenViewModelTest {
 
     private fun buildViewModel() = StatisticsScreenViewModel(
         statisticsProvider = statisticsProvider,
+        chartsPresenter = chartsPresenter,
         calendarEventsProvider = calendarEventsProvider,
         medicineRepository = medicineRepository,
         reminderEventRepository = reminderEventRepository,
