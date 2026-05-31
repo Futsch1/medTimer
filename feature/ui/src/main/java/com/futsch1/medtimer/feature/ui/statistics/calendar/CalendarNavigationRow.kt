@@ -11,6 +11,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import java.time.YearMonth
 import java.time.format.TextStyle
 
@@ -101,6 +104,24 @@ private fun YearMonthTitle(
                     },
                 )
             }
+        }
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun CalendarNavigationRowPreview() {
+    val month = YearMonth.of(2026, 5)
+    MedTimerTheme {
+        Surface {
+            CalendarNavigationRow(
+                yearMonth = month,
+                startMonth = month.minusMonths(3),
+                endMonth = month,
+                onPrev = {},
+                onNext = {},
+                onYearSelected = {},
+            )
         }
     }
 }

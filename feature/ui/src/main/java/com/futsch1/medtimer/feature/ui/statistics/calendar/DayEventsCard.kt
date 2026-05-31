@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,6 +19,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -79,6 +82,24 @@ fun DayEventsCard(
                     Text(text = ": ${event.amount} ${event.medicineName}$suffix", style = bodySmall)
                 }
             }
+        }
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun DayEventsCardPreview() {
+    val date = LocalDate.of(2026, 5, 28)
+    MedTimerTheme {
+        Surface {
+            DayEventsCard(
+                date = date,
+                events = listOf(
+                    CalendarDayEvent(date.atTime(8, 0), "1 tablet", "Vitamin X 500 mg", CalendarDayEvent.Status.TAKEN),
+                    CalendarDayEvent(date.atTime(12, 30), "2 ml", "Medicine A", CalendarDayEvent.Status.SKIPPED),
+                    CalendarDayEvent(date.atTime(20, 0), "1 capsule", "Supplement B", CalendarDayEvent.Status.SCHEDULED),
+                ),
+            )
         }
     }
 }

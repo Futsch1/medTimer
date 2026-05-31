@@ -6,11 +6,13 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,8 +22,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
+import java.time.LocalDate
 
 @Composable
 fun DayCell(
@@ -73,5 +78,22 @@ fun DayCell(
             color = textColor,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun DayCellPreview() {
+    val date = LocalDate.of(2026, 5, 28)
+    MedTimerTheme {
+        Surface {
+            // Plain, has-events, selected, and an out-of-month (dimmed) day.
+            Row {
+                DayCell(CalendarDay(date, DayPosition.MonthDate), isSelected = false, hasEvents = false, onClick = {})
+                DayCell(CalendarDay(date, DayPosition.MonthDate), isSelected = false, hasEvents = true, onClick = {})
+                DayCell(CalendarDay(date, DayPosition.MonthDate), isSelected = true, hasEvents = true, onClick = {})
+                DayCell(CalendarDay(date, DayPosition.OutDate), isSelected = false, hasEvents = false, onClick = {})
+            }
+        }
     }
 }

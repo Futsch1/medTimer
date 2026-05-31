@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
@@ -129,6 +132,26 @@ private fun WeekDaysRow(firstDayOfWeek: DayOfWeek) {
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, locale),
                 style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun CalendarContentPreview() {
+    val today = LocalDate.now()
+    MedTimerTheme {
+        Surface {
+            CalendarContent(
+                dayEvents = mapOf(
+                    today to listOf(
+                        CalendarDayEvent(today.atTime(8, 0), "1 tablet", "Vitamin X 500 mg", CalendarDayEvent.Status.TAKEN),
+                    ),
+                    today.minusDays(2) to listOf(
+                        CalendarDayEvent(today.minusDays(2).atTime(20, 0), "2 ml", "Medicine A", CalendarDayEvent.Status.SKIPPED),
+                    ),
+                ),
             )
         }
     }

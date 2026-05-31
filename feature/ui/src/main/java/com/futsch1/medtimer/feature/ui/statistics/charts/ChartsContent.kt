@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,19 +25,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.ChartsState
+import com.futsch1.medtimer.feature.ui.statistics.MedicineDaySeries
+import com.futsch1.medtimer.feature.ui.statistics.MedicinePerDayData
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModel
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.data.ColumnCartesianLayerModel
 import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
@@ -58,6 +65,7 @@ import com.patrykandpatrick.vico.compose.pie.PieChartHost
 import com.patrykandpatrick.vico.compose.pie.data.PieChartModel
 import com.patrykandpatrick.vico.compose.pie.data.PieValueFormatter
 import com.patrykandpatrick.vico.compose.pie.rememberPieChart
+import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import kotlin.math.roundToInt
 
@@ -182,6 +190,33 @@ private fun LegendDot(color: Color, label: String) {
     }
 }
 
+@MedTimerPreview
+@Composable
+private fun ChartsContentPreview() {
+    MedTimerTheme {
+        Surface {
+            ChartsContent(
+                state = ChartsState(
+                    perDay = MedicinePerDayData(
+                        epochDays = listOf(20200L, 20201L, 20202L),
+                        series = listOf(
+                            MedicineDaySeries("Vitamin X 500 mg", listOf(1, 2, 1)),
+                            MedicineDaySeries("Medicine A", listOf(0, 1, 2)),
+                        ),
+                    ),
+                    dayLabels = persistentListOf("May 26", "May 27", "May 28"),
+                    seriesColors = persistentListOf(0xFF003F5C.toInt(), 0xFFFF7C43.toInt()),
+                    takenPeriod = 7,
+                    skippedPeriod = 3,
+                    takenTotal = 42,
+                    skippedTotal = 8,
+                    days = 7,
+                ),
+            )
+        }
+    }
+}
+
 @Composable
 private fun MedicinePerDayBarChart(
     epochDays: List<Long>,
@@ -215,46 +250,57 @@ private fun MedicinePerDayBarChart(
     }
     val legendLabelComponent = rememberTextComponent(TextStyle(vicoTheme.textColor))
 
+    val chart = rememberCartesianChart(
+        rememberColumnCartesianLayer(
+            columnProvider = ColumnCartesianLayer.ColumnProvider.series(
+                resolvedColors.map { color -> rememberLineComponent(fill = Fill(color), thickness = 16.dp) },
+            ),
+            mergeMode = { ColumnCartesianLayer.MergeMode.Stacked },
+        ),
+        startAxis = VerticalAxis.rememberStart(
+            valueFormatter = remember { CartesianValueFormatter.decimal(decimalCount = 0) },
+            itemPlacer = remember { VerticalAxis.ItemPlacer.step(step = { 1.0 }) },
+            guideline = null,
+        ),
+        bottomAxis = HorizontalAxis.rememberBottom(
+            valueFormatter = bottomAxisValueFormatter,
+            itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 2 }) },
+            guideline = null,
+        ),
+        legend = rememberHorizontalLegend(
+            items = {
+                seriesNames.forEachIndexed { index, name ->
+                    add(
+                        LegendItem(
+                            icon = ShapeComponent(Fill(resolvedColors[index % resolvedColors.size]), CircleShape),
+                            labelComponent = legendLabelComponent,
+                            label = name,
+                        )
+                    )
+                }
+            },
+            padding = Insets(top = 8.dp),
+        ),
+    )
+    val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = remember { Zoom.Content })
+    val hostModifier = Modifier.fillMaxSize().padding(16.dp)
+
     Card(
         modifier = modifier.fillMaxSize(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
-        CartesianChartHost(
-            chart = rememberCartesianChart(
-                rememberColumnCartesianLayer(
-                    columnProvider = ColumnCartesianLayer.ColumnProvider.series(
-                        resolvedColors.map { color -> rememberLineComponent(fill = Fill(color), thickness = 16.dp) },
-                    ),
-                    mergeMode = { ColumnCartesianLayer.MergeMode.Stacked },
-                ),
-                startAxis = VerticalAxis.rememberStart(
-                    valueFormatter = remember { CartesianValueFormatter.decimal(decimalCount = 0) },
-                    itemPlacer = remember { VerticalAxis.ItemPlacer.step(step = { 1.0 }) },
-                    guideline = null,
-                ),
-                bottomAxis = HorizontalAxis.rememberBottom(
-                    valueFormatter = bottomAxisValueFormatter,
-                    itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 2 }) },
-                    guideline = null,
-                ),
-                legend = rememberHorizontalLegend(
-                    items = {
-                        seriesNames.forEachIndexed { index, name ->
-                            add(
-                                LegendItem(
-                                    icon = ShapeComponent(Fill(resolvedColors[index % resolvedColors.size]), CircleShape),
-                                    labelComponent = legendLabelComponent,
-                                    label = name,
-                                )
-                            )
-                        }
-                    },
-                    padding = Insets(top = 8.dp),
-                ),
-            ),
-            modelProducer = modelProducer,
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = remember { Zoom.Content }),
-        )
+        if (LocalInspectionMode.current) {
+            // @Preview renders don't run the LaunchedEffect that fills the producer, so the bars would
+            // be blank. Build the model synchronously here; production keeps the producer for its
+            // difference animations.
+            val previewModel = remember(epochDays, series) {
+                CartesianChartModel(
+                    ColumnCartesianLayerModel.build { series.forEach { series(x = epochDays, y = it) } },
+                )
+            }
+            CartesianChartHost(chart = chart, model = previewModel, modifier = hostModifier, zoomState = zoomState)
+        } else {
+            CartesianChartHost(chart = chart, modelProducer = modelProducer, modifier = hostModifier, zoomState = zoomState)
+        }
     }
 }

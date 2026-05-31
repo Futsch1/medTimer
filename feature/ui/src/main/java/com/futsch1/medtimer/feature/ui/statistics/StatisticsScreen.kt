@@ -24,6 +24,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -186,11 +187,13 @@ private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 private fun StatisticsScreenPreview() {
     val state = StatisticsUiState(activeView = StatisticFragment.TABLE)
     MedTimerTheme {
-        StatisticsScreen(
-            state = state,
-            onSelectView = {},
-            onSelectRange = {},
-            onEditEvent = {},
-        )
+        Surface {
+            StatisticsScreen(
+                state = state,
+                onSelectView = {},
+                onSelectRange = {},
+                onEditEvent = {},
+            )
+        }
     }
 }

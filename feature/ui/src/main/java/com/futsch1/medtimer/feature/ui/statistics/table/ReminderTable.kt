@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -136,13 +137,15 @@ private fun sampleRow(id: Long, taken: String, name: String, dosage: String, rem
 @Composable
 private fun ReminderTablePreview() {
     MedTimerTheme {
-        ReminderTable(
-            rows = persistentListOf(
-                sampleRow(1, "May 28, 09:00", "Vitamin X 500 mg", "1 tablet", "May 28, 08:00"),
-                sampleRow(2, "-", "Medicine A", "2 ml", "May 28, 12:30"),
-                sampleRow(3, "May 27, 21:00", "Supplement B", "1 capsule", "May 27, 20:00"),
-            ),
-            onEditEvent = {},
-        )
+        Surface {
+            ReminderTable(
+                rows = persistentListOf(
+                    sampleRow(1, "May 28, 09:00", "Vitamin X 500 mg", "1 tablet", "May 28, 08:00"),
+                    sampleRow(2, "-", "Medicine A", "2 ml", "May 28, 12:30"),
+                    sampleRow(3, "May 27, 21:00", "Supplement B", "1 capsule", "May 27, 20:00"),
+                ),
+                onEditEvent = {},
+            )
+        }
     }
 }
