@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">வீட்டு இடத்தை வரைபடத்தில் காட்டு</string>
     <string name="set_home_location_confirm">வீட்டு இடத்தை\n%1$s, %2$s ஆக அமைக்கவா?</string>
     <string name="home_location_error">உங்கள் தற்போதைய இடத்தை தீர்மானிக்க முடியவில்லை</string>
-<string name="exact_reminders_warning_title">துல்லியமான நினைவூட்டல்கள் முடக்கப்பட்டுள்ளன</string><string name="exact_reminders_warning_summary">நினைவூட்டல்கள் திட்டமிட்ட நேரத்தை விட சில நிமிடங்கள் தாமதமாக அனுப்பப்படலாம். துல்லியமான நினைவூட்டல்கள் தேவைப்பட்டால் (சற்று அதிகரிக்கும் பேட்டரி நுகர்வுக்கு ஈடாக), அறிவிப்பு அமைப்புகளில் இதை இயக்கவும்.</string></resources>
+    <string name="exact_reminders_warning_title">துல்லியமான நினைவூட்டல்கள் முடக்கப்பட்டுள்ளன</string>
+    <string name="exact_reminders_warning_summary">நினைவூட்டல்கள் திட்டமிட்ட நேரத்தை விட சில நிமிடங்கள் தாமதமாக அனுப்பப்படலாம். துல்லியமான நினைவூட்டல்கள் தேவைப்பட்டால் (சற்று அதிகரிக்கும் பேட்டரி நுகர்வுக்கு ஈடாக), அறிவிப்பு அமைப்புகளில் இதை இயக்கவும்.</string>
+    <string name="medicine_settings">மருந்து அமைப்புகள்</string>
+    <string name="medicine_cannot_be_skipped">மருந்தை தவிர்க்க முடியாது</string>
+    <string name="medicine_cannot_be_skipped_summary">இயக்கப்பட்டால், இந்த மருந்தின் அனைத்து நினைவூட்டல்களும் மருந்தை எடுத்ததாக குறிப்பிடுவதன் மூலம் மட்டுமே நிராகரிக்க முடியும்.</string>
+    <string name="reminders_cannot_be_skipped">நினைவூட்டல்களை தவிர்க்க முடியாது</string>
+    <string name="reminders_cannot_be_skipped_summary">இயக்கப்பட்டால், நினைவூட்டல்களை எடுத்ததாக குறிப்பிடுவதன் மூலம் மட்டுமே நிராகரிக்க முடியும். இதை ஒவ்வொரு மருந்திற்கும் தனித்தனியாக இயக்கலாம்.</string>
+</resources>

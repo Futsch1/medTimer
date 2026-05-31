@@ -301,4 +301,11 @@
     <string name="show_home_location_on_map">在地圖上顯示家庭位置</string>
     <string name="set_home_location_confirm">將家庭位置設定為\n%1$s, %2$s？</string>
     <string name="home_location_error">無法確定您目前的位置</string>
-<string name="exact_reminders_warning_title">精確提醒已停用</string><string name="exact_reminders_warning_summary">提醒可能會比排定時間晚幾分鐘觸發。如需精確提醒（會稍微增加電池消耗），請在通知設定中啟用此功能。</string></resources>
+    <string name="exact_reminders_warning_title">精確提醒已停用</string>
+    <string name="exact_reminders_warning_summary">提醒可能會比排定時間晚幾分鐘觸發。如需精確提醒（會稍微增加電池消耗），請在通知設定中啟用此功能。</string>
+    <string name="medicine_settings">藥物設定</string>
+    <string name="medicine_cannot_be_skipped">藥物不可跳過</string>
+    <string name="medicine_cannot_be_skipped_summary">若啟用，此藥物的所有提醒只能透過標記為已服用來關閉。</string>
+    <string name="reminders_cannot_be_skipped">提醒不可跳過</string>
+    <string name="reminders_cannot_be_skipped_summary">若啟用，提醒只能透過標記為已服用來關閉。此設定也可針對每種藥物個別啟用。</string>
+</resources>

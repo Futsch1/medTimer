@@ -315,4 +315,9 @@
     <string name="home_location_error">No se pudo determinar tu ubicación actual</string>
     <string name="exact_reminders_warning_title">Los recordatorios exactos están desactivados</string>
     <string name="exact_reminders_warning_summary">Los recordatorios pueden activarse unos minutos más tarde de lo programado. Si necesita recordatorios exactos (a costa de un ligero aumento del consumo de batería), actívelo en la configuración de notificaciones.</string>
+    <string name="medicine_settings">Configuración de medicamento</string>
+    <string name="medicine_cannot_be_skipped">El medicamento no se puede omitir</string>
+    <string name="medicine_cannot_be_skipped_summary">Si está activado, todos los recordatorios de este medicamento solo se pueden cerrar marcando el medicamento como tomado.</string>
+    <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
+    <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
 </resources>
