@@ -79,7 +79,8 @@ internal class JSONMedicineBackupUnitTest {
         "notes": "Generic ingredient: Dihydrogen monoxide",
         "showNotificationAsAlarm": true,
         "productionDate": 1,
-        "expirationDate": 2
+        "expirationDate": 2,
+        "cannotBeSkipped": true
       },
       "tags": [
         {
@@ -254,7 +255,8 @@ internal class JSONMedicineBackupUnitTest {
         "notes": "",
         "showNotificationAsAlarm": false,
         "productionDate": 0,
-        "expirationDate": 0
+        "expirationDate": 0,
+        "cannotBeSkipped": false
       },
       "tags": [],
       "reminders": [
@@ -307,7 +309,8 @@ internal class JSONMedicineBackupUnitTest {
         "notes": "",
         "showNotificationAsAlarm": false,
         "productionDate": 0,
-        "expirationDate": 0
+        "expirationDate": 0,
+        "cannotBeSkipped": false
       },
       "tags": [],
       "reminders": [
