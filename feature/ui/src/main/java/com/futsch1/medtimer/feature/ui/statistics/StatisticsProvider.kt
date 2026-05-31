@@ -2,19 +2,24 @@ package com.futsch1.medtimer.feature.ui.statistics
 
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.normalizeMedicineName
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-class StatisticsProvider @Inject constructor(private val reminderEventRepository: ReminderEventRepository) {
+// Pure aggregation over an already-loaded reminder-event list. Holds no repository, so a single
+// events read in the ViewModel feeds every chart series at once — see StatisticsScreenViewModel.observeCharts.
+class StatisticsProvider @Inject constructor() {
 
-    suspend fun getTakenSkippedData(days: Int): TakenSkipped {
-        val reminderEvents = reminderEventRepository.getAllWithoutDeleted()
-        val taken = reminderEvents.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.TAKEN) }
-        val skipped =
-            reminderEvents.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.SKIPPED) }
+    fun aggregate(events: List<ReminderEvent>, days: Int): ChartsData = ChartsData(
+        perDay = getLastDaysReminders(events, days),
+        period = getTakenSkippedData(events, days),
+        total = getTakenSkippedData(events, 0),
+    )
+
+    fun getTakenSkippedData(events: List<ReminderEvent>, days: Int): TakenSkipped {
+        val taken = events.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.TAKEN) }
+        val skipped = events.count { eventStatusDaysFilter(it, days, ReminderEvent.ReminderStatus.SKIPPED) }
         return TakenSkipped(taken.toLong(), skipped.toLong())
     }
 
@@ -37,8 +42,8 @@ class StatisticsProvider @Inject constructor(private val reminderEventRepository
         return instant.atZone(ZoneId.systemDefault()).toLocalDate().isAfter(date)
     }
 
-    suspend fun getLastDaysReminders(days: Int): MedicinePerDayData {
-        val medicineToDayCount = calculateMedicineToDayMap(days)
+    fun getLastDaysReminders(events: List<ReminderEvent>, days: Int): MedicinePerDayData {
+        val medicineToDayCount = calculateMedicineToDayMap(events, days)
         return calculateDataEntries(days, medicineToDayCount)
     }
 
@@ -58,11 +63,10 @@ class StatisticsProvider @Inject constructor(private val reminderEventRepository
         return MedicinePerDayData(epochDays, series)
     }
 
-    private suspend fun calculateMedicineToDayMap(days: Int): Map<String, IntArray> {
+    private fun calculateMedicineToDayMap(events: List<ReminderEvent>, days: Int): Map<String, IntArray> {
         val earliestDate = LocalDate.now().minusDays(days.toLong())
 
-        val reminderEvents = reminderEventRepository.getAllWithoutDeleted()
-        return reminderEvents
+        return events
             .filter {
                 it.status == ReminderEvent.ReminderStatus.TAKEN && wasAfter(
                     it.remindedTimestamp,

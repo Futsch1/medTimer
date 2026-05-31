@@ -21,7 +21,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private val viewModel: StatisticsScreenViewModel by viewModels()
-    private val calendarEventsViewModel: CalendarEventsViewModel by viewModels()
     private val medicineViewModel: MedicineViewModel by viewModels()
 
     @Inject
@@ -50,7 +49,6 @@ class StatisticsFragment : Fragment() {
                 MedTimerTheme {
                     StatisticsScreen(
                         viewModel = viewModel,
-                        calendarViewModel = calendarEventsViewModel,
                         onEditEvent = ::onEditEvent,
                     )
                 }

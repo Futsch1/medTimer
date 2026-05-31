@@ -19,16 +19,19 @@ import com.futsch1.medtimer.core.ui.filter.TagEventFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsScreenViewModel @Inject constructor(
     private val statisticsProvider: StatisticsProvider,
+    private val calendarEventsProvider: CalendarEventsProvider,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val tagRepository: TagRepository,
@@ -49,6 +52,7 @@ class StatisticsScreenViewModel @Inject constructor(
         _state.analysisDays = data.analysisDays
         observeCharts()
         observeTableRows()
+        observeCalendar()
     }
 
     fun onSelectView(view: StatisticFragment) {
@@ -66,29 +70,28 @@ class StatisticsScreenViewModel @Inject constructor(
     private fun observeCharts() {
         // Recompute whenever the reminder events change or the selected range changes — same reactive
         // pattern as observeTableRows, so adding an event refreshes the charts without a manual reload.
+        // The events the flow emits are the ones we aggregate: one read feeds every series.
         viewModelScope.launch {
             combine(
                 reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped),
                 analysisDays,
-            ) { _, days -> buildChartsState(days) }
+            ) { events, days -> buildChartsState(events, days) }
                 .flowOn(ioDispatcher)
                 .collect { _state.charts = it }
         }
     }
 
-    private suspend fun buildChartsState(days: Int): ChartsState {
-        val perDay = statisticsProvider.getLastDaysReminders(days)
-        val seriesColors = computeSeriesColors(perDay)
-        val period = statisticsProvider.getTakenSkippedData(days)
-        val total = statisticsProvider.getTakenSkippedData(0)
+    private suspend fun buildChartsState(events: List<ReminderEvent>, days: Int): ChartsState {
+        val data = statisticsProvider.aggregate(events, days)
+        val seriesColors = computeSeriesColors(data.perDay)
         return ChartsState(
-            perDay = perDay,
-            dayLabels = perDay.epochDays.map { timeFormatter.daysSinceEpochToDateString(it) }.toImmutableList(),
+            perDay = data.perDay,
+            dayLabels = data.perDay.epochDays.map { timeFormatter.daysSinceEpochToDateString(it) }.toImmutableList(),
             seriesColors = seriesColors.toImmutableList(),
-            takenPeriod = period.taken,
-            skippedPeriod = period.skipped,
-            takenTotal = total.taken,
-            skippedTotal = total.skipped,
+            takenPeriod = data.period.taken,
+            skippedPeriod = data.period.skipped,
+            takenTotal = data.total.taken,
+            skippedTotal = data.total.skipped,
             days = days,
         )
     }
@@ -101,6 +104,18 @@ class StatisticsScreenViewModel @Inject constructor(
                 .firstOrNull { it.name == series.medicineName && it.useColor }
                 ?.color
                 ?: COLORS[colorIndex++ % COLORS.size].toArgb()
+        }
+    }
+
+    private fun observeCalendar() {
+        // The calendar shows past + scheduled reminders; recompute on event changes so it stays in
+        // sync with the rest of the screen. The emitted list is just a change trigger — the provider
+        // reads its own time-windowed slice (getLastDays), which differs from the charts query.
+        viewModelScope.launch {
+            reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped)
+                .map { calendarEventsProvider.getStructuredEvents(ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS).toImmutableMap() }
+                .flowOn(ioDispatcher)
+                .collect { _state.calendarDayEvents = it }
         }
     }
 
@@ -137,6 +152,10 @@ class StatisticsScreenViewModel @Inject constructor(
     }
 
     companion object {
+        private const val ALL_MEDICINES = -1
+        private const val CALENDAR_PAST_MONTHS = 3
+        private const val CALENDAR_FUTURE_MONTHS = 0
+
         private val COLORS = listOf(
             Color(0xFF003F5C),
             Color(0xFF2F4B7C),

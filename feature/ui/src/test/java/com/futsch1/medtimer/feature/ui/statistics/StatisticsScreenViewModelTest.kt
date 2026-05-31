@@ -42,6 +42,7 @@ class StatisticsScreenViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val statisticsProvider: StatisticsProvider = mock()
+    private val calendarEventsProvider: CalendarEventsProvider = mock()
     private val medicineRepository: MedicineRepository = mock()
     private val reminderEventRepository: ReminderEventRepository = mock()
     private val tagRepository: TagRepository = mock()
@@ -63,15 +64,17 @@ class StatisticsScreenViewModelTest {
         whenever(tagRepository.getAllFlow()).thenReturn(flowOf(emptyList()))
         whenever(timeFormatter.toDateTimeString(any<java.time.Instant>())).thenReturn("")
 
+        whenever(statisticsProvider.aggregate(any(), any())).thenReturn(
+            ChartsData(
+                perDay = MedicinePerDayData(emptyList(), emptyList()),
+                period = StatisticsProvider.TakenSkipped(0, 0),
+                total = StatisticsProvider.TakenSkipped(0, 0),
+            )
+        )
         // Suspend functions must be stubbed from inside a coroutine context
         runBlocking {
             whenever(medicineRepository.getAll()).thenReturn(emptyList())
-            whenever(statisticsProvider.getLastDaysReminders(any())).thenReturn(
-                MedicinePerDayData(emptyList(), emptyList())
-            )
-            whenever(statisticsProvider.getTakenSkippedData(any())).thenReturn(
-                StatisticsProvider.TakenSkipped(0, 0)
-            )
+            whenever(calendarEventsProvider.getStructuredEvents(any(), any(), any())).thenReturn(emptyMap())
         }
 
         viewModel = buildViewModel()
@@ -190,6 +193,7 @@ class StatisticsScreenViewModelTest {
 
     private fun buildViewModel() = StatisticsScreenViewModel(
         statisticsProvider = statisticsProvider,
+        calendarEventsProvider = calendarEventsProvider,
         medicineRepository = medicineRepository,
         reminderEventRepository = reminderEventRepository,
         tagRepository = tagRepository,

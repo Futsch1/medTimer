@@ -14,6 +14,14 @@ data class MedicineDaySeries(
     val counts: List<Int>,
 )
 
+// One aggregation of a single events read: the per-day bar series plus the windowed and all-time
+// taken/skipped tallies the pie charts need. StatisticsProvider builds it; the ViewModel formats it.
+data class ChartsData(
+    val perDay: MedicinePerDayData,
+    val period: StatisticsProvider.TakenSkipped,
+    val total: StatisticsProvider.TakenSkipped,
+)
+
 @Immutable
 data class ChartsState(
     val perDay: MedicinePerDayData,

@@ -82,7 +82,6 @@ class StatisticsScreenTest {
                 Box(modifier = Modifier.size(400.dp, 800.dp)) {
                     StatisticsScreen(
                         state = state,
-                        calendarDayEvents = emptyMap(),
                         onSelectView = onSelectView,
                         onSelectRange = {},
                         onEditEvent = {},

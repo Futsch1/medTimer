@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,31 +42,18 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarContent
-import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsContent
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTable
-import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableMap
-import java.time.LocalDate
 
-/** Stateful entry point: binds the ViewModels to the stateless [StatisticsScreen]. */
+/** Stateful entry point: binds the ViewModel to the stateless [StatisticsScreen]. */
 @Composable
 fun StatisticsScreen(
     viewModel: StatisticsScreenViewModel,
-    calendarViewModel: CalendarEventsViewModel,
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val calendarDayEvents by produceState<ImmutableMap<LocalDate, List<CalendarDayEvent>>>(persistentMapOf(), calendarViewModel) {
-        calendarViewModel.getStructuredEventsForMonths(ALL_MEDICINES, PAST_MONTHS, FUTURE_MONTHS).collect { map ->
-            value = map.toImmutableMap()
-        }
-    }
     StatisticsScreen(
         state = viewModel.state,
-        calendarDayEvents = calendarDayEvents,
         onSelectView = viewModel::onSelectView,
         onSelectRange = viewModel::onSelectRange,
         onEditEvent = onEditEvent,
@@ -79,7 +65,6 @@ fun StatisticsScreen(
 @Composable
 fun StatisticsScreen(
     state: StatisticsScreenState,
-    calendarDayEvents: Map<LocalDate, List<CalendarDayEvent>>,
     onSelectView: (StatisticFragment) -> Unit,
     onSelectRange: (Int) -> Unit,
     onEditEvent: (Int) -> Unit,
@@ -89,7 +74,7 @@ fun StatisticsScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -120,13 +105,13 @@ fun StatisticsScreen(
                     (slideOutHorizontally { width -> -direction * width } + fadeOut())
             },
             label = "tabContent",
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp, 4.dp, 16.dp, 16.dp),
         ) { view ->
             Box(modifier = Modifier.fillMaxSize()) {
                 when (view) {
                     StatisticFragment.CHARTS -> state.charts?.let { ChartsContent(it) }
                     StatisticFragment.TABLE -> ReminderTable(rows = state.tableRows, onEditEvent = onEditEvent)
-                    StatisticFragment.CALENDAR -> CalendarContent(dayEvents = calendarDayEvents)
+                    StatisticFragment.CALENDAR -> CalendarContent(dayEvents = state.calendarDayEvents)
                 }
             }
         }
@@ -189,10 +174,6 @@ private fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mod
     }
 }
 
-private const val ALL_MEDICINES = -1
-private const val PAST_MONTHS = 3
-private const val FUTURE_MONTHS = 0
-
 // mirrors R.array.analysis_days_values — must stay in sync with that resource array
 private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 
@@ -201,12 +182,10 @@ private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 private fun StatisticsScreenPreview() {
     val state = MutableStatisticsScreenState().apply {
         activeView = StatisticFragment.TABLE
-        tableRows = persistentListOf()
     }
     MedTimerTheme {
         StatisticsScreen(
             state = state,
-            calendarDayEvents = persistentMapOf(),
             onSelectView = {},
             onSelectRange = {},
             onEditEvent = {},
