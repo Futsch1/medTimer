@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
@@ -52,8 +53,9 @@ fun StatisticsScreen(
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     StatisticsScreen(
-        state = viewModel.state,
+        state = state,
         onSelectView = viewModel::onSelectView,
         onSelectRange = viewModel::onSelectRange,
         onEditEvent = onEditEvent,
@@ -64,7 +66,7 @@ fun StatisticsScreen(
 /** Stateless screen — the `@Preview`/test target. Renders purely from its inputs. */
 @Composable
 fun StatisticsScreen(
-    state: StatisticsScreenState,
+    state: StatisticsUiState,
     onSelectView: (StatisticFragment) -> Unit,
     onSelectRange: (Int) -> Unit,
     onEditEvent: (Int) -> Unit,
@@ -102,10 +104,12 @@ fun StatisticsScreen(
                 // Slide in the direction of travel between tabs, with a cross-fade.
                 val direction = if (targetState.ordinal > initialState.ordinal) 1 else -1
                 (slideInHorizontally { width -> direction * width } + fadeIn()) togetherWith
-                    (slideOutHorizontally { width -> -direction * width } + fadeOut())
+                        (slideOutHorizontally { width -> -direction * width } + fadeOut())
             },
             label = "tabContent",
-            modifier = Modifier.fillMaxSize().padding(16.dp, 4.dp, 16.dp, 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp, 4.dp, 16.dp, 16.dp),
         ) { view ->
             Box(modifier = Modifier.fillMaxSize()) {
                 when (view) {
@@ -180,9 +184,7 @@ private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 @MedTimerPreview
 @Composable
 private fun StatisticsScreenPreview() {
-    val state = MutableStatisticsScreenState().apply {
-        activeView = StatisticFragment.TABLE
-    }
+    val state = StatisticsUiState(activeView = StatisticFragment.TABLE)
     MedTimerTheme {
         StatisticsScreen(
             state = state,

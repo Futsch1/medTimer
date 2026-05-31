@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.addDividerToSpan
@@ -18,16 +17,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
 
-// Legacy XML CalendarFragment renderer: turns the shared calendar traversal (CalendarEventsProvider)
-// into icon-bearing Spanned text. The Compose calendar renders CalendarDayEvent from the same
-// traversal instead — see CalendarEventsProvider.getStructuredEvents.
+// Legacy XML CalendarFragment renderer: maps the provider's shared entriesFlow into icon-bearing
+// Spanned text. The Compose calendar maps the same flow to CalendarDayEvent instead — see
+// CalendarEventsProvider.structuredEventsFlow.
 @HiltViewModel
 class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -36,17 +36,14 @@ class CalendarEventsViewModel @Inject constructor(
     private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
-
+    // The legacy XML calendar reads a fixed window once per call; flowOf(Unit) is that single trigger.
+    // The provider owns the read and reactivity (entriesFlow); this maps each day's entries to Spanned.
     fun getEventForMonths(
         medicineId: Int, pastMonths: Int, futureMonths: Int
-    ): Flow<Map<LocalDate, Spanned>> {
-        viewModelScope.launch(ioDispatcher) {
-            val entries = calendarEventsProvider.getEntries(medicineId, pastMonths, futureMonths)
-            eventsByDay.emit(entries.mapValues { (day, dayEntries) -> renderDay(day, dayEntries) })
-        }
-        return eventsByDay
-    }
+    ): Flow<Map<LocalDate, Spanned>> =
+        calendarEventsProvider.entriesFlow(flowOf(Unit), medicineId, pastMonths, futureMonths)
+            .map { entriesByDay -> entriesByDay.mapValues { (day, dayEntries) -> renderDay(day, dayEntries) } }
+            .flowOn(ioDispatcher)
 
     private fun renderDay(day: LocalDate, entries: List<CalendarEntry>): Spanned {
         val builder = SpannableStringBuilder()

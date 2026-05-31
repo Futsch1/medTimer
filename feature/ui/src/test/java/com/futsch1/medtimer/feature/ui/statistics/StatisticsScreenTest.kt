@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 
 /**
  * Smoke tests for the stateless [StatisticsScreen] overload. No ViewModel or Hilt required —
- * state is constructed directly via [MutableStatisticsScreenState].
+ * state is constructed directly via [StatisticsUiState].
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -73,7 +73,7 @@ class StatisticsScreenTest {
     }
 
     private fun setScreen(
-        state: StatisticsScreenState,
+        state: StatisticsUiState,
         onSelectView: (StatisticFragment) -> Unit = {},
     ) {
         composeTestRule.setContent {
@@ -91,8 +91,8 @@ class StatisticsScreenTest {
         }
     }
 
-    private fun tableState() = MutableStatisticsScreenState().apply {
-        activeView = StatisticFragment.TABLE
-        tableRows = persistentListOf()
-    }
+    private fun tableState() = StatisticsUiState(
+        activeView = StatisticFragment.TABLE,
+        tableRows = persistentListOf(),
+    )
 }

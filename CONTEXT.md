@@ -16,6 +16,13 @@ intentional and is **not** being unified.
 _Note_: an earlier plan to rename `Statistic*` code symbols to `Analysis*` was **cancelled**
 (2026-05-29) — do not rename these symbols or their translations.
 
+**Statistics screen state** (`StatisticsUiState`):
+The single immutable render-ready value the Statistics screen draws from. The ViewModel exposes one
+read-only `uiState: StateFlow<StatisticsUiState>` — the two session selections combined with three
+independently-derived view slices (Charts, Reminder Table rows, Calendar day events), each keeping its
+own recompute trigger. The screen collects it once at the Compose edge (`collectAsStateWithLifecycle`),
+so the flow-to-snapshot conversion isn't a ViewModel concern.
+
 **Charts**:
 One of the three Statistics views — pie charts (taken vs. skipped) plus a per-day stacked bar chart of
 medicines. `StatisticsProvider` folds a single reminder-event read into the **Charts data** —
@@ -30,10 +37,12 @@ The single month-events traversal behind the Calendar. It loads events once and 
 and scheduler-simulated future ones into a **Calendar entry** per day (`CalendarEntry`: a past
 `ReminderEvent` or a future `ScheduledReminder`). Two renderers sit at that seam: the typed
 `CalendarDayEvent` for the Compose calendar, and the icon-bearing `Spanned` text the legacy XML
-`CalendarFragment` shows (built in `CalendarEventsViewModel`). The provider also exposes a flow-shaped
-read (`structuredEventsFlow`) that adapts a change trigger — the screen's shared reminder-events flow —
-into the reactive stream the Compose screen collects, so the provider owns its reactivity rather than
-the ViewModel faking it around a one-shot suspend read.
+`CalendarFragment` shows (built in `CalendarEventsViewModel`). The provider owns the calendar's
+reactivity for both renderers via one flow-shaped seam (`entriesFlow`): it adapts a change trigger into
+a stream of bucketed `CalendarEntry`s, re-reading the window on every emission. Each renderer maps that
+stream to its own leaf — `structuredEventsFlow` to `CalendarDayEvent` for the Compose screen (collecting
+the shared reminder-events flow as trigger), and `CalendarEventsViewModel` to `Spanned` for the legacy
+XML calendar (a one-shot trigger). Neither caller fakes reactivity around a suspend read.
 
 **Reminder Table**:
 One of the three Statistics views — a sortable, filterable table of reminder events. The **Reminder
@@ -50,10 +59,11 @@ read-only detail panel for the selected day.
 **Analysis range**:
 The look-back window the Charts aggregate over. The actual options are **1 / 2 / 3 / 7 / 14 / 30 days**
 (`R.array.analysis_days_values`). Persisted across sessions. Drives the **Charts only** — the Reminder
-Table shows all taken/skipped events and the Calendar pages by month (neither is range-driven). Held
-as a single source of truth in the ViewModel (one `MutableStateFlow`); the screen-state value the
-dropdown reads is a one-way projection of it, so the displayed range and the aggregated range cannot
-drift apart.
+Table shows all taken/skipped events and the Calendar pages by month (neither is range-driven). The
+range and the active view are the two **session selections** — each a `PersistedSelection` (seeded from
+persistence, written through to it on change, skipping unchanged values) — so the persist rule lives in
+one module rather than per handler. The dropdown reads the range through the screen's single derived
+state, so the displayed range and the aggregated range cannot drift apart.
 _Avoid_: days, time span (in user-facing text "Analysis" owns this; the underlying setting key is
 `analysisDays`).
 

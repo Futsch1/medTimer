@@ -26,34 +26,46 @@ sealed interface CalendarEntry {
 }
 
 // The single calendar-month traversal: load events once, bucket past reminders and simulated future
-// reminders by day. Two renderers sit at the seam — CalendarDayEvent for the Compose calendar
-// (getStructuredEvents) and the Spanned builder in CalendarEventsViewModel for the legacy XML
-// CalendarFragment. They differ only at the leaf; the windowing and filtering live here.
+// reminders by day. Callers collect entriesFlow and map to their own leaf — CalendarDayEvent for the
+// Compose calendar (structuredEventsFlow) and the Spanned builder in CalendarEventsViewModel for the
+// legacy XML CalendarFragment. They differ only at the leaf; windowing, filtering, and reactivity live here.
 class CalendarEventsProvider @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
 ) {
 
-    // The calendar isn't backed by a reactive query — getStructuredEvents reads a fixed window on each
-    // call. This adapts a change [trigger] (e.g. the screen's shared reminder-events flow) into the
-    // reactive shape the screen collects, so callers no longer fake reactivity around a suspend read.
-    // The trigger's value is ignored: the window (getLastDays) is re-read in full on every emission.
+    // The calendar isn't backed by a reactive query — getEntries reads a fixed window on each call.
+    // This adapts a change [trigger] (e.g. the screen's shared reminder-events flow) into the reactive
+    // shape callers collect, re-reading the window on every emission (the trigger's value is ignored).
+    // Both renderers map this one stream to their own leaf, so the provider owns the calendar's
+    // reactivity instead of each caller faking it around a suspend read.
+    fun entriesFlow(
+        trigger: Flow<*>,
+        medicineId: Int,
+        pastMonths: Int,
+        futureMonths: Int,
+    ): Flow<Map<LocalDate, List<CalendarEntry>>> =
+        trigger.map { getEntries(medicineId, pastMonths, futureMonths) }
+
+    // The Compose calendar's leaf: the typed CalendarDayEvent stream over the entries flow.
     fun structuredEventsFlow(
         trigger: Flow<*>,
         medicineId: Int,
         pastMonths: Int,
         futureMonths: Int,
     ): Flow<Map<LocalDate, List<CalendarDayEvent>>> =
-        trigger.map { getStructuredEvents(medicineId, pastMonths, futureMonths) }
+        entriesFlow(trigger, medicineId, pastMonths, futureMonths).map { it.toCalendarDayEvents() }
 
     suspend fun getStructuredEvents(
         medicineId: Int,
         pastMonths: Int,
         futureMonths: Int,
     ): Map<LocalDate, List<CalendarDayEvent>> =
-        getEntries(medicineId, pastMonths, futureMonths)
-            .mapValues { (_, entries) -> entries.map { it.toCalendarDayEvent() } }
+        getEntries(medicineId, pastMonths, futureMonths).toCalendarDayEvents()
+
+    private fun Map<LocalDate, List<CalendarEntry>>.toCalendarDayEvents(): Map<LocalDate, List<CalendarDayEvent>> =
+        mapValues { (_, entries) -> entries.map { it.toCalendarDayEvent() } }
 
     suspend fun getEntries(
         medicineId: Int,

@@ -91,12 +91,12 @@ class StatisticsScreenViewModelTest {
 
     @Test
     fun `initial state reads activeView from persisted data`() {
-        assertEquals(StatisticFragment.CHARTS, viewModel.state.activeView)
+        assertEquals(StatisticFragment.CHARTS, viewModel.uiState.value.activeView)
     }
 
     @Test
     fun `initial state reads analysisDays from persisted data`() {
-        assertEquals(7, viewModel.state.analysisDays)
+        assertEquals(7, viewModel.uiState.value.analysisDays)
     }
 
     @Test
@@ -107,8 +107,8 @@ class StatisticsScreenViewModelTest {
         )
         val vm = buildViewModel()
 
-        assertEquals(StatisticFragment.TABLE, vm.state.activeView)
-        assertEquals(14, vm.state.analysisDays)
+        assertEquals(StatisticFragment.TABLE, vm.uiState.value.activeView)
+        assertEquals(14, vm.uiState.value.analysisDays)
     }
 
     // ── onSelectView ──────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ class StatisticsScreenViewModelTest {
     fun `onSelectView updates the active view in state`() {
         viewModel.onSelectView(StatisticFragment.TABLE)
 
-        assertEquals(StatisticFragment.TABLE, viewModel.state.activeView)
+        assertEquals(StatisticFragment.TABLE, viewModel.uiState.value.activeView)
     }
 
     @Test
@@ -140,7 +140,7 @@ class StatisticsScreenViewModelTest {
     fun `onSelectRange updates analysisDays state`() {
         viewModel.onSelectRange(14)
 
-        assertEquals(14, viewModel.state.analysisDays)
+        assertEquals(14, viewModel.uiState.value.analysisDays)
     }
 
     @Test
@@ -154,7 +154,7 @@ class StatisticsScreenViewModelTest {
 
     @Test
     fun `table rows are empty when repository emits no events`() {
-        assertTrue(viewModel.state.tableRows.isEmpty())
+        assertTrue(viewModel.uiState.value.tableRows.isEmpty())
     }
 
     @Test
@@ -165,7 +165,7 @@ class StatisticsScreenViewModelTest {
         )
         eventsFlow.value = listOf(event)
 
-        assertEquals(1, viewModel.state.tableRows.size)
+        assertEquals(1, viewModel.uiState.value.tableRows.size)
     }
 
     @Test
@@ -187,8 +187,8 @@ class StatisticsScreenViewModelTest {
         dataFlow.value = PersistentData.default().copy(filterTags = setOf("1"))
         val vm = buildViewModel()
 
-        assertEquals(1, vm.state.tableRows.size)
-        assertEquals("Vitamin X", vm.state.tableRows[0].cells[1].text)
+        assertEquals(1, vm.uiState.value.tableRows.size)
+        assertEquals("Vitamin X", vm.uiState.value.tableRows[0].cells[1].text)
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────
