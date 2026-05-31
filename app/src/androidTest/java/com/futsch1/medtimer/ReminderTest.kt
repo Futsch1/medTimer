@@ -330,7 +330,8 @@ class ReminderTest : BaseTestHelper() {
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        device.findObject(By.text(context.getString(R.string.tabular_view)))?.click()
+        // The Analysis view chips are icon-only; their labels are exposed as content descriptions.
+        device.findObject(By.desc(context.getString(R.string.tabular_view)))?.click()
         AndroidTestHelper.waitForIdle(1_000)
 
         internalAssert(device.findObject(By.textContains(timeFormatter().toDateTimeString(newReminded))) != null)

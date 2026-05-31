@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
-import androidx.core.graphics.toColorInt
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -19,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -39,11 +41,13 @@ class StatisticsScreenViewModel @Inject constructor(
     private val _state = MutableStatisticsScreenState()
     val state: StatisticsScreenState get() = _state
 
+    private val analysisDays = MutableStateFlow(persistentDataDataSource.data.value.analysisDays)
+
     init {
         val data = persistentDataDataSource.data.value
         _state.activeView = data.activeStatisticsFragment
         _state.analysisDays = data.analysisDays
-        loadCharts(data.analysisDays)
+        observeCharts()
         observeTableRows()
     }
 
@@ -56,26 +60,37 @@ class StatisticsScreenViewModel @Inject constructor(
         if (days == _state.analysisDays) return
         _state.analysisDays = days
         persistentDataDataSource.setAnalysisDays(days)
-        loadCharts(days)
+        analysisDays.value = days
     }
 
-    private fun loadCharts(days: Int) {
-        viewModelScope.launch(ioDispatcher) {
-            val perDay = statisticsProvider.getLastDaysReminders(days)
-            val seriesColors = computeSeriesColors(perDay)
-            val period = statisticsProvider.getTakenSkippedData(days)
-            val total = statisticsProvider.getTakenSkippedData(0)
-            _state.charts = ChartsState(
-                perDay = perDay,
-                dayLabels = perDay.epochDays.map { timeFormatter.daysSinceEpochToDateString(it) }.toImmutableList(),
-                seriesColors = seriesColors.toImmutableList(),
-                takenPeriod = period.taken,
-                skippedPeriod = period.skipped,
-                takenTotal = total.taken,
-                skippedTotal = total.skipped,
-                days = days,
-            )
+    private fun observeCharts() {
+        // Recompute whenever the reminder events change or the selected range changes — same reactive
+        // pattern as observeTableRows, so adding an event refreshes the charts without a manual reload.
+        viewModelScope.launch {
+            combine(
+                reminderEventRepository.getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped),
+                analysisDays,
+            ) { _, days -> buildChartsState(days) }
+                .flowOn(ioDispatcher)
+                .collect { _state.charts = it }
         }
+    }
+
+    private suspend fun buildChartsState(days: Int): ChartsState {
+        val perDay = statisticsProvider.getLastDaysReminders(days)
+        val seriesColors = computeSeriesColors(perDay)
+        val period = statisticsProvider.getTakenSkippedData(days)
+        val total = statisticsProvider.getTakenSkippedData(0)
+        return ChartsState(
+            perDay = perDay,
+            dayLabels = perDay.epochDays.map { timeFormatter.daysSinceEpochToDateString(it) }.toImmutableList(),
+            seriesColors = seriesColors.toImmutableList(),
+            takenPeriod = period.taken,
+            skippedPeriod = period.skipped,
+            takenTotal = total.taken,
+            skippedTotal = total.skipped,
+            days = days,
+        )
     }
 
     private suspend fun computeSeriesColors(data: MedicinePerDayData): List<Int> {
@@ -85,7 +100,7 @@ class StatisticsScreenViewModel @Inject constructor(
             allMedicines
                 .firstOrNull { it.name == series.medicineName && it.useColor }
                 ?.color
-                ?: COLORS[colorIndex++ % COLORS.size]
+                ?: COLORS[colorIndex++ % COLORS.size].toArgb()
         }
     }
 
@@ -122,24 +137,24 @@ class StatisticsScreenViewModel @Inject constructor(
     }
 
     companion object {
-        private val COLORS = intArrayOf(
-            "#003f5c".toColorInt(),
-            "#2f4b7c".toColorInt(),
-            "#665191".toColorInt(),
-            "#a05195".toColorInt(),
-            "#d45087".toColorInt(),
-            "#f95d6a".toColorInt(),
-            "#ff7c43".toColorInt(),
-            "#ffa600".toColorInt(),
-            "#004c6d".toColorInt(),
-            "#295d7d".toColorInt(),
-            "#436f8e".toColorInt(),
-            "#5b829f".toColorInt(),
-            "#7295b0".toColorInt(),
-            "#89a8c2".toColorInt(),
-            "#a1bcd4".toColorInt(),
-            "#b8d0e6".toColorInt(),
-            "#d0e5f8".toColorInt(),
+        private val COLORS = listOf(
+            Color(0xFF003F5C),
+            Color(0xFF2F4B7C),
+            Color(0xFF665191),
+            Color(0xFFA05195),
+            Color(0xFFD45087),
+            Color(0xFFF95D6A),
+            Color(0xFFFF7C43),
+            Color(0xFFFFA600),
+            Color(0xFF004C6D),
+            Color(0xFF295D7D),
+            Color(0xFF436F8E),
+            Color(0xFF5B829F),
+            Color(0xFF7295B0),
+            Color(0xFF89A8C2),
+            Color(0xFFA1BCD4),
+            Color(0xFFB8D0E6),
+            Color(0xFFD0E5F8),
         )
     }
 }

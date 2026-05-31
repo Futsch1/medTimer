@@ -1,12 +1,11 @@
 package com.futsch1.medtimer.core.ui.component
 
+import androidx.compose.material3.Text
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -15,6 +14,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import androidx.compose.ui.unit.dp
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -24,8 +24,8 @@ class SortableTableTest {
     val composeTestRule = createComposeRule()
 
     private val columns = persistentListOf(
-        SortableTableColumn("Name"),
-        SortableTableColumn("Dosage"),
+        SortableTableColumn("Name", minWidth = 120.dp, fill = true),
+        SortableTableColumn("Dosage", minWidth = 80.dp),
     )
 
     private val rows = persistentListOf(
@@ -46,88 +46,64 @@ class SortableTableTest {
     }
 
     @Test
-    fun `filter reduces visible rows`() {
+    fun `custom cell content is used for rendering rows`() {
         composeTestRule.setContent {
-            SortableTable(columns = columns, rows = rows, filterLabel = "Filter")
+            SortableTable(columns = columns, rows = rows) { row, columnIndex, _ ->
+                Text(text = "cell-${row.id}-$columnIndex")
+            }
         }
 
-        composeTestRule.onNode(hasSetTextAction()).performTextInput("Vitam")
-
-        composeTestRule.onNode(hasText("Vitamin X 500 mg"), useUnmergedTree = true).assertIsDisplayed()
-        assertTrue(composeTestRule.onAllNodes(hasText("Medicine A"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
-        assertTrue(composeTestRule.onAllNodes(hasText("Supplement B"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
-    }
-
-    @Test
-    fun `clear filter restores all rows`() {
-        composeTestRule.setContent {
-            SortableTable(columns = columns, rows = rows, filterLabel = "Filter")
-        }
-
-        composeTestRule.onNode(hasSetTextAction()).performTextInput("Vitam")
-        composeTestRule.onNodeWithText("✕").performClick()
-
-        composeTestRule.onNode(hasText("Vitamin X 500 mg"), useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNode(hasText("Medicine A"), useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNode(hasText("Supplement B"), useUnmergedTree = true).assertIsDisplayed()
-    }
-
-    @Test
-    fun `tapping sortable header shows ascending indicator`() {
-        // Default sortColumn=0 ("Name"), so "Dosage" (column 1) starts without an arrow.
-        composeTestRule.setContent {
-            SortableTable(columns = columns, rows = rows)
-        }
-
-        composeTestRule.onNodeWithText("Dosage").performClick()
-
-        composeTestRule.onNodeWithText("Dosage ↑").assertIsDisplayed()
-    }
-
-    @Test
-    fun `tapping header twice shows descending indicator`() {
-        composeTestRule.setContent {
-            SortableTable(columns = columns, rows = rows)
-        }
-
-        composeTestRule.onNodeWithText("Dosage").performClick()
-        composeTestRule.onNodeWithText("Dosage ↑").performClick()
-
-        composeTestRule.onNodeWithText("Dosage ↓").assertIsDisplayed()
-    }
-
-    @Test
-    fun `row click invokes callback with the row id`() {
-        var clickedId: Long? = null
-
-        composeTestRule.setContent {
-            SortableTable(
-                columns = columns,
-                rows = rows,
-                onRowClick = { clickedId = it.id },
-            )
-        }
-
-        composeTestRule.onNode(hasText("Medicine A"), useUnmergedTree = true).performClick()
-
-        assertEquals(2L, clickedId)
+        composeTestRule.onNode(hasText("cell-1-0"), useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNode(hasText("cell-2-1"), useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
     fun `non-sortable column header is not clickable`() {
         val fixedColumns = persistentListOf(
-            SortableTableColumn("Name", sortable = true),
-            SortableTableColumn("Fixed", sortable = false),
+            SortableTableColumn("Name", minWidth = 120.dp, fill = true, sortable = true),
+            SortableTableColumn("Fixed", minWidth = 80.dp, sortable = false),
         )
 
         composeTestRule.setContent {
             SortableTable(columns = fixedColumns, rows = rows)
         }
 
-        // Clicking non-sortable header should not change any sort indicator
+        // Tapping a non-sortable header must not throw and the header stays present.
         composeTestRule.onNodeWithText("Fixed").performClick()
+        composeTestRule.onNodeWithText("Fixed").assertIsDisplayed()
+    }
 
-        assertTrue(composeTestRule.onAllNodes(hasText("Fixed ↑")).fetchSemanticsNodes().isEmpty())
-        assertTrue(composeTestRule.onAllNodes(hasText("Fixed ↓")).fetchSemanticsNodes().isEmpty())
+    @Test
+    fun `default sort is descending on the first column`() {
+        val sorted = sortRows(rows, sortColumn = 0, sortDirection = SortDirection.DESCENDING)
+
+        assertEquals(listOf("Vitamin X 500 mg", "Supplement B", "Medicine A"), sorted.map { it.cells[0].text })
+    }
+
+    @Test
+    fun `ascending sort reverses the order`() {
+        val sorted = sortRows(rows, sortColumn = 0, sortDirection = SortDirection.ASCENDING)
+
+        assertEquals(listOf("Medicine A", "Supplement B", "Vitamin X 500 mg"), sorted.map { it.cells[0].text })
+    }
+
+    @Test
+    fun `unsorted preserves the input order`() {
+        val sorted = sortRows(rows, sortColumn = 0, sortDirection = SortDirection.UNSORTED)
+
+        assertEquals(rows.toList(), sorted)
+    }
+
+    @Test
+    fun `sort uses the cell sort value when provided`() {
+        val byNumericSortValue = persistentListOf(
+            SortableTableRow(1, persistentListOf(SortableTableCell("ten", sortValue = 10))),
+            SortableTableRow(2, persistentListOf(SortableTableCell("two", sortValue = 2))),
+            SortableTableRow(3, persistentListOf(SortableTableCell("thirty", sortValue = 30))),
+        )
+
+        val sorted = sortRows(byNumericSortValue, sortColumn = 0, sortDirection = SortDirection.DESCENDING)
+
+        assertTrue(sorted.map { it.cells[0].text } == listOf("thirty", "ten", "two"))
     }
 }

@@ -290,6 +290,39 @@ Follow [Compose performance best practices](https://developer.android.com/develo
   Use a `@MedTimerPreview` multipreview annotation (`@Preview` + dark variant + minimum supported font scale) defined in `:core:ui`.
 - Previews **must render without a real ViewModel** — that is the whole point of the stateless `*Content` split.
 
+## Icons — vendored Material Symbols (Rounded)
+
+**Do not depend on `androidx.compose.material:material-icons-extended`.** It is effectively deprecated, ships thousands of
+icons (APK-size and build-time cost), and Google now recommends vendoring only the icons you use. The lightweight
+`material-icons-core` set that comes with Compose is also discouraged for new work — prefer vendored Material Symbols.
+
+**Vendor each icon as a vector drawable in `:core:ui/src/main/res/drawable/`**, named `ic_<snake_case>.xml` (e.g.
+`ic_bar_chart.xml`). Putting them in `:core:ui` makes them reachable from every `:feature:*` module via
+`com.futsch1.medtimer.core.ui.R.drawable.ic_…`.
+
+- **Style: Rounded**, to match Material 3. Weight 400, grade 0, optical size 24 (the defaults).
+- Use directional icons (`navigate_before`, `navigate_next`, `sort`, …) with `android:autoMirrored="true"` so they flip in RTL.
+- Reference them in Compose with `Icon(painterResource(R.drawable.ic_…), contentDescription = …)`. `Icon` applies `tint`
+  (defaults to `LocalContentColor`), so the drawable's `android:fillColor` is just a placeholder — keep it a solid color.
+- Icon-only controls (e.g. chips, the calendar nav buttons) still need an accessible label: pass a real `contentDescription`
+  (a `stringResource`), which is also what UiAutomator instrumented tests target via `By.desc(...)`.
+
+### How to get the drawable
+
+**Android Studio (preferred):** right-click `core/ui/src/main/res` → **New → Vector Asset → Clip Art**, search the icon,
+pick the **Rounded** style, set size 24dp, name it `ic_<snake_case>`, Finish. Studio writes the `<vector>` for you and
+sets `autoMirrored` for directional glyphs.
+
+**From the web:** [fonts.google.com/icons?icon.style=Rounded](https://fonts.google.com/icons?icon.style=Rounded) → select
+the icon → set **Style = Rounded** → either download the **Android** XML vector drawable directly, or download the SVG and
+import it via the Vector Asset wizard. Raw SVGs are also available from the
+[`google/material-design-icons`](https://github.com/google/material-design-icons) repo under
+`symbols/web/<name>/materialsymbolsrounded/<name>_24px.svg`.
+
+> Manual SVG conversion gotcha: Material Symbols SVGs use a `viewBox="0 -960 960 960"` (font coordinate space). In the
+> `<vector>` set `viewportWidth`/`viewportHeight` to `960` and wrap the `<path>` in `<group android:translateY="960">` to
+> shift the negative-Y origin into the 0…960 viewport. The Vector Asset wizard handles this automatically.
+
 ## Testing — pointer
 
 See [testing.md](testing.md) for the full Compose testing section.

@@ -1,5 +1,14 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,11 +16,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +43,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarContent
+import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsContent
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTable
 import kotlinx.collections.immutable.ImmutableMap
@@ -44,9 +60,9 @@ fun StatisticsScreen(
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val calendarDayEvents by produceState<ImmutableMap<LocalDate, CharSequence>>(persistentMapOf(), calendarViewModel) {
-        calendarViewModel.getEventForMonths(ALL_MEDICINES, PAST_MONTHS, FUTURE_MONTHS).collect { map ->
-            value = map.entries.associate { (date, text) -> date to (text as CharSequence) }.toImmutableMap()
+    val calendarDayEvents by produceState<ImmutableMap<LocalDate, List<CalendarDayEvent>>>(persistentMapOf(), calendarViewModel) {
+        calendarViewModel.getStructuredEventsForMonths(ALL_MEDICINES, PAST_MONTHS, FUTURE_MONTHS).collect { map ->
+            value = map.toImmutableMap()
         }
     }
     StatisticsScreen(
@@ -63,7 +79,7 @@ fun StatisticsScreen(
 @Composable
 fun StatisticsScreen(
     state: StatisticsScreenState,
-    calendarDayEvents: Map<LocalDate, CharSequence>,
+    calendarDayEvents: Map<LocalDate, List<CalendarDayEvent>>,
     onSelectView: (StatisticFragment) -> Unit,
     onSelectRange: (Int) -> Unit,
     onEditEvent: (Int) -> Unit,
@@ -71,46 +87,95 @@ fun StatisticsScreen(
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            ViewChip(R.string.analysis, state.activeView == StatisticFragment.CHARTS) { onSelectView(StatisticFragment.CHARTS) }
-            ViewChip(R.string.tabular_view, state.activeView == StatisticFragment.TABLE) { onSelectView(StatisticFragment.TABLE) }
-            ViewChip(R.string.calendar, state.activeView == StatisticFragment.CALENDAR) { onSelectView(StatisticFragment.CALENDAR) }
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                ViewChip(R.drawable.ic_bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
+                    onSelectView(StatisticFragment.CHARTS)
+                }
+                ViewChip(R.drawable.ic_table_chart, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
+                    onSelectView(StatisticFragment.TABLE)
+                }
+                ViewChip(R.drawable.ic_calendar_month, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
+                    onSelectView(StatisticFragment.CALENDAR)
+                }
+            }
 
             // The Analysis range drives the Charts only — show the control only there (matches the legacy app).
-            if (state.activeView == StatisticFragment.CHARTS) {
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
-                    RangeDropdown(days = state.analysisDays, onSelectRange = onSelectRange)
-                }
+            AnimatedVisibility(visible = state.activeView == StatisticFragment.CHARTS) {
+                RangeDropdown(days = state.analysisDays, onSelectRange = onSelectRange)
             }
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            when (state.activeView) {
-                StatisticFragment.CHARTS -> state.charts?.let { ChartsContent(it) }
-                StatisticFragment.TABLE -> ReminderTable(rows = state.tableRows, onEditEvent = onEditEvent)
-                StatisticFragment.CALENDAR -> CalendarContent(dayEvents = calendarDayEvents)
+        AnimatedContent(
+            targetState = state.activeView,
+            transitionSpec = {
+                // Slide in the direction of travel between tabs, with a cross-fade.
+                val direction = if (targetState.ordinal > initialState.ordinal) 1 else -1
+                (slideInHorizontally { width -> direction * width } + fadeIn()) togetherWith
+                    (slideOutHorizontally { width -> -direction * width } + fadeOut())
+            },
+            label = "tabContent",
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+        ) { view ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                when (view) {
+                    StatisticFragment.CHARTS -> state.charts?.let { ChartsContent(it) }
+                    StatisticFragment.TABLE -> ReminderTable(rows = state.tableRows, onEditEvent = onEditEvent)
+                    StatisticFragment.CALENDAR -> CalendarContent(dayEvents = calendarDayEvents)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ViewChip(labelRes: Int, selected: Boolean, onClick: () -> Unit) {
-    FilterChip(selected = selected, onClick = onClick, label = { Text(stringResource(labelRes)) })
+private fun ViewChip(iconRes: Int, labelRes: Int, selected: Boolean, onClick: () -> Unit) {
+    // FilterChip switches its container/content colors instantly; animate them for a smooth selection.
+    val containerColor by animateColorAsState(
+        targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface,
+        label = "chipContainerColor",
+    )
+    val contentColor by animateColorAsState(
+        targetValue = if (selected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+        label = "chipContentColor",
+    )
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Icon(painterResource(iconRes), contentDescription = stringResource(labelRes), tint = contentColor) },
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = containerColor,
+            selectedContainerColor = containerColor,
+            labelColor = contentColor,
+            selectedLabelColor = contentColor,
+        ),
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Modifier = Modifier) {
     val labels = stringArrayResource(R.array.analysis_days)
     var expanded by remember { mutableStateOf(false) }
     val selectedIndex = ANALYSIS_DAYS_VALUES.indexOf(days).coerceAtLeast(0)
+    val rotation by animateFloatAsState(targetValue = if (expanded) 180f else 0f, label = "rangeArrowRotation")
 
-    Box(modifier = modifier) {
-        TextButton(onClick = { expanded = true }) { Text(labels.getOrElse(selectedIndex) { "" }) }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }, modifier = modifier) {
+        FilterChip(
+            selected = true,
+            onClick = {},
+            label = { Text(labels.getOrElse(selectedIndex) { "" }) },
+            trailingIcon = {
+                Icon(painterResource(R.drawable.ic_arrow_drop_down), contentDescription = null, modifier = Modifier.rotate(rotation))
+            },
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             labels.forEachIndexed { index, label ->
                 DropdownMenuItem(
                     text = { Text(label) },
@@ -127,6 +192,7 @@ private fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mod
 private const val ALL_MEDICINES = -1
 private const val PAST_MONTHS = 3
 private const val FUTURE_MONTHS = 0
+
 // mirrors R.array.analysis_days_values — must stay in sync with that resource array
 private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 

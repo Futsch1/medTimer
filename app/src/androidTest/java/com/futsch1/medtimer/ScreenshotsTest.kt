@@ -88,8 +88,8 @@ class ScreenshotsTest : BaseTestHelper() {
         device.findObject(By.text(rangeLabels[1]))?.click()
         AndroidTestHelper.waitForIdle(300)
 
-        // Switch to Table view
-        device.findObject(By.text(context.getString(R.string.tabular_view)))?.click()
+        // Switch to Table view (view chips are icon-only; labels exposed as content descriptions)
+        device.findObject(By.desc(context.getString(R.string.tabular_view)))?.click()
         AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("7")
 
@@ -99,8 +99,8 @@ class ScreenshotsTest : BaseTestHelper() {
 
         internalAssert(device.findObject(By.textContains("Selen")) != null)
 
-        // Filter by "B"
-        val filterField = device.findObject(By.editable(true))
+        // Filter by "B" (the Compose text field surfaces as an EditText to UiAutomator)
+        val filterField = device.findObject(By.clazz("android.widget.EditText"))
         filterField?.click()
         AndroidTestHelper.waitForIdle(200)
         filterField?.text = "B"
@@ -108,12 +108,12 @@ class ScreenshotsTest : BaseTestHelper() {
 
         internalAssert(device.findObject(By.textContains("B12")) != null)
 
-        // Clear the filter
-        device.findObject(By.text("✕"))?.click()
+        // Clear the filter (trailing Cancel icon, described by R.string.cancel)
+        device.findObject(By.desc(context.getString(R.string.cancel)))?.click()
         AndroidTestHelper.waitForIdle(300)
 
         // Switch to Calendar view
-        device.findObject(By.text(context.getString(R.string.calendar)))?.click()
+        device.findObject(By.desc(context.getString(R.string.calendar)))?.click()
         AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("8")
 

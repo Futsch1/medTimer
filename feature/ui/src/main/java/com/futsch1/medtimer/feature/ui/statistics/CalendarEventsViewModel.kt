@@ -22,6 +22,7 @@ import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
+import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -50,6 +52,8 @@ class CalendarEventsViewModel @Inject constructor(
     private var medicine: Medicine? = null
     private val eventsByDay = MutableSharedFlow<Map<LocalDate, Spanned>>(replay = 1)
     private var eventListByDay: MutableMap<LocalDate, MutableList<Spanned>> = mutableMapOf()
+    private val structuredEventsByDay =
+        MutableSharedFlow<Map<LocalDate, List<CalendarDayEvent>>>(replay = 1)
 
     fun getEventForMonths(
         medicineId: Int, pastMonths: Int, futureMonths: Int
@@ -78,6 +82,108 @@ class CalendarEventsViewModel @Inject constructor(
             eventsByDay.emit(buildEventsByDay())
         }
         return eventsByDay
+    }
+
+    // Structured variant for the Compose calendar: emits typed events the DayEventsCard renders
+    // theme-aware, instead of the icon-bearing Spanned used by the standalone CalendarFragment.
+    fun getStructuredEventsForMonths(
+        medicineId: Int,
+        pastMonths: Int,
+        futureMonths: Int,
+    ): Flow<Map<LocalDate, List<CalendarDayEvent>>> {
+        val currentDate = LocalDate.now()
+        val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong())
+            .withDayOfMonth(1).toEpochDay()
+        val futureDays = if (futureMonths > 0) (currentDate.plusMonths(futureMonths.toLong() + 1)
+            .withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
+        else 0
+
+        viewModelScope.launch(ioDispatcher) {
+            val events = reminderEventRepository.getLastDays(pastDays.toInt())
+            var medicines = medicineRepository.getAll()
+            var selectedMedicine: Medicine? = null
+            if (medicineId > 0) {
+                selectedMedicine = medicineRepository.fetch(medicineId)
+                medicines = medicines.filter { it.id == medicineId }
+            }
+
+            val structured: MutableMap<LocalDate, MutableList<CalendarDayEvent>> = mutableMapOf()
+            addStructuredPastEvents(structured, events, selectedMedicine, pastDays)
+            addStructuredFutureEvents(structured, medicines, events, futureDays)
+            structuredEventsByDay.emit(structured)
+        }
+        return structuredEventsByDay
+    }
+
+    private fun addStructuredPastEvents(
+        target: MutableMap<LocalDate, MutableList<CalendarDayEvent>>,
+        events: List<ReminderEvent>,
+        selectedMedicine: Medicine?,
+        pastDays: Long,
+    ) {
+        val startDay = LocalDate.now().minusDays(pastDays)
+        val zone = ZoneId.systemDefault()
+        for (reminderEvent in events) {
+            if (reminderEvent.status == ReminderEvent.ReminderStatus.DELETED) {
+                continue
+            }
+            val day = reminderEvent.remindedTimestamp.atZone(zone).toLocalDate()
+            if (day >= startDay && (selectedMedicine == null ||
+                    selectedMedicine.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))
+            ) {
+                target.getOrPut(day) { mutableListOf() }.add(reminderEvent.toCalendarDayEvent(zone))
+            }
+        }
+    }
+
+    private fun ReminderEvent.toCalendarDayEvent(zone: ZoneId): CalendarDayEvent {
+        val timestamp =
+            if (processedTimestamp != Instant.EPOCH) processedTimestamp else remindedTimestamp
+        val eventStatus = when (status) {
+            ReminderEvent.ReminderStatus.SKIPPED -> CalendarDayEvent.Status.SKIPPED
+            ReminderEvent.ReminderStatus.RAISED -> CalendarDayEvent.Status.RAISED
+            else -> CalendarDayEvent.Status.TAKEN
+        }
+        return CalendarDayEvent(
+            time = LocalDateTime.ofInstant(timestamp, zone),
+            amount = amount,
+            medicineName = medicineName,
+            status = eventStatus,
+        )
+    }
+
+    private fun addStructuredFutureEvents(
+        target: MutableMap<LocalDate, MutableList<CalendarDayEvent>>,
+        medicines: List<Medicine>,
+        events: List<ReminderEvent>,
+        futureDays: Long,
+    ) {
+        if (futureDays <= 0) {
+            return
+        }
+        val zone = ZoneId.systemDefault()
+        val timeProvider = object : TimeAccess {
+            override fun systemZone(): ZoneId = ZoneId.systemDefault()
+            override fun localDate(): LocalDate = LocalDate.now()
+            override fun now(): Instant = Instant.now()
+        }
+        val endDay = LocalDate.now().plusDays(futureDays)
+        val schedulingSimulator =
+            SchedulingSimulator(medicines, events, timeProvider, preferencesDataSource)
+
+        schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
+            if (scheduledDate < endDay) {
+                target.getOrPut(scheduledDate) { mutableListOf() }.add(
+                    CalendarDayEvent(
+                        time = LocalDateTime.ofInstant(scheduledReminder.timestamp, zone),
+                        amount = scheduledReminder.reminder.amount,
+                        medicineName = scheduledReminder.medicine.name,
+                        status = CalendarDayEvent.Status.SCHEDULED,
+                    )
+                )
+            }
+            scheduledDate < endDay
+        }
     }
 
     private fun buildEventsByDay(): Map<LocalDate, Spanned> {

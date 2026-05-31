@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
@@ -36,9 +36,10 @@ class StatisticsScreenTest {
     fun `all three view chips are displayed`() {
         setScreen(tableState())
 
-        composeTestRule.onNodeWithText("Analysis").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Tabular view").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Calendar").assertIsDisplayed()
+        // Chips are icon-only; their localized labels are exposed as icon content descriptions.
+        composeTestRule.onNodeWithContentDescription("Analysis").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Tabular view").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Calendar").assertIsDisplayed()
     }
 
     @Test
@@ -66,7 +67,7 @@ class StatisticsScreenTest {
         var selected: StatisticFragment? = null
         setScreen(tableState(), onSelectView = { selected = it })
 
-        composeTestRule.onNodeWithText("Calendar").performClick()
+        composeTestRule.onNodeWithContentDescription("Calendar").performClick()
 
         assertEquals(StatisticFragment.CALENDAR, selected)
     }

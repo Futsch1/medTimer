@@ -2,7 +2,6 @@ package com.futsch1.medtimer
 
 import androidx.test.espresso.Espresso
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
@@ -45,9 +44,14 @@ class CalendarTest : BaseTestHelper() {
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        device.findObject(By.text(context.getString(R.string.calendar)))?.click()
+        // View chips are icon-only; labels are exposed as content descriptions.
+        device.findObject(By.desc(context.getString(R.string.calendar)))?.click()
         AndroidTestHelper.waitForIdle(500)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Selen (200 µg)")
+        // The Compose calendar reveals a day's events only after tapping that day's (clickable) cell.
+        val today = java.time.LocalDate.now().dayOfMonth.toString()
+        device.findObject(By.text(today).clickable(true))?.click()
+        AndroidTestHelper.waitForIdle(500)
+        internalAssert(device.findObject(By.textContains("Selen")) != null)
     }
 
     @Test
@@ -72,8 +76,9 @@ class CalendarTest : BaseTestHelper() {
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
         val device2 = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val context2 = InstrumentationRegistry.getInstrumentation().targetContext
-        device2.findObject(By.text(context2.getString(R.string.calendar)))?.click()
+        device2.findObject(By.desc(context2.getString(R.string.calendar)))?.click()
         AndroidTestHelper.waitForIdle(500)
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Test")
+        // The deleted event has no day with events to reveal, so its text is absent entirely.
+        internalAssert(device2.findObject(By.textContains("Test")) == null)
     }
 }
