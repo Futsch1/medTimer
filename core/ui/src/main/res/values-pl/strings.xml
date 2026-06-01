@@ -319,4 +319,11 @@
     <string name="show_home_location_on_map">Pokaż lokalizację domową na mapie</string>
     <string name="set_home_location_confirm">Ustawić lokalizację domową na\n%1$s, %2$s?</string>
     <string name="home_location_error">Nie można określić bieżącej lokalizacji</string>
-<string name="exact_reminders_warning_title">Dokładne przypomnienia są wyłączone</string><string name="exact_reminders_warning_summary">Przypomnienia mogą być wyświetlane kilka minut później niż zaplanowano. Jeśli potrzebujesz dokładnych przypomnień (kosztem nieznacznie zwiększonego zużycia baterii), włącz tę opcję w ustawieniach powiadomień.</string></resources>
+    <string name="exact_reminders_warning_title">Dokładne przypomnienia są wyłączone</string>
+    <string name="exact_reminders_warning_summary">Przypomnienia mogą być wyświetlane kilka minut później niż zaplanowano. Jeśli potrzebujesz dokładnych przypomnień (kosztem nieznacznie zwiększonego zużycia baterii), włącz tę opcję w ustawieniach powiadomień.</string>
+    <string name="medicine_settings">Ustawienia leku</string>
+    <string name="medicine_cannot_be_skipped">Lek nie może być pominięty</string>
+    <string name="medicine_cannot_be_skipped_summary">Jeśli włączone, wszystkie przypomnienia dla tego leku można odrzucić tylko przez oznaczenie leku jako przyjętego.</string>
+    <string name="reminders_cannot_be_skipped">Przypomnienia nie mogą być pominięte</string>
+    <string name="reminders_cannot_be_skipped_summary">Jeśli włączone, przypomnienia można odrzucić tylko przez oznaczenie ich jako przyjętych. Można to również włączyć indywidualnie dla każdego leku.</string>
+</resources>

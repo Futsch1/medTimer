@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Покажи домашното местоположение на картата</string>
     <string name="set_home_location_confirm">Задаване на домашно местоположение на\n%1$s, %2$s?</string>
     <string name="home_location_error">Неуспешно определяне на текущото ви местоположение</string>
-<string name="exact_reminders_warning_title">Точните напомняния са деактивирани</string><string name="exact_reminders_warning_summary">Напомнянията може да се появят няколко минути по-късно от планираното. Ако имате нужда от точни напомняния (за сметка на леко увеличена консумация на батерия), активирайте това в настройките за известия.</string></resources>
+    <string name="exact_reminders_warning_title">Точните напомняния са деактивирани</string>
+    <string name="exact_reminders_warning_summary">Напомнянията може да се появят няколко минути по-късно от планираното. Ако имате нужда от точни напомняния (за сметка на леко увеличена консумация на батерия), активирайте това в настройките за известия.</string>
+    <string name="medicine_settings">Настройки на лекарството</string>
+    <string name="medicine_cannot_be_skipped">Лекарството не може да бъде пропуснато</string>
+    <string name="medicine_cannot_be_skipped_summary">Ако е активирано, всички напомняния за това лекарство могат да бъдат затворени само чрез отбелязване на лекарството като взето.</string>
+    <string name="reminders_cannot_be_skipped">Напомнянията не могат да бъдат пропуснати</string>
+    <string name="reminders_cannot_be_skipped_summary">Ако е активирано, напомнянията могат да бъдат затворени само чрез отбелязването им като взети. Това може да бъде активирано и индивидуално за всяко лекарство.</string>
+</resources>

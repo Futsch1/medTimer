@@ -15,7 +15,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.stockSettings.setupAmountEdit
+import com.futsch1.medtimer.feature.ui.medicine.medicineSettings.setupAmountEdit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -56,35 +56,47 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
 
         menuProvider.reminder = modelData
 
-        findPreference<Preference>("stock_threshold")?.summary = MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
+        findPreference<Preference>("stock_threshold")?.summary =
+            MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
     }
 
     override fun customSetup(modelData: Reminder) {
         setupAmountEdit(findPreference("stock_threshold")!!)
 
-        findPreference<Preference>("stock_threshold")?.isVisible = modelData.reminderType == ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("stock_reminder")?.isVisible = modelData.reminderType == ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("medicine_stock")?.isVisible = modelData.reminderType == ReminderType.OUT_OF_STOCK
-        findPreference<Preference>("expiration_reminder")?.isVisible = modelData.reminderType == ReminderType.EXPIRATION_DATE
-        findPreference<Preference>("expiration_days_before")?.isVisible = modelData.reminderType == ReminderType.EXPIRATION_DATE
-        findPreference<Preference>("medicine_expiration_date")?.isVisible = modelData.reminderType == ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("stock_threshold")?.isVisible =
+            modelData.reminderType == ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("stock_reminder")?.isVisible =
+            modelData.reminderType == ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("medicine_stock")?.isVisible =
+            modelData.reminderType == ReminderType.OUT_OF_STOCK
+        findPreference<Preference>("expiration_reminder")?.isVisible =
+            modelData.reminderType == ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("expiration_days_before")?.isVisible =
+            modelData.reminderType == ReminderType.EXPIRATION_DATE
+        findPreference<Preference>("medicine_expiration_date")?.isVisible =
+            modelData.reminderType == ReminderType.EXPIRATION_DATE
 
         this.lifecycleScope.launch(ioDispatcher) {
             val medicine = medicineRepository.fetch(modelData.medicineRelId) ?: return@launch
             this.launch(mainDispatcher) {
                 findPreference<Preference>("medicine_stock")?.summary =
                     MedicineHelper.formatAmount(medicine.amount, medicine.unit)
-                findPreference<Preference>("medicine_expiration_date")?.summary = if (medicine.expirationDate != LocalDate.EPOCH) {
-                    timeFormatter.localDateToString(medicine.expirationDate)
-                } else {
-                    context?.getString(com.futsch1.medtimer.core.ui.R.string.never)
-                }
+                findPreference<Preference>("medicine_expiration_date")?.summary =
+                    if (medicine.expirationDate != LocalDate.EPOCH) {
+                        timeFormatter.localDateToString(medicine.expirationDate)
+                    } else {
+                        context?.getString(com.futsch1.medtimer.core.ui.R.string.never)
+                    }
                 this@AdvancedReminderPreferencesStockFragment.medicine = medicine
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         requireActivity().addMenuProvider(

@@ -307,4 +307,11 @@
     <string name="set_home_location_confirm">Ange hemplats till\n%1$s, %2$s?</string>
     <string name="home_location_error">Det gick inte att fastställa din aktuella plats</string>
     <string name="linked_reminder_delay">Fördröjning för följande dos</string>
-<string name="exact_reminders_warning_title">Exakta påminnelser är inaktiverade</string><string name="exact_reminders_warning_summary">Påminnelser kan visas några minuter senare än planerat. Om du behöver exakta påminnelser (på bekostnad av något ökad batteriförbrukning) aktiverar du detta i aviseringsinställningarna.</string></resources>
+    <string name="exact_reminders_warning_title">Exakta påminnelser är inaktiverade</string>
+    <string name="exact_reminders_warning_summary">Påminnelser kan visas några minuter senare än planerat. Om du behöver exakta påminnelser (på bekostnad av något ökad batteriförbrukning) aktiverar du detta i aviseringsinställningarna.</string>
+    <string name="medicine_settings">Medicinsinställningar</string>
+    <string name="medicine_cannot_be_skipped">Medicin kan inte hoppas över</string>
+    <string name="medicine_cannot_be_skipped_summary">Om aktiverat kan alla påminnelser för denna medicin endast stängas av genom att markera medicinen som tagen.</string>
+    <string name="reminders_cannot_be_skipped">Påminnelser kan inte hoppas över</string>
+    <string name="reminders_cannot_be_skipped_summary">Om aktiverat kan påminnelser endast stängas av genom att markera dem som tagna. Detta kan även aktiveras individuellt per medicin.</string>
+</resources>

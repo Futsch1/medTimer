@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Εμφάνιση τοποθεσίας σπιτιού στον χάρτη</string>
     <string name="set_home_location_confirm">Ορισμός τοποθεσίας σπιτιού σε\n%1$s, %2$s;</string>
     <string name="home_location_error">Δεν ήταν δυνατός ο προσδιορισμός της τρέχουσας τοποθεσίας σας</string>
-<string name="exact_reminders_warning_title">Οι ακριβείς υπενθυμίσεις είναι απενεργοποιημένες</string><string name="exact_reminders_warning_summary">Οι υπενθυμίσεις ενδέχεται να εμφανιστούν μερικά λεπτά αργότερα από το προγραμματισμένο. Αν χρειάζεστε ακριβείς υπενθυμίσεις (με ελαφρώς αυξημένη κατανάλωση μπαταρίας), ενεργοποιήστε αυτήν την επιλογή στις ρυθμίσεις ειδοποιήσεων.</string></resources>
+    <string name="exact_reminders_warning_title">Οι ακριβείς υπενθυμίσεις είναι απενεργοποιημένες</string>
+    <string name="exact_reminders_warning_summary">Οι υπενθυμίσεις ενδέχεται να εμφανιστούν μερικά λεπτά αργότερα από το προγραμματισμένο. Αν χρειάζεστε ακριβείς υπενθυμίσεις (με ελαφρώς αυξημένη κατανάλωση μπαταρίας), ενεργοποιήστε αυτήν την επιλογή στις ρυθμίσεις ειδοποιήσεων.</string>
+    <string name="medicine_settings">Ρυθμίσεις φαρμάκου</string>
+    <string name="medicine_cannot_be_skipped">Το φάρμακο δεν μπορεί να παραλειφθεί</string>
+    <string name="medicine_cannot_be_skipped_summary">Εάν είναι ενεργοποιημένο, όλες οι υπενθυμίσεις για αυτό το φάρμακο μπορούν να απορριφθούν μόνο σημειώνοντας το φάρμακο ως ληφθέν.</string>
+    <string name="reminders_cannot_be_skipped">Οι υπενθυμίσεις δεν μπορούν να παραλειφθούν</string>
+    <string name="reminders_cannot_be_skipped_summary">Εάν είναι ενεργοποιημένο, οι υπενθυμίσεις μπορούν να απορριφθούν μόνο σημειώνοντάς τις ως ληφθείσες. Αυτό μπορεί επίσης να ενεργοποιηθεί μεμονωμένα ανά φάρμακο.</string>
+</resources>

@@ -315,4 +315,9 @@
     <string name="backup_successful_to">Automatic backup successful: %s</string>
     <string name="exact_reminders_warning_title">Exact reminders are disabled</string>
     <string name="exact_reminders_warning_summary">Reminders might be raised a few minutes later than scheduled. If you need exact reminders (at the cost of slightly increased battery consumption), enable this in the notification settings.</string>
+    <string name="medicine_settings">Medicine settings</string>
+    <string name="medicine_cannot_be_skipped">Medicine cannot be skipped</string>
+    <string name="medicine_cannot_be_skipped_summary">If enabled, all reminders for this medicine can only be dismissed by marking the medicine as taken.</string>
+    <string name="reminders_cannot_be_skipped">Reminders cannot be skipped</string>
+    <string name="reminders_cannot_be_skipped_summary">If enabled, reminders can only be dismissed by marking them as taken. This can also be individually enabled per medicine.</string>
 </resources>

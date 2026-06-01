@@ -315,4 +315,9 @@
     <string name="home_location_error">Impossible de déterminer votre position actuelle</string>
     <string name="exact_reminders_warning_title">Les rappels exacts sont désactivés</string>
     <string name="exact_reminders_warning_summary">Les rappels peuvent être déclenchés quelques minutes après l&amp;apos;heure prévue. Si vous avez besoin de rappels exacts (au prix d&amp;apos;une légère augmentation de la consommation de batterie), activez cette option dans les paramètres de notification.</string>
+    <string name="medicine_settings">Paramètres du médicament</string>
+    <string name="medicine_cannot_be_skipped">Le médicament ne peut pas être ignoré</string>
+    <string name="medicine_cannot_be_skipped_summary">Si activé, tous les rappels pour ce médicament ne peuvent être supprimés qu\'en marquant le médicament comme pris.</string>
+    <string name="reminders_cannot_be_skipped">Les rappels ne peuvent pas être ignorés</string>
+    <string name="reminders_cannot_be_skipped_summary">Si activé, les rappels ne peuvent être supprimés qu\'en les marquant comme pris. Cela peut également être activé individuellement par médicament.</string>
 </resources>

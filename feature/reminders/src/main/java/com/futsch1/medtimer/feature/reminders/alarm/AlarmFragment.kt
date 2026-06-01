@@ -65,12 +65,24 @@ class AlarmFragment(
                 )!!
                 Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
 
-                val notificationStrings = NotificationStringBuilder(requireContext(), preferencesDataSource, timeFormatter, reminderNotification, false)
+                val notificationStrings = NotificationStringBuilder(
+                    requireContext(),
+                    preferencesDataSource,
+                    timeFormatter,
+                    reminderNotification,
+                    false
+                )
                 val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {
-                    setupTexts(view, notificationStrings, reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() })
-                    setupButtons(view, intents)
+                    setupTexts(
+                        view,
+                        notificationStrings,
+                        reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() })
+                    setupButtons(
+                        view,
+                        intents
+                    )
                 }
             }
         }
@@ -79,7 +91,11 @@ class AlarmFragment(
         return view
     }
 
-    private fun setupTexts(view: View, notificationStrings: NotificationStringBuilder, anyOutOfStock: Boolean) {
+    private fun setupTexts(
+        view: View,
+        notificationStrings: NotificationStringBuilder,
+        anyOutOfStock: Boolean
+    ) {
         val notificationTitle = view.findViewById<TextView>(R.id.notificationTitle)
         notificationTitle.text = notificationStrings.notificationString
         if (anyOutOfStock) {
@@ -92,17 +108,23 @@ class AlarmFragment(
         }
     }
 
-    private fun setupButtons(view: View, intents: NotificationIntentBuilder) {
+    private fun setupButtons(
+        view: View,
+        intents: NotificationIntentBuilder
+    ) {
         val takenButton = view.findViewById<TextView>(R.id.takenButton)
         takenButton.setOnClickListener {
             closeWithIntent(intents.pendingTaken)
         }
 
         val skippedButton = view.findViewById<TextView>(R.id.skippedButton)
-        skippedButton.setOnClickListener {
-            closeWithIntent(intents.pendingSkipped)
+        if (intents.pendingSkipped != null) {
+            skippedButton.setOnClickListener {
+                closeWithIntent(intents.pendingSkipped)
+            }
+        } else {
+            skippedButton.visibility = View.GONE
         }
-
         val snoozeButton = view.findViewById<TextView>(R.id.snoozeButton)
         snoozeButton.setOnClickListener {
             closeWithIntent(intents.pendingSnooze)

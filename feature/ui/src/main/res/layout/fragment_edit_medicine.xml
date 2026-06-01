@@ -47,65 +47,27 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/colorLayout"
+            <LinearLayout
+                android:id="@+id/medicineMenuButtons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/enableColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/selectColor"
+                    android:id="@+id/openMedicineSettings"
+                    style="?attr/materialIconButtonFilledStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:contentDescription="@string/medicine_settings"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    app:icon="@drawable/gear"
+                    app:iconPadding="0dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/priorityAndIcons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.constraintlayout.helper.widget.Flow
-                    android:id="@+id/flow_helper"
+                <Space
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:constraint_referenced_ids="notificationImportanceLayout, openNotes, openTags, openStockTracking, openCalendar"
-                    app:flow_horizontalAlign="start"
-                    app:flow_horizontalStyle="spread_inside"
-                    app:flow_wrapMode="chain"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/notificationImportanceLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/notificationImportanceLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/notification_importance"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
-
-                    <Spinner
-                        android:id="@+id/notificationImportance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
-                </LinearLayout>
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openNotes"
@@ -116,9 +78,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/journal_text"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openTags" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openTags"
@@ -129,9 +89,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/tag"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openStockTracking" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openStockTracking"
@@ -142,9 +100,7 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/box_seam"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/openCalendar" />
+                    app:iconPadding="0dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openCalendar"
@@ -155,10 +111,8 @@
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:icon="@drawable/calendar_week"
-                    app:iconPadding="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:iconPadding="0dp" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reminderList"

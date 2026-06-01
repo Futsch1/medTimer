@@ -315,4 +315,11 @@
     <string name="show_home_location_on_map">Показать домашнее местоположение на карте</string>
     <string name="set_home_location_confirm">Задать домашнее местоположение:\n%1$s, %2$s?</string>
     <string name="home_location_error">Не удалось определить ваше текущее местоположение</string>
-<string name="exact_reminders_warning_title">Точные напоминания отключены</string><string name="exact_reminders_warning_summary">Напоминания могут срабатывать на несколько минут позже запланированного. Если вам нужны точные напоминания (за счёт незначительного увеличения расхода батареи), включите это в настройках уведомлений.</string></resources>
+    <string name="exact_reminders_warning_title">Точные напоминания отключены</string>
+    <string name="exact_reminders_warning_summary">Напоминания могут срабатывать на несколько минут позже запланированного. Если вам нужны точные напоминания (за счёт незначительного увеличения расхода батареи), включите это в настройках уведомлений.</string>
+    <string name="medicine_settings">Настройки лекарства</string>
+    <string name="medicine_cannot_be_skipped">Лекарство нельзя пропустить</string>
+    <string name="medicine_cannot_be_skipped_summary">Если включено, все напоминания об этом лекарстве можно закрыть только отметив лекарство как принятое.</string>
+    <string name="reminders_cannot_be_skipped">Напоминания нельзя пропустить</string>
+    <string name="reminders_cannot_be_skipped_summary">Если включено, напоминания можно закрыть только отметив их как принятые. Это также можно включить отдельно для каждого лекарства.</string>
+</resources>

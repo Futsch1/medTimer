@@ -313,4 +313,11 @@
     <string name="show_home_location_on_map">הצג מיקום בית על המפה</string>
     <string name="set_home_location_confirm">להגדיר את מיקום הבית ל-\n%1$s, %2$s?</string>
     <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
-<string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string><string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string></resources>
+    <string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string>
+    <string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string>
+    <string name="medicine_settings">הגדרות תרופה</string>
+    <string name="medicine_cannot_be_skipped">לא ניתן לדלג על תרופה</string>
+    <string name="medicine_cannot_be_skipped_summary">אם מופעל, ניתן לסגור את כל התזכורות לתרופה זו רק על ידי סימון התרופה כנלקחה.</string>
+    <string name="reminders_cannot_be_skipped">לא ניתן לדלג על תזכורות</string>
+    <string name="reminders_cannot_be_skipped_summary">אם מופעל, ניתן לסגור תזכורות רק על ידי סימונן כנלקחו. ניתן גם להפעיל זאת בנפרד לכל תרופה.</string>
+</resources>
