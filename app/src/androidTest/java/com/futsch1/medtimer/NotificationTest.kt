@@ -829,8 +829,12 @@ class NotificationTest : BaseTestHelper() {
     private fun dismissNotification(notification: UiObject2) {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        notification.fling(Direction.RIGHT)
-        val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 500)
-        notification?.fling(Direction.RIGHT)
+        try {
+            notification.fling(Direction.RIGHT)
+        } catch (_: StaleObjectException) {
+            // Notification view was re-rendered (e.g. after expansion); re-find and fling
+        }
+        val current = device.wait(Until.findObject(By.textContains(TEST_MED)), 500)
+        current?.fling(Direction.RIGHT)
     }
 }
