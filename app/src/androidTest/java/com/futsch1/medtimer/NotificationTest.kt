@@ -213,6 +213,7 @@ class NotificationTest : BaseTestHelper() {
         // Repeat reminder every minute and enable exact reminders
         clickOn(R.string.tab_settings)
         clickOn(R.string.notification_reminder_settings)
+        AndroidTestHelper.scrollDown()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             clickOn(R.string.exact_reminders)
         }
@@ -657,12 +658,12 @@ class NotificationTest : BaseTestHelper() {
         device.wakeUp()
 
         AndroidTestHelper.createMedicine(TEST_MED)
+        AndroidTestHelper.createIntervalReminder("1", 2)
         openMenu()
         clickOn(R.string.medicine_settings)
         clickOn(R.string.notification_importance)
         clickOn(R.string.high_and_alarm)
         pressBack()
-        AndroidTestHelper.createIntervalReminder("1", 2)
 
         navigateTo(MainMenu.OVERVIEW)
         clickListItemChild(
