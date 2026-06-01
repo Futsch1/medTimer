@@ -319,4 +319,11 @@
     <string name="show_home_location_on_map">Zobrazit domovskou polohu na mapě</string>
     <string name="set_home_location_confirm">Nastavit domovskou polohu na\n%1$s, %2$s?</string>
     <string name="home_location_error">Nepodařilo se určit vaši aktuální polohu</string>
-<string name="exact_reminders_warning_title">Přesná připomenutí jsou zakázána</string><string name="exact_reminders_warning_summary">Připomenutí mohou být zobrazena o několik minut později, než je naplánováno. Pokud potřebujete přesná připomenutí (za cenu mírně zvýšené spotřeby baterie), povolte je v nastavení oznámení.</string></resources>
+    <string name="exact_reminders_warning_title">Přesná připomenutí jsou zakázána</string>
+    <string name="exact_reminders_warning_summary">Připomenutí mohou být zobrazena o několik minut později, než je naplánováno. Pokud potřebujete přesná připomenutí (za cenu mírně zvýšené spotřeby baterie), povolte je v nastavení oznámení.</string>
+    <string name="medicine_settings">Nastavení léku</string>
+    <string name="medicine_cannot_be_skipped">Lék nelze přeskočit</string>
+    <string name="medicine_cannot_be_skipped_summary">Je-li povoleno, všechna připomenutí tohoto léku lze zamítnout pouze označením léku jako užitého.</string>
+    <string name="reminders_cannot_be_skipped">Připomenutí nelze přeskočit</string>
+    <string name="reminders_cannot_be_skipped_summary">Je-li povoleno, připomenutí lze zamítnout pouze označením jako užitých. Toto lze také individuálně povolit pro každý lék.</string>
+</resources>

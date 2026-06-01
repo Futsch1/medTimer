@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Ev konumunu haritada göster</string>
     <string name="set_home_location_confirm">Ev konumunu şu şekilde ayarla:\n%1$s, %2$s?</string>
     <string name="home_location_error">Mevcut konumunuz belirlenemedi</string>
-<string name="exact_reminders_warning_title">Tam hatırlatıcılar devre dışı</string><string name="exact_reminders_warning_summary">Hatırlatıcılar planlanandan birkaç dakika geç gönderilebilir. Tam hatırlatıcılara ihtiyaç duyuyorsanız (biraz daha fazla pil tüketimi pahasına), bunu bildirim ayarlarından etkinleştirebilirsiniz.</string></resources>
+    <string name="exact_reminders_warning_title">Tam hatırlatıcılar devre dışı</string>
+    <string name="exact_reminders_warning_summary">Hatırlatıcılar planlanandan birkaç dakika geç gönderilebilir. Tam hatırlatıcılara ihtiyaç duyuyorsanız (biraz daha fazla pil tüketimi pahasına), bunu bildirim ayarlarından etkinleştirebilirsiniz.</string>
+    <string name="medicine_settings">İlaç ayarları</string>
+    <string name="medicine_cannot_be_skipped">İlaç atlanamaz</string>
+    <string name="medicine_cannot_be_skipped_summary">Etkinleştirilirse, bu ilaca ait tüm hatırlatıcılar yalnızca ilaç alındı olarak işaretlenerek kapatılabilir.</string>
+    <string name="reminders_cannot_be_skipped">Hatırlatıcılar atlanamaz</string>
+    <string name="reminders_cannot_be_skipped_summary">Etkinleştirilirse, hatırlatıcılar yalnızca alındı olarak işaretlenerek kapatılabilir. Bu, her ilaç için ayrı da etkinleştirilebilir.</string>
+</resources>

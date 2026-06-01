@@ -10,13 +10,17 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.CANNOT_SKIP_REMINDERS
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.DISMISS_NOTIFICATION_ACTION
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.EXACT_REMINDERS
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.OVERRIDE_DND
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
+import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -68,12 +72,18 @@ class NotificationSettingsFragment : PreferencesFragment() {
         if (preference != null) {
             setupNotificationSettingsPreference(preference, Medicine.NotificationImportance.DEFAULT)
         }
-        preference =
-            preferenceScreen.findPreference(OVERRIDE_DND)
-        preference?.onPreferenceChangeListener =
+        preferenceScreen.findPreference<Preference>(OVERRIDE_DND)?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, value ->
                 if (true == value) {
                     showDndPermissions()
+                }
+                true
+            }
+        preferenceScreen.findPreference<Preference>(CANNOT_SKIP_REMINDERS)?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, value ->
+                if (true == value && preferencesDataSource.preferences.value.dismissNotificationAction == DismissNotificationAction.SKIP) {
+                    preferencesDataSource.putString(DISMISS_NOTIFICATION_ACTION, "1")
+                    findPreference<ListPreference>(DISMISS_NOTIFICATION_ACTION)?.value = "1"
                 }
                 true
             }

@@ -333,4 +333,9 @@
     <string name="home_location_error">تعذّر تحديد موقعك الحالي</string>
     <string name="exact_reminders_warning_title">التذكيرات الدقيقة معطّلة</string>
     <string name="exact_reminders_warning_summary">قد تظهر التذكيرات بعد دقائق قليلة من الموعد المحدد. إذا كنت بحاجة إلى تذكيرات دقيقة (على حساب زيادة طفيفة في استهلاك البطارية)، فعّل هذا في إعدادات الإشعارات.</string>
+    <string name="medicine_settings">إعدادات الدواء</string>
+    <string name="medicine_cannot_be_skipped">لا يمكن تخطي الدواء</string>
+    <string name="medicine_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق جميع التذكيرات لهذا الدواء إلا بتأكيد تناوله.</string>
+    <string name="reminders_cannot_be_skipped">لا يمكن تخطي التذكيرات</string>
+    <string name="reminders_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق التذكيرات إلا بتأكيد تناولها. يمكن أيضاً تفعيل هذا الخيار بشكل فردي لكل دواء.</string>
 </resources>

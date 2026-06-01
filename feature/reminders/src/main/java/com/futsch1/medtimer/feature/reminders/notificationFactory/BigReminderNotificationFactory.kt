@@ -48,13 +48,17 @@ class BigReminderNotificationFactory @AssistedInject constructor(
 
         views.setOnClickPendingIntent(R.id.takenButton, intents.pendingTaken)
         views.setOnClickPendingIntent(R.id.skippedButton, intents.pendingSkipped)
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.cannotBeSkipped }) {
+            views.setViewVisibility(R.id.skippedButton, View.GONE)
+        }
         views.setOnClickPendingIntent(R.id.snoozeButton, intents.pendingSnooze)
         if (intents.pendingLocationSnooze != null) {
             views.setOnClickPendingIntent(R.id.locationSnoozeButton, intents.pendingLocationSnooze)
         } else {
             views.setViewVisibility(R.id.locationSnoozeButton, View.GONE)
         }
-        val isAnyOutOfStock = reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() }
+        val isAnyOutOfStock =
+            reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() }
         views.setTextViewCompoundDrawablesRelative(
             R.id.notificationTitle,
             if (isAnyOutOfStock) com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill else 0,

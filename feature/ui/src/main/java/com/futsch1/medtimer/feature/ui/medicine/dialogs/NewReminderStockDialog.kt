@@ -17,7 +17,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.editors.TimeEditor
-import com.futsch1.medtimer.feature.ui.medicine.stockSettings.addDoubleValidator
+import com.futsch1.medtimer.feature.ui.medicine.medicineSettings.addDoubleValidator
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -37,7 +37,11 @@ class NewReminderStockDialog @AssistedInject constructor(
 ) {
     @AssistedFactory
     fun interface Factory {
-        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderStockDialog
+        fun create(
+            activity: FragmentActivity,
+            medicine: Medicine,
+            reminder: Reminder
+        ): NewReminderStockDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -63,8 +67,10 @@ class NewReminderStockDialog @AssistedInject constructor(
     }
 
     private fun setupEditExpirationDaysBefore() {
-        val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
-        textInputLayout.suffixText = activity.getString(com.futsch1.medtimer.core.ui.R.string.days_string)
+        val textInputLayout =
+            dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
+        textInputLayout.suffixText =
+            activity.getString(com.futsch1.medtimer.core.ui.R.string.days_string)
     }
 
     private fun setupEditStockThreshold() {
@@ -75,19 +81,23 @@ class NewReminderStockDialog @AssistedInject constructor(
 
         textInputEditText.setText(MedicineHelper.formatAmount(medicine.amount, ""))
 
-        textInputEditText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        textInputEditText.inputType =
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         textInputEditText.addDoubleValidator()
-        textInputEditText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
+        textInputEditText.keyListener =
+            DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }
 
     private fun setupStockReminderType() {
-        dialog.findViewById<RadioGroup>(R.id.stockReminderType).setOnCheckedChangeListener { _, checkedId ->
-            dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility = if (checkedId == R.id.daily) {
-                View.VISIBLE
-            } else {
-                View.GONE
+        dialog.findViewById<RadioGroup>(R.id.stockReminderType)
+            .setOnCheckedChangeListener { _, checkedId ->
+                dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
+                    if (checkedId == R.id.daily) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
             }
-        }
     }
 
     private fun setupVisibilities() {
@@ -102,12 +112,16 @@ class NewReminderStockDialog @AssistedInject constructor(
             View.GONE
         }
 
-        dialog.findViewById<TextInputLayout>(R.id.editStockThresholdLayout).visibility = outOfStockVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editStockThresholdLayout).visibility =
+            outOfStockVisibility
         dialog.findViewById<RadioGroup>(R.id.stockReminderType).visibility = outOfStockVisibility
 
-        dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout).visibility = expirationDateVisibility
-        dialog.findViewById<RadioGroup>(R.id.expirationReminderType).visibility = expirationDateVisibility
-        dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility = expirationDateVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout).visibility =
+            expirationDateVisibility
+        dialog.findViewById<RadioGroup>(R.id.expirationReminderType).visibility =
+            expirationDateVisibility
+        dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
+            expirationDateVisibility
     }
 
     private fun setupCreateReminder(
@@ -147,7 +161,11 @@ class NewReminderStockDialog @AssistedInject constructor(
                 }
 
                 if (!canCreate) {
-                    Toast.makeText(activity, com.futsch1.medtimer.core.ui.R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        activity,
+                        com.futsch1.medtimer.core.ui.R.string.invalid_input,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     reminderRepository.create(updatedReminder)
                     Toast.makeText(
@@ -163,12 +181,15 @@ class NewReminderStockDialog @AssistedInject constructor(
 
     private fun fillExpirationReminder(reminder: Reminder): Pair<Boolean, Reminder> {
         return try {
-            val expirationReminderType = when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
-                R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
-                R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
-                else -> Reminder.ExpirationReminderType.OFF
-            }
-            val daysBefore = dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString().toLong()
+            val expirationReminderType =
+                when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
+                    R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
+                    R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
+                    else -> Reminder.ExpirationReminderType.OFF
+                }
+            val daysBefore =
+                dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString()
+                    .toLong()
             Pair(
                 true, reminder.copy(
                     expirationReminderType = expirationReminderType,
@@ -182,14 +203,23 @@ class NewReminderStockDialog @AssistedInject constructor(
 
     private fun fillOutOfStockReminder(reminder: Reminder): Pair<Boolean, Reminder> {
         return try {
-            val threshold = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString().toDouble()
-            val outOfStockReminderType = when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-                R.id.once -> Reminder.OutOfStockReminderType.ONCE
-                R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
-                R.id.daily -> Reminder.OutOfStockReminderType.DAILY
-                else -> Reminder.OutOfStockReminderType.OFF
-            }
-            Pair(true, reminder.copy(outOfStockThreshold = threshold, outOfStockReminderType = outOfStockReminderType))
+            val threshold =
+                dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString()
+                    .toDouble()
+            val outOfStockReminderType =
+                when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
+                    R.id.once -> Reminder.OutOfStockReminderType.ONCE
+                    R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
+                    R.id.daily -> Reminder.OutOfStockReminderType.DAILY
+                    else -> Reminder.OutOfStockReminderType.OFF
+                }
+            Pair(
+                true,
+                reminder.copy(
+                    outOfStockThreshold = threshold,
+                    outOfStockReminderType = outOfStockReminderType
+                )
+            )
         } catch (_: NumberFormatException) {
             Pair(false, reminder)
         }

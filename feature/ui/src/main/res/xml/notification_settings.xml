@@ -42,6 +42,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
+        android:summary="@string/reminders_cannot_be_skipped_summary"
+        android:title="@string/reminders_cannot_be_skipped"
+        app:singleLineTitle="false"
+        app:key="cannot_skip_reminders" />
+    <SwitchPreferenceCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
         android:summary="@string/sticky_on_lockscreen_summary"
         android:title="@string/sticky_on_lockscreen"
         app:singleLineTitle="false"

@@ -9,8 +9,8 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.ui.MedicineIcons
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 
@@ -107,13 +107,16 @@ abstract class ReminderNotificationFactory(
                 addSnoozeAction()
             }
         }
+
         addLocationSnoozeAction()
     }
 
     private fun addSkippedAction() {
-        builder.addAction(
-            R.drawable.x_circle, context.getString(R.string.skipped), intents.pendingSkipped
-        )
+        intents.pendingSkipped?.let {
+            builder.addAction(
+                R.drawable.x_circle, context.getString(R.string.skipped), it
+            )
+        }
     }
 
     private fun addSnoozeAction() {
@@ -123,10 +126,11 @@ abstract class ReminderNotificationFactory(
     }
 
     private fun addLocationSnoozeAction() {
-        val pendingIntent = intents.pendingLocationSnooze
-        if (pendingIntent != null) {
+        if (intents.pendingLocationSnooze != null) {
             builder.addAction(
-                R.drawable.geo_alt_fill, context.getString(R.string.snooze_until_home), pendingIntent
+                R.drawable.geo_alt_fill,
+                context.getString(R.string.snooze_until_home),
+                intents.pendingLocationSnooze
             )
         }
     }
