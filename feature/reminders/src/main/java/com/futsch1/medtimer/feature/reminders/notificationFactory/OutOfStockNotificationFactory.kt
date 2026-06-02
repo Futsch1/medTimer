@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
@@ -27,7 +28,8 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         context,
         reminderNotification.reminderNotificationData.notificationId,
         reminderNotification.reminderNotificationParts.map { it.medicine },
-        notificationManager
+        notificationManager,
+        Medicine.NotificationImportance.DEFAULT
     ) {
 
     init {

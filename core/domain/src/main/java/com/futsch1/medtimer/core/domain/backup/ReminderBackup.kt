@@ -26,4 +26,5 @@ class ReminderBackup(
     var outOfStockThreshold: Double = 0.0,
     var outOfStockReminderType: Reminder.OutOfStockReminderType = Reminder.OutOfStockReminderType.OFF,
     var expirationReminderType: Reminder.ExpirationReminderType = Reminder.ExpirationReminderType.OFF,
+    var notificationImportance: Reminder.NotificationImportance = Reminder.NotificationImportance.SAME_AS_MEDICINE,
 )

@@ -14,6 +14,12 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="values_0_to_3">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string-array name="theme_entries_titles">
         <item>@string/default_</item>
         <item>@string/alternative</item>
@@ -88,6 +94,12 @@
         <item>7</item>
     </string-array>
     <string-array name="notification_importance">
+        <item>@string/default_</item>
+        <item>@string/high</item>
+        <item>@string/high_and_alarm</item>
+    </string-array>
+    <string-array name="reminder_notification_importance">
+        <item>@string/same_as_medicine</item>
         <item>@string/default_</item>
         <item>@string/high</item>
         <item>@string/high_and_alarm</item>

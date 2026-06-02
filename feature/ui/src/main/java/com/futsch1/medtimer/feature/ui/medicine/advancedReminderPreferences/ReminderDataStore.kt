@@ -7,8 +7,8 @@ import com.futsch1.medtimer.core.common.helpers.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -52,8 +52,12 @@ class ReminderDataStore @AssistedInject constructor(
             "automatically_taken" -> modelData = modelData.copy(automaticallyTaken = value)
             "variable_amount" -> modelData = modelData.copy(variableAmount = value)
             "reminder_active" -> modelData = modelData.copy(active = value)
-            "period_start_switch" -> modelData = modelData.copy(periodStart = if (value) LocalDate.now() else LocalDate.EPOCH)
-            "period_end_switch" -> modelData = modelData.copy(periodEnd = if (value) LocalDate.now() else LocalDate.EPOCH)
+            "period_start_switch" -> modelData =
+                modelData.copy(periodStart = if (value) LocalDate.now() else LocalDate.EPOCH)
+
+            "period_end_switch" -> modelData =
+                modelData.copy(periodEnd = if (value) LocalDate.now() else LocalDate.EPOCH)
+
             "daily_interval" -> modelData = modelData.copy(windowedInterval = value)
         }
 
@@ -76,6 +80,7 @@ class ReminderDataStore @AssistedInject constructor(
             "stock_reminder" -> modelData.outOfStockReminderType.ordinal.toString()
             "expiration_reminder" -> modelData.expirationReminderType.ordinal.toString()
             "expiration_days_before" -> modelData.periodStart.toEpochDay().toString()
+            "notification_importance" -> modelData.notificationImportance.ordinal.toString()
             else -> defValue
         }
     }
@@ -84,23 +89,68 @@ class ReminderDataStore @AssistedInject constructor(
         when (key) {
             "instructions" -> modelData = modelData.copy(instructions = value)
             "sample_instructions" -> modelData = modelData.copy(instructions = value)
-            "cycle_start_date" -> modelData = modelData.copy(cycleStartDay = timeFormatter.stringToLocalDate(value!!)!!)
-            "cycle_consecutive_days" -> value?.toIntOrNull()?.let { modelData = modelData.copy(consecutiveDays = it) }
-            "cycle_pause_days" -> value?.toIntOrNull()?.let { modelData = modelData.copy(pauseDays = it) }
-            "period_start_date" -> modelData = modelData.copy(periodStart = timeFormatter.stringToLocalDate(value!!)!!)
-            "period_end_date" -> modelData = modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
-            "interval_start" -> modelData = modelData.copy(intervalStartsFromProcessed = value == "1")
-            "interval_start_time" -> modelData = modelData.copy(intervalStart = timeFormatter.stringToInstant(value!!) ?: Instant.EPOCH)
+            "cycle_start_date" -> modelData =
+                modelData.copy(cycleStartDay = timeFormatter.stringToLocalDate(value!!)!!)
+
+            "cycle_consecutive_days" -> value?.toIntOrNull()
+                ?.let { modelData = modelData.copy(consecutiveDays = it) }
+
+            "cycle_pause_days" -> value?.toIntOrNull()
+                ?.let { modelData = modelData.copy(pauseDays = it) }
+
+            "period_start_date" -> modelData =
+                modelData.copy(periodStart = timeFormatter.stringToLocalDate(value!!)!!)
+
+            "period_end_date" -> modelData =
+                modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
+
+            "interval_start" -> modelData =
+                modelData.copy(intervalStartsFromProcessed = value == "1")
+
+            "interval_start_time" -> value?.let {
+                modelData = modelData.copy(
+                    intervalStart = timeFormatter.stringToInstant(it) ?: Instant.EPOCH
+                )
+            }
+
             "interval_daily_start_time" -> modelData =
-                modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+                modelData.copy(
+                    intervalStartTimeOfDay = LocalTime.ofSecondOfDay(
+                        timeFormatter.timeStringToMinutes(
+                            value!!
+                        ) * 60L
+                    )
+                )
 
             "interval_daily_end_time" -> modelData =
-                modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(timeFormatter.timeStringToMinutes(value!!) * 60L))
+                modelData.copy(
+                    intervalEndTimeOfDay = LocalTime.ofSecondOfDay(
+                        timeFormatter.timeStringToMinutes(
+                            value!!
+                        ) * 60L
+                    )
+                )
 
-            "stock_threshold" -> MedicineHelper.parseAmount(value)?.let { modelData = modelData.copy(outOfStockThreshold = it) }
-            "stock_reminder" -> modelData = modelData.copy(outOfStockReminderType = Reminder.OutOfStockReminderType.entries[value!!.toInt()])
-            "expiration_reminder" -> modelData = modelData.copy(expirationReminderType = Reminder.ExpirationReminderType.entries[value!!.toInt()])
-            "expiration_days_before" -> value?.toLongOrNull()?.let { modelData = modelData.copy(periodStart = LocalDate.ofEpochDay(it)) }
+            "stock_threshold" -> MedicineHelper.parseAmount(value)
+                ?.let { modelData = modelData.copy(outOfStockThreshold = it) }
+
+            "stock_reminder" -> value?.toIntOrNull()?.let {
+                modelData =
+                    modelData.copy(outOfStockReminderType = Reminder.OutOfStockReminderType.entries[it])
+            }
+
+            "expiration_reminder" -> value?.toIntOrNull()?.let {
+                modelData =
+                    modelData.copy(expirationReminderType = Reminder.ExpirationReminderType.entries[it])
+            }
+
+            "expiration_days_before" -> value?.toLongOrNull()
+                ?.let { modelData = modelData.copy(periodStart = LocalDate.ofEpochDay(it)) }
+
+            "notification_importance" -> value?.toIntOrNull()?.let {
+                modelData =
+                    modelData.copy(notificationImportance = Reminder.NotificationImportance.entries[it])
+            }
         }
 
         updateReminder(modelData)

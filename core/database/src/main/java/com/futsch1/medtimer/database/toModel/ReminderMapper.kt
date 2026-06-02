@@ -34,7 +34,8 @@ fun ReminderEntity.toModel(): Reminder =
         windowedInterval = windowedInterval,
         outOfStockThreshold = outOfStockThreshold,
         outOfStockReminderType = outOfStockReminderType.toModel(),
-        expirationReminderType = expirationReminderType.toModel()
+        expirationReminderType = expirationReminderType.toModel(),
+        notificationImportance = notificationImportance.toModel()
     )
 
 fun Reminder.toEntity(): ReminderEntity = ReminderEntity(
@@ -62,7 +63,8 @@ fun Reminder.toEntity(): ReminderEntity = ReminderEntity(
     windowedInterval = windowedInterval,
     outOfStockThreshold = outOfStockThreshold,
     outOfStockReminderType = outOfStockReminderType.toEntity(),
-    expirationReminderType = expirationReminderType.toEntity()
+    expirationReminderType = expirationReminderType.toEntity(),
+    notificationImportance = notificationImportance.toEntity()
 )
 
 fun ReminderEntity.OutOfStockReminderType.toModel(): Reminder.OutOfStockReminderType =
@@ -93,4 +95,20 @@ fun Reminder.ExpirationReminderType.toEntity(): ReminderEntity.ExpirationReminde
         Reminder.ExpirationReminderType.ONCE -> ReminderEntity.ExpirationReminderType.ONCE
         Reminder.ExpirationReminderType.DAILY -> ReminderEntity.ExpirationReminderType.DAILY
         Reminder.ExpirationReminderType.OFF -> ReminderEntity.ExpirationReminderType.OFF
+    }
+
+fun ReminderEntity.NotificationImportance.toModel(): Reminder.NotificationImportance =
+    when (this) {
+        ReminderEntity.NotificationImportance.SAME_AS_MEDICINE -> Reminder.NotificationImportance.SAME_AS_MEDICINE
+        ReminderEntity.NotificationImportance.DEFAULT -> Reminder.NotificationImportance.DEFAULT
+        ReminderEntity.NotificationImportance.HIGH -> Reminder.NotificationImportance.HIGH
+        ReminderEntity.NotificationImportance.HIGH_AND_ALARM -> Reminder.NotificationImportance.HIGH_AND_ALARM
+    }
+
+fun Reminder.NotificationImportance.toEntity(): ReminderEntity.NotificationImportance =
+    when (this) {
+        Reminder.NotificationImportance.SAME_AS_MEDICINE -> ReminderEntity.NotificationImportance.SAME_AS_MEDICINE
+        Reminder.NotificationImportance.DEFAULT -> ReminderEntity.NotificationImportance.DEFAULT
+        Reminder.NotificationImportance.HIGH -> ReminderEntity.NotificationImportance.HIGH
+        Reminder.NotificationImportance.HIGH_AND_ALARM -> ReminderEntity.NotificationImportance.HIGH_AND_ALARM
     }
