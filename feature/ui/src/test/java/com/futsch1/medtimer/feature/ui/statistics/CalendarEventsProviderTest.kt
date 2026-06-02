@@ -10,9 +10,8 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.time.Instant
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+import java.time.ZoneId
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -64,8 +63,9 @@ class CalendarEventsProviderTest {
     ) = ReminderEvent.default().copy(
         status = status,
         medicineName = medicineName,
-        // Subtract an extra hour so the local date is unambiguously `daysAgo` days back, not near midnight
-        remindedTimestamp = Instant.now().minus(daysAgo, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS),
+        // Anchor to noon of the target local day so bucketing is deterministic regardless of the time of
+        // day the test runs — a near-midnight instant could otherwise bucket a day early or late.
+        remindedTimestamp = LocalDate.now().minusDays(daysAgo).atTime(12, 0).atZone(ZoneId.systemDefault()).toInstant(),
     )
 
     private companion object {

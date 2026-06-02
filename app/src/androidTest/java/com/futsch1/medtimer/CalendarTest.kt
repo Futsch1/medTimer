@@ -47,10 +47,7 @@ class CalendarTest : BaseTestHelper() {
         // View chips are icon-only; labels are exposed as content descriptions.
         device.findObject(By.desc(context.getString(R.string.calendar)))?.click()
         AndroidTestHelper.waitForIdle(500)
-        // The Compose calendar reveals a day's events only after tapping that day's (clickable) cell.
-        val today = java.time.LocalDate.now().dayOfMonth.toString()
-        device.findObject(By.text(today).clickable(true))?.click()
-        AndroidTestHelper.waitForIdle(500)
+        // The Compose calendar pre-selects today, so today's events render without tapping a cell.
         internalAssert(device.findObject(By.textContains("Selen")) != null)
     }
 

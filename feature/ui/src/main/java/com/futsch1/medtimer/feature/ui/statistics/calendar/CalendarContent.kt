@@ -53,7 +53,8 @@ fun CalendarContent(
     pastMonths: Int = 3,
     futureMonths: Int = 0,
 ) {
-    var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
+    // Pre-select today so its events show on open, matching the legacy calendar's default day.
+    var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(LocalDate.now()) }
     val startMonth = remember { YearMonth.now().minusMonths(pastMonths.toLong()) }
     val endMonth = remember { YearMonth.now().plusMonths(futureMonths.toLong()) }
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
