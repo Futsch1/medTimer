@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Heimstandort auf Karte anzeigen</string>
     <string name="set_home_location_confirm">Heimstandort setzen auf\n%1$s, %2$s?</string>
     <string name="home_location_error">Aktueller Standort konnte nicht ermittelt werden</string>
+    <string name="exact_reminders_warning_title">Exakte Erinnerungen sind deaktiviert</string>
+    <string name="exact_reminders_warning_summary">Erinnerungen könnten einige Minuten später als geplant ausgelöst werden. Falls exakte Erinnerungen benötigt werden (auf Kosten eines leicht erhöhten Akkuverbrauchs), kann dies in den Benachrichtigungseinstellungen aktiviert werden.</string>
+    <string name="medicine_settings">Medikament-Einstellungen</string>
+    <string name="medicine_cannot_be_skipped">Medikament kann nicht übersprungen werden</string>
+    <string name="medicine_cannot_be_skipped_summary">Wenn aktiviert, können alle Erinnerungen für dieses Medikament nur durch Markieren des Medikaments als eingenommen bestätigt werden.</string>
+    <string name="reminders_cannot_be_skipped">Erinnerungen können nicht übersprungen werden</string>
+    <string name="reminders_cannot_be_skipped_summary">Wenn aktiviert, können Erinnerungen nur durch Markieren als eingenommen bestätigt werden. Dies kann auch individuell pro Medikament aktiviert werden.</string>
 </resources>

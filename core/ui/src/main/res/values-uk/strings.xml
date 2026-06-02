@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
@@ -319,4 +319,11 @@
     <string name="show_home_location_on_map">Показати домашнє місцезнаходження на карті</string>
     <string name="set_home_location_confirm">Встановити домашнє місцезнаходження:\n%1$s, %2$s?</string>
     <string name="home_location_error">Не вдалося визначити ваше поточне місцезнаходження</string>
+    <string name="exact_reminders_warning_title">Точні нагадування вимкнено</string>
+    <string name="exact_reminders_warning_summary">Нагадування можуть з&amp;apos;являтися на кілька хвилин пізніше за розкладом. Якщо вам потрібні точні нагадування (ціною незначного збільшення споживання заряду батареї), увімкніть це в налаштуваннях сповіщень.</string>
+    <string name="medicine_settings">Налаштування ліків</string>
+    <string name="medicine_cannot_be_skipped">Ліки не можна пропустити</string>
+    <string name="medicine_cannot_be_skipped_summary">Якщо увімкнено, усі нагадування для цих ліків можна закрити лише позначивши ліки як прийняті.</string>
+    <string name="reminders_cannot_be_skipped">Нагадування не можна пропустити</string>
+    <string name="reminders_cannot_be_skipped_summary">Якщо увімкнено, нагадування можна закрити лише позначивши їх як прийняті. Це також можна ввімкнути окремо для кожного ліку.</string>
 </resources>

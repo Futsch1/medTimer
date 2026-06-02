@@ -16,7 +16,7 @@ class RepeatProcessor @Inject constructor(
         reminderNotificationData.remindInstant = timeAccess.now().plusSeconds(repeatDelay.inWholeSeconds)
 
         Log.d(LogTags.REMINDER, "Repeating reminder $reminderNotificationData")
-        alarmProcessor.setAlarmForReminderNotification(reminderNotificationData)
+        alarmProcessor.setSecondaryAlarm(reminderNotificationData)
 
         for (reminderEventId in reminderNotificationData.reminderEventIds) {
             reminderEventRepository.decreaseRepeats(reminderEventId)

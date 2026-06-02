@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
     <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
@@ -28,27 +28,27 @@
     <string name="weekday_limited">Limitado a algunos días laborables</string>
     <string name="windowed_interval_reminder">Recordatorio de intervalo con ventana</string>
     <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) en la que el primer recordatorio siempre se envía a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta alcanzar la hora de finalización. El ciclo completo se restablece cada día.</string>
-    <plurals name="days">
+    <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one">día</item>
         <item quantity="other">días</item>
         <item quantity="many">días</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" tools:ignore="UnusedQuantity">
         <item quantity="one">hora</item>
         <item quantity="other">horas</item>
         <item quantity="many">horas</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="minutes" tools:ignore="UnusedQuantity">
         <item quantity="one">minuto</item>
         <item quantity="other">minutos</item>
         <item quantity="many">minutos</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="UnusedQuantity">
         <item quantity="one">%1$d recordatorio\n%2$s</item>
         <item quantity="many">%1$d recordatorios\n%2$s</item>
         <item quantity="other">%1$d recordatorios\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" tools:ignore="UnusedQuantity">
         <item quantity="one">semana</item>
         <item quantity="other">semanas</item>
         <item quantity="many">semanas</item>
@@ -154,7 +154,7 @@
     <string name="fourteen_days">14 días</string>
     <string name="thirty_days">30 días</string>
     <string name="total">Total</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" tools:ignore="UnusedQuantity">
         <item quantity="one">Últimas 24 horas</item>
         <item quantity="many">Últimos %1$d días</item>
         <item quantity="other">Últimos %1$d días</item>
@@ -313,4 +313,11 @@
     <string name="show_home_location_on_map">Mostrar ubicación de casa en el mapa</string>
     <string name="set_home_location_confirm">¿Establecer ubicación de casa en\n%1$s, %2$s?</string>
     <string name="home_location_error">No se pudo determinar tu ubicación actual</string>
+    <string name="exact_reminders_warning_title">Los recordatorios exactos están desactivados</string>
+    <string name="exact_reminders_warning_summary">Los recordatorios pueden activarse unos minutos más tarde de lo programado. Si necesita recordatorios exactos (a costa de un ligero aumento del consumo de batería), actívelo en la configuración de notificaciones.</string>
+    <string name="medicine_settings">Configuración de medicamento</string>
+    <string name="medicine_cannot_be_skipped">El medicamento no se puede omitir</string>
+    <string name="medicine_cannot_be_skipped_summary">Si está activado, todos los recordatorios de este medicamento solo se pueden cerrar marcando el medicamento como tomado.</string>
+    <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
+    <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
 </resources>

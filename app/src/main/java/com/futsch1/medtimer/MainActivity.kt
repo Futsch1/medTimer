@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var autostartService: AutostartService
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
+    private var exactReminderWarning: CardView? = null
     private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
@@ -156,6 +157,12 @@ class MainActivity : AppCompatActivity() {
             checkBatteryOptimization()
         }
 
+        exactReminderWarning = findViewById(R.id.exactRemindersWarning)
+        findViewById<View>(R.id.dismissExactReminderWarning)?.setOnClickListener { _: View ->
+            persistentDataDataSource.setExactRemindersWarningShown(true)
+            checkExactReminders()
+        }
+
         dispatchIntent(this.intent)
         this.intent = Intent()
 
@@ -213,6 +220,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkExactReminders() {
+        if (!preferencesDataSource.preferences.value.exactReminders && !persistentDataDataSource.data.value.exactRemindersWarningShown && !BuildConfig.DEBUG) {
+            Log.d(LogTags.MAIN, "Show exact reminders warning")
+            exactReminderWarning?.visibility = View.VISIBLE
+        } else {
+            exactReminderWarning?.visibility = View.GONE
+        }
+    }
+
     private suspend fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val exitInfos: List<ApplicationExitInfo> = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
@@ -240,6 +256,7 @@ class MainActivity : AppCompatActivity() {
         backupManagerFactory.create(this, this, null, null, null, supportFragmentManager).autoBackup()
 
         checkBatteryOptimization()
+        checkExactReminders()
     }
 
     private suspend fun dispatchIntent(intent: Intent) {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Thuislocatie tonen op kaart</string>
     <string name="set_home_location_confirm">Thuislocatie instellen op\n%1$s, %2$s?</string>
     <string name="home_location_error">Kon uw huidige locatie niet bepalen</string>
+    <string name="exact_reminders_warning_title">Exacte herinneringen zijn uitgeschakeld</string>
+    <string name="exact_reminders_warning_summary">Herinneringen kunnen een paar minuten later dan gepland worden gegeven. Als u exacte herinneringen nodig heeft (ten koste van een iets hoger batterijverbruik), schakel dit in bij de meldingsinstellingen.</string>
+    <string name="medicine_settings">Medicatie-instellingen</string>
+    <string name="medicine_cannot_be_skipped">Medicatie kan niet worden overgeslagen</string>
+    <string name="medicine_cannot_be_skipped_summary">Indien ingeschakeld, kunnen alle herinneringen voor dit medicament alleen worden gesloten door het medicament als ingenomen te markeren.</string>
+    <string name="reminders_cannot_be_skipped">Herinneringen kunnen niet worden overgeslagen</string>
+    <string name="reminders_cannot_be_skipped_summary">Indien ingeschakeld, kunnen herinneringen alleen worden gesloten door ze als ingenomen te markeren. Dit kan ook per medicament afzonderlijk worden ingeschakeld.</string>
 </resources>

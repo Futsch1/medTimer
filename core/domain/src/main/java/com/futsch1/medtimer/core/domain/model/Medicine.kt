@@ -20,7 +20,8 @@ data class Medicine(
     val expirationDate: LocalDate,
     val sortOrder: Double,
     val tags: List<Tag>,
-    val reminders: List<Reminder>
+    val reminders: List<Reminder>,
+    val cannotBeSkipped: Boolean
 ) {
     enum class NotificationImportance(val value: Int) {
         DEFAULT(NotificationManager.IMPORTANCE_DEFAULT),
@@ -60,7 +61,8 @@ data class Medicine(
             expirationDate = LocalDate.EPOCH,
             sortOrder = 1.0,
             tags = emptyList(),
-            reminders = emptyList()
+            reminders = emptyList(),
+            cannotBeSkipped = false
         )
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Kezdő időpont: %1$s</string>
     <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
@@ -307,4 +307,11 @@
     <string name="show_home_location_on_map">Otthoni helyszín megjelenítése a térképen</string>
     <string name="set_home_location_confirm">Otthoni helyszín beállítása erre:\n%1$s, %2$s?</string>
     <string name="home_location_error">Nem sikerült meghatározni a jelenlegi tartózkodási helyét</string>
+    <string name="exact_reminders_warning_title">Pontos emlékeztetők letiltva</string>
+    <string name="exact_reminders_warning_summary">Az emlékeztetők néhány perccel később jelenhetnek meg a tervezettnél. Ha pontos emlékeztetőkre van szüksége (az akkumulátor valamivel nagyobb fogyasztásának árán), engedélyezze ezt az értesítési beállításokban.</string>
+    <string name="medicine_settings">Gyógyszer beállítások</string>
+    <string name="medicine_cannot_be_skipped">A gyógyszer nem hagyható ki</string>
+    <string name="medicine_cannot_be_skipped_summary">Ha engedélyezve van, az ehhez a gyógyszerhez tartozó összes emlékeztető csak a gyógyszer bevételének jelzésével nyugtázható.</string>
+    <string name="reminders_cannot_be_skipped">Az emlékeztetők nem hagyhatók ki</string>
+    <string name="reminders_cannot_be_skipped_summary">Ha engedélyezve van, az emlékeztetők csak a bevétel jelzésével nyugtázhatók. Ez gyógyszerenként egyedileg is beállítható.</string>
 </resources>

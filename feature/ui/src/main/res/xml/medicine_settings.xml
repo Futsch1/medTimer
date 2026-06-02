@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:title="@string/color"
+        app:key="use_color" />
+    <Preference
+        android:title="@string/select_color"
+        android:icon="@drawable/palette_fill"
+        app:key="color"
+        android:dependency="use_color" />
+    <ListPreference
+        app:icon="@drawable/arrow_up_circle"
+        app:key="notification_importance"
+        app:title="@string/notification_importance"
+        android:entries="@array/notification_importance"
+        android:entryValues="@array/values_0_to_2" />
+    <SwitchPreferenceCompat
+        android:title="@string/medicine_cannot_be_skipped"
+        android:key="cannot_be_skipped"
+        android:summary="@string/medicine_cannot_be_skipped_summary" />
+</androidx.preference.PreferenceScreen>

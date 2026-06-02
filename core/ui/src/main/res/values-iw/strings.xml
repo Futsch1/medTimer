@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
     <string name="continuous_interval_reminder_help">התחילו תזכורת על בסיס מרווח זמן (למשל, כל 6 שעות) מנקודת זמן מסוימת. דפוס זה הוא רציף, ומתעלם מהמגבלות של שעת היום, עד לכיבוי ידני.</string>
@@ -28,27 +28,27 @@
     <string name="weekday_limited">מוגבל לימים מסויימים בשבוע</string>
     <string name="windowed_interval_reminder">חלון תזכורת מחזורי</string>
     <string name="windowed_interval_reminder_help">הגדירו חלון פעיל יומי (למשל, 9:00 עד 21:00) שבו התזכורת הראשונה תמיד בשעת הפתיחה. תזכורות הבאות מופעלות במרווחים קבועים עד שהשעה הסופית מגיעה. הדפוס המלא מתאפס בכל יום.</string>
-    <plurals name="days">
+    <plurals name="days" tools:ignore="MissingQuantity">
         <item quantity="one">יום</item>
         <item quantity="two">יומיים</item>
         <item quantity="other">ימים</item>
     </plurals>
-    <plurals name="hours">
+    <plurals name="hours" tools:ignore="MissingQuantity">
         <item quantity="one">שעה</item>
         <item quantity="two">שעתיים</item>
         <item quantity="other">שעות</item>
     </plurals>
-    <plurals name="minutes">
+    <plurals name="minutes" tools:ignore="MissingQuantity">
         <item quantity="one">דקה</item>
         <item quantity="two">דקות</item>
         <item quantity="other">דקות</item>
     </plurals>
-    <plurals name="sum_reminders">
+    <plurals name="sum_reminders" tools:ignore="MissingQuantity">
         <item quantity="one">%1$d התראה\n%2$s</item>
         <item quantity="two">%1$d התראות\n%2$s</item>
         <item quantity="other">%1$d התראות\n%2$s</item>
     </plurals>
-    <plurals name="weeks">
+    <plurals name="weeks" tools:ignore="MissingQuantity">
         <item quantity="one">שבוע</item>
         <item quantity="two">שבועיים</item>
         <item quantity="other">שבועות</item>
@@ -155,7 +155,7 @@
     <string name="fourteen_days">14 ימים</string>
     <string name="thirty_days">30 ימים</string>
     <string name="total">סך הכל</string>
-    <plurals name="last_n_days">
+    <plurals name="last_n_days" tools:ignore="MissingQuantity">
         <item quantity="one">24 שעות אחרונות</item>
         <item quantity="two">יומיים אחרונים</item>
         <item quantity="other">%1$d ימים אחרונים</item>
@@ -313,4 +313,11 @@
     <string name="show_home_location_on_map">הצג מיקום בית על המפה</string>
     <string name="set_home_location_confirm">להגדיר את מיקום הבית ל-\n%1$s, %2$s?</string>
     <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
+    <string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string>
+    <string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string>
+    <string name="medicine_settings">הגדרות תרופה</string>
+    <string name="medicine_cannot_be_skipped">לא ניתן לדלג על תרופה</string>
+    <string name="medicine_cannot_be_skipped_summary">אם מופעל, ניתן לסגור את כל התזכורות לתרופה זו רק על ידי סימון התרופה כנלקחה.</string>
+    <string name="reminders_cannot_be_skipped">לא ניתן לדלג על תזכורות</string>
+    <string name="reminders_cannot_be_skipped_summary">אם מופעל, ניתן לסגור תזכורות רק על ידי סימונן כנלקחו. ניתן גם להפעיל זאת בנפרד לכל תרופה.</string>
 </resources>

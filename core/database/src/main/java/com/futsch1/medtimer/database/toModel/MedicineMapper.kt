@@ -19,7 +19,8 @@ fun Medicine.toEntity(): MedicineEntity = MedicineEntity(
     notes = notes,
     showNotificationAsAlarm = showNotificationAsAlarm,
     productionDate = productionDate.toEpochDay(),
-    expirationDate = expirationDate.toEpochDay()
+    expirationDate = expirationDate.toEpochDay(),
+    cannotBeSkipped = cannotBeSkipped
 )
 
 fun FullMedicineEntity.toModel(): Medicine {
@@ -39,6 +40,7 @@ fun FullMedicineEntity.toModel(): Medicine {
         expirationDate = LocalDate.ofEpochDay(medicine.expirationDate),
         sortOrder = medicine.sortOrder,
         tags = tags.map { it.toModel() },
-        reminders = reminders.map { it.toModel() }
+        reminders = reminders.map { it.toModel() },
+        cannotBeSkipped = medicine.cannotBeSkipped
     )
 }

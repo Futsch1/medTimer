@@ -16,8 +16,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 173
-        versionName = "1.22.18"
+        versionCode = 174
+        versionName = "1.23.0"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -241,9 +241,10 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
         html.required.set(true)
     }
     // Set source directories to the main source directory
-    sourceDirectories.setFrom(layout.projectDirectory.dir("src/main/java"),
+    sourceDirectories.setFrom(
+        layout.projectDirectory.dir("src/main/java"),
         layout.projectDirectory.dir("src/main/full/java")
-        )
+    )
     // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
     classDirectories.setFrom(
         files(
