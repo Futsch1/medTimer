@@ -314,4 +314,5 @@
     <string name="medicine_cannot_be_skipped_summary">Hvis aktiveret, kan alle påmindelser for denne medicin kun afvises ved at markere medicinen som taget.</string>
     <string name="reminders_cannot_be_skipped">Påmindelser kan ikke springes over</string>
     <string name="reminders_cannot_be_skipped_summary">Hvis aktiveret, kan påmindelser kun afvises ved at markere dem som taget. Dette kan også aktiveres individuelt pr. medicin.</string>
+    <string name="same_as_medicine">Samme som medicin</string>
 </resources>

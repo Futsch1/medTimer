@@ -314,4 +314,5 @@
     <string name="medicine_cannot_be_skipped_summary">Ha engedélyezve van, az ehhez a gyógyszerhez tartozó összes emlékeztető csak a gyógyszer bevételének jelzésével nyugtázható.</string>
     <string name="reminders_cannot_be_skipped">Az emlékeztetők nem hagyhatók ki</string>
     <string name="reminders_cannot_be_skipped_summary">Ha engedélyezve van, az emlékeztetők csak a bevétel jelzésével nyugtázhatók. Ez gyógyszerenként egyedileg is beállítható.</string>
+    <string name="same_as_medicine">Azonos a gyógyszerrel</string>
 </resources>

@@ -338,4 +338,5 @@
     <string name="medicine_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق جميع التذكيرات لهذا الدواء إلا بتأكيد تناوله.</string>
     <string name="reminders_cannot_be_skipped">لا يمكن تخطي التذكيرات</string>
     <string name="reminders_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق التذكيرات إلا بتأكيد تناولها. يمكن أيضاً تفعيل هذا الخيار بشكل فردي لكل دواء.</string>
+    <string name="same_as_medicine">نفس الدواء</string>
 </resources>

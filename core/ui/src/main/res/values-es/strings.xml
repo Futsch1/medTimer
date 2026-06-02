@@ -320,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Si está activado, todos los recordatorios de este medicamento solo se pueden cerrar marcando el medicamento como tomado.</string>
     <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
     <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
+    <string name="same_as_medicine">Igual que el medicamento</string>
 </resources>
