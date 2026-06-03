@@ -10,11 +10,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass.Companion.BREAKPOINTS_V1
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
@@ -88,13 +92,33 @@ fun CalendarContent(
             configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
+    // The month grid; the caller supplies the calendar Modifier and the per-cell size cap. Shared by both
+    // arrangements so the day/header content is defined once.
+    val calendarGrid: @Composable (Modifier, Dp) -> Unit = { calendarModifier, maxCellSize ->
+        HorizontalCalendar(
+            state = calendarState,
+            dayContent = { day ->
+                val hasEvents = dayEvents[day.date]?.isNotEmpty() == true
+                DayCell(
+                    day = day,
+                    isSelected = day.date == selectedDate,
+                    hasEvents = hasEvents,
+                    onClick = { selectedDate = day.date },
+                    maxCellSize = maxCellSize,
+                )
+            },
+            monthHeader = { WeekDaysRow(firstDayOfWeek = firstDayOfWeek) },
+            modifier = calendarModifier,
+        )
+    }
+
     // The calendar Card; the caller supplies the scoped weight (landscape) or default Modifier (portrait).
     val calendarCard: @Composable (Modifier) -> Unit = { cardModifier ->
         Card(
             modifier = cardModifier,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         ) {
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = if (isTabletLandscape) Modifier.fillMaxSize().padding(8.dp) else Modifier.padding(8.dp)) {
                 CalendarNavigationRow(
                     yearMonth = visibleMonth,
                     startMonth = startMonth,
@@ -111,22 +135,23 @@ fun CalendarContent(
                     },
                 )
 
-                HorizontalCalendar(
-                    state = calendarState,
-                    dayContent = { day ->
-                        val hasEvents = dayEvents[day.date]?.isNotEmpty() == true
-                        DayCell(
-                            day = day,
-                            isSelected = day.date == selectedDate,
-                            hasEvents = hasEvents,
-                            onClick = { selectedDate = day.date },
+                if (isTabletLandscape) {
+                    // Fill the height under the nav row and size the grid to the largest square cells that fit
+                    // both axes: 7 columns, and one row-height reserved for the weekday header above the six
+                    // week rows of the EndOfGrid grid. The grid scales up while keeping its square aspect.
+                    BoxWithConstraints(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                        val cellSize = minOf(maxWidth / 7, maxHeight / 7)
+                        calendarGrid(
+                            Modifier.width(cellSize * 7).align(Alignment.TopCenter),
+                            cellSize,
                         )
-                    },
-                    monthHeader = { WeekDaysRow(firstDayOfWeek = firstDayOfWeek) },
-                    modifier = Modifier
-                        .widthIn(max = 400.dp)
-                        .align(Alignment.CenterHorizontally),
-                )
+                    }
+                } else {
+                    calendarGrid(
+                        Modifier.widthIn(max = 400.dp).align(Alignment.CenterHorizontally),
+                        48.dp,
+                    )
+                }
             }
         }
     }
@@ -150,7 +175,7 @@ fun CalendarContent(
 
     if (isTabletLandscape) {
         Row(modifier = modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            calendarCard(Modifier.weight(2f))
+            calendarCard(Modifier.weight(2f).fillMaxHeight())
             eventPanel(Modifier.weight(1f))
         }
     } else {

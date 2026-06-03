@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -34,6 +35,9 @@ fun DayCell(
     isSelected: Boolean,
     hasEvents: Boolean,
     onClick: () -> Unit,
+    // Upper bound on a (square) cell. Portrait keeps 48dp; tablet landscape passes a larger computed
+    // size so the grid scales up to fill its card while staying square.
+    maxCellSize: Dp = 48.dp,
 ) {
     val isMonthDate = day.position == DayPosition.MonthDate
 
@@ -64,7 +68,7 @@ fun DayCell(
 
     Box(
         modifier = Modifier
-            .sizeIn(maxWidth = 48.dp, maxHeight = 48.dp)
+            .sizeIn(maxWidth = maxCellSize, maxHeight = maxCellSize)
             .aspectRatio(1f)
             .padding(2.dp)
             .clip(CircleShape)
