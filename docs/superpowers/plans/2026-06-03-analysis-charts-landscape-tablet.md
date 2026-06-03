@@ -4,9 +4,9 @@
 
 **Goal:** On a tablet in landscape, lay out the Analysis **Charts** view as bar-chart-left with the two taken/skipped pie charts stacked vertically on the right; phones and portrait keep today's top-to-bottom layout.
 
-**Architecture:** A single inlined adaptive check in `ChartsContent` selects a `Row` (landscape, bar `weight 2f` : pies `weight 1f`) or the existing `Column` (otherwise). The two pie call-sites are factored into one private `TwoPies(state, stacked, modifier)` composable so neither branch duplicates them, and the bar-chart call is hoisted into a local composable lambda for the same reason. Detection is inlined (no shared helper) to keep future per-view adaptive tweaks local.
+**Architecture:** A single inlined adaptive check in `ChartsContent` selects a `Row` (landscape, bar `weight 2f` : pies `weight 1f`) or the existing `Column` (otherwise). The two pie call-sites are factored into one private `TwoPies(state, stacked, modifier)` composable so neither branch duplicates them, and the bar-chart call is hoisted into a local composable lambda for the same reason. Detection is inlined (no shared helper) to keep future per-view adaptive tweaks local. The detection *logic* stays inlined, but its input `WindowAdaptiveInfo` is an injectable parameter defaulting to `currentWindowAdaptiveInfo()` — Google's Now in Android uses this same pattern so layout tests inject a computed window size instead of depending on the host's window metrics.
 
-**Tech Stack:** Jetpack Compose, Material 3, `androidx.compose.material3.adaptive:adaptive:1.2.0` (`currentWindowAdaptiveInfo`), `androidx.window` `WindowSizeClass` breakpoint API (transitive), Vico charts, Robolectric Compose tests.
+**Tech Stack:** Jetpack Compose, Material 3, `androidx.compose.material3.adaptive:adaptive:1.2.0` (`currentWindowAdaptiveInfo`, `WindowAdaptiveInfo`), `androidx.window` `WindowSizeClass` breakpoint + `compute` API (transitive), Vico charts, Robolectric Compose tests.
 
 **Source spec:** `docs/superpowers/specs/2026-06-03-analysis-charts-landscape-tablet-design.md`
 
@@ -86,6 +86,8 @@ package com.futsch1.medtimer.feature.ui.statistics.charts
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.adaptive.Posture
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -94,6 +96,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.ChartsState
 import com.futsch1.medtimer.feature.ui.statistics.MedicineDaySeries
@@ -120,9 +123,9 @@ class ChartsContentLayoutTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    @Config(qualifiers = "w800dp-land")
+    @Config(qualifiers = "land")
     fun `tablet landscape stacks the two pie charts vertically`() {
-        setCharts(width = 800.dp, height = 400.dp)
+        setCharts(width = 800.dp, height = 400.dp, windowSizeClass = WindowSizeClass.compute(800f, 400f))
 
         val period = composeTestRule.onNodeWithText("Last 7 days").getBoundsInRoot()
         val total = composeTestRule.onNodeWithText("Total").getBoundsInRoot()
@@ -135,7 +138,7 @@ class ChartsContentLayoutTest {
 
     @Test
     fun `phone portrait places the two pie charts side by side`() {
-        setCharts(width = 400.dp, height = 800.dp)
+        setCharts(width = 400.dp, height = 800.dp, windowSizeClass = WindowSizeClass.compute(400f, 800f))
 
         val period = composeTestRule.onNodeWithText("Last 7 days").getBoundsInRoot()
         val total = composeTestRule.onNodeWithText("Total").getBoundsInRoot()
@@ -146,15 +149,21 @@ class ChartsContentLayoutTest {
         )
     }
 
-    private fun setCharts(width: Dp, height: Dp) {
+    private fun setCharts(width: Dp, height: Dp, windowSizeClass: WindowSizeClass) {
         composeTestRule.setContent {
             MedTimerTheme {
-                // Inspection mode forces the bar chart's synchronous preview model (no async Vico
-                // producer), keeping the Robolectric render deterministic. It does not affect the
-                // Row/Column branch under test.
+                // Injecting WindowAdaptiveInfo removes any dependency on the host's window metrics for the
+                // width signal (orientation still comes from the reliable `land`/portrait config qualifier).
+                // LocalInspectionMode forces the bar chart's synchronous path so the render stays deterministic.
                 CompositionLocalProvider(LocalInspectionMode provides true) {
                     Box(modifier = Modifier.size(width, height)) {
-                        ChartsContent(state = chartsState())
+                        ChartsContent(
+                            state = chartsState(),
+                            windowAdaptiveInfo = WindowAdaptiveInfo(
+                                windowSizeClass = windowSizeClass,
+                                windowPosture = Posture(),
+                            ),
+                        )
                     }
                 }
             }
@@ -183,9 +192,9 @@ class ChartsContentLayoutTest {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `./gradlew :feature:ui:testDebugUnitTest --tests "com.futsch1.medtimer.feature.ui.statistics.charts.ChartsContentLayoutTest"`
-Expected: the portrait test PASSES (today's layout is already side-by-side); the landscape test FAILS its assertion (`total.top > period.top` is false because the pies render side-by-side regardless of orientation).
+Expected: a **compilation failure** — the test passes `windowAdaptiveInfo = ...` to `ChartsContent`, but that parameter does not exist yet (it is added in Step 3). This is the red state. Once Step 3 adds the parameter and the landscape branch, the landscape assertion (`total.top > period.top`) is what the new code satisfies, and the portrait assertion confirms the unchanged side-by-side path.
 
-> If the landscape test instead fails because `currentWindowAdaptiveInfo()` does not see the `w800dp` width under Robolectric (both pies still side-by-side after Step 3's implementation), **stop** — the detection works on-device but not under this harness. Do not weaken the assertion; raise it for a decision on using `androidx.window:window-testing`'s `TestWindowMetricsCalculator` or an instrumented test instead.
+> The earlier Robolectric-window risk is gone: width comes from an injected `WindowAdaptiveInfo` (`WindowSizeClass.compute(...)`) and orientation from the reliable `land`/portrait config qualifier — neither depends on the host computing window metrics. This mirrors Now in Android's own layout tests.
 
 - [ ] **Step 3: Implement the branch + `TwoPies`**
 
@@ -194,6 +203,7 @@ In `ChartsContent.kt`, add these imports alongside the existing ones (keep them 
 ```kotlin
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
@@ -204,11 +214,16 @@ Replace the entire `ChartsContent` function (current lines 73–105) with:
 ```kotlin
 // Tag-independent: tag filtering applies to the Table only, not to Charts.
 @Composable
-fun ChartsContent(state: ChartsState, modifier: Modifier = Modifier) {
+fun ChartsContent(
+    state: ChartsState,
+    modifier: Modifier = Modifier,
+    // Injectable (defaults to the live value) so layout tests supply a computed window size. The
+    // detection below stays inlined per the "no shared helper" decision. Matches Now in Android.
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+) {
     val configuration = LocalConfiguration.current
-    // Inlined (not a shared helper) so future per-view adaptive tweaks stay local to each view.
     val isTabletLandscape =
-        currentWindowAdaptiveInfo().windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) &&
+        windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) &&
             configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     // Single bar-chart definition shared by both arrangements; the caller supplies the scoped weight.
@@ -262,7 +277,7 @@ private fun TwoPies(state: ChartsState, stacked: Boolean, modifier: Modifier = M
 }
 ```
 
-Leave `TakenSkippedPieChart`, `EmptyPieCircle`, `LegendDot`, and `MedicinePerDayBarChart` unchanged.
+Leave `TakenSkippedPieChart`, `EmptyPieCircle`, `LegendDot`, and `MedicinePerDayBarChart` unchanged. The `StatisticsScreen` call site (`ChartsContent(it)`) needs no change — it uses the `windowAdaptiveInfo` default.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
@@ -322,7 +337,7 @@ private fun ChartsContentLandscapePreview() {
 }
 ```
 
-> Note: `@Preview(widthDp/heightDp)` sizes the canvas but does not by itself drive `currentWindowAdaptiveInfo()`, so this preview renders the portrait arrangement in the IDE. It exists to review the pies/bar at a wide canvas; the landscape arrangement itself is covered by the `w800dp-land` test in Task 2. If the existing `ChartsContentPreview` already imports `Preview` via `@MedTimerPreview`'s machinery, prefer matching that pattern — check the top of the file before adding a raw `@Preview` import.
+> Note: `@Preview(widthDp/heightDp)` sizes the canvas but does not by itself drive `currentWindowAdaptiveInfo()` or set landscape orientation, so this preview renders the portrait arrangement in the IDE. It exists to review the pies/bar at a wide canvas; the landscape arrangement itself is covered by the test in Task 2. Now that `ChartsContent` accepts `windowAdaptiveInfo`, you *can* force the landscape arrangement in a preview by passing `WindowAdaptiveInfo(WindowSizeClass.compute(900f, 480f), Posture())` together with a landscape `LocalConfiguration` override — optional polish, not required here. If the existing `ChartsContentPreview` already imports `Preview` via `@MedTimerPreview`'s machinery, prefer matching that pattern — check the top of the file before adding a raw `@Preview` import.
 
 - [ ] **Step 2: Build to verify the preview compiles**
 
@@ -350,5 +365,5 @@ git commit -m "#1234 Add wide-canvas preview for Analysis Charts"
 ## Self-Review Notes
 
 - **Spec coverage:** dependency (Task 1) ✓; inlined detection + 2:1 `Row` branch (Task 2) ✓; `TwoPies` DRY factoring (Task 2) ✓; `w800dp-land` Robolectric test + wide preview (Tasks 2–3) ✓; non-goals respected (no ViewModel/Table/Calendar/manifest/`material3`-pin changes) ✓.
-- **Naming consistency:** `TwoPies(state, stacked, modifier)`, `isTabletLandscape`, `barChart` lambda, and the `WIDTH_DP_MEDIUM_LOWER_BOUND` import are used identically across the implementation and the prose.
-- **Known risk, surfaced not hidden:** Robolectric honoring the `w800dp` width for `currentWindowAdaptiveInfo()` is the one uncertainty; Task 2 Step 2 calls it out with a stop-and-ask contingency rather than papering over it.
+- **Naming consistency:** `ChartsContent(state, modifier, windowAdaptiveInfo)`, `TwoPies(state, stacked, modifier)`, `isTabletLandscape`, `barChart` lambda, and the `WIDTH_DP_MEDIUM_LOWER_BOUND` import are used identically across the implementation and the prose.
+- **Risk removed (per NIA precedent):** the earlier Robolectric window-metric uncertainty is eliminated — `ChartsContent` takes an injectable `windowAdaptiveInfo` (default `currentWindowAdaptiveInfo()`), and the tests inject `WindowSizeClass.compute(...)` while taking orientation from the reliable config qualifier, exactly as Now in Android's layout tests do.
