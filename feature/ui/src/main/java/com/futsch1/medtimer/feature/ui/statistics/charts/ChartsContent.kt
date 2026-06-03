@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.statistics.charts
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -25,12 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -71,35 +77,65 @@ import kotlin.math.roundToInt
 
 // Tag-independent: tag filtering applies to the Table only, not to Charts.
 @Composable
-fun ChartsContent(state: ChartsState, modifier: Modifier = Modifier) {
-    ProvideVicoTheme(rememberM3VicoTheme()) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            MedicinePerDayBarChart(
-                epochDays = state.perDay.epochDays,
-                series = state.perDay.series.map { it.counts },
-                seriesNames = state.perDay.series.map { it.medicineName },
-                dayLabels = state.dayLabels,
-                seriesColors = state.seriesColors,
-                modifier = Modifier.fillMaxWidth().weight(2f),
-            )
+fun ChartsContent(
+    state: ChartsState,
+    modifier: Modifier = Modifier,
+    // Injectable (defaults to the live value) so layout tests supply a computed window size. The
+    // detection below stays inlined per the "no shared helper" decision. Matches Now in Android.
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+) {
+    val configuration = LocalConfiguration.current
+    val isTabletLandscape = remember(windowAdaptiveInfo, configuration) {
+        windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) &&
+            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    }
 
-            Row(modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TakenSkippedPieChart(
-                    title = pluralStringResource(R.plurals.last_n_days, state.days, state.days),
-                    taken = state.takenPeriod,
-                    skipped = state.skippedPeriod,
-                    modifier = Modifier.weight(1f),
-                )
-                TakenSkippedPieChart(
-                    title = stringResource(R.string.total),
-                    taken = state.takenTotal,
-                    skipped = state.skippedTotal,
-                    modifier = Modifier.weight(1f),
-                )
+    // Single bar-chart definition shared by both arrangements; the caller supplies the scoped weight.
+    val barChart: @Composable (Modifier) -> Unit = { barModifier ->
+        MedicinePerDayBarChart(
+            epochDays = state.perDay.epochDays,
+            series = state.perDay.series.map { it.counts },
+            seriesNames = state.perDay.series.map { it.medicineName },
+            dayLabels = state.dayLabels,
+            seriesColors = state.seriesColors,
+            modifier = barModifier,
+        )
+    }
+
+    ProvideVicoTheme(rememberM3VicoTheme()) {
+        if (isTabletLandscape) {
+            Row(
+                modifier = modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                barChart(Modifier.fillMaxHeight().weight(2f))
+                TwoPies(state = state, stacked = true, modifier = Modifier.fillMaxHeight().weight(1f))
             }
+        } else {
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                barChart(Modifier.fillMaxWidth().weight(2f))
+                TwoPies(state = state, stacked = false, modifier = Modifier.fillMaxWidth().weight(1f))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TwoPies(state: ChartsState, stacked: Boolean, modifier: Modifier = Modifier) {
+    val periodTitle = pluralStringResource(R.plurals.last_n_days, state.days, state.days)
+    val totalTitle = stringResource(R.string.total)
+    if (stacked) {
+        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, Modifier.weight(1f))
+            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, Modifier.weight(1f))
+        }
+    } else {
+        Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, Modifier.weight(1f))
+            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, Modifier.weight(1f))
         }
     }
 }
