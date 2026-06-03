@@ -56,8 +56,8 @@ compose-bom = "2026.05.00"
 # material3 is hand-pinned to the 1.5.0-alpha line (overriding the BOM) because MaterialExpressiveTheme
 # is still internal on the stable 1.4.x line; revert to BOM-managed once Expressive ships stable.
 material3-expressive = "1.5.0-alpha20"
-# Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; pulls androidx.window 1.4.x
-# (the WindowSizeClass breakpoint API) transitively — no separate window pin.
+# Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; resolves to androidx.window
+# 1.5.x in practice (upgraded by the Compose BOM's ui dependency) — no separate window pin.
 material3-adaptive = "1.2.0"
 vico = "3.1.0"
 kotlinx-collections-immutable = "0.4.0"

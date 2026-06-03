@@ -67,6 +67,21 @@ class ChartsContentLayoutTest {
         )
     }
 
+    @Test
+    @Config(qualifiers = "port")
+    fun `wide tablet in portrait places the two pie charts side by side`() {
+        // Width passes the medium breakpoint, so only the orientation guard keeps the layout side-by-side.
+        setCharts(width = 800.dp, height = 1200.dp, windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 800f, heightDp = 1200f))
+
+        val period = composeTestRule.onNodeWithText("Last 7 days").getBoundsInRoot()
+        val total = composeTestRule.onNodeWithText("Total").getBoundsInRoot()
+
+        assertTrue(
+            total.left > period.left,
+            "Wide tablet in portrait should keep the pies side by side; period.left=${period.left}, total.left=${total.left}",
+        )
+    }
+
     private fun setCharts(width: Dp, height: Dp, windowSizeClass: WindowSizeClass) {
         composeTestRule.setContent {
             MedTimerTheme {
