@@ -32,8 +32,9 @@ import kotlin.test.assertTrue
  * Verifies the adaptive arrangement of [CalendarContent]: the event panel sits to the right of the
  * calendar on a tablet in landscape, and below it otherwise. WindowAdaptiveInfo is injected so the
  * width signal does not depend on host window metrics. The calendar is anchored by its month-year
- * navigation title (a sibling of the HorizontalCalendar) and the event panel by the synthetic
- * medicine name rendered only inside DayEventsCard.
+ * navigation title (a sibling of the HorizontalCalendar) and the event panel by the synthetic dose
+ * amount ("1 tablet") on the event row's first line — the medicine name sits on a second line, which
+ * AnimatedContent leaves unplaced (Rect.Zero) under Robolectric, so it can't anchor the bounds check.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -54,7 +55,7 @@ class CalendarContentLayoutTest {
         setCalendar(width = 900.dp, height = 500.dp, windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 900f, heightDp = 500f))
 
         val calendar = composeTestRule.onNodeWithText(calendarTitle).getBoundsInRoot()
-        val event = composeTestRule.onNode(hasText("Vitamin X 500 mg", substring = true)).getBoundsInRoot()
+        val event = composeTestRule.onNode(hasText("1 tablet", substring = true)).getBoundsInRoot()
 
         assertTrue(
             event.left > calendar.left,
@@ -67,7 +68,7 @@ class CalendarContentLayoutTest {
         setCalendar(width = 420.dp, height = 900.dp, windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 420f, heightDp = 900f))
 
         val calendar = composeTestRule.onNodeWithText(calendarTitle).getBoundsInRoot()
-        val event = composeTestRule.onNode(hasText("Vitamin X 500 mg", substring = true)).getBoundsInRoot()
+        val event = composeTestRule.onNode(hasText("1 tablet", substring = true)).getBoundsInRoot()
 
         assertTrue(
             event.top > calendar.top,
@@ -82,7 +83,7 @@ class CalendarContentLayoutTest {
         setCalendar(width = 900.dp, height = 1200.dp, windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 900f, heightDp = 1200f))
 
         val calendar = composeTestRule.onNodeWithText(calendarTitle).getBoundsInRoot()
-        val event = composeTestRule.onNode(hasText("Vitamin X 500 mg", substring = true)).getBoundsInRoot()
+        val event = composeTestRule.onNode(hasText("1 tablet", substring = true)).getBoundsInRoot()
 
         assertTrue(
             event.top > calendar.top,

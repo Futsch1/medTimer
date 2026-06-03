@@ -20,17 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
@@ -67,19 +60,10 @@ fun DayEventsCard(
             val raisedLabel = stringResource(R.string.raised)
             val takenLabel = stringResource(R.string.taken)
             val bodySmall = MaterialTheme.typography.bodySmall
-            val textMeasurer = rememberTextMeasurer()
-            val density = LocalDensity.current
             val formattedTimes = remember(events, date) {
                 events.map { event ->
                     val formatter = if (event.time.toLocalDate() == date) timeFormatter else dateTimeFormatter
                     event.time.format(formatter)
-                }
-            }
-            val maxTimeWidth = remember(formattedTimes, bodySmall) {
-                with(density) {
-                    formattedTimes.maxOfOrNull { time ->
-                        textMeasurer.measure(time, bodySmall).size.width
-                    }?.toDp() ?: 0.dp
                 }
             }
             events.forEachIndexed { index, event ->
@@ -99,7 +83,6 @@ fun DayEventsCard(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 EventRow(
                     time = formattedTimes[index],
-                    timeWidth = maxTimeWidth,
                     statusIcon = statusIconRes(event.status),
                     statusLabel = statusLabel,
                     typeIcon = reminderTypeIconRes(event.reminderType),
@@ -116,7 +99,6 @@ fun DayEventsCard(
 @Composable
 private fun EventRow(
     time: String,
-    timeWidth: Dp,
     @DrawableRes statusIcon: Int?,
     statusLabel: String?,
     @DrawableRes typeIcon: Int,
@@ -126,39 +108,39 @@ private fun EventRow(
     textStyle: TextStyle,
 ) {
     val iconTint = MaterialTheme.colorScheme.onSurfaceVariant
-    val eventText = buildAnnotatedString {
-        append(amount)
-        append(" ")
-        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(medicineName) }
-        append(suffix)
-    }
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        // Fixed-width status slot. SCHEDULED (future) events have no status icon; the empty Box keeps the
-        // time column aligned across rows, mirroring the empty-pie legend's reserved space.
-        Box(modifier = Modifier.size(STATUS_ICON_SIZE)) {
-            if (statusIcon != null) {
-                Icon(
-                    painter = painterResource(statusIcon),
-                    contentDescription = statusLabel,
-                    tint = iconTint,
-                    modifier = Modifier.size(STATUS_ICON_SIZE),
-                )
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            // Fixed-width status slot. SCHEDULED (future) events have no status icon; the empty Box keeps
+            // the type icon aligned across rows, mirroring the empty-pie legend's reserved space.
+            Box(modifier = Modifier.size(STATUS_ICON_SIZE)) {
+                if (statusIcon != null) {
+                    Icon(
+                        painter = painterResource(statusIcon),
+                        contentDescription = statusLabel,
+                        tint = iconTint,
+                        modifier = Modifier.size(STATUS_ICON_SIZE),
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                painter = painterResource(typeIcon),
+                contentDescription = null,
+                tint = iconTint,
+                modifier = Modifier.size(TYPE_ICON_SIZE),
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text = amount, style = textStyle)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = time, style = textStyle)
+        }
+        // Medicine name on its own row; the status suffix stays unstyled next to the bold name.
+        Row {
+            Text(text = medicineName, style = textStyle, fontWeight = FontWeight.Bold)
+            if (suffix.isNotEmpty()) {
+                Text(text = suffix, style = textStyle)
             }
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = time, style = textStyle, textAlign = TextAlign.End, modifier = Modifier.width(timeWidth))
-        Spacer(modifier = Modifier.width(8.dp))
-        Icon(
-            painter = painterResource(typeIcon),
-            contentDescription = null,
-            tint = iconTint,
-            modifier = Modifier.size(TYPE_ICON_SIZE),
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = eventText, style = textStyle)
     }
 }
 
