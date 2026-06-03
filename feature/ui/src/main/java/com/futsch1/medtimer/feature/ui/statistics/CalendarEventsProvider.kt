@@ -157,6 +157,7 @@ class CalendarEventsProvider @Inject constructor(
             amount = amount,
             medicineName = medicineName,
             status = eventStatus,
+            reminderType = reminderType,
         )
     }
 
@@ -167,6 +168,7 @@ class CalendarEventsProvider @Inject constructor(
             amount = reminder.amount,
             medicineName = medicine.name,
             status = CalendarDayEvent.Status.SCHEDULED,
+            reminderType = reminder.reminderType,
         )
     }
 }

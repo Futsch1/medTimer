@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.statistics.calendar
 
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import java.time.LocalDateTime
 
 // Structured calendar event consumed by the Compose calendar (DayEventsCard). The standalone XML
@@ -9,6 +10,7 @@ data class CalendarDayEvent(
     val amount: String,
     val medicineName: String,
     val status: Status,
+    val reminderType: ReminderType = ReminderType.TIME_BASED,
 ) {
     enum class Status { TAKEN, SKIPPED, RAISED, SCHEDULED }
 }

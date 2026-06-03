@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.statistics
 
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
@@ -46,6 +47,22 @@ class CalendarEventsProviderTest {
         assertEquals(CalendarDayEvent.Status.TAKEN, result.getValue(dayOne)[0].status)
         assertEquals("Vitamin X", result.getValue(dayOne)[0].medicineName)
         assertEquals(CalendarDayEvent.Status.SKIPPED, result.getValue(dayTwo)[0].status)
+    }
+
+    @Test
+    fun `getStructuredEvents carries the reminder type through to the structured event`() = runTest {
+        whenever(medicineRepository.getAll()).thenReturn(emptyList())
+        whenever(reminderEventRepository.getLastDays(any())).thenReturn(
+            listOf(
+                event(status = ReminderEvent.ReminderStatus.TAKEN, daysAgo = 1, medicineName = "Vitamin X")
+                    .copy(reminderType = ReminderType.LINKED),
+            )
+        )
+
+        val result = provider.getStructuredEvents(ALL_MEDICINES, pastMonths = 3, futureMonths = 0)
+
+        val dayOne = LocalDate.now().minusDays(1)
+        assertEquals(ReminderType.LINKED, result.getValue(dayOne)[0].reminderType)
     }
 
     @Test
