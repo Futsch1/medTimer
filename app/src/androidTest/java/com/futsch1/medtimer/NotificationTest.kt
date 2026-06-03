@@ -349,6 +349,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        AndroidTestHelper.scrollDown()
         clickOn(R.string.variable_amount)
         pressBack()
         openMenu()
