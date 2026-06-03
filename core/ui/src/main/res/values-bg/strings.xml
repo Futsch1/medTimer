@@ -314,4 +314,5 @@
     <string name="medicine_cannot_be_skipped_summary">Ако е активирано, всички напомняния за това лекарство могат да бъдат затворени само чрез отбелязване на лекарството като взето.</string>
     <string name="reminders_cannot_be_skipped">Напомнянията не могат да бъдат пропуснати</string>
     <string name="reminders_cannot_be_skipped_summary">Ако е активирано, напомнянията могат да бъдат затворени само чрез отбелязването им като взети. Това може да бъде активирано и индивидуално за всяко лекарство.</string>
+    <string name="same_as_medicine">Същото като лекарството</string>
 </resources>

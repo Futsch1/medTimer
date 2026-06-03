@@ -308,4 +308,5 @@
     <string name="medicine_cannot_be_skipped_summary">如果启用，该药物的所有提醒只能通过标记为已服药来关闭。</string>
     <string name="reminders_cannot_be_skipped">提醒不可跳过</string>
     <string name="reminders_cannot_be_skipped_summary">如果启用，提醒只能通过标记为已服药来关闭。也可以为每种药物单独启用此功能。</string>
+    <string name="same_as_medicine">与药物相同</string>
 </resources>

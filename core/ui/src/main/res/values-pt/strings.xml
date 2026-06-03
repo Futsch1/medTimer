@@ -320,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Se ativado, todos os lembretes deste medicamento só podem ser dispensados marcando o medicamento como tomado.</string>
     <string name="reminders_cannot_be_skipped">Lembretes não podem ser ignorados</string>
     <string name="reminders_cannot_be_skipped_summary">Se ativado, os lembretes só podem ser dispensados marcando-os como tomados. Isso também pode ser ativado individualmente por medicamento.</string>
+    <string name="same_as_medicine">Igual ao medicamento</string>
 </resources>

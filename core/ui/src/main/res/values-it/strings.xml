@@ -320,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Se abilitato, tutti i promemoria per questo farmaco possono essere eliminati solo contrassegnando il farmaco come assunto.</string>
     <string name="reminders_cannot_be_skipped">I promemoria non possono essere saltati</string>
     <string name="reminders_cannot_be_skipped_summary">Se abilitato, i promemoria possono essere eliminati solo contrassegnandoli come assunti. Questo può essere abilitato anche singolarmente per ogni farmaco.</string>
+    <string name="same_as_medicine">Come per la medicina</string>
 </resources>

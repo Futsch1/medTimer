@@ -72,5 +72,11 @@
             app:key="automatically_taken"
             app:singleLineTitle="false"
             android:summary="@string/automatically_taken_summary"/>
+        <ListPreference
+            app:icon="@drawable/arrow_up_circle"
+            app:key="notification_importance"
+            app:title="@string/notification_importance"
+            android:entries="@array/reminder_notification_importance"
+            android:entryValues="@array/values_0_to_3" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

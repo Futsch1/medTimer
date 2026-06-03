@@ -30,7 +30,8 @@ data class Reminder(
     val windowedInterval: Boolean,
     val outOfStockThreshold: Double,
     val outOfStockReminderType: OutOfStockReminderType,
-    val expirationReminderType: ExpirationReminderType
+    val expirationReminderType: ExpirationReminderType,
+    val notificationImportance: NotificationImportance
 ) {
     val reminderType: ReminderType
         get() = when {
@@ -53,6 +54,13 @@ data class Reminder(
         ONCE,
         DAILY,
         OFF
+    }
+
+    enum class NotificationImportance {
+        SAME_AS_MEDICINE,
+        DEFAULT,
+        HIGH,
+        HIGH_AND_ALARM
     }
 
     val isInterval: Boolean
@@ -93,7 +101,8 @@ data class Reminder(
             windowedInterval = false,
             outOfStockThreshold = 0.0,
             outOfStockReminderType = OutOfStockReminderType.OFF,
-            expirationReminderType = ExpirationReminderType.OFF
+            expirationReminderType = ExpirationReminderType.OFF,
+            notificationImportance = NotificationImportance.SAME_AS_MEDICINE
         )
     }
 }

@@ -326,4 +326,5 @@
     <string name="medicine_cannot_be_skipped_summary">Je-li povoleno, všechna připomenutí tohoto léku lze zamítnout pouze označením léku jako užitého.</string>
     <string name="reminders_cannot_be_skipped">Připomenutí nelze přeskočit</string>
     <string name="reminders_cannot_be_skipped_summary">Je-li povoleno, připomenutí lze zamítnout pouze označením jako užitých. Toto lze také individuálně povolit pro každý lék.</string>
+    <string name="same_as_medicine">Stejné jako lék</string>
 </resources>

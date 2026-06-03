@@ -320,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">אם מופעל, ניתן לסגור את כל התזכורות לתרופה זו רק על ידי סימון התרופה כנלקחה.</string>
     <string name="reminders_cannot_be_skipped">לא ניתן לדלג על תזכורות</string>
     <string name="reminders_cannot_be_skipped_summary">אם מופעל, ניתן לסגור תזכורות רק על ידי סימונן כנלקחו. ניתן גם להפעיל זאת בנפרד לכל תרופה.</string>
+    <string name="same_as_medicine">זהה לתרופה</string>
 </resources>

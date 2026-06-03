@@ -314,4 +314,5 @@
     <string name="medicine_cannot_be_skipped_summary">Jos käytössä, kaikki tämän lääkkeen muistutukset voidaan poistaa vain merkitsemällä lääke otetuksi.</string>
     <string name="reminders_cannot_be_skipped">Muistutuksia ei voi ohittaa</string>
     <string name="reminders_cannot_be_skipped_summary">Jos käytössä, muistutukset voidaan poistaa vain merkitsemällä ne otetuiksi. Tämä voidaan myös ottaa käyttöön erikseen kullekin lääkkeelle.</string>
+    <string name="same_as_medicine">Sama kuin lääke</string>
 </resources>

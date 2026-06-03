@@ -320,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Si activé, tous les rappels pour ce médicament ne peuvent être supprimés qu\'en marquant le médicament comme pris.</string>
     <string name="reminders_cannot_be_skipped">Les rappels ne peuvent pas être ignorés</string>
     <string name="reminders_cannot_be_skipped_summary">Si activé, les rappels ne peuvent être supprimés qu\'en les marquant comme pris. Cela peut également être activé individuellement par médicament.</string>
+    <string name="same_as_medicine">Identique au médicament</string>
 </resources>

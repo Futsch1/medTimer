@@ -22,13 +22,17 @@ abstract class NotificationFactory(
     private val context: Context,
     protected val notificationId: Int,
     medicines: List<Medicine>,
-    notificationManager: NotificationManager
+    notificationManager: NotificationManager,
+    importance: Medicine.NotificationImportance
 ) {
     val builder: NotificationCompat.Builder
 
     init {
-        val importance = getHighestImportance(medicines)
-        val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(context, notificationManager, importance).id
+        val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(
+            context,
+            notificationManager,
+            importance
+        ).id
         builder = NotificationCompat.Builder(context, notificationChannelId)
 
         val color = getColor(medicines)
@@ -45,16 +49,10 @@ abstract class NotificationFactory(
     }
 
     private fun getIcon(medicines: List<Medicine>): Bitmap? {
-        val iconIds: List<Int> = medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.distinct().toList()
+        val iconIds: List<Int> =
+            medicines.stream().map { medicine -> medicine.iconId }.filter { it != 0 }.distinct()
+                .toList()
         return medicineIcons.getIconsBitmap(iconIds)
-    }
-
-    private fun getHighestImportance(medicines: List<Medicine>): Medicine.NotificationImportance {
-        for (medicine in medicines) {
-            if (medicine.notificationImportance == Medicine.NotificationImportance.HIGH)
-                return Medicine.NotificationImportance.HIGH
-        }
-        return Medicine.NotificationImportance.DEFAULT
     }
 
     private fun getColor(medicines: List<Medicine>): Color? {
@@ -73,10 +71,15 @@ abstract class NotificationFactory(
 
     fun getStartAppIntent(): PendingIntent {
         val startApp = Intent().setClassName(context, "com.futsch1.medtimer.MainActivity").apply {
-            setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
 
-        return PendingIntent.getActivity(context, notificationId, startApp, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(
+            context,
+            notificationId,
+            startApp,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     @OptIn(ExperimentalTime::class)

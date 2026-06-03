@@ -314,4 +314,5 @@
     <string name="medicine_cannot_be_skipped_summary">Indien ingeschakeld, kunnen alle herinneringen voor dit medicament alleen worden gesloten door het medicament als ingenomen te markeren.</string>
     <string name="reminders_cannot_be_skipped">Herinneringen kunnen niet worden overgeslagen</string>
     <string name="reminders_cannot_be_skipped_summary">Indien ingeschakeld, kunnen herinneringen alleen worden gesloten door ze als ingenomen te markeren. Dit kan ook per medicament afzonderlijk worden ingeschakeld.</string>
+    <string name="same_as_medicine">Hetzelfde als medicijn</string>
 </resources>

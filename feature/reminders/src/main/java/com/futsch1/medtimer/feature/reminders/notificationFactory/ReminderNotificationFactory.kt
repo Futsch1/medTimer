@@ -13,6 +13,8 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
+import com.futsch1.medtimer.feature.reminders.notificationData.effectiveHighestImportance
+import com.futsch1.medtimer.feature.reminders.notificationData.effectiveShowAsAlarm
 
 
 abstract class ReminderNotificationFactory(
@@ -28,7 +30,8 @@ abstract class ReminderNotificationFactory(
     context,
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine },
-    notificationManager
+    notificationManager,
+    reminderNotification.reminderNotificationParts.effectiveHighestImportance()
 ) {
 
     val intents = intentsFactory.create(reminderNotification)
@@ -59,7 +62,7 @@ abstract class ReminderNotificationFactory(
         ) {
             builder.setOngoing(true)
         }
-        if (reminderNotification.reminderNotificationParts.any { it.medicine.showNotificationAsAlarm }) {
+        if (reminderNotification.reminderNotificationParts.any { it.effectiveShowAsAlarm() }) {
             addFullScreenIntent()
         }
     }

@@ -40,7 +40,15 @@ class ReminderEntity(
     @ColumnInfo(defaultValue = "0.0") var outOfStockThreshold: Double = 0.0,
     @ColumnInfo(defaultValue = "OFF") var outOfStockReminderType: OutOfStockReminderType = OutOfStockReminderType.OFF,
     @ColumnInfo(defaultValue = "OFF") var expirationReminderType: ExpirationReminderType = ExpirationReminderType.OFF,
+    @ColumnInfo(defaultValue = "SAME_AS_MEDICINE") var notificationImportance: NotificationImportance = NotificationImportance.SAME_AS_MEDICINE,
 ) {
+    enum class NotificationImportance {
+        SAME_AS_MEDICINE,
+        DEFAULT,
+        HIGH,
+        HIGH_AND_ALARM
+    }
+
     enum class OutOfStockReminderType {
         ONCE,
         ALWAYS,
