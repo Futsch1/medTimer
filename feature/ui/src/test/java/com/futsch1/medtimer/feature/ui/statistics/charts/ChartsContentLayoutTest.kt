@@ -101,8 +101,9 @@ class ChartsContentLayoutTest {
     }
 
     @Test
-    fun `the Taken Skipped legend is shown even when a pie is empty`() {
-        // All-zero series renders an empty circle, but the legend must still be present.
+    fun `the Taken Skipped legend still reserves its space when a pie is empty`() {
+        // All-zero series renders an empty circle; the legend dots are hidden (alpha 0) but still laid
+        // out so the block keeps its space. The nodes therefore remain in the semantics tree.
         setCharts(
             width = 400.dp,
             height = 800.dp,
@@ -112,7 +113,7 @@ class ChartsContentLayoutTest {
 
         assertTrue(
             composeTestRule.onAllNodesWithText("Taken").fetchSemanticsNodes().isNotEmpty(),
-            "Expected the Taken/Skipped legend to be shown even for an empty (all-zero) pie",
+            "Expected the Taken/Skipped legend to remain laid out (space reserved) for an empty pie",
         )
     }
 

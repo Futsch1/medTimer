@@ -29,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -159,6 +160,8 @@ private fun TakenSkippedPieChart(
     val skippedColor = MaterialTheme.colorScheme.primaryContainer
     val takenLabel = stringResource(R.string.taken)
     val skippedLabel = stringResource(R.string.skipped)
+    // Hide the legend dots when there's no data, but keep their space so the layout doesn't shift.
+    val legendAlpha = if (taken + skipped > 0L) 1f else 0f
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -186,7 +189,7 @@ private fun TakenSkippedPieChart(
                 ) {
                     TakenSkippedPieContent(taken, skipped, takenColor, skippedColor, Modifier.fillMaxHeight().weight(1f))
                     Column(
-                        modifier = Modifier.padding(start = 12.dp),
+                        modifier = Modifier.padding(start = 12.dp).alpha(legendAlpha),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         LegendDot(takenColor, takenLabel)
@@ -197,7 +200,7 @@ private fun TakenSkippedPieChart(
                 TakenSkippedPieContent(taken, skipped, takenColor, skippedColor, Modifier.fillMaxWidth().weight(1f))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().alpha(legendAlpha),
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
                 ) {
                     LegendDot(takenColor, takenLabel)
