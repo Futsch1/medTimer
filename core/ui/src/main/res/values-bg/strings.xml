@@ -171,8 +171,8 @@
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активно</string>
-    <string name="period_start">Начало на период</string>
-    <string name="period_end">Край на период</string>
+    <string name="period_start">Активно от</string>
+    <string name="period_end">Активно до</string>
     <string name="activate_all">Активиране на всички напомняния</string>
     <string name="deactivate_all">Деактивиране на всички напомняния</string>
     <string name="block_screen_capture">Блокиране на екранни снимки</string>
@@ -243,7 +243,13 @@
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>
     <string name="display_settings">Настройки на екрана</string>
-    <string name="reminder_status">Статус на напомнянето</string>
+    <string name="reminder_status">Активен период от дати</string>
+    <string name="reminder_enabled">Напомнянето е активирано</string>
+    <string name="reminder_enabled_summary">Деактивирайте, за да спрете временно всички известия за това напомняне</string>
+    <string name="active_date_range_no_limit">Без ограничение за дата</string>
+    <string name="active_date_range_from">От %1$s</string>
+    <string name="active_date_range_until">До %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Инструкции за дозиране</string>
     <string name="sample_instructions">Попълнете с примерни инструкции</string>
     <string name="daily_start_time">Ежедневно начално време</string>
@@ -256,7 +262,7 @@
     <string name="cyclic_reminder_summary">Конфигурира повтарящ се модел на активни и паузирани дни, започвайки от дадена дата. Напомнянето ще изпраща известие само в активните дни. Използвайте това за лекарства като противозачатъчни хапчета.</string>
     <string name="variable_amount_summary">Когато е активно, се показва диалогов прозорец за въвеждане на дозата, когато напомнянето е прието.</string>
     <string name="automatically_taken_summary">Когато е активно, напомнянето не се показва като известие и автоматично се маркира като прието (може да се използва само за проследяване на наличността).</string>
-    <string name="reminder_status_summary">Напомнянията могат да бъдат активни и неактивни. Ако са неактивни, не се изпраща известие. Това може да бъде конфигурирано статично или въз основа на дати. Използвайте това за конфигуриране на постепенно спиране на лекарство.</string>
+    <string name="reminder_status_summary">Активирайте превключвател, за да зададете първата или последната дата на известие. Оставете и двата изключени за неограничено.</string>
     <string name="further_settings">Допълнителни настройки</string>
     <string name="alarm_settings">Настройки на алармата</string>
     <string name="no_alarm_sound_when_silent">Без звук на алармата в безшумен режим</string>

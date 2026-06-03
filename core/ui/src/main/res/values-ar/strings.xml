@@ -196,8 +196,8 @@
     <string name="calendar">التقويم</string>
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
-    <string name="period_start">بداية الفترة</string>
-    <string name="period_end">نهاية الفترة</string>
+    <string name="period_start">نشط من</string>
+    <string name="period_end">نشط حتى</string>
     <string name="activate_all">فعِّل جميع التذكيرات</string>
     <string name="deactivate_all">ألغِ تفعيل جميع التذكيرات</string>
     <string name="block_screen_capture">احظر التقاط الشاشة</string>
@@ -267,7 +267,13 @@
     <string name="sort">فرز</string>
     <string name="high_and_alarm">إنذار عالي + إنذار</string>
     <string name="enable_notification_alarm_dialog">من أجل السماح بإظهار التذكيرات كإنذارات قم بتمكين ذلك لـ MedTimer في القائمة التالية</string>
-    <string name="reminder_status">حالة التذكير</string>
+    <string name="reminder_status">نطاق التاريخ النشط</string>
+    <string name="reminder_enabled">تفعيل التذكير</string>
+    <string name="reminder_enabled_summary">عطّل لإيقاف جميع الإشعارات الخاصة بهذا التذكير مؤقتاً</string>
+    <string name="active_date_range_no_limit">لا حد للتاريخ</string>
+    <string name="active_date_range_from">من %1$s</string>
+    <string name="active_date_range_until">حتى %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">تعليمات الجرعات</string>
     <string name="sample_instructions">املأ بتعليمات نموذجية</string>
     <string name="daily_start_time">وقت البدء اليومي</string>
@@ -280,7 +286,7 @@
     <string name="cyclic_reminder_summary">يُكوِّن نمطًا متكررًا من الأيام النشطة وأيام الإيقاف المؤقت بدءًا من تاريخ معين. سيرسل التذكير إشعارًا فقط في الأيام النشطة. استخدم هذا لأدوية مثل حبوب منع الحمل.</string>
     <string name="variable_amount_summary">عندما يكون نشطًا، يظهر مربع حوار لإدخال الجرعة عند أخذ التذكير.</string>
     <string name="automatically_taken_summary">عندما يكون نشطًا، لا يتم عرض التذكير كإشعار ويتم تحديده تلقائيًا على أنه تم أخذه (يمكن استخدامه لتتبع المخزون فقط).</string>
-    <string name="reminder_status_summary">يمكن أن تكون التذكيرات نشطة وغير نشطة. إذا كانت غير نشطة، فلن يتم إرسال أي إشعار. يمكن تكوين هذا بشكل ثابت أو بناءً على التواريخ. استخدم هذا لتكوين التخفيض التدريجي للدواء.</string>
+    <string name="reminder_status_summary">قم بتفعيل مفتاح لتحديد أول أو آخر تاريخ للإشعار. اترك كليهما معطلاً لعدم وجود حد زمني.</string>
     <string name="further_settings">إعدادات إضافية</string>
     <string name="alarm_settings">إعدادات المنبه</string>
     <string name="no_alarm_sound_when_silent">لا يوجد صوت للمنبه في الوضع الصامت</string>

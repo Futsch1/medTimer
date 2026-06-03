@@ -178,8 +178,8 @@
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активний</string>
-    <string name="period_start">Початок менструації</string>
-    <string name="period_end">Кінець менструації</string>
+    <string name="period_start">Активно з</string>
+    <string name="period_end">Активно до</string>
     <string name="activate_all">Активувати всі нагадування</string>
     <string name="deactivate_all">Вимкнути всі нагадування</string>
     <string name="block_screen_capture">Заборонити запис екрану</string>
@@ -255,7 +255,13 @@
     <string name="sort">Сортування</string>
     <string name="high_and_alarm">Високий + Тривога</string>
     <string name="enable_notification_alarm_dialog">Щоб увімкнути показ нагадувань як будильника, увімкніть цю функцію для MedTimer у наступному меню</string>
-    <string name="reminder_status">Статус нагадування</string>
+    <string name="reminder_status">Активний діапазон дат</string>
+    <string name="reminder_enabled">Нагадування увімкнено</string>
+    <string name="reminder_enabled_summary">Вимкніть, щоб призупинити всі сповіщення для цього нагадування</string>
+    <string name="active_date_range_no_limit">Без обмеження дат</string>
+    <string name="active_date_range_from">З %1$s</string>
+    <string name="active_date_range_until">До %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Інструкції з дозування</string>
     <string name="sample_instructions">Заповнити зразками інструкцій</string>
     <string name="daily_start_time">Щоденний час початку</string>
@@ -268,7 +274,7 @@
     <string name="cyclic_reminder_summary">Налаштовує повторюваний патерн активних і призупинених днів, починаючи з заданої дати. Нагадування надсилатиме сповіщення лише в активні дні. Використовуйте це для ліків, таких як протизаплідні таблетки.</string>
     <string name="variable_amount_summary">Коли активно, при прийомі нагадування відображається діалогове вікно для введення дози.</string>
     <string name="automatically_taken_summary">Коли активно, нагадування не відображається як сповіщення та автоматично позначається як прийняте (можна використовувати лише для відстеження залишків).</string>
-    <string name="reminder_status_summary">Нагадування можуть бути активними та неактивними. Якщо вони неактивні, сповіщення не надсилається. Це можна налаштувати статично або на основі дат. Використовуйте це для налаштування поступового зменшення дози ліків.</string>
+    <string name="reminder_status_summary">Увімкніть перемикач, щоб задати першу або останню дату сповіщення. Залиште обидва вимкненими для відсутності обмеження дат.</string>
     <string name="further_settings">Додаткові налаштування</string>
     <string name="alarm_settings">Налаштування будильника</string>
     <string name="no_alarm_sound_when_silent">Немає звуку будильника в беззвучному режимі</string>

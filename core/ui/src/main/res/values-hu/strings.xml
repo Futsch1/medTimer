@@ -173,8 +173,8 @@
     <string name="calendar">Naptár</string>
     <string name="date">Dátum</string>
     <string name="active">Aktív</string>
-    <string name="period_start">Időszak kezdete</string>
-    <string name="period_end">Időszak vége</string>
+    <string name="period_start">Aktív ettől</string>
+    <string name="period_end">Aktív eddig</string>
     <string name="activate_all">Az összes emlékeztető aktiválása</string>
     <string name="deactivate_all">Az összes emlékeztető kikapcsolása</string>
     <string name="block_screen_capture">Képernyőkép készítésének tiltása</string>
@@ -243,7 +243,13 @@
     <string name="automatically_taken">Automatikusan jelölje bevettként</string>
     <string name="high_and_alarm">Magas + Riasztás</string>
     <string name="enable_notification_alarm_dialog">Ahhoz, hogy az emlékeztetők riasztásként jelenjenek meg, engedélyezd ezt a MedTimer számára a következő menüben</string>
-    <string name="reminder_status">Emlékeztető állapota</string>
+    <string name="reminder_status">Aktív dátumtartomány</string>
+    <string name="reminder_enabled">Emlékeztető engedélyezve</string>
+    <string name="reminder_enabled_summary">Kapcsold ki az emlékeztető összes értesítésének szüneteltetéséhez</string>
+    <string name="active_date_range_no_limit">Nincs dátumkorlát</string>
+    <string name="active_date_range_from">%1$s-tól</string>
+    <string name="active_date_range_until">%1$s-ig</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Bevételi útmutató</string>
     <string name="sample_instructions">Minta utasítások</string>
     <string name="daily_start_time">Napi kezdés</string>
@@ -256,7 +262,7 @@
     <string name="cyclic_reminder_summary">Egy olyan ismétlődést állít be, ahol egy választott dátumtól kezdődően, aktív és szünetelő napok váltják egymást. Az emlékeztető csak az aktív napokon küld értesítést. Használható pl. fogamzásgátló tabletta ütemezéséhez.</string>
     <string name="variable_amount_summary">Ha be van kapcsolva, a bevételekor felugrik egy ablak, ahol megadhatod az adagot.</string>
     <string name="automatically_taken_summary">Ha be van kapcsolva, az emlékeztető nem jelenik meg értesítésként, és automatikusan bevettként lesz jelölve (használható csak a készlet nyomon követésére).</string>
-    <string name="reminder_status_summary">Az emlékeztetők lehetnek aktívak vagy inaktívak. Ha inaktívak, nem küldenek értesítést. Ezt beállíthatod fixen vagy dátumok alapján. Használható például gyógyszer adagcsökkentéshez.</string>
+    <string name="reminder_status_summary">Kapcsolj be egy kapcsolót az első vagy utolsó értesítési dátum beállításához. Mindkettőt hagyd kikapcsolva a korlátlan időszakhoz.</string>
     <string name="further_settings">További beállítások</string>
     <string name="alarm_settings">Ébresztő beállításai</string>
     <string name="no_alarm_sound_when_silent">Nincs ébresztőhang némításkor</string>
