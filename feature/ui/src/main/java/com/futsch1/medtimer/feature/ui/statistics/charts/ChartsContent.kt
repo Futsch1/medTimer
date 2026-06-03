@@ -20,9 +20,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,8 +37,11 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass.Companion.BREAKPOINTS_V1
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
+import androidx.window.core.layout.computeWindowSizeClass
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -249,6 +254,44 @@ private fun ChartsContentPreview() {
                     days = 7,
                 ),
             )
+        }
+    }
+}
+
+@Preview(name = "Charts — tablet landscape", widthDp = 900, heightDp = 480)
+@Composable
+private fun ChartsContentLandscapePreview() {
+    // A wide @Preview canvas alone drives neither currentWindowAdaptiveInfo() nor orientation, so the
+    // tablet-landscape branch is forced explicitly: a medium-width window size class + a landscape config.
+    val landscapeConfiguration = Configuration(LocalConfiguration.current).apply {
+        orientation = Configuration.ORIENTATION_LANDSCAPE
+    }
+    MedTimerTheme {
+        Surface {
+            CompositionLocalProvider(LocalConfiguration provides landscapeConfiguration) {
+                ChartsContent(
+                    state = ChartsState(
+                        perDay = MedicinePerDayData(
+                            epochDays = listOf(20200L, 20201L, 20202L),
+                            series = listOf(
+                                MedicineDaySeries("Vitamin X 500 mg", listOf(1, 2, 1)),
+                                MedicineDaySeries("Medicine A", listOf(0, 1, 2)),
+                            ),
+                        ),
+                        dayLabels = persistentListOf("May 26", "May 27", "May 28"),
+                        seriesColors = persistentListOf(0xFF003F5C.toInt(), 0xFFFF7C43.toInt()),
+                        takenPeriod = 7,
+                        skippedPeriod = 3,
+                        takenTotal = 42,
+                        skippedTotal = 8,
+                        days = 7,
+                    ),
+                    windowAdaptiveInfo = WindowAdaptiveInfo(
+                        windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 900f, heightDp = 480f),
+                        windowPosture = Posture(),
+                    ),
+                )
+            }
         }
     }
 }
