@@ -11,7 +11,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.core.common.helpers.isReminderActive
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.Interval
@@ -22,6 +21,7 @@ import com.futsch1.medtimer.feature.ui.medicine.LinkedReminderHandling
 import com.futsch1.medtimer.feature.ui.showEnableFullScreenIntentDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.LocalDate.EPOCH
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -115,8 +115,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
 
         menuProvider.reminder = modelData
 
-        findPreference<Preference>("reminder_status")?.summary =
-            requireContext().getString(if (isReminderActive(modelData)) com.futsch1.medtimer.core.ui.R.string.active else com.futsch1.medtimer.core.ui.R.string.inactive)
+        findPreference<Preference>("reminder_status")?.summary = getDateRangeSummary(modelData)
         findPreference<Preference>("interval")?.summary =
             Interval(modelData.time).toTranslatedString(requireContext())
         findPreference<Preference>("remind_on_weekdays")?.summary = getWeekdaysSummary(modelData)
@@ -215,6 +214,27 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
                 val newTimeString = timeFormatter.minutesToTimeString(minutes)
                 preference.preferenceDataStore?.putString(preference.key, newTimeString)
             }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+        }
+    }
+
+    private fun getDateRangeSummary(modelData: Reminder): String {
+        val hasStart = modelData.periodStart != EPOCH
+        val hasEnd = modelData.periodEnd != EPOCH
+        return when {
+            hasStart && hasEnd -> requireContext().getString(
+                com.futsch1.medtimer.core.ui.R.string.active_date_range_range,
+                timeFormatter.localDateToString(modelData.periodStart),
+                timeFormatter.localDateToString(modelData.periodEnd)
+            )
+            hasStart -> requireContext().getString(
+                com.futsch1.medtimer.core.ui.R.string.active_date_range_from,
+                timeFormatter.localDateToString(modelData.periodStart)
+            )
+            hasEnd -> requireContext().getString(
+                com.futsch1.medtimer.core.ui.R.string.active_date_range_until,
+                timeFormatter.localDateToString(modelData.periodEnd)
+            )
+            else -> requireContext().getString(com.futsch1.medtimer.core.ui.R.string.active_date_range_no_limit)
         }
     }
 

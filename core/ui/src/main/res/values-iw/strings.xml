@@ -175,8 +175,8 @@
     <string name="calendar">לוח שנה</string>
     <string name="date">תאריך</string>
     <string name="active">פעיל</string>
-    <string name="period_start">תחילת תקופה</string>
-    <string name="period_end">סוף תקופה</string>
+    <string name="period_start">פעיל מ-</string>
+    <string name="period_end">פעיל עד</string>
     <string name="activate_all">הפעילו את כל התזכורות</string>
     <string name="deactivate_all">כבו את כל התזכורות</string>
     <string name="block_screen_capture">חסמו צילום מסך</string>
@@ -251,7 +251,13 @@
     <string name="automatically_taken">סמן בתור נלקח באופן אוטומטי</string>
     <string name="high_and_alarm">חשיבות גבוהה + שעון מעורר</string>
     <string name="enable_notification_alarm_dialog">בכדי לאפשר להראות תזכורות בתור שעונים מעוררים הפעילו את זה למדטיימר בתפריט הבא</string>
-    <string name="reminder_status">מצב תזכורת</string>
+    <string name="reminder_status">טווח תאריכים פעיל</string>
+    <string name="reminder_enabled">תזכורת פעילה</string>
+    <string name="reminder_enabled_summary">כבה כדי להשהות את כל ההתראות של תזכורת זו</string>
+    <string name="active_date_range_no_limit">ללא הגבלת תאריך</string>
+    <string name="active_date_range_from">מ-%1$s</string>
+    <string name="active_date_range_until">עד %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">הנחיות נטילה</string>
     <string name="sample_instructions">מלא עם החניות לדוגמה</string>
     <string name="daily_start_time">זמן התחלה יומי</string>
@@ -264,7 +270,7 @@
     <string name="cyclic_reminder_summary">מגדיר דפוס חזרה של ימים פעילים ומושהים החל מתאריך מסוים. התזכורת תפעיל התראה רק בימים הפעילים. השתמשו בכך לתרופות כמו גלולות למניעת הריון.</string>
     <string name="variable_amount_summary">כאשר מופעל, יוצג חלון להזנת המינון בעת סימון התזכורת כנלקחה.</string>
     <string name="automatically_taken_summary">כאשר מופעל, התזכורת לא מוצגת כהתראה ומסומנת אוטומטית כנלקחה (ניתן להשתמש בכך למעקב אחר המלאי בלבד).</string>
-    <string name="reminder_status_summary">תזכורות יכולות להיות פעילות או לא פעילות. אם הן לא פעילות, לא תופיע התראה. ניתן להגדיר זאת באופן קבוע או בהתאם לתאריכים. השתמשו בכך כדי להגדיר הפחתת מינון של תרופה.</string>
+    <string name="reminder_status_summary">הפעל מתג כדי להגדיר את התאריך הראשון או האחרון להתראה. השאר את שניהם כבויים לאין הגבלת תאריך.</string>
     <string name="further_settings">הגדרות נוספות</string>
     <string name="alarm_settings">הגדרות שעון מעורר</string>
     <string name="no_alarm_sound_when_silent">ללא צליל שעון מעורר על מצב שקט</string>

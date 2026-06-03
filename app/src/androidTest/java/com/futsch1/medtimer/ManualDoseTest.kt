@@ -85,8 +85,7 @@ class ManualDoseTest : BaseTestHelper() {
 
         // Disable reminder
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(R.string.reminder_status)
-        clickOn(R.string.active)
+        clickOn(R.string.reminder_enabled)
 
         // Create manual dose of the disabled reminder
         AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)

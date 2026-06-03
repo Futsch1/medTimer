@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:icon="@drawable/calendar_check"
+        android:title="@string/reminder_enabled"
+        android:summary="@string/reminder_enabled_summary"
+        app:key="reminder_active"
+        app:singleLineTitle="false" />
     <Preference
         android:icon="@drawable/calendar_check"
         android:title="@string/reminder_status"

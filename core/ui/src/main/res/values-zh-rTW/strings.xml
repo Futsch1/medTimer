@@ -167,8 +167,8 @@
     <string name="calendar">行事曆</string>
     <string name="date">日期</string>
     <string name="active">啟動</string>
-    <string name="period_start">期間開始</string>
-    <string name="period_end">期間結束</string>
+    <string name="period_start">從此日期生效</string>
+    <string name="period_end">到此日期結束</string>
     <string name="activate_all">啟用所有提醒</string>
     <string name="deactivate_all">停用所有提醒</string>
     <string name="block_screen_capture">封鎖螢幕擷取</string>
@@ -237,7 +237,13 @@
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>
     <string name="enable_notification_alarm_dialog">若要將提醒以鬧鐘形式顯示，請在以下選單中為 MedTimer 啟用此設定</string>
-    <string name="reminder_status">提醒狀態</string>
+    <string name="reminder_status">有效日期範圍</string>
+    <string name="reminder_enabled">提醒已啟用</string>
+    <string name="reminder_enabled_summary">關閉以暫停此提醒的所有通知</string>
+    <string name="active_date_range_no_limit">無日期限制</string>
+    <string name="active_date_range_from">從 %1$s 起</string>
+    <string name="active_date_range_until">直到 %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">劑量說明</string>
     <string name="sample_instructions">填寫範例說明</string>
     <string name="daily_start_time">每日開始時間</string>
@@ -250,7 +256,7 @@
     <string name="cyclic_reminder_summary">從給定日期開始，設定一個由啟用日和暫停日組成的重複模式。提醒只會在啟用日發出通知。此功能可用於避孕藥等藥物。</string>
     <string name="variable_amount_summary">啟用後，在服用提醒時會顯示一個對話框以輸入劑量。</string>
     <string name="automatically_taken_summary">啟用後，提醒不會顯示為通知，並自動標記為已服用（可僅用於追蹤庫存）。</string>
-    <string name="reminder_status_summary">提醒可以是啟用和停用的。如果停用，則不會發出通知。這可以靜態設定或根據日期設定。使用此功能來設定藥物的逐漸減量。</string>
+    <string name="reminder_status_summary">啟用開關以設定第一個或最後一個通知日期。兩者均關閉則無日期限制。</string>
     <string name="further_settings">更多設定</string>
     <string name="alarm_settings">鬧鐘設定</string>
     <string name="no_alarm_sound_when_silent">靜音模式下沒有鬧鐘聲音</string>
