@@ -173,6 +173,7 @@ class BackupManager @AssistedInject constructor(
             )
         }
         if (checkedItems[0] || checkedItems[1]) {
+            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
             createAndSave(gson.toJson(jsonObject))
         }
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
@@ -251,6 +252,9 @@ class BackupManager @AssistedInject constructor(
                     JSONReminderEventBackup(backupRepository)
                 )
             }
+            if (rootElement.has(SETTINGS_KEY)) {
+                JSONSettingsBackup(preferencesDataSource).applyBackup(rootElement[SETTINGS_KEY].toString())
+            }
         } catch (_: JsonSyntaxException) {
             restoreSuccessful = false
         }
@@ -305,6 +309,7 @@ class BackupManager @AssistedInject constructor(
                 backupRepository.getReminderEventBackup()
             )
         )
+        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
 
         val json = gson.toJson(jsonObject)
         val filename = ExportBackupPath.backupFilename
@@ -315,7 +320,10 @@ class BackupManager @AssistedInject constructor(
                 persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
                 Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.backup_failed, Toast.LENGTH_LONG).show()
+                MaterialAlertDialogBuilder(context)
+                    .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)
+                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
+                    .show()
             }
         }
     }
@@ -341,5 +349,6 @@ class BackupManager @AssistedInject constructor(
     companion object {
         private const val MEDICINE_KEY = "medicines"
         private const val EVENT_KEY = "events"
+        private const val SETTINGS_KEY = "settings"
     }
 }
