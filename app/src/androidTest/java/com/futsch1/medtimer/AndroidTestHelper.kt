@@ -144,14 +144,21 @@ object AndroidTestHelper {
 
     @JvmStatic
     fun navigateTo(mainMenu: MainMenu) {
-        val menuIds =
-            intArrayOf(
-                com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
-                com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
-                com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
-            )
-        clickOn(menuIds[mainMenu.ordinal])
-        clickOn(menuIds[mainMenu.ordinal])
+        // MainMenu.ANALYSIS maps to the "statistics" destination/tag — the app uses both terms
+        // (statisticsFragment + R.string.analysis); this preserves that existing naming.
+        val tag = when (mainMenu) {
+            MainMenu.OVERVIEW -> NavTestTags.OVERVIEW
+            MainMenu.MEDICINES -> NavTestTags.MEDICINES
+            MainMenu.ANALYSIS -> NavTestTags.STATISTICS
+        }
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        // Click twice: first navigates to the tab, second reselects it (some tests rely on the
+        // legacy reselect behavior, e.g. onFragmentReselected resetting Overview to today).
+        repeat(2) {
+            val item = device.wait(Until.findObject(By.res(tag)), 5_000)
+                ?: throw AssertionError("Navigation item with tag '$tag' not found")
+            item.click()
+        }
     }
 
     val nextNotificationTime: LocalDateTime

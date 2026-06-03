@@ -12,8 +12,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -23,6 +27,13 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R as FeatureUiR
+
+/** Stable testTags for the top-level nav items; exposed to instrumented tests as resource-ids. */
+object NavTestTags {
+    const val OVERVIEW = "nav_overview"
+    const val MEDICINES = "nav_medicines"
+    const val STATISTICS = "nav_statistics"
+}
 
 /**
  * Maps the window to a navigation layout: a side rail once the window is at least Medium width
@@ -42,13 +53,14 @@ private data class TopLevelNavItem(
     val iconRes: Int,
     val labelRes: Int,
     val descriptionRes: Int,
+    val testTag: String,
 )
 
 // Tab order for the bar and rail. Destination ids come from the nav graph in :feature:ui.
 private val NAV_ITEMS = listOf(
-    TopLevelNavItem(FeatureUiR.id.overviewFragment, CoreUiR.drawable.calendar_event, CoreUiR.string.tab_overview, CoreUiR.string.overview_tab_description),
-    TopLevelNavItem(FeatureUiR.id.medicinesFragment, CoreUiR.drawable.capsule, CoreUiR.string.tab_medicine, CoreUiR.string.medicines_tab_description),
-    TopLevelNavItem(FeatureUiR.id.statisticsFragment, CoreUiR.drawable.bar_chart, CoreUiR.string.analysis, CoreUiR.string.statistics_tab_description),
+    TopLevelNavItem(FeatureUiR.id.overviewFragment, CoreUiR.drawable.calendar_event, CoreUiR.string.tab_overview, CoreUiR.string.overview_tab_description, NavTestTags.OVERVIEW),
+    TopLevelNavItem(FeatureUiR.id.medicinesFragment, CoreUiR.drawable.capsule, CoreUiR.string.tab_medicine, CoreUiR.string.medicines_tab_description, NavTestTags.MEDICINES),
+    TopLevelNavItem(FeatureUiR.id.statisticsFragment, CoreUiR.drawable.bar_chart, CoreUiR.string.analysis, CoreUiR.string.statistics_tab_description, NavTestTags.STATISTICS),
 )
 
 private val TOP_LEVEL_IDS = NAV_ITEMS.map { it.destinationId }.toSet()
@@ -78,10 +90,12 @@ fun AppNavigationScaffold(
                     onClick = { navController?.let { onNavItemClick(it, navItem.destinationId) } },
                     icon = { Icon(painterResource(navItem.iconRes), contentDescription = stringResource(navItem.descriptionRes)) },
                     label = { Text(stringResource(navItem.labelRes)) },
+                    modifier = Modifier.testTag(navItem.testTag),
                 )
             }
         },
         layoutType = navSuiteType(currentWindowAdaptiveInfo()),
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
         AndroidViewBinding(ContentMainBinding::inflate) {
             // The update block runs on every recomposition; set up exactly once.
