@@ -56,6 +56,9 @@ compose-bom = "2026.05.00"
 # material3 is hand-pinned to the 1.5.0-alpha line (overriding the BOM) because MaterialExpressiveTheme
 # is still internal on the stable 1.4.x line; revert to BOM-managed once Expressive ships stable.
 material3-expressive = "1.5.0-alpha20"
+# Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; pulls androidx.window 1.4.x
+# (the WindowSizeClass breakpoint API) transitively — no separate window pin.
+material3-adaptive = "1.2.0"
 vico = "3.1.0"
 kotlinx-collections-immutable = "0.4.0"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
@@ -126,6 +129,7 @@ androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3-expressive" }
+androidx-compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-ktx" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
