@@ -21,9 +21,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,8 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass.Companion.BREAKPOINTS_V1
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
+import androidx.window.core.layout.computeWindowSizeClass
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.kizitonwose.calendar.compose.HorizontalCalendar
@@ -188,6 +193,37 @@ private fun CalendarContentPreview() {
                     ),
                 ),
             )
+        }
+    }
+}
+
+@Preview(name = "Calendar — tablet landscape", widthDp = 900, heightDp = 480)
+@Composable
+private fun CalendarContentLandscapePreview() {
+    // A wide @Preview canvas alone drives neither currentWindowAdaptiveInfo() nor orientation, so the
+    // tablet-landscape branch is forced explicitly: a medium-width window size class + a landscape config.
+    val landscapeConfiguration = Configuration(LocalConfiguration.current).apply {
+        orientation = Configuration.ORIENTATION_LANDSCAPE
+    }
+    val today = LocalDate.now()
+    MedTimerTheme {
+        Surface {
+            CompositionLocalProvider(LocalConfiguration provides landscapeConfiguration) {
+                CalendarContent(
+                    dayEvents = mapOf(
+                        today to listOf(
+                            CalendarDayEvent(today.atTime(8, 0), "1 tablet", "Vitamin X 500 mg", CalendarDayEvent.Status.TAKEN),
+                        ),
+                        today.minusDays(2) to listOf(
+                            CalendarDayEvent(today.minusDays(2).atTime(20, 0), "2 ml", "Medicine A", CalendarDayEvent.Status.SKIPPED),
+                        ),
+                    ),
+                    windowAdaptiveInfo = WindowAdaptiveInfo(
+                        windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 900f, heightDp = 480f),
+                        windowPosture = Posture(),
+                    ),
+                )
+            }
         }
     }
 }
