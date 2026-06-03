@@ -100,6 +100,22 @@ class ChartsContentLayoutTest {
         )
     }
 
+    @Test
+    fun `the Taken Skipped legend is shown even when a pie is empty`() {
+        // All-zero series renders an empty circle, but the legend must still be present.
+        setCharts(
+            width = 400.dp,
+            height = 800.dp,
+            windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 400f, heightDp = 800f),
+            state = chartsState(takenPeriod = 0, skippedPeriod = 0, takenTotal = 0, skippedTotal = 0),
+        )
+
+        assertTrue(
+            composeTestRule.onAllNodesWithText("Taken").fetchSemanticsNodes().isNotEmpty(),
+            "Expected the Taken/Skipped legend to be shown even for an empty (all-zero) pie",
+        )
+    }
+
     private fun setCharts(width: Dp, height: Dp, windowSizeClass: WindowSizeClass, state: ChartsState = chartsState()) {
         composeTestRule.setContent {
             MedTimerTheme {

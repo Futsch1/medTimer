@@ -4,10 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -177,22 +177,23 @@ private fun TakenSkippedPieChart(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            if (taken + skipped <= 0L) {
-                // Mirror the original widget: an all-zero series renders only an empty circle — no chart, no legend.
-                EmptyPieCircle(modifier = Modifier.fillMaxSize())
-            } else {
-                // The circular chart, sized by the caller. A single non-zero category is one full-circle
-                // slice, which Vico renders as a blank 360-degree arc — so draw a solid "100%" circle for
-                // that case and use the real Vico pie only when both categories are present.
-                val pieSlot: @Composable (Modifier) -> Unit = { pieModifier ->
-                    if (taken == 0L || skipped == 0L) {
+            // The circular chart, sized by the caller, for all three data states: an all-zero series is an
+            // empty circle; a single non-zero category is one full-circle slice (which Vico renders as a
+            // blank 360-degree arc, so draw a solid "100%" circle instead); otherwise the real Vico pie.
+            val pieSlot: @Composable (Modifier) -> Unit = { pieModifier ->
+                when {
+                    taken + skipped <= 0L -> EmptyPieCircle(modifier = pieModifier)
+
+                    taken == 0L || skipped == 0L -> {
                         val isTaken = taken > 0L
                         FullValuePieCircle(
                             color = if (isTaken) takenColor else skippedColor,
                             labelColor = if (isTaken) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = pieModifier,
                         )
-                    } else {
+                    }
+
+                    else -> {
                         // Render from a synchronously-built model (not an async PieChartModelProducer): the
                         // producer path leaves the pie blank on first composition until a later data change
                         // re-triggers it.
@@ -214,31 +215,33 @@ private fun TakenSkippedPieChart(
                         PieChartHost(chart, model, modifier = pieModifier)
                     }
                 }
+            }
 
-                if (legendOnSide) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        pieSlot(Modifier.fillMaxHeight().weight(1f))
-                        Column(
-                            modifier = Modifier.padding(start = 12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            LegendDot(takenColor, takenLabel)
-                            LegendDot(skippedColor, skippedLabel)
-                        }
-                    }
-                } else {
-                    pieSlot(Modifier.fillMaxWidth().weight(1f))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+            // The legend is always shown (even for an empty pie) — beside the pie in the landscape layout,
+            // below it otherwise.
+            if (legendOnSide) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    pieSlot(Modifier.fillMaxHeight().weight(1f))
+                    Column(
+                        modifier = Modifier.padding(start = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         LegendDot(takenColor, takenLabel)
                         LegendDot(skippedColor, skippedLabel)
                     }
+                }
+            } else {
+                pieSlot(Modifier.fillMaxWidth().weight(1f))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                ) {
+                    LegendDot(takenColor, takenLabel)
+                    LegendDot(skippedColor, skippedLabel)
                 }
             }
         }
@@ -248,11 +251,11 @@ private fun TakenSkippedPieChart(
 @Composable
 private fun EmptyPieCircle(modifier: Modifier = Modifier) {
     val circleColor = MaterialTheme.colorScheme.surfaceVariant
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    // Size to the largest square that fits BOTH axes so the circle never overflows a short/wide panel.
+    BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1f)
+                .size(minOf(maxWidth, maxHeight))
                 .clip(CircleShape)
                 .background(circleColor),
         )
@@ -262,11 +265,11 @@ private fun EmptyPieCircle(modifier: Modifier = Modifier) {
 @Composable
 private fun FullValuePieCircle(color: Color, labelColor: Color, modifier: Modifier = Modifier) {
     // A 100% single-category "pie": a solid filled circle (the Vico pie can't draw a full-circle slice).
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    // Size to the largest square that fits BOTH axes so the circle never overflows a short/wide panel.
+    BoxWithConstraints(modifier = modifier, contentAlignment = Alignment.Center) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1f)
+                .size(minOf(maxWidth, maxHeight))
                 .clip(CircleShape)
                 .background(color),
             contentAlignment = Alignment.Center,
