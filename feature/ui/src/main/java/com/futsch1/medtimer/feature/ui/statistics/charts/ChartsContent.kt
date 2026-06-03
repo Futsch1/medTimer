@@ -133,14 +133,16 @@ private fun TwoPies(state: ChartsState, stacked: Boolean, modifier: Modifier = M
     val periodTitle = pluralStringResource(R.plurals.last_n_days, state.days, state.days)
     val totalTitle = stringResource(R.string.total)
     if (stacked) {
+        // Landscape: the two pie cards stack vertically and are short/wide, so the legend sits beside
+        // the pie (reclaiming the vertical space a bottom legend would cost).
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, Modifier.weight(1f))
-            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, Modifier.weight(1f))
+            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, legendOnSide = true, modifier = Modifier.weight(1f))
+            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, legendOnSide = true, modifier = Modifier.weight(1f))
         }
     } else {
         Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, Modifier.weight(1f))
-            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, Modifier.weight(1f))
+            TakenSkippedPieChart(periodTitle, state.takenPeriod, state.skippedPeriod, legendOnSide = false, modifier = Modifier.weight(1f))
+            TakenSkippedPieChart(totalTitle, state.takenTotal, state.skippedTotal, legendOnSide = false, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -150,6 +152,7 @@ private fun TakenSkippedPieChart(
     title: String,
     taken: Long,
     skipped: Long,
+    legendOnSide: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val takenColor = MaterialTheme.colorScheme.primary
@@ -194,14 +197,30 @@ private fun TakenSkippedPieChart(
                     ),
                     valueFormatter = percentFormatter,
                 )
-                PieChartHost(chart, model, modifier = Modifier.fillMaxWidth().weight(1f))
+                if (legendOnSide) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        PieChartHost(chart, model, modifier = Modifier.fillMaxHeight().weight(1f))
+                        Column(
+                            modifier = Modifier.padding(start = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            LegendDot(takenColor, takenLabel)
+                            LegendDot(skippedColor, skippedLabel)
+                        }
+                    }
+                } else {
+                    PieChartHost(chart, model, modifier = Modifier.fillMaxWidth().weight(1f))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
-                ) {
-                    LegendDot(takenColor, takenLabel)
-                    LegendDot(skippedColor, skippedLabel)
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                    ) {
+                        LegendDot(takenColor, takenLabel)
+                        LegendDot(skippedColor, skippedLabel)
+                    }
                 }
             }
         }
