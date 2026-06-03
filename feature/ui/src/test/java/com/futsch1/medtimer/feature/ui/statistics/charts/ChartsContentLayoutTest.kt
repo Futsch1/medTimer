@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -82,7 +83,24 @@ class ChartsContentLayoutTest {
         )
     }
 
-    private fun setCharts(width: Dp, height: Dp, windowSizeClass: WindowSizeClass) {
+    @Test
+    fun `a single-category pie still renders (a full-circle slice would otherwise be blank)`() {
+        // Only taken, no skipped: each pie is one full-circle slice. Vico draws a 360-degree arc as
+        // nothing, so the fix renders a solid "100%" circle instead. Assert that label is present.
+        setCharts(
+            width = 400.dp,
+            height = 800.dp,
+            windowSizeClass = BREAKPOINTS_V1.computeWindowSizeClass(widthDp = 400f, heightDp = 800f),
+            state = chartsState(takenPeriod = 5, skippedPeriod = 0, takenTotal = 12, skippedTotal = 0),
+        )
+
+        assertTrue(
+            composeTestRule.onAllNodesWithText("100%").fetchSemanticsNodes().isNotEmpty(),
+            "Expected a single-category pie to render a 100% circle, but no \"100%\" label was found",
+        )
+    }
+
+    private fun setCharts(width: Dp, height: Dp, windowSizeClass: WindowSizeClass, state: ChartsState = chartsState()) {
         composeTestRule.setContent {
             MedTimerTheme {
                 // Injecting WindowAdaptiveInfo removes any dependency on the host's window metrics for the
@@ -91,7 +109,7 @@ class ChartsContentLayoutTest {
                 CompositionLocalProvider(LocalInspectionMode provides true) {
                     Box(modifier = Modifier.size(width, height)) {
                         ChartsContent(
-                            state = chartsState(),
+                            state = state,
                             windowAdaptiveInfo = WindowAdaptiveInfo(
                                 windowSizeClass = windowSizeClass,
                                 windowPosture = Posture(),
@@ -103,7 +121,12 @@ class ChartsContentLayoutTest {
         }
     }
 
-    private fun chartsState() = ChartsState(
+    private fun chartsState(
+        takenPeriod: Long = 7,
+        skippedPeriod: Long = 3,
+        takenTotal: Long = 42,
+        skippedTotal: Long = 8,
+    ) = ChartsState(
         perDay = MedicinePerDayData(
             epochDays = listOf(20200L, 20201L, 20202L),
             series = listOf(
@@ -113,10 +136,10 @@ class ChartsContentLayoutTest {
         ),
         dayLabels = persistentListOf("May 26", "May 27", "May 28"),
         seriesColors = persistentListOf(0xFF003F5C.toInt(), 0xFFFF7C43.toInt()),
-        takenPeriod = 7,
-        skippedPeriod = 3,
-        takenTotal = 42,
-        skippedTotal = 8,
+        takenPeriod = takenPeriod,
+        skippedPeriod = skippedPeriod,
+        takenTotal = takenTotal,
+        skippedTotal = skippedTotal,
         days = 7,
     )
 }

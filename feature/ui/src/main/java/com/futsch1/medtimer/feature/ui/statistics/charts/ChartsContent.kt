@@ -167,6 +167,7 @@ private fun TakenSkippedPieChart(
         Column(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
                 text = title,
@@ -178,31 +179,48 @@ private fun TakenSkippedPieChart(
 
             if (taken + skipped <= 0L) {
                 // Mirror the original widget: an all-zero series renders only an empty circle — no chart, no legend.
-                EmptyPieCircle(modifier = Modifier.fillMaxWidth().weight(1f))
+                EmptyPieCircle(modifier = Modifier.fillMaxSize())
             } else {
-                // Render from a synchronously-built model (not an async PieChartModelProducer): the producer
-                // path leaves the pie blank on first composition until a later data change re-triggers it.
-                val model = remember(taken, skipped) { PieChartModel.build(taken, skipped) }
-                val takenLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimary))
-                val skippedLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer))
-                val percentFormatter = remember {
-                    PieValueFormatter { context, value, _ ->
-                        if (context.model.sum == 0f || value == 0f) "" else "${(value / context.model.sum * 100).roundToInt()}%"
+                // The circular chart, sized by the caller. A single non-zero category is one full-circle
+                // slice, which Vico renders as a blank 360-degree arc — so draw a solid "100%" circle for
+                // that case and use the real Vico pie only when both categories are present.
+                val pieSlot: @Composable (Modifier) -> Unit = { pieModifier ->
+                    if (taken == 0L || skipped == 0L) {
+                        val isTaken = taken > 0L
+                        FullValuePieCircle(
+                            color = if (isTaken) takenColor else skippedColor,
+                            labelColor = if (isTaken) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = pieModifier,
+                        )
+                    } else {
+                        // Render from a synchronously-built model (not an async PieChartModelProducer): the
+                        // producer path leaves the pie blank on first composition until a later data change
+                        // re-triggers it.
+                        val model = remember(taken, skipped) { PieChartModel.build(taken, skipped) }
+                        val takenLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimary))
+                        val skippedLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer))
+                        val percentFormatter = remember {
+                            PieValueFormatter { context, value, _ ->
+                                if (context.model.sum == 0f || value == 0f) "" else "${(value / context.model.sum * 100).roundToInt()}%"
+                            }
+                        }
+                        val chart = rememberPieChart(
+                            sliceProvider = PieChart.SliceProvider.series(
+                                PieChart.Slice(fill = Fill(takenColor), label = PieChart.SliceLabel.Inside(takenLabelComponent)),
+                                PieChart.Slice(fill = Fill(skippedColor), label = PieChart.SliceLabel.Inside(skippedLabelComponent)),
+                            ),
+                            valueFormatter = percentFormatter,
+                        )
+                        PieChartHost(chart, model, modifier = pieModifier)
                     }
                 }
-                val chart = rememberPieChart(
-                    sliceProvider = PieChart.SliceProvider.series(
-                        PieChart.Slice(fill = Fill(takenColor), label = PieChart.SliceLabel.Inside(takenLabelComponent)),
-                        PieChart.Slice(fill = Fill(skippedColor), label = PieChart.SliceLabel.Inside(skippedLabelComponent)),
-                    ),
-                    valueFormatter = percentFormatter,
-                )
+
                 if (legendOnSide) {
                     Row(
                         modifier = Modifier.fillMaxWidth().weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        PieChartHost(chart, model, modifier = Modifier.fillMaxHeight().weight(1f))
+                        pieSlot(Modifier.fillMaxHeight().weight(1f))
                         Column(
                             modifier = Modifier.padding(start = 12.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -212,7 +230,7 @@ private fun TakenSkippedPieChart(
                         }
                     }
                 } else {
-                    PieChartHost(chart, model, modifier = Modifier.fillMaxWidth().weight(1f))
+                    pieSlot(Modifier.fillMaxWidth().weight(1f))
 
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
@@ -238,6 +256,23 @@ private fun EmptyPieCircle(modifier: Modifier = Modifier) {
                 .clip(CircleShape)
                 .background(circleColor),
         )
+    }
+}
+
+@Composable
+private fun FullValuePieCircle(color: Color, labelColor: Color, modifier: Modifier = Modifier) {
+    // A 100% single-category "pie": a solid filled circle (the Vico pie can't draw a full-circle slice).
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .aspectRatio(1f)
+                .clip(CircleShape)
+                .background(color),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(text = "100%", style = MaterialTheme.typography.labelMedium, color = labelColor)
+        }
     }
 }
 
