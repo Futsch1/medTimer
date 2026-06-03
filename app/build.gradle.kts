@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -63,6 +64,8 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
+        viewBinding = true
     }
     @Suppress("UnstableApiUsage")
     androidResources {
@@ -124,6 +127,14 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:reminders"))
     implementation(project(":feature:ui"))
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.ui.viewbinding)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)
