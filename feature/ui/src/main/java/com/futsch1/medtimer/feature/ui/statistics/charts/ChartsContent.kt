@@ -177,54 +177,14 @@ private fun TakenSkippedPieChart(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            // The circular chart, sized by the caller, for all three data states: an all-zero series is an
-            // empty circle; a single non-zero category is one full-circle slice (which Vico renders as a
-            // blank 360-degree arc, so draw a solid "100%" circle instead); otherwise the real Vico pie.
-            val pieSlot: @Composable (Modifier) -> Unit = { pieModifier ->
-                when {
-                    taken + skipped <= 0L -> EmptyPieCircle(modifier = pieModifier)
-
-                    taken == 0L || skipped == 0L -> {
-                        val isTaken = taken > 0L
-                        FullValuePieCircle(
-                            color = if (isTaken) takenColor else skippedColor,
-                            labelColor = if (isTaken) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = pieModifier,
-                        )
-                    }
-
-                    else -> {
-                        // Render from a synchronously-built model (not an async PieChartModelProducer): the
-                        // producer path leaves the pie blank on first composition until a later data change
-                        // re-triggers it.
-                        val model = remember(taken, skipped) { PieChartModel.build(taken, skipped) }
-                        val takenLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimary))
-                        val skippedLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer))
-                        val percentFormatter = remember {
-                            PieValueFormatter { context, value, _ ->
-                                if (context.model.sum == 0f || value == 0f) "" else "${(value / context.model.sum * 100).roundToInt()}%"
-                            }
-                        }
-                        val chart = rememberPieChart(
-                            sliceProvider = PieChart.SliceProvider.series(
-                                PieChart.Slice(fill = Fill(takenColor), label = PieChart.SliceLabel.Inside(takenLabelComponent)),
-                                PieChart.Slice(fill = Fill(skippedColor), label = PieChart.SliceLabel.Inside(skippedLabelComponent)),
-                            ),
-                            valueFormatter = percentFormatter,
-                        )
-                        PieChartHost(chart, model, modifier = pieModifier)
-                    }
-                }
-            }
-
-            // The legend is always shown (even for an empty pie) — beside the pie in the landscape layout,
-            // below it otherwise.
+            // The chart is sized by the caller; the legend is always shown (even for an empty pie) —
+            // beside the chart in the landscape layout, below it otherwise.
             if (legendOnSide) {
                 Row(
                     modifier = Modifier.fillMaxWidth().weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    pieSlot(Modifier.fillMaxHeight().weight(1f))
+                    TakenSkippedPieContent(taken, skipped, takenColor, skippedColor, Modifier.fillMaxHeight().weight(1f))
                     Column(
                         modifier = Modifier.padding(start = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -234,7 +194,7 @@ private fun TakenSkippedPieChart(
                     }
                 }
             } else {
-                pieSlot(Modifier.fillMaxWidth().weight(1f))
+                TakenSkippedPieContent(taken, skipped, takenColor, skippedColor, Modifier.fillMaxWidth().weight(1f))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -246,6 +206,61 @@ private fun TakenSkippedPieChart(
             }
         }
     }
+}
+
+// The circular chart for all three data states: an all-zero series is an empty circle; a single
+// non-zero category is one full-circle slice (which Vico renders as a blank 360-degree arc, so draw a
+// solid "100%" circle instead); otherwise the real Vico pie.
+@Composable
+private fun TakenSkippedPieContent(
+    taken: Long,
+    skipped: Long,
+    takenColor: Color,
+    skippedColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    when {
+        taken + skipped <= 0L -> EmptyPieCircle(modifier = modifier)
+
+        taken == 0L || skipped == 0L -> {
+            val isTaken = taken > 0L
+            FullValuePieCircle(
+                color = if (isTaken) takenColor else skippedColor,
+                labelColor = if (isTaken) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = modifier,
+            )
+        }
+
+        else -> TakenSkippedVicoPie(taken, skipped, takenColor, skippedColor, modifier)
+    }
+}
+
+@Composable
+private fun TakenSkippedVicoPie(
+    taken: Long,
+    skipped: Long,
+    takenColor: Color,
+    skippedColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    // Render from a synchronously-built model (not an async PieChartModelProducer): the producer path
+    // leaves the pie blank on first composition until a later data change re-triggers it.
+    val model = remember(taken, skipped) { PieChartModel.build(taken, skipped) }
+    val takenLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimary))
+    val skippedLabelComponent = rememberTextComponent(TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer))
+    val percentFormatter = remember {
+        PieValueFormatter { context, value, _ ->
+            if (context.model.sum == 0f || value == 0f) "" else "${(value / context.model.sum * 100).roundToInt()}%"
+        }
+    }
+    val chart = rememberPieChart(
+        sliceProvider = PieChart.SliceProvider.series(
+            PieChart.Slice(fill = Fill(takenColor), label = PieChart.SliceLabel.Inside(takenLabelComponent)),
+            PieChart.Slice(fill = Fill(skippedColor), label = PieChart.SliceLabel.Inside(skippedLabelComponent)),
+        ),
+        valueFormatter = percentFormatter,
+    )
+    PieChartHost(chart, model, modifier = modifier)
 }
 
 @Composable
