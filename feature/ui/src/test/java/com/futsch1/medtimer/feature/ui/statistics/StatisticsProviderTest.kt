@@ -63,11 +63,12 @@ class StatisticsProviderTest {
     // ── getLastDaysReminders ──────────────────────────────────────────────────
 
     @Test
-    fun `getLastDaysReminders returns empty data when there are no events`() {
+    fun `getLastDaysReminders returns the full date range with no series when there are no events`() {
         val result = provider.getLastDaysReminders(emptyList(), 7)
 
+        // No medicine data, but the dates are still emitted so the bar chart can show empty dates.
         assertTrue(result.series.isEmpty())
-        assertTrue(result.epochDays.isEmpty())
+        assertEquals(7, result.epochDays.size)
     }
 
     @Test

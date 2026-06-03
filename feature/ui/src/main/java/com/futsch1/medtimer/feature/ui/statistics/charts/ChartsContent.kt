@@ -362,7 +362,8 @@ private fun MedicinePerDayBarChart(
     seriesColors: List<Int>,
     modifier: Modifier = Modifier,
 ) {
-    if (series.isEmpty()) {
+    if (epochDays.isEmpty()) {
+        // No date range at all (e.g. an all-time window with no data): nothing to plot.
         Card(
             modifier = modifier.fillMaxSize(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
@@ -370,11 +371,19 @@ private fun MedicinePerDayBarChart(
         return
     }
 
-    val resolvedColors = remember(seriesColors) { seriesColors.map { Color(it) } }
+    // With no medicine data we still plot one all-zero series so the date axis renders with empty bars.
+    // Vico's auto range maps an all-zero series to a 0..1 y-axis, so the chart stays well-defined.
+    val hasData = series.isNotEmpty()
+    val plotSeries = remember(series, epochDays, hasData) {
+        if (hasData) series else listOf(List(epochDays.size) { 0 })
+    }
+    val resolvedColors = remember(seriesColors, hasData) {
+        if (hasData) seriesColors.map { Color(it) } else listOf(Color.Transparent)
+    }
     val modelProducer = remember { CartesianChartModelProducer() }
     // Plot against the real epoch-day x-values so labels can be derived from the x-value itself.
-    LaunchedEffect(epochDays, series) {
-        modelProducer.runTransaction { columnSeries { series.forEach { series(x = epochDays, y = it) } } }
+    LaunchedEffect(epochDays, plotSeries) {
+        modelProducer.runTransaction { columnSeries { plotSeries.forEach { series(x = epochDays, y = it) } } }
     }
 
     // Vico 3.x throws if the formatter ever returns a blank string, so the fallback must be non-blank.
@@ -403,20 +412,25 @@ private fun MedicinePerDayBarChart(
             itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 2 }) },
             guideline = null,
         ),
-        legend = rememberHorizontalLegend(
-            items = {
-                seriesNames.forEachIndexed { index, name ->
-                    add(
-                        LegendItem(
-                            icon = ShapeComponent(Fill(resolvedColors[index % resolvedColors.size]), CircleShape),
-                            labelComponent = legendLabelComponent,
-                            label = name,
+        legend = if (hasData) {
+            rememberHorizontalLegend(
+                items = {
+                    seriesNames.forEachIndexed { index, name ->
+                        add(
+                            LegendItem(
+                                icon = ShapeComponent(Fill(resolvedColors[index % resolvedColors.size]), CircleShape),
+                                labelComponent = legendLabelComponent,
+                                label = name,
+                            )
                         )
-                    )
-                }
-            },
-            padding = Insets(top = 8.dp),
-        ),
+                    }
+                },
+                padding = Insets(top = 8.dp),
+            )
+        } else {
+            // No legend for an empty (data-less) chart — just the dated axis.
+            null
+        },
     )
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = remember { Zoom.Content })
     val hostModifier = Modifier.fillMaxSize().padding(16.dp)
@@ -429,9 +443,9 @@ private fun MedicinePerDayBarChart(
             // @Preview renders don't run the LaunchedEffect that fills the producer, so the bars would
             // be blank. Build the model synchronously here; production keeps the producer for its
             // difference animations.
-            val previewModel = remember(epochDays, series) {
+            val previewModel = remember(epochDays, plotSeries) {
                 CartesianChartModel(
-                    ColumnCartesianLayerModel.build { series.forEach { series(x = epochDays, y = it) } },
+                    ColumnCartesianLayerModel.build { plotSeries.forEach { series(x = epochDays, y = it) } },
                 )
             }
             CartesianChartHost(chart = chart, model = previewModel, modifier = hostModifier, zoomState = zoomState)

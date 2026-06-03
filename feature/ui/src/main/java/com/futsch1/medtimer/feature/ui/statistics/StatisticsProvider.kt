@@ -51,10 +51,8 @@ class StatisticsProvider @Inject constructor() {
         days: Int,
         medicineToDayCount: Map<String, IntArray>
     ): MedicinePerDayData {
-        if (medicineToDayCount.isEmpty()) {
-            return MedicinePerDayData(emptyList(), emptyList())
-        }
-
+        // Emit the full date range even when there's no data, so the bar chart can still show the dates
+        // (empty bars) instead of a blank card. The series stays empty when nothing was taken.
         val today = LocalDate.now().toEpochDay()
         val epochDays = (days - 1 downTo 0).map { today - it }
         val series = medicineToDayCount.map { (name, counts) ->
