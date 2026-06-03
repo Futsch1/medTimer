@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.statistics.calendar
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
@@ -11,6 +12,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -19,6 +21,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.kizitonwose.calendar.compose.HorizontalCalendar
@@ -52,6 +57,9 @@ fun CalendarContent(
     modifier: Modifier = Modifier,
     pastMonths: Int = 3,
     futureMonths: Int = 0,
+    // Injectable (defaults to the live value) so layout tests supply a computed window size. The
+    // detection below stays inlined per the "no shared helper" decision. Matches ChartsContent.
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     // Pre-select today so its events show on open, matching the legacy calendar's default day.
     var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(LocalDate.now()) }
@@ -69,8 +77,18 @@ fun CalendarContent(
     val coroutineScope = rememberCoroutineScope()
     val visibleMonth = calendarState.firstVisibleMonth.yearMonth
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)) {
+    val configuration = LocalConfiguration.current
+    val isTabletLandscape = remember(windowAdaptiveInfo, configuration) {
+        windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) &&
+            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    }
+
+    // The calendar Card; the caller supplies the scoped weight (landscape) or default Modifier (portrait).
+    val calendarCard: @Composable (Modifier) -> Unit = { cardModifier ->
+        Card(
+            modifier = cardModifier,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        ) {
             Column(modifier = Modifier.padding(8.dp)) {
                 CalendarNavigationRow(
                     yearMonth = visibleMonth,
@@ -106,7 +124,10 @@ fun CalendarContent(
                 )
             }
         }
+    }
 
+    // The day-events panel; the caller supplies the scoped weight (landscape) or default Modifier (portrait).
+    val eventPanel: @Composable (Modifier) -> Unit = { panelModifier ->
         AnimatedContent(
             targetState = selectedDate,
             transitionSpec = {
@@ -115,9 +136,22 @@ fun CalendarContent(
                     .using(SizeTransform(clip = false))
             },
             label = "dayEventsCard",
+            modifier = panelModifier,
         ) { date ->
             if (date == null) return@AnimatedContent
             DayEventsCard(date = date, events = dayEvents[date].orEmpty())
+        }
+    }
+
+    if (isTabletLandscape) {
+        Row(modifier = modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            calendarCard(Modifier.weight(2f))
+            eventPanel(Modifier.weight(1f))
+        }
+    } else {
+        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            calendarCard(Modifier)
+            eventPanel(Modifier)
         }
     }
 }
