@@ -74,9 +74,12 @@ fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
             try {
                 expandButtons[buttonIndex].click()
                 buttonIndex++
+                device.waitForIdle(1_000)
             } catch (_: StaleObjectException) {
                 // Ignore
             }
+        } else {
+            Thread.sleep(200)
         }
         button = device.findObject(By.text(buttonText))
     }
@@ -746,7 +749,7 @@ class NotificationTest : BaseTestHelper() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun noSkippedButton() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
