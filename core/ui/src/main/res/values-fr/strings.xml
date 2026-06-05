@@ -178,8 +178,8 @@
     <string name="calendar">Calendrier</string>
     <string name="date">Date</string>
     <string name="active">Actif</string>
-    <string name="period_start">Début de la période</string>
-    <string name="period_end">Fin de la période</string>
+    <string name="period_start">Actif à partir du</string>
+    <string name="period_end">Actif jusqu\'au</string>
     <string name="activate_all">Activer tous les rappels</string>
     <string name="deactivate_all">Désactiver tous les rappels</string>
     <string name="block_screen_capture">Bloquer la capture d\'écran</string>
@@ -249,7 +249,13 @@
     <string name="sort">Trier</string>
     <string name="high_and_alarm">Haut + Alarme</string>
     <string name="enable_notification_alarm_dialog">Pour que les rappels soient affichés comme des alarmes, activez cette option pour MedTimer dans le menu suivant</string>
-    <string name="reminder_status">Statut du rappel</string>
+    <string name="reminder_status">Plage de dates active</string>
+    <string name="reminder_enabled">Rappel activé</string>
+    <string name="reminder_enabled_summary">Désactiver pour mettre en pause toutes les notifications de ce rappel</string>
+    <string name="active_date_range_no_limit">Aucune limite de date</string>
+    <string name="active_date_range_from">À partir du %1$s</string>
+    <string name="active_date_range_until">Jusqu\'au %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Instructions de dosage</string>
     <string name="sample_instructions">Remplir avec des exemples d\'instructions</string>
     <string name="daily_start_time">Heure de début journalière</string>
@@ -262,7 +268,7 @@
     <string name="cyclic_reminder_summary">Configure un schéma récurrent de jours actifs et de jours de pause à partir d\'une date donnée. Le rappel ne déclenchera une notification que les jours actifs. Utilisez cette fonction pour les médicaments tels que les pilules contraceptives.</string>
     <string name="variable_amount_summary">Lorsqu\'il est actif, une boîte de dialogue permettant de saisir la posologie s\'affiche lorsque le rappel est pris.</string>
     <string name="automatically_taken_summary">Lorsqu\'il est actif, le rappel n\'est pas affiché comme une notification et est automatiquement marqué comme pris (peut être utilisé pour suivre uniquement le stock).</string>
-    <string name="reminder_status_summary">Les rappels peuvent être actifs et inactifs. S\'ils sont inactifs, aucune notification n\'est déclenchée. Cela peut être configuré de manière statique ou en fonction de dates. Utilisez cette fonction pour configurer la réduction progressive d\'un médicament.</string>
+    <string name="reminder_status_summary">Activez un interrupteur pour définir la première ou dernière date de notification. Laissez les deux désactivés pour aucune limite de date.</string>
     <string name="further_settings">Autres paramètres</string>
     <string name="alarm_settings">Paramètres de l\'alarme</string>
     <string name="no_alarm_sound_when_silent">Pas de son d\'alarme en mode silencieux</string>
@@ -320,4 +326,5 @@
     <string name="medicine_cannot_be_skipped_summary">Si activé, tous les rappels pour ce médicament ne peuvent être supprimés qu\'en marquant le médicament comme pris.</string>
     <string name="reminders_cannot_be_skipped">Les rappels ne peuvent pas être ignorés</string>
     <string name="reminders_cannot_be_skipped_summary">Si activé, les rappels ne peuvent être supprimés qu\'en les marquant comme pris. Cela peut également être activé individuellement par médicament.</string>
+    <string name="same_as_medicine">Identique au médicament</string>
 </resources>

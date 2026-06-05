@@ -77,6 +77,7 @@ fun ReminderEntity.toBackup(): ReminderBackup = ReminderBackup(
     outOfStockThreshold = outOfStockThreshold,
     outOfStockReminderType = Reminder.OutOfStockReminderType.valueOf(outOfStockReminderType.name),
     expirationReminderType = Reminder.ExpirationReminderType.valueOf(expirationReminderType.name),
+    notificationImportance = Reminder.NotificationImportance.valueOf(notificationImportance.name),
 )
 
 fun ReminderBackup.toEntity(): ReminderEntity = ReminderEntity(
@@ -103,6 +104,7 @@ fun ReminderBackup.toEntity(): ReminderEntity = ReminderEntity(
     outOfStockThreshold = outOfStockThreshold,
     outOfStockReminderType = ReminderEntity.OutOfStockReminderType.valueOf(outOfStockReminderType.name),
     expirationReminderType = ReminderEntity.ExpirationReminderType.valueOf(expirationReminderType.name),
+    notificationImportance = ReminderEntity.NotificationImportance.valueOf(notificationImportance.name),
 )
 
 // --- Tag ---

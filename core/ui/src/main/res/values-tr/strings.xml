@@ -172,8 +172,8 @@
     <string name="calendar">Takvim</string>
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
-    <string name="period_start">Dönem başlangıcı</string>
-    <string name="period_end">Dönem sonu</string>
+    <string name="period_start">Etkin başlangıç</string>
+    <string name="period_end">Etkin bitiş</string>
     <string name="activate_all">Tüm hatırlatıcıları etkinleştirin</string>
     <string name="deactivate_all">Tüm hatırlatıcıları devre dışı bırakın</string>
     <string name="block_screen_capture">Ekran yakalamayı engelle</string>
@@ -243,7 +243,13 @@
     <string name="sort">Sırala</string>
     <string name="high_and_alarm">Yüksek + Alarm</string>
     <string name="enable_notification_alarm_dialog">Hatırlatıcıların alarm olarak gösterilmesine izin vermek için aşağıdaki menüden MedTimer için bunu etkinleştirin</string>
-    <string name="reminder_status">Hatırlatıcı durumu</string>
+    <string name="reminder_status">Aktif tarih aralığı</string>
+    <string name="reminder_enabled">Hatırlatıcı etkin</string>
+    <string name="reminder_enabled_summary">Bu hatırlatıcının tüm bildirimlerini duraklatmak için devre dışı bırakın</string>
+    <string name="active_date_range_no_limit">Tarih sınırı yok</string>
+    <string name="active_date_range_from">%1$s tarihinden itibaren</string>
+    <string name="active_date_range_until">%1$s tarihine kadar</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Dozaj talimatları</string>
     <string name="sample_instructions">Örnek talimatlarla doldurun</string>
     <string name="daily_start_time">Günlük başlangıç zamanı</string>
@@ -256,7 +262,7 @@
     <string name="cyclic_reminder_summary">Belirli bir tarihten başlayarak aktif ve duraklatılmış günlerden oluşan yinelenen bir düzen yapılandırır. Hatırlatıcı yalnızca aktif günlerde bildirim gönderir. Doğum kontrol hapları gibi ilaçlar için bunu kullanın.</string>
     <string name="variable_amount_summary">Aktif olduğunda, hatırlatıcı alındığında dozu girmek için bir diyalog kutusu gösterilir.</string>
     <string name="automatically_taken_summary">Aktif olduğunda, hatırlatıcı bildirim olarak gösterilmez ve otomatik olarak alınmış olarak işaretlenir (sadece stok takibi için kullanılabilir).</string>
-    <string name="reminder_status_summary">Hatırlatıcılar aktif ve pasif olabilir. Pasif iseler, bildirim gönderilmez. Bu, statik olarak veya tarihlere göre yapılandırılabilir. Bir ilacın dozunu azaltmayı yapılandırmak için bunu kullanın.</string>
+    <string name="reminder_status_summary">İlk veya son bildirim tarihini ayarlamak için bir anahtarı etkinleştirin. Tarih sınırı olmadan her ikisini de kapalı bırakın.</string>
     <string name="further_settings">Diğer ayarlar</string>
     <string name="alarm_settings">Alarm ayarları</string>
     <string name="no_alarm_sound_when_silent">Sessiz modda alarm sesi yok</string>
@@ -314,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Etkinleştirilirse, bu ilaca ait tüm hatırlatıcılar yalnızca ilaç alındı olarak işaretlenerek kapatılabilir.</string>
     <string name="reminders_cannot_be_skipped">Hatırlatıcılar atlanamaz</string>
     <string name="reminders_cannot_be_skipped_summary">Etkinleştirilirse, hatırlatıcılar yalnızca alındı olarak işaretlenerek kapatılabilir. Bu, her ilaç için ayrı da etkinleştirilebilir.</string>
+    <string name="same_as_medicine">İlaçla aynı</string>
 </resources>

@@ -1,19 +1,14 @@
 package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import android.app.NotificationManager
-import android.content.Intent
-import android.os.Build
-import android.provider.Settings
 import android.widget.Toast
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.net.toUri
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.ColorPickerDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.futsch1.medtimer.feature.ui.showEnableFullScreenIntentDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -78,25 +73,7 @@ class MedicineSettingsFragment : MedicinePreferences(
     }
 
     fun showEnablePermissionsDialog() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || notificationManager.canUseFullScreenIntent()) {
-            return
-        }
-
-        val context = requireContext()
-        val dialog = MaterialAlertDialogBuilder(context)
-            .setMessage(com.futsch1.medtimer.core.ui.R.string.enable_notification_alarm_dialog)
-            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
-                val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
-                    data = "package:${context.packageName}".toUri()
-                }
-                safeStartActivity(context, intent)
-            }
-
-            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ ->
-                // Intentionally empty
-            }.create()
-
-        dialog.show()
+        showEnableFullScreenIntentDialog(requireContext(), notificationManager)
     }
 
 }

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:icon="@drawable/calendar_check"
+        android:title="@string/reminder_enabled"
+        android:summary="@string/reminder_enabled_summary"
+        app:key="reminder_active"
+        app:singleLineTitle="false" />
     <Preference
         android:icon="@drawable/calendar_check"
         android:title="@string/reminder_status"
@@ -72,5 +78,11 @@
             app:key="automatically_taken"
             app:singleLineTitle="false"
             android:summary="@string/automatically_taken_summary"/>
+        <ListPreference
+            app:icon="@drawable/arrow_up_circle"
+            app:key="notification_importance"
+            app:title="@string/notification_importance"
+            android:entries="@array/reminder_notification_importance"
+            android:entryValues="@array/values_0_to_3" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

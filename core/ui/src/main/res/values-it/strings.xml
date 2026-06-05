@@ -178,8 +178,8 @@
     <string name="calendar">Calendario</string>
     <string name="date">Data</string>
     <string name="active">Attivo</string>
-    <string name="period_start">Inizio del periodo</string>
-    <string name="period_end">Fine del periodo</string>
+    <string name="period_start">Attivo dal</string>
+    <string name="period_end">Attivo fino al</string>
     <string name="activate_all">Attiva tutti i promemoria</string>
     <string name="deactivate_all">Disattiva tutti i promemoria</string>
     <string name="block_screen_capture">Blocca la cattura dello schermo</string>
@@ -249,7 +249,13 @@
     <string name="sort">Ordinamento</string>
     <string name="high_and_alarm">Alta + Allarme</string>
     <string name="enable_notification_alarm_dialog">Per consentire la visualizzazione dei promemoria come allarmi, attiva questa opzione per MedTimer nel seguente menu</string>
-    <string name="reminder_status">Stato del promemoria</string>
+    <string name="reminder_status">Intervallo di date attivo</string>
+    <string name="reminder_enabled">Promemoria abilitato</string>
+    <string name="reminder_enabled_summary">Disabilita per mettere in pausa tutte le notifiche di questo promemoria</string>
+    <string name="active_date_range_no_limit">Nessun limite di date</string>
+    <string name="active_date_range_from">Dal %1$s</string>
+    <string name="active_date_range_until">Fino al %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Istruzioni di dosaggio</string>
     <string name="sample_instructions">Usa istruzioni pre-compilate</string>
     <string name="daily_start_time">Orario di inizio quotidiano</string>
@@ -262,7 +268,7 @@
     <string name="cyclic_reminder_summary">Configura un modello ricorrente di giorni attivi e di pausa a partire da una data specifica. Il promemoria invia una notifica solo nei giorni attivi. È utile per farmaci come le pillole anticoncezionali.</string>
     <string name="variable_amount_summary">Quando è attiva, al momento dell\'assunzione del farmaco viene mostrata una finestra di dialogo per inserire il dosaggio.</string>
     <string name="automatically_taken_summary">Quando attivo, il promemoria non mostra una notifica e il farmaco viene automaticamente segnato come \'assunto\' (utile per tracciare solo la scorta di farmaci).</string>
-    <string name="reminder_status_summary">I promemoria possono essere attivi e inattivi. Se sono inattivi, non è inviata alcuna notifica. Si può configurare questa impostazione in modo statico o in base a date. È ideale per gestire la riduzione graduale di un farmaco.</string>
+    <string name="reminder_status_summary">Attiva un interruttore per impostare la prima o l\'ultima data di notifica. Lascia entrambi disattivati per nessun limite di date.</string>
     <string name="further_settings">Impostazioni aggiuntive</string>
     <string name="alarm_settings">Impostazioni di allarme</string>
     <string name="no_alarm_sound_when_silent">Nessun suono di allarme in modalità silenziosa</string>
@@ -320,4 +326,5 @@
     <string name="medicine_cannot_be_skipped_summary">Se abilitato, tutti i promemoria per questo farmaco possono essere eliminati solo contrassegnando il farmaco come assunto.</string>
     <string name="reminders_cannot_be_skipped">I promemoria non possono essere saltati</string>
     <string name="reminders_cannot_be_skipped_summary">Se abilitato, i promemoria possono essere eliminati solo contrassegnandoli come assunti. Questo può essere abilitato anche singolarmente per ogni farmaco.</string>
+    <string name="same_as_medicine">Come per la medicina</string>
 </resources>

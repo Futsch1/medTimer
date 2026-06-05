@@ -172,8 +172,8 @@
     <string name="calendar">Kalender</string>
     <string name="date">Date</string>
     <string name="active">Aktiv</string>
-    <string name="period_start">Beginn der Zeitspanne</string>
-    <string name="period_end">Ende der Zeitspanne</string>
+    <string name="period_start">Aktiv ab</string>
+    <string name="period_end">Aktiv bis</string>
     <string name="activate_all">Alle Erinnerungen aktivieren</string>
     <string name="deactivate_all">Alle Erinnerungen deaktivieren</string>
     <string name="block_screen_capture">Screenshots blockieren</string>
@@ -243,7 +243,13 @@
     <string name="sort">Sortieren</string>
     <string name="high_and_alarm">Hoch + Alarm</string>
     <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktivieren Sie dies für MedTimer im folgenden Menü</string>
-    <string name="reminder_status">Erinnerungsstatus</string>
+    <string name="reminder_status">Aktiver Datumsbereich</string>
+    <string name="reminder_enabled">Erinnerung aktiviert</string>
+    <string name="reminder_enabled_summary">Deaktivieren, um alle Benachrichtigungen für diese Erinnerung zu pausieren</string>
+    <string name="active_date_range_no_limit">Kein Datumslimit</string>
+    <string name="active_date_range_from">Ab %1$s</string>
+    <string name="active_date_range_until">Bis %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Dosierungsanweisungen</string>
     <string name="sample_instructions">Beispielanweisungen einsetzen</string>
     <string name="daily_start_time">Tägliche Startzeit</string>
@@ -256,7 +262,7 @@
     <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung wird nur an aktiven Tagen ausgelöst. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
     <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
     <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
-    <string name="reminder_status_summary">Erinnerungen können aktiv und inaktiv sein. Wenn sie inaktiv sind, wird keine Benachrichtigung ausgelöst. Dies kann entweder dauerhaft oder datumsbasiert konfiguriert werden und kann zum Ausschleichen eines Medikaments verwendet werden.</string>
+    <string name="reminder_status_summary">Schalter aktivieren, um das erste oder letzte Benachrichtigungsdatum festzulegen. Beide aus lassen für kein Datumslimit.</string>
     <string name="further_settings">Weitere Einstellungen</string>
     <string name="alarm_settings">Alarmeinstellungen</string>
     <string name="no_alarm_sound_when_silent">Kein Alarmton im Lautlos-Modus</string>
@@ -314,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Wenn aktiviert, können alle Erinnerungen für dieses Medikament nur durch Markieren des Medikaments als eingenommen bestätigt werden.</string>
     <string name="reminders_cannot_be_skipped">Erinnerungen können nicht übersprungen werden</string>
     <string name="reminders_cannot_be_skipped_summary">Wenn aktiviert, können Erinnerungen nur durch Markieren als eingenommen bestätigt werden. Dies kann auch individuell pro Medikament aktiviert werden.</string>
+    <string name="same_as_medicine">Wie Medikament</string>
 </resources>

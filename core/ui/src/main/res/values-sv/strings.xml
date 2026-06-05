@@ -177,8 +177,8 @@
     <string name="calendar">Kalender</string>
     <string name="date">Datum</string>
     <string name="active">Aktiv</string>
-    <string name="period_start">Periodstart</string>
-    <string name="period_end">Periodslut</string>
+    <string name="period_start">Aktiv från</string>
+    <string name="period_end">Aktiv till</string>
     <string name="activate_all">Aktivera alla påminnelser</string>
     <string name="deactivate_all">Inaktivera alla påminnelser</string>
     <string name="block_screen_capture">Blockera skärmdump</string>
@@ -242,7 +242,13 @@
     <string name="sort">Sortera</string>
     <string name="high_and_alarm">Hög + Larm</string>
     <string name="enable_notification_alarm_dialog">Om du vill kunna visa påminnelser som larm aktiverar du detta för MedTimer i följande meny</string>
-    <string name="reminder_status">Påminnelsestatus</string>
+    <string name="reminder_status">Aktivt datumintervall</string>
+    <string name="reminder_enabled">Påminnelse aktiverad</string>
+    <string name="reminder_enabled_summary">Inaktivera för att pausa alla aviseringar för denna påminnelse</string>
+    <string name="active_date_range_no_limit">Ingen datumgräns</string>
+    <string name="active_date_range_from">Från %1$s</string>
+    <string name="active_date_range_until">Till %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Doseringsanvisningar</string>
     <string name="sample_instructions">Fyll i med exempelinstruktioner</string>
     <string name="daily_start_time">Dagligen starttid</string>
@@ -255,7 +261,7 @@
     <string name="cyclic_reminder_summary">Konfigurerar ett återkommande mönster av aktiva och pausade dagar från ett angivet datum. Påminnelsen kommer endast att skicka en avisering på aktiva dagar. Använd detta för mediciner som p-piller.</string>
     <string name="variable_amount_summary">När den är aktiv visas en dialogruta för att ange dosen när påminnelsen tas.</string>
     <string name="automatically_taken_summary">När den är aktiv visas inte påminnelsen som en avisering och markeras automatiskt som tagen (kan användas för att endast spåra lagret).</string>
-    <string name="reminder_status_summary">Påminnelser kan vara aktiva och inaktiva. Om de är inaktiva skickas ingen avisering. Detta kan konfigureras antingen statiskt или baserat på datum. Använd detta för att konfigurera nedtrappning av en medicin.</string>
+    <string name="reminder_status_summary">Aktivera en växel för att ange det första eller sista aviseringsdatumet. Lämna båda avaktiverade för ingen datumgräns.</string>
     <string name="further_settings">Ytterligare inställningar</string>
     <string name="alarm_settings">Alarminställningar</string>
     <string name="no_alarm_sound_when_silent">Inget alarmljud i tyst läge</string>
@@ -314,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Om aktiverat kan alla påminnelser för denna medicin endast stängas av genom att markera medicinen som tagen.</string>
     <string name="reminders_cannot_be_skipped">Påminnelser kan inte hoppas över</string>
     <string name="reminders_cannot_be_skipped_summary">Om aktiverat kan påminnelser endast stängas av genom att markera dem som tagna. Detta kan även aktiveras individuellt per medicin.</string>
+    <string name="same_as_medicine">Samma som läkemedel</string>
 </resources>

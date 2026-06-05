@@ -119,7 +119,8 @@ internal class JSONMedicineBackupUnitTest {
           "windowedInterval": false,
           "outOfStockThreshold": 1.0,
           "outOfStockReminderType": "ONCE",
-          "expirationReminderType": "DAILY"
+          "expirationReminderType": "DAILY",
+          "notificationImportance": "SAME_AS_MEDICINE"
         }
       ]
     }
@@ -291,7 +292,8 @@ internal class JSONMedicineBackupUnitTest {
           "windowedInterval": false,
           "outOfStockThreshold": 0.0,
           "outOfStockReminderType": "OFF",
-          "expirationReminderType": "OFF"
+          "expirationReminderType": "OFF",
+          "notificationImportance": "SAME_AS_MEDICINE"
         }
       ]
     },
@@ -345,7 +347,8 @@ internal class JSONMedicineBackupUnitTest {
           "windowedInterval": false,
           "outOfStockThreshold": 0.0,
           "outOfStockReminderType": "OFF",
-          "expirationReminderType": "OFF"
+          "expirationReminderType": "OFF",
+          "notificationImportance": "SAME_AS_MEDICINE"
         },
         {
           "reminderId": 2,
@@ -378,7 +381,8 @@ internal class JSONMedicineBackupUnitTest {
           "windowedInterval": false,
           "outOfStockThreshold": 0.0,
           "outOfStockReminderType": "OFF",
-          "expirationReminderType": "OFF"
+          "expirationReminderType": "OFF",
+          "notificationImportance": "SAME_AS_MEDICINE"
         }
       ]
     }

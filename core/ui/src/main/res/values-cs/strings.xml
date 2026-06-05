@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
@@ -185,8 +185,8 @@
     <string name="calendar">Kalendář</string>
     <string name="date">Datum</string>
     <string name="active">Aktivní</string>
-    <string name="period_start">Začátek období</string>
-    <string name="period_end">Konec období</string>
+    <string name="period_start">Aktivní od</string>
+    <string name="period_end">Aktivní do</string>
     <string name="activate_all">Aktivovat všechna připomenutí</string>
     <string name="deactivate_all">Deaktivovat všechna připomenutí</string>
     <string name="block_screen_capture">Blokovat záznam obrazovky</string>
@@ -255,7 +255,13 @@
     <string name="automatically_taken">Automaticky označit jako užité</string>
     <string name="high_and_alarm">Vysoká + Alarm</string>
     <string name="enable_notification_alarm_dialog">Pro aktivaci zobrazení připomínek jako alarmy to povolte pro aplikaci MedTimer v následujícím menu</string>
-    <string name="reminder_status">Stav připomenutí</string>
+    <string name="reminder_status">Aktivní rozsah dat</string>
+    <string name="reminder_enabled">Připomenutí povoleno</string>
+    <string name="reminder_enabled_summary">Vypněte, abyste pozastavili všechna oznámení pro toto připomenutí</string>
+    <string name="active_date_range_no_limit">Bez omezení data</string>
+    <string name="active_date_range_from">Od %1$s</string>
+    <string name="active_date_range_until">Do %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Instrukce k dávce</string>
     <string name="sample_instructions">Vyplnit ukázkovými instrukcemi</string>
     <string name="daily_start_time">Denní počáteční čas</string>
@@ -268,7 +274,7 @@
     <string name="cyclic_reminder_summary">Nastaví vzorec opakování aktivních a neaktivních dní počínaje zvoleným datem. Takové připomenutí způsobí notifikaci pouze v aktivní dny. Použítí např. pro antikoncepci.</string>
     <string name="variable_amount_summary">Pokud je aktivní, dialog pro vložení dávky je zobrazen v momentě zobrazení připomenutí.</string>
     <string name="automatically_taken_summary">Pokud je aktivní, připomenutí není zobrazeno jako notifikace, ale je automaticky označeno jako užito (může být pouze použito ke sledování zásob).</string>
-    <string name="reminder_status_summary">Připomenutí mohou být aktivní a neaktivní. Pokud jsou neaktivní, není zobrazena notifikace. To může být buď nastaveno pevně, nebo na základě datumů. Může být použito pro snižování dávky léku.</string>
+    <string name="reminder_status_summary">Zapněte přepínač a nastavte první nebo poslední datum oznámení. Nechte oba vypnuté pro neomezené.</string>
     <string name="further_settings">Další nastavení</string>
     <string name="alarm_settings">Nastavení alarmu</string>
     <string name="no_alarm_sound_when_silent">Bez zvuku alarmu v tichém režimu</string>
@@ -326,4 +332,5 @@
     <string name="medicine_cannot_be_skipped_summary">Je-li povoleno, všechna připomenutí tohoto léku lze zamítnout pouze označením léku jako užitého.</string>
     <string name="reminders_cannot_be_skipped">Připomenutí nelze přeskočit</string>
     <string name="reminders_cannot_be_skipped_summary">Je-li povoleno, připomenutí lze zamítnout pouze označením jako užitých. Toto lze také individuálně povolit pro každý lék.</string>
+    <string name="same_as_medicine">Stejné jako lék</string>
 </resources>

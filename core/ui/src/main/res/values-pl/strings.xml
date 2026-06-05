@@ -80,7 +80,7 @@
     <string name="next_reminders">Kolejne przypomnienia</string>
     <string name="all_taken">Przyjęto wszystko (%s)</string>
     <string name="app_url">MedTimer na GitHubie</string>
-    <string name="period_end">Koniec okresu</string>
+    <string name="period_end">Aktywne do</string>
     <string name="tab_overview">Przegląd</string>
     <string name="version">Wersja %s</string>
     <string name="intro_welcome">Witaj w MedTimer!</string>
@@ -216,7 +216,7 @@
     <string name="date">Data</string>
     <string name="exact_reminders_summary">Przypomnienia są zaplanowane na dokładny czas (zwiększa to zużycie baterii)</string>
     <string name="edit_event">Edytuj zdarzenie</string>
-    <string name="period_start">Początek okresu</string>
+    <string name="period_start">Aktywne od</string>
     <string name="intro_overview_description">Na ekranie przeglądu możesz zobaczyć nadchodzące przypomnienia i ostatnie wydarzenia przypomnień. Wydarzenia przypomnień można edytować, przesuwając w prawo i usuwać, przesuwając w lewo.\n\nCo więcej, możesz ręcznie wprowadzić dodatkowe dawki jednego ze skonfigurowanych lub niestandardowych leków.</string>
     <string name="repeat_reminders_summary">Automatyczne powtarza przypomnienie, dopóki nie zostanie oznaczone jako przyjęto lub pominięto</string>
     <string name="delete_re_raise_event">Czy chcesz usunąć to zdarzenie i ponownie wysłać powiadomienie?</string>
@@ -255,7 +255,13 @@
     <string name="sort">Sortuj</string>
     <string name="high_and_alarm">Wysoki + Alarm</string>
     <string name="enable_notification_alarm_dialog">Aby umożliwić wyświetlanie przypomnień jako alarmów, włącz tę opcję dla MedTimer w następującym menu</string>
-    <string name="reminder_status">Status przypomnienia</string>
+    <string name="reminder_status">Aktywny zakres dat</string>
+    <string name="reminder_enabled">Przypomnienie włączone</string>
+    <string name="reminder_enabled_summary">Wyłącz, aby wstrzymać wszystkie powiadomienia dla tego przypomnienia</string>
+    <string name="active_date_range_no_limit">Bez limitu dat</string>
+    <string name="active_date_range_from">Od %1$s</string>
+    <string name="active_date_range_until">Do %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Instrukcje dawkowania</string>
     <string name="sample_instructions">Wypełnij przykładowymi instrukcjami</string>
     <string name="daily_start_time">Dzienny czas rozpoczęcia</string>
@@ -268,7 +274,7 @@
     <string name="cyclic_reminder_summary">Konfiguruje cykliczny wzorzec aktywnych i wstrzymanych dni, zaczynając od podanej daty. Przypomnienie będzie wysyłać powiadomienie tylko w aktywne dni. Użyj tej opcji dla leków takich jak tabletki antykoncepcyjne.</string>
     <string name="variable_amount_summary">Gdy opcja jest aktywna, po przyjęciu przypomnienia wyświetlane jest okno dialogowe do wprowadzenia dawki.</string>
     <string name="automatically_taken_summary">Gdy opcja jest aktywna, przypomnienie nie jest wyświetlane jako powiadomienie i jest automatycznie oznaczane jako przyjęte (może być używane tylko do śledzenia zapasów).</string>
-    <string name="reminder_status_summary">Przypomnienia mogą być aktywne i nieaktywne. Jeśli są nieaktywne, powiadomienie nie jest wysyłane. Można to skonfigurować na stałe lub na podstawie dat. Użyj tej opcji do konfigurowania stopniowego odstawiania leku.</string>
+    <string name="reminder_status_summary">Włącz przełącznik, aby ustawić pierwszy lub ostatni dzień powiadomień. Pozostaw oba wyłączone, aby nie ustawiać limitu dat.</string>
     <string name="further_settings">Dalsze ustawienia</string>
     <string name="alarm_settings">Ustawienia alarmu</string>
     <string name="no_alarm_sound_when_silent">Bez dźwięku w trybie cichym</string>
@@ -326,4 +332,5 @@
     <string name="medicine_cannot_be_skipped_summary">Jeśli włączone, wszystkie przypomnienia dla tego leku można odrzucić tylko przez oznaczenie leku jako przyjętego.</string>
     <string name="reminders_cannot_be_skipped">Przypomnienia nie mogą być pominięte</string>
     <string name="reminders_cannot_be_skipped_summary">Jeśli włączone, przypomnienia można odrzucić tylko przez oznaczenie ich jako przyjętych. Można to również włączyć indywidualnie dla każdego leku.</string>
+    <string name="same_as_medicine">Tak samo jak lek</string>
 </resources>

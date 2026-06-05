@@ -178,8 +178,8 @@
     <string name="calendar">Calendario</string>
     <string name="date">Fecha</string>
     <string name="active">Activo</string>
-    <string name="period_start">Inicio del período</string>
-    <string name="period_end">Fin de periodo</string>
+    <string name="period_start">Activo desde</string>
+    <string name="period_end">Activo hasta</string>
     <string name="activate_all">Activar todos los recordatorios</string>
     <string name="deactivate_all">Desactivar todos los recordatorios</string>
     <string name="block_screen_capture">Bloquear la captura de pantalla</string>
@@ -249,7 +249,13 @@
     <string name="sort">Ordenar</string>
     <string name="high_and_alarm">Alta + Alarma</string>
     <string name="enable_notification_alarm_dialog">Para poder mostrar los recordatorios como alarmas, active esta opción para MedTimer en el siguiente menú</string>
-    <string name="reminder_status">Estado del recordatorio</string>
+    <string name="reminder_status">Rango de fechas activo</string>
+    <string name="reminder_enabled">Recordatorio activado</string>
+    <string name="reminder_enabled_summary">Desactivar para pausar todas las notificaciones de este recordatorio</string>
+    <string name="active_date_range_no_limit">Sin límite de fecha</string>
+    <string name="active_date_range_from">Desde %1$s</string>
+    <string name="active_date_range_until">Hasta %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Instrucciones de dosificación</string>
     <string name="sample_instructions">Rellenar con instrucciones de ejemplo</string>
     <string name="daily_start_time">Hora de inicio diaria</string>
@@ -262,7 +268,7 @@
     <string name="cyclic_reminder_summary">Configura un patrón recurrente de días activos y en pausa a partir de una fecha determinada. El recordatorio solo generará una notificación en los días activos. Úselo para medicamentos como las píldoras anticonceptivas.</string>
     <string name="variable_amount_summary">Cuando está activo, se muestra un diálogo para introducir la dosis cuando se toma el recordatorio.</string>
     <string name="automatically_taken_summary">Cuando está activo, el recordatorio no se muestra como notificación y se marca automáticamente como tomado (se puede usar para rastrear solo el stock).</string>
-    <string name="reminder_status_summary">Los recordatorios pueden estar activos e inactivos. Si están inactivos, no se genera ninguna notificación. Esto se puede configurar de forma estática o en función de las fechas. Utilice esta opción para configurar la reducción gradual de un medicamento.</string>
+    <string name="reminder_status_summary">Activa un interruptor para definir la primera o última fecha de notificación. Deja ambos desactivados para no tener límite de fecha.</string>
     <string name="further_settings">Más ajustes</string>
     <string name="alarm_settings">Ajustes de la alarma</string>
     <string name="no_alarm_sound_when_silent">No sonar la alarma en modo silencio</string>
@@ -320,4 +326,5 @@
     <string name="medicine_cannot_be_skipped_summary">Si está activado, todos los recordatorios de este medicamento solo se pueden cerrar marcando el medicamento como tomado.</string>
     <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
     <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
+    <string name="same_as_medicine">Igual que el medicamento</string>
 </resources>

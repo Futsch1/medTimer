@@ -19,7 +19,7 @@ jobs:
       profile: medium_phone
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Set up JDK 21
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
@@ -95,7 +95,7 @@ jobs:
       - name: Android lint
         run: ./gradlew lint
 
-      - uses: qltysh/qlty-action/coverage@a19242102d17e497f437d7466aa01b528537e899 # v2.2.0
+      - uses: qltysh/qlty-action/coverage@fd52dc852530a708d68c3b7342f8d33d1df4cd55 # v2.2.1
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         env:
           JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsFullDebug app/build/generated/ap_generated_sources/fullDebug/out

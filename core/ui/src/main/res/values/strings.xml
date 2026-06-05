@@ -181,8 +181,8 @@
     <string name="calendar">Calendar</string>
     <string name="date">Date</string>
     <string name="active">Active</string>
-    <string name="period_start">Period start</string>
-    <string name="period_end">Period end</string>
+    <string name="period_start">Active from</string>
+    <string name="period_end">Active until</string>
     <string name="activate_all">Activate all reminders</string>
     <string name="deactivate_all">Deactivate all reminders</string>
     <string name="block_screen_capture">Block screen capture</string>
@@ -259,8 +259,15 @@
     <string name="notes">Notes</string>
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>
+    <string name="same_as_medicine">Same as medicine</string>
     <string name="enable_notification_alarm_dialog">In order to allow showing reminders as alarms enable this for MedTimer in the following menu</string>
-    <string name="reminder_status">Reminder status</string>
+    <string name="reminder_status">Active date range</string>
+    <string name="reminder_enabled">Reminder enabled</string>
+    <string name="reminder_enabled_summary">Disable to pause all notifications for this reminder</string>
+    <string name="active_date_range_no_limit">No date limit</string>
+    <string name="active_date_range_from">From %1$s</string>
+    <string name="active_date_range_until">Until %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Dosing instructions</string>
     <string name="sample_instructions">Fill with sample instructions</string>
     <string name="daily_start_time">Daily start time</string>
@@ -273,7 +280,7 @@
     <string name="cyclic_reminder_summary">Configures a recurring pattern of active and paused days starting from a given date. The reminder will only raise a notification on active days. Use this for meds like birth control pills.</string>
     <string name="variable_amount_summary">When active, a dialog to enter the dosage is shown when the reminder is taken.</string>
     <string name="automatically_taken_summary">When active, the reminder is not shown as notification and automatically marked as taken (can be used to only track the stock).</string>
-    <string name="reminder_status_summary">Reminders can be active and inactive. If they are inactive, no notification is raised. This can be either configured statically or based on dates. Use this to configure tapering of a medicine.</string>
+    <string name="reminder_status_summary">Enable a switch to set the first or last notification date. Leave both off for no date limit.</string>
     <string name="further_settings">Further settings</string>
     <string name="alarm_settings">Alarm settings</string>
     <string name="no_alarm_sound_when_silent">No alarm sound when silent</string>

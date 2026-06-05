@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.R
@@ -28,7 +29,8 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
         context,
         reminderNotification.reminderNotificationData.notificationId,
         reminderNotification.reminderNotificationParts.map { it.medicine },
-        notificationManager
+        notificationManager,
+        Medicine.NotificationImportance.DEFAULT
     ) {
 
     init {

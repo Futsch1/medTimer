@@ -173,8 +173,8 @@
     <string name="calendar">Kalenteri</string>
     <string name="date">Päivämäärä</string>
     <string name="active">Aktiivinen</string>
-    <string name="period_start">Ajanjakson alku</string>
-    <string name="period_end">Ajanjakson loppu</string>
+    <string name="period_start">Aktiivinen alkaen</string>
+    <string name="period_end">Aktiivinen saakka</string>
     <string name="activate_all">Aktivoi kaikki muistutukset</string>
     <string name="deactivate_all">Deaktivoi kaikki muistutukset</string>
     <string name="block_screen_capture">Estä ruudunkaappaus</string>
@@ -243,7 +243,13 @@
     <string name="automatically_taken">Merkitse automaattisesti otetuksi</string>
     <string name="high_and_alarm">Korkea + Hälytys</string>
     <string name="enable_notification_alarm_dialog">Salliaksesi muistutusten näyttämisen hälytyksinä, ota tämä asetus käyttöön MedTimerille seuraavassa valikossa</string>
-    <string name="reminder_status">Muistutuksen tila</string>
+    <string name="reminder_status">Aktiivinen päivämääräväli</string>
+    <string name="reminder_enabled">Muistutus käytössä</string>
+    <string name="reminder_enabled_summary">Poista käytöstä keskeyttääksesi kaikki tämän muistutuksen ilmoitukset</string>
+    <string name="active_date_range_no_limit">Ei päivämäärärajoitusta</string>
+    <string name="active_date_range_from">Alkaen %1$s</string>
+    <string name="active_date_range_until">Saakka %1$s</string>
+    <string name="active_date_range_range">%1$s – %2$s</string>
     <string name="dosing_instructions">Annostusohjeet</string>
     <string name="sample_instructions">Täytä näyteohjeilla</string>
     <string name="daily_start_time">Päivittäinen aloitusaika</string>
@@ -256,7 +262,7 @@
     <string name="cyclic_reminder_summary">Määrittää toistuvan aktiivisten ja tauotettujen päivien mallin tietystä päivämäärästä alkaen. Muistutus lähettää ilmoituksen vain aktiivisina päivinä. Käytä tätä esimerkiksi ehkäisypillereiden kaltaisiin lääkkeisiin.</string>
     <string name="variable_amount_summary">Kun toiminto on aktiivinen, annoksen syöttämistä varten näytetään valintaikkuna, kun muistutus otetaan.</string>
     <string name="automatically_taken_summary">Kun toiminto on aktiivinen, muistutusta ei näytetä ilmoituksena ja se merkitään automaattisesti otetuksi (voidaan käyttää vain varaston seurantaan).</string>
-    <string name="reminder_status_summary">Muistutukset voivat olla aktiivisia ja passiivisia. Jos ne ovat passiivisia, ilmoitusta ei lähetetä. Tämä voidaan määrittää staattisesti tai päivämäärien perusteella. Käytä tätä lääkkeen annoksen pienentämisen määrittämiseen.</string>
+    <string name="reminder_status_summary">Ota käyttöön valitsin asettaaksesi ensimmäisen tai viimeisen ilmoituspäivämäärän. Jätä molemmat pois päältä ilman päivämäärärajoitusta.</string>
     <string name="further_settings">Lisäasetukset</string>
     <string name="alarm_settings">Hälytysasetukset</string>
     <string name="no_alarm_sound_when_silent">Ei hälytysääntä äänettömässä tilassa</string>
@@ -314,4 +320,5 @@
     <string name="medicine_cannot_be_skipped_summary">Jos käytössä, kaikki tämän lääkkeen muistutukset voidaan poistaa vain merkitsemällä lääke otetuksi.</string>
     <string name="reminders_cannot_be_skipped">Muistutuksia ei voi ohittaa</string>
     <string name="reminders_cannot_be_skipped_summary">Jos käytössä, muistutukset voidaan poistaa vain merkitsemällä ne otetuiksi. Tämä voidaan myös ottaa käyttöön erikseen kullekin lääkkeelle.</string>
+    <string name="same_as_medicine">Sama kuin lääke</string>
 </resources>

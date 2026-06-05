@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <ScrollView
@@ -19,128 +19,141 @@
             android:layout_height="match_parent"
             android:layout_weight="3">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="0dp"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/selectIcon"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:iconPadding="0dp" />
-
-                    <com.google.android.material.textfield.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:hint="@string/medicine_name">
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editMedicineName"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/selectIcon"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:iconPadding="0dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:inputType="text" />
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:hint="@string/medicine_name">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editMedicineName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/medicineMenuButtons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/openMedicineSettings"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/medicine_settings"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:icon="@drawable/gear"
+                            app:iconPadding="0dp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/openNotes"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/notes"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:icon="@drawable/journal_text"
+                            app:iconPadding="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/openTags"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/tags"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:icon="@drawable/tag"
+                            app:iconPadding="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/openStockTracking"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/medicine_stock"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:icon="@drawable/box_seam"
+                            app:iconPadding="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/openCalendar"
+                            style="?attr/materialIconButtonFilledStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/calendar"
+                            android:minWidth="48dp"
+                            android:minHeight="48dp"
+                            app:icon="@drawable/calendar_week"
+                            app:iconPadding="0dp" />
+                    </LinearLayout>
                 </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/medicineMenuButtons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/openMedicineSettings"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/medicine_settings"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:icon="@drawable/gear"
-                        app:iconPadding="0dp" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/openNotes"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/notes"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:icon="@drawable/journal_text"
-                        app:iconPadding="0dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/openTags"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/tags"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:icon="@drawable/tag"
-                        app:iconPadding="0dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/openStockTracking"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/medicine_stock"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:icon="@drawable/box_seam"
-                        app:iconPadding="0dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/openCalendar"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/calendar"
-                        android:minWidth="48dp"
-                        android:minHeight="48dp"
-                        app:icon="@drawable/calendar_week"
-                        app:iconPadding="0dp" />
-                </LinearLayout>
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </ScrollView>
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="?android:attr/listDivider" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reminderList"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:clipToPadding="false"
-            android:contentDescription="@string/reminders"
-            android:paddingBottom="60dp"
-            android:scrollbars="vertical" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/reminders"
+                android:textAppearance="?attr/textAppearanceTitleSmall" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reminderList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:contentDescription="@string/reminders"
+                android:paddingBottom="60dp"
+                android:scrollbars="vertical" />
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
