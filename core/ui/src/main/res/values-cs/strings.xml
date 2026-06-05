@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
@@ -258,7 +258,7 @@
     <string name="reminder_status">Aktivní rozsah dat</string>
     <string name="reminder_enabled">Připomenutí povoleno</string>
     <string name="reminder_enabled_summary">Vypněte, abyste pozastavili všechna oznámení pro toto připomenutí</string>
-    <string name="active_date_range_no_limit">Bez omezení datumu</string>
+    <string name="active_date_range_no_limit">Bez omezení data</string>
     <string name="active_date_range_from">Od %1$s</string>
     <string name="active_date_range_until">Do %1$s</string>
     <string name="active_date_range_range">%1$s – %2$s</string>
