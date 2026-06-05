@@ -27,7 +27,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
@@ -181,12 +180,12 @@ private fun HeaderRow(
                 )
                 if (sortColumn == index && sortDirection != SortDirection.UNSORTED) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_sort),
+                        painter = painterResource(
+                            if (sortDirection == SortDirection.ASCENDING) R.drawable.sort_up else R.drawable.sort_down,
+                        ),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier
-                            .size(16.dp)
-                            .graphicsLayer { scaleY = if (sortDirection == SortDirection.ASCENDING) -1f else 1f },
+                        modifier = Modifier.size(16.dp),
                     )
                 }
             }

@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.getIcon
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import java.time.Duration
@@ -96,7 +97,7 @@ fun DayEventsCard(
                     intervalText = intervalText,
                     statusIcon = statusIconRes(event.status),
                     statusLabel = statusLabel,
-                    typeIcon = reminderTypeIconRes(event.reminderType),
+                    typeIcon = event.reminderType.getIcon(),
                     amount = event.amount,
                     medicineName = event.medicineName,
                     suffix = suffix,
@@ -143,7 +144,7 @@ private fun EventRow(
             // The taken time follows the reminded time after an arrow, e.g. "8:00 → 8:42".
             if (takenTime != null) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_arrow_right_alt),
+                    painter = painterResource(R.drawable.arrow_right),
                     contentDescription = null,
                     tint = iconTint,
                     modifier = Modifier.size(16.dp),
@@ -169,23 +170,14 @@ private fun EventRow(
     }
 }
 
+// The reminder-type icon comes from the shared ReminderType.getIcon() mapping in :core:ui so the
+// calendar matches the rest of the app; only the status icons are calendar-local.
 @DrawableRes
 private fun statusIconRes(status: CalendarDayEvent.Status): Int? = when (status) {
-    CalendarDayEvent.Status.TAKEN -> R.drawable.ic_check_circle
-    CalendarDayEvent.Status.SKIPPED -> R.drawable.ic_cancel
-    CalendarDayEvent.Status.RAISED -> R.drawable.ic_notifications
+    CalendarDayEvent.Status.TAKEN -> R.drawable.check2_circle
+    CalendarDayEvent.Status.SKIPPED -> R.drawable.x_circle
+    CalendarDayEvent.Status.RAISED -> R.drawable.bell
     CalendarDayEvent.Status.SCHEDULED -> null
-}
-
-@DrawableRes
-private fun reminderTypeIconRes(type: ReminderType): Int = when (type) {
-    ReminderType.TIME_BASED -> R.drawable.ic_event
-    ReminderType.LINKED -> R.drawable.ic_link
-    ReminderType.CONTINUOUS_INTERVAL -> R.drawable.ic_repeat
-    ReminderType.WINDOWED_INTERVAL -> R.drawable.ic_timelapse
-    ReminderType.OUT_OF_STOCK -> R.drawable.ic_inventory_2
-    ReminderType.EXPIRATION_DATE -> R.drawable.ic_event_busy
-    ReminderType.REFILL -> R.drawable.ic_shopping_cart
 }
 
 // Formats an interval as a locale-aware short measure ("2 h 30 min"), mirroring the legacy overview

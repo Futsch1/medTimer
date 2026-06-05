@@ -45,7 +45,7 @@ fun CalendarNavigationRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         IconButton(onClick = onPrev, enabled = yearMonth > startMonth) {
-            Icon(painterResource(R.drawable.ic_navigate_before), contentDescription = null)
+            Icon(painterResource(R.drawable.chevron_left), contentDescription = null)
         }
 
         YearMonthTitle(
@@ -56,7 +56,7 @@ fun CalendarNavigationRow(
         )
 
         IconButton(onClick = onNext, enabled = yearMonth < endMonth) {
-            Icon(painterResource(R.drawable.ic_navigate_next), contentDescription = null)
+            Icon(painterResource(R.drawable.chevron_right), contentDescription = null)
         }
     }
 }
@@ -83,7 +83,7 @@ private fun YearMonthTitle(
         ) {
             Text(text = "$monthName ${yearMonth.year}", style = MaterialTheme.typography.titleMedium)
             Icon(
-                painter = painterResource(R.drawable.ic_arrow_drop_down),
+                painter = painterResource(R.drawable.caret_down_fill),
                 contentDescription = null,
                 modifier = Modifier.rotate(rotation),
             )

@@ -290,38 +290,53 @@ Follow [Compose performance best practices](https://developer.android.com/develo
   Use a `@MedTimerPreview` multipreview annotation (`@Preview` + dark variant + minimum supported font scale) defined in `:core:ui`.
 - Previews **must render without a real ViewModel** — that is the whole point of the stateless `*Content` split.
 
-## Icons — vendored Material Symbols (Rounded)
+## Icons — vendored Bootstrap Icons
 
-**Do not depend on `androidx.compose.material:material-icons-extended`.** It is effectively deprecated, ships thousands of
-icons (APK-size and build-time cost), and Google now recommends vendoring only the icons you use. The lightweight
-`material-icons-core` set that comes with Compose is also discouraged for new work — prefer vendored Material Symbols.
+**[Bootstrap Icons](https://icons.getbootstrap.com/) are the icon set for medTimer** — both the legacy XML/View UI and new
+Compose UI. This is not a Compose-only convention; it is the app-wide standard. The existing drawables in `:core:ui`
+(`bell`, `cart2`, `chevron_left`, `box_seam`, `calendar_event`, `link`, `repeat`, …) are all vendored Bootstrap Icons —
+match them.
 
-**Vendor each icon as a vector drawable in `:core:ui/src/main/res/drawable/`**, named `ic_<snake_case>.xml` (e.g.
-`ic_bar_chart.xml`). Putting them in `:core:ui` makes them reachable from every `:feature:*` module via
-`com.futsch1.medtimer.core.ui.R.drawable.ic_…`.
+**Do not** depend on `androidx.compose.material:material-icons-extended` or `material-icons-core`, and **do not** vendor
+Material Symbols. New Compose icons must come from Bootstrap Icons so the whole app stays visually consistent.
 
-- **Style: Rounded**, to match Material 3. Weight 400, grade 0, optical size 24 (the defaults).
-- Use directional icons (`navigate_before`, `navigate_next`, `sort`, …) with `android:autoMirrored="true"` so they flip in RTL.
-- Reference them in Compose with `Icon(painterResource(R.drawable.ic_…), contentDescription = …)`. `Icon` applies `tint`
-  (defaults to `LocalContentColor`), so the drawable's `android:fillColor` is just a placeholder — keep it a solid color.
+**Vendor each icon as a vector drawable in `:core:ui/src/main/res/drawable/`**, named after the Bootstrap icon with hyphens
+replaced by underscores (e.g. `arrow-right` → `arrow_right.xml`, `caret-down-fill` → `caret_down_fill.xml`). Putting them in
+`:core:ui` makes them reachable from every `:feature:*` module via `com.futsch1.medtimer.core.ui.R.drawable.<name>`.
+
+- **Reuse before you vendor.** Check `:core:ui/src/main/res/drawable/` for an existing Bootstrap icon first, and prefer the
+  shared semantic mappings — `ReminderType.getIcon()` and `OverviewState.getImage()` in `:core:ui` — over hand-picking a
+  drawable per call site. Don't add a near-duplicate of an icon that already exists.
+- **Geometry: 16×16.** Bootstrap Icons are drawn on a 16-unit canvas, so set `android:width`/`android:height` to `16dp` and
+  `viewportWidth`/`viewportHeight` to `16`. (This differs from Material Symbols' 24/960 space.)
+- Use directional icons (`arrow_right`, `chevron_left`, `chevron_right`, …) with `android:autoMirrored="true"` so they flip
+  in RTL.
+- Reference them in Compose with `Icon(painterResource(R.drawable.<name>), contentDescription = …)`. `Icon` applies `tint`
+  (defaults to `LocalContentColor`), so the drawable's `android:fillColor` is just a placeholder — keep it the solid
+  `?android:colorForeground` used by the other icons.
 - Icon-only controls (e.g. chips, the calendar nav buttons) still need an accessible label: pass a real `contentDescription`
   (a `stringResource`), which is also what UiAutomator instrumented tests target via `By.desc(...)`.
 
 ### How to get the drawable
 
-**Android Studio (preferred):** right-click `core/ui/src/main/res` → **New → Vector Asset → Clip Art**, search the icon,
-pick the **Rounded** style, set size 24dp, name it `ic_<snake_case>`, Finish. Studio writes the `<vector>` for you and
-sets `autoMirrored` for directional glyphs.
+**From the web (preferred):** open [icons.getbootstrap.com](https://icons.getbootstrap.com/), pick the icon, and copy its
+SVG. Bootstrap SVGs already use a `viewBox="0 0 16 16"`, and the SVG `<path d="…">` grammar is identical to Android's
+`android:pathData`, so the path string drops straight in — no coordinate-space translation or `<group>` wrapper needed.
+Wrap it as:
 
-**From the web:** [fonts.google.com/icons?icon.style=Rounded](https://fonts.google.com/icons?icon.style=Rounded) → select
-the icon → set **Style = Rounded** → either download the **Android** XML vector drawable directly, or download the SVG and
-import it via the Vector Asset wizard. Raw SVGs are also available from the
-[`google/material-design-icons`](https://github.com/google/material-design-icons) repo under
-`symbols/web/<name>/materialsymbolsrounded/<name>_24px.svg`.
+```xml
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp" android:height="16dp"
+    android:viewportWidth="16" android:viewportHeight="16">
+  <path android:pathData="<the SVG d attribute>" android:fillColor="?android:colorForeground"/>
+</vector>
+```
 
-> Manual SVG conversion gotcha: Material Symbols SVGs use a `viewBox="0 -960 960 960"` (font coordinate space). In the
-> `<vector>` set `viewportWidth`/`viewportHeight` to `960` and wrap the `<path>` in `<group android:translateY="960">` to
-> shift the negative-Y origin into the 0…960 viewport. The Vector Asset wizard handles this automatically.
+Carry over `fill-rule="evenodd"` as `android:fillType="evenOdd"`, and add `android:autoMirrored="true"` for directional
+glyphs. Multi-`<path>` Bootstrap icons (e.g. `calendar3`) become one `<path>` element per SVG path.
+
+**Android Studio:** **New → Vector Asset → Local file** and point it at the downloaded `.svg`; the wizard writes the
+`<vector>` for you. Rename it to the underscored Bootstrap name afterwards.
 
 ## Testing — pointer
 
@@ -344,4 +359,4 @@ In brief:
   and [Material 3 Expressive](https://developer.android.com/develop/ui/compose/designsystems/material3/expressive).
 - [Now in Android](https://github.com/android/nowinandroid) — reference patterns for Hilt + Compose + multi-module.
 
-_Last reviewed: 2026-05-29 · Compose: adopted on the Statistics screen (StatisticsFragment → ComposeView); remaining screens still use XML layouts + Fragments._
+_Last reviewed: 2026-06-05 · Compose: adopted on the Statistics screen (StatisticsFragment → ComposeView); remaining screens still use XML layouts + Fragments. Icons standardised on Bootstrap Icons._

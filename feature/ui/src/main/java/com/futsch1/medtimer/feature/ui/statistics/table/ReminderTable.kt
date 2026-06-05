@@ -85,7 +85,7 @@ fun ReminderTable(
                         exit = scaleOut() + fadeOut(),
                     ) {
                         IconButton(onClick = { query = "" }) {
-                            Icon(painterResource(R.drawable.ic_cancel), contentDescription = stringResource(R.string.cancel))
+                            Icon(painterResource(R.drawable.x_circle), contentDescription = stringResource(R.string.cancel))
                         }
                     }
                 },

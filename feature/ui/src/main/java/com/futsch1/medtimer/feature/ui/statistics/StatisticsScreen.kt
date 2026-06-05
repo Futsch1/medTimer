@@ -82,13 +82,13 @@ fun StatisticsScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                ViewChip(R.drawable.ic_bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
+                ViewChip(R.drawable.bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
                     onSelectView(StatisticFragment.CHARTS)
                 }
-                ViewChip(R.drawable.ic_table_chart, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
+                ViewChip(R.drawable.table, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
                     onSelectView(StatisticFragment.TABLE)
                 }
-                ViewChip(R.drawable.ic_calendar_month, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
+                ViewChip(R.drawable.calendar3, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
                     onSelectView(StatisticFragment.CALENDAR)
                 }
             }
@@ -161,7 +161,7 @@ private fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mod
             onClick = {},
             label = { Text(labels.getOrElse(selectedIndex) { "" }) },
             trailingIcon = {
-                Icon(painterResource(R.drawable.ic_arrow_drop_down), contentDescription = null, modifier = Modifier.rotate(rotation))
+                Icon(painterResource(R.drawable.caret_down_fill), contentDescription = null, modifier = Modifier.rotate(rotation))
             },
             modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
