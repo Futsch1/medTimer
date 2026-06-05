@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -179,7 +181,12 @@ fun CalendarContent(
             eventPanel(Modifier.weight(1f))
         }
     } else {
-        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        // The calendar grid plus a busy day's event list can exceed the viewport in portrait, so the
+        // stacked arrangement scrolls vertically to keep every event reachable.
+        Column(
+            modifier = modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             calendarCard(Modifier)
             eventPanel(Modifier)
         }

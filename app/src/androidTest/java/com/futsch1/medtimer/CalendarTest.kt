@@ -47,8 +47,10 @@ class CalendarTest : BaseTestHelper() {
         // View chips are icon-only; labels are exposed as content descriptions.
         device.findObject(By.desc(context.getString(R.string.calendar)))?.click()
         AndroidTestHelper.waitForIdle(500)
-        // The Compose calendar pre-selects today, so today's events render without tapping a cell.
-        internalAssert(device.findObject(By.textContains("Selen")) != null)
+        // The Compose calendar pre-selects today, so today's events render without tapping a cell. Assert a
+        // medicine from the top of today's (long) list, which stays on screen — the panel scrolls for the
+        // rest, but UiAutomator only matches on-screen nodes.
+        internalAssert(device.findObject(By.textContains("Omega 3 (EPA/DHA 500mg)")) != null)
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.time.Duration
 import java.time.LocalDate
 import kotlin.test.assertTrue
 
@@ -53,6 +54,20 @@ class DayEventsCardTest {
             composeTestRule.onAllNodesWithContentDescription("Taken").fetchSemanticsNodes().isEmpty(),
             "A scheduled event should not render a status icon",
         )
+    }
+
+    @Test
+    fun `a taken event renders the taken time and interval`() {
+        setEvents(
+            CalendarDayEvent(
+                date.atTime(8, 0), "1 tablet", "Vitamin X 500 mg", CalendarDayEvent.Status.TAKEN, ReminderType.CONTINUOUS_INTERVAL,
+                takenTime = date.atTime(8, 42), interval = Duration.ofMinutes(150),
+            ),
+        )
+
+        // The interval label ("Interval …") is rendered after the arrow-linked taken time; assert the
+        // locale-stable prefix from R.string.interval_time rather than the locale-formatted duration.
+        composeTestRule.onNodeWithText("Interval", substring = true).assertExists()
     }
 
     private fun setEvents(vararg events: CalendarDayEvent) {

@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -190,6 +189,14 @@ class MainActivity : AppCompatActivity() {
     private fun onContentBound(binding: ContentMainBinding, navHostFragment: NavHostFragment) {
         this.navHostFragment = navHostFragment
         val navController = navHostFragment.navController
+        // Track the tab whose area we're in. Detail screens (e.g. editMedicineFragment) are flat siblings
+        // of the tab roots, so they don't carry their tab in the destination hierarchy; keep the last
+        // top-level tab stickily so a tab tap from one of its detail screens counts as a reselect.
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in topLevelTabIds) {
+                currentTabId = destination.id
+            }
+        }
         setSupportActionBar(binding.toolbar)
         appBarConfiguration = AppBarConfiguration.Builder(
             com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
@@ -210,17 +217,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val topLevelTabIds = setOf(
+        com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
+        com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
+        com.futsch1.medtimer.feature.ui.R.id.statisticsFragment,
+    )
+
+    // The tab area the user is currently in (sticky across that tab's detail screens). Initialised to the
+    // start destination, then kept in sync by the destination listener in onContentBound.
+    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
+
+    // The destination the previous click navigated to (a fresh select, not a reselect). NavController's
+    // currentDestination updates synchronously on navigate(), so a tap that lands right after navigating
+    // to the same destination would otherwise look like a reselect. The legacy BottomNavigationView
+    // tolerated that navigate-then-retap, so we suppress the stray reselect to mirror its behavior.
+    private var justNavigatedTo: Int? = null
+
     // Mirrors the legacy BottomNavigationView select/reselect behavior.
     private fun onNavItemClick(navController: NavController, destinationId: Int) {
-        val isReselected = navController.currentDestination
-            ?.hierarchy?.any { it.id == destinationId } == true
+        // A tap on the tab we're already in (including its detail screens) is a reselect.
+        val isReselected = destinationId == currentTabId
         if (isReselected) {
+            // A tab tap always returns to the tab's root, clearing any detail screens on its back stack.
             navController.popBackStack(destinationId, false)
+            // But a reselect that immediately follows navigating to this destination is a stray re-tap
+            // (the instrumented tests tap each item twice), not a real reselect — don't fire the reselect
+            // side-effect for it (e.g. it must not reset the overview day to today).
+            if (justNavigatedTo == destinationId) {
+                justNavigatedTo = null
+                return
+            }
             val topFragment = navHostFragment?.childFragmentManager?.fragments?.firstOrNull()
             if (topFragment is OnFragmentReselectedListener) {
                 topFragment.onFragmentReselected()
             }
         } else {
+            justNavigatedTo = destinationId
             navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(true)
