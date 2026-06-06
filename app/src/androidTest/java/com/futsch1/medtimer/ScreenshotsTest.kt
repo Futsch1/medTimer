@@ -9,18 +9,18 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
+import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.feature.ui.statistics.ANALYSIS_RANGES
 import com.futsch1.medtimer.utilities.openNotification
 import org.junit.ClassRule
 import org.junit.Test
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
-import com.futsch1.medtimer.core.ui.R
 
 
 class ScreenshotsTest : BaseTestHelper() {
@@ -81,7 +81,7 @@ class ScreenshotsTest : BaseTestHelper() {
         Screengrab.screenshot("6")
 
         // Open the range dropdown (button shows the currently-selected range) and select "2 days"
-        val rangeLabels = context.resources.getStringArray(R.array.analysis_days)
+        val rangeLabels = ANALYSIS_RANGES.map { context.getString(it.first) }
         val rangeButton = rangeLabels.firstNotNullOfOrNull { device.findObject(By.text(it)) }
         rangeButton?.click()
         AndroidTestHelper.waitForIdle(300)

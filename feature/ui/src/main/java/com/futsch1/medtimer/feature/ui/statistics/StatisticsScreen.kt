@@ -3,7 +3,6 @@ package com.futsch1.medtimer.feature.ui.statistics
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -16,26 +15,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,28 +65,33 @@ fun StatisticsScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                ViewChip(R.drawable.bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
-                    onSelectView(StatisticFragment.CHARTS)
+        // FilterChip's clickable Surface reserves a 48dp minimum interactive size, making the header taller than the
+        // 32dp chip pills. Disabling the reservation here is layout-only — the system still expands the touch target at
+        // the input layer — so the row matches the chip height.
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    ViewChip(R.drawable.bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
+                        onSelectView(StatisticFragment.CHARTS)
+                    }
+                    ViewChip(R.drawable.table, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
+                        onSelectView(StatisticFragment.TABLE)
+                    }
+                    ViewChip(R.drawable.calendar3, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
+                        onSelectView(StatisticFragment.CALENDAR)
+                    }
                 }
-                ViewChip(R.drawable.table, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
-                    onSelectView(StatisticFragment.TABLE)
-                }
-                ViewChip(R.drawable.calendar3, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
-                    onSelectView(StatisticFragment.CALENDAR)
-                }
-            }
 
-            // The Analysis range drives the Charts only — show the control only there (matches the legacy app).
-            AnimatedVisibility(visible = state.activeView == StatisticFragment.CHARTS) {
-                RangeDropdown(days = state.analysisDays, onSelectRange = onSelectRange)
+                // The Analysis range drives the Charts only — show the control only there (matches the legacy app).
+                AnimatedVisibility(visible = state.activeView == StatisticFragment.CHARTS) {
+                    RangeDropdown(days = state.analysisDays, onSelectRange = onSelectRange)
+                }
             }
         }
 
@@ -146,41 +142,6 @@ private fun ViewChip(iconRes: Int, labelRes: Int, selected: Boolean, onClick: ()
         ),
     )
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val labels = stringArrayResource(R.array.analysis_days)
-    var expanded by remember { mutableStateOf(false) }
-    val selectedIndex = ANALYSIS_DAYS_VALUES.indexOf(days).coerceAtLeast(0)
-    val rotation by animateFloatAsState(targetValue = if (expanded) 180f else 0f, label = "rangeArrowRotation")
-
-    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }, modifier = modifier) {
-        FilterChip(
-            selected = true,
-            onClick = {},
-            label = { Text(labels.getOrElse(selectedIndex) { "" }) },
-            trailingIcon = {
-                Icon(painterResource(R.drawable.caret_down_fill), contentDescription = null, modifier = Modifier.rotate(rotation))
-            },
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-        )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            labels.forEachIndexed { index, label ->
-                DropdownMenuItem(
-                    text = { Text(label) },
-                    onClick = {
-                        expanded = false
-                        onSelectRange(ANALYSIS_DAYS_VALUES[index])
-                    },
-                )
-            }
-        }
-    }
-}
-
-// mirrors R.array.analysis_days_values — must stay in sync with that resource array
-private val ANALYSIS_DAYS_VALUES = intArrayOf(1, 2, 3, 7, 14, 30)
 
 @MedTimerPreview
 @Composable
