@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,7 +44,8 @@ class ReminderTableFragment : Fragment() {
         val tableFilter = Filter(tableView)
         setupFilter(tableFilter)
 
-        val adapter = ReminderTableAdapter(tableView, requireActivity().supportFragmentManager, timeFormatter)
+        val adapter =
+            ReminderTableAdapter(tableView, requireActivity().supportFragmentManager, timeFormatter)
 
         tableView.setAdapter(adapter)
 
@@ -57,7 +59,10 @@ class ReminderTableFragment : Fragment() {
             )
         )
         viewLifecycleOwner.lifecycleScope.launch {
-            medicineViewModel.getLiveReminderEvents(0, ReminderEvent.statusValuesTakenOrSkipped)
+            medicineViewModel.getLiveReminderEvents(
+                Instant.EPOCH,
+                ReminderEvent.statusValuesTakenOrSkipped
+            )
                 .collect { reminderEvents ->
                     adapter.submitList(reminderEvents)
                     tableFilter.set(filter?.text?.toString() ?: "")

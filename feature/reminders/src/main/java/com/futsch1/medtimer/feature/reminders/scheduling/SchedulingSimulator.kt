@@ -7,6 +7,8 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.feature.reminders.TimeAccess
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -37,10 +39,12 @@ class SchedulingSimulator(
         override fun now(): Instant = Instant.now()
     }
 
-    fun simulate(scheduledReminderConsumer: scheduledReminderConsumerType) {
+    suspend fun simulate(scheduledReminderConsumer: scheduledReminderConsumerType) {
+        val context = currentCoroutineContext()
         val maxSimulationDay = currentDay.plusDays(maxSimulationDays.toLong())
         while (simulateDay(scheduledReminderConsumer) && currentDay < maxSimulationDay) {
             currentDay = currentDay.plusDays(1)
+            context.ensureActive()
         }
     }
 

@@ -99,7 +99,7 @@ class CalendarEventsViewModel @Inject constructor(
         return builder
     }
 
-    private fun addFutureEvents(futureDays: Long) {
+    private suspend fun addFutureEvents(futureDays: Long) {
         val timeProvider = object : TimeAccess {
             override fun systemZone(): ZoneId = ZoneId.systemDefault()
             override fun localDate(): LocalDate = LocalDate.now()

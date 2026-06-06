@@ -11,6 +11,7 @@ import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
+import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagFilterStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.util.stream.Collectors
 import javax.inject.Inject
 
@@ -32,6 +34,7 @@ class MedicineViewModel @Inject constructor(
     medicineRepository: MedicineRepository,
     private val tagRepository: TagRepository,
     private val reminderEventRepository: ReminderEventRepository,
+    private val futureRemindersRepository: FutureRemindersRepository,
 ) : ViewModel() {
     private val liveMedicines = medicineRepository.getAllFlow()
 
@@ -39,7 +42,10 @@ class MedicineViewModel @Inject constructor(
     val validTagIds: StateFlow<Set<Int>?> = _validTagIds.asStateFlow()
     val tagFilterStore = TagFilterStore(persistentDataDataSource, _validTagIds)
 
-    fun clearTagFilter() { _validTagIds.value = setOf() }
+    fun clearTagFilter() {
+        _validTagIds.value = setOf()
+    }
+
     private var medicineToTags: List<MedicineToTag> = emptyList()
     private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(
         viewModelScope, SharingStarted.Eagerly, emptyList()
@@ -47,13 +53,15 @@ class MedicineViewModel @Inject constructor(
 
     private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
 
-    val medicines: StateFlow<List<Medicine>> = combine(liveMedicines, validTagIds) { medicines, tagIds ->
-        getFiltered(medicines, tagIds ?: emptySet())
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val medicines: StateFlow<List<Medicine>> =
+        combine(liveMedicines, validTagIds) { medicines, tagIds ->
+            getFiltered(medicines, tagIds ?: emptySet())
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val scheduledReminders: SharedFlow<List<ScheduledReminder>> = combine(_scheduledReminders, validTagIds) { reminders, tagIds ->
-        getFiltered(reminders, tagIds ?: emptySet())
-    }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
+    val scheduledReminders: SharedFlow<List<ScheduledReminder>> =
+        combine(_scheduledReminders, validTagIds) { reminders, tagIds ->
+            getFiltered(reminders, tagIds ?: emptySet())
+        }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         viewModelScope.launch {
@@ -65,6 +73,12 @@ class MedicineViewModel @Inject constructor(
         viewModelScope.launch {
             tagRepository.getAllFlow().collect {
                 tagFilterStore.filterForDeletedTags(it)
+            }
+        }
+
+        viewModelScope.launch {
+            futureRemindersRepository.simulatedReminders.collect { reminders ->
+                _scheduledReminders.value = reminders
             }
         }
     }
@@ -95,7 +109,7 @@ class MedicineViewModel @Inject constructor(
     }
 
     fun tagFilterActive(): Boolean {
-        return validTagIds.value?.isNotEmpty() ?: return false
+        return validTagIds.value?.isNotEmpty() ?: false
     }
 
     private fun getFilteredEvents(
@@ -141,11 +155,11 @@ class MedicineViewModel @Inject constructor(
     }
 
     fun getLiveReminderEvents(
-        timeStamp: Long,
+        startInstant: Instant,
         statusValues: List<ReminderEvent.ReminderStatus> = ReminderEvent.allStatusValues
     ): Flow<List<ReminderEvent>> {
         return combine(
-            reminderEventRepository.getAllFlow(timeStamp, statusValues),
+            reminderEventRepository.getAllFlow(startInstant, statusValues),
             validTagIds,
             liveTags
         ) { events, tagIds, tags ->
@@ -153,7 +167,5 @@ class MedicineViewModel @Inject constructor(
         }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
     }
 
-    fun setScheduledReminders(scheduledReminders: List<ScheduledReminder>) {
-        _scheduledReminders.value = scheduledReminders
-    }
+
 }
