@@ -12,6 +12,7 @@ import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
 import com.futsch1.medtimer.schedulertests.TestHelper.on
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito
 import java.time.Instant
@@ -33,7 +34,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun standard() {
+    fun standard() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test"),
             TestHelper.buildTestMedicine(1, "Test2")
@@ -65,7 +66,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun interval() {
+    fun interval() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")
         )
@@ -91,7 +92,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun windowedInterval() {
+    fun windowedInterval() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")
         )
@@ -120,7 +121,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun windowedIntervalReversed() {
+    fun windowedIntervalReversed() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")
         )
@@ -151,7 +152,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun linkedAndAmount() {
+    fun linkedAndAmount() = runBlocking {
         val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         medicineWithReminders.amount = 12.0
         val reminderSource = TestHelper.buildReminder(1, 1, "1", 480, 1)
@@ -190,7 +191,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun noReminders() {
+    fun noReminders() = runBlocking {
         val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val medicines = listOf(medicineWithReminders)
 
@@ -202,7 +203,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun dailyReminders() {
+    fun dailyReminders() = runBlocking {
         val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         val reminder = TestHelper.buildReminder(1, 1, "1", 480, 1).copy(
             intervalStart = Instant.ofEpochSecond(60 * 60),
@@ -238,7 +239,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun outOfStock() {
+    fun outOfStock() = runBlocking {
         val medicineWithReminders = TestHelper.buildTestMedicine(1, "Test")
         medicineWithReminders.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "3", 480, 1)
@@ -271,7 +272,7 @@ class SchedulingSimulatorTest {
     }
 
     @Test
-    fun singleDays() {
+    fun singleDays() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")
         )

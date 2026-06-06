@@ -11,6 +11,7 @@ import java.util.regex.Pattern
 
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
+    private val AMOUNT_PATTERN: Pattern = Pattern.compile("(?:\\d|\\.\\d)[.,\\s\\d]*")
 
     fun normalizeMedicineName(medicineName: String): String {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
@@ -59,8 +60,7 @@ object MedicineHelper {
     }
 
     fun parseAmount(amount: String?): Double? {
-        val numberRegex = Pattern.compile("(?:\\d|\\.\\d)[.,\\s\\d]*")
-        val matcher = numberRegex.matcher(amount ?: "")
+        val matcher = AMOUNT_PATTERN.matcher(amount ?: "")
 
         return if (matcher.find() && matcher.group(0) != null) {
             val numberFormat = NumberFormat.getNumberInstance()
