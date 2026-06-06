@@ -28,6 +28,7 @@ import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,7 +38,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -163,6 +165,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
     override fun onResume() {
         super.onResume()
         daySelector.updateWeekRange()
+        updateTitle(overviewViewModel.day)
     }
 
     inner class OverviewOnSwipeListener : OnSwipeListener {
@@ -238,6 +241,13 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     fun daySelected(date: LocalDate) {
         overviewViewModel.day = date
+        updateTitle(date)
+    }
+
+    private fun updateTitle(date: LocalDate) {
+        (requireActivity() as AppCompatActivity).supportActionBar?.title =
+            getString(com.futsch1.medtimer.core.ui.R.string.tab_overview) + " - " +
+                    date.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()))
     }
 
 
