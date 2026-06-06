@@ -110,8 +110,7 @@ class OverviewViewModel @AssistedInject constructor(
                 // Prefetch when within 7 days of simulation boundary
                 if (simThrough > LocalDate.MIN && day >= simThrough.minusDays(7)) {
                     futureRemindersRepository.triggerCalculation(
-                        simThrough.plusWeeks(3),
-                        immediate = true
+                        simThrough.plusWeeks(3)
                     )
                 }
             }

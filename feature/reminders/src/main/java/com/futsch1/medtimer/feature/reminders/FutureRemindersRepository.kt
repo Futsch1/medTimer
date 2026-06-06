@@ -9,15 +9,15 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.Duration.Companion.milliseconds
 
 @Singleton
 class FutureRemindersRepository @Inject constructor(
@@ -30,28 +30,39 @@ class FutureRemindersRepository @Inject constructor(
     private val _simulatedReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
     val simulatedReminders: StateFlow<List<ScheduledReminder>> = _simulatedReminders.asStateFlow()
 
-    private val _simulatedThrough = MutableStateFlow(java.time.LocalDate.MIN)
-    val simulatedThrough: StateFlow<java.time.LocalDate> = _simulatedThrough.asStateFlow()
+    private val _simulatedThrough = MutableStateFlow(LocalDate.MIN)
+    val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
 
-    private var calculationJob: Job? = null
+    private val triggerChannel = Channel<LocalDate>(Channel.CONFLATED)
 
-    fun triggerCalculation(
-        endDay: java.time.LocalDate = timeAccess.localDate().plusDays(DEFAULT_SIMULATION_DAYS),
-        immediate: Boolean = false
-    ) {
-        // Never shrink the simulation window during a session
-        val effectiveEndDay = maxOf(endDay, _simulatedThrough.value)
-        Log.d(LogTags.SIMULATION, "Triggering future reminders simulation through $effectiveEndDay")
-        calculationJob?.cancel()
-        calculationJob = applicationScope.launch {
-            if (!immediate) delay(DEBOUNCE_MS)
-            _simulatedReminders.value = runSimulation(effectiveEndDay)
-            _simulatedThrough.value = effectiveEndDay
-            Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
+    init {
+        applicationScope.launch {
+            triggerChannel.consumeEach { endDay ->
+                try {
+                    Log.d(
+                        LogTags.SIMULATION,
+                        "Triggering future reminders simulation through $endDay"
+                    )
+                    _simulatedReminders.value = runSimulation(endDay)
+                    _simulatedThrough.value = endDay
+                    Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
+                } catch (e: Exception) {
+                    Log.e(LogTags.SIMULATION, "Future reminders simulation failed", e)
+                }
+            }
         }
     }
 
-    private suspend fun runSimulation(endDay: java.time.LocalDate): List<ScheduledReminder> {
+    fun triggerCalculation(
+        endDay: LocalDate = timeAccess.localDate().plusDays(DEFAULT_SIMULATION_DAYS)
+    ) {
+        // Never shrink the simulation window during a session
+        val effectiveEndDay = maxOf(endDay, _simulatedThrough.value)
+        Log.d(LogTags.SIMULATION, "Queuing future reminders simulation through $effectiveEndDay")
+        triggerChannel.trySend(effectiveEndDay)
+    }
+
+    private suspend fun runSimulation(endDay: LocalDate): List<ScheduledReminder> {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
         val result = mutableListOf<ScheduledReminder>()
@@ -72,7 +83,6 @@ class FutureRemindersRepository @Inject constructor(
     }
 
     companion object {
-        private val DEBOUNCE_MS = 1000.milliseconds
         const val DEFAULT_SIMULATION_DAYS = 28L
     }
 }
