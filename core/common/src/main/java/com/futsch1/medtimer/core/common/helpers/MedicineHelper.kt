@@ -12,6 +12,7 @@ import java.util.regex.Pattern
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
     private val AMOUNT_PATTERN: Pattern = Pattern.compile("(?:\\d|\\.\\d)[.,\\s\\d]*")
+    private val numberFormat = NumberFormat.getNumberInstance()
 
     fun normalizeMedicineName(medicineName: String): String {
         return CYCLIC_COUNT.matcher(medicineName).replaceAll("")
@@ -53,7 +54,6 @@ object MedicineHelper {
     }
 
     fun formatAmount(amount: Double, unit: String): String {
-        val numberFormat = NumberFormat.getNumberInstance()
         numberFormat.minimumFractionDigits = 0
         numberFormat.maximumFractionDigits = 2
         return numberFormat.format(amount) + if (unit.isEmpty()) "" else " $unit"
