@@ -63,7 +63,6 @@ object MedicineHelper {
         val matcher = AMOUNT_PATTERN.matcher(amount ?: "")
 
         return if (matcher.find() && matcher.group(0) != null) {
-            val numberFormat = NumberFormat.getNumberInstance()
             try {
                 numberFormat.parse(matcher.group(0)!!.replace(" ", ""))?.toDouble()
             } catch (_: ParseException) {
