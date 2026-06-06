@@ -16,15 +16,36 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.3" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/overviewPrevWeek"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/previous_week"
+        app:icon="@drawable/chevron_left"
+        app:layout_constraintBottom_toBottomOf="@id/overviewWeek"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/overviewWeek" />
+
     <com.kizitonwose.calendar.view.WeekCalendarView
         android:id="@+id/overviewWeek"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp"
         app:cv_dayViewResource="@layout/calendar_day_layout"
-        app:layout_constraintEnd_toStartOf="@id/separator"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/overviewNextWeek"
+        app:layout_constraintStart_toEndOf="@id/overviewPrevWeek"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/overviewNextWeek"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/next_week"
+        app:icon="@drawable/chevron_right"
+        app:layout_constraintBottom_toBottomOf="@id/overviewWeek"
+        app:layout_constraintEnd_toStartOf="@id/separator"
+        app:layout_constraintTop_toTopOf="@id/overviewWeek" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/filterButtons"

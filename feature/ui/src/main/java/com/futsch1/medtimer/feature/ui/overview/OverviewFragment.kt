@@ -21,7 +21,6 @@ import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
@@ -38,10 +37,12 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersViewAdapter.ClickListener {
+class OverviewFragment : Fragment(), OnFragmentReselectedListener,
+    RemindersViewAdapter.ClickListener {
     @Inject
     @Dispatcher(MedTimerDispatchers.Default)
     lateinit var backgroundDispatcher: CoroutineDispatcher
@@ -79,10 +80,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         extrasProducer = {
             defaultViewModelCreationExtras.withCreationCallback<OverviewViewModel.Factory> { factory ->
                 factory.create(
-                    medicineViewModel.getLiveReminderEvents(
-                        Instant.now().toEpochMilli() / 1000 - (6 * 24 * 60 * 60),
-                        ReminderEvent.statusValuesWithoutDelete
-                    ),
+                    medicineViewModel.validTagIds,
                     medicineViewModel.scheduledReminders
                 )
             }
@@ -118,18 +116,44 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val overview = inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val overview =
+            inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
         fragmentOverview = overview
 
-        daySelector = DaySelector(requireContext(), overview.findViewById(R.id.overviewWeek), overviewViewModel.day) { day -> daySelected(day) }
+        daySelector = DaySelector(
+            requireContext(),
+            overview.findViewById(R.id.overviewWeek),
+            overviewViewModel.day
+        ) { day -> daySelected(day) }
+
+        overview.findViewById<View>(R.id.overviewPrevWeek)
+            .setOnClickListener { daySelector.scrollToPreviousWeek() }
+        overview.findViewById<View>(R.id.overviewNextWeek)
+            .setOnClickListener { daySelector.scrollToNextWeek() }
+
+        viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
+            overviewViewModel.simulatedThrough.collect { endDay ->
+                withContext(mainDispatcher) {
+                    daySelector.updateRangeEnd(endDay)
+                }
+            }
+        }
 
         requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
 
         setupReminders(overview)
 
         setupLogManualDose(overview)
-        FilterToggleGroup(overview.findViewById(R.id.filterButtons), overviewViewModel, persistentDataDataSource)
+        FilterToggleGroup(
+            overview.findViewById(R.id.filterButtons),
+            overviewViewModel,
+            persistentDataDataSource
+        )
 
         overview.onSwipeListener = OverviewOnSwipeListener()
 
@@ -161,7 +185,10 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     private fun setupReminders(overview: FragmentSwipeLayout) {
         reminders = overview.findViewById(R.id.reminders)
-        adapter = remindersViewAdapterFactory.create(RemindersViewAdapter.OverviewEventDiff(), requireActivity())
+        adapter = remindersViewAdapterFactory.create(
+            RemindersViewAdapter.OverviewEventDiff(),
+            requireActivity()
+        )
         reminders.setAdapter(adapter)
         reminders.setLayoutManager(LinearLayoutManager(overview.context))
         adapter.clickListener = this
@@ -186,7 +213,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
 
     private fun scrollToCurrentTimeItem() {
         adapter.currentList.forEachIndexed { index, listItem ->
-            if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault()).toLocalTime() >= LocalTime.now()) {
+            if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault())
+                    .toLocalTime() >= LocalTime.now()
+            ) {
                 reminders.scrollToPosition(index)
                 return
             }
@@ -197,7 +226,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
         val logManualDose = overview.findViewById<Button>(R.id.logManualDose)
         logManualDose.setOnClickListener { _: View? ->
             lifecycleScope.launch {
-                manualDoseFactory.create(requireContext(), medicineViewModel, requireActivity(), overviewViewModel.day).logManualDose()
+                manualDoseFactory.create(
+                    requireContext(),
+                    medicineViewModel,
+                    requireActivity(),
+                    overviewViewModel.day
+                ).logManualDose()
             }
         }
     }
@@ -252,7 +286,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
             actionsMenu = null
         } else {
             actionMode?.title = selectedCount.toString()
-            val multipleActions = multipleActionsFactory.create(adapter.getSelectedItems(), requireActivity())
+            val multipleActions =
+                multipleActionsFactory.create(adapter.getSelectedItems(), requireActivity())
             actionsMenu = ActionsMenu(actionMode!!.menu, multipleActions)
         }
 
@@ -276,7 +311,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener, RemindersView
                     adapter.selectAll()
                     updateActionMode()
                 } else {
-                    val button = com.futsch1.medtimer.feature.ui.overview.actions.Button.fromId(item?.itemId ?: return false)
+                    val button = com.futsch1.medtimer.feature.ui.overview.actions.Button.fromId(
+                        item?.itemId ?: return false
+                    )
                     lifecycleScope.launch {
                         actionsMenu?.actions?.buttonClicked(button)
                         mode?.finish()

@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.util.stream.Collectors
 import javax.inject.Inject
 
@@ -154,11 +155,11 @@ class MedicineViewModel @Inject constructor(
     }
 
     fun getLiveReminderEvents(
-        timeStamp: Long,
+        startInstant: Instant,
         statusValues: List<ReminderEvent.ReminderStatus> = ReminderEvent.allStatusValues
     ): Flow<List<ReminderEvent>> {
         return combine(
-            reminderEventRepository.getAllFlow(timeStamp, statusValues),
+            reminderEventRepository.getAllFlow(startInstant, statusValues),
             validTagIds,
             liveTags
         ) { events, tagIds, tags ->

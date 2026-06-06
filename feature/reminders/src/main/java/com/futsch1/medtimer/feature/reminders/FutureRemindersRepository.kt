@@ -30,22 +30,30 @@ class FutureRemindersRepository @Inject constructor(
     private val _simulatedReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
     val simulatedReminders: StateFlow<List<ScheduledReminder>> = _simulatedReminders.asStateFlow()
 
+    private val _simulatedThrough = MutableStateFlow(java.time.LocalDate.MIN)
+    val simulatedThrough: StateFlow<java.time.LocalDate> = _simulatedThrough.asStateFlow()
+
     private var calculationJob: Job? = null
 
-    fun triggerCalculation() {
-        Log.d(LogTags.SIMULATION, "Triggering future reminders simulation")
+    fun triggerCalculation(
+        endDay: java.time.LocalDate = timeAccess.localDate().plusDays(DEFAULT_SIMULATION_DAYS),
+        immediate: Boolean = false
+    ) {
+        // Never shrink the simulation window during a session
+        val effectiveEndDay = maxOf(endDay, _simulatedThrough.value)
+        Log.d(LogTags.SIMULATION, "Triggering future reminders simulation through $effectiveEndDay")
         calculationJob?.cancel()
         calculationJob = applicationScope.launch {
-            delay(DEBOUNCE_MS)
-            _simulatedReminders.value = runSimulation()
+            if (!immediate) delay(DEBOUNCE_MS)
+            _simulatedReminders.value = runSimulation(effectiveEndDay)
+            _simulatedThrough.value = effectiveEndDay
             Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
         }
     }
 
-    private suspend fun runSimulation(): List<ScheduledReminder> {
+    private suspend fun runSimulation(endDay: java.time.LocalDate): List<ScheduledReminder> {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-        val endDay = timeAccess.localDate().plusDays(SIMULATION_DAYS)
         val result = mutableListOf<ScheduledReminder>()
 
         SchedulingSimulator(
@@ -65,6 +73,6 @@ class FutureRemindersRepository @Inject constructor(
 
     companion object {
         private val DEBOUNCE_MS = 1000.milliseconds
-        private const val SIMULATION_DAYS = 14L
+        const val DEFAULT_SIMULATION_DAYS = 28L
     }
 }
