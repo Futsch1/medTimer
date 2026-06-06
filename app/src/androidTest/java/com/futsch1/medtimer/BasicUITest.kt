@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.test.espresso.Espresso
 import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertChecked
 import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListNotEmpty
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
@@ -23,6 +24,7 @@ import com.futsch1.medtimer.AndroidTestHelper.createReminder
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setDate
 import com.futsch1.medtimer.AndroidTestHelper.setValue
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.text.DateFormat
@@ -32,7 +34,6 @@ import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
-import com.futsch1.medtimer.core.ui.R
 
 
 class BasicUITest : BaseTestHelper() {
@@ -202,7 +203,9 @@ class BasicUITest : BaseTestHelper() {
         assertContains(TEST_2)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            0,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton
         )
         clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
@@ -240,11 +243,15 @@ class BasicUITest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     // Using internal assert
     fun overviewDaySelection() {
+        openMenu()
+        clickOn(R.string.generate_test_data_and_events)
+
         val secondDay =
             DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
         val today = DayOfWeek.FRIDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n1"
 
         clickOn(secondDay)
+        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
 
         navigateTo(MainMenu.MEDICINES)
 
@@ -252,20 +259,30 @@ class BasicUITest : BaseTestHelper() {
 
         val view = AtomicReference<View>()
         view.set(
-            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity()
+                .findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
         )
 
         var currentDay = view.get().findViewWithTag<TextView>("selected")
-        internalAssert(currentDay.getText() == secondDay)
+        internalAssert(currentDay.text == secondDay)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
 
         navigateTo(MainMenu.OVERVIEW)
         view.set(
-            baristaRule.activityTestRule.getActivity().findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
+            baristaRule.activityTestRule.getActivity()
+                .findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
         )
         currentDay = view.get().findViewWithTag("selected")
-        internalAssert(currentDay.getText() == today)
+        internalAssert(currentDay.text == today)
+        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewNextWeek)
+        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewPrevWeek)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewPrevWeek)
+        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
     }
 
     companion object {
