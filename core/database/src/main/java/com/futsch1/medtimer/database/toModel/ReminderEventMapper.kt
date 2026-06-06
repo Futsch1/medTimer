@@ -25,7 +25,10 @@ fun ReminderEventEntity.toModel(): ReminderEvent =
         reminderType = reminderType.toModelReminderEventType(),
         stockHandled = stockHandled,
         askForAmount = askForAmount,
-        lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+        lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
+        stockBefore = stockBefore,
+        stockAfter = stockAfter,
+        stockUnit = stockUnit
     )
 
 fun ReminderEvent.toEntity(): ReminderEventEntity = ReminderEventEntity(
@@ -46,7 +49,10 @@ fun ReminderEvent.toEntity(): ReminderEventEntity = ReminderEventEntity(
     reminderType = reminderType.toEntityReminderType(),
     stockHandled = stockHandled,
     askForAmount = askForAmount,
-    lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+    lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
+    stockBefore = stockBefore,
+    stockAfter = stockAfter,
+    stockUnit = stockUnit
 )
 
 fun ReminderEventEntity.ReminderEntityStatus.toModel(): ReminderEvent.ReminderStatus =

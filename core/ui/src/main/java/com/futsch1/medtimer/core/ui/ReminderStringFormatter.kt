@@ -37,7 +37,11 @@ class ReminderStringFormatter @Inject constructor(
         if (processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
             preferencesDataSource.preferences.value.showTakenTimeInOverview
         ) {
-            val processedTime = if (TimeHelper.isSameDay(reminderEvent.remindedTimestamp, reminderEvent.processedTimestamp))
+            val processedTime = if (TimeHelper.isSameDay(
+                    reminderEvent.remindedTimestamp,
+                    reminderEvent.processedTimestamp
+                )
+            )
                 timeFormatter.toConfigurableTimeString(reminderEvent.processedTimestamp, false)
             else
                 timeFormatter.toConfigurableDateTimeString(reminderEvent.processedTimestamp)
@@ -46,8 +50,11 @@ class ReminderStringFormatter @Inject constructor(
         }
 
         val intervalTime = getLastIntervalTime(reminderEvent)
+        val stockText = getStockChangeText(reminderEvent)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime).append(intervalTime).append("\n").bold { append(reminderEvent.medicineName) }
+        return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime)
+            .append(intervalTime).append(stockText).append("\n")
+            .bold { append(reminderEvent.medicineName) }
             .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
     }
 
@@ -57,9 +64,10 @@ class ReminderStringFormatter @Inject constructor(
         )
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n").bold {
-            append(scheduledReminder.medicine.name)
-        }.append(getAmountOrStockString(scheduledReminder))
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n")
+            .bold {
+                append(scheduledReminder.medicine.name)
+            }.append(getAmountOrStockString(scheduledReminder))
     }
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
@@ -73,13 +81,18 @@ class ReminderStringFormatter @Inject constructor(
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
 
-        val amountStatusString = "${reminderEvent.amount} ${statusToString(reminderEvent.status)}".trim()
+        val amountStatusString =
+            "${reminderEvent.amount} ${statusToString(reminderEvent.status)}".trim()
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime).bold { append(reminderEvent.medicineName) }
+        return SpannableStringBuilder().append(reminderTypeSpan).append(takenTime)
+            .bold { append(reminderEvent.medicineName) }
             .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
     }
 
-    fun formatScheduledReminderForWidget(scheduledReminder: ScheduledReminder, isShort: Boolean): Spanned {
+    fun formatScheduledReminderForWidget(
+        scheduledReminder: ScheduledReminder,
+        isShort: Boolean
+    ): Spanned {
         val scheduledTime = (if (isShort)
             timeFormatter.toConfigurableTimeString(
                 scheduledReminder.timestamp, true
@@ -90,9 +103,10 @@ class ReminderStringFormatter @Inject constructor(
             )) + ": "
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).bold { append(scheduledReminder.medicine.name) }.append(
-            getAmountOrStockString(scheduledReminder)
-        )
+        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime)
+            .bold { append(scheduledReminder.medicine.name) }.append(
+                getAmountOrStockString(scheduledReminder)
+            )
     }
 
     fun getReminderTypeSpan(reminderType: ReminderType): Spanned {
@@ -113,7 +127,10 @@ class ReminderStringFormatter @Inject constructor(
         val amount =
             when (scheduledReminder.reminder.reminderType) {
                 ReminderType.OUT_OF_STOCK -> {
-                    MedicineHelper.formatAmount(scheduledReminder.medicine.amount, scheduledReminder.medicine.unit)
+                    MedicineHelper.formatAmount(
+                        scheduledReminder.medicine.amount,
+                        scheduledReminder.medicine.unit
+                    )
                 }
 
                 ReminderType.EXPIRATION_DATE -> {
@@ -128,6 +145,25 @@ class ReminderStringFormatter @Inject constructor(
     }
 
 
+    private fun getStockChangeText(reminderEvent: ReminderEvent): Spanned {
+        if (reminderEvent.stockBefore == reminderEvent.stockAfter) return SpannableStringBuilder()
+        val span = SpannableStringBuilder()
+        val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
+        if (drawable != null) {
+            span.append(", ")
+            val iconStart = span.length
+            span.append("  ")
+            span.setSpan(
+                TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE),
+                iconStart,
+                iconStart + 1,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+        span.append(MedicineHelper.formatAmount(reminderEvent.stockAfter, reminderEvent.stockUnit))
+        return span
+    }
+
     private fun getReminderTypeSpan(reminderEvent: ReminderEvent): Spanned =
         getReminderTypeSpan(reminderEvent.reminderType)
 
@@ -136,7 +172,10 @@ class ReminderStringFormatter @Inject constructor(
         val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
         val durationMillis = processedTimestamp * 1000L - lastIntervalTime * 60_000L
         return if (lastIntervalTime > 0 && reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN && durationMillis >= 0) {
-            " (" + context.getString(R.string.interval_time, formatDuration(durationMillis).toString()) + ")"
+            " (" + context.getString(
+                R.string.interval_time,
+                formatDuration(durationMillis).toString()
+            ) + ")"
         } else {
             ""
         }
@@ -159,7 +198,8 @@ class ReminderStringFormatter @Inject constructor(
         if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
         if (minutes >= 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
 
-        val formatter = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
+        val formatter =
+            MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
         return formatter.formatMeasures(*measures.toTypedArray<Measure>())
     }
 }

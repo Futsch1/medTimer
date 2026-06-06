@@ -32,6 +32,9 @@ class ReminderEventEntity(
     @ColumnInfo(defaultValue = "0") var lastIntervalReminderTimeInMinutes: Int = 0,
     @ColumnInfo(defaultValue = "") var notes: String = "",
     @ColumnInfo(defaultValue = "TIME_BASED") var reminderType: ReminderEntityType = ReminderEntityType.TIME_BASED,
+    @ColumnInfo(defaultValue = "-1.0") var stockBefore: Double = -1.0,
+    @ColumnInfo(defaultValue = "-1.0") var stockAfter: Double = -1.0,
+    @ColumnInfo(defaultValue = "") var stockUnit: String = "",
 ) {
     enum class ReminderEntityStatus {
         RAISED,
