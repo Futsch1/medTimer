@@ -1,8 +1,6 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -34,7 +32,7 @@ class MedicineHandlingTest : BaseTestHelper() {
             TEST_MED_1
         )
 
-        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(0, 1))
+        drag(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, 1)
         assertDisplayedAtPosition(
             com.futsch1.medtimer.feature.ui.R.id.medicineList,
             0,
@@ -51,14 +49,14 @@ class MedicineHandlingTest : BaseTestHelper() {
             TEST_MED_2 + '_'
         )
 
-        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(1, 0))
+        drag(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1, 0)
         assertDisplayedAtPosition(
             com.futsch1.medtimer.feature.ui.R.id.medicineList,
             0,
             com.futsch1.medtimer.feature.ui.R.id.medicineName,
             TEST_MED_1
         )
-        onView(withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(drag(0, 1))
+        drag(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0, 1)
 
         AndroidTestHelper.createMedicine(TEST_MED_3)
         pressBack()

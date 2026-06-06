@@ -67,10 +67,10 @@ class StatisticsScreenViewModel @Inject constructor(
     // Each view slice derives independently, so one input change recomputes only its own slice rather
     // than the whole screen state.
     private val charts: StateFlow<ChartsState?> =
-        combine(reminderEvents, analysisDays.value) { events, days ->
+        combine(reminderEvents, analysisDays.value, medicineRepository.getAllFlow()) { events, days, medicines ->
             val data = statisticsProvider.aggregate(events, days)
             // First custom color wins if names somehow collide — matches the prior firstOrNull lookup.
-            val medicineColorsByName = medicineRepository.getAll()
+            val medicineColorsByName = medicines
                 .filter { it.useColor }
                 .reversed()
                 .associate { it.name to it.color }

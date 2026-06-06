@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
+import androidx.compose.ui.graphics.toArgb
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
@@ -16,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -54,6 +55,7 @@ class StatisticsScreenViewModelTest {
 
     private val dataFlow = MutableStateFlow(PersistentData.default())
     private val eventsFlow = MutableStateFlow<List<ReminderEvent>>(emptyList())
+    private val medicinesFlow = MutableStateFlow<List<Medicine>>(emptyList())
 
     private lateinit var viewModel: StatisticsScreenViewModel
 
@@ -74,10 +76,7 @@ class StatisticsScreenViewModelTest {
             )
         )
         whenever(calendarEventsProvider.structuredEventsFlow(any(), any(), any(), any())).thenReturn(flowOf(emptyMap()))
-        // Suspend functions must be stubbed from inside a coroutine context
-        runBlocking {
-            whenever(medicineRepository.getAll()).thenReturn(emptyList())
-        }
+        whenever(medicineRepository.getAllFlow()).thenReturn(medicinesFlow)
 
         viewModel = buildViewModel()
     }
@@ -189,6 +188,31 @@ class StatisticsScreenViewModelTest {
 
         assertEquals(1, vm.uiState.value.tableRows.size)
         assertEquals("Vitamin X", vm.uiState.value.tableRows[0].cells[1].text)
+    }
+
+    // ── charts ────────────────────────────────────────────────────────────────
+
+    @Test
+    fun `charts recompute live when the medicine repository emits a custom color`() {
+        // One series named "Vitamin X" so its color is driven by the medicine flow.
+        whenever(statisticsProvider.aggregate(any(), any())).thenReturn(
+            ChartsData(
+                perDay = MedicinePerDayData(epochDays = listOf(0L), series = listOf(MedicineDaySeries("Vitamin X", listOf(1)))),
+                period = StatisticsProvider.TakenSkipped(0, 0),
+                total = StatisticsProvider.TakenSkipped(0, 0),
+            )
+        )
+        val vm = buildViewModel()
+        // No custom colors yet → the series falls back to the first palette slot.
+        assertEquals(
+            com.futsch1.medtimer.feature.ui.statistics.charts.ChartSeriesColors.PALETTE[0].toArgb(),
+            vm.uiState.value.charts?.seriesColors?.first(),
+        )
+
+        medicinesFlow.value = listOf(Medicine.default().copy(name = "Vitamin X", color = 0x12345678, useColor = true))
+
+        // The flow input recomputed the chart with no other trigger — the custom color now wins.
+        assertEquals(0x12345678, vm.uiState.value.charts?.seriesColors?.first())
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────
