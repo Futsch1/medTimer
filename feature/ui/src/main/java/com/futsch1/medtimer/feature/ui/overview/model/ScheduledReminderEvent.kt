@@ -21,8 +21,10 @@ class ScheduledReminderEvent @AssistedInject constructor(
     }
 
     override val text: Spanned = reminderStringFormatter.formatScheduledReminder(scheduledReminder)
-    override val id: Int
-        get() = scheduledReminder.reminder.id + 1_000_000
+    override val id: Int = java.util.Objects.hash(
+        scheduledReminder.reminder.id,
+        scheduledReminder.timestamp.epochSecond
+    )
 
     override val timestamp: Long
         get() = scheduledReminder.timestamp.epochSecond
