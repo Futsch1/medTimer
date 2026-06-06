@@ -9,15 +9,14 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.Duration.Companion.milliseconds
 
 @Singleton
 class FutureRemindersRepository @Inject constructor(
@@ -30,16 +29,24 @@ class FutureRemindersRepository @Inject constructor(
     private val _simulatedReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
     val simulatedReminders: StateFlow<List<ScheduledReminder>> = _simulatedReminders.asStateFlow()
 
-    private var calculationJob: Job? = null
+    private val triggerChannel = Channel<Unit>(Channel.CONFLATED)
+
+    init {
+        applicationScope.launch {
+            triggerChannel.consumeEach {
+                try {
+                    _simulatedReminders.value = runSimulation()
+                    Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
+                } catch (e: Exception) {
+                    Log.e(LogTags.SIMULATION, "Future reminders simulation failed", e)
+                }
+            }
+        }
+    }
 
     fun triggerCalculation() {
         Log.d(LogTags.SIMULATION, "Triggering future reminders simulation")
-        calculationJob?.cancel()
-        calculationJob = applicationScope.launch {
-            delay(DEBOUNCE_MS)
-            _simulatedReminders.value = runSimulation()
-            Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
-        }
+        triggerChannel.trySend(Unit)
     }
 
     private suspend fun runSimulation(): List<ScheduledReminder> {
@@ -64,7 +71,6 @@ class FutureRemindersRepository @Inject constructor(
     }
 
     companion object {
-        private val DEBOUNCE_MS = 1000.milliseconds
         private const val SIMULATION_DAYS = 14L
     }
 }
