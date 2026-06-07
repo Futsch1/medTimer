@@ -61,43 +61,47 @@ and the [Compose architecture guide](https://developer.android.com/develop/ui/co
   Leaf composables are stateless: they take state in via parameters and report events via lambdas.
   Stateful wrappers live one level up.
 
-## Screen pattern — stateful `Screen` + stateless `ScreenContent`
+## Screen pattern — stateful `Screen` + stateless `Screen` (overloaded)
 
-Every screen is split in two:
+Every screen is split into two overloads of the same name, disambiguated by their parameter sets:
 
 ```kotlin
-// Stateful: pulls state from the ViewModel, exposes events as lambdas.
+// Stateful overload: pulls state from the ViewModel; the Fragment calls this one.
 @Composable
 fun OverviewScreen(
+    viewModel: OverviewViewModel,
+    onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OverviewViewModel = hiltViewModel(),
 ) {
-    OverviewScreenContent(
+    // Collect any non-snapshot sources (e.g. a secondary ViewModel's Flow) here with produceState.
+    OverviewScreen(
         state = viewModel.state,
         onMarkTaken = viewModel::onMarkTaken,
         onSnooze = viewModel::onSnooze,
+        onEditEvent = onEditEvent,
         modifier = modifier,
     )
 }
 
-// Stateless: takes the rendered state + lambdas. Pure function of its inputs.
+// Stateless overload: pure function of its inputs — the @Preview and test target.
 @Composable
-fun OverviewScreenContent(
+fun OverviewScreen(
     state: OverviewScreenState,
     onMarkTaken: (ReminderId) -> Unit,
     onSnooze: (ReminderId) -> Unit,
+    onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
-) { /* … */
-}
+) { /* … */ }
 ```
 
-- **`@Preview` and screenshot tests target the stateless `*Content` composable** — that is the unit you can render with fabricated state (construct a
-  `MutableOverviewScreenState` and pass it as `OverviewScreenState`).
-- **The stateful `Screen` composable is the only place `hiltViewModel()` is called.**
+- **Both overloads share the same name.** The Kotlin compiler distinguishes them by parameter types; callers pass either a ViewModel (stateful) or a state object (stateless/preview).
+- **`@Preview` and tests target the stateless overload** — construct a `MutableOverviewScreenState` and pass it as `OverviewScreenState`.
+- **The stateful overload is the only place ViewModel references live.**
   Don't reach for a ViewModel from a leaf composable.
-- The stateless half should not import the ViewModel type.
+- The stateless overload must not import the ViewModel type.
 - `state` is the screen's state-holder interface ([next section](#state-holders)); the composable reads its properties directly. No
   `collectAsStateWithLifecycle()` is needed — Compose snapshot state is already reactive.
+- When the stateful overload needs additional data from a secondary source (e.g. a second ViewModel's `Flow`), collect it with `produceState` at the top of the stateful overload and pass the resulting value as a parameter to the stateless overload.
 
 ## State holders
 
@@ -286,6 +290,54 @@ Follow [Compose performance best practices](https://developer.android.com/develo
   Use a `@MedTimerPreview` multipreview annotation (`@Preview` + dark variant + minimum supported font scale) defined in `:core:ui`.
 - Previews **must render without a real ViewModel** — that is the whole point of the stateless `*Content` split.
 
+## Icons — vendored Bootstrap Icons
+
+**[Bootstrap Icons](https://icons.getbootstrap.com/) are the icon set for medTimer** — both the legacy XML/View UI and new
+Compose UI. This is not a Compose-only convention; it is the app-wide standard. The existing drawables in `:core:ui`
+(`bell`, `cart2`, `chevron_left`, `box_seam`, `calendar_event`, `link`, `repeat`, …) are all vendored Bootstrap Icons —
+match them.
+
+**Do not** depend on `androidx.compose.material:material-icons-extended` or `material-icons-core`, and **do not** vendor
+Material Symbols. New Compose icons must come from Bootstrap Icons so the whole app stays visually consistent.
+
+**Vendor each icon as a vector drawable in `:core:ui/src/main/res/drawable/`**, named after the Bootstrap icon with hyphens
+replaced by underscores (e.g. `arrow-right` → `arrow_right.xml`, `caret-down-fill` → `caret_down_fill.xml`). Putting them in
+`:core:ui` makes them reachable from every `:feature:*` module via `com.futsch1.medtimer.core.ui.R.drawable.<name>`.
+
+- **Reuse before you vendor.** Check `:core:ui/src/main/res/drawable/` for an existing Bootstrap icon first, and prefer the
+  shared semantic mappings — `ReminderType.getIcon()` and `OverviewState.getImage()` in `:core:ui` — over hand-picking a
+  drawable per call site. Don't add a near-duplicate of an icon that already exists.
+- **Geometry: 16×16.** Bootstrap Icons are drawn on a 16-unit canvas, so set `android:width`/`android:height` to `16dp` and
+  `viewportWidth`/`viewportHeight` to `16`. (This differs from Material Symbols' 24/960 space.)
+- Use directional icons (`arrow_right`, `chevron_left`, `chevron_right`, …) with `android:autoMirrored="true"` so they flip
+  in RTL.
+- Reference them in Compose with `Icon(painterResource(R.drawable.<name>), contentDescription = …)`. `Icon` applies `tint`
+  (defaults to `LocalContentColor`), so the drawable's `android:fillColor` is just a placeholder — keep it the solid
+  `?android:colorForeground` used by the other icons.
+- Icon-only controls (e.g. chips, the calendar nav buttons) still need an accessible label: pass a real `contentDescription`
+  (a `stringResource`), which is also what UiAutomator instrumented tests target via `By.desc(...)`.
+
+### How to get the drawable
+
+**From the web (preferred):** open [icons.getbootstrap.com](https://icons.getbootstrap.com/), pick the icon, and copy its
+SVG. Bootstrap SVGs already use a `viewBox="0 0 16 16"`, and the SVG `<path d="…">` grammar is identical to Android's
+`android:pathData`, so the path string drops straight in — no coordinate-space translation or `<group>` wrapper needed.
+Wrap it as:
+
+```xml
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp" android:height="16dp"
+    android:viewportWidth="16" android:viewportHeight="16">
+  <path android:pathData="<the SVG d attribute>" android:fillColor="?android:colorForeground"/>
+</vector>
+```
+
+Carry over `fill-rule="evenodd"` as `android:fillType="evenOdd"`, and add `android:autoMirrored="true"` for directional
+glyphs. Multi-`<path>` Bootstrap icons (e.g. `calendar3`) become one `<path>` element per SVG path.
+
+**Android Studio:** **New → Vector Asset → Local file** and point it at the downloaded `.svg`; the wizard writes the
+`<vector>` for you. Rename it to the underscored Bootstrap name afterwards.
+
 ## Testing — pointer
 
 See [testing.md](testing.md) for the full Compose testing section.
@@ -307,4 +359,4 @@ In brief:
   and [Material 3 Expressive](https://developer.android.com/develop/ui/compose/designsystems/material3/expressive).
 - [Now in Android](https://github.com/android/nowinandroid) — reference patterns for Hilt + Compose + multi-module.
 
-_Last reviewed: 2026-05-26 · Compose: target standard, not yet adopted._
+_Last reviewed: 2026-06-05 · Compose: adopted on the Statistics screen (StatisticsFragment → ComposeView); remaining screens still use XML layouts + Fragments. Icons standardised on Bootstrap Icons._
