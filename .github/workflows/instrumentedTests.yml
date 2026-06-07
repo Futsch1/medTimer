@@ -14,16 +14,6 @@ on:
         description: Emulator device profile (e.g. medium_phone)
         required: true
         type: string
-      target:
-        description: System image target (google_apis, google_atd, ...). ATD images exist only for API >= 30.
-        required: false
-        type: string
-        default: google_apis
-      channel:
-        description: SDK channel for the system image / emulator (stable, beta, dev, canary). API 36 google_atd is published only on the dev channel.
-        required: false
-        type: string
-        default: stable
       gradle-task:
         description: Instrumented Gradle task to run on the emulator
         required: true
@@ -74,7 +64,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ inputs.api-level }}-${{ inputs.profile }}-${{ inputs.target }}
+          key: avd-${{ inputs.api-level }}-${{ inputs.profile }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -82,8 +72,7 @@ jobs:
         with:
           api-level: ${{ inputs.api-level }}
           arch: x86_64
-          target: ${{ inputs.target }}
-          channel: ${{ inputs.channel }}
+          target: google_apis
           profile: ${{ inputs.profile }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -96,8 +85,7 @@ jobs:
           api-level: ${{ inputs.api-level }}
           profile: ${{ inputs.profile }}
           arch: x86_64
-          target: ${{ inputs.target }}
-          channel: ${{ inputs.channel }}
+          target: google_apis
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
