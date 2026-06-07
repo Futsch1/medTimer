@@ -3,6 +3,7 @@ name: Test
 on:
   workflow_dispatch:
   push:
+    branches: [ main ]
   pull_request:
     branches: [main]
 
@@ -16,14 +17,12 @@ permissions:
   contents: read
   id-token: write
 
+# Staged pipeline: lint -> unit tests -> compile -> instrumented fan-out.
+# The instrumented jobs (coverage run + compatibility matrix) only start once
+# lint, unit tests and the compile step have all succeeded.
 jobs:
-  test:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)
+  lint:
     runs-on: ubuntu-latest
-    env:
-      target_api_level: 36
-      profile: medium_phone
-
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Set up JDK 21
@@ -33,33 +32,26 @@ jobs:
           distribution: temurin
           cache: gradle
       - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
-
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-      - name: AVD cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        id: avd-cache
+      - name: Android lint
+        run: ./gradlew lint
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ env.target_api_level }}-${{ env.profile }}
+          name: LintReports
+          path: app/build/reports/lint-results-fullDebug.html
 
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@e89f39f1abbbd05b1113a29cf4db69e7540cae5a # v2.37.0
+  unit-tests:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Set up JDK 21
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
-          api-level: ${{ env.target_api_level }}
-          arch: x86_64
-          target: google_apis
-          profile: ${{ env.profile }}
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          disable-animations: true
-          script: echo "Generated AVD snapshot for caching."
+          java-version: "21"
+          distribution: temurin
+          cache: gradle
+      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
 
       - name: Run fuzzing tests (both variants)
         run: ./gradlew testFullDebug testFossDebug -Dfuzzing=true
@@ -78,54 +70,57 @@ jobs:
       - name: Run library module unit tests
         run: ./gradlew testDebugUnitTest
 
-      - name: Run Android tests
-        uses: reactivecircus/android-emulator-runner@e89f39f1abbbd05b1113a29cf4db69e7540cae5a # v2.37.0
-        with:
-          api-level: ${{ env.target_api_level }}
-          profile: ${{ env.profile }}
-          arch: x86_64
-          target: google_apis
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          disable-animations: true
-          script: |
-            ./gradlew packageFullDebug packageFullDebugUnitTest
-            adb shell input keyevent 3
-            adb shell settings put secure long_press_timeout 1500
-            adb uninstall com.futsch1.medtimer || true
-            adb shell settings put global auto_time 0
-            adb shell su 0 toybox date 0801160025
-            EXIT_CODE=0 && ./gradlew jacocoFullDebugCodeCoverage || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
-          cores: 4
-
-      - name: Android lint
-        run: ./gradlew lint
-
-      - uses: qltysh/qlty-action/coverage@fd52dc852530a708d68c3b7342f8d33d1df4cd55 # v2.2.1
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsFullDebug app/build/generated/ap_generated_sources/fullDebug/out
-        with:
-          oidc: true
-          files: app/build/reports/jacoco/JacocoDebugCodeCoverage/JacocoDebugCodeCoverage.xml
-
-      - name: SonarQube
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ env.SONAR_TOKEN != '' }}
-        run: ./gradlew sonar
-
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
-          name: TestReports
+          name: UnitTestReports
           path: |
-            app/build/reports/jacoco/JacocoDebugCodeCoverage/html
             app/build/reports/tests/testFullDebugUnitTest
             app/build/reports/tests/testFossDebugUnitTest
             core/ui/build/reports/tests/testDebugUnitTest
             core/database/build/reports/tests/testDebugUnitTest
-            app/build/reports/androidTest/connected/fullDebug
-            app/build/reports/lint-results-fullDebug.html
-            app/build/outputs/androidTest-results
+
+  compile-test:
+    needs: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Set up JDK 21
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: "21"
+          distribution: temurin
+          cache: gradle
+      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+      - name: Compile (assemble both flavors)
+        run: ./gradlew assembleDebug
+
+  # Coverage instrumented run (single config) — gated behind compile-test.
+  coverage-instrumented:
+    needs: compile-test
+    uses: ./.github/workflows/instrumentedTests.yml
+    with:
+      api-level: 36
+      profile: medium_phone
+      gradle-task: jacocoFullDebugCodeCoverage
+      coverage: true
+      artifact-name: TestReports
+    secrets: inherit
+
+  # Compatibility instrumented fan-out (API x form-factor) — gated behind compile-test.
+  # Note: API 36 / medium_phone overlaps with coverage-instrumented above; redundancy left intentionally.
+  compatibility-instrumented:
+    needs: compile-test
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 28, 36 ]
+        profile: [ medium_phone, medium_tablet ]
+    uses: ./.github/workflows/instrumentedTests.yml
+    with:
+      api-level: ${{ matrix.api-level }}
+      profile: ${{ matrix.profile }}
+      gradle-task: connectedFullDebugAndroidTest
+      coverage: false
+      artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
+    secrets: inherit
