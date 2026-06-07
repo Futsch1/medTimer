@@ -43,7 +43,7 @@ class FutureRemindersRepository @Inject constructor(
                         LogTags.SIMULATION,
                         "Triggering future reminders simulation through $endDay"
                     )
-                    _simulatedReminders.value = runSimulation(endDay)
+                    runSimulation(endDay)
                     _simulatedThrough.value = endDay
                     Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
                 } catch (e: Exception) {
@@ -62,10 +62,11 @@ class FutureRemindersRepository @Inject constructor(
         triggerChannel.trySend(effectiveEndDay)
     }
 
-    private suspend fun runSimulation(endDay: LocalDate): List<ScheduledReminder> {
+    private suspend fun runSimulation(endDay: LocalDate) {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
         val result = mutableListOf<ScheduledReminder>()
+        var currentEmitDay = LocalDate.MIN
 
         SchedulingSimulator(
             medicines,
@@ -74,12 +75,16 @@ class FutureRemindersRepository @Inject constructor(
             preferencesDataSource
         ).simulate { scheduledReminder, scheduledDate, _ ->
             if (scheduledDate < endDay) {
+                if (scheduledDate > currentEmitDay && currentEmitDay != LocalDate.MIN) {
+                    _simulatedReminders.value = result.toList()
+                }
+                currentEmitDay = scheduledDate
                 result.add(scheduledReminder)
             }
             scheduledDate < endDay
         }
 
-        return result
+        _simulatedReminders.value = result
     }
 
     companion object {
