@@ -1,15 +1,19 @@
 package com.futsch1.medtimer
 
 import android.graphics.Rect
+import android.os.Build
 import android.os.SystemClock
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.core.graphics.toRectF
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.MotionEvents
+import androidx.test.espresso.action.Press
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
@@ -20,6 +24,10 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
 
 object RecyclerViewDragAction {
+
+    // TODO: Remove this whole API-split drag workaround once the medicine list is migrated to Compose — the
+    //  RecyclerView + ItemTouchHelper long-press drag (and the API <= 28 Compose-interop idle problem it works
+    //  around) goes away, and reordering can be driven through the Compose test APIs instead.
 
     // The medicine list reorders via ItemTouchHelper.SimpleCallback, which leaves isLongPressDragEnabled() at its
     // default of true: a drag only starts after the pointer is held stationary past the long-press timeout
@@ -34,19 +42,65 @@ object RecyclerViewDragAction {
     /**
      * Drag-reorders the item at [fromPosition] to [toPosition] in the RecyclerView with id [recyclerViewId].
      *
-     * The gesture is injected as a raw [MotionEvent] stream via UiAutomation rather than through Espresso's
-     * UiController. Espresso's perform() synchronises on the main looper being idle, but the RecyclerView is hosted
-     * inside a Compose AndroidViewBinding (the adaptive navigation shell); on API <= 28, where Compose draws layers
-     * with ViewLayer instead of a hardware RenderNode, the View<->Compose interop re-invalidates every frame for the
-     * duration of the drag, so the looper never idles and Espresso times out with AppNotIdleException. Injecting at
-     * the input layer avoids the idle requirement during the gesture.
+     * The gesture path is chosen by API level, because the two viable techniques each only work on one side of the
+     * split:
      *
-     * Unlike `input draganddrop`, this hand-built gesture holds the pointer stationary at the start for
-     * [LONG_PRESS_HOLD_MS] so ItemTouchHelper's long-press drag actually engages before the pointer moves. Without
-     * that hold the first MOVE can arrive before onLongPress fires, the gesture degrades to a tap that opens the
-     * tapped medicine, and the following assertions fail because the list is no longer on screen.
+     * - **API > 28 — Espresso [UiController].** A real long-press drag injected through Espresso, synchronising on
+     *   the main looper between phases. This reliably commits the ItemTouchHelper reorder, but it can only be used
+     *   where the looper actually idles during the drag.
+     * - **API <= 28 — raw [MotionEvent] injection via UiAutomation.** The RecyclerView is hosted inside a Compose
+     *   AndroidViewBinding (the adaptive navigation shell); on API <= 28, where Compose draws layers with ViewLayer
+     *   instead of a hardware RenderNode, the View<->Compose interop re-invalidates every frame for the duration of
+     *   the drag, so the looper never idles and the Espresso path times out with AppNotIdleException. Injecting at
+     *   the input layer sidesteps the idle requirement; the gesture holds the pointer stationary at the start for
+     *   [LONG_PRESS_HOLD_MS] so the long-press drag engages before the pointer moves.
      */
     fun drag(recyclerViewId: Int, fromPosition: Int, toPosition: Int) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            onView(withId(recyclerViewId)).perform(espressoDrag(fromPosition, toPosition))
+        } else {
+            injectedDrag(recyclerViewId, fromPosition, toPosition)
+        }
+    }
+
+    /** API > 28 path: real long-press drag through Espresso, synchronising on the main looper between phases. */
+    private fun espressoDrag(fromPosition: Int, toPosition: Int): ViewAction = object : ViewAction {
+        override fun getConstraints(): Matcher<View> = recyclerViewConstraint()
+
+        override fun getDescription(): String = "drag from position $fromPosition to position $toPosition"
+
+        override fun perform(uiController: UiController, view: View) {
+            val (from, to) = dragCoordinates(view as RecyclerView, fromPosition, toPosition)
+            val precision = Press.PINPOINT.describePrecision()
+            val downEvent = MotionEvents.sendDown(
+                uiController, from, precision,
+                InputDevice.SOURCE_TOUCHSCREEN, // Necessary for SelectionTracker
+                MotionEvent.BUTTON_PRIMARY,
+            ).down
+
+            try {
+                // Hold stationary so ItemTouchHelper's long-press drag engages, then let the lift settle.
+                uiController.loopMainThreadForAtLeast((ViewConfiguration.getLongPressTimeout() * 1.5).toLong())
+                uiController.loopMainThreadUntilIdle()
+
+                for (step in interpolate(from, to, 50)) {
+                    if (!MotionEvents.sendMovement(uiController, downEvent, step)) {
+                        MotionEvents.sendCancel(uiController, downEvent)
+                    }
+                }
+
+                if (!MotionEvents.sendUp(uiController, downEvent, to)) {
+                    MotionEvents.sendCancel(uiController, downEvent)
+                }
+                uiController.loopMainThreadUntilIdle()
+            } finally {
+                downEvent.recycle()
+            }
+        }
+    }
+
+    /** API <= 28 path: raw MotionEvent stream injected at the input layer, with an explicit long-press hold. */
+    private fun injectedDrag(recyclerViewId: Int, fromPosition: Int, toPosition: Int) {
         val from = AtomicReference<IntArray>()
         val to = AtomicReference<IntArray>()
         onView(withId(recyclerViewId)).perform(captureDragCoordinates(fromPosition, toPosition, from, to))
@@ -87,38 +141,54 @@ object RecyclerViewDragAction {
         event.recycle()
     }
 
+    private fun interpolate(from: FloatArray, to: FloatArray, count: Int): List<FloatArray> =
+        List(count) { i ->
+            floatArrayOf(
+                from[0] + (to[0] - from[0]) * i / count,
+                from[1] + (to[1] - from[1]) * i / count,
+            )
+        }
+
     private fun captureDragCoordinates(
         fromPosition: Int,
         toPosition: Int,
         from: AtomicReference<IntArray>,
         to: AtomicReference<IntArray>,
     ): ViewAction = object : ViewAction {
-        override fun getConstraints(): Matcher<View> =
-            object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
-                override fun describeTo(description: Description) {
-                    description.appendText("is a RecyclerView")
-                }
-
-                override fun matchesSafely(recyclerView: RecyclerView): Boolean = true
-            }
+        override fun getConstraints(): Matcher<View> = recyclerViewConstraint()
 
         override fun getDescription(): String = "capture drag coordinates from $fromPosition to $toPosition"
 
         override fun perform(uiController: UiController, view: View) {
-            val recyclerView = view as RecyclerView
-            val layoutManager = checkNotNull(recyclerView.layoutManager) { "RecyclerView has no LayoutManager" }
-            val startView = checkNotNull(layoutManager.findViewByPosition(fromPosition)) { "No laid-out view at position $fromPosition" }
-            val targetView = checkNotNull(layoutManager.findViewByPosition(toPosition)) { "No laid-out view at position $toPosition" }
-
-            val startRectF = Rect().apply { startView.getGlobalVisibleRect(this) }.toRectF()
-            from.set(intArrayOf(startRectF.centerX().toInt(), startRectF.centerY().toInt()))
-
-            val targetRectF = Rect().apply { targetView.getGlobalVisibleRect(this) }.toRectF()
-
-            // Drop onto the far edge of the target row (its bottom when moving down, its top when moving up) so
-            // ItemTouchHelper settles the dragged item past it into the intended slot.
-            val targetY = if (fromPosition < toPosition) targetRectF.bottom else targetRectF.top
-            to.set(intArrayOf(targetRectF.centerX().toInt(), targetY.toInt()))
+            val (start, end) = dragCoordinates(view as RecyclerView, fromPosition, toPosition)
+            from.set(intArrayOf(start[0].toInt(), start[1].toInt()))
+            to.set(intArrayOf(end[0].toInt(), end[1].toInt()))
         }
+    }
+
+    private fun recyclerViewConstraint(): Matcher<View> =
+        object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("is a RecyclerView")
+            }
+
+            override fun matchesSafely(recyclerView: RecyclerView): Boolean = true
+        }
+
+    private fun dragCoordinates(recyclerView: RecyclerView, fromPosition: Int, toPosition: Int): Pair<FloatArray, FloatArray> {
+        val layoutManager = checkNotNull(recyclerView.layoutManager) { "RecyclerView has no LayoutManager" }
+        val startView = checkNotNull(layoutManager.findViewByPosition(fromPosition)) { "No laid-out view at position $fromPosition" }
+        val targetView = checkNotNull(layoutManager.findViewByPosition(toPosition)) { "No laid-out view at position $toPosition" }
+
+        val startRectF = Rect().apply { startView.getGlobalVisibleRect(this) }.toRectF()
+        val from = floatArrayOf(startRectF.centerX(), startRectF.centerY())
+
+        val targetRectF = Rect().apply { targetView.getGlobalVisibleRect(this) }.toRectF()
+        // Drop onto the far edge of the target row (its bottom when moving down, its top when moving up) so
+        // ItemTouchHelper settles the dragged item past it into the intended slot.
+        val targetY = if (fromPosition < toPosition) targetRectF.bottom else targetRectF.top
+        val to = floatArrayOf(targetRectF.centerX(), targetY)
+
+        return from to to
     }
 }
