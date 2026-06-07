@@ -19,6 +19,11 @@ on:
         required: false
         type: string
         default: google_apis
+      channel:
+        description: SDK channel for the system image / emulator (stable, beta, dev, canary). API 36 google_atd is published only on the dev channel.
+        required: false
+        type: string
+        default: stable
       gradle-task:
         description: Instrumented Gradle task to run on the emulator
         required: true
@@ -78,6 +83,7 @@ jobs:
           api-level: ${{ inputs.api-level }}
           arch: x86_64
           target: ${{ inputs.target }}
+          channel: ${{ inputs.channel }}
           profile: ${{ inputs.profile }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -91,6 +97,7 @@ jobs:
           profile: ${{ inputs.profile }}
           arch: x86_64
           target: ${{ inputs.target }}
+          channel: ${{ inputs.channel }}
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
