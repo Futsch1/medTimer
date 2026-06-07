@@ -19,6 +19,12 @@ on:
   schedule:
     - cron: 43 14 * * 1
 
+# Cancel in-progress runs when new commits are pushed to the same branch/PR.
+# Keep main and release tags running to completion.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') }}
+
 permissions:
   contents: read
 
