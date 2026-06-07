@@ -63,11 +63,17 @@ class ReminderStringFormatter @Inject constructor(
             scheduledReminder.timestamp, false
         )
         val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
+        val expectedStockOrExpirationDateSpan =
+            getExpectedStockOrExpirationDateText(scheduledReminder)
 
-        return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime).append("\n")
+        return SpannableStringBuilder()
+            .append(reminderTypeSpan)
+            .append(scheduledTime)
+            .append(expectedStockOrExpirationDateSpan)
+            .append("\n")
             .bold {
                 append(scheduledReminder.medicine.name)
-            }.append(getAmountOrStockString(scheduledReminder))
+            }.append(getAmountString(scheduledReminder))
     }
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
@@ -105,7 +111,7 @@ class ReminderStringFormatter @Inject constructor(
 
         return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime)
             .bold { append(scheduledReminder.medicine.name) }.append(
-                getAmountOrStockString(scheduledReminder)
+                getAmountString(scheduledReminder)
             )
     }
 
@@ -123,7 +129,11 @@ class ReminderStringFormatter @Inject constructor(
         return span
     }
 
-    private fun getAmountOrStockString(scheduledReminder: ScheduledReminder): String {
+    private fun getAmountString(scheduledReminder: ScheduledReminder): String {
+        if (scheduledReminder.reminder.isOutOfStockOrExpirationReminder) {
+            return ""
+        }
+
         val amount =
             when (scheduledReminder.reminder.reminderType) {
                 ReminderType.OUT_OF_STOCK -> {
@@ -144,6 +154,39 @@ class ReminderStringFormatter @Inject constructor(
         return if (amount.isNotEmpty()) " (${amount})" else ""
     }
 
+
+    private fun getExpectedStockOrExpirationDateText(scheduledReminder: ScheduledReminder): Spanned {
+        val span = SpannableStringBuilder()
+
+        if (scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
+            span.append(", ")
+            span.append(timeFormatter.localDateToString(scheduledReminder.medicine.expirationDate))
+        } else {
+            if (scheduledReminder.reminder.variableAmount
+                || !scheduledReminder.medicine.isStockManagementActive()
+            ) return SpannableStringBuilder()
+
+            val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
+            if (drawable != null) {
+                span.append(", ")
+                val iconStart = span.length
+                span.append("  ")
+                span.setSpan(
+                    TintedImageSpan(drawable, ImageSpan.ALIGN_BASELINE),
+                    iconStart,
+                    iconStart + 1,
+                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
+            span.append(
+                MedicineHelper.formatAmount(
+                    scheduledReminder.medicine.amount,
+                    scheduledReminder.medicine.unit
+                )
+            )
+        }
+        return span
+    }
 
     private fun getStockChangeText(reminderEvent: ReminderEvent): Spanned {
         if (reminderEvent.stockBefore == reminderEvent.stockAfter) return SpannableStringBuilder()
