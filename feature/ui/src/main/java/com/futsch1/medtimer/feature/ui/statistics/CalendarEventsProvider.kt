@@ -115,7 +115,7 @@ class CalendarEventsProvider @Inject constructor(
         }
     }
 
-    private fun addFutureEntries(
+    private suspend fun addFutureEntries(
         target: MutableMap<LocalDate, MutableList<CalendarEntry>>,
         medicines: List<Medicine>,
         events: List<ReminderEvent>,
@@ -130,11 +130,13 @@ class CalendarEventsProvider @Inject constructor(
             override fun now(): Instant = Instant.now()
         }
         val endDay = LocalDate.now().plusDays(futureDays)
-        val schedulingSimulator = SchedulingSimulator(medicines, events, timeProvider, preferencesDataSource)
+        val schedulingSimulator =
+            SchedulingSimulator(medicines, events, timeProvider, preferencesDataSource)
 
         schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
             if (scheduledDate < endDay) {
-                target.getOrPut(scheduledDate) { mutableListOf() }.add(CalendarEntry.Future(scheduledReminder))
+                target.getOrPut(scheduledDate) { mutableListOf() }
+                    .add(CalendarEntry.Future(scheduledReminder))
             }
             scheduledDate < endDay
         }
@@ -166,18 +168,20 @@ class CalendarEventsProvider @Inject constructor(
     // The processed (taken) time, shown after the arrow — only for taken events and only when the user
     // opted into seeing taken times, mirroring the legacy overview formatter's showTakenTimeInOverview gate.
     private fun ReminderEvent.takenTime(zone: ZoneId): LocalDateTime? {
-        val isTaken = status == ReminderEvent.ReminderStatus.TAKEN || status == ReminderEvent.ReminderStatus.ACKNOWLEDGED
+        val isTaken =
+            status == ReminderEvent.ReminderStatus.TAKEN || status == ReminderEvent.ReminderStatus.ACKNOWLEDGED
         val show = processedTimestamp.epochSecond != 0L && isTaken &&
-            preferencesDataSource.preferences.value.showTakenTimeInOverview
+                preferencesDataSource.preferences.value.showTakenTimeInOverview
         return if (show) LocalDateTime.ofInstant(processedTimestamp, zone) else null
     }
 
     // Elapsed time from the last interval reminder to when the dose was taken (interval-type reminders only),
     // matching the legacy formatter's getLastIntervalTime computation.
     private fun ReminderEvent.interval(): Duration? {
-        val durationMillis = processedTimestamp.epochSecond * 1000L - lastIntervalReminderTimeInMinutes * 60_000L
+        val durationMillis =
+            processedTimestamp.epochSecond * 1000L - lastIntervalReminderTimeInMinutes * 60_000L
         val show = lastIntervalReminderTimeInMinutes > 0 &&
-            status == ReminderEvent.ReminderStatus.TAKEN && durationMillis >= 0
+                status == ReminderEvent.ReminderStatus.TAKEN && durationMillis >= 0
         return if (show) Duration.ofMillis(durationMillis) else null
     }
 
