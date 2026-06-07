@@ -23,6 +23,7 @@ import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import com.futsch1.medtimer.utilities.waitForView
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
@@ -565,8 +566,16 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         AndroidTestHelper.waitForIdle(2_000)
+        // Wait until the raised reminder is actually shown before clicking position 0.
+        // The raise is asynchronous (broadcast -> DB -> overview Flow -> rebind);
+        // until it lands, the only row is the still-pending scheduled occurrence, so a position-0 click would reschedule that instead,
+        // creating a second event and leaving the raised one at the top.
+        // The raised event sorts first (earlier timestamp), so once it appears, it owns position 0.
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .waitForView(By.desc(context.getString(R.string.reminded)), 5_000)
         clickListItemChild(
             com.futsch1.medtimer.feature.ui.R.id.reminders,
             0,
