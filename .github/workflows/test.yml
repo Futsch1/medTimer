@@ -102,6 +102,7 @@ jobs:
     with:
       api-level: 36
       profile: medium_phone
+      target: google_atd
       gradle-task: jacocoFullDebugCodeCoverage
       coverage: true
       artifact-name: TestReports
@@ -120,6 +121,8 @@ jobs:
     with:
       api-level: ${{ matrix.api-level }}
       profile: ${{ matrix.profile }}
+      # ATD (streamlined) images exist only for API >= 30; API 28 stays on google_apis.
+      target: ${{ matrix.api-level == 36 && 'google_atd' || 'google_apis' }}
       gradle-task: connectedFullDebugAndroidTest
       coverage: false
       artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
