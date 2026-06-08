@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.futsch1.medtimer.feature.ui"
+    namespace = "com.futsch1.medtimer.feature.ui.impl"
     compileSdk = 37
 
     defaultConfig {

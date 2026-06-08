@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
-import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
+import com.futsch1.medtimer.feature.ui.impl.RequestPostNotificationPermission
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import dagger.hilt.android.AndroidEntryPoint

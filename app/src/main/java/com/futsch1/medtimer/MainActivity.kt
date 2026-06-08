@@ -45,9 +45,9 @@ import com.futsch1.medtimer.feature.reminders.impl.ReminderNotificationChannelMa
 import com.futsch1.medtimer.feature.reminders.impl.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
-import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
-import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
-import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
+import com.futsch1.medtimer.feature.ui.impl.RequestPostNotificationPermission
+import com.futsch1.medtimer.feature.ui.impl.helpers.TextInputDialogBuilder
+import com.futsch1.medtimer.feature.ui.impl.overview.VariableAmountHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -208,9 +208,9 @@ class MainActivity : AppCompatActivity() {
         }
         setSupportActionBar(binding.toolbar)
         appBarConfiguration = AppBarConfiguration.Builder(
-            com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
-            com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
-            com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
+            com.futsch1.medtimer.feature.ui.impl.R.id.overviewFragment,
+            com.futsch1.medtimer.feature.ui.impl.R.id.medicinesFragment,
+            com.futsch1.medtimer.feature.ui.impl.R.id.statisticsFragment
         ).build()
         setupActionBarWithNavController(this, navController, appBarConfiguration!!)
 
@@ -227,14 +227,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val topLevelTabIds = setOf(
-        com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
-        com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
-        com.futsch1.medtimer.feature.ui.R.id.statisticsFragment,
+        com.futsch1.medtimer.feature.ui.impl.R.id.overviewFragment,
+        com.futsch1.medtimer.feature.ui.impl.R.id.medicinesFragment,
+        com.futsch1.medtimer.feature.ui.impl.R.id.statisticsFragment,
     )
 
     // The tab area the user is currently in (sticky across that tab's detail screens). Initialised to the
     // start destination, then kept in sync by the destination listener in onContentBound.
-    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
+    private var currentTabId = com.futsch1.medtimer.feature.ui.impl.R.id.overviewFragment
 
     // The destination the previous click navigated to (a fresh select, not a reselect). NavController's
     // currentDestination updates synchronously on navigate(), so a tap that lands right after navigating
@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity() {
             // treated as a reselect even if the restored state lands on a detail screen whose id is
             // not in topLevelTabIds.
             currentTabId = destinationId
-            navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
+            navController.popBackStack(com.futsch1.medtimer.feature.ui.impl.R.id.preferencesFragment, true)
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setRestoreState(true)

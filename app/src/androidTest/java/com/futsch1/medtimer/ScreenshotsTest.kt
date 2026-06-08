@@ -10,7 +10,7 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.statistics.ANALYSIS_RANGES
+import com.futsch1.medtimer.feature.ui.impl.statistics.ANALYSIS_RANGES
 import com.futsch1.medtimer.utilities.openNotification
 import org.junit.ClassRule
 import org.junit.Test
@@ -37,24 +37,24 @@ class ScreenshotsTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.generate_test_data)
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.impl.R.id.overviewContentContainer)
         internalAssert(device.findObject(By.textContains("Some note")) != null)
         Espresso.pressBack()
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.skippedButton)
 
         openNotification().use {
             makeNotificationExpanded(device, getNotificationText(R.string.taken))
             Screengrab.screenshot("5")
         }
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         Screengrab.screenshot("1")
 
@@ -64,7 +64,7 @@ class ScreenshotsTest : BaseTestHelper() {
         AndroidTestHelper.clickMedicineItem(0)
         Screengrab.screenshot("3")
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         AndroidTestHelper.waitForIdle(500)
         Screengrab.screenshot("4")
 

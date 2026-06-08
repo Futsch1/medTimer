@@ -27,11 +27,11 @@ class DeleteTest : BaseTestHelper() {
         AndroidTestHelper.assertMedicineCount(3)
 
         AndroidTestHelper.clickMedicineItem(2)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminderList, 1, com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
 
         openMenu()
         clickOn(R.string.delete)
         clickOn(R.string.yes)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminderList, 1)
     }
 }

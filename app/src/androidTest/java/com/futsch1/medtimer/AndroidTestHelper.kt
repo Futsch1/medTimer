@@ -17,7 +17,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiScrollable
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
-import com.futsch1.medtimer.feature.ui.medicine.MedicineTestTags
+import com.futsch1.medtimer.feature.ui.impl.medicine.MedicineTestTags
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
@@ -32,18 +32,18 @@ import java.util.Locale
 object AndroidTestHelper {
     @JvmStatic
     fun createReminder(amount: String, time: LocalTime?) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, amount)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.timeBasedCard)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editAmount, amount)
         closeKeyboard()
 
         if (time != null) {
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.editReminderTime)
             setTime(time.hour, time.minute, false)
         }
         closeKeyboard()
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.createReminder)
     }
 
     fun setTime(hour: Int, minute: Int, isDeltaTime: Boolean) {
@@ -124,15 +124,15 @@ object AndroidTestHelper {
 
     @JvmStatic
     fun createIntervalReminder(amount: String, intervalMinutes: Int) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, amount)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.continuousIntervalCard)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editAmount, amount)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalMinutes)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, intervalMinutes.toString())
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.intervalMinutes)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editIntervalTime, intervalMinutes.toString())
 
         closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.createReminder)
     }
 
     @JvmStatic
@@ -143,7 +143,7 @@ object AndroidTestHelper {
         val addBtn = device.wait(Until.findObject(By.res(MedicineTestTags.ADD_MEDICINE)), 3_000)
             ?: throw AssertionError("Add medicine button not found")
         addBtn.click()
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.medicineName, name)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.medicineName, name)
 
         clickDialogPositiveButton()
     }

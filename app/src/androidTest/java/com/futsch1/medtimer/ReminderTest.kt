@@ -46,29 +46,29 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_enabled)
 
         pressBack()
         pressBack()
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         AndroidTestHelper.clickMedicineItem(0)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_enabled)
 
         pressBack()
         pressBack()
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 1)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         AndroidTestHelper.clickMedicineItem(0)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
         clickOn(R.string.period_start)
         clickOn(R.string.start_date)
@@ -78,11 +78,11 @@ class ReminderTest : BaseTestHelper() {
         pressBack()
         pressBack()
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         AndroidTestHelper.clickMedicineItem(0)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
         clickOn(R.string.period_end)
         clickOn(R.string.end_date)
@@ -92,11 +92,11 @@ class ReminderTest : BaseTestHelper() {
         pressBack()
         pressBack()
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
         AndroidTestHelper.clickMedicineItem(0)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
         clickOn(R.string.start_date)
         AndroidTestHelper.setDate(pastTime.getTime())
@@ -107,7 +107,7 @@ class ReminderTest : BaseTestHelper() {
         pressBack()
         pressBack()
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 1)
     }
 
     @Test
@@ -121,7 +121,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test")
         AndroidTestHelper.createIntervalReminder("1", 180)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.interval_start_time)
         AndroidTestHelper.setDate(futureTime.getTime())
         AndroidTestHelper.setTime(
@@ -138,7 +138,7 @@ class ReminderTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.activate_all)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         assertContains(DateFormat.getDateInstance(DateFormat.SHORT).format(nowTime.getTime()))
     }
 
@@ -148,16 +148,16 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine("Test med")
         AndroidTestHelper.createReminder("1", LocalTime.of(0, 0))
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
 
         clickOn(R.string.add_linked_reminder)
         clickDialogPositiveButton()
         AndroidTestHelper.setTime(0, 1, true)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
 
         clickOn(R.string.add_linked_reminder)
@@ -165,9 +165,9 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.setTime(0, 2, true)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
 
         openMenu()
@@ -175,7 +175,7 @@ class ReminderTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         // Check that the reminder list is empty
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminderList, 0)
     }
 
     @Test
@@ -190,7 +190,7 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", reminder1Time)
 
         // Linked reminder (amount 2) 30 minutes later
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
         clickOn(R.string.add_linked_reminder)
         writeTo(android.R.id.input, "2")
         clickDialogPositiveButton()
@@ -198,30 +198,30 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.setTime(0, 30, true)
 
         // Interval reminder (amount 3) 2 hours from now
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, "3")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalHours)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, "2")
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.continuousIntervalCard)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editAmount, "3")
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.intervalHours)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editIntervalTime, "2")
         closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.createReminder)
 
         // Windowed interval reminder (amount 4)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.windowedIntervalCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, "4")
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.addReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.windowedIntervalCard)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editAmount, "4")
         closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyStartTime)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.editIntervalDailyStartTime)
         AndroidTestHelper.setTime(20, 0, false)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyEndTime)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.editIntervalDailyEndTime)
         AndroidTestHelper.setTime(23, 30, false)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalHours)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, "3")
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.intervalHours)
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editIntervalTime, "3")
         closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.createReminder)
 
         // Check calendar view not crashing
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openCalendar)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openCalendar)
         pressBack()
 
         var expectedString = context.getString(
@@ -229,17 +229,17 @@ class ReminderTest : BaseTestHelper() {
             "2 " + context.resources.getQuantityString(R.plurals.hours, 2)
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.reminderCardLayout,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderCardLayout,
             matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
         )
 
         expectedString = timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
         assertDisplayedAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.editReminderTime,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editReminderTime,
             expectedString
         )
 
@@ -248,9 +248,9 @@ class ReminderTest : BaseTestHelper() {
             timeFormatter().toTimeString(reminder1Time)
         )
         assertDisplayedAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             2,
-            com.futsch1.medtimer.feature.ui.R.id.reminderCardLayout,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderCardLayout,
             expectedString
         )
 
@@ -259,55 +259,55 @@ class ReminderTest : BaseTestHelper() {
             "3 " + context.resources.getQuantityString(R.plurals.hours, 3)
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             3,
-            com.futsch1.medtimer.feature.ui.R.id.reminderCardLayout,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderCardLayout,
             matches(ViewMatchers.withChild(ViewMatchers.withSubstring(expectedString)))
         )
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
         pressBack()
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
         pressBack()
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             2,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
         pressBack()
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderList,
             3,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
+            com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings
         )
         pressBack()
 
         // Check overview and next reminders
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test (1)")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.reminderText, "Test (1)")
         expectedString = timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, expectedString)
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.reminderText, expectedString)
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test (3)")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.reminderText, "Test (3)")
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test (4)")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.reminderText, "Test (4)")
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         assertContains("Test (2)")
     }
@@ -319,7 +319,7 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.logManualDose)
 
         clickListItem(position = 1)
 
@@ -329,65 +329,65 @@ class ReminderTest : BaseTestHelper() {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer
+            com.futsch1.medtimer.feature.ui.impl.R.id.overviewContentContainer
         )
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventName, "Test")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventAmount, "12")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventName, "Test")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventAmount, "12")
         assertContains(
-            com.futsch1.medtimer.feature.ui.R.id.editEventRemindedTimestamp,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventRemindedTimestamp,
             timeFormatter().toTimeString(now)
         )
         assertContains(
-            com.futsch1.medtimer.feature.ui.R.id.editEventRemindedDate,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventRemindedDate,
             timeFormatter().toDateString(now)
         )
         assertContains(
-            com.futsch1.medtimer.feature.ui.R.id.editEventTakenTimestamp,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventTakenTimestamp,
             timeFormatter().toTimeString(now)
         )
         assertContains(
-            com.futsch1.medtimer.feature.ui.R.id.editEventTakenDate,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventTakenDate,
             timeFormatter().toDateString(now)
         )
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventNotes, "")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventNotes, "")
 
         clickOn(R.string.skipped)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editEventNotes, "Test notes")
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editEventNotes, "Test notes")
         pressBack()
 
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.x_circle)))
         )
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer
+            com.futsch1.medtimer.feature.ui.impl.R.id.overviewContentContainer
         )
         clickOn(R.string.taken)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventNotes, "Test notes")
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventNotes, "Test notes")
 
         val newReminded = now.plusSeconds(60 * 60 * 24 + 120)
         writeTo(
-            com.futsch1.medtimer.feature.ui.R.id.editEventRemindedTimestamp,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventRemindedTimestamp,
             timeFormatter().toTimeString(newReminded)
         )
         writeTo(
-            com.futsch1.medtimer.feature.ui.R.id.editEventRemindedDate,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventRemindedDate,
             timeFormatter().toDateString(newReminded)
         )
 
         val newTaken = now.plusSeconds(60 * 60 * 48 + 180)
         writeTo(
-            com.futsch1.medtimer.feature.ui.R.id.editEventTakenTimestamp,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventTakenTimestamp,
             timeFormatter().toTimeString(newTaken)
         )
         writeTo(
-            com.futsch1.medtimer.feature.ui.R.id.editEventTakenDate,
+            com.futsch1.medtimer.feature.ui.impl.R.id.editEventTakenDate,
             timeFormatter().toDateString(newTaken)
         )
 
@@ -422,21 +422,21 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.deleteButton)
         clickDialogPositiveButton()
 
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        assertListItemCount(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
     }
 
     @Test
@@ -451,20 +451,20 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         assertNotContains(context.getString(R.string.interval_time, "0 min"))
 
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         AndroidTestHelper.waitForText(context.getString(R.string.interval_time, "0 min"))
         assertContains(context.getString(R.string.interval_time, "0 min"))
@@ -489,7 +489,7 @@ class ReminderTest : BaseTestHelper() {
             AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
             // Set active and pause days
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
             clickOn(R.string.cycle_reminder)
             clickOn(R.string.cycle_consecutive_days)
             AndroidTestHelper.setValue(reminder!!.consecutiveDays.toString())
@@ -509,42 +509,42 @@ class ReminderTest : BaseTestHelper() {
             // Mark event as taken
             AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
             clickListItemChild(
-                com.futsch1.medtimer.feature.ui.R.id.reminders,
+                com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
                 0,
-                com.futsch1.medtimer.feature.ui.R.id.stateButton
+                com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
             )
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
             // Check if cyclic information is present
             clickListItemChild(
-                com.futsch1.medtimer.feature.ui.R.id.reminders,
+                com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
                 0,
-                com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer
+                com.futsch1.medtimer.feature.ui.impl.R.id.overviewContentContainer
             )
             if (reminder.shouldHaveInfo) {
                 assertContains(
-                    com.futsch1.medtimer.feature.ui.R.id.editEventName,
+                    com.futsch1.medtimer.feature.ui.impl.R.id.editEventName,
                     String.format("Test (1/%d)", reminder.consecutiveDays)
                 )
             } else {
-                assertNotContains(com.futsch1.medtimer.feature.ui.R.id.editEventName, "Test (")
-                assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventName, "Test")
+                assertNotContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventName, "Test (")
+                assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.editEventName, "Test")
             }
             pressBack()
 
             // Remove event
             clickListItemChild(
-                com.futsch1.medtimer.feature.ui.R.id.reminders,
+                com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
                 0,
-                com.futsch1.medtimer.feature.ui.R.id.stateButton
+                com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
             )
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.deleteButton)
             clickDialogPositiveButton()
 
             // Remove reminder
             AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
             AndroidTestHelper.clickMedicineItem(0)
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openAdvancedSettings)
             openMenu()
             clickOn(R.string.delete)
             clickDialogPositiveButton()
@@ -590,11 +590,11 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
         AndroidTestHelper.waitForIdle(2_000)
-        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
+        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
+        clickListItem(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 1)
 
         try {
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.rescheduleButton)
+            clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.rescheduleButton)
         } catch (_: Exception) {
             val menuButton: UiObject =
                 device.findObject(UiSelector().description("More options"))
@@ -606,58 +606,58 @@ class ReminderTest : BaseTestHelper() {
 
         val timeString = timeFormatter().minutesToTimeString(19 * 60)
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.reminderText,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderText,
             matches(ViewMatchers.withSubstring(timeString))
         )
 
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.reminderText,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderText,
             matches(ViewMatchers.withSubstring(timeString))
         )
 
-        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0)
         assertDisplayed("2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             0,
-            com.futsch1.medtimer.feature.ui.R.id.reminderText,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderText,
             matches(ViewMatchers.withSubstring(timeString))
         )
 
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
+            com.futsch1.medtimer.feature.ui.impl.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.check2_circle)))
         )
         assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders,
             1,
-            com.futsch1.medtimer.feature.ui.R.id.reminderText,
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminderText,
             matches(ViewMatchers.withSubstring(timeString))
         )
     }

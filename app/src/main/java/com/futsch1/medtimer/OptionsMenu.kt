@@ -32,16 +32,16 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
-import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport
-import com.futsch1.medtimer.feature.ui.exporters.CSVMedicineExport
-import com.futsch1.medtimer.feature.ui.exporters.Export
-import com.futsch1.medtimer.feature.ui.exporters.Export.ExporterException
-import com.futsch1.medtimer.feature.ui.exporters.PDFEventExport
-import com.futsch1.medtimer.feature.ui.exporters.PDFMedicineExport
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromPreferences
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
+import com.futsch1.medtimer.feature.ui.impl.OptionsMenuFactory
+import com.futsch1.medtimer.feature.ui.impl.TagFilterViewModel
+import com.futsch1.medtimer.feature.ui.impl.exporters.CSVEventExport
+import com.futsch1.medtimer.feature.ui.impl.exporters.CSVMedicineExport
+import com.futsch1.medtimer.feature.ui.impl.exporters.Export
+import com.futsch1.medtimer.feature.ui.impl.exporters.Export.ExporterException
+import com.futsch1.medtimer.feature.ui.impl.exporters.PDFEventExport
+import com.futsch1.medtimer.feature.ui.impl.exporters.PDFMedicineExport
+import com.futsch1.medtimer.feature.ui.impl.medicine.tags.TagDataFromPreferences
+import com.futsch1.medtimer.feature.ui.impl.medicine.tags.TagsFragment
 import com.futsch1.medtimer.helpers.ExportBackupPath.getExportFilename
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
@@ -148,7 +148,7 @@ class OptionsMenu @AssistedInject constructor(
         val item = menu.findItem(R.id.settings)
         item.setOnMenuItemClickListener { _: MenuItem? ->
             try {
-                navController.navigate(com.futsch1.medtimer.feature.ui.R.id.action_global_preferencesFragment)
+                navController.navigate(com.futsch1.medtimer.feature.ui.impl.R.id.action_global_preferencesFragment)
                 return@setOnMenuItemClickListener true
             } catch (_: IllegalStateException) {
                 return@setOnMenuItemClickListener false

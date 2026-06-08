@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.di
 
 import com.futsch1.medtimer.OptionsMenu
-import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
+import com.futsch1.medtimer.feature.ui.impl.OptionsMenuFactory
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

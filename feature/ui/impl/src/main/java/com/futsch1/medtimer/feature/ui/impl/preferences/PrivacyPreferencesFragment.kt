@@ -1,0 +1,47 @@
+package com.futsch1.medtimer.feature.ui.impl.preferences
+
+import android.os.Bundle
+import android.view.WindowManager
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
+import com.futsch1.medtimer.core.common.helpers.hasBiometrics
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.SECURE_WINDOW
+import com.futsch1.medtimer.feature.ui.impl.R
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.privacy_preferences, rootKey)
+        setupBlockScreenCapture()
+        setupAppAuthentication()
+    }
+
+    private fun setupBlockScreenCapture() {
+        val preference = preferenceScreen.findPreference<SwitchPreferenceCompat>(SECURE_WINDOW)
+        if (preference != null) {
+            preference.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, newValue ->
+                    requireActivity().window.setFlags(
+                        if (java.lang.Boolean.TRUE == newValue) WindowManager.LayoutParams.FLAG_SECURE else 0,
+                        WindowManager.LayoutParams.FLAG_SECURE
+                    )
+                    true
+                }
+        }
+    }
+
+    private fun setupAppAuthentication() {
+        val preference = preferenceScreen.findPreference<Preference>("app_authentication")
+        if (preference != null) {
+            preference.isEnabled = this.requireContext().hasBiometrics()
+        }
+    }
+
+}

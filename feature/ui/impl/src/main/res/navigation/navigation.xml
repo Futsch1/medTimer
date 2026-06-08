@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/medicinesFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.MedicinesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.MedicinesFragment"
         android:label="@string/tab_medicine">
         <action
             android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/preferencesFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.PreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.PreferencesFragment"
         android:label="@string/tab_settings">
         <action
             android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
@@ -39,15 +39,15 @@
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.WeekendModePreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.WeekendModePreferencesFragment"
         android:label="@string/weekend_mode" />
     <fragment
         android:id="@+id/repeatRemindersPreferencesFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.RepeatRemindersPreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.RepeatRemindersPreferencesFragment"
         android:label="@string/repeat_reminders" />
     <fragment
         android:id="@+id/editMedicineFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.EditMedicineFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.EditMedicineFragment"
         tools:layout="@layout/fragment_edit_medicine">
         <argument
             android:name="medicineId"
@@ -80,11 +80,11 @@
         app:launchSingleTop="true" />
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.statistics.StatisticsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.statistics.StatisticsFragment"
         android:label="@string/analysis" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.futsch1.medtimer.feature.ui.statistics.CalendarFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.statistics.CalendarFragment"
         android:label="@string/calendar">
         <argument
             android:name="medicineId"
@@ -98,11 +98,11 @@
     </fragment>
     <fragment
         android:id="@+id/privacyPreferencesFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.PrivacyPreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.PrivacyPreferencesFragment"
         android:label="@string/privacy_settings" />
     <fragment
         android:id="@+id/notificationSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.NotificationSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.NotificationSettingsFragment"
         android:label="@string/notification_reminder_settings">
         <action
             android:id="@+id/action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment"
@@ -110,19 +110,19 @@
     </fragment>
     <fragment
         android:id="@+id/snoozeSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.SnoozeSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.SnoozeSettingsFragment"
         android:label="@string/snooze_settings" />
     <fragment
         android:id="@+id/displaySettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.DisplaySettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.DisplaySettingsFragment"
         android:label="@string/display_settings" />
     <fragment
         android:id="@+id/overviewFragment"
-        android:name="com.futsch1.medtimer.feature.ui.overview.OverviewFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.overview.OverviewFragment"
         android:label="@string/tab_overview" />
     <fragment
         android:id="@+id/advancedReminderPreferencesRootFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"
         android:label="@string/advanced_settings">
         <argument
             android:name="reminderId"
@@ -139,7 +139,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesInstructionsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesInstructionsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesInstructionsFragment"
         android:label="@string/dosing_instructions">
         <argument
             android:name="reminderId"
@@ -147,7 +147,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesStatusFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStatusFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStatusFragment"
         android:label="@string/reminder_status">
         <argument
             android:name="reminderId"
@@ -155,7 +155,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesCyclicFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesCyclicFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesCyclicFragment"
         android:label="@string/cycle_reminder">
         <argument
             android:name="reminderId"
@@ -163,11 +163,11 @@
     </fragment>
     <fragment
         android:id="@+id/alarmSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.preferences.AlarmSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.AlarmSettingsFragment"
         android:label="@string/alarm_settings" />
     <fragment
         android:id="@+id/stockSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.medicineSettings.StockSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.medicineSettings.StockSettingsFragment"
         android:label="@string/medicine_stock_settings">
         <argument
             android:name="medicineId"
@@ -175,7 +175,7 @@
     </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesStockFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockFragment"
         android:label="@string/advanced_settings">
         <argument
             android:name="reminderId"
@@ -186,7 +186,7 @@
     </fragment>
     <fragment
         android:id="@+id/medicineSettingsFragment"
-        android:name="com.futsch1.medtimer.feature.ui.medicine.medicineSettings.MedicineSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.medicineSettings.MedicineSettingsFragment"
         android:label="@string/medicine_settings">
         <argument
             android:name="medicineId"
