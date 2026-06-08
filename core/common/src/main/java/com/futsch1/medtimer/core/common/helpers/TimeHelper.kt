@@ -87,5 +87,23 @@ object TimeHelper {
         ).toLocalDate()
     }
 
+    fun isOnDay(epochSeconds: Long, epochDay: Long, systemZone: ZoneId): Boolean {
+        val dayInterval = zoneIdCaches.getOrPut(systemZone) { Cache(systemZone) }.getDaySecondsStartEnd(epochDay)
+        return dayInterval.first <= epochSeconds && epochSeconds < dayInterval.second
+    }
+
+    val zoneIdCaches: MutableMap<ZoneId, Cache> = mutableMapOf()
+
+    class Cache(val zoneId: ZoneId) {
+        val daySecondsStartEndCache: MutableMap<Long, Pair<Long, Long>> = mutableMapOf()
+
+        fun getDaySecondsStartEnd(epochDay: Long): Pair<Long, Long> {
+            return daySecondsStartEndCache.getOrPut(epochDay) {
+                val start = LocalDate.ofEpochDay(epochDay).atStartOfDay(zoneId).toInstant()
+                val end = LocalDate.ofEpochDay(epochDay + 1).atStartOfDay(zoneId).toInstant()
+                Pair(start.epochSecond, end.epochSecond)
+            }
+        }
+    }
 }
 

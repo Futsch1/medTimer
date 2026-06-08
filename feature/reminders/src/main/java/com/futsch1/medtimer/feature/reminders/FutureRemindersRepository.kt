@@ -39,13 +39,17 @@ class FutureRemindersRepository @Inject constructor(
         applicationScope.launch {
             triggerChannel.consumeEach { endDay ->
                 try {
+                    val startTime = System.currentTimeMillis()
                     Log.d(
                         LogTags.SIMULATION,
                         "Triggering future reminders simulation through $endDay"
                     )
                     runSimulation(endDay)
                     _simulatedThrough.value = endDay
-                    Log.d(LogTags.SIMULATION, "Future reminders simulation finished")
+                    Log.d(
+                        LogTags.SIMULATION,
+                        "Future reminders simulation finished after ${System.currentTimeMillis() - startTime} ms"
+                    )
                 } catch (e: Exception) {
                     Log.e(LogTags.SIMULATION, "Future reminders simulation failed", e)
                 }
