@@ -9,7 +9,7 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.getShowReminderNotificationIntent
+import com.futsch1.medtimer.feature.reminders.impl.getShowReminderNotificationIntent
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher

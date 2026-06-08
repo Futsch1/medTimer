@@ -41,8 +41,8 @@ import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.databinding.ContentMainBinding
-import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
-import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
+import com.futsch1.medtimer.feature.reminders.impl.ReminderNotificationChannelManager.Companion.initialize
+import com.futsch1.medtimer.feature.reminders.impl.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission

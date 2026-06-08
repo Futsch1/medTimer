@@ -1,0 +1,145 @@
+package com.futsch1.medtimer.feature.reminders.impl.alarm
+
+import android.app.PendingIntent
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.LogTags.ALARM
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.impl.R
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.impl.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.impl.notificationFactory.NotificationIntentBuilder
+import com.futsch1.medtimer.feature.reminders.impl.notificationFactory.NotificationStringBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class AlarmFragment(
+    private val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+) : Fragment() {
+    lateinit var reminderNotificationData: ReminderNotificationData
+
+    @Inject
+    lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
+
+    @Inject
+    lateinit var reminderNotificationFactory: ReminderNotificationFactory
+
+    @Inject
+    lateinit var preferencesDataSource: PreferencesDataSource
+
+    @Inject
+    lateinit var timeFormatter: TimeFormatter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val bundle = requireArguments()
+
+        reminderNotificationData = bundle.toReminderNotificationData()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_alarm, container, false)
+
+        lifecycleScope.launch {
+            withContext(ioCoroutineDispatcher) {
+                val reminderNotification = reminderNotificationFactory.create(
+                    reminderNotificationData
+                )!!
+                Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
+
+                val notificationStrings = NotificationStringBuilder(
+                    requireContext(),
+                    preferencesDataSource,
+                    timeFormatter,
+                    reminderNotification,
+                    false
+                )
+                val intents = notificationIntentBuilderFactory.create(reminderNotification)
+
+                withContext(mainDispatcher) {
+                    setupTexts(
+                        view,
+                        notificationStrings,
+                        reminderNotification.reminderNotificationParts.any { it.medicine.isOutOfStock() })
+                    setupButtons(
+                        view,
+                        intents
+                    )
+                }
+            }
+        }
+
+
+        return view
+    }
+
+    private fun setupTexts(
+        view: View,
+        notificationStrings: NotificationStringBuilder,
+        anyOutOfStock: Boolean
+    ) {
+        val notificationTitle = view.findViewById<TextView>(R.id.notificationTitle)
+        notificationTitle.text = notificationStrings.notificationString
+        if (anyOutOfStock) {
+            notificationTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill,
+                0,
+                0,
+                0
+            )
+        }
+    }
+
+    private fun setupButtons(
+        view: View,
+        intents: NotificationIntentBuilder
+    ) {
+        val takenButton = view.findViewById<TextView>(R.id.takenButton)
+        takenButton.setOnClickListener {
+            closeWithIntent(intents.pendingTaken)
+        }
+
+        val skippedButton = view.findViewById<TextView>(R.id.skippedButton)
+        if (intents.pendingSkipped != null) {
+            skippedButton.setOnClickListener {
+                closeWithIntent(intents.pendingSkipped)
+            }
+        } else {
+            skippedButton.visibility = View.GONE
+        }
+        val snoozeButton = view.findViewById<TextView>(R.id.snoozeButton)
+        snoozeButton.setOnClickListener {
+            closeWithIntent(intents.pendingSnooze)
+        }
+    }
+
+    private fun closeWithIntent(pendingIntent: PendingIntent) {
+        pendingIntent.send()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(ALARM, "Closing activity")
+        requireActivity().finishAndRemoveTask()
+    }
+}

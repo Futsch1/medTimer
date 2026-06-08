@@ -8,7 +8,7 @@ import java.time.LocalDate
  * View of the simulated upcoming reminders for the UI layer.
  *
  * Consumers outside the reminders impl module depend on this interface instead of the concrete
- * [com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository], which keeps feature:ui
+ * [com.futsch1.medtimer.feature.reminders.impl.SimulatedRemindersRepository], which keeps feature:ui
  * decoupled from the impl module. The impl binds itself to this interface (see the reminders
  * impl module). Consumers may widen the simulation window they need, but triggering a
  * recalculation stays internal to the impl module.

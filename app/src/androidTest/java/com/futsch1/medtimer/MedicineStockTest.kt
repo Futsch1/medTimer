@@ -23,7 +23,7 @@ import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.AndroidTestHelper.setValue
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.impl.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.equalTo

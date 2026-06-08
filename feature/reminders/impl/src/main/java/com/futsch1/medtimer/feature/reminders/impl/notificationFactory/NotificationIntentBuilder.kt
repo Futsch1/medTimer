@@ -1,0 +1,135 @@
+package com.futsch1.medtimer.feature.reminders.impl.notificationFactory
+
+import android.app.PendingIntent
+import android.content.Context
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
+import com.futsch1.medtimer.feature.reminders.impl.getCustomSnoozeActionIntent
+import com.futsch1.medtimer.feature.reminders.impl.getLocationSnoozeIntent
+import com.futsch1.medtimer.feature.reminders.impl.getSkippedActionIntent
+import com.futsch1.medtimer.feature.reminders.impl.getSnoozeIntent
+import com.futsch1.medtimer.feature.reminders.impl.getTakenActionIntent
+import com.futsch1.medtimer.feature.reminders.api.getVariableAmountActivityIntent
+import com.futsch1.medtimer.feature.reminders.impl.notificationData.ReminderNotification
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
+
+class NotificationIntentBuilder @AssistedInject constructor(
+    @param:ApplicationContext private val context: Context,
+    private val preferencesDataSource: PreferencesDataSource,
+    @Assisted val reminderNotification: ReminderNotification
+) {
+    @AssistedFactory
+    fun interface Factory {
+        fun create(reminderNotification: ReminderNotification): NotificationIntentBuilder
+    }
+
+    private val reminderEventIds = reminderNotification.reminderNotificationData.reminderEventIds.toList()
+
+    val pendingSnooze = getSnoozePendingIntent()
+    val pendingLocationSnooze = getLocationSnoozePendingIntent()
+
+    val pendingSkipped = getSkippedPendingIntent()
+    val pendingTaken = getTakenPendingIntent()
+
+    val pendingDismiss = getDismissPendingIntent()
+
+    private fun getTakenPendingIntent(): PendingIntent {
+        val anyAskForAmount =
+            reminderNotification.reminderNotificationParts.any { it.reminderEvent.askForAmount }
+
+        return if (anyAskForAmount) {
+            val notifyTaken = getVariableAmountActivityIntent(
+                context,
+                reminderNotification.reminderNotificationData
+            )
+            PendingIntent.getActivity(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                notifyTaken,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        } else {
+            val notifyTaken = getTakenActionIntent(context, reminderEventIds)
+            PendingIntent.getBroadcast(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                notifyTaken,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+    }
+
+    private fun getSkippedPendingIntent(): PendingIntent? {
+        if (reminderNotification.reminderNotificationParts.any { it.medicine.cannotBeSkipped } ||
+            preferencesDataSource.preferences.value.cannotSkipReminders) {
+            return null
+        }
+        val notifySkipped = getSkippedActionIntent(context, reminderEventIds)
+        return PendingIntent.getBroadcast(
+            context,
+            reminderNotification.reminderNotificationData.notificationId,
+            notifySkipped,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    private fun getSnoozePendingIntent(): PendingIntent {
+        val snoozeDuration = preferencesDataSource.preferences.value.snoozeDuration
+
+        return if (snoozeDuration.inWholeMinutes < 0) {
+            val snooze = getCustomSnoozeActionIntent(
+                context, reminderNotification.reminderNotificationData
+            )
+            PendingIntent.getActivity(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                snooze,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            val snooze = getSnoozeIntent(
+                context, reminderNotification.reminderNotificationData, snoozeDuration
+            )
+            PendingIntent.getBroadcast(
+                context,
+                reminderNotification.reminderNotificationData.notificationId,
+                snooze,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+    }
+
+    private fun getLocationSnoozePendingIntent(): PendingIntent? {
+        if (!preferencesDataSource.preferences.value.locationBasedSnooze || preferencesDataSource.preferences.value.homeLocation == null) {
+            return null
+        }
+
+        val snooze = getLocationSnoozeIntent(context, reminderNotification.reminderNotificationData)
+        return PendingIntent.getBroadcast(
+            context,
+            reminderNotification.reminderNotificationData.notificationId,
+            snooze,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    private fun getDismissPendingIntent(): PendingIntent {
+        return when (preferencesDataSource.preferences.value.dismissNotificationAction) {
+            DismissNotificationAction.SKIP -> {
+                pendingSkipped ?: pendingSnooze
+            }
+
+            DismissNotificationAction.SNOOZE -> {
+                pendingSnooze
+            }
+
+            else -> {
+                pendingTaken
+            }
+        }
+    }
+
+}

@@ -32,7 +32,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.impl.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo

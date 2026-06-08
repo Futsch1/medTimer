@@ -1,0 +1,66 @@
+package com.futsch1.medtimer.feature.reminders.impl.notificationData
+
+import android.util.Log
+import com.futsch1.medtimer.core.common.LogTags
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.api.buildReminderEvent
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+open class ReminderNotificationFactory @Inject constructor(
+    private val medicineRepository: MedicineRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
+    private val timeFormatter: TimeFormatter,
+    private val preferencesDataSource: PreferencesDataSource
+) {
+    open suspend fun create(reminderNotificationData: ReminderNotificationData): ReminderNotification? {
+        if (!reminderNotificationData.valid) {
+            return null
+        }
+
+        val result = mutableListOf<ReminderNotificationPart>()
+
+        val newReminderEventIds = mutableListOf<Int>()
+        for (i in reminderNotificationData.reminderIds.indices) {
+            val reminder = reminderRepository.fetch(reminderNotificationData.reminderIds[i])
+            if (reminder == null) {
+                Log.e(LogTags.REMINDER, String.format("Could not find reminder rID %d in database", reminderNotificationData.reminderIds[i]))
+                return null
+            }
+
+            val medicine = medicineRepository.fetch(reminder.medicineRelId)
+            if (medicine == null) {
+                Log.e(LogTags.REMINDER, "Could not find medicine mID ${reminder.medicineRelId} in database")
+                return null
+            }
+
+            var reminderEvent = if (reminderNotificationData.reminderEventIds[i] != 0) {
+                reminderEventRepository.fetch(reminderNotificationData.reminderEventIds[i])
+            } else {
+                reminderEventRepository.fetch(reminder.id, reminderNotificationData.remindInstant.epochSecond)
+            }
+
+            if (reminderEvent == null) {
+                val newEvent = buildReminderEvent(
+                    reminderNotificationData.remindInstant.epochSecond, medicine, reminder, reminderEventRepository, preferencesDataSource.preferences.value.numberOfRepetitions
+                ) { timeFormatter.localDateToString(it) }
+                reminderEvent = reminderEventRepository.create(newEvent)
+                Log.d(LogTags.REMINDER, "Created reminder event rEID [${reminderEvent.reminderEventId}] for reminder rID [${reminder.id}]")
+            } else {
+                reminderNotificationData.notificationId = reminderEvent.notificationId
+            }
+            newReminderEventIds.add(reminderEvent.reminderEventId)
+            result.add(ReminderNotificationPart(reminder, reminderEvent, medicine))
+        }
+        reminderNotificationData.reminderEventIds = newReminderEventIds
+
+        return ReminderNotification(result, reminderNotificationData)
+    }
+}

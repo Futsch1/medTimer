@@ -40,7 +40,7 @@ class GeofenceBroadcastReceiverTest {
         val forwarded = shadowOf(application).broadcastIntents.lastOrNull()
         assertEquals(ProcessorCode.GeofenceEntered.action, forwarded?.action)
         assertEquals(
-            "com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver",
+            "com.futsch1.medtimer.feature.reminders.impl.ReminderProcessorBroadcastReceiver",
             forwarded?.component?.className
         )
     }

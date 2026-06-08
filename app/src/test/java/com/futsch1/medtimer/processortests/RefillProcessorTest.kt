@@ -21,7 +21,7 @@ import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.database.toModel.toEntity
-import com.futsch1.medtimer.feature.reminders.RefillProcessor
+import com.futsch1.medtimer.feature.reminders.impl.RefillProcessor
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.schedulertests.TestHelper

@@ -30,7 +30,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val REMINDER_RECEIVER_CLASS =
-            "com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver"
+            "com.futsch1.medtimer.feature.reminders.impl.ReminderProcessorBroadcastReceiver"
         private const val REMINDER_RECEIVER_PERMISSION =
             "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
     }

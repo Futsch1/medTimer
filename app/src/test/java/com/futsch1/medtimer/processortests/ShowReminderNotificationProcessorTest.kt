@@ -19,7 +19,7 @@ import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
-import com.futsch1.medtimer.feature.reminders.ShowReminderNotificationProcessor
+import com.futsch1.medtimer.feature.reminders.impl.ShowReminderNotificationProcessor
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import dagger.hilt.android.testing.BindValue
