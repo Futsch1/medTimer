@@ -126,8 +126,8 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:ui"))
     implementation(project(":core:location"))
-    implementation(project(":feature:reminders"))
-    implementation(project(":feature:ui"))
+    implementation(project(":feature:reminders:impl"))
+    implementation(project(":feature:ui:impl"))
     // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
