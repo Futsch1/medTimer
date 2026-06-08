@@ -43,7 +43,11 @@ class NewReminderDialog @AssistedInject constructor(
 ) {
     @AssistedFactory
     fun interface Factory {
-        fun create(activity: FragmentActivity, medicine: Medicine, reminder: Reminder): NewReminderDialog
+        fun create(
+            activity: FragmentActivity,
+            medicine: Medicine,
+            reminder: Reminder
+        ): NewReminderDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -70,7 +74,7 @@ class NewReminderDialog @AssistedInject constructor(
         if (!BuildConfig.DEBUG) {
             textInputEditText.requestFocus()
             textInputEditText.postDelayed({
-                inputMethodManager.showSoftInput(textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+                inputMethodManager.showSoftInput(textInputEditText, 0)
             }, 100)
         }
         if (medicine.isStockManagementActive()) {
@@ -168,7 +172,8 @@ class NewReminderDialog @AssistedInject constructor(
         dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
             activity.lifecycleScope.launch {
                 var updatedReminder = reminder.copy(
-                    amount = dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString().trim()
+                    amount = dialog.findViewById<TextInputEditText>(R.id.editAmount).text.toString()
+                        .trim()
                 )
 
                 val reminderTime = if (reminder.reminderType == ReminderType.TIME_BASED) {
@@ -198,7 +203,11 @@ class NewReminderDialog @AssistedInject constructor(
                     ).show()
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(activity, com.futsch1.medtimer.core.ui.R.string.invalid_input, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        activity,
+                        com.futsch1.medtimer.core.ui.R.string.invalid_input,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

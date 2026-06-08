@@ -39,7 +39,7 @@ object TimeHelper {
      * @return Local date
      */
     fun secondsSinceEpochToLocalDate(secondsSinceEpoch: Long, zoneId: ZoneId): LocalDate {
-        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalDate()
+        return LocalDate.ofInstant(Instant.ofEpochSecond(secondsSinceEpoch), zoneId)
     }
 
     /**
@@ -48,7 +48,7 @@ object TimeHelper {
      * @return Local date/time
      */
     fun secondsSinceEpochToLocalTime(secondsSinceEpoch: Long, zoneId: ZoneId): LocalTime {
-        return Instant.ofEpochSecond(secondsSinceEpoch).atZone(zoneId).toLocalTime()
+        return LocalTime.ofInstant(Instant.ofEpochSecond(secondsSinceEpoch), zoneId)
     }
 
     fun changeInstantDate(instant: Instant, localDate: LocalDate?): Instant {

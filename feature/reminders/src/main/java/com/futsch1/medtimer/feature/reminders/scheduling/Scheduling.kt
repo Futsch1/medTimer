@@ -6,7 +6,6 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
-import java.util.stream.Collectors
 
 fun interface Scheduling {
     fun getNextScheduledTime(): Instant?
@@ -31,7 +30,10 @@ abstract class SchedulingBase(
         return findLastReminderEvent(reminderEvents, linkedReminderId)
     }
 
-    protected fun findLastReminderEvent(reminderEvents: List<ReminderEvent>, reminderId: Int): ReminderEvent? {
+    protected fun findLastReminderEvent(
+        reminderEvents: List<ReminderEvent>,
+        reminderId: Int
+    ): ReminderEvent? {
         var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEvents) {
             if ((reminderEvent.reminderId == reminderId) && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
@@ -77,13 +79,8 @@ abstract class SchedulingBase(
         return null
     }
 
-    private fun filterEvents(
-        reminderEvents: List<ReminderEvent>
-    ): List<ReminderEvent> {
-        return reminderEvents.stream()
-            .filter { event: ReminderEvent -> event.reminderId == reminder.id }.collect(
-                Collectors.toList()
-            )
+    private fun filterEvents(reminderEvents: List<ReminderEvent>): List<ReminderEvent> {
+        return reminderEvents.filter { it.reminderId == reminder.id }
     }
 }
 

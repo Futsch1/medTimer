@@ -5,7 +5,8 @@ import android.view.inputmethod.InputMethodManager
 
 fun View.showSoftKeyboard() {
     if (requestFocus()) {
-        val imm = this.context.getSystemService(InputMethodManager::class.java) as InputMethodManager
-        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        val imm =
+            this.context.getSystemService(InputMethodManager::class.java) as InputMethodManager
+        imm.showSoftInput(this, 0)
     }
 }
