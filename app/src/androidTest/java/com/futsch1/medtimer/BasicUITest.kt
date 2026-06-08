@@ -255,7 +255,7 @@ class BasicUITest : BaseTestHelper() {
 
         navigateTo(MainMenu.MEDICINES)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+        navigateTo(MainMenu.OVERVIEW)
 
         val view = AtomicReference<View>()
         view.set(
@@ -266,7 +266,7 @@ class BasicUITest : BaseTestHelper() {
         var currentDay = view.get().findViewWithTag<TextView>("selected")
         internalAssert(currentDay.text == secondDay)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+        navigateTo(MainMenu.OVERVIEW)
 
         navigateTo(MainMenu.OVERVIEW)
         view.set(

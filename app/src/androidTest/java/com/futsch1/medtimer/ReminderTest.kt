@@ -1,11 +1,12 @@
 package com.futsch1.medtimer
 
-import android.widget.TextView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
@@ -18,12 +19,11 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.evrencoskun.tableview.TableView
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import junit.framework.TestCase
+import com.futsch1.medtimer.utilities.waitForView
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
@@ -33,7 +33,6 @@ import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
 
 
 class ReminderTest : BaseTestHelper() {
@@ -398,18 +397,14 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.ANALYSIS)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.tableChip)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        // The Analysis view chips are icon-only; their labels are exposed as content descriptions.
+        device.findObject(By.desc(context.getString(R.string.tabular_view)))?.click()
+        AndroidTestHelper.waitForIdle(1_000)
 
-        val tableView = AtomicReference<TableView?>()
-        tableView.set(
-            baristaRule.activityTestRule.getActivity()
-                .findViewById(com.futsch1.medtimer.feature.ui.R.id.reminder_table)
-        )
-
-        var view = tableView.get()!!.cellRecyclerView.findViewWithTag<TextView>("time")
-        TestCase.assertEquals(timeFormatter().toDateTimeString(newReminded), view.text)
-        view = tableView.get()!!.cellRecyclerView.findViewWithTag("taken")
-        TestCase.assertEquals(timeFormatter().toDateTimeString(newTaken), view.text)
+        internalAssert(device.findObject(By.textContains(timeFormatter().toDateTimeString(newReminded))) != null)
+        internalAssert(device.findObject(By.textContains(timeFormatter().toDateTimeString(newTaken))) != null)
     }
 
     @Test
@@ -571,8 +566,16 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         AndroidTestHelper.waitForIdle(2_000)
+        // Wait until the raised reminder is actually shown before clicking position 0.
+        // The raise is asynchronous (broadcast -> DB -> overview Flow -> rebind);
+        // until it lands, the only row is the still-pending scheduled occurrence, so a position-0 click would reschedule that instead,
+        // creating a second event and leaving the raised one at the top.
+        // The raised event sorts first (earlier timestamp), so once it appears, it owns position 0.
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .waitForView(By.desc(context.getString(R.string.reminded)), 5_000)
         clickListItemChild(
             com.futsch1.medtimer.feature.ui.R.id.reminders,
             0,

@@ -117,8 +117,8 @@ Conventions:
 When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests live alongside JVM unit tests and use **`createComposeRule()`** with *
 *Robolectric** so they run on the JVM without an emulator.
 
-- **Target the stateless `*Content` composable**, not the stateful `Screen` that pulls in `hiltViewModel()`.
-  Feed it fabricated state and lambdas; assert on what's visible.
+- **Target the stateless `Screen` overload** (see [jetpack-compose.md](jetpack-compose.md#screen-pattern)), not the stateful overload that references a ViewModel.
+  Feed it fabricated state (construct a `MutableXxxScreenState`) and lambdas; assert on what's visible.
 - **Query by semantics first.**
   `onNodeWithText`, `onNodeWithContentDescription`, `onNodeWithTag` only as a last resort — and only when the tag has a meaningful name, not `tag_42`.
 - **Don't assert on recomposition counts, memoization, or the number of times a lambda fires.**

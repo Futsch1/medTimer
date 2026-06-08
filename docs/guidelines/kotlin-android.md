@@ -1,7 +1,7 @@
 # Coding Guidelines — Kotlin / Android
 
 **Audience:** all contributors.
-**Stack:** Kotlin 2.3 (or newer), Android Gradle Plugin 9.2 (or newer), `compileSdk = 36`, `minSdk = 28`, JDK 21, Hilt 2.59, Room 2.8, Navigation 2.9, AndroidX,
+**Stack:** Kotlin 2.3 (or newer), Android Gradle Plugin 9.2 (or newer), `compileSdk = 37`, `minSdk = 28`, JDK 21, Hilt 2.59, Room 2.8, Navigation 2.9, AndroidX,
 Kotlinx Coroutines 1.9.
 
 These conventions describe the multi-module Gradle build rooted at `settings.gradle.kts`.
@@ -145,7 +145,7 @@ The current layout:
 | `:core:domain`       | Domain models and repository interfaces                                                                                                                                                                        |
 | `:core:database`     | Room database, entities, repository implementations, mappers                                                                                                                                                   |
 | `:core:datastore`    | DataStore-based preferences                                                                                                                                                                                    |
-| `:core:ui`           | Shared **resources** (strings, drawables, themes, navigation graphs, XML layouts that cross features). Compose theme + reusable composables will land here too — see [jetpack-compose.md](jetpack-compose.md). |
+| `:core:ui`           | Shared **resources** (strings, drawables, themes, navigation graphs, XML layouts that cross features). Compose theme (`MedTimerTheme`) and reusable composables (`SortableTable`, `TagEventFilter`, `@MedTimerPreview`) live here — see [jetpack-compose.md](jetpack-compose.md). |
 | `:feature:reminders` | Reminder scheduling, notification processing                                                                                                                                                                   |
 | `:feature:ui`        | Overview UI                                                                                                                                                                                                    |
 
