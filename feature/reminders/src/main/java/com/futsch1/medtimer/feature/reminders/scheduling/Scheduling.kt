@@ -1,11 +1,11 @@
 package com.futsch1.medtimer.feature.reminders.scheduling
 
+import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 fun interface Scheduling {
     fun getNextScheduledTime(): Instant?
@@ -23,21 +23,19 @@ abstract class SchedulingBase(
     abstract override fun getNextScheduledTime(): Instant?
 
     protected fun findLastReminderEvent(): ReminderEvent? {
-        return findLastReminderEvent(filteredReminderEvents, reminder.id)
+        return findLastReminderEvent(filteredReminderEvents)
     }
 
     protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEvent? {
-        return findLastReminderEvent(reminderEvents, linkedReminderId)
+        return findLastReminderEvent(reminderEvents.filter { it.reminderId == linkedReminderId })
     }
 
-    protected fun findLastReminderEvent(
-        reminderEvents: List<ReminderEvent>,
-        reminderId: Int
+    private fun findLastReminderEvent(
+        reminderEvents: List<ReminderEvent>
     ): ReminderEvent? {
         var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEvents) {
-            if ((reminderEvent.reminderId == reminderId) && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
-            ) {
+            if (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp) {
                 foundReminderEvent = reminderEvent
             }
         }
@@ -55,8 +53,7 @@ abstract class SchedulingBase(
     }
 
     protected fun isOnDay(epochSeconds: Long, epochDay: Long): Boolean {
-        val dayInterval = getDaySecondsStartEnd(epochDay, systemZone)
-        return dayInterval.first <= epochSeconds && epochSeconds < dayInterval.second
+        return TimeHelper.isOnDay(epochSeconds, epochDay, systemZone)
     }
 
     protected fun today(): Long {
@@ -81,18 +78,6 @@ abstract class SchedulingBase(
 
     private fun filterEvents(reminderEvents: List<ReminderEvent>): List<ReminderEvent> {
         return reminderEvents.filter { it.reminderId == reminder.id }
-    }
-
-    companion object {
-        val daySecondsStartEndCache: MutableMap<Long, Pair<Long, Long>> = mutableMapOf()
-
-        fun getDaySecondsStartEnd(epochDay: Long, zoneId: ZoneId): Pair<Long, Long> {
-            return daySecondsStartEndCache.getOrPut(epochDay) {
-                val start = LocalDate.ofEpochDay(epochDay).atStartOfDay(zoneId).toInstant()
-                val end = LocalDate.ofEpochDay(epochDay + 1).atStartOfDay(zoneId).toInstant()
-                Pair(start.epochSecond, end.epochSecond)
-            }
-        }
     }
 }
 

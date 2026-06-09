@@ -333,4 +333,6 @@
     <string name="reminders_cannot_be_skipped">Przypomnienia nie mogą być pominięte</string>
     <string name="reminders_cannot_be_skipped_summary">Jeśli włączone, przypomnienia można odrzucić tylko przez oznaczenie ich jako przyjętych. Można to również włączyć indywidualnie dla każdego leku.</string>
     <string name="same_as_medicine">Tak samo jak lek</string>
+    <string name="previous_week">Poprzedni tydzień</string>
+    <string name="next_week">Następny tydzień</string>
 </resources>

@@ -321,4 +321,6 @@
     <string name="reminders_cannot_be_skipped">Påminnelser kan inte hoppas över</string>
     <string name="reminders_cannot_be_skipped_summary">Om aktiverat kan påminnelser endast stängas av genom att markera dem som tagna. Detta kan även aktiveras individuellt per medicin.</string>
     <string name="same_as_medicine">Samma som läkemedel</string>
+    <string name="previous_week">Föregående vecka</string>
+    <string name="next_week">Nästa vecka</string>
 </resources>

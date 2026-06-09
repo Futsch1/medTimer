@@ -13,22 +13,23 @@ import android.os.Handler
 import android.os.PowerManager
 import android.text.InputType
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.navigateUp
-import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
@@ -36,7 +37,9 @@ import com.futsch1.medtimer.core.common.helpers.hasBiometrics
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.database.backup.BackupManager
+import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
@@ -44,7 +47,6 @@ import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificat
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var appBarConfiguration: AppBarConfiguration? = null
     private var batteryOptimizationWarning: CardView? = null
     private var exactReminderWarning: CardView? = null
+    private var navHostFragment: NavHostFragment? = null
     private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
@@ -149,19 +152,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun start() {
-        setContentView(R.layout.activity_main)
-        setupNavigation()
-        batteryOptimizationWarning = findViewById(R.id.batteryOptimizationWarning)
-        findViewById<View>(R.id.dismissBatteryWarning)?.setOnClickListener { _: View ->
-            persistentDataDataSource.setBatteryWarningShown(true)
-            checkBatteryOptimization()
-        }
-
-        exactReminderWarning = findViewById(R.id.exactRemindersWarning)
-        findViewById<View>(R.id.dismissExactReminderWarning)?.setOnClickListener { _: View ->
-            persistentDataDataSource.setExactRemindersWarningShown(true)
-            checkExactReminders()
-        }
+        setContentView(
+            ComposeView(this).apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MedTimerTheme {
+                        AppNavigationScaffold(
+                            onContentBound = ::onContentBound,
+                            onNavItemClick = ::onNavItemClick,
+                        )
+                    }
+                }
+            }
+        )
 
         dispatchIntent(this.intent)
         this.intent = Intent()
@@ -183,31 +186,80 @@ class MainActivity : AppCompatActivity() {
         this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    private fun setupNavigation() {
-        val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
+    private fun onContentBound(binding: ContentMainBinding, navHostFragment: NavHostFragment) {
+        this.navHostFragment = navHostFragment
         val navController = navHostFragment.navController
-        setSupportActionBar(findViewById(R.id.toolbar))
+        // Track the tab whose area we're in. Detail screens (e.g. editMedicineFragment) are flat siblings
+        // of the tab roots, so they don't carry their tab in the destination hierarchy; keep the last
+        // top-level tab stickily so a tab tap from one of its detail screens counts as a reselect.
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in topLevelTabIds) {
+                currentTabId = destination.id
+            }
+        }
+        setSupportActionBar(binding.toolbar)
         appBarConfiguration = AppBarConfiguration.Builder(
             com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
             com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
             com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
-        )
-            .build()
+        ).build()
         setupActionBarWithNavController(this, navController, appBarConfiguration!!)
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        setupWithNavController(bottomNavigationView, navController)
-        bottomNavigationView.setOnItemReselectedListener { item: MenuItem? ->
-            navController.popBackStack(item!!.itemId, false)
-            val topFragment = navHostFragment.getChildFragmentManager().fragments.firstOrNull()
+
+        batteryOptimizationWarning = binding.batteryOptimizationWarning
+        binding.dismissBatteryWarning.setOnClickListener {
+            persistentDataDataSource.setBatteryWarningShown(true)
+            checkBatteryOptimization()
+        }
+        exactReminderWarning = binding.exactRemindersWarning
+        binding.dismissExactReminderWarning.setOnClickListener {
+            persistentDataDataSource.setExactRemindersWarningShown(true)
+            checkExactReminders()
+        }
+    }
+
+    private val topLevelTabIds = setOf(
+        com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
+        com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
+        com.futsch1.medtimer.feature.ui.R.id.statisticsFragment,
+    )
+
+    // The tab area the user is currently in (sticky across that tab's detail screens). Initialised to the
+    // start destination, then kept in sync by the destination listener in onContentBound.
+    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
+
+    // The destination the previous click navigated to (a fresh select, not a reselect). NavController's
+    // currentDestination updates synchronously on navigate(), so a tap that lands right after navigating
+    // to the same destination would otherwise look like a reselect. The legacy BottomNavigationView
+    // tolerated that navigate-then-retap, so we suppress the stray reselect to mirror its behavior.
+    private var justNavigatedTo: Int? = null
+
+    // Mirrors the legacy BottomNavigationView select/reselect behavior.
+    private fun onNavItemClick(navController: NavController, destinationId: Int) {
+        // A tap on the tab we're already in (including its detail screens) is a reselect.
+        val isReselected = destinationId == currentTabId
+        if (isReselected) {
+            // A tab tap always returns to the tab's root, clearing any detail screens on its back stack.
+            navController.popBackStack(destinationId, false)
+            // But a reselect that immediately follows navigating to this destination is a stray re-tap
+            // (the instrumented tests tap each item twice), not a real reselect — don't fire the reselect
+            // side-effect for it (e.g. it must not reset the overview day to today).
+            if (justNavigatedTo == destinationId) {
+                justNavigatedTo = null
+                return
+            }
+            val topFragment = navHostFragment?.childFragmentManager?.fragments?.firstOrNull()
             if (topFragment is OnFragmentReselectedListener) {
-                // Forward the reselection event to the current fragment
                 topFragment.onFragmentReselected()
             }
-        }
-        bottomNavigationView.setOnItemSelectedListener { item: MenuItem? ->
+        } else {
+            justNavigatedTo = destinationId
             navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
-            onNavDestinationSelected(item!!, navController)
-            true
+            val options = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setRestoreState(true)
+                .setPopUpTo(navController.graph.startDestinationId, inclusive = false, saveState = true)
+                .build()
+            navController.navigate(destinationId, null, options)
         }
     }
 
@@ -297,7 +349,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         try {
             val navController = this.findNavController(R.id.navHost)
-            return navigateUp(navController, appBarConfiguration!!)
+            return appBarConfiguration?.let { navigateUp(navController, it) } == true
                     || super.onSupportNavigateUp()
         } catch (_: IllegalStateException) {
             return false

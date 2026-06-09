@@ -321,4 +321,6 @@
     <string name="reminders_cannot_be_skipped">Az emlékeztetők nem hagyhatók ki</string>
     <string name="reminders_cannot_be_skipped_summary">Ha engedélyezve van, az emlékeztetők csak a bevétel jelzésével nyugtázhatók. Ez gyógyszerenként egyedileg is beállítható.</string>
     <string name="same_as_medicine">Azonos a gyógyszerrel</string>
+    <string name="previous_week">Előző hét</string>
+    <string name="next_week">Következő hét</string>
 </resources>

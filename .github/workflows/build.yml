@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel in-progress runs when new commits are pushed to the same branch/PR.
+# Keep main and release tags running to completion (they publish releases).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') }}
+
 env:
   FULL_APK_RELEASE_DIRECTORY: app/build/outputs/apk/full/release
   FOSS_APK_RELEASE_DIRECTORY: app/build/outputs/apk/foss/release

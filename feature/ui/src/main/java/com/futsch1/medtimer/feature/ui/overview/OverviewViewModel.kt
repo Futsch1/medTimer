@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.seconds
 
@@ -193,9 +195,10 @@ class OverviewViewModel @AssistedInject constructor(
     ): Boolean {
         val scheduledRemindersVisible =
             filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilter.SCHEDULED)
-        return isSameDay(
+        return TimeHelper.isOnDay(
             scheduledReminder.timestamp.epochSecond,
-            filterState.day
+            filterState.day.toEpochDay(),
+            ZoneId.systemDefault()
         ) && scheduledRemindersVisible
     }
 
@@ -213,15 +216,10 @@ class OverviewViewModel @AssistedInject constructor(
                 (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(
                     OverviewFilter.RAISED
                 ))
-        return isSameDay(
+        return TimeHelper.isOnDay(
             reminderEvent.remindedTimestamp.epochSecond,
-            filterState.day
+            filterState.day.toEpochDay(),
+            ZoneId.systemDefault()
         ) && reminderEventVisible
-    }
-
-    private fun isSameDay(timestamp: Long, day: LocalDate): Boolean {
-        val reminderDate =
-            Instant.ofEpochSecond(timestamp).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
-        return reminderDate.isEqual(day)
     }
 }

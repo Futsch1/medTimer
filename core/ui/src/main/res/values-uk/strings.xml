@@ -333,4 +333,6 @@
     <string name="reminders_cannot_be_skipped">Нагадування не можна пропустити</string>
     <string name="reminders_cannot_be_skipped_summary">Якщо увімкнено, нагадування можна закрити лише позначивши їх як прийняті. Це також можна ввімкнути окремо для кожного ліку.</string>
     <string name="same_as_medicine">Як у ліках</string>
+    <string name="previous_week">Попередній тиждень</string>
+    <string name="next_week">Наступний тиждень</string>
 </resources>
