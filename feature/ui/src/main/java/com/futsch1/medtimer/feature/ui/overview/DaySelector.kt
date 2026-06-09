@@ -14,6 +14,7 @@ import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
+import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -25,16 +26,35 @@ class DaySelector(
     val daySelected: (LocalDate) -> Unit
 ) {
     private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
-    var rangeStartDay: LocalDate = LocalDate.now().minusDays(5)
-    var rangeEndDay: LocalDate = LocalDate.now().plusDays(1)
+    private val rangeStartDay: LocalDate = LocalDate.now().minusYears(3)
+    var rangeEndDay: LocalDate = LocalDate.now().plusDays(FutureRemindersRepository.DEFAULT_SIMULATION_DAYS)
 
     init {
         setupDayBinder()
-        calendarView.setup(
-            rangeStartDay,
-            rangeEndDay,
-            rangeStartDay.dayOfWeek
-        )
+        // firstDayOfWeek = today - 3 days so today is always at position 4 of 7 on first open
+        calendarView.setup(rangeStartDay, rangeEndDay, LocalDate.now().minusDays(3).dayOfWeek)
+        // Scroll synchronously before the listener is registered so the initial posted
+        // notifyWeekScrollListenerIfNeeded fires while today's week is visible, not week-1.
+        calendarView.scrollToDate(startDay)
+        setupWeekScrollListener()
+    }
+
+    private fun setupWeekScrollListener() {
+        calendarView.weekScrollListener = { week ->
+            val weekDates = week.days.map { it.date }
+            val today = LocalDate.now()
+            // Only auto-select when current selection is not in the newly visible week — prevents
+            // feedback loops from programmatic scrollToWeek calls and initial setup fires.
+            if (!weekDates.contains(currentDay.date)) {
+                val newDay = when {
+                    weekDates.contains(today) -> today
+                    weekDates.last() < currentDay.date -> weekDates.last()  // scrolled back
+                    else -> weekDates.first()  // scrolled forward
+                }
+                notifyDaySelected(WeekDay(newDay, WeekDayPosition.RangeDate))
+                calendarView.notifyDayChanged(WeekDay(newDay, WeekDayPosition.RangeDate))
+            }
+        }
     }
 
     fun setDay(date: LocalDate) {
@@ -45,6 +65,7 @@ class DaySelector(
         calendarView.notifyCalendarChanged()
         currentDay = data
         daySelected(currentDay.date)
+        calendarView.scrollToWeek(currentDay.date)
     }
 
     private fun setupDayBinder() {
@@ -137,18 +158,36 @@ class DaySelector(
         }
     }
 
+    fun scrollToPreviousWeek() {
+        val target = currentDay.date.minusWeeks(1)
+        if (target >= rangeStartDay) {
+            calendarView.smoothScrollToWeek(target)
+        }
+    }
+
+    fun scrollToNextWeek() {
+        val target = currentDay.date.plusWeeks(1)
+        if (target <= rangeEndDay) {
+            calendarView.smoothScrollToWeek(target)
+        }
+    }
+
+    fun updateRangeEnd(newEndDay: LocalDate) {
+        if (newEndDay > rangeEndDay) {
+            rangeEndDay = newEndDay
+            calendarView.updateWeekData(endDate = rangeEndDay)
+        }
+    }
+
     fun updateWeekRange() {
-        // Check if the day selector is still matching the present day, potentially resetting the day selection if a day has passed since
-        if (rangeStartDay != LocalDate.now().minusDays(5)) {
-            startDay = LocalDate.now()
-            rangeStartDay = startDay.minusDays(5)
-            rangeEndDay = startDay.plusDays(1)
-            calendarView.setup(
-                rangeStartDay,
-                rangeEndDay,
-                rangeStartDay.dayOfWeek
-            )
-            notifyDaySelected(WeekDay(startDay, WeekDayPosition.RangeDate))
+        // Reset to today when the date has rolled over since the selector was last active
+        val today = LocalDate.now()
+        if (startDay < today) {
+            startDay = today
+            // Reconfigure firstDayOfWeek so today stays at position 4 in the new day
+            calendarView.updateWeekData(firstDayOfWeek = today.minusDays(3).dayOfWeek)
+            notifyDaySelected(WeekDay(today, WeekDayPosition.RangeDate))
         }
     }
 }
+

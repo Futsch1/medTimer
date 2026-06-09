@@ -321,4 +321,6 @@
     <string name="reminders_cannot_be_skipped">Οι υπενθυμίσεις δεν μπορούν να παραλειφθούν</string>
     <string name="reminders_cannot_be_skipped_summary">Εάν είναι ενεργοποιημένο, οι υπενθυμίσεις μπορούν να απορριφθούν μόνο σημειώνοντάς τις ως ληφθείσες. Αυτό μπορεί επίσης να ενεργοποιηθεί μεμονωμένα ανά φάρμακο.</string>
     <string name="same_as_medicine">Ίδιο με το φάρμακο</string>
+    <string name="previous_week">Προηγούμενη εβδομάδα</string>
+    <string name="next_week">Επόμενη εβδομάδα</string>
 </resources>

@@ -321,4 +321,6 @@
     <string name="reminders_cannot_be_skipped">Hatırlatıcılar atlanamaz</string>
     <string name="reminders_cannot_be_skipped_summary">Etkinleştirilirse, hatırlatıcılar yalnızca alındı olarak işaretlenerek kapatılabilir. Bu, her ilaç için ayrı da etkinleştirilebilir.</string>
     <string name="same_as_medicine">İlaçla aynı</string>
+    <string name="previous_week">Önceki hafta</string>
+    <string name="next_week">Sonraki hafta</string>
 </resources>
