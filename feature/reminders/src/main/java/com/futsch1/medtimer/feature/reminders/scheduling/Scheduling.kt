@@ -23,21 +23,19 @@ abstract class SchedulingBase(
     abstract override fun getNextScheduledTime(): Instant?
 
     protected fun findLastReminderEvent(): ReminderEvent? {
-        return findLastReminderEvent(filteredReminderEvents, reminder.id)
+        return findLastReminderEvent(filteredReminderEvents)
     }
 
     protected fun findLastReminderEvent(linkedReminderId: Int): ReminderEvent? {
-        return findLastReminderEvent(reminderEvents, linkedReminderId)
+        return findLastReminderEvent(reminderEvents.filter { it.reminderId == linkedReminderId })
     }
 
-    protected fun findLastReminderEvent(
-        reminderEvents: List<ReminderEvent>,
-        reminderId: Int
+    private fun findLastReminderEvent(
+        reminderEvents: List<ReminderEvent>
     ): ReminderEvent? {
         var foundReminderEvent: ReminderEvent? = null
         for (reminderEvent in reminderEvents) {
-            if ((reminderEvent.reminderId == reminderId) && (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp)
-            ) {
+            if (foundReminderEvent == null || reminderEvent.remindedTimestamp > foundReminderEvent.remindedTimestamp) {
                 foundReminderEvent = reminderEvent
             }
         }
