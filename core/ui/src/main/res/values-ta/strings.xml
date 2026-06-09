@@ -321,4 +321,6 @@
     <string name="reminders_cannot_be_skipped">நினைவூட்டல்களை தவிர்க்க முடியாது</string>
     <string name="reminders_cannot_be_skipped_summary">இயக்கப்பட்டால், நினைவூட்டல்களை எடுத்ததாக குறிப்பிடுவதன் மூலம் மட்டுமே நிராகரிக்க முடியும். இதை ஒவ்வொரு மருந்திற்கும் தனித்தனியாக இயக்கலாம்.</string>
     <string name="same_as_medicine">மருந்தைப் போலவே</string>
+    <string name="previous_week">முந்தைய வாரம்</string>
+    <string name="next_week">அடுத்த வாரம்</string>
 </resources>

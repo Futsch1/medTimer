@@ -3,10 +3,11 @@ package com.futsch1.medtimer.core.domain.repository
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 interface ReminderEventRepository {
     fun getAllFlow(
-        timeStamp: Long,
+        startInstant: Instant,
         statusValues: List<ReminderEvent.ReminderStatus>
     ): Flow<List<ReminderEvent>>
 

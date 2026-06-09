@@ -327,4 +327,6 @@
     <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
     <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
     <string name="same_as_medicine">Igual que el medicamento</string>
+    <string name="previous_week">Semana anterior</string>
+    <string name="next_week">Semana siguiente</string>
 </resources>

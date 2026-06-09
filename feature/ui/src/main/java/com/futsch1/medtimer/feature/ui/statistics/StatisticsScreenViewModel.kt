@@ -21,6 +21,7 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+import java.time.Instant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -61,7 +62,7 @@ class StatisticsScreenViewModel @Inject constructor(
     // One shared read of the taken/skipped reminder events feeds charts, table, and calendar — the
     // Room flow is cold, so subscribing per view would spin up three independent DB observers.
     private val reminderEvents = reminderEventRepository
-        .getAllFlow(0, ReminderEvent.statusValuesTakenOrSkipped)
+        .getAllFlow(Instant.EPOCH, ReminderEvent.statusValuesTakenOrSkipped)
         .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     // Each view slice derives independently, so one input change recomputes only its own slice rather
