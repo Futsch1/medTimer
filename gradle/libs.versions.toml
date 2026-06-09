@@ -62,7 +62,7 @@ material3-adaptive = "1.2.0"
 vico = "3.1.0"
 kotlinx-collections-immutable = "0.4.0"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
-kotlin-compose-compiler = "2.2.10"
+kotlin-compose-compiler = "2.4.0"
 
 [libraries]
 # AndroidX
