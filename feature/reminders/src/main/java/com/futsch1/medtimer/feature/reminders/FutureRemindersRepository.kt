@@ -38,7 +38,8 @@ class FutureRemindersRepository @Inject constructor(
 
     private val triggerChannel = Channel<LocalDate>(Channel.CONFLATED)
 
-    private val idlingResource = IdlingResourcesPool.getInstance().getResource("FutureRemindersRepository")
+    private val idlingResource =
+        IdlingResourcesPool.getInstance().getResource("FutureRemindersRepository")
 
     init {
         idlingResource.setIdle()
@@ -103,6 +104,6 @@ class FutureRemindersRepository @Inject constructor(
     }
 
     companion object {
-        const val DEFAULT_SIMULATION_DAYS = 28L
+        const val DEFAULT_SIMULATION_DAYS = 365L
     }
 }

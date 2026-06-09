@@ -21,15 +21,16 @@ class LastEventPerReminder(initialReminderEvents: List<ReminderEvent>) {
 
     init {
         for (reminderEvent in initialReminderEvents) {
-            add(reminderEvent)
+            val prevReminderEvent = lastReminderEvents[reminderEvent.reminderId]
+            if (prevReminderEvent == null || prevReminderEvent.remindedTimestamp < reminderEvent.remindedTimestamp) {
+                lastReminderEvents[reminderEvent.reminderId] = reminderEvent
+            }
         }
     }
 
+    // Unconditional: DB may pre-schedule future events; the simulation's synthetic event must always win
     fun add(reminderEvent: ReminderEvent) {
-        val prevReminderEvent = lastReminderEvents[reminderEvent.reminderId]
-        if (prevReminderEvent == null || prevReminderEvent.remindedTimestamp < reminderEvent.remindedTimestamp) {
-            lastReminderEvents[reminderEvent.reminderId] = reminderEvent
-        }
+        lastReminderEvents[reminderEvent.reminderId] = reminderEvent
     }
 
     fun get(): List<ReminderEvent> {

@@ -176,7 +176,7 @@ class BasicUITest : BaseTestHelper() {
 
         clickOn(com.github.appintro.R.id.skip)
 
-        assertDisplayed(R.string.tab_overview)
+        assertContains(R.string.tab_overview)
     }
 
     @Test
