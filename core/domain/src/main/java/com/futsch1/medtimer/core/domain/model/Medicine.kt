@@ -28,6 +28,12 @@ data class Medicine(
         HIGH(NotificationManager.IMPORTANCE_HIGH)
     }
 
+    enum class ReminderChannel(val channelId: String, val importance: Int) {
+        DEFAULT("3", NotificationManager.IMPORTANCE_DEFAULT),
+        HIGH("4", NotificationManager.IMPORTANCE_HIGH),
+        OUT_OF_STOCK("out_of_stock", NotificationManager.IMPORTANCE_DEFAULT)
+    }
+
     fun hasExpired(): Boolean {
         return expirationDate != LocalDate.EPOCH && expirationDate < LocalDate.now()
     }

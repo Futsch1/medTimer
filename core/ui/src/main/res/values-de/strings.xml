@@ -169,6 +169,7 @@
     <string name="notification_importance">Benachrichtigungspriorität</string>
     <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
+    <string name="notification_settings_out_of_stock">Benachrichtigungseinstellungen Vorratserinnerung</string>
     <string name="calendar">Kalender</string>
     <string name="date">Date</string>
     <string name="active">Aktiv</string>

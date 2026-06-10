@@ -175,6 +175,7 @@
     <string name="notification_importance">Пріоритет сповіщення</string>
     <string name="notification_settings_default">Налаштування сповіщень за замовчуванням Пріоритет за замовчуванням</string>
     <string name="notification_settings_high">Налаштування сповіщень з високим пріоритетом</string>
+    <string name="notification_settings_out_of_stock">Налаштування нагадування про відсутність ліків</string>
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активний</string>

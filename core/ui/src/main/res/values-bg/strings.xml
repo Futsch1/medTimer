@@ -168,6 +168,7 @@
     <string name="notification_importance">Приоритет на известието</string>
     <string name="notification_settings_default">Настройки на приоритета на известието по подразбиране</string>
     <string name="notification_settings_high">Настройка на висок приоритет на известието</string>
+    <string name="notification_settings_out_of_stock">Настройки на напомняне за отъствие на запас</string>
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активно</string>

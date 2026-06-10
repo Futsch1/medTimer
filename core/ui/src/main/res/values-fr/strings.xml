@@ -175,6 +175,7 @@
     <string name="notification_importance">Priorité de notification</string>
     <string name="notification_settings_default">Priorité par défaut des paramètres de notification</string>
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
+    <string name="notification_settings_out_of_stock">Paramètres de rappel de réserve épuisée</string>
     <string name="calendar">Calendrier</string>
     <string name="date">Date</string>
     <string name="active">Actif</string>

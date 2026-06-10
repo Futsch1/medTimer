@@ -182,6 +182,7 @@
     <string name="notification_importance">Priorita notifikací</string>
     <string name="notification_settings_default">Nastavení notifikací s výchozí prioritou</string>
     <string name="notification_settings_high">Nastavení notifikací s vysokou prioritou</string>
+    <string name="notification_settings_out_of_stock">Nastavení připomenutí vyčerpání zásob</string>
     <string name="calendar">Kalendář</string>
     <string name="date">Datum</string>
     <string name="active">Aktivní</string>

@@ -31,3 +31,11 @@ fun List<ReminderNotificationPart>.effectiveHighestImportance(): Medicine.Notifi
     }
     return Medicine.NotificationImportance.DEFAULT
 }
+
+fun List<ReminderNotificationPart>.channelForHighestImportance(): Medicine.ReminderChannel {
+    for (part in this) {
+        if (part.effectiveImportance() == Medicine.NotificationImportance.HIGH)
+            return Medicine.ReminderChannel.HIGH
+    }
+    return Medicine.ReminderChannel.DEFAULT
+}

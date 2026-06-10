@@ -175,6 +175,7 @@
     <string name="notification_importance">Prioridad de notificación</string>
     <string name="notification_settings_default">Ajustes de notificación de prioridad predeterminada</string>
     <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
+    <string name="notification_settings_out_of_stock">Ajustes de recordatorio de existencias</string>
     <string name="calendar">Calendario</string>
     <string name="date">Fecha</string>
     <string name="active">Activo</string>

@@ -170,6 +170,7 @@
     <string name="notification_importance">Értesítési prioritás</string>
     <string name="notification_settings_default">Alapértelmezett értesítési prioritás beállítása</string>
     <string name="notification_settings_high">Magas értesítési prioritás beállítása</string>
+    <string name="notification_settings_out_of_stock">Készletfigyelmeztetés beállítása</string>
     <string name="calendar">Naptár</string>
     <string name="date">Dátum</string>
     <string name="active">Aktív</string>

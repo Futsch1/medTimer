@@ -169,6 +169,7 @@
     <string name="notification_importance">Bildirim önceliği</string>
     <string name="notification_settings_default">Bildirim ayarları varsayılan öncelik</string>
     <string name="notification_settings_high">Bildirim ayarları yüksek öncelik</string>
+    <string name="notification_settings_out_of_stock">Bildirim ayarları stokta yok hatırlatması</string>
     <string name="calendar">Takvim</string>
     <string name="date">Tarih</string>
     <string name="active">Aktif</string>
