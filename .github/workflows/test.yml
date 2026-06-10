@@ -31,7 +31,7 @@ jobs:
           java-version: "21"
           distribution: temurin
           cache: gradle
-      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
       - name: Android lint
         run: ./gradlew lint
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -51,7 +51,7 @@ jobs:
           java-version: "21"
           distribution: temurin
           cache: gradle
-      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
 
       - name: Run fuzzing tests (both variants)
         run: ./gradlew testFullDebug testFossDebug -Dfuzzing=true
@@ -91,7 +91,7 @@ jobs:
           java-version: "21"
           distribution: temurin
           cache: gradle
-      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
+      - uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
       - name: Compile (assemble both flavors)
         run: ./gradlew assembleDebug
 
