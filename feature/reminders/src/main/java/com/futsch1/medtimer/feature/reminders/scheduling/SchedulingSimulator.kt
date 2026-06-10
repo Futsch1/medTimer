@@ -18,15 +18,38 @@ data class SchedulingItem(val medicine: Medicine, val reminder: Reminder)
 
 typealias ScheduledReminderConsumer = (ScheduledReminder, LocalDate, Double) -> Boolean
 
+
+class LastEventPerReminder(initialReminderEvents: List<ReminderEvent>) {
+    private val lastReminderEvents = mutableMapOf<Int, ReminderEvent>()
+
+    init {
+        for (reminderEvent in initialReminderEvents) {
+            val prevReminderEvent = lastReminderEvents[reminderEvent.reminderId]
+            if (prevReminderEvent == null || prevReminderEvent.remindedTimestamp < reminderEvent.remindedTimestamp) {
+                lastReminderEvents[reminderEvent.reminderId] = reminderEvent
+            }
+        }
+    }
+
+    // Unconditional: DB may pre-schedule future events; the simulation's synthetic event must always win
+    fun add(reminderEvent: ReminderEvent) {
+        lastReminderEvents[reminderEvent.reminderId] = reminderEvent
+    }
+
+    fun get(): List<ReminderEvent> {
+        return lastReminderEvents.values.toList()
+    }
+}
+
 class SchedulingSimulator(
     medicines: List<Medicine>,
-    recentReminders: List<ReminderEvent>,
+    recentReminderEvents: List<ReminderEvent>,
     timeAccess: TimeAccess,
     private val dataSource: PreferencesDataSource
 ) {
     val maxSimulationDays = 400
 
-    var totalEvents = mutableListOf(*recentReminders.toTypedArray())
+    var totalEvents = LastEventPerReminder(recentReminderEvents)
     val medicines =
         medicines.associateBy(
             { it.id },
@@ -93,7 +116,7 @@ class SchedulingSimulator(
         val scheduler = schedulingFactory.create(
             schedulingItem.reminder,
             schedulingItem.medicine,
-            totalEvents,
+            totalEvents.get(),
             timeAccess,
             dataSource
         )
