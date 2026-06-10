@@ -14,8 +14,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-data class SchedulingItem(val medicine: Medicine, val reminder: Reminder)
-
 typealias ScheduledReminderConsumer = (ScheduledReminder, LocalDate, Double) -> Boolean
 
 
@@ -85,41 +83,31 @@ class SchedulingSimulator(
     private fun simulateDay(scheduledReminderConsumer: ScheduledReminderConsumer): Boolean {
         for (medicine in medicines.values) {
             do {
-                val scheduledReminders = mutableListOf<ScheduledReminder>()
+                val eventsSnapshot = totalEvents.get()
+                var earliest: ScheduledReminder? = null
                 for (reminder in medicine.reminders) {
-                    val schedulingItem = SchedulingItem(medicine, reminder)
-                    getNextScheduledTime(schedulingItem)?.let {
-                        scheduledReminders.add(ScheduledReminder(medicine, reminder, it))
+                    val nextForReminder =
+                        getNextScheduledTime(medicine, reminder, eventsSnapshot) ?: continue
+                    if (earliest == null || nextForReminder < earliest.timestamp) {
+                        earliest = ScheduledReminder(medicine, reminder, nextForReminder)
                     }
                 }
-                scheduledReminders.sortWith(Comparator.comparing(ScheduledReminder::timestamp))
-
-                if (scheduledReminders.isEmpty()) {
-                    break
-                }
-
-                val schedulingItem = scheduledReminders[0]
-                if (!processScheduledTime(
-                        schedulingItem,
-                        scheduledReminderConsumer
-                    )
-                ) {
+                val next = earliest ?: break
+                if (!processScheduledTime(next, scheduledReminderConsumer)) {
                     return false
                 }
-
             } while (true)
         }
         return true
     }
 
-    private fun getNextScheduledTime(schedulingItem: SchedulingItem): Instant? {
-        val scheduler = schedulingFactory.create(
-            schedulingItem.reminder,
-            schedulingItem.medicine,
-            totalEvents.get(),
-            timeAccess,
-            dataSource
-        )
+    private fun getNextScheduledTime(
+        medicine: Medicine,
+        reminder: Reminder,
+        eventsSnapshot: List<ReminderEvent>
+    ): Instant? {
+        val scheduler =
+            schedulingFactory.create(reminder, medicine, eventsSnapshot, timeAccess, dataSource)
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if ((nextScheduledTime ?: endOfCurrentDay) >= endOfCurrentDay) {
