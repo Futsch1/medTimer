@@ -77,6 +77,10 @@ object TimeHelper {
         return localDateTime.toInstant()
     }
 
+    fun instantAtStartOfDay(localDate: LocalDate, zoneId: ZoneId): Instant {
+        return localDate.atStartOfDay().atZone(zoneId).toInstant()
+    }
+
     fun secondsSinceEpochToISO8601DatetimeString(remindedTimestamp: Long): Any {
         return Instant.ofEpochSecond(remindedTimestamp).toString()
     }

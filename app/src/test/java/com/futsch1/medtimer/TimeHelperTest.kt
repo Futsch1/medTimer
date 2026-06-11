@@ -58,15 +58,31 @@ class TimeHelperTest {
         val preferences = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
 
-        val timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
+        val timeFormatter =
+            TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
 
-        assertEquals(englishDataSecondOfJan2023, timeFormatter.localDateToString(LocalDate.of(2023, 1, 2)))
-        assertEquals(englishDataSecondOfJan2023, timeFormatter.toDateString(Instant.parse("2023-01-02T12:00:00Z")))
-        assertEquals(englishDataSecondOfJan2023, timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay()))
+        assertEquals(
+            englishDataSecondOfJan2023,
+            timeFormatter.localDateToString(LocalDate.of(2023, 1, 2))
+        )
+        assertEquals(
+            englishDataSecondOfJan2023,
+            timeFormatter.toDateString(Instant.parse("2023-01-02T12:00:00Z"))
+        )
+        assertEquals(
+            englishDataSecondOfJan2023,
+            timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay())
+        )
 
         preferences.value = preferences.value.copy(systemLocale = true)
         Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        assertEquals(germanDateSecondOfJan2023, timeFormatter.localDateToString(LocalDate.of(2023, 1, 2)))
-        assertEquals(germanDateSecondOfJan2023, timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay()))
+        assertEquals(
+            germanDateSecondOfJan2023,
+            timeFormatter.localDateToString(LocalDate.of(2023, 1, 2))
+        )
+        assertEquals(
+            germanDateSecondOfJan2023,
+            timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay())
+        )
     }
 }

@@ -22,7 +22,10 @@ import java.time.ZoneId
 import kotlin.test.assertEquals
 
 class SchedulingSimulatorTest {
-    private fun buildSchedulingSimulator(medicines: List<TestMedicine>, recentReminders: List<ReminderEvent>): SchedulingSimulator {
+    private fun buildSchedulingSimulator(
+        medicines: List<TestMedicine>,
+        recentReminders: List<ReminderEvent>
+    ): SchedulingSimulator {
         val mockTimeAccess = Mockito.mock<TimeAccess>()
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
@@ -30,7 +33,12 @@ class SchedulingSimulatorTest {
         val stateFlow = MutableStateFlow(UserPreferences.default())
         Mockito.`when`(mockPreferencesDataSource.preferences).thenReturn(stateFlow)
 
-        return SchedulingSimulator(medicines.map { it.toMedicine() }, recentReminders, mockTimeAccess, mockPreferencesDataSource)
+        return SchedulingSimulator(
+            medicines.map { it.toMedicine() },
+            recentReminders,
+            mockTimeAccess,
+            mockPreferencesDataSource
+        )
     }
 
     @Test
@@ -58,11 +66,40 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(5, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 60), medicines[0].toMedicine(), medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 120), medicines[1].toMedicine(), medicines[1].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 60), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
-        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[1].toMedicine(), medicines[1].reminders[0], 3)
-        assertRemindedAtIndex(scheduledReminders, on(3, 60), medicines[0].toMedicine(), medicines[0].reminders[0], 4)
+        assertReminded(
+            scheduledReminders,
+            on(1, 60),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(1, 120),
+            medicines[1].toMedicine(),
+            medicines[1].reminders[0],
+            1
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 60),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            2
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 120),
+            medicines[1].toMedicine(),
+            medicines[1].reminders[0],
+            3
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(3, 60),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            4
+        )
     }
 
     @Test
@@ -86,9 +123,26 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(3, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 600), medicines[0].toMedicine(), medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 1200), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 360), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
+        assertReminded(
+            scheduledReminders,
+            on(1, 600),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(1, 1200),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            1
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 360),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            2
+        )
     }
 
     @Test
@@ -115,9 +169,26 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(3, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 120), medicines[0].toMedicine(), medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(1, 600), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 120), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
+        assertReminded(
+            scheduledReminders,
+            on(1, 120),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(1, 600),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            1
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 120),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            2
+        )
     }
 
     @Test
@@ -144,11 +215,40 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(5, scheduledReminders.size)
-        assertReminded(scheduledReminders, on(1, 700), medicines[0].toMedicine(), medicines[0].reminders[0])
-        assertRemindedAtIndex(scheduledReminders, on(2, 1), medicines[0].toMedicine(), medicines[0].reminders[0], 1)
-        assertRemindedAtIndex(scheduledReminders, on(2, 700), medicines[0].toMedicine(), medicines[0].reminders[0], 2)
-        assertRemindedAtIndex(scheduledReminders, on(3, 1), medicines[0].toMedicine(), medicines[0].reminders[0], 3)
-        assertRemindedAtIndex(scheduledReminders, on(3, 700), medicines[0].toMedicine(), medicines[0].reminders[0], 4)
+        assertReminded(
+            scheduledReminders,
+            on(1, 700),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 1),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            1
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(2, 700),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            2
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(3, 1),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            3
+        )
+        assertRemindedAtIndex(
+            scheduledReminders,
+            on(3, 700),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            4
+        )
     }
 
     @Test
@@ -232,7 +332,10 @@ class SchedulingSimulatorTest {
             }
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
-                assertEquals(scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60))
+                assertEquals(
+                    scheduledReminder.timestamp,
+                    Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60)
+                )
             }
             scheduledReminders.size < 3
         }
@@ -244,7 +347,7 @@ class SchedulingSimulatorTest {
         medicineWithReminders.amount = 12.0
         val reminder = TestHelper.buildReminder(1, 1, "3", 480, 1)
         medicineWithReminders.reminders.add(reminder)
-        val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 481, 1).copy(
+        val outOfStockReminder = TestHelper.buildReminder(1, 2, "", 479, 1).copy(
             outOfStockThreshold = 6.0,
             outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
         )
@@ -263,7 +366,7 @@ class SchedulingSimulatorTest {
                 assertEquals(9.0, amount)
             }
             if (scheduledReminders.size == 3) {
-                assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
+                assertEquals(LocalDate.EPOCH.plusDays(2), localDate)
                 assertEquals(6.0, amount)
                 assertEquals(scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
             }

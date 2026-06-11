@@ -132,7 +132,17 @@ class NotificationProcessor @Inject constructor(
                 )
             )
             alarmProcessor.cancelPendingReminderNotifications(reminderEvent.reminderEventId)
-            reminderEvent.copy(status = status, processedTimestamp = processedTime, stockHandled = doStockHandling(status, reminderEvent, processedTime))
+            val stockResult = doStockHandling(status, reminderEvent, processedTime)
+            reminderEvent.copy(
+                status = status,
+                processedTimestamp = processedTime,
+                stockHandled = stockResult.stockHandled,
+                stockAfter = when {
+                    stockResult.stockChange != null && reminderEvent.stockBefore >= 0 -> stockResult.stockChange.after
+                    status == ReminderEvent.ReminderStatus.SKIPPED -> reminderEvent.stockBefore
+                    else -> reminderEvent.stockAfter
+                }
+            )
         }
 
         persistentDataDataSource.removePendingLocationSnoozesForReminderEventIds(reminderEvents.map { it.reminderEventId })
@@ -140,21 +150,20 @@ class NotificationProcessor @Inject constructor(
         removeRemindersFromNotification(reminderEvents)
     }
 
-    private suspend fun doStockHandling(status: ReminderEvent.ReminderStatus, reminderEvent: ReminderEvent, processedTime: Instant): Boolean {
+    private data class StockHandlingResult(val stockHandled: Boolean, val stockChange: StockChange?)
+
+    private suspend fun doStockHandling(status: ReminderEvent.ReminderStatus, reminderEvent: ReminderEvent, processedTime: Instant): StockHandlingResult {
         if (!reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.TAKEN ||
             reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
         ) {
-            val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return false
-            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return false
+            val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return StockHandlingResult(false, null)
+            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return StockHandlingResult(false, null)
             if (status == ReminderEvent.ReminderStatus.SKIPPED) {
                 amount = -amount
             }
-            stockHandlingProcessor.processStock(
-                amount,
-                reminder.medicineRelId,
-                processedTime
-            )
+            val stockChange = stockHandlingProcessor.processStock(amount, reminder.medicineRelId, processedTime)
+            return StockHandlingResult(status == ReminderEvent.ReminderStatus.TAKEN, stockChange)
         }
-        return status == ReminderEvent.ReminderStatus.TAKEN
+        return StockHandlingResult(status == ReminderEvent.ReminderStatus.TAKEN, null)
     }
 }

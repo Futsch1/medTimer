@@ -27,6 +27,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.time.Instant
+import java.time.LocalDate
 import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
@@ -56,7 +57,11 @@ class ReminderHelperTest {
         val app = RuntimeEnvironment.getApplication()
         val preferences = MutableStateFlow(UserPreferences.default())
         `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        timeFormatter = TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor(app))
+        timeFormatter = TimeFormatter(
+            app,
+            mockPreferenceDataSource,
+            com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor(app)
+        )
         formatter = ReminderStringFormatter(app, mockPreferenceDataSource, timeFormatter)
     }
 
@@ -73,7 +78,8 @@ class ReminderHelperTest {
         val medicine = Medicine.default().copy(name = "Test")
         var reminder = Reminder.default().copy(medicineRelId = 1, amount = "5")
         var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
-        var reminderEvent = ReminderEvent.default().copy(remindedTimestamp = instant, medicineName = "Test", amount = "5")
+        var reminderEvent = ReminderEvent.default()
+            .copy(remindedTimestamp = instant, medicineName = "Test", amount = "5")
 
         var result = formatter.formatScheduledReminder(scheduledReminder)
         var resultReminder = formatter.formatReminderEvent(reminderEvent)
@@ -102,7 +108,11 @@ class ReminderHelperTest {
         assertEquals(result.toString(), resultReminder.toString())
 
         // Relative date/time
-        `when`(mockPreferenceDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(useRelativeDateTime = true)))
+        `when`(mockPreferenceDataSource.preferences).thenReturn(
+            MutableStateFlow(
+                UserPreferences.default().copy(useRelativeDateTime = true)
+            )
+        )
         scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
         reminderEvent = reminderEvent.copy(remindedTimestamp = instantLater)
         result = formatter.formatScheduledReminder(scheduledReminder)
@@ -122,14 +132,23 @@ class ReminderHelperTest {
         reminderEvent = reminderEvent.copy(status = ReminderEvent.ReminderStatus.TAKEN)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("  In 1 hour, 2:00 AM: Test (Taken)", resultReminder.toString())
-        reminderEvent = reminderEvent.copy(status = ReminderEvent.ReminderStatus.SKIPPED, amount = "6")
+        reminderEvent =
+            reminderEvent.copy(status = ReminderEvent.ReminderStatus.SKIPPED, amount = "6")
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("  In 1 hour, 2:00 AM: Test (6 Skipped)", resultReminder.toString())
 
         // Test show taken time in overview
-        `when`(mockPreferenceDataSource.preferences).thenReturn(MutableStateFlow(UserPreferences.default().copy(showTakenTimeInOverview = true)))
+        `when`(mockPreferenceDataSource.preferences).thenReturn(
+            MutableStateFlow(
+                UserPreferences.default().copy(showTakenTimeInOverview = true)
+            )
+        )
 
-        reminderEvent = reminderEvent.copy(status = ReminderEvent.ReminderStatus.TAKEN, processedTimestamp = instantLater, remindedTimestamp = instantZero)
+        reminderEvent = reminderEvent.copy(
+            status = ReminderEvent.ReminderStatus.TAKEN,
+            processedTimestamp = instantLater,
+            remindedTimestamp = instantZero
+        )
         resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  1:00 AM ➡ 2:00 AM\nTest (6)", resultReminder.toString())
 
@@ -139,5 +158,92 @@ class ReminderHelperTest {
 
         // Cleanup
         instantMock.close()
+    }
+
+    @Test
+    fun testFormatReminderEventStockChange() {
+        val instant = Instant.ofEpochSecond(0)
+
+        // Default: stockBefore == stockAfter == -1.0 → no stock text
+        var reminderEvent = ReminderEvent.default().copy(
+            remindedTimestamp = instant, medicineName = "Test", amount = "5"
+        )
+        assertEquals("  1:00 AM\nTest (5)", formatter.formatReminderEvent(reminderEvent).toString())
+
+        // Stock deducted → show stockAfter with unit
+        reminderEvent =
+            reminderEvent.copy(stockBefore = 10.0, stockAfter = 9.0, stockUnit = "tablets")
+        assertEquals(
+            "  1:00 AM,   9 tablets\nTest (5)",
+            formatter.formatReminderEvent(reminderEvent).toString()
+        )
+
+        // stockBefore == stockAfter (e.g. skipped, stock restored) → no stock text
+        reminderEvent = reminderEvent.copy(stockBefore = 9.0, stockAfter = 9.0)
+        assertEquals("  1:00 AM\nTest (5)", formatter.formatReminderEvent(reminderEvent).toString())
+    }
+
+    @Test
+    fun testFormatScheduledReminderStockAndExpiration() {
+        val instant = Instant.ofEpochSecond(0)
+        val reminder = Reminder.default().copy(amount = "5")
+
+        // No stock management (amount == 0.0) → no expected stock text
+        var medicine = Medicine.default().copy(name = "Test")
+        assertEquals(
+            "  1:00 AM\nTest (5)",
+            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant))
+                .toString()
+        )
+
+        // Stock active → show expected stock after taking
+        medicine = medicine.copy(amount = 9.0, unit = "tablets")
+        assertEquals(
+            "  1:00 AM,   9 tablets\nTest (5)",
+            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant))
+                .toString()
+        )
+
+        // Variable amount with active stock → no expected stock text
+        val variableReminder = reminder.copy(variableAmount = true)
+        assertEquals(
+            "  1:00 AM\nTest (5)",
+            formatter.formatScheduledReminder(
+                ScheduledReminder(
+                    medicine,
+                    variableReminder,
+                    instant
+                )
+            ).toString()
+        )
+
+        // Out-of-stock reminder type → no expected stock text (getAmountOrStockString shows medicine amount instead)
+        val outOfStockReminder =
+            Reminder.default().copy(outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE)
+        assertEquals(
+            "  1:00 AM,   9 tablets\nTest",
+            formatter.formatScheduledReminder(
+                ScheduledReminder(
+                    medicine,
+                    outOfStockReminder,
+                    instant
+                )
+            ).toString()
+        )
+
+        // Expiration date reminder type → no expected stock text
+        val expirationReminder =
+            Reminder.default().copy(expirationReminderType = Reminder.ExpirationReminderType.DAILY)
+        medicine = medicine.copy(expirationDate = LocalDate.of(2026, 6, 7))
+        assertEquals(
+            "  1:00 AM, 6/7/26\nTest",
+            formatter.formatScheduledReminder(
+                ScheduledReminder(
+                    medicine,
+                    expirationReminder,
+                    instant
+                )
+            ).toString()
+        )
     }
 }
