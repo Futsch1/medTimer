@@ -29,6 +29,8 @@ data class Medicine(
     }
 
     enum class ReminderChannel(val channelId: String, val importance: Int) {
+        // "3" and "4" are legacy channel IDs from when the app used importance.toString() directly.
+        // Keeping them for backward compatibility so users don't lose their notification settings.
         DEFAULT("3", NotificationManager.IMPORTANCE_DEFAULT),
         HIGH("4", NotificationManager.IMPORTANCE_HIGH),
         OUT_OF_STOCK("out_of_stock", NotificationManager.IMPORTANCE_DEFAULT)
