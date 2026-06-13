@@ -323,4 +323,5 @@
     <string name="same_as_medicine">Wie Medikament</string>
     <string name="previous_week">Vorherige Woche</string>
     <string name="next_week">Nächste Woche</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

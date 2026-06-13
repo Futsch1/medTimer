@@ -7,13 +7,13 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.TimeAccess
-import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
+import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.Duration
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -34,112 +34,80 @@ class CalendarEventsProvider @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
+    private val futureRemindersRepository: FutureRemindersRepository,
 ) {
 
-    // The calendar isn't backed by a reactive query — getEntries reads a fixed window on each call.
-    // This adapts a change [trigger] (e.g. the screen's shared reminder-events flow) into the reactive
-    // shape callers collect, re-reading the window on every emission (the trigger's value is ignored).
-    // Both renderers map this one stream to their own leaf, so the provider owns the calendar's
-    // reactivity instead of each caller faking it around a suspend read.
+    // Combines a Room-backed past-events flow (re-emits on DB writes) with the simulated future
+    // reminders flow. Both sources drive reactivity independently.
     fun entriesFlow(
-        trigger: Flow<*>,
         medicineId: Int,
-        pastMonths: Int,
-        futureMonths: Int,
-    ): Flow<Map<LocalDate, List<CalendarEntry>>> =
-        trigger.map { getEntries(medicineId, pastMonths, futureMonths) }
+        pastMonths: Int
+    ): Flow<Map<LocalDate, List<CalendarEntry>>> {
+        val zone = ZoneId.systemDefault()
+        val startInstant = LocalDate.now()
+            .minusMonths(pastMonths.toLong())
+            .withDayOfMonth(1)
+            .atStartOfDay(zone)
+            .toInstant()
+
+        return combine(
+            reminderEventRepository.getAllFlow(
+                startInstant,
+                ReminderEvent.statusValuesWithoutDelete
+            ),
+            futureRemindersRepository.simulatedReminders,
+            medicineRepository.getFlow(medicineId)
+        ) { pastEvents, simulatedReminders, medicine ->
+            buildEntriesByDay(pastEvents, simulatedReminders, medicine)
+        }
+    }
 
     // The Compose calendar's leaf: the typed CalendarDayEvent stream over the entries flow.
     fun structuredEventsFlow(
-        trigger: Flow<*>,
         medicineId: Int,
-        pastMonths: Int,
-        futureMonths: Int,
+        pastMonths: Int
     ): Flow<Map<LocalDate, List<CalendarDayEvent>>> =
-        entriesFlow(trigger, medicineId, pastMonths, futureMonths).map { it.toCalendarDayEvents() }
+        entriesFlow(medicineId, pastMonths).map { it.toCalendarDayEvents() }
 
     suspend fun getStructuredEvents(
         medicineId: Int,
-        pastMonths: Int,
-        futureMonths: Int,
+        pastMonths: Int
     ): Map<LocalDate, List<CalendarDayEvent>> =
-        getEntries(medicineId, pastMonths, futureMonths).toCalendarDayEvents()
+        structuredEventsFlow(medicineId, pastMonths).first()
 
     private fun Map<LocalDate, List<CalendarEntry>>.toCalendarDayEvents(): Map<LocalDate, List<CalendarDayEvent>> =
         mapValues { (_, entries) -> entries.map { it.toCalendarDayEvent() } }
 
-    suspend fun getEntries(
-        medicineId: Int,
-        pastMonths: Int,
-        futureMonths: Int,
+    private fun buildEntriesByDay(
+        pastEvents: List<ReminderEvent>,
+        simulatedReminders: List<ScheduledReminder>,
+        medicine: Medicine?
     ): Map<LocalDate, List<CalendarEntry>> {
-        val currentDate = LocalDate.now()
-        val pastDays = currentDate.toEpochDay() - currentDate.minusMonths(pastMonths.toLong())
-            .withDayOfMonth(1).toEpochDay()
-        val futureDays = if (futureMonths > 0) (currentDate.plusMonths(futureMonths.toLong() + 1)
-            .withDayOfMonth(1).toEpochDay() - 1) - currentDate.toEpochDay()
-        else 0
-
-        val events = reminderEventRepository.getLastDays(pastDays.toInt())
-        var medicines = medicineRepository.getAll()
-        var selectedMedicine: Medicine? = null
-        if (medicineId > 0) {
-            selectedMedicine = medicineRepository.fetch(medicineId)
-            medicines = medicines.filter { it.id == medicineId }
-        }
+        val zone = ZoneId.systemDefault()
 
         val entriesByDay = LinkedHashMap<LocalDate, MutableList<CalendarEntry>>()
-        addPastEntries(entriesByDay, events, selectedMedicine, pastDays)
-        addFutureEntries(entriesByDay, medicines, events, futureDays)
-        return entriesByDay
-    }
 
-    private fun addPastEntries(
-        target: MutableMap<LocalDate, MutableList<CalendarEntry>>,
-        events: List<ReminderEvent>,
-        selectedMedicine: Medicine?,
-        pastDays: Long,
-    ) {
-        val startDay = LocalDate.now().minusDays(pastDays)
-        val zone = ZoneId.systemDefault()
-        for (reminderEvent in events) {
-            if (reminderEvent.status == ReminderEvent.ReminderStatus.DELETED) {
-                continue
-            }
-            val day = reminderEvent.remindedTimestamp.atZone(zone).toLocalDate()
-            if (day >= startDay && (selectedMedicine == null ||
-                        selectedMedicine.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName))
+        for (reminderEvent in pastEvents) {
+            if (medicine == null ||
+                medicine.name == MedicineHelper.normalizeMedicineName(reminderEvent.medicineName)
             ) {
-                target.getOrPut(day) { mutableListOf() }.add(CalendarEntry.Past(reminderEvent))
+                val day = reminderEvent.remindedTimestamp.atZone(zone).toLocalDate()
+                entriesByDay.getOrPut(day) { mutableListOf() }
+                    .add(CalendarEntry.Past(reminderEvent))
             }
         }
-    }
 
-    private suspend fun addFutureEntries(
-        target: MutableMap<LocalDate, MutableList<CalendarEntry>>,
-        medicines: List<Medicine>,
-        events: List<ReminderEvent>,
-        futureDays: Long,
-    ) {
-        if (futureDays <= 0) {
-            return
-        }
-        val timeProvider = object : TimeAccess {
-            override fun systemZone(): ZoneId = ZoneId.systemDefault()
-            override fun localDate(): LocalDate = LocalDate.now()
-            override fun now(): Instant = Instant.now()
-        }
-        val endDay = LocalDate.now().plusDays(futureDays)
-        val schedulingSimulator =
-            SchedulingSimulator(medicines, events, timeProvider, preferencesDataSource)
-
-        schedulingSimulator.simulate { scheduledReminder: ScheduledReminder, scheduledDate: LocalDate, _: Double ->
-            if (scheduledDate < endDay) {
-                target.getOrPut(scheduledDate) { mutableListOf() }
+        simulatedReminders
+            .filter { scheduledReminder -> medicine == null || scheduledReminder.medicine.id == medicine.id }
+            .forEach { scheduledReminder ->
+                entriesByDay
+                    .getOrPut(
+                        scheduledReminder.timestamp.atZone(zone).toLocalDate()
+                    ) { mutableListOf() }
                     .add(CalendarEntry.Future(scheduledReminder))
             }
-            scheduledDate < endDay
-        }
+
+        return entriesByDay
     }
 
     private fun CalendarEntry.toCalendarDayEvent(): CalendarDayEvent = when (this) {

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
+import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -39,9 +40,13 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CalendarFragment : Fragment() {
+    @Inject
+    lateinit var futureRemindersRepository: FutureRemindersRepository
+
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private lateinit var calendarView: CalendarView
     private var currentDayEvents: EditText? = null
@@ -79,8 +84,7 @@ class CalendarFragment : Fragment() {
         lifecycleScope.launch {
             calendarEventsViewModel.getEventForMonths(
                 medicineCalenderArgs.medicineId,
-                medicineCalenderArgs.pastMonths,
-                medicineCalenderArgs.futureMonths
+                medicineCalenderArgs.pastMonths
             ).collect {
                 this@CalendarFragment.dayStrings = it
                 calendarView.notifyCalendarChanged()
@@ -237,6 +241,19 @@ class CalendarFragment : Fragment() {
         } else {
             currentDayEvents?.setText(null)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val futureMonths = calendarFragmentArgs().futureMonths
+        if (futureMonths > 0) {
+            futureRemindersRepository.requestWindow("calendar", (futureMonths.toLong() + 2) * 31)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        futureRemindersRepository.releaseWindow("calendar")
     }
 
     override fun onDestroy() {

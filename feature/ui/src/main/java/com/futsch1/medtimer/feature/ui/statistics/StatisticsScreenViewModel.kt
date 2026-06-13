@@ -21,7 +21,6 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import java.time.Instant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +29,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -68,7 +68,11 @@ class StatisticsScreenViewModel @Inject constructor(
     // Each view slice derives independently, so one input change recomputes only its own slice rather
     // than the whole screen state.
     private val charts: StateFlow<ChartsState?> =
-        combine(reminderEvents, analysisDays.value, medicineRepository.getAllFlow()) { events, days, medicines ->
+        combine(
+            reminderEvents,
+            analysisDays.value,
+            medicineRepository.getAllFlow()
+        ) { events, days, medicines ->
             val data = statisticsProvider.aggregate(events, days)
             // First custom color wins if names somehow collide — matches the prior firstOrNull lookup.
             val medicineColorsByName = medicines
@@ -93,11 +97,9 @@ class StatisticsScreenViewModel @Inject constructor(
             .flowOn(ioDispatcher)
             .stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())
 
-    // The provider re-reads its own time window on each emission of the shared event flow, so the
-    // events payload is only a change trigger — the provider owns the calendar's reactivity.
     private val calendarDayEvents: StateFlow<ImmutableMap<LocalDate, List<CalendarDayEvent>>> =
         calendarEventsProvider
-            .structuredEventsFlow(reminderEvents, ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS)
+            .structuredEventsFlow(ALL_MEDICINES, CALENDAR_PAST_MONTHS)
             .map { it.toImmutableMap() }
             .flowOn(ioDispatcher)
             .stateIn(viewModelScope, SharingStarted.Eagerly, persistentMapOf())
@@ -117,7 +119,10 @@ class StatisticsScreenViewModel @Inject constructor(
             .stateIn(
                 viewModelScope,
                 SharingStarted.Eagerly,
-                StatisticsUiState(activeView = activeView.value.value, analysisDays = analysisDays.value.value),
+                StatisticsUiState(
+                    activeView = activeView.value.value,
+                    analysisDays = analysisDays.value.value
+                ),
             )
 
     fun onSelectView(view: StatisticFragment) = activeView.set(view)
@@ -127,6 +132,5 @@ class StatisticsScreenViewModel @Inject constructor(
     companion object {
         private const val ALL_MEDICINES = -1
         private const val CALENDAR_PAST_MONTHS = 3
-        private const val CALENDAR_FUTURE_MONTHS = 0
     }
 }

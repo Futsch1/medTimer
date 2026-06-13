@@ -323,4 +323,5 @@
     <string name="same_as_medicine">Ίδιο με το φάρμακο</string>
     <string name="previous_week">Προηγούμενη εβδομάδα</string>
     <string name="next_week">Επόμενη εβδομάδα</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

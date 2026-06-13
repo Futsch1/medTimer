@@ -2,39 +2,22 @@ package com.futsch1.medtimer.feature.reminders.widgets
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import com.futsch1.medtimer.core.common.di.ApplicationScope
-import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.ReminderStringFormatter
-import com.futsch1.medtimer.feature.reminders.TimeAccess
-import com.futsch1.medtimer.feature.reminders.scheduling.ReminderScheduler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import java.time.LocalDate
 import javax.inject.Inject
 
 class NextRemindersLineProvider @Inject constructor(
-    private val medicineRepository: MedicineRepository,
-    private val reminderEventRepository: ReminderEventRepository,
-    private val preferencesDataSource: PreferencesDataSource,
-    private val timeAccess: TimeAccess,
+    private val futureRemindersRepository: FutureRemindersRepository,
     private val reminderStringFormatter: ReminderStringFormatter,
-    @param:ApplicationScope private val scope: CoroutineScope
 ) : WidgetLineProvider {
-    private val scheduledReminders = scope.async {
-        val medicinesWithReminders = medicineRepository.getAll()
-        val reminderEvents = reminderEventRepository.getForScheduling(medicinesWithReminders)
-        val reminderScheduler = ReminderScheduler(timeAccess, preferencesDataSource)
 
-        reminderScheduler.schedule(medicinesWithReminders, reminderEvents)
-    }
-
-    override fun getWidgetLine(
-        line: Int,
-        isShort: Boolean
-    ): Spanned {
-        val scheduledReminder = runBlocking { scheduledReminders.await() }.getOrNull(line)
+    override fun getWidgetLine(line: Int, isShort: Boolean): Spanned {
+        if (futureRemindersRepository.simulatedThrough.value == LocalDate.MIN) {
+            futureRemindersRepository.triggerCalculation()
+        }
+        val scheduledReminder =
+            futureRemindersRepository.simulatedReminders.value.getOrNull(line)
 
         return if (scheduledReminder != null)
             reminderStringFormatter.formatScheduledReminderForWidget(scheduledReminder, isShort)

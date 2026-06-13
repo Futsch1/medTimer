@@ -75,7 +75,7 @@ class StatisticsScreenViewModelTest {
                 total = StatisticsProvider.TakenSkipped(0, 0),
             )
         )
-        whenever(calendarEventsProvider.structuredEventsFlow(any(), any(), any(), any())).thenReturn(flowOf(emptyMap()))
+        whenever(calendarEventsProvider.structuredEventsFlow(any(), any())).thenReturn(flowOf(emptyMap()))
         whenever(medicineRepository.getAllFlow()).thenReturn(medicinesFlow)
 
         viewModel = buildViewModel()

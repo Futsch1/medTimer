@@ -102,18 +102,17 @@ class OverviewViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
-            combine(filterState, futureRemindersRepository.simulatedThrough) { fs, simThrough ->
-                Pair(fs.day, simThrough)
-            }.collect { (day, simThrough) ->
+            filterState.collect { fs ->
                 // Expand past query when user scrolls beyond the default 6-day window
-                if (day < LocalDate.now().minusDays(6) && queryStart.value > Instant.EPOCH) {
+                if (fs.day < LocalDate.now().minusDays(6) && queryStart.value > Instant.EPOCH) {
                     queryStart.value = Instant.EPOCH
                 }
-                // Prefetch when within 7 days of simulation boundary
-                if (simThrough > LocalDate.MIN && day >= simThrough.minusDays(7)) {
-                    futureRemindersRepository.triggerCalculation(
-                        simThrough.plusWeeks(3)
-                    )
+                // Request a wider simulation window when scrolling far into the future
+                val dayOffset = ChronoUnit.DAYS.between(LocalDate.now(), fs.day)
+                if (dayOffset >= 21) {
+                    futureRemindersRepository.requestWindow("overview", dayOffset + 28)
+                } else {
+                    futureRemindersRepository.releaseWindow("overview")
                 }
             }
         }
@@ -126,6 +125,11 @@ class OverviewViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        futureRemindersRepository.releaseWindow("overview")
     }
 
     fun update() {

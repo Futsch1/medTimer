@@ -202,4 +202,5 @@
     <string name="show_home_location_on_map">Sýna heimilisstaðsetningu á korti</string>
     <string name="set_home_location_confirm">Setja heimilisstaðsetningu á\n%1$s, %2$s?</string>
     <string name="home_location_error">Ekki tókst að ákvarða núverandi staðsetningu þína</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

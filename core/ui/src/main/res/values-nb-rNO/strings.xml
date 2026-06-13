@@ -52,4 +52,5 @@
     <string name="show_home_location_on_map">Vis hjemsted på kart</string>
     <string name="set_home_location_confirm">Angi hjemsted til\n%1$s, %2$s?</string>
     <string name="home_location_error">Kunne ikke bestemme gjeldende posisjon</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

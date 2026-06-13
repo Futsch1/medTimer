@@ -323,4 +323,5 @@
     <string name="same_as_medicine">Sama kuin lääke</string>
     <string name="previous_week">Edellinen viikko</string>
     <string name="next_week">Seuraava viikko</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

@@ -17,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
@@ -36,19 +35,25 @@ class CalendarEventsViewModel @Inject constructor(
     private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    // The legacy XML calendar reads a fixed window once per call; flowOf(Unit) is that single trigger.
-    // The provider owns the read and reactivity (entriesFlow); this maps each day's entries to Spanned.
     fun getEventForMonths(
-        medicineId: Int, pastMonths: Int, futureMonths: Int
+        medicineId: Int, pastMonths: Int
     ): Flow<Map<LocalDate, Spanned>> =
-        calendarEventsProvider.entriesFlow(flowOf(Unit), medicineId, pastMonths, futureMonths)
-            .map { entriesByDay -> entriesByDay.mapValues { (day, dayEntries) -> renderDay(day, dayEntries) } }
+        calendarEventsProvider.entriesFlow(medicineId, pastMonths)
+            .map { entriesByDay ->
+                entriesByDay.mapValues { (day, dayEntries) ->
+                    renderDay(
+                        day,
+                        dayEntries
+                    )
+                }
+            }
             .flowOn(ioDispatcher)
 
     private fun renderDay(day: LocalDate, entries: List<CalendarEntry>): Spanned {
         val builder = SpannableStringBuilder()
         if (entries.isNotEmpty()) {
-            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).append("\n")
+            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
+                .append("\n")
         }
         entries.forEach { builder.append(it.toSpanned()).append("\n") }
         return builder

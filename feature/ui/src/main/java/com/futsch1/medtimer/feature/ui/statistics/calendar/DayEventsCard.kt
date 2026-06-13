@@ -58,7 +58,10 @@ fun DayEventsCard(
                 modifier = Modifier.padding(bottom = 4.dp),
             )
             if (events.isEmpty()) {
-                Text(text = stringResource(R.string.no_reminders), style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = stringResource(R.string.no_reminders),
+                    style = MaterialTheme.typography.bodySmall
+                )
                 return@Column
             }
             val skippedLabel = stringResource(R.string.skipped)
@@ -81,13 +84,13 @@ fun DayEventsCard(
                     CalendarDayEvent.Status.RAISED -> raisedLabel
                     CalendarDayEvent.Status.SCHEDULED -> null
                 }
-                val suffix = when (event.status) {
-                    CalendarDayEvent.Status.SKIPPED -> " ($skippedLabel)"
-                    CalendarDayEvent.Status.RAISED -> " ($raisedLabel)"
-                    else -> ""
-                }
                 val (remindedTime, takenTime) = formattedTimes[index]
-                val intervalText = event.interval?.let { "(" + stringResource(R.string.interval_time, formatInterval(it)) + ")" }
+                val intervalText = event.interval?.let {
+                    "(" + stringResource(
+                        R.string.interval_time,
+                        formatInterval(it)
+                    ) + ")"
+                }
                 // A divider before every row, including the first, separates the date title from the
                 // events and the events from each other — matching the legacy calendar's per-row divider.
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -100,7 +103,6 @@ fun DayEventsCard(
                     typeIcon = event.reminderType.getIcon(),
                     amount = event.amount,
                     medicineName = event.medicineName,
-                    suffix = suffix,
                     textStyle = bodySmall,
                 )
             }
@@ -109,6 +111,7 @@ fun DayEventsCard(
 }
 
 @Composable
+@Suppress("kotlin:S107")
 private fun EventRow(
     time: String,
     takenTime: String?,
@@ -118,14 +121,19 @@ private fun EventRow(
     @DrawableRes typeIcon: Int,
     amount: String,
     medicineName: String,
-    suffix: String,
     textStyle: TextStyle,
 ) {
     val iconTint = MaterialTheme.colorScheme.onSurfaceVariant
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             if (statusIcon != null) {
                 Icon(
                     painter = painterResource(statusIcon),
@@ -158,13 +166,8 @@ private fun EventRow(
         // Medicine name on its own row; the status suffix stays unstyled next to the bold name.
         Row {
             Text(text = medicineName, style = textStyle, fontWeight = FontWeight.Bold)
-            if (suffix.isNotEmpty()) {
-                Text(text = suffix, style = textStyle)
-            }
-        }
-        if (amount.isNotEmpty()) {
-            Row {
-                Text(text = amount, style = textStyle)
+            if (amount.isNotEmpty()) {
+                Text(text = " ($amount)", style = textStyle)
             }
         }
     }
@@ -204,12 +207,35 @@ private fun DayEventsCardPreview() {
                 date = date,
                 events = listOf(
                     CalendarDayEvent(
-                        date.atTime(8, 0), "1 tablet", "Vitamin X 500 mg", CalendarDayEvent.Status.TAKEN, ReminderType.CONTINUOUS_INTERVAL,
-                        takenTime = date.atTime(8, 42), interval = Duration.ofMinutes(150),
+                        date.atTime(8, 0),
+                        "1 tablet",
+                        "Vitamin X 500 mg",
+                        CalendarDayEvent.Status.TAKEN,
+                        ReminderType.CONTINUOUS_INTERVAL,
+                        takenTime = date.atTime(8, 42),
+                        interval = Duration.ofMinutes(150),
                     ),
-                    CalendarDayEvent(date.atTime(12, 30), "2 ml", "Medicine A", CalendarDayEvent.Status.SKIPPED, ReminderType.CONTINUOUS_INTERVAL),
-                    CalendarDayEvent(date.atTime(18, 0), "1 dose", "Linked Med", CalendarDayEvent.Status.RAISED, ReminderType.LINKED),
-                    CalendarDayEvent(date.atTime(20, 0), "1 capsule", "Supplement B", CalendarDayEvent.Status.SCHEDULED, ReminderType.WINDOWED_INTERVAL),
+                    CalendarDayEvent(
+                        date.atTime(12, 30),
+                        "2 ml",
+                        "Medicine A",
+                        CalendarDayEvent.Status.SKIPPED,
+                        ReminderType.CONTINUOUS_INTERVAL
+                    ),
+                    CalendarDayEvent(
+                        date.atTime(18, 0),
+                        "1 dose",
+                        "Linked Med",
+                        CalendarDayEvent.Status.RAISED,
+                        ReminderType.LINKED
+                    ),
+                    CalendarDayEvent(
+                        date.atTime(20, 0),
+                        "1 capsule",
+                        "Supplement B",
+                        CalendarDayEvent.Status.SCHEDULED,
+                        ReminderType.WINDOWED_INTERVAL
+                    ),
                 ),
             )
         }
