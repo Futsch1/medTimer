@@ -193,6 +193,7 @@
     <string name="notification_importance">أولوية الإشعار</string>
     <string name="notification_settings_default">إعدادات الإشعار الأولوية الافتراضية</string>
     <string name="notification_settings_high">إعدادات الإشعار الأولوية المرتفعة</string>
+    <string name="notification_settings_out_of_stock">إعدادات تذكير نفاد المخزون</string>
     <string name="calendar">التقويم</string>
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>

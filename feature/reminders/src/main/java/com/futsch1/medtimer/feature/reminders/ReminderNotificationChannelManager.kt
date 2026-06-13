@@ -22,28 +22,34 @@ class ReminderNotificationChannelManager {
                 channelId++
             }
 
-            createChannel(context, notificationManager, Medicine.NotificationImportance.DEFAULT)
-            createChannel(context, notificationManager, Medicine.NotificationImportance.HIGH)
+            createChannel(context, notificationManager, Medicine.ReminderChannel.DEFAULT)
+            createChannel(context, notificationManager, Medicine.ReminderChannel.HIGH)
+            createChannel(context, notificationManager, Medicine.ReminderChannel.OUT_OF_STOCK)
         }
 
         fun getNotificationChannel(
             context: Context,
             notificationManager: NotificationManager,
-            notificationImportance: Medicine.NotificationImportance
+            reminderChannel: Medicine.ReminderChannel
         ): ReminderNotificationChannel {
-            return createChannel(context, notificationManager, notificationImportance)
+            return createChannel(context, notificationManager, reminderChannel)
         }
 
         private fun createChannel(
             context: Context,
             notificationManager: NotificationManager,
-            notificationImportance: Medicine.NotificationImportance
+            reminderChannel: Medicine.ReminderChannel
         ): ReminderNotificationChannel {
+            val nameId = when (reminderChannel) {
+                Medicine.ReminderChannel.HIGH -> R.string.high
+                Medicine.ReminderChannel.DEFAULT -> R.string.default_
+                Medicine.ReminderChannel.OUT_OF_STOCK -> R.string.out_of_stock_reminder
+            }
             return ReminderNotificationChannel(
                 context,
                 notificationManager,
-                notificationImportance.value,
-                if (notificationImportance == Medicine.NotificationImportance.HIGH) R.string.high else R.string.default_
+                reminderChannel,
+                nameId
             )
         }
     }

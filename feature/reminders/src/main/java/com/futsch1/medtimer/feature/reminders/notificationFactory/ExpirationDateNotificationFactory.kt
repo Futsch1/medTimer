@@ -30,7 +30,7 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
         reminderNotification.reminderNotificationData.notificationId,
         reminderNotification.reminderNotificationParts.map { it.medicine },
         notificationManager,
-        Medicine.NotificationImportance.DEFAULT
+        Medicine.ReminderChannel.DEFAULT
     ) {
 
     init {

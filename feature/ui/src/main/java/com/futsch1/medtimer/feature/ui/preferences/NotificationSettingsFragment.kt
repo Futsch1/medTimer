@@ -65,12 +65,17 @@ class NotificationSettingsFragment : PreferencesFragment() {
         var preference =
             preferenceScreen.findPreference<Preference?>("notification_settings_high")
         if (preference != null) {
-            setupNotificationSettingsPreference(preference, Medicine.NotificationImportance.HIGH)
+            setupNotificationSettingsPreference(preference, Medicine.ReminderChannel.HIGH)
         }
         preference =
             preferenceScreen.findPreference("notification_settings_default")
         if (preference != null) {
-            setupNotificationSettingsPreference(preference, Medicine.NotificationImportance.DEFAULT)
+            setupNotificationSettingsPreference(preference, Medicine.ReminderChannel.DEFAULT)
+        }
+        preference =
+            preferenceScreen.findPreference("notification_settings_out_of_stock")
+        if (preference != null) {
+            setupNotificationSettingsPreference(preference, Medicine.ReminderChannel.OUT_OF_STOCK)
         }
         preferenceScreen.findPreference<Preference>(OVERRIDE_DND)?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, value ->
@@ -92,12 +97,12 @@ class NotificationSettingsFragment : PreferencesFragment() {
 
     private fun setupNotificationSettingsPreference(
         preference: Preference,
-        notificationImportance: Medicine.NotificationImportance
+        reminderChannel: Medicine.ReminderChannel
     ) {
         preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
             val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-            intent.putExtra(Settings.EXTRA_CHANNEL_ID, notificationImportance.value.toString())
+            intent.putExtra(Settings.EXTRA_CHANNEL_ID, reminderChannel.channelId)
             startActivity(intent)
             true
         }

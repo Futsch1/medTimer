@@ -161,6 +161,7 @@
     <string name="are_you_sure_delete_reminder_event">您確定要刪除這個提醒事件嗎？</string>
     <string name="notification_settings_default">通知設定預設優先權</string>
     <string name="notification_settings_high">通知設定高優先權</string>
+    <string name="notification_settings_out_of_stock">庫存不足提醒設定</string>
     <string name="show_intro">顯示應用程式介紹</string>
     <string name="time_after">在藥品 y 之後 x 小時</string>
     <string name="intro_overview_description">在總覽畫面中，你可以查看即將到來的提醒以及最近的提醒事件。提醒事件可向右滑動進行編輯，向左滑動則可刪除。\n\n此外，你也可以手動記錄額外的劑量，無論是已設定的藥品或自訂藥品都可以。</string>

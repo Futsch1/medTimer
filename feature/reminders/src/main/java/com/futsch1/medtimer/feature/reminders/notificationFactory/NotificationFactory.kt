@@ -23,7 +23,7 @@ abstract class NotificationFactory(
     protected val notificationId: Int,
     medicines: List<Medicine>,
     notificationManager: NotificationManager,
-    importance: Medicine.NotificationImportance
+    reminderChannel: Medicine.ReminderChannel
 ) {
     val builder: NotificationCompat.Builder
 
@@ -31,7 +31,7 @@ abstract class NotificationFactory(
         val notificationChannelId = ReminderNotificationChannelManager.getNotificationChannel(
             context,
             notificationManager,
-            importance
+            reminderChannel
         ).id
         builder = NotificationCompat.Builder(context, notificationChannelId)
 

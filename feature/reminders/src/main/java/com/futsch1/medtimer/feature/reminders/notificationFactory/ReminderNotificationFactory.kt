@@ -13,7 +13,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
-import com.futsch1.medtimer.feature.reminders.notificationData.effectiveHighestImportance
+import com.futsch1.medtimer.feature.reminders.notificationData.channelForHighestImportance
 import com.futsch1.medtimer.feature.reminders.notificationData.effectiveShowAsAlarm
 
 
@@ -31,7 +31,7 @@ abstract class ReminderNotificationFactory(
     reminderNotification.reminderNotificationData.notificationId,
     reminderNotification.reminderNotificationParts.map { it.medicine },
     notificationManager,
-    reminderNotification.reminderNotificationParts.effectiveHighestImportance()
+    reminderNotification.reminderNotificationParts.channelForHighestImportance()
 ) {
 
     val intents = intentsFactory.create(reminderNotification)
