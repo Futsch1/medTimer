@@ -85,4 +85,17 @@ class TimeHelperTest {
             timeFormatter.daysSinceEpochToDateString(LocalDate.of(2023, 1, 2).toEpochDay())
         )
     }
+
+    @Test
+    fun testLocaleDateRoundTrip() {
+        val context = RuntimeEnvironment.getApplication()
+        context.resources.configuration.setLocales(LocaleList(Locale.US, Locale.GERMAN))
+        val preferences = MutableStateFlow(UserPreferences.default().copy(systemLocale = true))
+        Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
+
+        val timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
+        val original = LocalDate.of(2023, 1, 2)
+        val formatted = timeFormatter.localDateToString(original)
+        assertEquals(original, timeFormatter.stringToLocalDate(formatted))
+    }
 }
