@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
-    // Force recompile
 
     @Inject
     lateinit var locationSnoozeProcessor: LocationSnoozeProcessor

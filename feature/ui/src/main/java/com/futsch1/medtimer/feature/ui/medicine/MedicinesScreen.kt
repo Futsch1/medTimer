@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -238,6 +239,7 @@ private fun MedicineCard(
     medicine: MedicineUiState,
     editMedicine: (id: Int) -> Unit,
     isDragging: Boolean = false,
+    @SuppressLint("ModifierParameter")
     dragHandleModifier: Modifier = Modifier
 ) {
     val cardColors = if (medicine.color != null) {
@@ -287,7 +289,7 @@ private fun MedicineCard(
                 MedicineTags(medicine.tags)
             }
             Icon(
-                painter = painterResource(R.drawable.drag_handle),
+                painter = painterResource(R.drawable.grip_horizontal),
                 contentDescription = stringResource(R.string.move_medicine),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
