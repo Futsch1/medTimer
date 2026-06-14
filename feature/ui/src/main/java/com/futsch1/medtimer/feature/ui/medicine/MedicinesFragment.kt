@@ -26,7 +26,6 @@ import com.futsch1.medtimer.feature.ui.BuildConfig
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -110,11 +109,7 @@ class MedicinesFragment : Fragment() {
     }
 
     private fun deleteItem(medicineId: Int) {
-        DeleteHelper.deleteItem(
-            requireContext(),
-            com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_medicine,
-            { lifecycleScope.launch { medicineRepository.delete(medicineId) } },
-            { })
+        lifecycleScope.launch { medicineRepository.delete(medicineId) }
     }
 
     private fun addMedicine() {

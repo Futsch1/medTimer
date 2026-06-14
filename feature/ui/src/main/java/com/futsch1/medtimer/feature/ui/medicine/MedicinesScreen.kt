@@ -1,16 +1,21 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
 import androidx.compose.foundation.layout.FlexAlignItems
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -18,11 +23,22 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
@@ -40,6 +56,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import kotlinx.coroutines.launch
 
 @Composable
 fun MedicinesScreen(
@@ -81,10 +98,85 @@ fun MedicinesScreen(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = paddingValues
         ) {
-            items(medicines) { medicine ->
-                MedicineCard(medicine, editMedicine)
+            items(medicines, key = { it.id }) { medicine ->
+                SwipeToDeleteContainer(medicine, deleteMedicine) {
+                    MedicineCard(medicine, editMedicine)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun SwipeToDeleteContainer(
+    medicine: MedicineUiState,
+    onDelete: (id: Int) -> Unit,
+    content: @Composable () -> Unit
+) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val dismissState = rememberSwipeToDismissBoxState()
+
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+            showDeleteDialog = true
+        }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+                scope.launch { dismissState.snapTo(SwipeToDismissBoxValue.Settled) }
+            },
+            title = { Text(stringResource(R.string.confirm)) },
+            text = { Text(stringResource(R.string.are_you_sure_delete_medicine)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    onDelete(medicine.id)
+                }) { Text(stringResource(R.string.yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    scope.launch { dismissState.snapTo(SwipeToDismissBoxValue.Settled) }
+                }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
+    SwipeToDismissBox(
+        state = dismissState,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                val maxWidthPx = constraints.maxWidth.toFloat()
+                val offset = try { dismissState.requireOffset() } catch (_: IllegalStateException) { 0f }
+                val alpha = if (maxWidthPx > 0f) (-offset / maxWidthPx).coerceIn(0f, 1f) else 0f
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(Color(0xFFCC0000).copy(alpha = alpha)),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.trash),
+                        contentDescription = stringResource(R.string.delete),
+                        tint = Color.White,
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .size(48.dp)
+                    )
+                }
+            }
+        }
+    ) {
+        content()
     }
 }
 
