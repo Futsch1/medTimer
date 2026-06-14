@@ -134,7 +134,6 @@ class MedicinesFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        idlingResource.destroy()
         optionsMenu.onDestroy()
     }
 

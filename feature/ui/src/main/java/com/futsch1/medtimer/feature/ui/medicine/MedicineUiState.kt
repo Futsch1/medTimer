@@ -16,5 +16,6 @@ data class MedicineUiState(
     val reminderTimes: List<String>,
     val stockState: StockState,
     val icon: Bitmap?,
+    val color: Int?,
     val tags: List<String>
 )

@@ -62,6 +62,7 @@ class MedicinesViewModel @AssistedInject constructor(
                         )
                     ),
                     if (medicine.iconId != 0) medicineIcons.getIconBitmapUntinted(medicine.iconId) else null,
+                    if (medicine.useColor) medicine.color else null,
                     medicine.tags.map { tag -> tag.name }
                 )
             }.toImmutableList()
