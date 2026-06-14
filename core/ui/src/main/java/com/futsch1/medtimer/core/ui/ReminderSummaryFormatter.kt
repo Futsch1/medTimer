@@ -82,8 +82,7 @@ class ReminderSummaryFormatter @Inject constructor(
         return context.resources.getQuantityString(
             R.plurals.sum_reminders,
             len,
-            len,
-            join("; ", reminderTimes)
+            len
         )
     }
 

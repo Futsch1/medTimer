@@ -47,10 +47,10 @@
         <item quantity="many">хвилин</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d нагадування\n%2$s</item>
-        <item quantity="few">%1$d нагадування\n%2$s</item>
-        <item quantity="many">%1$d нагадування\n%2$s</item>
-        <item quantity="other">%1$d нагадування\n%2$s</item>
+        <item quantity="one">%1$d нагадування</item>
+        <item quantity="few">%1$d нагадування</item>
+        <item quantity="many">%1$d нагадування</item>
+        <item quantity="other">%1$d нагадування</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one" ns0:ignore="ImpliedQuantity">тиждень</item>

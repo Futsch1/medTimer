@@ -44,10 +44,10 @@
         <item quantity="many">минут</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d напоминание\n%2$s</item>
-        <item quantity="few">%1$d напоминания\n%2$s</item>
-        <item quantity="many">%1$d напоминаний\n%2$s</item>
-        <item quantity="other">%1$d напоминаний\n%2$s</item>
+        <item quantity="one">%1$d напоминание</item>
+        <item quantity="few">%1$d напоминания</item>
+        <item quantity="many">%1$d напоминаний</item>
+        <item quantity="other">%1$d напоминаний</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one" ns0:ignore="ImpliedQuantity">неделя</item>

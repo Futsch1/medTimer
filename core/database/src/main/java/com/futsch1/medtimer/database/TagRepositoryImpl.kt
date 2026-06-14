@@ -42,8 +42,8 @@ class TagRepositoryImpl(
         tagDao.deleteMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
-    override suspend fun hasAny(): Boolean {
-        return tagDao.count() > 0
+    override fun hasAny(): Flow<Boolean> {
+        return tagDao.countFlow().map { it > 0 }
     }
 
     override suspend fun deleteAll() {

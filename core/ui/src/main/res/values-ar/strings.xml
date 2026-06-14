@@ -53,12 +53,12 @@
         <item quantity="other">دقيقة</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="zero">%1$d تذكير\n%2$s</item>
-        <item quantity="one">%1$d تذكير\n%2$s</item>
-        <item quantity="two">تذكيران\n%2$s</item>
-        <item quantity="few">%1$d تذكيرات\n%2$s</item>
-        <item quantity="many">%1$d تذكيرا\n%2$s</item>
-        <item quantity="other">%1$d تذكير\n%2$s</item>
+        <item quantity="zero">%1$d تذكير</item>
+        <item quantity="one">%1$d تذكير</item>
+        <item quantity="two">تذكيران</item>
+        <item quantity="few">%1$d تذكيرات</item>
+        <item quantity="many">%1$d تذكيرا</item>
+        <item quantity="other">%1$d تذكير</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="zero">أسبوع</item>

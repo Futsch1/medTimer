@@ -44,9 +44,9 @@
         <item quantity="many">minutos</item>
     </plurals>
     <plurals name="sum_reminders" tools:ignore="UnusedQuantity">
-        <item quantity="one">%1$d recordatorio\n%2$s</item>
-        <item quantity="many">%1$d recordatorios\n%2$s</item>
-        <item quantity="other">%1$d recordatorios\n%2$s</item>
+        <item quantity="one">%1$d recordatorio</item>
+        <item quantity="many">%1$d recordatorios</item>
+        <item quantity="other">%1$d recordatorios</item>
     </plurals>
     <plurals name="weeks" tools:ignore="UnusedQuantity">
         <item quantity="one">semana</item>

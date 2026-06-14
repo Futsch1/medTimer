@@ -41,8 +41,8 @@
         <item quantity="other">dakika</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d hatırlatıcı\n%2$s</item>
-        <item quantity="other">%1$d hatırlatıcı\n%2$s</item>
+        <item quantity="one">%1$d hatırlatıcı</item>
+        <item quantity="other">%1$d hatırlatıcı</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">hafta</item>

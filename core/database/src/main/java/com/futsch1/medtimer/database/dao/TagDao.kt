@@ -22,6 +22,9 @@ interface TagDao {
     @Query("SELECT COUNT(*) FROM Tag")
     suspend fun count(): Int
 
+    @Query("SELECT COUNT(*) FROM Tag")
+    fun countFlow(): Flow<Int>
+
     @Insert
     suspend fun create(tag: TagEntity): Long
 

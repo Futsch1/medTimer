@@ -44,9 +44,9 @@
         <item quantity="many">minutes</item>
     </plurals>
     <plurals name="sum_reminders" ns0:ignore="UnusedQuantity">
-        <item quantity="one">%1$d rappel\n%2$s</item>
-        <item quantity="many">%1$d rappels\n%2$s</item>
-        <item quantity="other">%1$d rappels\n%2$s</item>
+        <item quantity="one">%1$d rappel</item>
+        <item quantity="many">%1$d rappels</item>
+        <item quantity="other">%1$d rappels</item>
     </plurals>
     <plurals name="weeks" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">semaine</item>

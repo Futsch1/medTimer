@@ -41,8 +41,8 @@
         <item quantity="other">λεπτά</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d υπενθύμιση\n%2$s</item>
-        <item quantity="other">%1$d υπενθυμίσεις\n%2$s</item>
+        <item quantity="one">%1$d υπενθύμιση</item>
+        <item quantity="other">%1$d υπενθυμίσεις</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">εβδομάδα</item>

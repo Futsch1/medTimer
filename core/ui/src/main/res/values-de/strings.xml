@@ -41,8 +41,8 @@
         <item quantity="other">Minuten</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d Erinnerung\n%2$s</item>
-        <item quantity="other">%1$d Erinnerungen\n%2$s</item>
+        <item quantity="one">%1$d Erinnerung</item>
+        <item quantity="other">%1$d Erinnerungen</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">Woche</item>

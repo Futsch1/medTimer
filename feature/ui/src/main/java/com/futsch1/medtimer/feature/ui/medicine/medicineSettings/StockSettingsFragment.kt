@@ -15,6 +15,7 @@ import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
@@ -48,6 +49,9 @@ class StockSettingsFragment : MedicinePreferences(
 
     @Inject
     lateinit var timeFormatter: TimeFormatter
+
+    @Inject
+    lateinit var medicineStringFormatter: MedicineStringFormatter
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
@@ -132,14 +136,7 @@ class StockSettingsFragment : MedicinePreferences(
                 .collect { dates ->
                     val runOutDate = dates[medicineId]
                     val simulatedThrough = futureRemindersRepository.simulatedThrough.value
-                    val summary = when {
-                        runOutDate != null -> timeFormatter.localDateToString(runOutDate)
-                        simulatedThrough == LocalDate.MIN -> "---"
-                        else -> context?.getString(
-                            com.futsch1.medtimer.core.ui.R.string.stock_after_simulation_end,
-                            timeFormatter.localDateToString(simulatedThrough)
-                        ) ?: "---"
-                    }
+                    val summary = medicineStringFormatter.getStockRunOutText(runOutDate, simulatedThrough)
                     withContext(mainDispatcher) {
                         findPreference<EditTextPreference>("stock_run_out_date")?.summary = summary
                     }

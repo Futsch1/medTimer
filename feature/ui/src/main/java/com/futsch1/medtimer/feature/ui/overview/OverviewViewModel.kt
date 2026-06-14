@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
-import com.futsch1.medtimer.core.domain.model.Tag
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
@@ -43,27 +44,24 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel(assistedFactory = OverviewViewModel.Factory::class)
 class OverviewViewModel @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
-    private val reminderEventRepository: ReminderEventRepository,
-    tagRepository: TagRepository,
+    medicineRepository: MedicineRepository,
+    reminderEventRepository: ReminderEventRepository,
     private val futureRemindersRepository: FutureRemindersRepository,
     private val reminderEventFactory: PastReminderEvent.Factory,
     private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
-    @Assisted private val validTagIds: StateFlow<Set<Int>?>,
-    @Assisted private val scheduledReminders: SharedFlow<List<ScheduledReminder>>
+    @Assisted private val tagFilterViewModel: TagFilterViewModel
 ) : ViewModel() {
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(tagFilterViewModel: TagFilterViewModel): OverviewViewModel
+    }
+
     private data class FilterState(
         val activeFilters: Set<OverviewFilter>,
         val day: LocalDate,
         val tick: Long
     )
-
-    @AssistedFactory
-    fun interface Factory {
-        fun create(
-            validTagIds: StateFlow<Set<Int>?>,
-            scheduledReminders: SharedFlow<List<ScheduledReminder>>
-        ): OverviewViewModel
-    }
 
     private var _initialized = false
     val initialized get() = _initialized
@@ -72,9 +70,6 @@ class OverviewViewModel @AssistedInject constructor(
 
     // Expands from default 6-day window to Instant.EPOCH when user scrolls into past
     private val queryStart = MutableStateFlow(Instant.now().minus(Duration.of(6, ChronoUnit.DAYS)))
-
-    private val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val simulatedThrough: StateFlow<LocalDate> = futureRemindersRepository.simulatedThrough
 
@@ -85,15 +80,33 @@ class OverviewViewModel @AssistedInject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val reminderEvents: Flow<List<ReminderEvent>> = queryStart.flatMapLatest { start ->
+    private val reminderEvents: Flow<List<ReminderEvent>> =
         combine(
-            reminderEventRepository.getAllFlow(start, ReminderEvent.statusValuesWithoutDelete),
-            validTagIds,
-            liveTags
+            queryStart.flatMapLatest { start ->
+                reminderEventRepository.getAllFlow(
+                    start,
+                    ReminderEvent.statusValuesWithoutDelete
+                )
+            },
+            tagFilterViewModel.validTagIds,
+            tagFilterViewModel.liveTags
         ) { events, tagIds, tags ->
-            filterByTags(events, tagIds, tags)
+            tagFilterViewModel.getFilteredEvents(events, tagIds, tags)
         }
-    }
+
+    private val liveMedicines = medicineRepository.getAllFlow()
+
+    private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
+
+    val medicines: StateFlow<List<Medicine>> =
+        combine(liveMedicines, tagFilterViewModel.validTagIds) { medicines, tagIds ->
+            tagFilterViewModel.getFiltered(medicines, tagIds ?: emptySet())
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    val scheduledReminders: SharedFlow<List<ScheduledReminder>> =
+        combine(_scheduledReminders, tagFilterViewModel.validTagIds) { reminders, tagIds ->
+            tagFilterViewModel.getFiltered(reminders, tagIds ?: emptySet())
+        }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
         combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
@@ -101,6 +114,12 @@ class OverviewViewModel @AssistedInject constructor(
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
+        viewModelScope.launch {
+            futureRemindersRepository.simulatedReminders.collect { reminders ->
+                _scheduledReminders.value = reminders
+            }
+        }
+
         viewModelScope.launch {
             filterState.collect { fs ->
                 // Expand past query when user scrolls beyond the default 6-day window
@@ -146,16 +165,6 @@ class OverviewViewModel @AssistedInject constructor(
 
     fun setFilters(filters: Set<OverviewFilter>) {
         filterState.update { it.copy(activeFilters = filters) }
-    }
-
-    private fun filterByTags(
-        events: List<ReminderEvent>,
-        tagIds: Set<Int>?,
-        tags: List<Tag>
-    ): List<ReminderEvent> {
-        if (tagIds.isNullOrEmpty()) return events
-        val validTagNames = tags.filter { tagIds.contains(it.id) }.map { it.name }.toSet()
-        return events.filter { event -> event.tags.any { it in validTagNames } }
     }
 
     private fun getFiltered(

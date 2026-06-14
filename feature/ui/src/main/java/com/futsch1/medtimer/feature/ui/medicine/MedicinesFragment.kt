@@ -7,33 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
-import com.futsch1.medtimer.core.common.helpers.SwipeHelper
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.BuildConfig
-import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -56,7 +57,16 @@ class MedicinesFragment : Fragment() {
     lateinit var medicinesMenu: MedicinesMenu
 
     private lateinit var idlingResource: SimpleIdlingResource
-    private val medicineViewModel: MedicineViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by viewModels()
+    private val medicinesViewModel: MedicinesViewModel by viewModels(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback<MedicinesViewModel.Factory> { factory ->
+                factory.create(
+                    tagFilterViewModel
+                )
+            }
+        }
+    )
     private lateinit var adapter: MedicineViewAdapter
 
     @Inject
@@ -68,14 +78,11 @@ class MedicinesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        idlingResource = SimpleIdlingResource(MedicinesFragment::class.java.getName())
-        idlingResource.setBusy()
-
         optionsMenu = optionsMenuFactory.create(
             this,
             NavHostFragment.findNavController(this),
             false,
-            medicineViewModel
+            medicinesViewModel.tagFilterViewModel
         )
 
         adapter = medicineViewAdapterFactory.create(requireActivity())
@@ -85,6 +92,18 @@ class MedicinesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
+
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MedTimerTheme {
+                    MedicinesScreen(medicinesViewModel)
+                }
+            }
+        }
+
+        /*
         val fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false)
         // Medicine recycler
         val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.medicineList)
@@ -110,21 +129,7 @@ class MedicinesFragment : Fragment() {
 
         setupAddMedicineButton(fragmentView)
 
-        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
-
-        // Connect view model to recycler view adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            medicineViewModel.medicines.collect { l: List<Medicine> ->
-                adapter.submitList(l)
-                medicinesMenu.medicines = l
-                startPostponedEnterTransition()
-                idlingResource.setIdle()
-            }
-        }
-
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
-
-        return fragmentView
+        return fragmentView*/
     }
 
     override fun onDestroy() {
@@ -146,7 +151,12 @@ class MedicinesFragment : Fragment() {
         fab.setOnClickListener { _: View? ->
             val textInputLayout = TextInputLayout(requireContext())
             val editText = TextInputEditText(requireContext())
-            editText.setLayoutParams(LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            editText.setLayoutParams(
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
             editText.setHint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
             editText.setSingleLine()
             editText.setId(R.id.medicineName)
@@ -163,7 +173,10 @@ class MedicinesFragment : Fragment() {
         }
     }
 
-    private fun getAlertBuilder(textInputLayout: TextInputLayout?, editText: TextInputEditText): MaterialAlertDialogBuilder {
+    private fun getAlertBuilder(
+        textInputLayout: TextInputLayout?,
+        editText: TextInputEditText
+    ): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(requireContext())
             .setView(textInputLayout)
             .setTitle(com.futsch1.medtimer.core.ui.R.string.add_medicine)
@@ -172,7 +185,8 @@ class MedicinesFragment : Fragment() {
 
                 lifecycleScope.launch(dispatcher) {
                     val highestSortOrder = medicineRepository.getHighestSortOrder()
-                    val medicine = Medicine.default().copy(name = text.toString().trim(), sortOrder = highestSortOrder)
+                    val medicine = Medicine.default()
+                        .copy(name = text.toString().trim(), sortOrder = highestSortOrder)
                     val medicineId = medicineRepository.create(medicine)
                     withContext(mainDispatcher) { navigateToMedicineId(medicineId) }
                 }

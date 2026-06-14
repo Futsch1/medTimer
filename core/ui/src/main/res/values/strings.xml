@@ -41,8 +41,8 @@
         <item quantity="other">minutes</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d reminder\n%2$s</item>
-        <item quantity="other">%1$d reminders\n%2$s</item>
+        <item quantity="one">%1$d reminder</item>
+        <item quantity="other">%1$d reminders</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">week</item>

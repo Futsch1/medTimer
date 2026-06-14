@@ -41,8 +41,8 @@
         <item quantity="other">நிமிடங்கள்</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d நினைவூட்டல்\n %2$s</item>
-        <item quantity="other">%1$d நினைவூட்டல்கள்\n %2$s</item>
+        <item quantity="one">%1$d நினைவூட்டல்</item>
+        <item quantity="other">%1$d நினைவூட்டல்கள்</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">வாரம்</item>

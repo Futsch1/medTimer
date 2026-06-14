@@ -41,8 +41,8 @@
         <item quantity="other">minuuttia</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d muistutus\n%2$s</item>
-        <item quantity="other">%1$d muistutusta\n%2$s</item>
+        <item quantity="one">%1$d muistutus</item>
+        <item quantity="other">%1$d muistutusta</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">viikko</item>

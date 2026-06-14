@@ -12,6 +12,6 @@ interface TagRepository {
     suspend fun delete(tag: Tag)
     suspend fun addMedicineTag(medicineId: Int, tagId: Int)
     suspend fun removeMedicineTag(medicineId: Int, tagId: Int)
-    suspend fun hasAny(): Boolean
+    fun hasAny(): Flow<Boolean>
     suspend fun deleteAll()
 }

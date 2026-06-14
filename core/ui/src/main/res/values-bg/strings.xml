@@ -41,8 +41,8 @@
         <item quantity="other">минути</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d напомняне\n%2$s</item>
-        <item quantity="other">%1$d напомняния\n%2$s</item>
+        <item quantity="one">%1$d напомняне</item>
+        <item quantity="other">%1$d напомняния</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">седмица</item>

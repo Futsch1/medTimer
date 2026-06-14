@@ -23,7 +23,10 @@ class MedicineStringFormatter @Inject constructor(
         return getMedicineNameWithStockText(preferencesDataSource.preferences.value, medicine)
     }
 
-    fun getMedicineNameWithStockText(userPreferences: UserPreferences, medicine: Medicine): SpannableStringBuilder {
+    fun getMedicineNameWithStockText(
+        userPreferences: UserPreferences,
+        medicine: Medicine
+    ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 MedicineHelper.getMedicineName(
@@ -83,5 +86,16 @@ class MedicineStringFormatter @Inject constructor(
             R.string.medicine_stock_string,
             MedicineHelper.formatAmount(medicine.amount, medicine.unit)
         )
+    }
+
+    fun getStockRunOutText(runOutDate: LocalDate?, simulatedThrough: LocalDate): String {
+        return when {
+            runOutDate != null -> timeFormatter.localDateToString(runOutDate)
+            simulatedThrough == LocalDate.MIN -> "---"
+            else -> context.getString(
+                R.string.stock_after_simulation_end,
+                timeFormatter.localDateToString(simulatedThrough)
+            )
+        }
     }
 }

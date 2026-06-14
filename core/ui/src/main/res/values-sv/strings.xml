@@ -41,8 +41,8 @@
         <item quantity="other">minuter</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d påminnelse\n%2$s</item>
-        <item quantity="other">%1$d påminnelser\n%2$s</item>
+        <item quantity="one">%1$d påminnelse</item>
+        <item quantity="other">%1$d påminnelser</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">vecka</item>

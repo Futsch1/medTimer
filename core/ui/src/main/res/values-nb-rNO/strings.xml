@@ -5,8 +5,8 @@
     <string name="skipped">Hoppet over</string>
     <string name="taken">Tatt</string>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d påminnelse\n%2$s</item>
-        <item quantity="other">%1$d påminnelser\n%2$s</item>
+        <item quantity="one">%1$d påminnelse</item>
+        <item quantity="other">%1$d påminnelser</item>
     </plurals>
     <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="expiration_reminder">Påminnelse om utløpsdato</string>
