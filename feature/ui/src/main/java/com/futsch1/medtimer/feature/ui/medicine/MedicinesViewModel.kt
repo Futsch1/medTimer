@@ -49,13 +49,19 @@ class MedicinesViewModel @AssistedInject constructor(
             medicines.map { medicine ->
                 MedicineUiState(
                     medicine.name,
-                    listOf(""),
-                    medicineStringFormatter.getStockRunOutText
-                        (
-                        stockRunOutDates.getOrDefault(medicine.id, null),
-                        futureRemindersRepository.simulatedThrough.value
+                    medicineStringFormatter.getReminderTimes(medicine),
+                    StockState(
+                        if (medicine.isStockManagementActive()) medicineStringFormatter.getStockText(
+                            medicine
+                        ) else null,
+                        medicine.isOutOfStock(),
+                        medicineStringFormatter.getStockRunOutText
+                            (
+                            stockRunOutDates.getOrDefault(medicine.id, null),
+                            futureRemindersRepository.simulatedThrough.value
+                        )
                     ),
-                    if (medicine.iconId != 0) medicineIcons.getIconBitmap(medicine.iconId) else null,
+                    if (medicine.iconId != 0) medicineIcons.getIconBitmapUntinted(medicine.iconId) else null,
                     medicine.tags.map { tag -> tag.name }
                 )
             }.toImmutableList()

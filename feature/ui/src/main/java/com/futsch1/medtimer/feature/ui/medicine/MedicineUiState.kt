@@ -3,11 +3,18 @@ package com.futsch1.medtimer.feature.ui.medicine
 import android.graphics.Bitmap
 import androidx.compose.runtime.Immutable
 
+
+data class StockState(
+    val stockString: String?,
+    val stockWarning: Boolean,
+    val stockRunOutDate: String?
+)
+
 @Immutable
 data class MedicineUiState(
     val name: String,
     val reminderTimes: List<String>,
-    val stockRunOutDate: String?,
+    val stockState: StockState,
     val icon: Bitmap?,
     val tags: List<String>
 )
