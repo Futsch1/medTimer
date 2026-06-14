@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +44,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -57,29 +61,65 @@ import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import kotlinx.coroutines.launch
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
 fun MedicinesScreen(
     medicinesViewModel: MedicinesViewModel,
     addMedicine: () -> Unit,
     deleteMedicine: (id: Int) -> Unit,
-    editMedicine: (id: Int) -> Unit
+    editMedicine: (id: Int) -> Unit,
+    moveMedicine: (id: Int, newPosition: Int) -> Unit
 ) {
     MedicinesScreen(
         medicinesViewModel.medicinesForUi.collectAsState().value,
         addMedicine,
         deleteMedicine,
-        editMedicine
+        editMedicine,
+        moveMedicine
     )
 }
 
 @Composable
 fun MedicinesScreen(
     medicines: List<MedicineUiState>,
-    addMedicine: () -> Unit,
+    addMedicine: () -> Unit = {},
     deleteMedicine: (id: Int) -> Unit = {},
-    editMedicine: (id: Int) -> Unit = {}
+    editMedicine: (id: Int) -> Unit = {},
+    moveMedicine: (id: Int, newPosition: Int) -> Unit = { _, _ -> }
 ) {
+    val localMedicines = remember { mutableStateListOf<MedicineUiState>() }
+    var lastDraggedId by remember { mutableStateOf<Int?>(null) }
+    val listState = rememberLazyListState()
+    val hapticFeedback = LocalHapticFeedback.current
+    val reorderState = rememberReorderableLazyListState(listState) { from, to ->
+        val item = localMedicines.removeAt(from.index)
+        localMedicines.add(to.index, item)
+        lastDraggedId = item.id
+        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+    }
+
+    LaunchedEffect(medicines) {
+        if (!reorderState.isAnyItemDragging) {
+            localMedicines.clear()
+            localMedicines.addAll(medicines)
+        }
+    }
+
+    LaunchedEffect(reorderState.isAnyItemDragging) {
+        if (!reorderState.isAnyItemDragging) {
+            val id = lastDraggedId
+            if (id != null) {
+                val newIndex = localMedicines.indexOfFirst { it.id == id }
+                if (newIndex >= 0) {
+                    moveMedicine(id, newIndex)
+                }
+                lastDraggedId = null
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier.padding(8.dp),
         floatingActionButton = {
@@ -95,12 +135,20 @@ fun MedicinesScreen(
         }
     ) { paddingValues ->
         LazyColumn(
+            state = listState,
             modifier = Modifier.fillMaxWidth(),
             contentPadding = paddingValues
         ) {
-            items(medicines, key = { it.id }) { medicine ->
-                SwipeToDeleteContainer(medicine, deleteMedicine) {
-                    MedicineCard(medicine, editMedicine)
+            items(localMedicines, key = { it.id }) { medicine ->
+                ReorderableItem(reorderState, key = medicine.id) { isDragging ->
+                    SwipeToDeleteContainer(medicine, deleteMedicine) {
+                        MedicineCard(
+                            medicine = medicine,
+                            editMedicine = editMedicine,
+                            isDragging = isDragging,
+                            dragHandleModifier = Modifier.draggableHandle()
+                        )
+                    }
                 }
             }
         }
@@ -154,7 +202,11 @@ private fun SwipeToDeleteContainer(
         backgroundContent = {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val maxWidthPx = constraints.maxWidth.toFloat()
-                val offset = try { dismissState.requireOffset() } catch (_: IllegalStateException) { 0f }
+                val offset = try {
+                    dismissState.requireOffset()
+                } catch (_: IllegalStateException) {
+                    0f
+                }
                 val alpha = if (maxWidthPx > 0f) (-offset / maxWidthPx).coerceIn(0f, 1f) else 0f
                 Box(
                     modifier = Modifier
@@ -182,7 +234,12 @@ private fun SwipeToDeleteContainer(
 
 @OptIn(ExperimentalFlexBoxApi::class)
 @Composable
-private fun MedicineCard(medicine: MedicineUiState, editMedicine: (id: Int) -> Unit) {
+private fun MedicineCard(
+    medicine: MedicineUiState,
+    editMedicine: (id: Int) -> Unit,
+    isDragging: Boolean = false,
+    dragHandleModifier: Modifier = Modifier
+) {
     val cardColors = if (medicine.color != null) {
         val bg = Color(medicine.color)
         CardDefaults.cardColors(containerColor = bg, contentColor = contentColorFor(bg))
@@ -194,7 +251,10 @@ private fun MedicineCard(medicine: MedicineUiState, editMedicine: (id: Int) -> U
             .fillMaxWidth()
             .padding(8.dp),
         colors = cardColors,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp,
+            draggedElevation = if (isDragging) 8.dp else 2.dp
+        ),
         onClick = { editMedicine(medicine.id) }
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
@@ -208,7 +268,7 @@ private fun MedicineCard(medicine: MedicineUiState, editMedicine: (id: Int) -> U
                         .padding(end = 8.dp)
                 )
             }
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 MedicineHeader(medicine)
                 Text(
                     text = pluralStringResource(
@@ -226,6 +286,15 @@ private fun MedicineCard(medicine: MedicineUiState, editMedicine: (id: Int) -> U
                 }
                 MedicineTags(medicine.tags)
             }
+            Icon(
+                painter = painterResource(R.drawable.drag_handle),
+                contentDescription = stringResource(R.string.move_medicine),
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp)
+                    .size(24.dp)
+                    .then(dragHandleModifier)
+            )
         }
     }
 }
@@ -322,7 +391,6 @@ fun MedicinesScreenPreview() {
                 icon = ResourcesCompat.getDrawable(LocalResources.current, R.drawable.capsule, null)
                     ?.toBitmap()
             ),
-        ),
-        {}, {}, {}
+        )
     )
 }

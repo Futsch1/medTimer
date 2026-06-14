@@ -61,13 +61,10 @@ class MedicinesFragment : Fragment() {
             }
         }
     )
-    private lateinit var adapter: MedicineViewAdapter
 
     @Inject
     lateinit var optionsMenuFactory: OptionsMenuFactory
 
-    @Inject
-    lateinit var medicineViewAdapterFactory: MedicineViewAdapter.Factory
     private lateinit var optionsMenu: EntityEditOptionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +75,6 @@ class MedicinesFragment : Fragment() {
             false,
             medicinesViewModel.tagFilterViewModel
         )
-
-        adapter = medicineViewAdapterFactory.create(requireActivity())
     }
 
     override fun onCreateView(
@@ -97,6 +92,11 @@ class MedicinesFragment : Fragment() {
                         addMedicine = { addMedicine() },
                         deleteMedicine = { medicineId -> deleteItem(medicineId) },
                         editMedicine = { medicineId -> navigateToMedicineId(medicineId) },
+                        moveMedicine = { medicineId, newPosition ->
+                            lifecycleScope.launch {
+                                medicineRepository.move(medicineId, newPosition)
+                            }
+                        }
                     )
                 }
             }

@@ -61,6 +61,7 @@
     <string name="expiration_reminder">Expiration reminder</string>
     <string name="app_name" translatable="false">MedTimer</string>
     <string name="medicine_name">Medicine name</string>
+    <string name="move_medicine">Move medicine</string>
     <string name="please_wait">Please wait…</string>
     <string name="notification_title">Medicine reminder</string>
     <string name="refill_amount">Refill (%s)</string>
