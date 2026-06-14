@@ -42,17 +42,32 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 
 @Composable
-fun MedicinesScreen(medicinesViewModel: MedicinesViewModel) {
-    MedicinesScreen(medicinesViewModel.medicinesForUi.collectAsState().value)
+fun MedicinesScreen(
+    medicinesViewModel: MedicinesViewModel,
+    addMedicine: () -> Unit,
+    deleteMedicine: (id: Int) -> Unit,
+    editMedicine: (id: Int) -> Unit
+) {
+    MedicinesScreen(
+        medicinesViewModel.medicinesForUi.collectAsState().value,
+        addMedicine,
+        deleteMedicine,
+        editMedicine
+    )
 }
 
 @Composable
-fun MedicinesScreen(medicines: List<MedicineUiState>) {
+fun MedicinesScreen(
+    medicines: List<MedicineUiState>,
+    addMedicine: () -> Unit,
+    deleteMedicine: (id: Int) -> Unit = {},
+    editMedicine: (id: Int) -> Unit = {}
+) {
     Scaffold(
         modifier = Modifier.padding(8.dp),
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = addMedicine,
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.plus_circle),
@@ -67,7 +82,7 @@ fun MedicinesScreen(medicines: List<MedicineUiState>) {
             contentPadding = paddingValues
         ) {
             items(medicines) { medicine ->
-                MedicineCard(medicine)
+                MedicineCard(medicine, editMedicine)
             }
         }
     }
@@ -75,7 +90,7 @@ fun MedicinesScreen(medicines: List<MedicineUiState>) {
 
 @OptIn(ExperimentalFlexBoxApi::class)
 @Composable
-private fun MedicineCard(medicine: MedicineUiState) {
+private fun MedicineCard(medicine: MedicineUiState, editMedicine: (id: Int) -> Unit) {
     val cardColors = if (medicine.color != null) {
         val bg = Color(medicine.color)
         CardDefaults.cardColors(containerColor = bg, contentColor = contentColorFor(bg))
@@ -87,7 +102,8 @@ private fun MedicineCard(medicine: MedicineUiState) {
             .fillMaxWidth()
             .padding(8.dp),
         colors = cardColors,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        onClick = { editMedicine(medicine.id) }
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
             if (medicine.icon != null) {
@@ -196,6 +212,7 @@ fun MedicinesScreenPreview() {
     MedicinesScreen(
         listOf(
             MedicineUiState(
+                id = 1,
                 name = "Test",
                 reminderTimes = listOf("8:00"),
                 tags = listOf("Test 1", "Test 2"),
@@ -204,6 +221,7 @@ fun MedicinesScreenPreview() {
                 icon = null
             ),
             MedicineUiState(
+                id = 2,
                 name = "Test colored",
                 reminderTimes = listOf("8:00", "12:00"),
                 tags = listOf("Tag"),
@@ -212,6 +230,7 @@ fun MedicinesScreenPreview() {
                 icon = ResourcesCompat.getDrawable(LocalResources.current, R.drawable.capsule, null)
                     ?.toBitmap()
             ),
-        )
+        ),
+        {}, {}, {}
     )
 }

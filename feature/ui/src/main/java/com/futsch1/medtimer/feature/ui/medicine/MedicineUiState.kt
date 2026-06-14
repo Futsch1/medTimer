@@ -12,6 +12,7 @@ data class StockState(
 
 @Immutable
 data class MedicineUiState(
+    val id: Int,
     val name: String,
     val reminderTimes: List<String>,
     val stockState: StockState,

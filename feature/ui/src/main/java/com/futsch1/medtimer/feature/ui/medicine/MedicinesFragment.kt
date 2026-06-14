@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
-import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -30,7 +28,6 @@ import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,8 +52,6 @@ class MedicinesFragment : Fragment() {
 
     @Inject
     lateinit var medicinesMenu: MedicinesMenu
-
-    private lateinit var idlingResource: SimpleIdlingResource
     private val tagFilterViewModel: TagFilterViewModel by viewModels()
     private val medicinesViewModel: MedicinesViewModel by viewModels(
         extrasProducer = {
@@ -98,38 +93,15 @@ class MedicinesFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MedTimerTheme {
-                    MedicinesScreen(medicinesViewModel)
+                    MedicinesScreen(
+                        medicinesViewModel,
+                        addMedicine = { addMedicine() },
+                        deleteMedicine = { medicineId -> deleteItem(medicineId) },
+                        editMedicine = { medicineId -> navigateToMedicineId(medicineId) },
+                    )
                 }
             }
         }
-
-        /*
-        val fragmentView = inflater.inflate(R.layout.fragment_medicines, container, false)
-        // Medicine recycler
-        val recyclerView = fragmentView.findViewById<RecyclerView>(R.id.medicineList)
-
-        recyclerView.setAdapter(adapter)
-        recyclerView.setLayoutManager(LinearLayoutManager(fragmentView.context))
-
-        // Swipe to delete
-        val itemTouchHelper = SwipeHelper.createSwipeHelper(
-            requireContext(),
-            { viewHolder ->
-                deleteItem(
-                    requireContext(),
-                    viewHolder.itemId,
-                    viewHolder.getBindingAdapterPosition()
-                )
-            },
-            adapter
-        )
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
-        postponeEnterTransition()
-
-        setupAddMedicineButton(fragmentView)
-
-        return fragmentView*/
     }
 
     override fun onDestroy() {
@@ -137,39 +109,34 @@ class MedicinesFragment : Fragment() {
         optionsMenu.onDestroy()
     }
 
-    private fun deleteItem(context: Context, itemId: Long, adapterPosition: Int) {
+    private fun deleteItem(medicineId: Int) {
         DeleteHelper.deleteItem(
-            context,
+            requireContext(),
             com.futsch1.medtimer.core.ui.R.string.are_you_sure_delete_medicine,
-            { lifecycleScope.launch { medicineRepository.delete(itemId.toInt()) } },
-            { adapter.notifyItemChanged(adapterPosition) })
+            { lifecycleScope.launch { medicineRepository.delete(medicineId) } },
+            { })
     }
 
-    private fun setupAddMedicineButton(fragmentView: View) {
-        val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addMedicine)
-        fab.setOnClickListener { _: View? ->
-            val textInputLayout = TextInputLayout(requireContext())
-            val editText = TextInputEditText(requireContext())
-            editText.setLayoutParams(
-                LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            )
-            editText.setHint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
-            editText.setSingleLine()
-            editText.setId(R.id.medicineName)
-            if (!BuildConfig.DEBUG) {
-                editText.postDelayed({ editText.showSoftKeyboard() }, 200)
-            }
-
-            textInputLayout.addView(editText)
-            textInputLayout.setPadding(requireContext().resources.dpToPx(16f).toInt())
-
-            val builder = getAlertBuilder(textInputLayout, editText)
-            val dialog = builder.create()
-            dialog.show()
+    private fun addMedicine() {
+        val textInputLayout = TextInputLayout(requireContext())
+        val editText = TextInputEditText(requireContext())
+        editText.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        editText.setHint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
+        editText.setSingleLine()
+        editText.id = R.id.medicineName
+        if (!BuildConfig.DEBUG) {
+            editText.postDelayed({ editText.showSoftKeyboard() }, 200)
         }
+
+        textInputLayout.addView(editText)
+        textInputLayout.setPadding(requireContext().resources.dpToPx(16f).toInt())
+
+        val builder = getAlertBuilder(textInputLayout, editText)
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun getAlertBuilder(

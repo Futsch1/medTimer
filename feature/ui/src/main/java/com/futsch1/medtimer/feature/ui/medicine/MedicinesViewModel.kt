@@ -48,6 +48,7 @@ class MedicinesViewModel @AssistedInject constructor(
         ) { medicines, stockRunOutDates ->
             medicines.map { medicine ->
                 MedicineUiState(
+                    medicine.id,
                     medicine.name,
                     medicineStringFormatter.getReminderTimes(medicine),
                     StockState(
