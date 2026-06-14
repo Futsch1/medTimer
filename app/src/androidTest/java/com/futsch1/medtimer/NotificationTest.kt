@@ -26,7 +26,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
@@ -209,7 +208,6 @@ class NotificationTest : BaseTestHelper() {
 
     @Test
     fun repeatingReminders() {
-        // Use an interval reminder an check if the timestamp changes
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         openMenu()
 
@@ -309,7 +307,7 @@ class NotificationTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.duplicate_including_reminders)
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1)
+        AndroidTestHelper.clickMedicineItem(1)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, SECOND_ONE)
         pressBack()
 
@@ -358,11 +356,11 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
         openMenu()
         clickOn(R.string.duplicate_including_reminders)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
         pressBack()
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 1)
+        AndroidTestHelper.clickMedicineItem(1)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, SECOND_ONE)
         pressBack()
 

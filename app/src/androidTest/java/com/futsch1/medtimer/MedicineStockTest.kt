@@ -13,7 +13,6 @@ import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustom
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
@@ -119,9 +118,9 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "⚠")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "pills")
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.assertMedicineNameContains("⚠")
+        AndroidTestHelper.assertMedicineNameContains("pills")
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(3.5, "pills"))
         pressBack()
@@ -136,7 +135,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         clickOn(R.string.refill_now)
 
@@ -144,12 +143,9 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         pressBack()
 
-        assertContains(
-            com.futsch1.medtimer.feature.ui.R.id.medicineName,
-            MedicineHelper.formatAmount(10.8, "pills")
-        )
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "⚠")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineName, "pills")
+        AndroidTestHelper.assertMedicineNameContains(MedicineHelper.formatAmount(10.8, "pills"))
+        AndroidTestHelper.assertMedicineNameNotContains("⚠")
+        AndroidTestHelper.assertMedicineNameContains("pills")
     }
 
     private fun checkNotificationWithTitle(
@@ -234,7 +230,7 @@ class MedicineStockTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(100.0, "pills"))
     }
@@ -369,7 +365,7 @@ class MedicineStockTest : BaseTestHelper() {
         checkNotificationWithTitle(device, notificationTitle, false)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         AndroidTestHelper.scrollDown()
         clickOn(R.string.expiration_date)
@@ -436,7 +432,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
         pressBack()
@@ -452,7 +448,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.string.yes)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
     }
@@ -481,7 +477,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(8.0, "pills"))
         pressBack()
@@ -497,7 +493,7 @@ class MedicineStockTest : BaseTestHelper() {
         clickOn(R.string.yes)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10.0, "pills"))
     }

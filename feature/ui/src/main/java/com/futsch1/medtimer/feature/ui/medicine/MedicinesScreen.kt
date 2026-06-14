@@ -48,6 +48,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -122,9 +125,12 @@ fun MedicinesScreen(
     }
 
     Scaffold(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .semantics { testTagsAsResourceId = true },
         floatingActionButton = {
             ExtendedFloatingActionButton(
+                modifier = Modifier.testTag(MedicineTestTags.ADD_MEDICINE),
                 onClick = addMedicine,
                 icon = {
                     Icon(
@@ -137,7 +143,9 @@ fun MedicinesScreen(
     ) { paddingValues ->
         LazyColumn(
             state = listState,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(MedicineTestTags.MEDICINE_LIST),
             contentPadding = paddingValues
         ) {
             items(localMedicines, key = { it.id }) { medicine ->
@@ -251,7 +259,8 @@ private fun MedicineCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .testTag(MedicineTestTags.MEDICINE_ITEM),
         colors = cardColors,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
@@ -304,6 +313,7 @@ private fun MedicineCard(
 @Composable
 private fun MedicineHeader(medicine: MedicineUiState) {
     Text(
+        modifier = Modifier.testTag(MedicineTestTags.MEDICINE_NAME),
         text = buildAnnotatedString {
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                 append(medicine.name)
@@ -358,6 +368,13 @@ private fun MedicineTags(tags: List<String>) {
 }
 
 private const val MAX_VISIBLE_TAGS = 5
+
+object MedicineTestTags {
+    const val MEDICINE_LIST = "medicine_list"
+    const val MEDICINE_ITEM = "medicine_item"
+    const val MEDICINE_NAME = "medicine_name"
+    const val ADD_MEDICINE = "add_medicine"
+}
 
 @Composable
 private fun contentColorFor(backgroundColor: Color): Color {

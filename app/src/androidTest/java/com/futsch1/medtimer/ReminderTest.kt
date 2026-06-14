@@ -57,7 +57,7 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_enabled)
@@ -68,7 +68,7 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
@@ -83,7 +83,7 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
         clickOn(R.string.period_end)
@@ -97,7 +97,7 @@ class ReminderTest : BaseTestHelper() {
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
 
         AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         clickOn(R.string.reminder_status)
         clickOn(R.string.start_date)
@@ -136,7 +136,7 @@ class ReminderTest : BaseTestHelper() {
         Espresso.pressBack()
         Espresso.pressBack()
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         openMenu()
         clickOn(R.string.activate_all)
 
@@ -529,7 +529,7 @@ class ReminderTest : BaseTestHelper() {
 
             // Remove reminder
             AndroidTestHelper.navigateTo(MainMenu.MEDICINES)
-            clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+            AndroidTestHelper.clickMedicineItem(0)
             clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
             openMenu()
             clickOn(R.string.delete)

@@ -1,10 +1,6 @@
 package com.futsch1.medtimer
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
@@ -65,11 +61,7 @@ class ScreenshotsTest : BaseTestHelper() {
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
         Screengrab.screenshot("2")
 
-        Espresso.onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.medicineList)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                0, ViewActions.click()
-            )
-        )
+        AndroidTestHelper.clickMedicineItem(0)
         Screengrab.screenshot("3")
 
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)

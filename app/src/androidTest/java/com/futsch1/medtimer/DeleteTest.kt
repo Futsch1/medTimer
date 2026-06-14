@@ -2,7 +2,6 @@ package com.futsch1.medtimer
 
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
@@ -20,14 +19,14 @@ class DeleteTest : BaseTestHelper() {
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
 
         openMenu()
         clickOn(R.string.delete)
         clickOn(R.string.yes)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.medicineList, 3)
+        AndroidTestHelper.assertMedicineCount(3)
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2)
+        AndroidTestHelper.clickMedicineItem(2)
         clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
         openMenu()

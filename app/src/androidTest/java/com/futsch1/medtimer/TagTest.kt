@@ -12,7 +12,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
@@ -78,7 +77,7 @@ class TagTest : BaseTestHelper() {
 
         openMenu()
         clickOn(com.futsch1.medtimer.core.ui.R.string.duplicate)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 2)
+        AndroidTestHelper.clickMedicineItem(2)
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
         assertChecked(NEW_TAG)
     }
