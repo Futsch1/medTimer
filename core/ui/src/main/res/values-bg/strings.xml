@@ -168,6 +168,7 @@
     <string name="notification_importance">Приоритет на известието</string>
     <string name="notification_settings_default">Настройки на приоритета на известието по подразбиране</string>
     <string name="notification_settings_high">Настройка на висок приоритет на известието</string>
+    <string name="notification_settings_out_of_stock">Настройки на напомняне за отъствие на запас</string>
     <string name="calendar">Календар</string>
     <string name="date">Дата</string>
     <string name="active">Активно</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Напомнянията не могат да бъдат пропуснати</string>
     <string name="reminders_cannot_be_skipped_summary">Ако е активирано, напомнянията могат да бъдат затворени само чрез отбелязването им като взети. Това може да бъде активирано и индивидуално за всяко лекарство.</string>
     <string name="same_as_medicine">Същото като лекарството</string>
+    <string name="previous_week">Предишна седмица</string>
+    <string name="next_week">Следваща седмица</string>
 </resources>

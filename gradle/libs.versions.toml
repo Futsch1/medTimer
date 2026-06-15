@@ -10,7 +10,7 @@ ksp = "2.3.9"
 
 # AndroidX
 appcompat = "1.7.1"
-core-ktx = "1.18.0"
+core-ktx = "1.19.0"
 constraintlayout = "2.2.1"
 navigation = "2.9.8"
 preference-ktx = "1.2.1"
@@ -59,10 +59,10 @@ material3-expressive = "1.5.0-alpha21"
 # Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; resolves to androidx.window
 # 1.5.x in practice (upgraded by the Compose BOM's ui dependency) — no separate window pin.
 material3-adaptive = "1.2.0"
-vico = "3.1.0"
+vico = "3.2.2"
 kotlinx-collections-immutable = "0.4.0"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
-kotlin-compose-compiler = "2.2.10"
+kotlin-compose-compiler = "2.4.0"
 
 [libraries]
 # AndroidX

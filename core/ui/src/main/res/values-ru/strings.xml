@@ -177,6 +177,7 @@
     <string name="notification_importance">Приоритет напоминаний</string>
     <string name="notification_settings_default">Настройки уведомлений стандартного приоритета</string>
     <string name="notification_settings_high">Настройки уведомлений высокого приоритета</string>
+    <string name="notification_settings_out_of_stock">Настройки напоминания об отсутствии на складе</string>
     <string name="calendar">Календарь</string>
     <string name="date">Дата</string>
     <string name="active">Активный</string>
@@ -329,4 +330,6 @@
     <string name="reminders_cannot_be_skipped">Напоминания нельзя пропустить</string>
     <string name="reminders_cannot_be_skipped_summary">Если включено, напоминания можно закрыть только отметив их как принятые. Это также можно включить отдельно для каждого лекарства.</string>
     <string name="same_as_medicine">Как у лекарства</string>
+    <string name="previous_week">Предыдущая неделя</string>
+    <string name="next_week">Следующая неделя</string>
 </resources>

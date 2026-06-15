@@ -20,7 +20,10 @@ data class ReminderEvent(
     val reminderType: ReminderType,
     val stockHandled: Boolean,
     val askForAmount: Boolean,
-    val lastIntervalReminderTimeInMinutes: Int
+    val lastIntervalReminderTimeInMinutes: Int,
+    val stockBefore: Double,
+    val stockAfter: Double,
+    val stockUnit: String
 ) {
     enum class ReminderStatus { RAISED, TAKEN, SKIPPED, DELETED, ACKNOWLEDGED }
 
@@ -51,7 +54,10 @@ data class ReminderEvent(
             reminderType = ReminderType.TIME_BASED,
             stockHandled = false,
             askForAmount = false,
-            lastIntervalReminderTimeInMinutes = 0
+            lastIntervalReminderTimeInMinutes = 0,
+            stockBefore = -1.0,
+            stockAfter = -1.0,
+            stockUnit = ""
         )
     }
 }

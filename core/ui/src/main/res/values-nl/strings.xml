@@ -169,6 +169,7 @@
     <string name="notification_importance">Prioriteit melding</string>
     <string name="notification_settings_default">Standaardprioriteit meldingsinstellingen</string>
     <string name="notification_settings_high">Meldingsinstellingen hoge prioriteit</string>
+    <string name="notification_settings_out_of_stock">Voorraadherinnering meldingsinstellingen</string>
     <string name="calendar">Kalender</string>
     <string name="date">Datum</string>
     <string name="active">Actief</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Herinneringen kunnen niet worden overgeslagen</string>
     <string name="reminders_cannot_be_skipped_summary">Indien ingeschakeld, kunnen herinneringen alleen worden gesloten door ze als ingenomen te markeren. Dit kan ook per medicament afzonderlijk worden ingeschakeld.</string>
     <string name="same_as_medicine">Hetzelfde als medicijn</string>
+    <string name="previous_week">Vorige week</string>
+    <string name="next_week">Volgende week</string>
 </resources>

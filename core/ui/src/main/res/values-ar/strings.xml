@@ -193,6 +193,7 @@
     <string name="notification_importance">أولوية الإشعار</string>
     <string name="notification_settings_default">إعدادات الإشعار الأولوية الافتراضية</string>
     <string name="notification_settings_high">إعدادات الإشعار الأولوية المرتفعة</string>
+    <string name="notification_settings_out_of_stock">إعدادات تذكير نفاد المخزون</string>
     <string name="calendar">التقويم</string>
     <string name="date">التاريخ</string>
     <string name="active">نشط</string>
@@ -345,4 +346,6 @@
     <string name="reminders_cannot_be_skipped">لا يمكن تخطي التذكيرات</string>
     <string name="reminders_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق التذكيرات إلا بتأكيد تناولها. يمكن أيضاً تفعيل هذا الخيار بشكل فردي لكل دواء.</string>
     <string name="same_as_medicine">نفس الدواء</string>
+    <string name="previous_week">الأسبوع السابق</string>
+    <string name="next_week">الأسبوع التالي</string>
 </resources>

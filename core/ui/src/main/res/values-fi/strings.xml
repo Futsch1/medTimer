@@ -170,6 +170,7 @@
     <string name="notification_importance">Ilmoituksen prioriteetti</string>
     <string name="notification_settings_default">Ilmoitusasetukset oletusprioriteetti</string>
     <string name="notification_settings_high">Ilmoitusasetukset korkea prioriteetti</string>
+    <string name="notification_settings_out_of_stock">Muistutusasetukset loppumisesta</string>
     <string name="calendar">Kalenteri</string>
     <string name="date">Päivämäärä</string>
     <string name="active">Aktiivinen</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Muistutuksia ei voi ohittaa</string>
     <string name="reminders_cannot_be_skipped_summary">Jos käytössä, muistutukset voidaan poistaa vain merkitsemällä ne otetuiksi. Tämä voidaan myös ottaa käyttöön erikseen kullekin lääkkeelle.</string>
     <string name="same_as_medicine">Sama kuin lääke</string>
+    <string name="previous_week">Edellinen viikko</string>
+    <string name="next_week">Seuraava viikko</string>
 </resources>

@@ -15,11 +15,15 @@ private fun nowInSeconds() = Instant.now().toEpochMilli() / 1000
 class ReminderEventRepositoryImpl(
     private val reminderEventDao: ReminderEventDao
 ) : ReminderEventRepository {
-    override fun getAllFlow(timeStamp: Long, statusValues: List<ReminderEvent.ReminderStatus>): Flow<List<ReminderEvent>> {
+    override fun getAllFlow(
+        startInstant: Instant,
+        statusValues: List<ReminderEvent.ReminderStatus>
+    ): Flow<List<ReminderEvent>> {
         val entityStatusValues = statusValues.map { it.toEntity() }
-        return reminderEventDao.getAllFlowStartingFrom(timeStamp, entityStatusValues).map { list ->
-            list.map { it.toModel() }
-        }
+        return reminderEventDao.getAllFlowStartingFrom(startInstant.epochSecond, entityStatusValues)
+            .map { list ->
+                list.map { it.toModel() }
+            }
     }
 
     override suspend fun getAllWithoutDeleted(): List<ReminderEvent> {
@@ -27,7 +31,8 @@ class ReminderEventRepositoryImpl(
     }
 
     override suspend fun getAllWithoutDeletedAndAcknowledged(): List<ReminderEvent> {
-        return reminderEventDao.getAllLimited(0L, statusValuesWithoutDeletedAndAcknowledged).map { it.toModel() }
+        return reminderEventDao.getAllLimited(0L, statusValuesWithoutDeletedAndAcknowledged)
+            .map { it.toModel() }
     }
 
     override suspend fun getLastDays(days: Int): List<ReminderEvent> {

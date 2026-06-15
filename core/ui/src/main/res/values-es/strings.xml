@@ -175,6 +175,7 @@
     <string name="notification_importance">Prioridad de notificación</string>
     <string name="notification_settings_default">Ajustes de notificación de prioridad predeterminada</string>
     <string name="notification_settings_high">Ajustes de notificación de alta prioridad</string>
+    <string name="notification_settings_out_of_stock">Ajustes de recordatorio de existencias</string>
     <string name="calendar">Calendario</string>
     <string name="date">Fecha</string>
     <string name="active">Activo</string>
@@ -327,4 +328,6 @@
     <string name="reminders_cannot_be_skipped">Los recordatorios no se pueden omitir</string>
     <string name="reminders_cannot_be_skipped_summary">Si está activado, los recordatorios solo se pueden cerrar marcándolos como tomados. También se puede activar individualmente por medicamento.</string>
     <string name="same_as_medicine">Igual que el medicamento</string>
+    <string name="previous_week">Semana anterior</string>
+    <string name="next_week">Semana siguiente</string>
 </resources>

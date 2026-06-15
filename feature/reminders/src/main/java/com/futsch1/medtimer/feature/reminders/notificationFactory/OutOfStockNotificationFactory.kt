@@ -30,7 +30,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         reminderNotification.reminderNotificationData.notificationId,
         reminderNotification.reminderNotificationParts.map { it.medicine },
         notificationManager,
-        Medicine.NotificationImportance.DEFAULT
+        Medicine.ReminderChannel.OUT_OF_STOCK
     ) {
 
     init {

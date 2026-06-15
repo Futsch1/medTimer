@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
@@ -182,6 +182,7 @@
     <string name="notification_importance">Priorita notifikací</string>
     <string name="notification_settings_default">Nastavení notifikací s výchozí prioritou</string>
     <string name="notification_settings_high">Nastavení notifikací s vysokou prioritou</string>
+    <string name="notification_settings_out_of_stock">Nastavení připomenutí vyčerpání zásob</string>
     <string name="calendar">Kalendář</string>
     <string name="date">Datum</string>
     <string name="active">Aktivní</string>
@@ -333,4 +334,6 @@
     <string name="reminders_cannot_be_skipped">Připomenutí nelze přeskočit</string>
     <string name="reminders_cannot_be_skipped_summary">Je-li povoleno, připomenutí lze zamítnout pouze označením jako užitých. Toto lze také individuálně povolit pro každý lék.</string>
     <string name="same_as_medicine">Stejné jako lék</string>
+    <string name="previous_week">Předchozí týden</string>
+    <string name="next_week">Příští týden</string>
 </resources>

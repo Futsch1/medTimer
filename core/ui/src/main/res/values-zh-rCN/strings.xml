@@ -163,6 +163,7 @@
     <string name="notification_importance">通知优先级</string>
     <string name="notification_settings_default">默认优先级通知设置</string>
     <string name="notification_settings_high">高优先级通知设置</string>
+    <string name="notification_settings_out_of_stock">库存不足提醒设置</string>
     <string name="calendar">日历</string>
     <string name="date">日期</string>
     <string name="active">启用提醒</string>
@@ -315,4 +316,6 @@
     <string name="reminders_cannot_be_skipped">提醒不可跳过</string>
     <string name="reminders_cannot_be_skipped_summary">如果启用，提醒只能通过标记为已服药来关闭。也可以为每种药物单独启用此功能。</string>
     <string name="same_as_medicine">与药物相同</string>
+    <string name="previous_week">上一周</string>
+    <string name="next_week">下一周</string>
 </resources>

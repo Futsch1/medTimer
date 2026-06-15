@@ -158,6 +158,7 @@
     <string name="notification_importance">Prioridade da notificação</string>
     <string name="notification_settings_default">Prioridade padrão das configurações de notificação</string>
     <string name="notification_settings_high">Configurações de notificação de alta prioridade</string>
+    <string name="notification_settings_out_of_stock">Configurações de lembrete de estoque esgotado</string>
     <string name="calendar">Calendário</string>
     <string name="date">Data</string>
     <string name="active">Ativo</string>
@@ -327,4 +328,6 @@
     <string name="reminders_cannot_be_skipped">Lembretes não podem ser ignorados</string>
     <string name="reminders_cannot_be_skipped_summary">Se ativado, os lembretes só podem ser dispensados marcando-os como tomados. Isso também pode ser habilitado individualmente por medicamento.</string>
     <string name="same_as_medicine">Igual ao medicamento</string>
+    <string name="previous_week">Semana anterior</string>
+    <string name="next_week">Próxima semana</string>
 </resources>

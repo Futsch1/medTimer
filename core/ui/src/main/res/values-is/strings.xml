@@ -145,6 +145,7 @@
     <string name="notification_importance">Forgangur tilkynninga</string>
     <string name="notification_settings_default">Sjálfgefinn forgangur tilkynninga</string>
     <string name="notification_settings_high">Tilkynningar með háan forgang</string>
+    <string name="notification_settings_out_of_stock">Tilkynningastillingar fyrir tómt lager</string>
     <string name="calendar">Dagatal</string>
     <string name="date">Dagur</string>
     <string name="active">Virk</string>

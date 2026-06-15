@@ -175,6 +175,7 @@
     <string name="notification_importance">Priorité de notification</string>
     <string name="notification_settings_default">Priorité par défaut des paramètres de notification</string>
     <string name="notification_settings_high">Paramètres de notification haute priorité</string>
+    <string name="notification_settings_out_of_stock">Paramètres de rappel de réserve épuisée</string>
     <string name="calendar">Calendrier</string>
     <string name="date">Date</string>
     <string name="active">Actif</string>
@@ -327,4 +328,6 @@
     <string name="reminders_cannot_be_skipped">Les rappels ne peuvent pas être ignorés</string>
     <string name="reminders_cannot_be_skipped_summary">Si activé, les rappels ne peuvent être supprimés qu\'en les marquant comme pris. Cela peut également être activé individuellement par médicament.</string>
     <string name="same_as_medicine">Identique au médicament</string>
+    <string name="previous_week">Semaine précédente</string>
+    <string name="next_week">Semaine suivante</string>
 </resources>

@@ -169,6 +169,7 @@
     <string name="notification_importance">Benachrichtigungspriorität</string>
     <string name="notification_settings_default">Benachrichtigungseinstellungen Standardpriorität</string>
     <string name="notification_settings_high">Benachrichtigungseinstellungen hohe Priorität</string>
+    <string name="notification_settings_out_of_stock">Benachrichtigungseinstellungen Vorratserinnerung</string>
     <string name="calendar">Kalender</string>
     <string name="date">Date</string>
     <string name="active">Aktiv</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Erinnerungen können nicht übersprungen werden</string>
     <string name="reminders_cannot_be_skipped_summary">Wenn aktiviert, können Erinnerungen nur durch Markieren als eingenommen bestätigt werden. Dies kann auch individuell pro Medikament aktiviert werden.</string>
     <string name="same_as_medicine">Wie Medikament</string>
+    <string name="previous_week">Vorherige Woche</string>
+    <string name="next_week">Nächste Woche</string>
 </resources>

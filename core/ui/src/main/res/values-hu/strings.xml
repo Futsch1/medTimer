@@ -170,6 +170,7 @@
     <string name="notification_importance">Értesítési prioritás</string>
     <string name="notification_settings_default">Alapértelmezett értesítési prioritás beállítása</string>
     <string name="notification_settings_high">Magas értesítési prioritás beállítása</string>
+    <string name="notification_settings_out_of_stock">Készletfigyelmeztetés beállítása</string>
     <string name="calendar">Naptár</string>
     <string name="date">Dátum</string>
     <string name="active">Aktív</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Az emlékeztetők nem hagyhatók ki</string>
     <string name="reminders_cannot_be_skipped_summary">Ha engedélyezve van, az emlékeztetők csak a bevétel jelzésével nyugtázhatók. Ez gyógyszerenként egyedileg is beállítható.</string>
     <string name="same_as_medicine">Azonos a gyógyszerrel</string>
+    <string name="previous_week">Előző hét</string>
+    <string name="next_week">Következő hét</string>
 </resources>

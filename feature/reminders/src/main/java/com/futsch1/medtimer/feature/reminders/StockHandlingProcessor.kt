@@ -11,14 +11,17 @@ import dagger.Lazy
 import java.time.Instant
 import javax.inject.Inject
 
+data class StockChange(val after: Double)
+
 class StockHandlingProcessor @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val showReminderNotificationProcessor: Lazy<ShowReminderNotificationProcessor>
 ) {
-    suspend fun processStock(amount: Double, medicineId: Int, processedInstant: Instant) {
-        val medicine = medicineRepository.decreaseStock(medicineId, amount) ?: return
+    suspend fun processStock(amount: Double, medicineId: Int, processedInstant: Instant): StockChange? {
+        val medicine = medicineRepository.decreaseStock(medicineId, amount) ?: return null
         Log.d(LogTags.STOCK_HANDLING, "Decrease stock for medicine ${medicine.name} by $amount resulting in ${medicine.amount}.")
         checkForThreshold(medicine, amount, processedInstant)
+        return StockChange(after = medicine.amount)
     }
 
     private suspend fun checkForThreshold(medicine: Medicine, decreaseAmount: Double, processedInstant: Instant) {

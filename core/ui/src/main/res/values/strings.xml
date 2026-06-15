@@ -178,6 +178,7 @@
     <string name="notification_importance">Notification priority</string>
     <string name="notification_settings_default">Notification settings default priority</string>
     <string name="notification_settings_high">Notification settings high priority</string>
+    <string name="notification_settings_out_of_stock">Notification settings out of stock</string>
     <string name="calendar">Calendar</string>
     <string name="date">Date</string>
     <string name="active">Active</string>
@@ -195,6 +196,8 @@
     <string name="statistics_tab_description">Statistics tab</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
+    <string name="previous_week">Previous week</string>
+    <string name="next_week">Next week</string>
     <string name="repeat_reminders">Repeat reminders</string>
     <string name="minutes_1">1 minute</string>
     <string name="number_of_repetitions">Number of repetitions</string>

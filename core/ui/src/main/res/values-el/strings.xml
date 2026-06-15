@@ -169,6 +169,7 @@
     <string name="notification_importance">Προτεραιότητα ειδοποίησης</string>
     <string name="notification_settings_default">Ρύθμιση ειδοποιήσεων προεπιλεγμένης προτεραιότητας</string>
     <string name="notification_settings_high">Ρύθμιση ειδοποιήσεων υψηλής προτεραιότητας</string>
+    <string name="notification_settings_out_of_stock">Ρύθμιση υπενθύμισης εξάντλησης αποθέματος</string>
     <string name="calendar">Ημερολόγιο</string>
     <string name="date">Ημερομηνία</string>
     <string name="active">Ενεργή</string>
@@ -321,4 +322,6 @@
     <string name="reminders_cannot_be_skipped">Οι υπενθυμίσεις δεν μπορούν να παραλειφθούν</string>
     <string name="reminders_cannot_be_skipped_summary">Εάν είναι ενεργοποιημένο, οι υπενθυμίσεις μπορούν να απορριφθούν μόνο σημειώνοντάς τις ως ληφθείσες. Αυτό μπορεί επίσης να ενεργοποιηθεί μεμονωμένα ανά φάρμακο.</string>
     <string name="same_as_medicine">Ίδιο με το φάρμακο</string>
+    <string name="previous_week">Προηγούμενη εβδομάδα</string>
+    <string name="next_week">Επόμενη εβδομάδα</string>
 </resources>

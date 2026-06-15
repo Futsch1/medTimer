@@ -62,7 +62,10 @@ suspend fun buildReminderEvent(
         stockHandled = false,
         askForAmount = reminder.variableAmount,
         tags = medicine.tags.map { it.name },
-        lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes
+        lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
+        stockBefore = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
+        stockAfter = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
+        stockUnit = medicine.unit
     )
 }
 
