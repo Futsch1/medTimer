@@ -69,23 +69,6 @@ class ReminderSummaryFormatter @Inject constructor(
         return join(", ", strings)
     }
 
-    suspend fun formatRemindersSummary(reminders: List<Reminder>): String {
-        val reminderTimes = buildList {
-            addAll(timeBasedRemindersSummary(reminders.filter { it.reminderType == ReminderType.TIME_BASED }))
-            addAll(reminders.filter { it.reminderType == ReminderType.LINKED }.map { linkedReminderSummaryString(it) })
-            addAll(reminders.filter { it.isInterval }.map { intervalBasedReminderString(it) })
-            addAll(reminders.filter { it.reminderType == ReminderType.OUT_OF_STOCK }.map { outOfStockReminderString(it) })
-            addAll(reminders.filter { it.reminderType == ReminderType.EXPIRATION_DATE }.map { context.getString(R.string.expiration_date) })
-        }
-
-        val len = reminderTimes.size
-        return context.resources.getQuantityString(
-            R.plurals.sum_reminders,
-            len,
-            len
-        )
-    }
-
     private fun expirationDateReminderString(reminder: Reminder): String {
         return context.getString(R.string.expiration_date) + ", " +
                 context.resources.getStringArray(R.array.expiration_reminder)[reminder.expirationReminderType.ordinal]
@@ -138,21 +121,6 @@ class ReminderSummaryFormatter @Inject constructor(
         else "$base + ${delays.reversed().joinToString(" + ")}"
     }
 
-    private suspend fun linkedReminderSummaryString(reminder: Reminder): String {
-        val delays = mutableListOf<String>()
-        var current = reminder
-
-        while (current.reminderType == ReminderType.LINKED) {
-            delays.add(timeFormatter.toTimeString(current.time))
-            val source = reminderRepository.fetch(current.linkedReminderId) ?: return "?"
-            current = source
-        }
-
-        val base = timeFormatter.toTimeString(current.time)
-        return if (delays.isEmpty()) base
-        else "$base + ${delays.reversed().joinToString(" + ")}"
-    }
-
     private fun timeBasedReminderString(
         reminder: Reminder,
         strings: MutableList<String>
@@ -195,11 +163,6 @@ class ReminderSummaryFormatter @Inject constructor(
                 " " +
                 timeFormatter.daysSinceEpochToDateString(reminder.cycleStartDay.toEpochDay())
         else ""
-    }
-
-    private fun timeBasedRemindersSummary(reminders: List<Reminder>): List<String> {
-        return reminders.map { r -> r.time }.sorted()
-            .map { timeFormatter.toTimeString(it) }
     }
 
     private fun firstToLower(string: String): String {
