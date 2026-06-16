@@ -42,12 +42,12 @@ consumers rather than a session high-water mark.
 
 ### 3 — Consumer responsibilities
 
-| Consumer | consumerId | Window | Lifecycle |
-|---|---|---|---|
-| `StockSettingsFragment` | `"stockSettings"` | 365 days | Fragment `onStart` / `onStop` |
-| `CalendarEventsViewModel` | `"calendar"` | `futureMonths × 31 + 28` days | ViewModel `init` / `onCleared` |
-| `OverviewViewModel` | `"overview"` | `dayOffset + 28` days, only when offset ≥ 21 | updated on day selection; released when offset drops below 21 |
-| Widget (`WidgetUpdateReceiver`) | — | No registration; reads existing result. Triggers `triggerCalculation()` only if `simulatedThrough == LocalDate.MIN` | — |
+| Consumer                        | consumerId        | Window                                                                                                              | Lifecycle                                                     |
+| ------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `StockSettingsFragment`         | `"stockSettings"` | 365 days                                                                                                            | Fragment `onStart` / `onStop`                                 |
+| `CalendarEventsViewModel`       | `"calendar"`      | `futureMonths × 31 + 28` days                                                                                       | ViewModel `init` / `onCleared`                                |
+| `OverviewViewModel`             | `"overview"`      | `dayOffset + 28` days, only when offset ≥ 21                                                                        | updated on day selection; released when offset drops below 21 |
+| Widget (`WidgetUpdateReceiver`) | —                 | No registration; reads existing result. Triggers `triggerCalculation()` only if `simulatedThrough == LocalDate.MIN` | —                                                             |
 
 ### 4 — `CalendarEventsProvider` migrated to the repository
 
