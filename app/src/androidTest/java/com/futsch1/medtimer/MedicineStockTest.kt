@@ -276,7 +276,7 @@ class MedicineStockTest : BaseTestHelper() {
         pressBack()
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openStockTracking)
         assertDisplayed(MedicineHelper.formatAmount(10005.0, "pills"))
-        assertDisplayed("---")
+        assertContains(timeFormatter().localDateToString(LocalDate.now().plusDays(365)))
     }
 
     @Test
