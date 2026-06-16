@@ -324,4 +324,5 @@
     <string name="previous_week">முந்தைய வாரம்</string>
     <string name="next_week">அடுத்த வாரம்</string>
     <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">மருந்தை நகர்த்து</string>
 </resources>

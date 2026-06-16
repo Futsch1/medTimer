@@ -324,4 +324,5 @@
     <string name="previous_week">Önceki hafta</string>
     <string name="next_week">Sonraki hafta</string>
     <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">İlacı taşı</string>
 </resources>
