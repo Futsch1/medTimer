@@ -289,7 +289,12 @@ private fun MedicineCard(
                     ),
                     style = MaterialTheme.typography.bodySmall
                 )
-                if (medicine.reminderTimes.isNotEmpty()) {
+                if (medicine.inactive) {
+                    Text(
+                        text = stringResource(R.string.inactive),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                } else if (medicine.reminderTimes.isNotEmpty()) {
                     Text(
                         text = medicine.reminderTimes.joinToString(", "),
                         style = MaterialTheme.typography.bodySmall

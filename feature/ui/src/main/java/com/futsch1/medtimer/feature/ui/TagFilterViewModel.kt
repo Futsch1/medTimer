@@ -39,11 +39,8 @@ class TagFilterViewModel @Inject constructor(
             viewModelScope, SharingStarted.Eagerly, false
         )
 
-    fun hasAnyTags(): StateFlow<Boolean> {
-        return tagRepository.hasAny().stateIn(
-            viewModelScope, SharingStarted.Eagerly, false
-        )
-    }
+    val hasAnyTags: StateFlow<Boolean> = tagRepository.hasAny()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private var medicineToTags: List<MedicineToTag> = emptyList()
     val liveTags: StateFlow<List<Tag>> = tagRepository.getAllFlow().stateIn(

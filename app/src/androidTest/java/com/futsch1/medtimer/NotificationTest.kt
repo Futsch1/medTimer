@@ -497,7 +497,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 120)
         pressBack()
-        assertContains(TEST_MED)
+        AndroidTestHelper.assertMedicineNameContains(TEST_MED)
 
         openNotification().use {
             val notification = device.wait(Until.findObject(By.textContains("T*******")), 2000)

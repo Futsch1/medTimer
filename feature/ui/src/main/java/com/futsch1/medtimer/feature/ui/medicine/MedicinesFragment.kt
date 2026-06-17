@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.view.MenuProvider
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -82,6 +83,8 @@ class MedicinesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
+        requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
+        medicinesMenu.medicinesProvider = { medicinesViewModel.medicines.value }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)

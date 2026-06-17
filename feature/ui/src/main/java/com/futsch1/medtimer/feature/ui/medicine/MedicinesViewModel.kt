@@ -64,7 +64,8 @@ class MedicinesViewModel @AssistedInject constructor(
                     ),
                     if (medicine.iconId != 0) medicineIcons.getIconBitmapUntinted(medicine.iconId) else null,
                     if (medicine.useColor) medicine.color else null,
-                    medicine.tags.map { tag -> tag.name }
+                    medicine.tags.map { tag -> tag.name },
+                    medicine.reminders.isNotEmpty() && medicine.reminders.none { it.active }
                 )
             }.toImmutableList()
         }.stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())

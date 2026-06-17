@@ -3,6 +3,7 @@ package com.futsch1.medtimer
 import android.icu.util.Calendar
 import android.text.format.DateFormat
 import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
@@ -211,6 +212,8 @@ object AndroidTestHelper {
     }
 
     fun clickMedicineItem(position: Int) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.wait(Until.hasObject(By.res(MedicineTestTags.MEDICINE_ITEM)), 3_000)
         getMedicineItems()[position].click()
     }
 
@@ -242,6 +245,29 @@ object AndroidTestHelper {
         assert(names.none { it.text?.contains(text) == true }) {
             "A medicine name contains '$text' but should not"
         }
+    }
+
+    fun assertTextDisplayed(text: String, timeoutMs: Long = 5_000) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val found = device.wait(Until.hasObject(By.text(text)), timeoutMs)
+        assert(found) { "Text '$text' not found on screen" }
+    }
+
+    fun assertTextDisplayed(@StringRes textRes: Int, timeoutMs: Long = 5_000) {
+        val text = InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes)
+        assertTextDisplayed(text, timeoutMs)
+    }
+
+    fun assertTextNotDisplayed(text: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.waitForIdle(3_000)
+        val node = device.findObject(By.text(text))
+        assert(node == null) { "Text '$text' should not be visible, but it is" }
+    }
+
+    fun assertTextNotDisplayed(@StringRes textRes: Int) {
+        val text = InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes)
+        assertTextNotDisplayed(text)
     }
 
     fun dragMedicineItem(fromPosition: Int, toPosition: Int) {

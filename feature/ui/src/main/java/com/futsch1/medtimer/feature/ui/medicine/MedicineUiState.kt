@@ -18,5 +18,6 @@ data class MedicineUiState(
     val stockState: StockState,
     val icon: Bitmap?,
     val color: Int?,
-    val tags: List<String>
+    val tags: List<String>,
+    val inactive: Boolean = false
 )

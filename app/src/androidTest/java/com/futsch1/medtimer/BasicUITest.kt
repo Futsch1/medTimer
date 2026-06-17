@@ -65,7 +65,6 @@ class BasicUITest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         openMenu()
         clickOn(R.string.duplicate)
-        Espresso.pressBack()
 
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
 
@@ -229,7 +228,7 @@ class BasicUITest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
 
         navigateTo(MainMenu.MEDICINES)
-        clickOn("Test")
+        AndroidTestHelper.clickMedicineItem(0)
         createReminder("1", LocalTime.of(20, 0))
 
         navigateTo(MainMenu.OVERVIEW)

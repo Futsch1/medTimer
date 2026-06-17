@@ -53,8 +53,8 @@ class TagTest : BaseTestHelper() {
 
         pressBack()
 
-        assertContains(NEW_TAG)
-        assertNotContains(ANOTHER_TAG)
+        AndroidTestHelper.assertTextDisplayed(NEW_TAG)
+        AndroidTestHelper.assertTextNotDisplayed(ANOTHER_TAG)
 
         createMedicine("Test 2")
 
@@ -97,8 +97,8 @@ class TagTest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
         pressBack()
 
-        assertContains("Test")
-        assertContains("Else")
+        AndroidTestHelper.assertMedicineNameContains("Test")
+        AndroidTestHelper.assertMedicineNameContains("Else")
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
@@ -106,8 +106,8 @@ class TagTest : BaseTestHelper() {
         assertUnchecked("Tag2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        assertContains("Test")
-        assertNotContains("Else")
+        AndroidTestHelper.assertMedicineNameContains("Test")
+        AndroidTestHelper.assertMedicineNameNotContains("Else")
 
         clickOn(R.id.tag_filter)
         clickOn("Tag1")
@@ -116,8 +116,8 @@ class TagTest : BaseTestHelper() {
         assertChecked("Tag2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        assertNotContains("Test")
-        assertContains("Else")
+        AndroidTestHelper.assertMedicineNameNotContains("Test")
+        AndroidTestHelper.assertMedicineNameContains("Else")
     }
 
     @Test
@@ -145,7 +145,7 @@ class TagTest : BaseTestHelper() {
 
         openMenu()
         clickOn(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
-        assertContains(com.futsch1.medtimer.core.ui.R.string.inactive)
+        AndroidTestHelper.assertTextDisplayed(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         // Now, check that Else is not deactivated
         clickOn(R.id.tag_filter)
@@ -153,7 +153,7 @@ class TagTest : BaseTestHelper() {
         clickOn("Tag2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
 
-        assertNotContains(com.futsch1.medtimer.core.ui.R.string.inactive)
+        AndroidTestHelper.assertTextNotDisplayed(com.futsch1.medtimer.core.ui.R.string.inactive)
 
         clickOn(R.id.tag_filter)
         clickOn("Tag2")

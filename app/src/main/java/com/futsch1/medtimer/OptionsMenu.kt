@@ -253,7 +253,7 @@ class OptionsMenu @AssistedInject constructor(
     private fun handleTagFilter() {
         if (!hideFilter) {
             fragment.lifecycleScope.launch(ioDispatcher) {
-                if (tagFilterViewModel.hasAnyTags().value) {
+                if (tagFilterViewModel.hasAnyTags.value) {
                     try {
                         withContext(mainDispatcher) {
                             setupTagFilter()
