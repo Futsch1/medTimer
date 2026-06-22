@@ -52,7 +52,7 @@ documentfile = "1.1.0"
 kotlinx-coroutines = "1.11.0"
 
 # Compose
-compose-bom = "2026.05.01"
+compose-bom = "2026.06.00"
 # material3 is hand-pinned to the 1.5.0-alpha line (overriding the BOM) because MaterialExpressiveTheme
 # is still internal on the stable 1.4.x line; revert to BOM-managed once Expressive ships stable.
 material3-expressive = "1.5.0-alpha21"
