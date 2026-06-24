@@ -64,20 +64,21 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
 fun MedicinesScreen(
-    medicinesViewModel: MedicinesViewModel,
+    medicinesScreenViewModel: MedicinesScreenViewModel,
     addMedicine: () -> Unit,
     deleteMedicine: (id: Int) -> Unit,
     editMedicine: (id: Int) -> Unit,
     moveMedicine: (id: Int, newPosition: Int) -> Unit
 ) {
     MedicinesScreen(
-        medicinesViewModel.medicinesForUi.collectAsState().value,
+        medicinesScreenViewModel.medicineUiState.collectAsState().value.medicines,
         addMedicine,
         deleteMedicine,
         editMedicine,
@@ -87,13 +88,13 @@ fun MedicinesScreen(
 
 @Composable
 fun MedicinesScreen(
-    medicines: List<MedicineUiState>,
+    medicines: List<MedicineScreenItem>,
     addMedicine: () -> Unit = {},
     deleteMedicine: (id: Int) -> Unit = {},
     editMedicine: (id: Int) -> Unit = {},
     moveMedicine: (id: Int, newPosition: Int) -> Unit = { _, _ -> }
 ) {
-    val localMedicines = remember { mutableStateListOf<MedicineUiState>() }
+    val localMedicines = remember { mutableStateListOf<MedicineScreenItem>() }
     var lastDraggedId by remember { mutableStateOf<Int?>(null) }
     val listState = rememberLazyListState()
     val hapticFeedback = LocalHapticFeedback.current
@@ -166,7 +167,7 @@ fun MedicinesScreen(
 
 @Composable
 private fun SwipeToDeleteContainer(
-    medicine: MedicineUiState,
+    medicine: MedicineScreenItem,
     onDelete: (id: Int) -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -244,7 +245,7 @@ private fun SwipeToDeleteContainer(
 @OptIn(ExperimentalFlexBoxApi::class)
 @Composable
 private fun MedicineCard(
-    medicine: MedicineUiState,
+    medicine: MedicineScreenItem,
     editMedicine: (id: Int) -> Unit,
     isDragging: Boolean = false,
     @SuppressLint("ModifierParameter")
@@ -316,7 +317,7 @@ private fun MedicineCard(
 }
 
 @Composable
-private fun MedicineHeader(medicine: MedicineUiState) {
+private fun MedicineHeader(medicine: MedicineScreenItem) {
     Text(
         modifier = Modifier.testTag(MedicineTestTags.MEDICINE_NAME),
         text = buildAnnotatedString {
@@ -396,20 +397,20 @@ private fun contentColorFor(backgroundColor: Color): Color {
 fun MedicinesScreenPreview() {
     MedicinesScreen(
         listOf(
-            MedicineUiState(
+            MedicineScreenItem(
                 id = 1,
                 name = "Test",
-                reminderTimes = listOf("8:00"),
-                tags = listOf("Test 1", "Test 2"),
+                reminderTimes = persistentListOf("8:00"),
+                tags = persistentListOf("Test 1", "Test 2"),
                 stockState = StockState(null, false, null),
                 color = null,
                 icon = null
             ),
-            MedicineUiState(
+            MedicineScreenItem(
                 id = 2,
                 name = "Test colored",
-                reminderTimes = listOf("8:00", "12:00"),
-                tags = listOf("Tag"),
+                reminderTimes = persistentListOf("8:00", "12:00"),
+                tags = persistentListOf("Tag"),
                 stockState = StockState("5 left", true, "08/01/25"),
                 color = Color.Red.value.toInt(),
                 icon = ResourcesCompat.getDrawable(LocalResources.current, R.drawable.capsule, null)

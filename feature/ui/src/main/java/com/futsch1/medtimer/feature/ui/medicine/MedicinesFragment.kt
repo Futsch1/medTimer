@@ -53,9 +53,9 @@ class MedicinesFragment : Fragment() {
     @Inject
     lateinit var medicinesMenu: MedicinesMenu
     private val tagFilterViewModel: TagFilterViewModel by viewModels()
-    private val medicinesViewModel: MedicinesViewModel by viewModels(
+    private val medicinesScreenViewModel: MedicinesScreenViewModel by viewModels(
         extrasProducer = {
-            defaultViewModelCreationExtras.withCreationCallback<MedicinesViewModel.Factory> { factory ->
+            defaultViewModelCreationExtras.withCreationCallback<MedicinesScreenViewModel.Factory> { factory ->
                 factory.create(
                     tagFilterViewModel
                 )
@@ -74,7 +74,7 @@ class MedicinesFragment : Fragment() {
             this,
             NavHostFragment.findNavController(this),
             false,
-            medicinesViewModel.tagFilterViewModel
+            medicinesScreenViewModel.tagFilterViewModel
         )
     }
 
@@ -84,14 +84,14 @@ class MedicinesFragment : Fragment() {
     ): View {
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
         requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
-        medicinesMenu.medicinesProvider = { medicinesViewModel.medicines.value }
+        medicinesMenu.medicinesProvider = { medicinesScreenViewModel.medicines.value }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MedTimerTheme {
                     MedicinesScreen(
-                        medicinesViewModel,
+                        medicinesScreenViewModel,
                         addMedicine = { addMedicine() },
                         deleteMedicine = { medicineId -> deleteItem(medicineId) },
                         editMedicine = { medicineId -> navigateToMedicineId(medicineId) },

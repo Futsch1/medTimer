@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 
-@HiltViewModel(assistedFactory = MedicinesViewModel.Factory::class)
-class MedicinesViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = MedicinesScreenViewModel.Factory::class)
+class MedicinesScreenViewModel @AssistedInject constructor(
     medicineRepository: MedicineRepository,
     @Assisted val tagFilterViewModel: TagFilterViewModel,
     private val medicineIcons: MedicineIcons,
@@ -31,7 +31,7 @@ class MedicinesViewModel @AssistedInject constructor(
 
     @AssistedFactory
     fun interface Factory {
-        fun create(tagFilterViewModel: TagFilterViewModel): MedicinesViewModel
+        fun create(tagFilterViewModel: TagFilterViewModel): MedicinesScreenViewModel
     }
 
     private val liveMedicines = medicineRepository.getAllFlow()
@@ -41,16 +41,16 @@ class MedicinesViewModel @AssistedInject constructor(
             tagFilterViewModel.getFiltered(medicines, tagIds ?: emptySet())
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val medicinesForUi: StateFlow<List<MedicineUiState>> =
+    val medicineUiState: StateFlow<MedicineUiState> =
         combine(
             medicines,
             futureRemindersRepository.stockRunOutDates
         ) { medicines, stockRunOutDates ->
-            medicines.map { medicine ->
-                MedicineUiState(
+            MedicineUiState(medicines.map { medicine ->
+                MedicineScreenItem(
                     medicine.id,
                     medicine.name,
-                    medicineStringFormatter.getReminderTimes(medicine),
+                    medicineStringFormatter.getReminderTimes(medicine).toImmutableList(),
                     StockState(
                         if (medicine.isStockManagementActive()) medicineStringFormatter.getStockText(
                             medicine
@@ -64,9 +64,9 @@ class MedicinesViewModel @AssistedInject constructor(
                     ),
                     if (medicine.iconId != 0) medicineIcons.getIconBitmapUntinted(medicine.iconId) else null,
                     if (medicine.useColor) medicine.color else null,
-                    medicine.tags.map { tag -> tag.name },
+                    medicine.tags.map { tag -> tag.name }.toImmutableList(),
                     medicine.reminders.isNotEmpty() && medicine.reminders.none { it.active }
                 )
-            }.toImmutableList()
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())
+            }.toImmutableList())
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, MedicineUiState(persistentListOf()))
 }

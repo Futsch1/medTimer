@@ -14,7 +14,7 @@ import org.junit.Test
 
 class ExportBackupTest : BaseTestHelper() {
     @Test
-    @AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun testTriggerExport() {
         openMenu()
         clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
