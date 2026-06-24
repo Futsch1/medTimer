@@ -48,7 +48,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 
@@ -252,17 +251,19 @@ class OptionsMenu @AssistedInject constructor(
 
     private fun handleTagFilter() {
         if (!hideFilter) {
-            fragment.lifecycleScope.launch(ioDispatcher) {
-                if (tagFilterViewModel.hasAnyTags.value) {
-                    try {
-                        withContext(mainDispatcher) {
+            var filterSetupDone = false
+            fragment.lifecycleScope.launch {
+                tagFilterViewModel.hasAnyTags.collect { hasAny ->
+                    if (hasAny && !filterSetupDone) {
+                        filterSetupDone = true
+                        try {
                             setupTagFilter()
+                        } catch (_: IllegalStateException) {
+                            // Intentionally empty, do nothing
                         }
-                    } catch (_: IllegalStateException) {
-                        // Intentionally empty, do nothing
+                    } else if (!hasAny) {
+                        tagFilterViewModel.clearTagFilter()
                     }
-                } else {
-                    tagFilterViewModel.clearTagFilter()
                 }
             }
         }
