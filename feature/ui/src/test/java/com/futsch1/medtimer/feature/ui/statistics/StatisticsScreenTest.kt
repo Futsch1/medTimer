@@ -12,7 +12,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +22,7 @@ import kotlin.test.assertTrue
 
 /**
  * Smoke tests for the stateless [StatisticsScreen] overload. No ViewModel or Hilt required —
- * state is constructed directly via [StatisticsUiState].
+ * state is constructed directly via [MutableStatisticsScreenState].
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -73,7 +72,7 @@ class StatisticsScreenTest {
     }
 
     private fun setScreen(
-        state: StatisticsUiState,
+        state: StatisticsScreenState,
         onSelectView: (StatisticFragment) -> Unit = {},
     ) {
         composeTestRule.setContent {
@@ -84,6 +83,7 @@ class StatisticsScreenTest {
                         state = state,
                         onSelectView = onSelectView,
                         onSelectRange = {},
+                        onSearchQueryChange = {},
                         onEditEvent = {},
                     )
                 }
@@ -91,8 +91,7 @@ class StatisticsScreenTest {
         }
     }
 
-    private fun tableState() = StatisticsUiState(
-        activeView = StatisticFragment.TABLE,
-        tableRows = persistentListOf(),
-    )
+    private fun tableState() = MutableStatisticsScreenState().apply {
+        activeView = StatisticFragment.TABLE
+    }
 }
