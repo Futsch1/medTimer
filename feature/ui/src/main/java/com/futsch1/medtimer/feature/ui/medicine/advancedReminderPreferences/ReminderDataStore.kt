@@ -89,8 +89,8 @@ class ReminderDataStore @AssistedInject constructor(
         when (key) {
             "instructions" -> modelData = modelData.copy(instructions = value)
             "sample_instructions" -> modelData = modelData.copy(instructions = value)
-            "cycle_start_date" -> modelData =
-                modelData.copy(cycleStartDay = timeFormatter.stringToLocalDate(value!!)!!)
+            "cycle_start_date" -> value?.let { timeFormatter.stringToLocalDate(it) }
+                ?.let { modelData = modelData.copy(cycleStartDay = it) }
 
             "cycle_consecutive_days" -> value?.toIntOrNull()
                 ?.let { modelData = modelData.copy(consecutiveDays = it) }
@@ -98,11 +98,11 @@ class ReminderDataStore @AssistedInject constructor(
             "cycle_pause_days" -> value?.toIntOrNull()
                 ?.let { modelData = modelData.copy(pauseDays = it) }
 
-            "period_start_date" -> modelData =
-                modelData.copy(periodStart = timeFormatter.stringToLocalDate(value!!)!!)
+            "period_start_date" -> value?.let { timeFormatter.stringToLocalDate(it) }
+                ?.let { modelData = modelData.copy(periodStart = it) }
 
-            "period_end_date" -> modelData =
-                modelData.copy(periodEnd = timeFormatter.stringToLocalDate(value!!)!!)
+            "period_end_date" -> value?.let { timeFormatter.stringToLocalDate(it) }
+                ?.let { modelData = modelData.copy(periodEnd = it) }
 
             "interval_start" -> modelData =
                 modelData.copy(intervalStartsFromProcessed = value == "1")
@@ -113,23 +113,15 @@ class ReminderDataStore @AssistedInject constructor(
                 )
             }
 
-            "interval_daily_start_time" -> modelData =
-                modelData.copy(
-                    intervalStartTimeOfDay = LocalTime.ofSecondOfDay(
-                        timeFormatter.timeStringToMinutes(
-                            value!!
-                        ) * 60L
-                    )
-                )
+            "interval_daily_start_time" -> value
+                ?.let { timeFormatter.timeStringToMinutes(it) }
+                ?.takeIf { it >= 0 }
+                ?.let { modelData = modelData.copy(intervalStartTimeOfDay = LocalTime.ofSecondOfDay(it * 60L)) }
 
-            "interval_daily_end_time" -> modelData =
-                modelData.copy(
-                    intervalEndTimeOfDay = LocalTime.ofSecondOfDay(
-                        timeFormatter.timeStringToMinutes(
-                            value!!
-                        ) * 60L
-                    )
-                )
+            "interval_daily_end_time" -> value
+                ?.let { timeFormatter.timeStringToMinutes(it) }
+                ?.takeIf { it >= 0 }
+                ?.let { modelData = modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(it * 60L)) }
 
             "stock_threshold" -> MedicineHelper.parseAmount(value)
                 ?.let { modelData = modelData.copy(outOfStockThreshold = it) }
