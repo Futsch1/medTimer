@@ -158,7 +158,6 @@ class StatisticsScreenViewModel @Inject constructor(
     companion object {
         private const val ALL_MEDICINES = -1
         private const val CALENDAR_PAST_MONTHS = 3
-        private const val CALENDAR_FUTURE_MONTHS = 0
         private const val SEARCH_DEBOUNCE_MILLIS = 300L
     }
 }
