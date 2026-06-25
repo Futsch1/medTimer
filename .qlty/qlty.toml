@@ -89,8 +89,6 @@ mode = "comment"
 [[plugin]]
 name = "ripgrep"
 mode = "comment"
-[plugin.rules.TODO]
-mode = "disabled"
 
 [[plugin]]
 name = "rubocop"
@@ -115,3 +113,13 @@ name = "trufflehog"
 
 [[plugin]]
 name = "yamllint"
+
+[[triage]]
+match.rules = ["kotlin:S100"]
+match.file_patterns = ["**/test/**", "**/androidTest/**"]
+set.ignored = true
+
+[[triage]]
+match.rules = ["qlty:function-parameters"]
+match.file_patterns = ["**/*Screen.kt"]
+set.ignored = true
