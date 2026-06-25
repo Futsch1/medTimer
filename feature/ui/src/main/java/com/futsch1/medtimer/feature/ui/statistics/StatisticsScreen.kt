@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
@@ -45,11 +44,12 @@ fun StatisticsScreen(
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    // The view-model's state is Compose snapshot state — read it directly, no collectAsState needed.
     StatisticsScreen(
-        state = state,
+        state = viewModel.state,
         onSelectView = viewModel::onSelectView,
         onSelectRange = viewModel::onSelectRange,
+        onSearchQueryChange = viewModel::onSearchQueryChange,
         onEditEvent = onEditEvent,
         modifier = modifier,
     )
@@ -58,9 +58,10 @@ fun StatisticsScreen(
 /** Stateless screen — the `@Preview`/test target. Renders purely from its inputs. */
 @Composable
 fun StatisticsScreen(
-    state: StatisticsUiState,
+    state: StatisticsScreenState,
     onSelectView: (StatisticFragment) -> Unit,
     onSelectRange: (Int) -> Unit,
+    onSearchQueryChange: (String) -> Unit,
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -111,7 +112,13 @@ fun StatisticsScreen(
             Box(modifier = Modifier.fillMaxSize()) {
                 when (view) {
                     StatisticFragment.CHARTS -> state.charts?.let { ChartsContent(it) }
-                    StatisticFragment.TABLE -> ReminderTable(rows = state.tableRows, onEditEvent = onEditEvent)
+                    StatisticFragment.TABLE -> ReminderTable(
+                        rows = state.filteredRows,
+                        query = state.query,
+                        onQueryChange = onSearchQueryChange,
+                        onEditEvent = onEditEvent,
+                    )
+
                     StatisticFragment.CALENDAR -> CalendarContent(dayEvents = state.calendarDayEvents)
                 }
             }
@@ -146,13 +153,14 @@ private fun ViewChip(iconRes: Int, labelRes: Int, selected: Boolean, onClick: ()
 @MedTimerPreview
 @Composable
 private fun StatisticsScreenPreview() {
-    val state = StatisticsUiState(activeView = StatisticFragment.TABLE)
+    val state = MutableStatisticsScreenState().apply { activeView = StatisticFragment.TABLE }
     MedTimerTheme {
         Surface {
             StatisticsScreen(
                 state = state,
                 onSelectView = {},
                 onSelectRange = {},
+                onSearchQueryChange = {},
                 onEditEvent = {},
             )
         }

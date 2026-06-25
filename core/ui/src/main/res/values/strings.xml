@@ -179,6 +179,7 @@
     <string name="notification_importance">Notification priority</string>
     <string name="notification_settings_default">Notification settings default priority</string>
     <string name="notification_settings_high">Notification settings high priority</string>
+    <string name="notification_settings_out_of_stock">Notification settings out of stock</string>
     <string name="calendar">Calendar</string>
     <string name="date">Date</string>
     <string name="active">Active</string>

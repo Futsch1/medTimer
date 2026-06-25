@@ -172,6 +172,7 @@
     <string name="notification_importance">עדיפות התראה</string>
     <string name="notification_settings_default">עדיפות ברירת מחדל של הגדרות התראה</string>
     <string name="notification_settings_high">עדיפות גבוהה בהגדרות ההתראה</string>
+    <string name="notification_settings_out_of_stock">הגדרות תזכורת מחוץ למלאי</string>
     <string name="calendar">לוח שנה</string>
     <string name="date">תאריך</string>
     <string name="active">פעיל</string>

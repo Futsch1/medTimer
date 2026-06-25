@@ -21,11 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,13 +37,19 @@ import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 private const val NAME_COLUMN_INDEX = 1
 
+/**
+ * The Table view. [rows] is already filtered by [query] — both are owned by the screen's state
+ * holder ([com.futsch1.medtimer.feature.ui.statistics.StatisticsScreenState]) so the filtered list can be a `derivedStateOf`; the filter field
+ * reports edits through [onQueryChange].
+ */
 @Composable
 fun ReminderTable(
     rows: ImmutableList<SortableTableRow>,
+    query: String,
+    onQueryChange: (String) -> Unit,
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,23 +60,19 @@ fun ReminderTable(
         SortableTableColumn(title = stringResource(R.string.reminded), minWidth = 120.dp),
     )
 
-    var query by rememberSaveable { mutableStateOf("") }
-    val visibleRows = remember(rows, query) {
-        if (query.isBlank()) rows
-        else rows.filter { row -> row.cells.any { it.text.contains(query, ignoreCase = true) } }.toImmutableList()
-    }
-
     Card(
         modifier = modifier.fillMaxSize(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             OutlinedTextField(
                 value = query,
-                onValueChange = { query = it },
+                onValueChange = onQueryChange,
                 label = { Text(stringResource(R.string.filter)) },
                 singleLine = true,
                 trailingIcon = {
@@ -84,7 +81,7 @@ fun ReminderTable(
                         enter = scaleIn() + fadeIn(),
                         exit = scaleOut() + fadeOut(),
                     ) {
-                        IconButton(onClick = { query = "" }) {
+                        IconButton(onClick = { onQueryChange("") }) {
                             Icon(painterResource(R.drawable.x_circle), contentDescription = stringResource(R.string.cancel))
                         }
                     }
@@ -98,7 +95,7 @@ fun ReminderTable(
             ) {
                 SortableTable(
                     columns = columns,
-                    rows = visibleRows,
+                    rows = rows,
                     modifier = Modifier.padding(8.dp),
                 ) { row, columnIndex, columnWidth ->
                     if (columnIndex == NAME_COLUMN_INDEX) {
@@ -144,6 +141,8 @@ private fun ReminderTablePreview() {
                     sampleRow(2, "-", "Medicine A", "2 ml", "May 28, 12:30"),
                     sampleRow(3, "May 27, 21:00", "Supplement B", "1 capsule", "May 27, 20:00"),
                 ),
+                query = "",
+                onQueryChange = {},
                 onEditEvent = {},
             )
         }

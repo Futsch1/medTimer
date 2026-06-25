@@ -166,6 +166,7 @@
     <string name="notification_importance">Notifikationsprioritet</string>
     <string name="notification_settings_default">Notifikationsindstillings standardprioritet</string>
     <string name="notification_settings_high">Notifikationsindstillings høj prioritet</string>
+    <string name="notification_settings_out_of_stock">Påmindelsesindstillinger for lav beholdning</string>
     <string name="calendar">Kalender</string>
     <string name="date">Dato</string>
     <string name="active">Aktiv</string>

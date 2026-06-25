@@ -170,6 +170,7 @@
     <string name="notification_importance">Ilmoituksen prioriteetti</string>
     <string name="notification_settings_default">Ilmoitusasetukset oletusprioriteetti</string>
     <string name="notification_settings_high">Ilmoitusasetukset korkea prioriteetti</string>
+    <string name="notification_settings_out_of_stock">Muistutusasetukset loppumisesta</string>
     <string name="calendar">Kalenteri</string>
     <string name="date">Päivämäärä</string>
     <string name="active">Aktiivinen</string>

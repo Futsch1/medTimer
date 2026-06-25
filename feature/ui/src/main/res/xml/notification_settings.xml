@@ -15,6 +15,13 @@
         android:title="@string/notification_settings_high"
         app:singleLineTitle="false"
         app:key="notification_settings_high" />
+    <Preference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/bell"
+        android:title="@string/notification_settings_out_of_stock"
+        app:singleLineTitle="false"
+        app:key="notification_settings_out_of_stock" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

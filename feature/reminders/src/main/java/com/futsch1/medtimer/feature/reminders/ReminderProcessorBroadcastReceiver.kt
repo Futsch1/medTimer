@@ -97,9 +97,13 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
                         }
                     }
 
-                    ProcessorCode.ShowReminderNotification -> showReminderNotificationProcessor.showReminder(
-                        ReminderNotificationData.fromBundle(intent.extras!!)
-                    )
+                    ProcessorCode.ShowReminderNotification -> {
+                        showReminderNotificationProcessor.showReminder(
+                            ReminderNotificationData.fromBundle(intent.extras!!)
+                        )
+                        // Show reminder might have rescheduled the next due reminder, so schedule again
+                        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+                    }
 
                     ProcessorCode.Refill -> processRefill(intent)
                     ProcessorCode.StockHandling -> processStockHandling(intent)
@@ -120,7 +124,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private suspend fun processSnooze(intent: Intent) {
+    private fun processSnooze(intent: Intent) {
         snoozeProcessor.processSnooze(
             ReminderNotificationData.fromBundle(intent.extras!!),
             intent.getLongExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, 0).toDuration(DurationUnit.SECONDS)

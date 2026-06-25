@@ -169,6 +169,7 @@
     <string name="notification_importance">Προτεραιότητα ειδοποίησης</string>
     <string name="notification_settings_default">Ρύθμιση ειδοποιήσεων προεπιλεγμένης προτεραιότητας</string>
     <string name="notification_settings_high">Ρύθμιση ειδοποιήσεων υψηλής προτεραιότητας</string>
+    <string name="notification_settings_out_of_stock">Ρύθμιση υπενθύμισης εξάντλησης αποθέματος</string>
     <string name="calendar">Ημερολόγιο</string>
     <string name="date">Ημερομηνία</string>
     <string name="active">Ενεργή</string>

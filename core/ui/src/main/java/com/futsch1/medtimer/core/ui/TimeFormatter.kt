@@ -151,7 +151,7 @@ class TimeFormatter @Inject constructor(
      */
     fun stringToLocalDate(dateString: String): LocalDate? {
         try {
-            return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
+            return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(getLocale()))
         } catch (_: DateTimeParseException) {
             try {
                 val date = DateFormat.getDateFormat(localeContextAccessor.getLocaleAwareContext()).parse(dateString)

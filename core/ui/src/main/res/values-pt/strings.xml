@@ -158,6 +158,7 @@
     <string name="notification_importance">Prioridade da notificação</string>
     <string name="notification_settings_default">Prioridade padrão das configurações de notificação</string>
     <string name="notification_settings_high">Configurações de notificação de alta prioridade</string>
+    <string name="notification_settings_out_of_stock">Configurações de lembrete de estoque esgotado</string>
     <string name="calendar">Calendário</string>
     <string name="date">Data</string>
     <string name="active">Ativo</string>
