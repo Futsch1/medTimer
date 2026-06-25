@@ -2,6 +2,8 @@ package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.di.Dispatcher
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
@@ -12,11 +14,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 
 
@@ -27,6 +32,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     private val medicineIcons: MedicineIcons,
     private val medicineStringFormatter: MedicineStringFormatter,
     private val futureRemindersRepository: FutureRemindersRepository,
+    @Dispatcher(MedTimerDispatchers.IO) ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -41,12 +47,15 @@ class MedicinesScreenViewModel @AssistedInject constructor(
             tagFilterViewModel.getFiltered(medicines, tagIds ?: emptySet())
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val medicineUiState: StateFlow<MedicineUiState> =
+    private val _state = MutableMedicineScreenState()
+    val state: MedicineScreenState get() = _state
+
+    init {
         combine(
             medicines,
             futureRemindersRepository.stockRunOutDates
         ) { medicines, stockRunOutDates ->
-            MedicineUiState(medicines.map { medicine ->
+            medicines.map { medicine ->
                 MedicineScreenItem(
                     medicine.id,
                     medicine.name,
@@ -67,6 +76,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
                     medicine.tags.map { tag -> tag.name }.toImmutableList(),
                     medicine.reminders.isNotEmpty() && medicine.reminders.none { it.active }
                 )
-            }.toImmutableList())
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, MedicineUiState(persistentListOf()))
+            }
+        }.flowOn(ioDispatcher).onEach { _state.medicines = it.toImmutableList() }.launchIn(viewModelScope)
+    }
 }

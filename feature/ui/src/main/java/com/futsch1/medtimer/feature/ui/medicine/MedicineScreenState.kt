@@ -1,12 +1,20 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 
-data class MedicineUiState(
-    val medicines: List<MedicineScreenItem>
-)
+interface MedicineScreenState {
+    val medicines: ImmutableList<MedicineScreenItem>
+}
+
+class MutableMedicineScreenState : MedicineScreenState {
+    override var medicines by mutableStateOf<ImmutableList<MedicineScreenItem>>(persistentListOf())
+}
 
 data class StockState(
     val stockString: String?,

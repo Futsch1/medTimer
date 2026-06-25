@@ -32,7 +32,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -78,7 +77,7 @@ fun MedicinesScreen(
     moveMedicine: (id: Int, newPosition: Int) -> Unit
 ) {
     MedicinesScreen(
-        medicinesScreenViewModel.medicineUiState.collectAsState().value.medicines,
+        medicinesScreenViewModel.state,
         addMedicine,
         deleteMedicine,
         editMedicine,
@@ -88,7 +87,7 @@ fun MedicinesScreen(
 
 @Composable
 fun MedicinesScreen(
-    medicines: List<MedicineScreenItem>,
+    state: MedicineScreenState,
     addMedicine: () -> Unit = {},
     deleteMedicine: (id: Int) -> Unit = {},
     editMedicine: (id: Int) -> Unit = {},
@@ -105,10 +104,10 @@ fun MedicinesScreen(
         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
     }
 
-    LaunchedEffect(medicines) {
+    LaunchedEffect(state.medicines) {
         if (!reorderState.isAnyItemDragging) {
             localMedicines.clear()
-            localMedicines.addAll(medicines)
+            localMedicines.addAll(state.medicines)
         }
     }
 
@@ -395,8 +394,8 @@ private fun contentColorFor(backgroundColor: Color): Color {
 @MedTimerPreview
 @Composable
 fun MedicinesScreenPreview() {
-    MedicinesScreen(
-        listOf(
+    val state = MutableMedicineScreenState().apply {
+        medicines = persistentListOf(
             MedicineScreenItem(
                 id = 1,
                 name = "Test",
@@ -417,5 +416,6 @@ fun MedicinesScreenPreview() {
                     ?.toBitmap()
             ),
         )
-    )
+    }
+    MedicinesScreen(state)
 }
