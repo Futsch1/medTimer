@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
 import androidx.compose.foundation.layout.FlexAlignItems
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -46,6 +49,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
@@ -141,12 +145,18 @@ fun MedicinesScreen(
                 text = { Text(text = stringResource(id = R.string.add_medicine)) })
         }
     ) { paddingValues ->
+        val layoutDirection = LocalLayoutDirection.current
         LazyColumn(
             state = listState,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(MedicineTestTags.MEDICINE_LIST),
-            contentPadding = paddingValues
+            contentPadding = PaddingValues(
+                start = paddingValues.calculateStartPadding(layoutDirection),
+                top = paddingValues.calculateTopPadding(),
+                end = paddingValues.calculateEndPadding(layoutDirection),
+                bottom = paddingValues.calculateBottomPadding() + 80.dp
+            )
         ) {
             items(localMedicines, key = { it.id }) { medicine ->
                 ReorderableItem(reorderState, key = medicine.id) { isDragging ->
@@ -268,37 +278,43 @@ private fun MedicineCard(
         ),
         onClick = { editMedicine(medicine.id) }
     ) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            if (medicine.icon != null) {
-                Icon(
-                    bitmap = medicine.icon.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .align(Alignment.CenterVertically)
-                        .padding(end = 8.dp)
-                )
-            }
+        Row(
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(modifier = Modifier.weight(1f)) {
-                MedicineHeader(medicine)
-                Text(
-                    text = pluralStringResource(
-                        id = R.plurals.sum_reminders,
-                        count = medicine.reminderTimes.size,
-                        medicine.reminderTimes.size
-                    ),
-                    style = MaterialTheme.typography.bodySmall
-                )
-                if (medicine.inactive) {
-                    Text(
-                        text = stringResource(R.string.inactive),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                } else if (medicine.reminderTimes.isNotEmpty()) {
-                    Text(
-                        text = medicine.reminderTimes.joinToString(", "),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (medicine.icon != null) {
+                        Icon(
+                            bitmap = medicine.icon.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 8.dp)
+                        )
+                    }
+                    Column {
+                        MedicineHeader(medicine)
+                        Text(
+                            text = pluralStringResource(
+                                id = R.plurals.sum_reminders,
+                                count = medicine.reminderTimes.size,
+                                medicine.reminderTimes.size
+                            ),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        if (medicine.inactive) {
+                            Text(
+                                text = stringResource(R.string.inactive),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        } else if (medicine.reminderTimes.isNotEmpty()) {
+                            Text(
+                                text = medicine.reminderTimes.joinToString(", "),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
                 }
                 MedicineTags(medicine.tags)
             }
@@ -306,7 +322,6 @@ private fun MedicineCard(
                 painter = painterResource(R.drawable.grip_horizontal),
                 contentDescription = stringResource(R.string.move_medicine),
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
                     .padding(start = 8.dp)
                     .size(24.dp)
                     .then(dragHandleModifier)
