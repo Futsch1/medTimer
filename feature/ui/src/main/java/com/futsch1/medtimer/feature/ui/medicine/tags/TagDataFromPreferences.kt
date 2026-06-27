@@ -12,7 +12,7 @@ class TagDataFromPreferences(fragment: Fragment) : TagDataProvider() {
         fragment,
     )[MedicineWithTagsViewModel::class.java]
     private var tagFilterViewModel: TagFilterViewModel = ViewModelProvider(
-        fragment,
+        fragment.requireActivity(),
     )[TagFilterViewModel::class.java]
 
     private var tagFilterStore = tagFilterViewModel.tagFilterStore

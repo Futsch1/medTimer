@@ -11,6 +11,7 @@ import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -77,7 +78,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
-    private val tagFilterViewModel: TagFilterViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val overviewViewModel: OverviewViewModel by viewModels(
         extrasProducer = {
             defaultViewModelCreationExtras.withCreationCallback<OverviewViewModel.Factory> { factory ->

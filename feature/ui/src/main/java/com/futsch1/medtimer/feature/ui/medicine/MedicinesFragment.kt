@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuProvider
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
@@ -52,7 +53,7 @@ class MedicinesFragment : Fragment() {
 
     @Inject
     lateinit var medicinesMenu: MedicinesMenu
-    private val tagFilterViewModel: TagFilterViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val medicinesScreenViewModel: MedicinesScreenViewModel by viewModels(
         extrasProducer = {
             defaultViewModelCreationExtras.withCreationCallback<MedicinesScreenViewModel.Factory> { factory ->
