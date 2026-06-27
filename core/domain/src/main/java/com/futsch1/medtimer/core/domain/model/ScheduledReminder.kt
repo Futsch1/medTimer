@@ -5,5 +5,7 @@ import java.time.Instant
 data class ScheduledReminder(
     val medicine: Medicine,
     val reminder: Reminder,
-    val timestamp: Instant
+    val timestamp: Instant,
+    val stockBefore: Double,
+    val stockAfter: Double
 )

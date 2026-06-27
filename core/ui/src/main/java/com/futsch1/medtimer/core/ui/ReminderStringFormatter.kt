@@ -178,12 +178,16 @@ class ReminderStringFormatter @Inject constructor(
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE
                 )
             }
-            span.append(
-                MedicineHelper.formatAmount(
-                    scheduledReminder.medicine.amount,
-                    scheduledReminder.medicine.unit
+            span.append(MedicineHelper.formatAmount(scheduledReminder.stockBefore, scheduledReminder.medicine.unit))
+            if (scheduledReminder.stockAfter != scheduledReminder.stockBefore) {
+                span.append(" ➡ ")
+                span.append(
+                    MedicineHelper.formatAmount(
+                        scheduledReminder.stockAfter,
+                        scheduledReminder.medicine.unit
+                    )
                 )
-            )
+            }
         }
         return span
     }
@@ -203,7 +207,16 @@ class ReminderStringFormatter @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE
             )
         }
-        span.append(MedicineHelper.formatAmount(reminderEvent.stockAfter, reminderEvent.stockUnit))
+        span.append(MedicineHelper.formatAmount(reminderEvent.stockBefore, reminderEvent.stockUnit))
+        if (reminderEvent.stockAfter != reminderEvent.stockBefore) {
+            span.append(" ➡ ")
+            span.append(
+                MedicineHelper.formatAmount(
+                    reminderEvent.stockAfter,
+                    reminderEvent.stockUnit
+                )
+            )
+        }
         return span
     }
 

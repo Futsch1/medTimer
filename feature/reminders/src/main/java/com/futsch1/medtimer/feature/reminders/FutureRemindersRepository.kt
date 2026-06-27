@@ -111,7 +111,7 @@ class FutureRemindersRepository @Inject constructor(
             reminderEvents,
             timeAccess,
             preferencesDataSource
-        ).simulate { scheduledReminder, scheduledDate, amount ->
+        ).simulate { scheduledReminder, scheduledDate ->
             if (scheduledDate < endDay) {
                 if (scheduledDate > currentEmitDay && currentEmitDay != LocalDate.MIN) {
                     _simulatedReminders.value = result.toList()
@@ -119,7 +119,7 @@ class FutureRemindersRepository @Inject constructor(
                 currentEmitDay = scheduledDate
                 result.add(scheduledReminder)
                 val medicineId = scheduledReminder.medicine.id
-                if (scheduledReminder.medicine.isStockManagementActive() && amount == 0.0 && runOutDates[medicineId] == null) {
+                if (scheduledReminder.medicine.isStockManagementActive() && scheduledReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
                     runOutDates[medicineId] = scheduledDate
                 }
             }

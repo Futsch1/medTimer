@@ -205,7 +205,7 @@ class CalendarEventsProviderTest {
         val tomorrow = LocalDate.now().plusDays(1)
         val tomorrowInstant = tomorrow.atTime(9, 0).atZone(ZoneId.systemDefault()).toInstant()
         simulatedRemindersFlow.value = listOf(
-            ScheduledReminder(medicine, reminder, tomorrowInstant)
+            ScheduledReminder(medicine, reminder, tomorrowInstant, 0.0, 0.0)
         )
 
         val result = provider.getStructuredEvents(ALL_MEDICINES, pastMonths = 0)

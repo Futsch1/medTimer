@@ -53,11 +53,11 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(0.0, amount)
+                assertEquals(0.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
@@ -117,7 +117,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate, _: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             scheduledReminders.size < 3
         }
@@ -163,7 +163,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate, _: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             scheduledReminders.size < 3
         }
@@ -209,7 +209,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate, _: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, _: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             scheduledReminders.size < 5
         }
@@ -268,23 +268,27 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(11.0, amount)
+                assertEquals(12.0, scheduledReminder.stockBefore)
+                assertEquals(11.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(9.0, amount)
+                assertEquals(11.0, scheduledReminder.stockBefore)
+                assertEquals(9.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
-                assertEquals(8.0, amount)
+                assertEquals(9.0, scheduledReminder.stockBefore)
+                assertEquals(8.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 4) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
-                assertEquals(6.0, amount)
+                assertEquals(8.0, scheduledReminder.stockBefore)
+                assertEquals(6.0, scheduledReminder.stockAfter)
             }
             scheduledReminders.size < 4
         }
@@ -297,7 +301,7 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        simulator.simulate { _: ScheduledReminder, localDate: LocalDate, _: Double ->
+        simulator.simulate { _: ScheduledReminder, localDate: LocalDate ->
             localDate == LocalDate.EPOCH.plusDays(30)
         }
     }
@@ -320,7 +324,7 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, _: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
@@ -359,15 +363,17 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(9.0, amount)
+                assertEquals(12.0, scheduledReminder.stockBefore)
+                assertEquals(9.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(2), localDate)
-                assertEquals(6.0, amount)
+                assertEquals(6.0, scheduledReminder.stockBefore)
+                assertEquals(6.0, scheduledReminder.stockAfter)
                 assertEquals(scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
             }
             scheduledReminders.size < 3
@@ -387,11 +393,11 @@ class SchedulingSimulatorTest {
 
         val scheduledReminders = mutableListOf<ScheduledReminder>()
 
-        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate, amount: Double ->
+        simulator.simulate { scheduledReminder: ScheduledReminder, localDate: LocalDate ->
             scheduledReminders.add(scheduledReminder)
             if (scheduledReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH.plusDays(4), localDate)
-                assertEquals(0.0, amount)
+                assertEquals(0.0, scheduledReminder.stockAfter)
             }
             if (scheduledReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH.plusDays(7), localDate)

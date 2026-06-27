@@ -14,7 +14,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-typealias ScheduledReminderConsumer = (ScheduledReminder, LocalDate, Double) -> Boolean
+typealias ScheduledReminderConsumer = (ScheduledReminder, LocalDate) -> Boolean
 
 
 class LastEventPerReminder(initialReminderEvents: List<ReminderEvent>) {
@@ -84,16 +84,16 @@ class SchedulingSimulator(
         for (medicine in medicines.values) {
             do {
                 val eventsSnapshot = totalEvents.get()
-                var earliest: ScheduledReminder? = null
+                var earliest: Pair<Reminder, Instant>? = null
                 for (reminder in medicine.reminders) {
                     val nextForReminder =
                         getNextScheduledTime(medicine, reminder, eventsSnapshot) ?: continue
-                    if (earliest == null || nextForReminder < earliest.timestamp) {
-                        earliest = ScheduledReminder(medicine, reminder, nextForReminder)
+                    if (earliest == null || nextForReminder < earliest.second) {
+                        earliest = reminder to nextForReminder
                     }
                 }
                 val next = earliest ?: break
-                if (!processScheduledTime(next, scheduledReminderConsumer)) {
+                if (!processScheduledTime(next, medicine, scheduledReminderConsumer)) {
                     return false
                 }
             } while (true)
@@ -117,51 +117,45 @@ class SchedulingSimulator(
     }
 
     private fun processScheduledTime(
-        scheduledReminder: ScheduledReminder,
+        reminderAndInstant: Pair<Reminder, Instant>,
+        medicine: Medicine,
         scheduledReminderConsumer: ScheduledReminderConsumer
     ): Boolean {
-        val amount = doStockHandling(scheduledReminder)
+        val (stockBefore, stockAfter) = doStockHandling(medicine, reminderAndInstant.first)
         // Notify consumer
         val continueSimulating =
             scheduledReminderConsumer(
-                scheduledReminder,
-                currentDay,
-                amount
+                ScheduledReminder(medicine, reminderAndInstant.first, reminderAndInstant.second, stockBefore, stockAfter),
+                currentDay
             )
         // Add the simulated event to make sure it is considered in the next scheduling call
-        totalEvents.add(
-            createReminderEvent(
-                scheduledReminder.reminder,
-                scheduledReminder.timestamp
-            )
-        )
+        totalEvents.add(createReminderEvent(reminderAndInstant))
         return continueSimulating
     }
 
-    private fun doStockHandling(scheduledReminder: ScheduledReminder): Double {
-        val currentMedicineAmount = medicines[scheduledReminder.medicine.id]?.amount ?: 0.0
-        return if (currentMedicineAmount > 0.0) {
+    private fun doStockHandling(medicine: Medicine, reminder: Reminder): Pair<Double, Double> {
+        val stockBefore = medicines[medicine.id]?.amount ?: 0.0
+        return if (stockBefore > 0.0) {
             val reminderAmount: Double =
-                MedicineHelper.parseAmount(scheduledReminder.reminder.amount) ?: 0.0
-            val amount = (currentMedicineAmount - reminderAmount).coerceAtLeast(0.0)
+                MedicineHelper.parseAmount(reminder.amount) ?: 0.0
+            val stockAfter = (stockBefore - reminderAmount).coerceAtLeast(0.0)
 
-            medicines[scheduledReminder.medicine.id] = scheduledReminder.medicine.copy(
-                amount = amount
+            medicines[medicine.id] = medicine.copy(
+                amount = stockAfter
             )
-            amount
+            stockBefore to stockAfter
         } else {
-            0.0
+            0.0 to 0.0
         }
     }
 
     private fun createReminderEvent(
-        reminder: Reminder,
-        nextScheduledTime: Instant
+        reminderAndInstant: Pair<Reminder, Instant>
     ): ReminderEvent {
         val reminderEvent = ReminderEvent.default().copy(
-            remindedTimestamp = nextScheduledTime,
-            processedTimestamp = nextScheduledTime,
-            reminderId = reminder.id,
+            remindedTimestamp = reminderAndInstant.second,
+            processedTimestamp = reminderAndInstant.second,
+            reminderId = reminderAndInstant.first.id,
             status = ReminderEvent.ReminderStatus.TAKEN
         )
         return reminderEvent

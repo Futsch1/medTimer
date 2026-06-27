@@ -77,7 +77,7 @@ class ReminderHelperTest {
         // Standard case
         val medicine = Medicine.default().copy(name = "Test")
         var reminder = Reminder.default().copy(medicineRelId = 1, amount = "5")
-        var scheduledReminder = ScheduledReminder(medicine, reminder, instant)
+        var scheduledReminder = ScheduledReminder(medicine, reminder, instant, 0.0, 0.0)
         var reminderEvent = ReminderEvent.default()
             .copy(remindedTimestamp = instant, medicineName = "Test", amount = "5")
 
@@ -97,7 +97,7 @@ class ReminderHelperTest {
         // Empty amount
         reminder = reminder.copy(amount = "")
         reminderEvent = reminderEvent.copy(amount = "")
-        scheduledReminder = ScheduledReminder(medicine, reminder, instant)
+        scheduledReminder = ScheduledReminder(medicine, reminder, instant, 0.0, 0.0)
         result = formatter.formatScheduledReminder(scheduledReminder)
         resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  1:00 AM\nTest", result.toString())
@@ -113,7 +113,7 @@ class ReminderHelperTest {
                 UserPreferences.default().copy(useRelativeDateTime = true)
             )
         )
-        scheduledReminder = ScheduledReminder(medicine, reminder, instantLater)
+        scheduledReminder = ScheduledReminder(medicine, reminder, instantLater, 0.0, 0.0)
         reminderEvent = reminderEvent.copy(remindedTimestamp = instantLater)
         result = formatter.formatScheduledReminder(scheduledReminder)
         resultReminder = formatter.formatReminderEvent(reminderEvent)
@@ -170,11 +170,11 @@ class ReminderHelperTest {
         )
         assertEquals("  1:00 AM\nTest (5)", formatter.formatReminderEvent(reminderEvent).toString())
 
-        // Stock deducted → show stockAfter with unit
+        // Stock deducted → show stockBefore ➡ stockAfter with unit
         reminderEvent =
             reminderEvent.copy(stockBefore = 10.0, stockAfter = 9.0, stockUnit = "tablets")
         assertEquals(
-            "  1:00 AM,   9 tablets\nTest (5)",
+            "  1:00 AM,   10 tablets ➡ 9 tablets\nTest (5)",
             formatter.formatReminderEvent(reminderEvent).toString()
         )
 
@@ -192,15 +192,22 @@ class ReminderHelperTest {
         var medicine = Medicine.default().copy(name = "Test")
         assertEquals(
             "  1:00 AM\nTest (5)",
-            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant))
+            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant, 0.0, 0.0))
                 .toString()
         )
 
-        // Stock active → show expected stock after taking
+        // Stock unchanged (scheduler path) → show stockBefore only
         medicine = medicine.copy(amount = 9.0, unit = "tablets")
         assertEquals(
             "  1:00 AM,   9 tablets\nTest (5)",
-            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant))
+            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant, 9.0, 9.0))
+                .toString()
+        )
+
+        // Stock depleted (simulator path) → show stockBefore ➡ stockAfter
+        assertEquals(
+            "  1:00 AM,   9 tablets ➡ 4 tablets\nTest (5)",
+            formatter.formatScheduledReminder(ScheduledReminder(medicine, reminder, instant, 9.0, 4.0))
                 .toString()
         )
 
@@ -212,7 +219,9 @@ class ReminderHelperTest {
                 ScheduledReminder(
                     medicine,
                     variableReminder,
-                    instant
+                    instant,
+                    9.0,
+                    9.0
                 )
             ).toString()
         )
@@ -226,7 +235,9 @@ class ReminderHelperTest {
                 ScheduledReminder(
                     medicine,
                     outOfStockReminder,
-                    instant
+                    instant,
+                    9.0,
+                    9.0
                 )
             ).toString()
         )
@@ -241,7 +252,9 @@ class ReminderHelperTest {
                 ScheduledReminder(
                     medicine,
                     expirationReminder,
-                    instant
+                    instant,
+                    9.0,
+                    9.0
                 )
             ).toString()
         )
