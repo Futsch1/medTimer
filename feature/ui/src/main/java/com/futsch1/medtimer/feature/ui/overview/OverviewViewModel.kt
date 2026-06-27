@@ -147,7 +147,6 @@ class OverviewViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         futureRemindersRepository.releaseWindow("overview")
     }
 
