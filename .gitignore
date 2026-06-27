@@ -45,3 +45,8 @@ gradle/gradle-daemon-jvm.properties
 # Kotlin
 .kotlin
 /caveman.json
+
+# Claude
+CLAUDE.md
+.claude
+.mcp.json
