@@ -6,6 +6,7 @@ import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
@@ -15,7 +16,7 @@ import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
-import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
+import com.futsch1.medtimer.feature.ui.overview.model.ProcessedReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -48,7 +49,7 @@ class OverviewViewModel @AssistedInject constructor(
     reminderEventRepository: ReminderEventRepository,
     private val futureRemindersRepository: FutureRemindersRepository,
     private val reminderEventFactory: PastReminderEvent.Factory,
-    private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
+    private val processedReminderEventFactory: ProcessedReminderEvent.Factory,
     @Assisted private val tagFilterViewModel: TagFilterViewModel
 ) : ViewModel() {
 
@@ -96,27 +97,27 @@ class OverviewViewModel @AssistedInject constructor(
 
     private val liveMedicines = medicineRepository.getAllFlow()
 
-    private val _scheduledReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
+    private val _processedReminders = MutableStateFlow<List<ProcessedReminder>>(emptyList())
 
     val medicines: StateFlow<List<Medicine>> =
         combine(liveMedicines, tagFilterViewModel.validTagIds) { medicines, tagIds ->
             tagFilterViewModel.getFiltered(medicines, tagIds ?: emptySet())
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val scheduledReminders: SharedFlow<List<ScheduledReminder>> =
-        combine(_scheduledReminders, tagFilterViewModel.validTagIds) { reminders, tagIds ->
+    val processedReminders: SharedFlow<List<ProcessedReminder>> =
+        combine(_processedReminders, tagFilterViewModel.validTagIds) { reminders, tagIds ->
             tagFilterViewModel.getFiltered(reminders, tagIds ?: emptySet())
         }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEvents, scheduledReminders, filterState) { events, reminders, fs ->
+        combine(reminderEvents, processedReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         viewModelScope.launch {
             futureRemindersRepository.simulatedReminders.collect { reminders ->
-                _scheduledReminders.value = reminders
+                _processedReminders.value = reminders
             }
         }
 
@@ -168,7 +169,7 @@ class OverviewViewModel @AssistedInject constructor(
 
     private fun getFiltered(
         events: List<ReminderEvent>,
-        reminders: List<ScheduledReminder>,
+        reminders: List<ProcessedReminder>,
         filterState: FilterState
     ): List<OverviewEvent> {
         val filteredOverviewEvents = mutableListOf<OverviewEvent>()
@@ -179,9 +180,9 @@ class OverviewViewModel @AssistedInject constructor(
             }
         }
 
-        for (scheduledReminder in reminders) {
-            if (isScheduledReminderVisible(scheduledReminder, filterState)) {
-                filteredOverviewEvents.add(scheduledReminderEventFactory.create(scheduledReminder))
+        for (processedReminder in reminders) {
+            if (isScheduledReminderVisible(processedReminder.scheduledReminder, filterState)) {
+                filteredOverviewEvents.add(processedReminderEventFactory.create(processedReminder))
             }
         }
 

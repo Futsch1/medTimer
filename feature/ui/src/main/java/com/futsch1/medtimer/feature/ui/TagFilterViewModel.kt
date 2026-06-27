@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.MedicineToTag
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.Tag
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagFilterStore
@@ -111,7 +111,7 @@ class TagFilterViewModel @Inject constructor(
         return if (medicineWithReminder is Medicine) {
             medicineWithReminder.id
         } else {
-            (medicineWithReminder as ScheduledReminder).medicine.id
+            (medicineWithReminder as ProcessedReminder).scheduledReminder.medicine.id
         }
     }
 

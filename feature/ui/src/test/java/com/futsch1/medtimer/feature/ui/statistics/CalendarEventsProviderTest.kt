@@ -5,6 +5,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
@@ -39,7 +40,7 @@ class CalendarEventsProviderTest {
     private val preferencesDataSource: PreferencesDataSource = mock()
     private val futureRemindersRepository: FutureRemindersRepository = mock()
 
-    private val simulatedRemindersFlow = MutableStateFlow<List<ScheduledReminder>>(emptyList())
+    private val simulatedRemindersFlow = MutableStateFlow<List<ProcessedReminder>>(emptyList())
 
     init {
         whenever(futureRemindersRepository.simulatedReminders).thenReturn(simulatedRemindersFlow)
@@ -205,7 +206,7 @@ class CalendarEventsProviderTest {
         val tomorrow = LocalDate.now().plusDays(1)
         val tomorrowInstant = tomorrow.atTime(9, 0).atZone(ZoneId.systemDefault()).toInstant()
         simulatedRemindersFlow.value = listOf(
-            ScheduledReminder(medicine, reminder, tomorrowInstant, 0.0, 0.0)
+            ProcessedReminder(ScheduledReminder(medicine, reminder, tomorrowInstant), 0.0, 0.0)
         )
 
         val result = provider.getStructuredEvents(ALL_MEDICINES, pastMonths = 0)

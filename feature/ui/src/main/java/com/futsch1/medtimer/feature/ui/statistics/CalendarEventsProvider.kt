@@ -4,6 +4,7 @@ import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -23,7 +24,7 @@ import javax.inject.Inject
 // scheduler simulated. The map key carries the day; renderers read the source to produce their leaf.
 sealed interface CalendarEntry {
     data class Past(val event: ReminderEvent) : CalendarEntry
-    data class Future(val scheduledReminder: ScheduledReminder) : CalendarEntry
+    data class Future(val processedReminder: ProcessedReminder) : CalendarEntry
 }
 
 // The single calendar-month traversal: load events once, bucket past reminders and simulated future
@@ -80,7 +81,7 @@ class CalendarEventsProvider @Inject constructor(
 
     private fun buildEntriesByDay(
         pastEvents: List<ReminderEvent>,
-        simulatedReminders: List<ScheduledReminder>,
+        simulatedReminders: List<ProcessedReminder>,
         medicine: Medicine?
     ): Map<LocalDate, List<CalendarEntry>> {
         val zone = ZoneId.systemDefault()
@@ -98,13 +99,13 @@ class CalendarEventsProvider @Inject constructor(
         }
 
         simulatedReminders
-            .filter { scheduledReminder -> medicine == null || scheduledReminder.medicine.id == medicine.id }
-            .forEach { scheduledReminder ->
+            .filter { processedReminder -> medicine == null || processedReminder.scheduledReminder.medicine.id == medicine.id }
+            .forEach { processedReminder ->
                 entriesByDay
                     .getOrPut(
-                        scheduledReminder.timestamp.atZone(zone).toLocalDate()
+                        processedReminder.scheduledReminder.timestamp.atZone(zone).toLocalDate()
                     ) { mutableListOf() }
-                    .add(CalendarEntry.Future(scheduledReminder))
+                    .add(CalendarEntry.Future(processedReminder))
             }
 
         return entriesByDay
@@ -112,7 +113,7 @@ class CalendarEventsProvider @Inject constructor(
 
     private fun CalendarEntry.toCalendarDayEvent(): CalendarDayEvent = when (this) {
         is CalendarEntry.Past -> event.toCalendarDayEvent()
-        is CalendarEntry.Future -> scheduledReminder.toCalendarDayEvent()
+        is CalendarEntry.Future -> processedReminder.scheduledReminder.toCalendarDayEvent()
     }
 
     private fun ReminderEvent.toCalendarDayEvent(): CalendarDayEvent {

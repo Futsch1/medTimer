@@ -4,6 +4,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderTime
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import java.time.Instant
 import java.time.LocalDate
@@ -103,5 +104,29 @@ object TestHelper {
         assertEquals(timestamp, scheduledReminders[index].timestamp)
         assertEquals(medicine, scheduledReminders[index].medicine)
         assertEquals(reminder, scheduledReminders[index].reminder)
+    }
+
+    @JvmName("assertRemindedProcessed")
+    fun assertReminded(
+        processedReminders: List<ProcessedReminder>,
+        timestamp: Instant,
+        medicine: Medicine,
+        reminder: Reminder
+    ) {
+        assertRemindedAtIndex(processedReminders, timestamp, medicine, reminder, 0)
+    }
+
+    @JvmName("assertRemindedAtIndexProcessed")
+    fun assertRemindedAtIndex(
+        processedReminders: List<ProcessedReminder>,
+        timestamp: Instant,
+        medicine: Medicine,
+        reminder: Reminder,
+        index: Int
+    ) {
+        assertTrue(processedReminders.size > index)
+        assertEquals(timestamp, processedReminders[index].scheduledReminder.timestamp)
+        assertEquals(medicine, processedReminders[index].scheduledReminder.medicine)
+        assertEquals(reminder, processedReminders[index].scheduledReminder.reminder)
     }
 }

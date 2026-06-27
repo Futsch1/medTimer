@@ -20,7 +20,7 @@ class NextRemindersLineProvider @Inject constructor(
             futureRemindersRepository.simulatedReminders.value.getOrNull(line)
 
         return if (scheduledReminder != null)
-            reminderStringFormatter.formatScheduledReminderForWidget(scheduledReminder, isShort)
+            reminderStringFormatter.formatProcessedReminderForWidget(scheduledReminder, isShort)
         else SpannableStringBuilder()
     }
 }

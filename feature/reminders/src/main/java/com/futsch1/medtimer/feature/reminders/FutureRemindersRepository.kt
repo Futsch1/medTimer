@@ -5,7 +5,7 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.IdlingResourcesPool
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.ProcessedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
@@ -30,8 +30,8 @@ class FutureRemindersRepository @Inject constructor(
     private val timeAccess: TimeAccess,
     @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
-    private val _simulatedReminders = MutableStateFlow<List<ScheduledReminder>>(emptyList())
-    val simulatedReminders: StateFlow<List<ScheduledReminder>> = _simulatedReminders.asStateFlow()
+    private val _simulatedReminders = MutableStateFlow<List<ProcessedReminder>>(emptyList())
+    val simulatedReminders: StateFlow<List<ProcessedReminder>> = _simulatedReminders.asStateFlow()
 
     private val _simulatedThrough = MutableStateFlow(LocalDate.MIN)
     val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
@@ -101,7 +101,7 @@ class FutureRemindersRepository @Inject constructor(
     private suspend fun runSimulation(endDay: LocalDate) {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-        val result = mutableListOf<ScheduledReminder>()
+        val result = mutableListOf<ProcessedReminder>()
         val runOutDates = mutableMapOf<Int, LocalDate?>()
         medicines.forEach { runOutDates[it.id] = null }
         var currentEmitDay = LocalDate.MIN
@@ -111,15 +111,15 @@ class FutureRemindersRepository @Inject constructor(
             reminderEvents,
             timeAccess,
             preferencesDataSource
-        ).simulate { scheduledReminder, scheduledDate ->
+        ).simulate { processedReminder, scheduledDate ->
             if (scheduledDate < endDay) {
                 if (scheduledDate > currentEmitDay && currentEmitDay != LocalDate.MIN) {
                     _simulatedReminders.value = result.toList()
                 }
                 currentEmitDay = scheduledDate
-                result.add(scheduledReminder)
-                val medicineId = scheduledReminder.medicine.id
-                if (scheduledReminder.medicine.isStockManagementActive() && scheduledReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
+                result.add(processedReminder)
+                val medicineId = processedReminder.scheduledReminder.medicine.id
+                if (processedReminder.scheduledReminder.medicine.isStockManagementActive() && processedReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
                     runOutDates[medicineId] = scheduledDate
                 }
             }

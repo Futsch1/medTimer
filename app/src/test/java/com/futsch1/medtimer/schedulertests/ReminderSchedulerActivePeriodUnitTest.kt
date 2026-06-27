@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.schedulertests
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import org.junit.Test
 import org.mockito.Mockito
@@ -112,7 +111,7 @@ internal class ReminderSchedulerActivePeriodUnitTest {
         val medicineList = listOf(medicineWithReminders)
         val reminderEventList: List<ReminderEvent> = listOf()
 
-        var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
+        var scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertEquals(TestHelper.on(4, 120), scheduledReminders[0].timestamp)
         assertEquals(medicineWithReminders.toMedicine(), scheduledReminders[0].medicine)
         assertEquals(reminder, scheduledReminders[0].reminder)

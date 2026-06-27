@@ -20,7 +20,7 @@ class ReminderScheduler(private val timeAccess: TimeAccess, private val dataSour
                 val reminderScheduledTime = scheduling.getNextScheduledTime()
 
                 if (reminderScheduledTime != null) {
-                    scheduledReminders.add(ScheduledReminder(medicine, reminder, reminderScheduledTime, medicine.amount, medicine.amount))
+                    scheduledReminders.add(ScheduledReminder(medicine, reminder, reminderScheduledTime))
                 }
             }
         }
