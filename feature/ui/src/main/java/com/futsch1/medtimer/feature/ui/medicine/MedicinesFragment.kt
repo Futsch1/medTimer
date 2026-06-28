@@ -161,9 +161,11 @@ class MedicinesFragment : Fragment() {
 
     private fun navigateToMedicineId(medicineId: Int) {
         val navController = findNavController(this.requireView())
-        val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
-            medicineId
-        )
-        navController.navigate(action)
+        if (navController.currentDestination?.id == R.id.medicinesFragment) {
+            val action = MedicinesFragmentDirections.actionMedicinesFragmentToEditMedicineFragment(
+                medicineId
+            )
+            navController.navigate(action)
+        }
     }
 }
