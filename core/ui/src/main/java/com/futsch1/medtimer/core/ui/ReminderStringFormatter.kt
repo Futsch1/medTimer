@@ -16,7 +16,7 @@ import com.futsch1.medtimer.core.common.helpers.TintedImageSpan
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -59,13 +59,13 @@ class ReminderStringFormatter @Inject constructor(
             .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
     }
 
-    fun formatProcessedReminder(processedReminder: ProcessedReminder): Spanned {
+    fun formatSimulatedReminder(simulatedReminder: SimulatedReminder): Spanned {
         val scheduledTime = timeFormatter.toConfigurableTimeString(
-            processedReminder.scheduledReminder.timestamp, false
+            simulatedReminder.scheduledReminder.timestamp, false
         )
-        val reminderTypeSpan = getReminderTypeSpan(processedReminder.scheduledReminder.reminder.reminderType)
+        val reminderTypeSpan = getReminderTypeSpan(simulatedReminder.scheduledReminder.reminder.reminderType)
         val expectedStockOrExpirationDateSpan =
-            getExpectedStockOrExpirationDateText(processedReminder)
+            getExpectedStockOrExpirationDateText(simulatedReminder)
 
         return SpannableStringBuilder()
             .append(reminderTypeSpan)
@@ -73,8 +73,8 @@ class ReminderStringFormatter @Inject constructor(
             .append(expectedStockOrExpirationDateSpan)
             .append("\n")
             .bold {
-                append(processedReminder.scheduledReminder.medicine.name)
-            }.append(getAmountString(processedReminder.scheduledReminder))
+                append(simulatedReminder.scheduledReminder.medicine.name)
+            }.append(getAmountString(simulatedReminder.scheduledReminder))
     }
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
@@ -96,23 +96,23 @@ class ReminderStringFormatter @Inject constructor(
             .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
     }
 
-    fun formatProcessedReminderForWidget(
-        processedReminder: ProcessedReminder,
+    fun formatSimulatedReminderForWidget(
+        simulatedReminder: SimulatedReminder,
         isShort: Boolean
     ): Spanned {
         val scheduledTime = (if (isShort)
             timeFormatter.toConfigurableTimeString(
-                processedReminder.scheduledReminder.timestamp, true
+                simulatedReminder.scheduledReminder.timestamp, true
             )
         else
             timeFormatter.toConfigurableDateTimeString(
-                processedReminder.scheduledReminder.timestamp
+                simulatedReminder.scheduledReminder.timestamp
             )) + ": "
-        val reminderTypeSpan = getReminderTypeSpan(processedReminder.scheduledReminder.reminder.reminderType)
+        val reminderTypeSpan = getReminderTypeSpan(simulatedReminder.scheduledReminder.reminder.reminderType)
 
         return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime)
-            .bold { append(processedReminder.scheduledReminder.medicine.name) }.append(
-                getAmountString(processedReminder.scheduledReminder)
+            .bold { append(simulatedReminder.scheduledReminder.medicine.name) }.append(
+                getAmountString(simulatedReminder.scheduledReminder)
             )
     }
 
@@ -156,15 +156,15 @@ class ReminderStringFormatter @Inject constructor(
     }
 
 
-    private fun getExpectedStockOrExpirationDateText(processedReminder: ProcessedReminder): Spanned {
+    private fun getExpectedStockOrExpirationDateText(simulatedReminder: SimulatedReminder): Spanned {
         val span = SpannableStringBuilder()
 
-        if (processedReminder.scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
+        if (simulatedReminder.scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
             span.append(", ")
-            span.append(timeFormatter.localDateToString(processedReminder.scheduledReminder.medicine.expirationDate))
+            span.append(timeFormatter.localDateToString(simulatedReminder.scheduledReminder.medicine.expirationDate))
         } else {
-            if (processedReminder.scheduledReminder.reminder.variableAmount
-                || !processedReminder.scheduledReminder.medicine.isStockManagementActive()
+            if (simulatedReminder.scheduledReminder.reminder.variableAmount
+                || !simulatedReminder.scheduledReminder.medicine.isStockManagementActive()
             ) return SpannableStringBuilder()
 
             val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
@@ -179,13 +179,13 @@ class ReminderStringFormatter @Inject constructor(
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE
                 )
             }
-            span.append(MedicineHelper.formatAmount(processedReminder.stockBefore, processedReminder.scheduledReminder.medicine.unit))
-            if (processedReminder.stockAfter != processedReminder.stockBefore) {
+            span.append(MedicineHelper.formatAmount(simulatedReminder.stockBefore, simulatedReminder.scheduledReminder.medicine.unit))
+            if (simulatedReminder.stockAfter != simulatedReminder.stockBefore) {
                 span.append(" ➡ ")
                 span.append(
                     MedicineHelper.formatAmount(
-                        processedReminder.stockAfter,
-                        processedReminder.scheduledReminder.medicine.unit
+                        simulatedReminder.stockAfter,
+                        simulatedReminder.scheduledReminder.medicine.unit
                     )
                 )
             }

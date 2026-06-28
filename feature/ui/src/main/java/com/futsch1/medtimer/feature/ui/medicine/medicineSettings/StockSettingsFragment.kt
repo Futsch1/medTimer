@@ -17,7 +17,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
@@ -39,7 +39,7 @@ class StockSettingsFragment : MedicinePreferences(
     listOf("stock_unit")
 ) {
     @Inject
-    lateinit var futureRemindersRepository: FutureRemindersRepository
+    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
 
     @Inject
     lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory
@@ -84,12 +84,12 @@ class StockSettingsFragment : MedicinePreferences(
 
     override fun onStart() {
         super.onStart()
-        futureRemindersRepository.requestWindow("stockSettings", 365)
+        simulatedRemindersRepository.requestWindow("stockSettings", 365)
     }
 
     override fun onStop() {
         super.onStop()
-        futureRemindersRepository.releaseWindow("stockSettings")
+        simulatedRemindersRepository.releaseWindow("stockSettings")
     }
 
     override fun customSetup(modelData: Medicine) {
@@ -132,10 +132,10 @@ class StockSettingsFragment : MedicinePreferences(
 
     private fun observeRunOutDate(medicineId: Int) {
         lifecycleScope.launch {
-            futureRemindersRepository.stockRunOutDates
+            simulatedRemindersRepository.stockRunOutDates
                 .collect { dates ->
                     val runOutDate = dates[medicineId]
-                    val simulatedThrough = futureRemindersRepository.simulatedThrough.value
+                    val simulatedThrough = simulatedRemindersRepository.simulatedThrough.value
                     val summary = medicineStringFormatter.getStockRunOutText(runOutDate, simulatedThrough)
                     withContext(mainDispatcher) {
                         findPreference<EditTextPreference>("stock_run_out_date")?.summary = summary
@@ -145,7 +145,7 @@ class StockSettingsFragment : MedicinePreferences(
     }
 
     private fun addToCalendar() {
-        val date = futureRemindersRepository.stockRunOutDates.value[dataStore.modelData.id]
+        val date = simulatedRemindersRepository.stockRunOutDates.value[dataStore.modelData.id]
         if (date != null) {
             val intent =
                 createCalendarEventIntent(

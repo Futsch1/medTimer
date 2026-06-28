@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
-import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -45,7 +45,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CalendarFragment : Fragment() {
     @Inject
-    lateinit var futureRemindersRepository: FutureRemindersRepository
+    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
 
     private var idlingResource = SimpleIdlingResource(CalendarFragment::class.java.name)
     private lateinit var calendarView: CalendarView
@@ -247,13 +247,13 @@ class CalendarFragment : Fragment() {
         super.onStart()
         val futureMonths = calendarFragmentArgs().futureMonths
         if (futureMonths > 0) {
-            futureRemindersRepository.requestWindow("calendar", (futureMonths.toLong() + 2) * 31)
+            simulatedRemindersRepository.requestWindow("calendar", (futureMonths.toLong() + 2) * 31)
         }
     }
 
     override fun onStop() {
         super.onStop()
-        futureRemindersRepository.releaseWindow("calendar")
+        simulatedRemindersRepository.releaseWindow("calendar")
     }
 
     override fun onDestroy() {

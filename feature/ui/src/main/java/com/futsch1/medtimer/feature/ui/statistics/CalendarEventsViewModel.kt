@@ -9,9 +9,9 @@ import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.addDividerToSpan
 import com.futsch1.medtimer.core.common.helpers.addImageToSpan
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
-import com.futsch1.medtimer.feature.ui.overview.model.ProcessedReminderEvent
+import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -32,7 +32,7 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val calendarEventsProvider: CalendarEventsProvider,
     private val reminderEventFactory: PastReminderEvent.Factory,
-    private val processedReminderEventFactory: ProcessedReminderEvent.Factory,
+    private val simulatedReminderEventFactory: SimulatedReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     fun getEventForMonths(
@@ -61,13 +61,13 @@ class CalendarEventsViewModel @Inject constructor(
 
     private fun CalendarEntry.toSpanned(): Spanned = when (this) {
         is CalendarEntry.Past -> reminderEventToString(event)
-        is CalendarEntry.Future -> processedReminderToString(processedReminder)
+        is CalendarEntry.Future -> simulatedReminderToString(simulatedReminder)
     }
 
-    private fun processedReminderToString(processedReminder: ProcessedReminder): Spanned {
+    private fun simulatedReminderToString(simulatedReminder: SimulatedReminder): Spanned {
         val builder = SpannableStringBuilder()
         addDividerToSpan(builder)
-        return builder.append(processedReminderEventFactory.create(processedReminder).text)
+        return builder.append(simulatedReminderEventFactory.create(simulatedReminder).text)
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {

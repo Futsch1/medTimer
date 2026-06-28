@@ -21,22 +21,22 @@ internal class ReminderSchedulerUnitTest {
         val scheduler: ReminderScheduler = scheduler
 
         // Two empty lists
-        var processedReminders: List<ScheduledReminder> = scheduler.schedule(emptyList(), emptyList())
-        assertTrue(processedReminders.isEmpty())
+        var simulatedReminders: List<ScheduledReminder> = scheduler.schedule(emptyList(), emptyList())
+        assertTrue(simulatedReminders.isEmpty())
 
         // One medicine without reminders, no reminder events
         val medicineWithReminders = TestHelper.buildTestMedicine(1, TEST)
-        processedReminders = scheduler.schedule(listOf(medicineWithReminders.toMedicine()), emptyList())
-        assertTrue(processedReminders.isEmpty())
+        simulatedReminders = scheduler.schedule(listOf(medicineWithReminders.toMedicine()), emptyList())
+        assertTrue(simulatedReminders.isEmpty())
 
         // No reminder events
         val reminder = TestHelper.buildReminder(1, 1, "1", 12, 1).copy(
             createdTime = TestHelper.on(1, 13)
         )
         medicineWithReminders.reminders.add(reminder)
-        processedReminders = scheduler.schedule(listOf(medicineWithReminders.toMedicine()), emptyList())
-        assertEquals(1, processedReminders.size)
-        TestHelper.assertReminded(processedReminders, TestHelper.on(2, 12), medicineWithReminders.toMedicine(), reminder)
+        simulatedReminders = scheduler.schedule(listOf(medicineWithReminders.toMedicine()), emptyList())
+        assertEquals(1, simulatedReminders.size)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(2, 12), medicineWithReminders.toMedicine(), reminder)
     }
 
     @Test
@@ -48,16 +48,16 @@ internal class ReminderSchedulerUnitTest {
         val reminder2 = TestHelper.buildReminder(1, 1, "2", 12, 1)
         medicineWithReminders1.reminders.add(reminder1)
         medicineWithReminders1.reminders.add(reminder2)
-        var processedReminders: List<ScheduledReminder> = scheduler.schedule(listOf(medicineWithReminders1.toMedicine()), emptyList())
-        TestHelper.assertReminded(processedReminders, TestHelper.on(1, 12), medicineWithReminders1.toMedicine(), reminder2)
-        TestHelper.assertRemindedAtIndex(processedReminders, TestHelper.on(1, 16), medicineWithReminders1.toMedicine(), reminder1, 1)
+        var simulatedReminders: List<ScheduledReminder> = scheduler.schedule(listOf(medicineWithReminders1.toMedicine()), emptyList())
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(1, 12), medicineWithReminders1.toMedicine(), reminder2)
+        TestHelper.assertRemindedAtIndex(simulatedReminders, TestHelper.on(1, 16), medicineWithReminders1.toMedicine(), reminder1, 1)
 
         // Now add a second medicine with an earlier reminder
         val medicineWithReminders2 = TestHelper.buildTestMedicine(2, TEST_2)
         val reminder3 = TestHelper.buildReminder(2, 1, "1", 3, 1)
         medicineWithReminders2.reminders.add(reminder3)
-        processedReminders = scheduler.schedule(listOf(medicineWithReminders1.toMedicine(), medicineWithReminders2.toMedicine()), emptyList())
-        TestHelper.assertReminded(processedReminders, TestHelper.on(1, 3), medicineWithReminders2.toMedicine(), reminder3)
+        simulatedReminders = scheduler.schedule(listOf(medicineWithReminders1.toMedicine(), medicineWithReminders2.toMedicine()), emptyList())
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(1, 3), medicineWithReminders2.toMedicine(), reminder3)
     }
 
     @Test
@@ -77,22 +77,22 @@ internal class ReminderSchedulerUnitTest {
         medicineWithReminders2.reminders.add(reminder3)
         val medicineWithReminders = listOf(medicineWithReminders1, medicineWithReminders2)
         // Reminder 3 already invoked
-        var processedReminders: List<ScheduledReminder> =
+        var simulatedReminders: List<ScheduledReminder> =
             scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, listOf(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3))))
-        TestHelper.assertReminded(processedReminders, TestHelper.on(2, 12), medicineWithReminders1.toMedicine(), reminder2)
-        TestHelper.assertRemindedAtIndex(processedReminders, TestHelper.on(2, 16), medicineWithReminders1.toMedicine(), reminder1, 1)
-        TestHelper.assertRemindedAtIndex(processedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3, 2)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(2, 12), medicineWithReminders1.toMedicine(), reminder2)
+        TestHelper.assertRemindedAtIndex(simulatedReminders, TestHelper.on(2, 16), medicineWithReminders1.toMedicine(), reminder1, 1)
+        TestHelper.assertRemindedAtIndex(simulatedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3, 2)
 
         // Check two reminders at the same time
         val reminder4 = TestHelper.buildReminder(2, 4, "1", 12, 1)
         medicineWithReminders2.reminders.add(reminder4)
-        processedReminders = scheduler.schedule(
+        simulatedReminders = scheduler.schedule(
             medicineWithReminders.map { it.toMedicine() },
             listOf(TestHelper.buildReminderEvent(3, TestHelper.on(2, 3)), TestHelper.buildReminderEvent(2, TestHelper.on(2, 12)))
         )
-        TestHelper.assertReminded(processedReminders, TestHelper.on(2, 12), medicineWithReminders2.toMedicine(), reminder4)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(2, 12), medicineWithReminders2.toMedicine(), reminder4)
 
-        processedReminders = scheduler.schedule(
+        simulatedReminders = scheduler.schedule(
             medicineWithReminders.map { it.toMedicine() },
             listOf(
                 TestHelper.buildReminderEvent(3, TestHelper.on(2, 4)),
@@ -100,10 +100,10 @@ internal class ReminderSchedulerUnitTest {
                 TestHelper.buildReminderEvent(4, TestHelper.on(2, 12))
             )
         )
-        TestHelper.assertReminded(processedReminders, TestHelper.on(2, 16), medicineWithReminders1.toMedicine(), reminder1)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(2, 16), medicineWithReminders1.toMedicine(), reminder1)
 
         // All reminders already invoked, switch to next day
-        processedReminders = scheduler.schedule(
+        simulatedReminders = scheduler.schedule(
             medicineWithReminders.map { it.toMedicine() }, listOf(
                 TestHelper.buildReminderEvent(3, TestHelper.on(2, 4).plusSeconds(4 * 60L)),
                 TestHelper.buildReminderEvent(2, TestHelper.on(2, 12)),
@@ -111,11 +111,11 @@ internal class ReminderSchedulerUnitTest {
                 TestHelper.buildReminderEvent(4, TestHelper.on(2, 16))
             )
         )
-        TestHelper.assertReminded(processedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3)
 
         // All reminders already invoked, we are on the next day
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
-        processedReminders = scheduler.schedule(
+        simulatedReminders = scheduler.schedule(
             medicineWithReminders.map { it.toMedicine() },
             listOf(
                 TestHelper.buildReminderEvent(3, TestHelper.on(2, 4)),
@@ -123,7 +123,7 @@ internal class ReminderSchedulerUnitTest {
                 TestHelper.buildReminderEvent(1, TestHelper.on(2, 16))
             )
         )
-        TestHelper.assertReminded(processedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(3, 3), medicineWithReminders2.toMedicine(), reminder3)
     }
 
     // schedules a reminder for the same day
@@ -365,8 +365,8 @@ internal class ReminderSchedulerUnitTest {
         val reminderEventList =
             listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 16)), TestHelper.buildReminderEvent(1, TestHelper.on(2, 16)))
 
-        val processedReminders: List<ScheduledReminder> = scheduler.schedule(medicines.map { it.toMedicine() }, reminderEventList)
-        TestHelper.assertReminded(processedReminders, TestHelper.on(3, 16), medicineWithReminders1.toMedicine(), reminder1)
+        val simulatedReminders: List<ScheduledReminder> = scheduler.schedule(medicines.map { it.toMedicine() }, reminderEventList)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.on(3, 16), medicineWithReminders1.toMedicine(), reminder1)
     }
 
     companion object {

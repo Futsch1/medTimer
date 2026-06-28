@@ -4,11 +4,11 @@ import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -24,7 +24,7 @@ import javax.inject.Inject
 // scheduler simulated. The map key carries the day; renderers read the source to produce their leaf.
 sealed interface CalendarEntry {
     data class Past(val event: ReminderEvent) : CalendarEntry
-    data class Future(val processedReminder: ProcessedReminder) : CalendarEntry
+    data class Future(val simulatedReminder: SimulatedReminder) : CalendarEntry
 }
 
 // The single calendar-month traversal: load events once, bucket past reminders and simulated future
@@ -35,7 +35,7 @@ class CalendarEventsProvider @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
-    private val futureRemindersRepository: FutureRemindersRepository,
+    private val simulatedRemindersRepository: SimulatedRemindersRepository,
 ) {
 
     // Combines a Room-backed past-events flow (re-emits on DB writes) with the simulated future
@@ -56,7 +56,7 @@ class CalendarEventsProvider @Inject constructor(
                 startInstant,
                 ReminderEvent.statusValuesWithoutDelete
             ),
-            futureRemindersRepository.simulatedReminders,
+            simulatedRemindersRepository.simulatedReminders,
             medicineRepository.getFlow(medicineId)
         ) { pastEvents, simulatedReminders, medicine ->
             buildEntriesByDay(pastEvents, simulatedReminders, medicine)
@@ -81,7 +81,7 @@ class CalendarEventsProvider @Inject constructor(
 
     private fun buildEntriesByDay(
         pastEvents: List<ReminderEvent>,
-        simulatedReminders: List<ProcessedReminder>,
+        simulatedReminders: List<SimulatedReminder>,
         medicine: Medicine?
     ): Map<LocalDate, List<CalendarEntry>> {
         val zone = ZoneId.systemDefault()
@@ -99,13 +99,13 @@ class CalendarEventsProvider @Inject constructor(
         }
 
         simulatedReminders
-            .filter { processedReminder -> medicine == null || processedReminder.scheduledReminder.medicine.id == medicine.id }
-            .forEach { processedReminder ->
+            .filter { simulatedReminder -> medicine == null || simulatedReminder.scheduledReminder.medicine.id == medicine.id }
+            .forEach { simulatedReminder ->
                 entriesByDay
                     .getOrPut(
-                        processedReminder.scheduledReminder.timestamp.atZone(zone).toLocalDate()
+                        simulatedReminder.scheduledReminder.timestamp.atZone(zone).toLocalDate()
                     ) { mutableListOf() }
-                    .add(CalendarEntry.Future(processedReminder))
+                    .add(CalendarEntry.Future(simulatedReminder))
             }
 
         return entriesByDay
@@ -113,7 +113,7 @@ class CalendarEventsProvider @Inject constructor(
 
     private fun CalendarEntry.toCalendarDayEvent(): CalendarDayEvent = when (this) {
         is CalendarEntry.Past -> event.toCalendarDayEvent()
-        is CalendarEntry.Future -> processedReminder.scheduledReminder.toCalendarDayEvent()
+        is CalendarEntry.Future -> simulatedReminder.scheduledReminder.toCalendarDayEvent()
     }
 
     private fun ReminderEvent.toCalendarDayEvent(): CalendarDayEvent {

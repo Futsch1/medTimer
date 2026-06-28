@@ -4,7 +4,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
@@ -51,50 +51,50 @@ class SchedulingSimulatorTest {
         medicines[1].reminders.add(TestHelper.buildReminder(1, 2, "1", 120, 1))
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, localDate: LocalDate ->
-            processedReminders.add(processedReminder)
-            if (processedReminders.size == 1) {
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(0.0, processedReminder.stockAfter)
+                assertEquals(0.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 3) {
+            if (simulatedReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
             }
-            processedReminders.size < 5
+            simulatedReminders.size < 5
         }
 
-        assertEquals(5, processedReminders.size)
+        assertEquals(5, simulatedReminders.size)
         assertReminded(
-            processedReminders,
+            simulatedReminders,
             on(1, 60),
             medicines[0].toMedicine(),
             medicines[0].reminders[0]
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(1, 120),
             medicines[1].toMedicine(),
             medicines[1].reminders[0],
             1
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 60),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             2
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 120),
             medicines[1].toMedicine(),
             medicines[1].reminders[0],
             3
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(3, 60),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
@@ -115,29 +115,29 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, _: LocalDate ->
-            processedReminders.add(processedReminder)
-            processedReminders.size < 3
+        simulator.simulate { simulatedReminder: SimulatedReminder, _: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            simulatedReminders.size < 3
         }
 
-        assertEquals(3, processedReminders.size)
+        assertEquals(3, simulatedReminders.size)
         assertReminded(
-            processedReminders,
+            simulatedReminders,
             on(1, 600),
             medicines[0].toMedicine(),
             medicines[0].reminders[0]
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(1, 1200),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             1
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 360),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
@@ -161,29 +161,29 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, _: LocalDate ->
-            processedReminders.add(processedReminder)
-            processedReminders.size < 3
+        simulator.simulate { simulatedReminder: SimulatedReminder, _: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            simulatedReminders.size < 3
         }
 
-        assertEquals(3, processedReminders.size)
+        assertEquals(3, simulatedReminders.size)
         assertReminded(
-            processedReminders,
+            simulatedReminders,
             on(1, 120),
             medicines[0].toMedicine(),
             medicines[0].reminders[0]
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(1, 600),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             1
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 120),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
@@ -207,43 +207,43 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, _: LocalDate ->
-            processedReminders.add(processedReminder)
-            processedReminders.size < 5
+        simulator.simulate { simulatedReminder: SimulatedReminder, _: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            simulatedReminders.size < 5
         }
 
-        assertEquals(5, processedReminders.size)
+        assertEquals(5, simulatedReminders.size)
         assertReminded(
-            processedReminders,
+            simulatedReminders,
             on(1, 700),
             medicines[0].toMedicine(),
             medicines[0].reminders[0]
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 1),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             1
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(2, 700),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             2
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(3, 1),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             3
         )
         assertRemindedAtIndex(
-            processedReminders,
+            simulatedReminders,
             on(3, 700),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
@@ -266,31 +266,31 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, localDate: LocalDate ->
-            processedReminders.add(processedReminder)
-            if (processedReminders.size == 1) {
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(12.0, processedReminder.stockBefore)
-                assertEquals(11.0, processedReminder.stockAfter)
+                assertEquals(12.0, simulatedReminder.stockBefore)
+                assertEquals(11.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 2) {
+            if (simulatedReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(11.0, processedReminder.stockBefore)
-                assertEquals(9.0, processedReminder.stockAfter)
+                assertEquals(11.0, simulatedReminder.stockBefore)
+                assertEquals(9.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 3) {
+            if (simulatedReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
-                assertEquals(9.0, processedReminder.stockBefore)
-                assertEquals(8.0, processedReminder.stockAfter)
+                assertEquals(9.0, simulatedReminder.stockBefore)
+                assertEquals(8.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 4) {
+            if (simulatedReminders.size == 4) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
-                assertEquals(8.0, processedReminder.stockBefore)
-                assertEquals(6.0, processedReminder.stockAfter)
+                assertEquals(8.0, simulatedReminder.stockBefore)
+                assertEquals(6.0, simulatedReminder.stockAfter)
             }
-            processedReminders.size < 4
+            simulatedReminders.size < 4
         }
     }
 
@@ -301,7 +301,7 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        simulator.simulate { _: ProcessedReminder, localDate: LocalDate ->
+        simulator.simulate { _: SimulatedReminder, localDate: LocalDate ->
             localDate == LocalDate.EPOCH.plusDays(30)
         }
     }
@@ -322,26 +322,26 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, localDate: LocalDate ->
-            processedReminders.add(processedReminder)
-            if (processedReminders.size == 1) {
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(processedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60))
+                assertEquals(simulatedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60))
             }
-            if (processedReminders.size == 2) {
+            if (simulatedReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(processedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(600 * 60))
+                assertEquals(simulatedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(600 * 60))
             }
-            if (processedReminders.size == 3) {
+            if (simulatedReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(
-                    processedReminder.scheduledReminder.timestamp,
+                    simulatedReminder.scheduledReminder.timestamp,
                     Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60)
                 )
             }
-            processedReminders.size < 3
+            simulatedReminders.size < 3
         }
     }
 
@@ -361,22 +361,22 @@ class SchedulingSimulatorTest {
 
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, localDate: LocalDate ->
-            processedReminders.add(processedReminder)
-            if (processedReminders.size == 1) {
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(12.0, processedReminder.stockBefore)
-                assertEquals(9.0, processedReminder.stockAfter)
+                assertEquals(12.0, simulatedReminder.stockBefore)
+                assertEquals(9.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 3) {
+            if (simulatedReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(2), localDate)
-                assertEquals(6.0, processedReminder.stockBefore)
-                assertEquals(6.0, processedReminder.stockAfter)
-                assertEquals(processedReminder.scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
+                assertEquals(6.0, simulatedReminder.stockBefore)
+                assertEquals(6.0, simulatedReminder.stockAfter)
+                assertEquals(simulatedReminder.scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
             }
-            processedReminders.size < 3
+            simulatedReminders.size < 3
         }
     }
 
@@ -391,18 +391,18 @@ class SchedulingSimulatorTest {
         medicines[0].reminders.add(reminder)
         val simulator = buildSchedulingSimulator(medicines, emptyList())
 
-        val processedReminders = mutableListOf<ProcessedReminder>()
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
 
-        simulator.simulate { processedReminder: ProcessedReminder, localDate: LocalDate ->
-            processedReminders.add(processedReminder)
-            if (processedReminders.size == 1) {
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH.plusDays(4), localDate)
-                assertEquals(0.0, processedReminder.stockAfter)
+                assertEquals(0.0, simulatedReminder.stockAfter)
             }
-            if (processedReminders.size == 2) {
+            if (simulatedReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH.plusDays(7), localDate)
             }
-            processedReminders.size < 2
+            simulatedReminders.size < 2
         }
     }
 }

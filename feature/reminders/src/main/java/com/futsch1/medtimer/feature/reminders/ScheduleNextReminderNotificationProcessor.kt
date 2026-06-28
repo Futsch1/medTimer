@@ -20,12 +20,12 @@ class ScheduleNextReminderNotificationProcessor @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess,
     private val preferencesDataSource: PreferencesDataSource,
-    private val futureRemindersRepository: FutureRemindersRepository
+    private val simulatedRemindersRepository: SimulatedRemindersRepository
 ) {
     private val mutex = Mutex()
 
     suspend fun scheduleNextReminder() {
-        futureRemindersRepository.triggerCalculation()
+        simulatedRemindersRepository.triggerCalculation()
         mutex.withLock {
             var futureReminderScheduled = false
             val medicines = medicineRepository.getAll()

@@ -6,7 +6,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -78,19 +78,19 @@ class ReminderHelperTest {
         // Standard case
         val medicine = Medicine.default().copy(name = "Test")
         var reminder = Reminder.default().copy(medicineRelId = 1, amount = "5")
-        var processedReminder = ProcessedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0)
+        var simulatedReminder = SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0)
         var reminderEvent = ReminderEvent.default()
             .copy(remindedTimestamp = instant, medicineName = "Test", amount = "5")
 
-        var result = formatter.formatProcessedReminder(processedReminder)
+        var result = formatter.formatSimulatedReminder(simulatedReminder)
         var resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  1:00 AM\nTest (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatter.formatProcessedReminderForWidget(processedReminder, false)
+        result = formatter.formatSimulatedReminderForWidget(simulatedReminder, false)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("  1/1/70 1:00 AM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatter.formatProcessedReminderForWidget(processedReminder, true)
+        result = formatter.formatSimulatedReminderForWidget(simulatedReminder, true)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
         assertEquals("  1:00 AM: Test (5)", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
@@ -98,12 +98,12 @@ class ReminderHelperTest {
         // Empty amount
         reminder = reminder.copy(amount = "")
         reminderEvent = reminderEvent.copy(amount = "")
-        processedReminder = ProcessedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0)
-        result = formatter.formatProcessedReminder(processedReminder)
+        simulatedReminder = SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0)
+        result = formatter.formatSimulatedReminder(simulatedReminder)
         resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  1:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatter.formatProcessedReminderForWidget(processedReminder, false)
+        result = formatter.formatSimulatedReminderForWidget(simulatedReminder, false)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("  1/1/70 1:00 AM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
@@ -114,17 +114,17 @@ class ReminderHelperTest {
                 UserPreferences.default().copy(useRelativeDateTime = true)
             )
         )
-        processedReminder = ProcessedReminder(ScheduledReminder(medicine, reminder, instantLater), 0.0, 0.0)
+        simulatedReminder = SimulatedReminder(ScheduledReminder(medicine, reminder, instantLater), 0.0, 0.0)
         reminderEvent = reminderEvent.copy(remindedTimestamp = instantLater)
-        result = formatter.formatProcessedReminder(processedReminder)
+        result = formatter.formatSimulatedReminder(simulatedReminder)
         resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  In 1 hour, 2:00 AM\nTest", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatter.formatProcessedReminderForWidget(processedReminder, false)
+        result = formatter.formatSimulatedReminderForWidget(simulatedReminder, false)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, false)
         assertEquals("  In 1 hour, 2:00 AM: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
-        result = formatter.formatProcessedReminderForWidget(processedReminder, true)
+        result = formatter.formatSimulatedReminderForWidget(simulatedReminder, true)
         resultReminder = formatter.formatReminderForWidget(reminderEvent, true)
         assertEquals("  In 1 hour: Test", result.toString())
         assertEquals(result.toString(), resultReminder.toString())
@@ -193,7 +193,7 @@ class ReminderHelperTest {
         var medicine = Medicine.default().copy(name = "Test")
         assertEquals(
             "  1:00 AM\nTest (5)",
-            formatter.formatProcessedReminder(ProcessedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0))
+            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0))
                 .toString()
         )
 
@@ -201,14 +201,14 @@ class ReminderHelperTest {
         medicine = medicine.copy(amount = 9.0, unit = "tablets")
         assertEquals(
             "  1:00 AM,   9 tablets\nTest (5)",
-            formatter.formatProcessedReminder(ProcessedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 9.0))
+            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 9.0))
                 .toString()
         )
 
         // Stock depleted (simulator path) → show stockBefore ➡ stockAfter
         assertEquals(
             "  1:00 AM,   9 tablets ➡ 4 tablets\nTest (5)",
-            formatter.formatProcessedReminder(ProcessedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 4.0))
+            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 4.0))
                 .toString()
         )
 
@@ -216,8 +216,8 @@ class ReminderHelperTest {
         val variableReminder = reminder.copy(variableAmount = true)
         assertEquals(
             "  1:00 AM\nTest (5)",
-            formatter.formatProcessedReminder(
-                ProcessedReminder(ScheduledReminder(medicine, variableReminder, instant), 9.0, 9.0)
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(ScheduledReminder(medicine, variableReminder, instant), 9.0, 9.0)
             ).toString()
         )
 
@@ -226,8 +226,8 @@ class ReminderHelperTest {
             Reminder.default().copy(outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE)
         assertEquals(
             "  1:00 AM,   9 tablets\nTest",
-            formatter.formatProcessedReminder(
-                ProcessedReminder(ScheduledReminder(medicine, outOfStockReminder, instant), 9.0, 9.0)
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(ScheduledReminder(medicine, outOfStockReminder, instant), 9.0, 9.0)
             ).toString()
         )
 
@@ -237,8 +237,8 @@ class ReminderHelperTest {
         medicine = medicine.copy(expirationDate = LocalDate.of(2026, 6, 7))
         assertEquals(
             "  1:00 AM, 6/7/26\nTest",
-            formatter.formatProcessedReminder(
-                ProcessedReminder(ScheduledReminder(medicine, expirationReminder, instant), 9.0, 9.0)
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(ScheduledReminder(medicine, expirationReminder, instant), 9.0, 9.0)
             ).toString()
         )
     }

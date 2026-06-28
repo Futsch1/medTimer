@@ -2,26 +2,26 @@ package com.futsch1.medtimer.feature.ui.overview.model
 
 import android.text.Spanned
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.ui.ReminderStringFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-class ProcessedReminderEvent @AssistedInject constructor(
+class SimulatedReminderEvent @AssistedInject constructor(
     reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
-    @Assisted val processedReminder: ProcessedReminder
+    @Assisted val simulatedReminder: SimulatedReminder
 ) :
     OverviewEvent(preferencesDataSource) {
 
     @AssistedFactory
     fun interface Factory {
-        fun create(processedReminder: ProcessedReminder): ProcessedReminderEvent
+        fun create(simulatedReminder: SimulatedReminder): SimulatedReminderEvent
     }
 
-    val scheduledReminder = processedReminder.scheduledReminder
-    override val text: Spanned = reminderStringFormatter.formatProcessedReminder(processedReminder)
+    val scheduledReminder = simulatedReminder.scheduledReminder
+    override val text: Spanned = reminderStringFormatter.formatSimulatedReminder(simulatedReminder)
     override val id: Int = java.util.Objects.hash(
         scheduledReminder.reminder.id,
         scheduledReminder.timestamp.epochSecond

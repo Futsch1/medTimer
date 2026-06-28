@@ -5,7 +5,7 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.IdlingResourcesPool
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
@@ -23,15 +23,15 @@ import javax.inject.Singleton
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
-class FutureRemindersRepository @Inject constructor(
+class SimulatedRemindersRepository @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
     private val timeAccess: TimeAccess,
     @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
-    private val _simulatedReminders = MutableStateFlow<List<ProcessedReminder>>(emptyList())
-    val simulatedReminders: StateFlow<List<ProcessedReminder>> = _simulatedReminders.asStateFlow()
+    private val _simulatedReminders = MutableStateFlow<List<SimulatedReminder>>(emptyList())
+    val simulatedReminders: StateFlow<List<SimulatedReminder>> = _simulatedReminders.asStateFlow()
 
     private val _simulatedThrough = MutableStateFlow(LocalDate.MIN)
     val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
@@ -101,7 +101,7 @@ class FutureRemindersRepository @Inject constructor(
     private suspend fun runSimulation(endDay: LocalDate) {
         val medicines = medicineRepository.getAll()
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
-        val result = mutableListOf<ProcessedReminder>()
+        val result = mutableListOf<SimulatedReminder>()
         val runOutDates = mutableMapOf<Int, LocalDate?>()
         medicines.forEach { runOutDates[it.id] = null }
         var currentEmitDay = LocalDate.MIN
@@ -111,15 +111,15 @@ class FutureRemindersRepository @Inject constructor(
             reminderEvents,
             timeAccess,
             preferencesDataSource
-        ).simulate { processedReminder, scheduledDate ->
+        ).simulate { simulatedReminder, scheduledDate ->
             if (scheduledDate < endDay) {
                 if (scheduledDate > currentEmitDay && currentEmitDay != LocalDate.MIN) {
                     _simulatedReminders.value = result.toList()
                 }
                 currentEmitDay = scheduledDate
-                result.add(processedReminder)
-                val medicineId = processedReminder.scheduledReminder.medicine.id
-                if (processedReminder.scheduledReminder.medicine.isStockManagementActive() && processedReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
+                result.add(simulatedReminder)
+                val medicineId = simulatedReminder.scheduledReminder.medicine.id
+                if (simulatedReminder.scheduledReminder.medicine.isStockManagementActive() && simulatedReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
                     runOutDates[medicineId] = scheduledDate
                 }
             }

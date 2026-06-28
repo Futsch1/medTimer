@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
-import com.futsch1.medtimer.feature.reminders.FutureRemindersRepository
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,7 +31,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     @Assisted val tagFilterViewModel: TagFilterViewModel,
     private val medicineIcons: MedicineIcons,
     private val medicineStringFormatter: MedicineStringFormatter,
-    private val futureRemindersRepository: FutureRemindersRepository,
+    private val simulatedRemindersRepository: SimulatedRemindersRepository,
     @Dispatcher(MedTimerDispatchers.IO) ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -53,7 +53,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     init {
         combine(
             medicines,
-            futureRemindersRepository.stockRunOutDates
+            simulatedRemindersRepository.stockRunOutDates
         ) { medicines, stockRunOutDates ->
             medicines.map { medicine ->
                 MedicineScreenItem(
@@ -68,7 +68,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
                         medicineStringFormatter.getStockRunOutText
                             (
                             stockRunOutDates.getOrDefault(medicine.id, null),
-                            futureRemindersRepository.simulatedThrough.value
+                            simulatedRemindersRepository.simulatedThrough.value
                         )
                     ),
                     if (medicine.iconId != 0) medicineIcons.getIconBitmapUntinted(medicine.iconId) else null,

@@ -6,7 +6,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ProcessedReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import kotlinx.coroutines.currentCoroutineContext
@@ -15,7 +15,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-typealias ScheduledReminderConsumer = (ProcessedReminder, LocalDate) -> Boolean
+typealias ScheduledReminderConsumer = (SimulatedReminder, LocalDate) -> Boolean
 
 
 class LastEventPerReminder(initialReminderEvents: List<ReminderEvent>) {
@@ -125,7 +125,7 @@ class SchedulingSimulator(
         // Notify consumer
         val continueSimulating =
             scheduledReminderConsumer(
-                ProcessedReminder(scheduledReminder, stockBefore, stockAfter),
+                SimulatedReminder(scheduledReminder, stockBefore, stockAfter),
                 currentDay
             )
         // Add the simulated event to make sure it is considered in the next scheduling call
