@@ -45,8 +45,8 @@ android {
 
     buildTypes {
         release {
-            @Suppress("kotlin:S7204")
-            isMinifyEnabled = false // NOSONAR - Does not make sense for open source apps
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
