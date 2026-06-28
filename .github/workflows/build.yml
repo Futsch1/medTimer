@@ -16,6 +16,7 @@ env:
   FULL_APK_RELEASE_DIRECTORY: app/build/outputs/apk/full/release
   FOSS_APK_RELEASE_DIRECTORY: app/build/outputs/apk/foss/release
   FULL_AAB_RELEASE_DIRECTORY: app/build/outputs/bundle/fullRelease
+  MAPPING_DIRECTORY: app/build/outputs/mapping/fullRelease
   BUILD_TOOLS_HOME: /usr/local/lib/android/sdk/build-tools
 
 permissions:
@@ -25,7 +26,8 @@ jobs:
   build:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -45,10 +47,15 @@ jobs:
         run: ./gradlew bundleRelease
 
       - name: Sign Full AAB
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          SIGNING_ALIAS_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+          SIGNING_ALIAS: ${{ secrets.SIGNING_ALIAS }}
         run: |
-          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks
-          jarsigner -keystore $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks -storepass ${{ secrets.SIGNING_KEYSTORE_PASSWORD }} \
-            -keypass ${{ secrets.SIGNING_ALIAS_PASSWORD }} $FULL_AAB_RELEASE_DIRECTORY/MedTimer-full-release.aab ${{ secrets.SIGNING_ALIAS }}
+          echo -n "$SIGNING_KEYSTORE" | base64 --decode >> $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks
+          jarsigner -keystore $FULL_AAB_RELEASE_DIRECTORY/signingKey.jks -storepass "$SIGNING_KEYSTORE_PASSWORD" \
+            -keypass "$SIGNING_ALIAS_PASSWORD" $FULL_AAB_RELEASE_DIRECTORY/MedTimer-full-release.aab "$SIGNING_ALIAS"
         continue-on-error: true
       - name: Upload Full App Bundle
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -63,11 +70,16 @@ jobs:
           echo "BUILD_TOOLS_PATH=$BUILD_TOOLS_HOME/$BUILD_TOOLS_VERSION" >> $GITHUB_ENV
 
       - name: Sign Full APK
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          SIGNING_ALIAS_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+          SIGNING_ALIAS: ${{ secrets.SIGNING_ALIAS }}
         run: |
-          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FULL_APK_RELEASE_DIRECTORY/signingKey.jks
-          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $FULL_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+          echo -n "$SIGNING_KEYSTORE" | base64 --decode >> $FULL_APK_RELEASE_DIRECTORY/signingKey.jks
+          $BUILD_TOOLS_PATH/apksigner sign --ks $FULL_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias "$SIGNING_ALIAS" \
             --alignment-preserved \
-            --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
+            --ks-pass "pass:$SIGNING_KEYSTORE_PASSWORD" --key-pass "pass:$SIGNING_ALIAS_PASSWORD" \
             --out $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-signed.apk \
             $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-unsigned.apk
           rm $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-unsigned.apk
@@ -79,11 +91,16 @@ jobs:
           path: ${{env.FULL_APK_RELEASE_DIRECTORY}}/MedTimer-full-release-signed.apk
 
       - name: Sign FOSS APK
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          SIGNING_ALIAS_PASSWORD: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+          SIGNING_ALIAS: ${{ secrets.SIGNING_ALIAS }}
         run: |
-          echo -n "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode >> $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks
-          ${{ env.BUILD_TOOLS_PATH }}/apksigner sign --ks $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias ${{ secrets.SIGNING_ALIAS }} \
+          echo -n "$SIGNING_KEYSTORE" | base64 --decode >> $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks
+          $BUILD_TOOLS_PATH/apksigner sign --ks $FOSS_APK_RELEASE_DIRECTORY/signingKey.jks --ks-key-alias "$SIGNING_ALIAS" \
             --alignment-preserved \
-            --ks-pass pass:${{ secrets.SIGNING_KEYSTORE_PASSWORD }} --key-pass pass:${{ secrets.SIGNING_ALIAS_PASSWORD }} \
+            --ks-pass "pass:$SIGNING_KEYSTORE_PASSWORD" --key-pass "pass:$SIGNING_ALIAS_PASSWORD" \
             --out $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-signed.apk \
             $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-unsigned.apk
           rm $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-unsigned.apk
@@ -98,5 +115,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
-          artifacts: ${{env.FULL_AAB_RELEASE_DIRECTORY}}/*.aab,${{env.FULL_APK_RELEASE_DIRECTORY}}/*.apk,${{env.FOSS_APK_RELEASE_DIRECTORY}}/*.apk
+          artifacts: ${{env.FULL_AAB_RELEASE_DIRECTORY}}/*.aab,${{env.FULL_APK_RELEASE_DIRECTORY}}/*.apk,${{env.FOSS_APK_RELEASE_DIRECTORY}}/*.apk,${{env.MAPPING_DIRECTORY}}/mapping.txt
           generateReleaseNotes: true
