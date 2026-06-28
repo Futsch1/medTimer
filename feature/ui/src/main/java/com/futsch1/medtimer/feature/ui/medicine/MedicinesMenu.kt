@@ -23,9 +23,7 @@ class MedicinesMenu @Inject constructor(
     @param:ApplicationScope private val applicationScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
-
-    lateinit var medicines: List<Medicine>
-
+    var medicinesProvider: () -> List<Medicine> = { emptyList() }
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines_settings, menu)
         menu.setGroupDividerEnabled(true)
@@ -49,7 +47,7 @@ class MedicinesMenu @Inject constructor(
 
     private fun sortBy(sortFunction: (List<Medicine>) -> List<Medicine>) {
         applicationScope.launch(dispatcher) {
-            var medicines = sortFunction(medicines)
+            var medicines = sortFunction(medicineRepository.getAll())
             medicines = medicines.map { it.copy(sortOrder = 1.0 + medicines.indexOf(it)) }
             medicineRepository.updateAll(medicines)
         }
@@ -57,11 +55,8 @@ class MedicinesMenu @Inject constructor(
 
     private fun setRemindersActive(active: Boolean) {
         applicationScope.launch {
-            if (this@MedicinesMenu::medicines.isInitialized) {
-                for (medicine in medicines) {
-                    val localMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
-                    setRemindersActive(localMedicine.reminders, reminderRepository, active)
-                }
+            for (medicine in medicinesProvider()) {
+                setRemindersActive(medicine.reminders, reminderRepository, active)
             }
         }
     }

@@ -41,8 +41,8 @@
         <item quantity="other">நிமிடங்கள்</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d நினைவூட்டல்\n %2$s</item>
-        <item quantity="other">%1$d நினைவூட்டல்கள்\n %2$s</item>
+        <item quantity="one">%1$d நினைவூட்டல்</item>
+        <item quantity="other">%1$d நினைவூட்டல்கள்</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">வாரம்</item>
@@ -324,4 +324,6 @@
     <string name="same_as_medicine">மருந்தைப் போலவே</string>
     <string name="previous_week">முந்தைய வாரம்</string>
     <string name="next_week">அடுத்த வாரம்</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">மருந்தை நகர்த்து</string>
 </resources>

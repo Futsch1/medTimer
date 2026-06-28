@@ -9,15 +9,14 @@ import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.addDividerToSpan
 import com.futsch1.medtimer.core.common.helpers.addImageToSpan
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
-import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
+import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
@@ -33,22 +32,28 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val calendarEventsProvider: CalendarEventsProvider,
     private val reminderEventFactory: PastReminderEvent.Factory,
-    private val scheduledReminderEventFactory: ScheduledReminderEvent.Factory,
+    private val simulatedReminderEventFactory: SimulatedReminderEvent.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    // The legacy XML calendar reads a fixed window once per call; flowOf(Unit) is that single trigger.
-    // The provider owns the read and reactivity (entriesFlow); this maps each day's entries to Spanned.
     fun getEventForMonths(
-        medicineId: Int, pastMonths: Int, futureMonths: Int
+        medicineId: Int, pastMonths: Int
     ): Flow<Map<LocalDate, Spanned>> =
-        calendarEventsProvider.entriesFlow(flowOf(Unit), medicineId, pastMonths, futureMonths)
-            .map { entriesByDay -> entriesByDay.mapValues { (day, dayEntries) -> renderDay(day, dayEntries) } }
+        calendarEventsProvider.entriesFlow(medicineId, pastMonths)
+            .map { entriesByDay ->
+                entriesByDay.mapValues { (day, dayEntries) ->
+                    renderDay(
+                        day,
+                        dayEntries
+                    )
+                }
+            }
             .flowOn(ioDispatcher)
 
     private fun renderDay(day: LocalDate, entries: List<CalendarEntry>): Spanned {
         val builder = SpannableStringBuilder()
         if (entries.isNotEmpty()) {
-            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).append("\n")
+            builder.append(day.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
+                .append("\n")
         }
         entries.forEach { builder.append(it.toSpanned()).append("\n") }
         return builder
@@ -56,13 +61,13 @@ class CalendarEventsViewModel @Inject constructor(
 
     private fun CalendarEntry.toSpanned(): Spanned = when (this) {
         is CalendarEntry.Past -> reminderEventToString(event)
-        is CalendarEntry.Future -> scheduledReminderToString(scheduledReminder)
+        is CalendarEntry.Future -> simulatedReminderToString(simulatedReminder)
     }
 
-    private fun scheduledReminderToString(scheduledReminder: ScheduledReminder): Spanned {
+    private fun simulatedReminderToString(simulatedReminder: SimulatedReminder): Spanned {
         val builder = SpannableStringBuilder()
         addDividerToSpan(builder)
-        return builder.append(scheduledReminderEventFactory.create(scheduledReminder).text)
+        return builder.append(simulatedReminderEventFactory.create(simulatedReminder).text)
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {

@@ -44,9 +44,9 @@
         <item quantity="many">minutes</item>
     </plurals>
     <plurals name="sum_reminders" ns0:ignore="UnusedQuantity">
-        <item quantity="one">%1$d rappel\n%2$s</item>
-        <item quantity="many">%1$d rappels\n%2$s</item>
-        <item quantity="other">%1$d rappels\n%2$s</item>
+        <item quantity="one">%1$d rappel</item>
+        <item quantity="many">%1$d rappels</item>
+        <item quantity="other">%1$d rappels</item>
     </plurals>
     <plurals name="weeks" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">semaine</item>
@@ -330,4 +330,6 @@
     <string name="same_as_medicine">Identique au médicament</string>
     <string name="previous_week">Semaine précédente</string>
     <string name="next_week">Semaine suivante</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Déplacer le médicament</string>
 </resources>

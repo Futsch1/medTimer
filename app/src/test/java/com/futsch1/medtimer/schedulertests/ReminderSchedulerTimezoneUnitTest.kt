@@ -21,15 +21,15 @@ internal class ReminderSchedulerTimezoneUnitTest {
         val medicineWithReminders = listOf(medicineWithReminders1)
         val reminderEvents = listOf(TestHelper.buildReminderEvent(1, TestHelper.on(1, 1)))
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("CET"))
-        var scheduledReminders: List<ScheduledReminder> = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
-        TestHelper.assertReminded(scheduledReminders, TestHelper.onTZ(2, 1, "CET"), medicineWithReminders1.toMedicine(), reminder1)
+        var simulatedReminders: List<ScheduledReminder> = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.onTZ(2, 1, "CET"), medicineWithReminders1.toMedicine(), reminder1)
 
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("America/New_York"))
-        scheduledReminders = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
-        TestHelper.assertReminded(scheduledReminders, TestHelper.onTZ(2, 1, "America/New_York"), medicineWithReminders1.toMedicine(), reminder1)
+        simulatedReminders = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.onTZ(2, 1, "America/New_York"), medicineWithReminders1.toMedicine(), reminder1)
 
         Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Asia/Kolkata"))
-        scheduledReminders = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
-        TestHelper.assertReminded(scheduledReminders, TestHelper.onTZ(2, 1, "Asia/Kolkata"), medicineWithReminders1.toMedicine(), reminder1)
+        simulatedReminders = scheduler.schedule(medicineWithReminders.map { it.toMedicine() }, reminderEvents)
+        TestHelper.assertReminded(simulatedReminders, TestHelper.onTZ(2, 1, "Asia/Kolkata"), medicineWithReminders1.toMedicine(), reminder1)
     }
 }

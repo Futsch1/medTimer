@@ -38,7 +38,7 @@
         <item quantity="other">分钟</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="other">共有 %1$d 条提醒\n%2$s</item>
+        <item quantity="other">共有 %1$d 条提醒</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="other">周</item>
@@ -318,4 +318,6 @@
     <string name="same_as_medicine">与药物相同</string>
     <string name="previous_week">上一周</string>
     <string name="next_week">下一周</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">移动药物</string>
 </resources>

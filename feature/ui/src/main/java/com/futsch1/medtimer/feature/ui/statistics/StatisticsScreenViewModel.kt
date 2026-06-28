@@ -113,7 +113,7 @@ class StatisticsScreenViewModel @Inject constructor(
         // The provider re-reads its own time window on each emission of the shared event flow, so the
         // events payload is only a change trigger — the provider owns the calendar's reactivity.
         calendarEventsProvider
-            .structuredEventsFlow(reminderEvents, ALL_MEDICINES, CALENDAR_PAST_MONTHS, CALENDAR_FUTURE_MONTHS)
+            .structuredEventsFlow(ALL_MEDICINES, CALENDAR_PAST_MONTHS)
             .map { it.toImmutableMap() }
             .flowOn(ioDispatcher)
             .onEach { _state.calendarDayEvents = it }
@@ -158,7 +158,6 @@ class StatisticsScreenViewModel @Inject constructor(
     companion object {
         private const val ALL_MEDICINES = -1
         private const val CALENDAR_PAST_MONTHS = 3
-        private const val CALENDAR_FUTURE_MONTHS = 0
         private const val SEARCH_DEBOUNCE_MILLIS = 300L
     }
 }

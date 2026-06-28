@@ -28,12 +28,11 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
-import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.exporters.CSVEventExport
 import com.futsch1.medtimer.feature.ui.exporters.CSVMedicineExport
 import com.futsch1.medtimer.feature.ui.exporters.Export
@@ -49,7 +48,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 
@@ -57,7 +55,7 @@ class OptionsMenu @AssistedInject constructor(
     @Assisted private val fragment: Fragment,
     @Assisted private val navController: NavController,
     @Assisted private val hideFilter: Boolean,
-    @Assisted private val medicineViewModel: MedicineViewModel,
+    @Assisted private val tagFilterViewModel: TagFilterViewModel,
     val backupManagerFactory: BackupManager.Factory,
     private val pdfMedicineExportFactory: PDFMedicineExport.Factory,
     private val csvMedicineExportFactory: CSVMedicineExport.Factory,
@@ -65,7 +63,6 @@ class OptionsMenu @AssistedInject constructor(
     private val csvEventExportFactory: CSVEventExport.Factory,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
-    private val tagRepository: TagRepository,
     private val databaseManager: DatabaseManager,
     private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
@@ -75,7 +72,8 @@ class OptionsMenu @AssistedInject constructor(
     private val context: Context = fragment.requireContext()
     private val openFileLauncher: ActivityResultLauncher<Intent>
     private val openDirectoryLauncher: ActivityResultLauncher<Intent>
-    private val idlingResource: SimpleIdlingResource = SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.getName())
+    private val idlingResource: SimpleIdlingResource =
+        SimpleIdlingResource("OptionsMenu_" + fragment.javaClass.name)
     private lateinit var menu: Menu
 
     private lateinit var backupManager: BackupManager
@@ -86,7 +84,7 @@ class OptionsMenu @AssistedInject constructor(
             fragment: Fragment,
             navController: NavController,
             hideFilter: Boolean,
-            medicineViewModel: MedicineViewModel
+            tagFilterViewModel: TagFilterViewModel
         ): OptionsMenu
     }
 
@@ -156,7 +154,10 @@ class OptionsMenu @AssistedInject constructor(
 
     private fun setupVersion() {
         val item = menu.findItem(R.id.version)
-        item.title = context.getString(com.futsch1.medtimer.core.ui.R.string.version, BuildConfig.VERSION_NAME)
+        item.title = context.getString(
+            com.futsch1.medtimer.core.ui.R.string.version,
+            BuildConfig.VERSION_NAME
+        )
     }
 
     private fun setupAppURL() {
@@ -220,7 +221,8 @@ class OptionsMenu @AssistedInject constructor(
                 idlingResource.setBusy()
                 fragment.lifecycleScope.launch(ioDispatcher) {
                     databaseManager.deleteAll()
-                    generateTestDataFactory.create(menuItem === itemWithEvents).generateTestMedicine()
+                    generateTestDataFactory.create(menuItem === itemWithEvents)
+                        .generateTestMedicine()
                     requestScheduleNextNotification(context)
                     idlingResource.setIdle()
                 }
@@ -249,31 +251,40 @@ class OptionsMenu @AssistedInject constructor(
 
     private fun handleTagFilter() {
         if (!hideFilter) {
-            fragment.lifecycleScope.launch(ioDispatcher) {
-                if (tagRepository.hasAny()) {
-                    try {
-                        withContext(mainDispatcher) {
+            var filterSetupDone = false
+            fragment.lifecycleScope.launch {
+                tagFilterViewModel.hasAnyTags.collect { hasAny ->
+                    if (hasAny && !filterSetupDone) {
+                        filterSetupDone = true
+                        try {
                             setupTagFilter()
+                        } catch (_: IllegalStateException) {
+                            // Intentionally empty, do nothing
                         }
-                    } catch (_: IllegalStateException) {
-                        // Intentionally empty, do nothing
+                    } else if (!hasAny) {
+                        tagFilterViewModel.clearTagFilter()
                     }
-                } else {
-                     medicineViewModel.clearTagFilter()
                 }
             }
         }
     }
 
     private suspend fun eventExport(isCSV: Boolean) {
-        if (medicineViewModel.tagFilterActive()) {
+        if (tagFilterViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    com.futsch1.medtimer.core.ui.R.string.tag_filter_active,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         val reminderEvents: List<ReminderEvent> =
-            medicineViewModel.filterEvents(reminderEventRepository.getAllWithoutDeletedAndAcknowledged())
-        val exporter = if (isCSV) csvEventExportFactory.create(reminderEvents, fragment.getParentFragmentManager()) else pdfEventExportFactory.create(
+            tagFilterViewModel.filterEvents(reminderEventRepository.getAllWithoutDeletedAndAcknowledged())
+        val exporter = if (isCSV) csvEventExportFactory.create(
+            reminderEvents,
+            fragment.getParentFragmentManager()
+        ) else pdfEventExportFactory.create(
             reminderEvents,
             fragment.getParentFragmentManager()
         )
@@ -281,13 +292,21 @@ class OptionsMenu @AssistedInject constructor(
     }
 
     private suspend fun medicineExport(isCSV: Boolean) {
-        if (medicineViewModel.tagFilterActive()) {
+        if (tagFilterViewModel.tagFilterActive()) {
             fragment.lifecycleScope.launch(mainDispatcher) {
-                Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.tag_filter_active, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    com.futsch1.medtimer.core.ui.R.string.tag_filter_active,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
-        val medicines: List<Medicine> = medicineViewModel.filterMedicines(medicineRepository.getAll())
-        val exporter = if (isCSV) csvMedicineExportFactory.create(medicines, fragment.getParentFragmentManager()) else pdfMedicineExportFactory.create(
+        val medicines: List<Medicine> =
+            tagFilterViewModel.filterMedicines(medicineRepository.getAll())
+        val exporter = if (isCSV) csvMedicineExportFactory.create(
+            medicines,
+            fragment.getParentFragmentManager()
+        ) else pdfMedicineExportFactory.create(
             medicines,
             fragment.getParentFragmentManager()
         )
@@ -308,8 +327,8 @@ class OptionsMenu @AssistedInject constructor(
             true
         }
         fragment.viewLifecycleOwner.lifecycleScope.launch {
-            medicineViewModel.validTagIds.collect { validTagIds ->
-                if (validTagIds.isNullOrEmpty()) {
+            tagFilterViewModel.tagsSelected.collect { tagsSelected ->
+                if (!tagsSelected) {
                     item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag)
                 } else {
                     item.setIcon(com.futsch1.medtimer.core.ui.R.drawable.tag_fill)
@@ -324,7 +343,11 @@ class OptionsMenu @AssistedInject constructor(
             export.export(csvFile)
             FileHelper.shareFile(context, csvFile)
         } catch (_: ExporterException) {
-            Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.export_failed, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                com.futsch1.medtimer.core.ui.R.string.export_failed,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

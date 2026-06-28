@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.EditEventSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StatisticsFragment : Fragment() {
     private val viewModel: StatisticsScreenViewModel by viewModels()
-    private val medicineViewModel: MedicineViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by viewModels()
 
     @Inject
     lateinit var optionsMenuFactory: OptionsMenuFactory
@@ -33,7 +33,7 @@ class StatisticsFragment : Fragment() {
             this,
             NavHostFragment.findNavController(this),
             true,
-            medicineViewModel
+            tagFilterViewModel
         )
     }
 

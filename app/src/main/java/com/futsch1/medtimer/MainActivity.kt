@@ -253,6 +253,10 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             justNavigatedTo = destinationId
+            // Mark the tab immediately so a second tap (e.g. navigateTo double-click in tests) is
+            // treated as a reselect even if the restored state lands on a detail screen whose id is
+            // not in topLevelTabIds.
+            currentTabId = destinationId
             navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(true)

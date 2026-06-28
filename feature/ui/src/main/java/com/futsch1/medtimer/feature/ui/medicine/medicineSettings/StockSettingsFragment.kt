@@ -13,15 +13,12 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
-import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
-import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.feature.reminders.SystemTimeAccess
-import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
@@ -42,10 +39,7 @@ class StockSettingsFragment : MedicinePreferences(
     listOf("stock_unit")
 ) {
     @Inject
-    lateinit var reminderEventRepository: ReminderEventRepository
-
-    @Inject
-    lateinit var preferencesDataSource: PreferencesDataSource
+    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
 
     @Inject
     lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory
@@ -57,7 +51,7 @@ class StockSettingsFragment : MedicinePreferences(
     lateinit var timeFormatter: TimeFormatter
 
     @Inject
-    lateinit var timeAccess: SystemTimeAccess
+    lateinit var medicineStringFormatter: MedicineStringFormatter
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
@@ -88,17 +82,25 @@ class StockSettingsFragment : MedicinePreferences(
             }
         )
 
+    override fun onStart() {
+        super.onStart()
+        simulatedRemindersRepository.requestWindow("stockSettings", 365)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        simulatedRemindersRepository.releaseWindow("stockSettings")
+    }
+
     override fun customSetup(modelData: Medicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
 
-        calculateRunOutDate(modelData)
+        observeRunOutDate(modelData.id)
     }
 
     override fun onModelDataUpdated(modelData: Medicine) {
         super.onModelDataUpdated(modelData)
-
-        calculateRunOutDate(modelData)
 
         findPreference<EditTextPreference>("amount")!!.summary =
             MedicineHelper.formatAmount(modelData.amount, modelData.unit)
@@ -128,59 +130,26 @@ class StockSettingsFragment : MedicinePreferences(
             }
     }
 
-    private fun calculateRunOutDate(medicine: Medicine) {
-        this.lifecycleScope.launch(ioDispatcher) {
-            val runOutDate = estimateStockRunOutDate(medicine.id, medicine.amount)
-
-            val runOutString =
-                if (runOutDate != null && context != null) timeFormatter.localDateToString(
-                    runOutDate
-                ) else "---"
-
-            withContext(mainDispatcher) {
-                findPreference<EditTextPreference>("stock_run_out_date")!!.summary = runOutString
-            }
+    private fun observeRunOutDate(medicineId: Int) {
+        lifecycleScope.launch {
+            simulatedRemindersRepository.stockRunOutDates
+                .collect { dates ->
+                    val runOutDate = dates[medicineId]
+                    val simulatedThrough = simulatedRemindersRepository.simulatedThrough.value
+                    val summary = medicineStringFormatter.getStockRunOutText(runOutDate, simulatedThrough)
+                    withContext(mainDispatcher) {
+                        findPreference<EditTextPreference>("stock_run_out_date")?.summary = summary
+                    }
+                }
         }
-    }
-
-    private suspend fun estimateStockRunOutDate(
-        medicineId: Int,
-        currentAmount: Double? = null
-    ): LocalDate? {
-        var medicine = medicineRepository.fetch(medicineId) ?: return null
-
-        if (currentAmount != null) {
-            medicine = medicine.copy(amount = currentAmount)
-        }
-        val recentReminders =
-            reminderEventRepository.getForScheduling(listOf(medicine))
-                .filter { it.status != ReminderEvent.ReminderStatus.RAISED }
-        val schedulingSimulator = SchedulingSimulator(
-            listOf(medicine),
-            recentReminders,
-            timeAccess,
-            preferencesDataSource
-        )
-        val endDate = LocalDate.now().plusDays(365 * 2)
-        var runOutDate: LocalDate? = null
-
-        schedulingSimulator.simulate { _, scheduledDate: LocalDate, amount: Double ->
-            if (amount == 0.0) {
-                runOutDate = scheduledDate
-            }
-            scheduledDate <= endDate && amount != 0.0
-        }
-
-        return runOutDate
     }
 
     private fun addToCalendar() {
-        val date =
-            timeFormatter.stringToLocalDate(findPreference<EditTextPreference>("stock_run_out_date")!!.summary.toString())
+        val date = simulatedRemindersRepository.stockRunOutDates.value[dataStore.modelData.id]
         if (date != null) {
             val intent =
                 createCalendarEventIntent(
-                    "\uD83D\uDC8A " + context?.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name,
+                    "💊 " + context?.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name,
                     date
                 )
             try {
@@ -246,4 +215,3 @@ fun setupAmountEdit(editTextPreference: EditTextPreference) {
         editText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }
 }
-

@@ -41,8 +41,8 @@
         <item quantity="other">minuuttia</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d muistutus\n%2$s</item>
-        <item quantity="other">%1$d muistutusta\n%2$s</item>
+        <item quantity="one">%1$d muistutus</item>
+        <item quantity="other">%1$d muistutusta</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">viikko</item>
@@ -324,4 +324,6 @@
     <string name="same_as_medicine">Sama kuin lääke</string>
     <string name="previous_week">Edellinen viikko</string>
     <string name="next_week">Seuraava viikko</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Siirrä lääke</string>
 </resources>

@@ -9,8 +9,7 @@
     <fragment
         android:id="@+id/medicinesFragment"
         android:name="com.futsch1.medtimer.feature.ui.medicine.MedicinesFragment"
-        android:label="@string/tab_medicine"
-        tools:layout="@layout/fragment_medicines">
+        android:label="@string/tab_medicine">
         <action
             android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
             app:destination="@id/editMedicineFragment" />

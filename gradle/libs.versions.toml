@@ -29,6 +29,7 @@ calendar = "2.10.1"
 icondialog = "3.3.0"
 flexbox = "3.0.0"
 preference-extended = "1.1.0"
+reorderable = "3.1.0"
 play-services-location = "21.3.0"
 
 # Testing
@@ -92,6 +93,7 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbo
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preference-extended" }
 preferencex-ringtone = { module = "com.takisoft.preferencex:preferencex-ringtone", version.ref = "preference-extended" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 
 # Espresso (used both as implementation and androidTest)
 espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espresso" }

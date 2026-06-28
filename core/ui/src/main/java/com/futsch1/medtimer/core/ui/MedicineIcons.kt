@@ -50,7 +50,7 @@ class MedicineIcons @Inject constructor(@ApplicationContext context: Context, pe
     }
 
     fun getIconBitmap(id: Int): Bitmap {
-        val drawable = getIconDrawable(id)
+        val drawable = getIconDrawable(id).mutate()
 
         val bit = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
 
@@ -62,6 +62,17 @@ class MedicineIcons @Inject constructor(@ApplicationContext context: Context, pe
         )
         drawable.draw(canvas)
 
+        return bit
+    }
+
+    fun getIconBitmapUntinted(id: Int): Bitmap {
+        val drawable = getIconDrawable(id).mutate()
+        val width = drawable.intrinsicWidth.coerceAtLeast(1)
+        val height = drawable.intrinsicHeight.coerceAtLeast(1)
+        val bit = createBitmap(width, height)
+        val canvas = Canvas(bit)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
         return bit
     }
 

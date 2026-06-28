@@ -41,8 +41,8 @@
         <item quantity="other">minuten</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d herinnering\n%2$s</item>
-        <item quantity="other">%1$d herinneringen\n%2$s</item>
+        <item quantity="one">%1$d herinnering</item>
+        <item quantity="other">%1$d herinneringen</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">week</item>
@@ -324,4 +324,6 @@
     <string name="same_as_medicine">Hetzelfde als medicijn</string>
     <string name="previous_week">Vorige week</string>
     <string name="next_week">Volgende week</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Medicijn verplaatsen</string>
 </resources>

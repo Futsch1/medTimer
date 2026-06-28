@@ -13,6 +13,6 @@ fun interface OptionsMenuFactory {
         fragment: Fragment,
         navController: NavController,
         hideFilter: Boolean,
-        medicineViewModel: MedicineViewModel
+        tagFilterViewModel: TagFilterViewModel
     ): EntityEditOptionsMenu
 }

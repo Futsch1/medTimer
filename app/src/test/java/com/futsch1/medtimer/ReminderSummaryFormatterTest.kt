@@ -29,7 +29,6 @@ import org.robolectric.annotation.Config
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
@@ -144,40 +143,9 @@ class ReminderSummaryFormatterTest {
     }
 
     @Test
-    fun testFormatRemindersSummarySimple() = runBlocking {
-        val reminder = Reminder.default().copy(time = ReminderTime(LocalTime.of(0, 2)))
-        val reminder2 = Reminder.default().copy(time = ReminderTime(LocalTime.of(1, 3)))
-        assertEquals(
-            "2 reminders\n" +
-                    "12:02 AM; 1:03 AM", formatter.formatRemindersSummary(listOf(reminder2, reminder))
-        )
-    }
-
-    @Test
-    fun testFormatRemindersSummaryLinked() = runBlocking {
-        val reminder = Reminder.default().copy(id = 1, time = ReminderTime(LocalTime.of(0, 2)))
-        val reminder2 = Reminder.default().copy(id = 2, time = ReminderTime(63, isDuration = true), linkedReminderId = 1)
-        val reminder3 = Reminder.default().copy(id = 3, time = ReminderTime(144, isDuration = true), linkedReminderId = 2)
-
-        `when`(mockReminderRepository.fetch(2)).thenReturn(reminder2)
-        `when`(mockReminderRepository.fetch(1)).thenReturn(reminder)
-
-        assertEquals(
-            "3 reminders\n" +
-                    "12:02 AM; 12:02 AM + 1:03; 12:02 AM + 1:03 + 2:24", formatter.formatRemindersSummary(listOf(reminder2, reminder, reminder3))
-        )
-    }
-
-    @Test
-    fun testFormatRemindersSummaryInterval() = runBlocking {
+    fun testFormatReminderSummaryInterval() = runBlocking {
         val reminder = Reminder.default().copy(time = ReminderTime(2, isDuration = true), intervalStart = Instant.ofEpochSecond(60))
-        val reminder2 = Reminder.default().copy(time = ReminderTime(LocalTime.of(2, 0)), intervalStart = Instant.ofEpochSecond(60))
 
         assertEquals("Every 2 minutes, Continuous interval starting from 1/1/70 1:01 AM", formatter.formatReminderSummary(reminder))
-        assertEquals(
-            "2 reminders\n" +
-                    "Every 2 hours, Continuous interval starting from 1/1/70 1:01 AM; Every 2 minutes, Continuous interval starting from 1/1/70 1:01 AM",
-            formatter.formatRemindersSummary(listOf(reminder2, reminder))
-        )
     }
 }

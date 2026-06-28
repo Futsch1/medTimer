@@ -47,10 +47,10 @@
         <item quantity="other">minut</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d przypomnienie\n%2$s</item>
-        <item quantity="few">%1$d przypomnienia\n%2$s</item>
-        <item quantity="many">%1$d przypomnień\n%2$s</item>
-        <item quantity="other">%1$d przypomnień\n%2$s</item>
+        <item quantity="one">%1$d przypomnienie</item>
+        <item quantity="few">%1$d przypomnienia</item>
+        <item quantity="many">%1$d przypomnień</item>
+        <item quantity="other">%1$d przypomnień</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">tydzień</item>
@@ -336,4 +336,6 @@
     <string name="same_as_medicine">Tak samo jak lek</string>
     <string name="previous_week">Poprzedni tydzień</string>
     <string name="next_week">Następny tydzień</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Przenieś lek</string>
 </resources>

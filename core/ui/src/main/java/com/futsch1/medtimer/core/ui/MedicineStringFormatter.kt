@@ -7,6 +7,8 @@ import androidx.core.text.bold
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalDate
@@ -23,7 +25,10 @@ class MedicineStringFormatter @Inject constructor(
         return getMedicineNameWithStockText(preferencesDataSource.preferences.value, medicine)
     }
 
-    fun getMedicineNameWithStockText(userPreferences: UserPreferences, medicine: Medicine): SpannableStringBuilder {
+    fun getMedicineNameWithStockText(
+        userPreferences: UserPreferences,
+        medicine: Medicine
+    ): SpannableStringBuilder {
         val builder = SpannableStringBuilder().bold {
             append(
                 MedicineHelper.getMedicineName(
@@ -83,5 +88,83 @@ class MedicineStringFormatter @Inject constructor(
             R.string.medicine_stock_string,
             MedicineHelper.formatAmount(medicine.amount, medicine.unit)
         )
+    }
+
+    fun getStockRunOutText(runOutDate: LocalDate?, simulatedThrough: LocalDate): String {
+        return when {
+            runOutDate != null -> timeFormatter.localDateToString(runOutDate)
+            simulatedThrough == LocalDate.MIN -> "---"
+            else -> context.getString(
+                R.string.stock_after_simulation_end,
+                timeFormatter.localDateToString(simulatedThrough)
+            )
+        }
+    }
+
+    fun getReminderTimes(medicine: Medicine): List<String> {
+        val reminders = medicine.reminders.filter { it.active }
+        val reminderTimes = buildList {
+            addAll(timeBasedRemindersSummary(reminders.filter { it.reminderType == ReminderType.TIME_BASED }))
+            addAll(reminders.filter { it.reminderType == ReminderType.LINKED }
+                .map { linkedReminderSummaryString(medicine, it) })
+            addAll(reminders.filter { it.isInterval }.map { intervalBasedReminderString(it) })
+            addAll(reminders.filter { it.reminderType == ReminderType.OUT_OF_STOCK }
+                .map { outOfStockReminderString(it) })
+            addAll(reminders.filter { it.reminderType == ReminderType.EXPIRATION_DATE }
+                .map { context.getString(R.string.expiration_date) })
+        }
+
+        return reminderTimes
+    }
+
+    private fun linkedReminderSummaryString(medicine: Medicine, reminder: Reminder): String {
+        val delays = mutableListOf<String>()
+        var current = reminder
+
+        while (current.reminderType == ReminderType.LINKED) {
+            delays.add(timeFormatter.toTimeString(current.time))
+            val source =
+                medicine.reminders.findLast { it.id == current.linkedReminderId } ?: return "?"
+            current = source
+        }
+
+        val base = timeFormatter.toTimeString(current.time)
+        return if (delays.isEmpty()) base
+        else "$base + ${delays.reversed().joinToString(" + ")}"
+    }
+
+    private fun outOfStockReminderString(reminder: Reminder): String {
+        return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
+            reminder.outOfStockThreshold,
+            ""
+        )
+    }
+
+    private fun intervalBasedReminderString(reminder: Reminder): String {
+        val interval = Interval(reminder.time)
+        return context.getString(
+            R.string.every_interval,
+            interval.toTranslatedString(context)
+        ) + ", " + getIntervalTypeSummary(reminder)
+    }
+
+    private fun timeBasedRemindersSummary(reminders: List<Reminder>): List<String> {
+        return reminders.map { r -> r.time }.sorted()
+            .map { timeFormatter.toTimeString(it) }
+    }
+
+    fun getIntervalTypeSummary(reminder: Reminder): String {
+        return if (reminder.windowedInterval) {
+            context.getString(
+                R.string.daily_from_to,
+                timeFormatter.toTimeString(reminder.intervalStartTimeOfDay),
+                timeFormatter.toTimeString(reminder.intervalEndTimeOfDay)
+            )
+        } else {
+            context.getString(
+                R.string.continuous_from,
+                timeFormatter.toDateTimeString(reminder.intervalStart)
+            )
+        }
     }
 }

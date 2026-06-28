@@ -16,6 +16,7 @@ import com.futsch1.medtimer.core.common.helpers.TintedImageSpan
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -58,13 +59,13 @@ class ReminderStringFormatter @Inject constructor(
             .append(if (reminderEvent.amount.isNotEmpty()) " (${reminderEvent.amount})" else "")
     }
 
-    fun formatScheduledReminder(scheduledReminder: ScheduledReminder): Spanned {
+    fun formatSimulatedReminder(simulatedReminder: SimulatedReminder): Spanned {
         val scheduledTime = timeFormatter.toConfigurableTimeString(
-            scheduledReminder.timestamp, false
+            simulatedReminder.scheduledReminder.timestamp, false
         )
-        val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
+        val reminderTypeSpan = getReminderTypeSpan(simulatedReminder.scheduledReminder.reminder.reminderType)
         val expectedStockOrExpirationDateSpan =
-            getExpectedStockOrExpirationDateText(scheduledReminder)
+            getExpectedStockOrExpirationDateText(simulatedReminder)
 
         return SpannableStringBuilder()
             .append(reminderTypeSpan)
@@ -72,8 +73,8 @@ class ReminderStringFormatter @Inject constructor(
             .append(expectedStockOrExpirationDateSpan)
             .append("\n")
             .bold {
-                append(scheduledReminder.medicine.name)
-            }.append(getAmountString(scheduledReminder))
+                append(simulatedReminder.scheduledReminder.medicine.name)
+            }.append(getAmountString(simulatedReminder.scheduledReminder))
     }
 
     fun formatReminderForWidget(reminderEvent: ReminderEvent, isShort: Boolean): Spanned {
@@ -95,23 +96,23 @@ class ReminderStringFormatter @Inject constructor(
             .append(if (amountStatusString.isNotEmpty()) " ($amountStatusString)" else "")
     }
 
-    fun formatScheduledReminderForWidget(
-        scheduledReminder: ScheduledReminder,
+    fun formatSimulatedReminderForWidget(
+        simulatedReminder: SimulatedReminder,
         isShort: Boolean
     ): Spanned {
         val scheduledTime = (if (isShort)
             timeFormatter.toConfigurableTimeString(
-                scheduledReminder.timestamp, true
+                simulatedReminder.scheduledReminder.timestamp, true
             )
         else
             timeFormatter.toConfigurableDateTimeString(
-                scheduledReminder.timestamp
+                simulatedReminder.scheduledReminder.timestamp
             )) + ": "
-        val reminderTypeSpan = getReminderTypeSpan(scheduledReminder.reminder.reminderType)
+        val reminderTypeSpan = getReminderTypeSpan(simulatedReminder.scheduledReminder.reminder.reminderType)
 
         return SpannableStringBuilder().append(reminderTypeSpan).append(scheduledTime)
-            .bold { append(scheduledReminder.medicine.name) }.append(
-                getAmountString(scheduledReminder)
+            .bold { append(simulatedReminder.scheduledReminder.medicine.name) }.append(
+                getAmountString(simulatedReminder.scheduledReminder)
             )
     }
 
@@ -155,15 +156,15 @@ class ReminderStringFormatter @Inject constructor(
     }
 
 
-    private fun getExpectedStockOrExpirationDateText(scheduledReminder: ScheduledReminder): Spanned {
+    private fun getExpectedStockOrExpirationDateText(simulatedReminder: SimulatedReminder): Spanned {
         val span = SpannableStringBuilder()
 
-        if (scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
+        if (simulatedReminder.scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
             span.append(", ")
-            span.append(timeFormatter.localDateToString(scheduledReminder.medicine.expirationDate))
+            span.append(timeFormatter.localDateToString(simulatedReminder.scheduledReminder.medicine.expirationDate))
         } else {
-            if (scheduledReminder.reminder.variableAmount
-                || !scheduledReminder.medicine.isStockManagementActive()
+            if (simulatedReminder.scheduledReminder.reminder.variableAmount
+                || !simulatedReminder.scheduledReminder.medicine.isStockManagementActive()
             ) return SpannableStringBuilder()
 
             val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
@@ -178,12 +179,16 @@ class ReminderStringFormatter @Inject constructor(
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE
                 )
             }
-            span.append(
-                MedicineHelper.formatAmount(
-                    scheduledReminder.medicine.amount,
-                    scheduledReminder.medicine.unit
+            span.append(MedicineHelper.formatAmount(simulatedReminder.stockBefore, simulatedReminder.scheduledReminder.medicine.unit))
+            if (simulatedReminder.stockAfter != simulatedReminder.stockBefore) {
+                span.append(" ➡ ")
+                span.append(
+                    MedicineHelper.formatAmount(
+                        simulatedReminder.stockAfter,
+                        simulatedReminder.scheduledReminder.medicine.unit
+                    )
                 )
-            )
+            }
         }
         return span
     }
@@ -203,7 +208,16 @@ class ReminderStringFormatter @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE
             )
         }
-        span.append(MedicineHelper.formatAmount(reminderEvent.stockAfter, reminderEvent.stockUnit))
+        span.append(MedicineHelper.formatAmount(reminderEvent.stockBefore, reminderEvent.stockUnit))
+        if (reminderEvent.stockAfter != reminderEvent.stockBefore) {
+            span.append(" ➡ ")
+            span.append(
+                MedicineHelper.formatAmount(
+                    reminderEvent.stockAfter,
+                    reminderEvent.stockUnit
+                )
+            )
+        }
         return span
     }
 

@@ -44,9 +44,9 @@
         <item quantity="other">דקות</item>
     </plurals>
     <plurals name="sum_reminders" tools:ignore="MissingQuantity">
-        <item quantity="one">%1$d התראה\n%2$s</item>
-        <item quantity="two">%1$d התראות\n%2$s</item>
-        <item quantity="other">%1$d התראות\n%2$s</item>
+        <item quantity="one">%1$d התראה</item>
+        <item quantity="two">%1$d התראות</item>
+        <item quantity="other">%1$d התראות</item>
     </plurals>
     <plurals name="weeks" tools:ignore="MissingQuantity">
         <item quantity="one">שבוע</item>
@@ -330,4 +330,6 @@
     <string name="same_as_medicine">זהה לתרופה</string>
     <string name="previous_week">שבוע קודם</string>
     <string name="next_week">שבוע הבא</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">הזז תרופה</string>
 </resources>
