@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
@@ -32,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,9 +55,11 @@ import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.ReorderableLazyListState
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
@@ -83,34 +87,8 @@ fun MedicinesScreen(
     onMedicineEdit: (id: Int) -> Unit = {},
     onMedicineMove: (id: Int, newPosition: Int) -> Unit = { _, _ -> }
 ) {
-    val localMedicines = remember { mutableStateListOf<MedicineScreenItem>() }
-    var lastDraggedId by remember { mutableStateOf<Int?>(null) }
     val listState = rememberLazyListState()
-    val hapticFeedback = LocalHapticFeedback.current
-    val reorderState = rememberReorderableLazyListState(listState) { from, to ->
-        val item = localMedicines.removeAt(from.index)
-        localMedicines.add(to.index, item)
-        lastDraggedId = item.id
-        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-    }
-
-    LaunchedEffect(state.medicines) {
-        if (!reorderState.isAnyItemDragging) {
-            localMedicines.clear()
-            localMedicines.addAll(state.medicines)
-        }
-    }
-
-    LaunchedEffect(reorderState.isAnyItemDragging) {
-        if (reorderState.isAnyItemDragging || lastDraggedId == null) {
-            return@LaunchedEffect
-        }
-        val newIndex = localMedicines.indexOfFirst { it.id == lastDraggedId }
-        if (newIndex >= 0) {
-            onMedicineMove(lastDraggedId!!, newIndex)
-        }
-        lastDraggedId = null
-    }
+    val reorderableMedicines = rememberReorderableMedicines(listState, state.medicines, onMedicineMove)
 
     Scaffold(
         modifier = Modifier
@@ -142,8 +120,8 @@ fun MedicinesScreen(
                 bottom = paddingValues.calculateBottomPadding() + 80.dp
             )
         ) {
-            items(localMedicines, key = { it.id }) { medicine ->
-                ReorderableItem(reorderState, key = medicine.id) { isDragging ->
+            items(reorderableMedicines.medicines, key = { it.id }) { medicine ->
+                ReorderableItem(reorderableMedicines.reorderState, key = medicine.id) { isDragging ->
                     SwipeToDeleteContainer(medicine, onMedicineDelete) {
                         MedicineCard(
                             medicine = medicine,
@@ -156,6 +134,52 @@ fun MedicinesScreen(
             }
         }
     }
+}
+
+private class ReorderableMedicines(
+    val medicines: SnapshotStateList<MedicineScreenItem>,
+    val reorderState: ReorderableLazyListState
+)
+
+/**
+ * Keeps a local, drag-mutable shadow of [medicines] so reordering stays smooth while a drag is in
+ * progress, tracks the last dragged item, and notifies [onMedicineMove] once the drag settles.
+ */
+@Composable
+private fun rememberReorderableMedicines(
+    listState: LazyListState,
+    medicines: ImmutableList<MedicineScreenItem>,
+    onMedicineMove: (id: Int, newPosition: Int) -> Unit
+): ReorderableMedicines {
+    val localMedicines = remember { mutableStateListOf<MedicineScreenItem>() }
+    var lastDraggedId by remember { mutableStateOf<Int?>(null) }
+    val hapticFeedback = LocalHapticFeedback.current
+    val reorderState = rememberReorderableLazyListState(listState) { from, to ->
+        val item = localMedicines.removeAt(from.index)
+        localMedicines.add(to.index, item)
+        lastDraggedId = item.id
+        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+    }
+
+    LaunchedEffect(medicines) {
+        if (!reorderState.isAnyItemDragging) {
+            localMedicines.clear()
+            localMedicines.addAll(medicines)
+        }
+    }
+
+    LaunchedEffect(reorderState.isAnyItemDragging) {
+        if (reorderState.isAnyItemDragging || lastDraggedId == null) {
+            return@LaunchedEffect
+        }
+        val newIndex = localMedicines.indexOfFirst { it.id == lastDraggedId }
+        if (newIndex >= 0) {
+            onMedicineMove(lastDraggedId!!, newIndex)
+        }
+        lastDraggedId = null
+    }
+
+    return remember(localMedicines, reorderState) { ReorderableMedicines(localMedicines, reorderState) }
 }
 
 @Composable
