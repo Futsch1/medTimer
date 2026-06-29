@@ -18,25 +18,39 @@ import java.time.ZoneId
 typealias ScheduledReminderConsumer = (SimulatedReminder, LocalDate) -> Boolean
 
 
-class LastEventPerReminder(initialReminderEvents: List<ReminderEvent>) {
-    private val lastReminderEvents = mutableMapOf<Int, ReminderEvent>()
+class LastEventsPerReminder(initialReminderEvents: List<ReminderEvent>) {
+    private val latestPastEvent = mutableMapOf<Int, ReminderEvent>()
+    private val futureEvents = mutableMapOf<Int, MutableList<ReminderEvent>>()
 
     init {
         for (reminderEvent in initialReminderEvents) {
-            val prevReminderEvent = lastReminderEvents[reminderEvent.reminderId]
-            if (prevReminderEvent == null || prevReminderEvent.remindedTimestamp < reminderEvent.remindedTimestamp) {
-                lastReminderEvents[reminderEvent.reminderId] = reminderEvent
+            futureEvents.getOrPut(reminderEvent.reminderId) { mutableListOf() }.add(reminderEvent)
+        }
+    }
+
+    fun advanceTo(endOfCurrentDay: Instant) {
+        for ((reminderId, events) in futureEvents) {
+            val promoted = events.filter { it.remindedTimestamp < endOfCurrentDay }
+            if (promoted.isNotEmpty()) {
+                val maxPromoted = promoted.maxBy { it.remindedTimestamp }
+                val current = latestPastEvent[reminderId]
+                if (current == null || current.remindedTimestamp < maxPromoted.remindedTimestamp) {
+                    latestPastEvent[reminderId] = maxPromoted
+                }
+                events.removeAll(promoted.toSet())
             }
         }
     }
 
-    // Unconditional: DB may pre-schedule future events; the simulation's synthetic event must always win
     fun add(reminderEvent: ReminderEvent) {
-        lastReminderEvents[reminderEvent.reminderId] = reminderEvent
+        val current = latestPastEvent[reminderEvent.reminderId]
+        if (current == null || current.remindedTimestamp < reminderEvent.remindedTimestamp) {
+            latestPastEvent[reminderEvent.reminderId] = reminderEvent
+        }
     }
 
     fun get(): List<ReminderEvent> {
-        return lastReminderEvents.values.toList()
+        return latestPastEvent.values.toList()
     }
 }
 
@@ -48,7 +62,7 @@ class SchedulingSimulator(
 ) {
     val maxSimulationDays = 400
 
-    var totalEvents = LastEventPerReminder(recentReminderEvents)
+    var totalEvents = LastEventsPerReminder(recentReminderEvents)
     val medicines =
         medicines.associateBy(
             { it.id },
@@ -82,6 +96,7 @@ class SchedulingSimulator(
     }
 
     private fun simulateDay(scheduledReminderConsumer: ScheduledReminderConsumer): Boolean {
+        totalEvents.advanceTo(endOfCurrentDay)
         for (medicine in medicines.values) {
             do {
                 val eventsSnapshot = totalEvents.get()

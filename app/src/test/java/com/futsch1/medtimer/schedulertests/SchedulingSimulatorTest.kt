@@ -381,6 +381,43 @@ class SchedulingSimulatorTest {
     }
 
     @Test
+    fun twoFutureEventsNotDuplicated() = runBlocking {
+        val medicines = listOf(
+            TestHelper.buildTestMedicine(0, "Test")
+        )
+        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 480, 1))
+
+        val recentReminders = listOf(
+            TestHelper.buildReminderEvent(1, on(2, 480)),
+            TestHelper.buildReminderEvent(1, on(3, 480))
+        )
+
+        val simulator = buildSchedulingSimulator(medicines, recentReminders)
+
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
+
+        simulator.simulate { simulatedReminder: SimulatedReminder, _: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            simulatedReminders.size < 2
+        }
+
+        assertEquals(2, simulatedReminders.size)
+        assertReminded(
+            simulatedReminders,
+            on(1, 480),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            simulatedReminders,
+            on(4, 480),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            1
+        )
+    }
+
+    @Test
     fun singleDays() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")
