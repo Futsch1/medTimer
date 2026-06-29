@@ -30,7 +30,7 @@ icondialog = "3.3.0"
 flexbox = "3.0.0"
 preference-extended = "1.1.0"
 reorderable = "3.1.0"
-play-services-location = "21.3.0"
+play-services-location = "21.4.0"
 
 # Testing
 junit4 = "4.13.2"
