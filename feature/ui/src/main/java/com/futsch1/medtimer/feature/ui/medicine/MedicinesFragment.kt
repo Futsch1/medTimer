@@ -93,10 +93,10 @@ class MedicinesFragment : Fragment() {
                 MedTimerTheme {
                     MedicinesScreen(
                         medicinesScreenViewModel,
-                        addMedicine = { addMedicine() },
-                        deleteMedicine = { medicineId -> deleteItem(medicineId) },
-                        editMedicine = { medicineId -> navigateToMedicineId(medicineId) },
-                        moveMedicine = { medicineId, newPosition ->
+                        onMedicineAdd = { addMedicine() },
+                        onMedicineDelete = { medicineId -> deleteItem(medicineId) },
+                        onMedicineEdit = { medicineId -> navigateToMedicineId(medicineId) },
+                        onMedicineMove = { medicineId, newPosition ->
                             lifecycleScope.launch {
                                 medicineRepository.move(medicineId, newPosition)
                             }
