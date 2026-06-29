@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
 import androidx.compose.foundation.layout.FlexAlignItems
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
+import androidx.compose.foundation.layout.FlexWrap
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -251,7 +252,6 @@ private fun SwipeToDeleteContainer(
     }
 }
 
-@OptIn(ExperimentalFlexBoxApi::class)
 @Composable
 private fun MedicineCard(
     medicine: MedicineScreenItem,
@@ -365,6 +365,7 @@ private fun MedicineTags(tags: List<String>) {
     FlexBox(
         config = {
             direction(FlexDirection.Row)
+            wrap(FlexWrap.Wrap)
             alignItems(FlexAlignItems.Start)
         }
     ) {
@@ -379,7 +380,7 @@ private fun MedicineTags(tags: List<String>) {
         if (overflowCount > 0) {
             FilterChip(
                 label = { Text(text = stringResource(R.string.more_tags, overflowCount)) },
-                selected = false,
+                selected = true,
                 onClick = {},
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
