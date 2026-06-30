@@ -60,24 +60,25 @@ class SchedulingSimulator(
     timeAccess: TimeAccess,
     private val dataSource: PreferencesDataSource
 ) {
-    val maxSimulationDays = 400
+    private val maxSimulationDays = 400
+    private val systemZone = timeAccess.systemZone()
 
-    var totalEvents = LastEventsPerReminder(recentReminderEvents)
-    val medicines =
+    private var totalEvents = LastEventsPerReminder(recentReminderEvents)
+    private val medicines =
         medicines.associateBy(
             { it.id },
             { it.copy(reminders = it.reminders.filter { iter -> iter.active }) }).toMutableMap()
 
-    val schedulingFactory = SchedulingFactory()
-    var endOfCurrentDay: Instant = Instant.EPOCH
-    var currentDay: LocalDate = timeAccess.localDate()
+    private val schedulingFactory = SchedulingFactory()
+    private var endOfCurrentDay: Instant = Instant.EPOCH
+    private var currentDay: LocalDate = timeAccess.localDate()
         set(value) {
             endOfCurrentDay =
-                TimeHelper.instantAtStartOfDay(value.plusDays(1), timeAccess.systemZone())
+                TimeHelper.instantAtStartOfDay(value.plusDays(1), systemZone)
             field = value
         }
-    val timeAccess = object : TimeAccess {
-        override fun systemZone(): ZoneId = timeAccess.systemZone()
+    private val simulatorTimeAccess = object : TimeAccess {
+        override fun systemZone(): ZoneId = systemZone
         override fun localDate(): LocalDate = currentDay
         override fun now(): Instant = Instant.now()
     }
@@ -123,7 +124,13 @@ class SchedulingSimulator(
         eventsSnapshot: List<ReminderEvent>
     ): Instant? {
         val scheduler =
-            schedulingFactory.create(reminder, medicine, eventsSnapshot, timeAccess, dataSource)
+            schedulingFactory.create(
+                reminder,
+                medicine,
+                eventsSnapshot,
+                simulatorTimeAccess,
+                dataSource
+            )
         var nextScheduledTime = scheduler.getNextScheduledTime()
         // Skip if not on current day
         if ((nextScheduledTime ?: endOfCurrentDay) >= endOfCurrentDay) {
