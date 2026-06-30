@@ -86,10 +86,10 @@ fun DayEventsCard(
                 }
                 val (remindedTime, takenTime) = formattedTimes[index]
                 val intervalText = event.interval?.let {
-                    "(" + stringResource(
+                    "(${stringResource(
                         R.string.interval_time,
                         formatInterval(it)
-                    ) + ")"
+                    )})"
                 }
                 // A divider before every row, including the first, separates the date title from the
                 // events and the events from each other — matching the legacy calendar's per-row divider.
