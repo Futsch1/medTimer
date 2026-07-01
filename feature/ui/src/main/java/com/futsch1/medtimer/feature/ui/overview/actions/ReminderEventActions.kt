@@ -118,9 +118,11 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private suspend fun undoStock(reminderEvent: ReminderEvent) {
-        val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
-        val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return
-        medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
+        if (reminderEvent.stockHandled) {
+            val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
+            val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return
+            medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
+        }
     }
 
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
