@@ -16,7 +16,6 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -34,7 +33,7 @@ import java.util.stream.Collectors
 
 class ManualDose @AssistedInject constructor(
     @Assisted private val context: Context,
-    @Assisted private val medicineViewModel: MedicineViewModel,
+    @Assisted private val medicines: List<Medicine>,
     @Assisted private val activity: FragmentActivity,
     @Assisted private val date: LocalDate,
     private val persistentDataDataSource: PersistentDataDataSource,
@@ -49,16 +48,19 @@ class ManualDose @AssistedInject constructor(
     fun interface Factory {
         fun create(
             context: Context,
-            medicineViewModel: MedicineViewModel,
+            medicines: List<Medicine>,
             activity: FragmentActivity,
             date: LocalDate
         ): ManualDose
     }
 
     suspend fun logManualDose() {
-        val medicines = medicineViewModel.medicines.value
         val entries = getManualDoseEntries(medicines)
-        val adapter = manualDoseListEntryAdapterFactory.create(context, R.layout.manual_dose_list_entry, entries)
+        val adapter = manualDoseListEntryAdapterFactory.create(
+            context,
+            R.layout.manual_dose_list_entry,
+            entries
+        )
 
         withContext(mainDispatcher) {
             MaterialAlertDialogBuilder(context)
@@ -109,7 +111,8 @@ class ManualDose @AssistedInject constructor(
             tags = entry.tags
         )
         if (reminderEvent.medicineName == context.getString(com.futsch1.medtimer.core.ui.R.string.custom)) {
-            TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
+            TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose)
+                .hint(com.futsch1.medtimer.core.ui.R.string.medicine_name)
                 .textSink { name: String ->
                     entry.baseName = name
                     getAmountAndContinue(reminderEvent.copy(medicineName = name), entry)
@@ -135,13 +138,15 @@ class ManualDose @AssistedInject constructor(
         }
 
     private fun getAmountAndContinue(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
-        val dialogBuilder = TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose).hint(com.futsch1.medtimer.core.ui.R.string.dosage)
-            .textSink { amount: String? ->
-                if (entry.medicineId == -1) {
-                    lastCustomDose = Pair(entry.baseName, amount!!)
+        val dialogBuilder =
+            TextInputDialogBuilder(context).title(com.futsch1.medtimer.core.ui.R.string.log_additional_dose)
+                .hint(com.futsch1.medtimer.core.ui.R.string.dosage)
+                .textSink { amount: String? ->
+                    if (entry.medicineId == -1) {
+                        lastCustomDose = Pair(entry.baseName, amount!!)
+                    }
+                    getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
                 }
-                getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
-            }
         if (!entry.amount.isNullOrBlank()) {
             dialogBuilder.initialText(entry.amount)
         }
