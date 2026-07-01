@@ -10,7 +10,6 @@ import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
-import com.futsch1.medtimer.feature.ui.overview.model.ScheduledReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.time.ZoneId
 
 class ScheduledReminderActions @AssistedInject constructor(
-    @Assisted val event: ScheduledReminderEvent,
+    @Assisted val scheduledReminder: ScheduledReminder,
     @Assisted private val fragmentActivity: FragmentActivity,
     private val reminderEventCreator: ReminderEventCreator,
     private val timePickerDialogFactory: TimePickerDialogFactory,
@@ -29,10 +28,10 @@ class ScheduledReminderActions @AssistedInject constructor(
 
     @AssistedFactory
     fun interface Factory {
-        fun create(event: ScheduledReminderEvent, fragmentActivity: FragmentActivity): ScheduledReminderActions
+        fun create(event: ScheduledReminder, fragmentActivity: FragmentActivity): ScheduledReminderActions
     }
 
-    private val isStockEvent = event.scheduledReminder.reminder.isOutOfStockOrExpirationReminder
+    private val isStockEvent = scheduledReminder.reminder.isOutOfStockOrExpirationReminder
 
     override val visibleButtons: MutableList<Button> = mutableListOf()
 
@@ -50,15 +49,15 @@ class ScheduledReminderActions @AssistedInject constructor(
     override suspend fun buttonClicked(button: Button) {
         if (isStockEvent) {
             when (button) {
-                Button.ACKNOWLEDGED -> processStockAcknowledged(event.scheduledReminder)
-                Button.RESCHEDULE -> scheduleReminder(event.scheduledReminder)
+                Button.ACKNOWLEDGED -> processStockAcknowledged(scheduledReminder)
+                Button.RESCHEDULE -> scheduleReminder(scheduledReminder)
                 else -> Unit
             }
         } else {
             when (button) {
-                Button.TAKEN -> processFutureReminder(event.scheduledReminder, true)
-                Button.SKIPPED -> processFutureReminder(event.scheduledReminder, false)
-                Button.RESCHEDULE -> scheduleReminder(event.scheduledReminder)
+                Button.TAKEN -> processFutureReminder(scheduledReminder, true)
+                Button.SKIPPED -> processFutureReminder(scheduledReminder, false)
+                Button.RESCHEDULE -> scheduleReminder(scheduledReminder)
                 else -> Unit
             }
         }

@@ -41,8 +41,8 @@
         <item quantity="other">perc</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d emlékeztető\n%2$s</item>
-        <item quantity="other">%1$d emlékeztető\n%2$s</item>
+        <item quantity="one">%1$d emlékeztető</item>
+        <item quantity="other">%1$d emlékeztető</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">hét</item>
@@ -324,4 +324,6 @@
     <string name="same_as_medicine">Azonos a gyógyszerrel</string>
     <string name="previous_week">Előző hét</string>
     <string name="next_week">Következő hét</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Gyógyszer áthelyezése</string>
 </resources>

@@ -1,21 +1,20 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Keep source file names and line numbers for readable crash stack traces
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep generic type signatures (required by Gson TypeToken)
+-keepattributes Signature
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep annotations (required by Hilt, Room, etc.)
+-keepattributes *Annotation*
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ---- Gson ----------------------------------------------------------------
+# Keep all backup model classes serialized/deserialized by field name
+-keep class com.futsch1.medtimer.core.domain.backup.** { *; }
+
+# Keep inner wrapper class used by JSONBackup for versioned parsing
+-keep class com.futsch1.medtimer.database.backup.JSONBackup$DatabaseContentWithVersion { *; }
+
+# Keep anonymous TypeToken subclasses created in Room Converters
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep class com.google.gson.reflect.TypeToken { *; }

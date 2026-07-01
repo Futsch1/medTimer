@@ -41,8 +41,8 @@
         <item quantity="other">λεπτά</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d υπενθύμιση\n%2$s</item>
-        <item quantity="other">%1$d υπενθυμίσεις\n%2$s</item>
+        <item quantity="one">%1$d υπενθύμιση</item>
+        <item quantity="other">%1$d υπενθυμίσεις</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">εβδομάδα</item>
@@ -324,4 +324,6 @@
     <string name="same_as_medicine">Ίδιο με το φάρμακο</string>
     <string name="previous_week">Προηγούμενη εβδομάδα</string>
     <string name="next_week">Επόμενη εβδομάδα</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Μετακίνηση φαρμάκου</string>
 </resources>

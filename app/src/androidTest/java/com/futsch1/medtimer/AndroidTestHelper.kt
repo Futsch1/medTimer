@@ -3,6 +3,7 @@ package com.futsch1.medtimer
 import android.icu.util.Calendar
 import android.text.format.DateFormat
 import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
@@ -11,10 +12,12 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiScrollable
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
+import com.futsch1.medtimer.feature.ui.medicine.MedicineTestTags
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
@@ -136,7 +139,10 @@ object AndroidTestHelper {
     fun createMedicine(name: String) {
         navigateTo(MainMenu.MEDICINES)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addMedicine)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val addBtn = device.wait(Until.findObject(By.res(MedicineTestTags.ADD_MEDICINE)), 3_000)
+            ?: throw AssertionError("Add medicine button not found")
+        addBtn.click()
         writeTo(com.futsch1.medtimer.feature.ui.R.id.medicineName, name)
 
         clickDialogPositiveButton()
@@ -197,6 +203,85 @@ object AndroidTestHelper {
 
     fun waitForText(text: String, timeoutMs: Long = 3_000) {
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).wait(Until.findObject(By.text(text)), timeoutMs)
+    }
+
+    fun getMedicineItems(): List<UiObject2> {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        return device.findObjects(By.res(MedicineTestTags.MEDICINE_ITEM))
+            .sortedBy { it.visibleBounds.top }
+    }
+
+    fun clickMedicineItem(position: Int) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.wait(Until.hasObject(By.res(MedicineTestTags.MEDICINE_ITEM)), 3_000)
+        getMedicineItems()[position].click()
+    }
+
+    fun assertMedicineCount(expected: Int) {
+        val actual = getMedicineItems().size
+        assert(actual == expected) { "Expected $expected medicine items, found $actual" }
+    }
+
+    fun assertMedicineAtPosition(position: Int, expectedName: String) {
+        val item = getMedicineItems()[position]
+        val nameNode = item.findObject(By.res(MedicineTestTags.MEDICINE_NAME))
+        val actual = nameNode?.text ?: ""
+        assert(actual == expectedName || actual.startsWith("$expectedName (")) {
+            "Medicine at position $position: expected name '$expectedName', got '$actual'"
+        }
+    }
+
+    fun assertMedicineNameContains(text: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val names = device.findObjects(By.res(MedicineTestTags.MEDICINE_NAME))
+        assert(names.any { it.text?.contains(text) == true }) {
+            "No medicine name contains '$text'"
+        }
+    }
+
+    fun assertMedicineNameNotContains(text: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val names = device.findObjects(By.res(MedicineTestTags.MEDICINE_NAME))
+        assert(names.none { it.text?.contains(text) == true }) {
+            "A medicine name contains '$text' but should not"
+        }
+    }
+
+    fun assertTextDisplayed(text: String, timeoutMs: Long = 5_000) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val found = device.wait(Until.hasObject(By.text(text)), timeoutMs)
+        assert(found) { "Text '$text' not found on screen" }
+    }
+
+    fun assertTextDisplayed(@StringRes textRes: Int, timeoutMs: Long = 5_000) {
+        val text = InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes)
+        assertTextDisplayed(text, timeoutMs)
+    }
+
+    fun assertTextNotDisplayed(text: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.waitForIdle(3_000)
+        val node = device.findObject(By.text(text))
+        assert(node == null) { "Text '$text' should not be visible, but it is" }
+    }
+
+    fun assertTextNotDisplayed(@StringRes textRes: Int) {
+        val text = InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes)
+        assertTextNotDisplayed(text)
+    }
+
+    fun dragMedicineItem(fromPosition: Int, toPosition: Int) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val items = getMedicineItems()
+        val fromHandle = items[fromPosition].findObject(By.desc("Move medicine"))
+        val toItemBounds = items[toPosition].visibleBounds
+        val fromBounds = fromHandle.visibleBounds
+        device.drag(
+            fromBounds.centerX(), fromBounds.centerY(),
+            toItemBounds.centerX(), toItemBounds.centerY(),
+            40
+        )
+        device.waitForIdle(1_000)
     }
 
     enum class MainMenu {

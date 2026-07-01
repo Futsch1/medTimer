@@ -5,8 +5,8 @@
     <string name="skipped">Hoppet over</string>
     <string name="taken">Tatt</string>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d påminnelse\n%2$s</item>
-        <item quantity="other">%1$d påminnelser\n%2$s</item>
+        <item quantity="one">%1$d påminnelse</item>
+        <item quantity="other">%1$d påminnelser</item>
     </plurals>
     <string name="snooze_until_home">Snooze til hjemkomst</string>
     <string name="expiration_reminder">Påminnelse om utløpsdato</string>
@@ -52,4 +52,5 @@
     <string name="show_home_location_on_map">Vis hjemsted på kart</string>
     <string name="set_home_location_confirm">Angi hjemsted til\n%1$s, %2$s?</string>
     <string name="home_location_error">Kunne ikke bestemme gjeldende posisjon</string>
+    <string name="stock_after_simulation_end">After %s</string>
 </resources>

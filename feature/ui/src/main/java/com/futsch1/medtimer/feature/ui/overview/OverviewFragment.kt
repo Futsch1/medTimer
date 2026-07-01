@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,13 +24,12 @@ import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.ui.MedicineViewModel
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
-import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.CoroutineDispatcher
@@ -77,13 +78,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
-    private val medicineViewModel: MedicineViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val overviewViewModel: OverviewViewModel by viewModels(
         extrasProducer = {
             defaultViewModelCreationExtras.withCreationCallback<OverviewViewModel.Factory> { factory ->
                 factory.create(
-                    medicineViewModel.validTagIds,
-                    medicineViewModel.scheduledReminders
+                    tagFilterViewModel
                 )
             }
         }
@@ -107,7 +107,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             this,
             this.findNavController(),
             false,
-            medicineViewModel
+            tagFilterViewModel
         )
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -231,7 +231,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             lifecycleScope.launch {
                 manualDoseFactory.create(
                     requireContext(),
-                    medicineViewModel,
+                    overviewViewModel.medicines.value,
                     requireActivity(),
                     overviewViewModel.day
                 ).logManualDose()

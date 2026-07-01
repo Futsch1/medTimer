@@ -47,10 +47,10 @@
         <item quantity="other">minut</item>
     </plurals>
     <plurals name="sum_reminders">
-        <item quantity="one">%1$d připomenutí\n%2$s</item>
-        <item quantity="few">%1$d připomenutí\n%2$s</item>
-        <item quantity="many">%1$d připomenutí\n%2$s</item>
-        <item quantity="other">%1$d připomenutí\n%2$s</item>
+        <item quantity="one">%1$d připomenutí</item>
+        <item quantity="few">%1$d připomenutí</item>
+        <item quantity="many">%1$d připomenutí</item>
+        <item quantity="other">%1$d připomenutí</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">týden</item>
@@ -336,4 +336,6 @@
     <string name="same_as_medicine">Stejné jako lék</string>
     <string name="previous_week">Předchozí týden</string>
     <string name="next_week">Příští týden</string>
+    <string name="stock_after_simulation_end">After %s</string>
+    <string name="move_medicine">Přesunout lék</string>
 </resources>

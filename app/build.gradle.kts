@@ -17,8 +17,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 175
-        versionName = "1.24.0"
+        versionCode = 177
+        versionName = "1.24.2"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -45,8 +45,8 @@ android {
 
     buildTypes {
         release {
-            @Suppress("kotlin:S7204")
-            isMinifyEnabled = false // NOSONAR - Does not make sense for open source apps
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

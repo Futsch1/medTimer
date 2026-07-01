@@ -57,6 +57,7 @@ abstract class ModelDataPreferencesFragment<T>(
                 preferenceManager.preferenceDataStore = dataStore
             } catch (_: NullPointerException) {
                 // It may happen that the reminder is deleted already, so ignore this
+                return@launch
             }
 
             withContext(mainDispatcher) {

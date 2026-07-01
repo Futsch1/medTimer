@@ -7,6 +7,7 @@ import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.database.toModel.toModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class TagRepositoryImpl(
@@ -42,8 +43,8 @@ class TagRepositoryImpl(
         tagDao.deleteMedicineToTag(MedicineToTagEntity(medicineId, tagId))
     }
 
-    override suspend fun hasAny(): Boolean {
-        return tagDao.count() > 0
+    override fun hasAny(): Flow<Boolean> {
+        return tagDao.countFlow().map { it > 0 }.distinctUntilChanged()
     }
 
     override suspend fun deleteAll() {

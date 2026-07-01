@@ -51,8 +51,9 @@ class MedicineRepositoryImpl(
         return medicineDao.getHighestSortOrder()
     }
 
-    override suspend fun move(fromPosition: Int, toPosition: Int) {
+    override suspend fun move(id: Int, toPosition: Int) {
         val medicines = medicineDao.getAll().toMutableList()
+        val fromPosition = medicines.indexOfFirst { it.medicine.medicineId == id }
         if (fromPosition == toPosition || medicines.size < 2) return
 
         val moveMedicine = medicines.removeAt(fromPosition)

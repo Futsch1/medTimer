@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.test.espresso.Espresso
 import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertChecked
 import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListNotEmpty
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -59,20 +60,19 @@ class BasicUITest : BaseTestHelper() {
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, " 2 ")
         Espresso.pressBack()
 
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
         openMenu()
         clickOn(R.string.duplicate)
-        Espresso.pressBack()
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.remindersSummary, ";")
+        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
 
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_2)
 
         navigateTo(MainMenu.MEDICINES)
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, " Test2 ")
         Espresso.pressBack()
 
@@ -148,7 +148,7 @@ class BasicUITest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
 
         Espresso.pressBack()
-        clickListItem(com.futsch1.medtimer.feature.ui.R.id.medicineList, 0)
+        AndroidTestHelper.clickMedicineItem(0)
 
         // Check if the note is saved
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
@@ -228,7 +228,7 @@ class BasicUITest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
 
         navigateTo(MainMenu.MEDICINES)
-        clickOn("Test")
+        AndroidTestHelper.clickMedicineItem(0)
         createReminder("1", LocalTime.of(20, 0))
 
         navigateTo(MainMenu.OVERVIEW)

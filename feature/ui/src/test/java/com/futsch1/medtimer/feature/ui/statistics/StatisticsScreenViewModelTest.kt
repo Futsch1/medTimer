@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.statistics
 
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.graphics.toArgb
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -75,7 +76,7 @@ class StatisticsScreenViewModelTest {
                 total = StatisticsProvider.TakenSkipped(0, 0),
             )
         )
-        whenever(calendarEventsProvider.structuredEventsFlow(any(), any(), any(), any())).thenReturn(flowOf(emptyMap()))
+        whenever(calendarEventsProvider.structuredEventsFlow(any(), any())).thenReturn(flowOf(emptyMap()))
         whenever(medicineRepository.getAllFlow()).thenReturn(medicinesFlow)
 
         viewModel = buildViewModel()
@@ -90,12 +91,12 @@ class StatisticsScreenViewModelTest {
 
     @Test
     fun `initial state reads activeView from persisted data`() {
-        assertEquals(StatisticFragment.CHARTS, viewModel.uiState.value.activeView)
+        assertEquals(StatisticFragment.CHARTS, viewModel.state.activeView)
     }
 
     @Test
     fun `initial state reads analysisDays from persisted data`() {
-        assertEquals(7, viewModel.uiState.value.analysisDays)
+        assertEquals(7, viewModel.state.analysisDays)
     }
 
     @Test
@@ -106,8 +107,8 @@ class StatisticsScreenViewModelTest {
         )
         val vm = buildViewModel()
 
-        assertEquals(StatisticFragment.TABLE, vm.uiState.value.activeView)
-        assertEquals(14, vm.uiState.value.analysisDays)
+        assertEquals(StatisticFragment.TABLE, vm.state.activeView)
+        assertEquals(14, vm.state.analysisDays)
     }
 
     // ── onSelectView ──────────────────────────────────────────────────────────
@@ -116,7 +117,7 @@ class StatisticsScreenViewModelTest {
     fun `onSelectView updates the active view in state`() {
         viewModel.onSelectView(StatisticFragment.TABLE)
 
-        assertEquals(StatisticFragment.TABLE, viewModel.uiState.value.activeView)
+        assertEquals(StatisticFragment.TABLE, viewModel.state.activeView)
     }
 
     @Test
@@ -139,7 +140,7 @@ class StatisticsScreenViewModelTest {
     fun `onSelectRange updates analysisDays state`() {
         viewModel.onSelectRange(14)
 
-        assertEquals(14, viewModel.uiState.value.analysisDays)
+        assertEquals(14, viewModel.state.analysisDays)
     }
 
     @Test
@@ -153,7 +154,7 @@ class StatisticsScreenViewModelTest {
 
     @Test
     fun `table rows are empty when repository emits no events`() {
-        assertTrue(viewModel.uiState.value.tableRows.isEmpty())
+        assertTrue(viewModel.state.filteredRows.isEmpty())
     }
 
     @Test
@@ -163,8 +164,11 @@ class StatisticsScreenViewModelTest {
             medicineName = "Vitamin X",
         )
         eventsFlow.value = listOf(event)
+        // filteredRows is fed by snapshotFlow { tableRows … } → the row write only reaches the filter
+        // loop once apply-notifications fire (no recomposer in a unit test).
+        Snapshot.sendApplyNotifications()
 
-        assertEquals(1, viewModel.uiState.value.tableRows.size)
+        assertEquals(1, viewModel.state.filteredRows.size)
     }
 
     @Test
@@ -186,8 +190,8 @@ class StatisticsScreenViewModelTest {
         dataFlow.value = PersistentData.default().copy(filterTags = setOf("1"))
         val vm = buildViewModel()
 
-        assertEquals(1, vm.uiState.value.tableRows.size)
-        assertEquals("Vitamin X", vm.uiState.value.tableRows[0].cells[1].text)
+        assertEquals(1, vm.state.filteredRows.size)
+        assertEquals("Vitamin X", vm.state.filteredRows[0].cells[1].text)
     }
 
     // ── charts ────────────────────────────────────────────────────────────────
@@ -206,13 +210,27 @@ class StatisticsScreenViewModelTest {
         // No custom colors yet → the series falls back to the first palette slot.
         assertEquals(
             com.futsch1.medtimer.feature.ui.statistics.charts.ChartSeriesColors.PALETTE[0].toArgb(),
-            vm.uiState.value.charts?.seriesColors?.first(),
+            vm.state.charts?.seriesColors?.first(),
         )
 
         medicinesFlow.value = listOf(Medicine.default().copy(name = "Vitamin X", color = 0x12345678, useColor = true))
 
         // The flow input recomputed the chart with no other trigger — the custom color now wins.
-        assertEquals(0x12345678, vm.uiState.value.charts?.seriesColors?.first())
+        assertEquals(0x12345678, vm.state.charts?.seriesColors?.first())
+    }
+
+    @Test
+    fun `charts recompute when the analysis range changes`() {
+        // The range now lives in Compose state and reaches the charts flow via snapshotFlow, so the
+        // presenter stamps the seeded range (7) onto the initial chart.
+        assertEquals(7, viewModel.state.charts?.days)
+
+        viewModel.onSelectRange(30)
+        // snapshotFlow only observes the write once apply-notifications fire — in a plain unit test
+        // (no recomposer) that has to be triggered explicitly.
+        Snapshot.sendApplyNotifications()
+
+        assertEquals(30, viewModel.state.charts?.days)
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────
@@ -228,5 +246,6 @@ class StatisticsScreenViewModelTest {
         persistentDataDataSource = persistentDataDataSource,
         tagEventFilter = tagEventFilter,
         ioDispatcher = testDispatcher,
+        filterDispatcher = testDispatcher,
     )
 }
