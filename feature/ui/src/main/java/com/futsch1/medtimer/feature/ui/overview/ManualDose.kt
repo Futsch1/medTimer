@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
@@ -14,7 +15,7 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,6 +23,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -38,7 +40,9 @@ class ManualDose @AssistedInject constructor(
     private val timePickerDialogFactory: TimePickerDialogFactory,
     private val manualDoseListEntryAdapterFactory: ManualDoseListEntryAdapter.Factory,
     private val reminderEventRepository: ReminderEventRepository,
-    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
+    @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher,
+    private val commandBus: ReminderCommandBus,
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     @AssistedFactory
     fun interface Factory {
@@ -168,12 +172,9 @@ class ManualDose @AssistedInject constructor(
 
             val amount = MedicineHelper.parseAmount(reminderEvent.amount)
             if (amount != null) {
-                ReminderProcessorBroadcastReceiver.requestStockHandling(
-                    context,
-                    amount,
-                    medicineId,
-                    remindedInstant.epochSecond
-                )
+                applicationScope.launch {
+                    commandBus.processStockHandling(amount, medicineId, remindedInstant.epochSecond)
+                }
             }
         }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }

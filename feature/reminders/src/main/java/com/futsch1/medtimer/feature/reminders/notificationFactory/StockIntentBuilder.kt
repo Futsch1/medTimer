@@ -4,17 +4,16 @@ import android.app.PendingIntent
 import android.content.Context
 import com.futsch1.medtimer.feature.reminders.getAcknowledgedActionIntent
 import com.futsch1.medtimer.feature.reminders.getRefillActionIntent
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 
 class StockIntentBuilder(private val context: Context, private val reminderNotification: ReminderNotification) {
-    val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
+    private val reminderEventIds = reminderNotification.reminderNotificationData.reminderEventIds.toList()
 
     val pendingAcknowledged = getAcknowledgedPendingIntent()
     val pendingRefill = getRefillPendingIntent()
 
     private fun getAcknowledgedPendingIntent(): PendingIntent {
-        val notifyAcknowledged = getAcknowledgedActionIntent(context, processedNotificationData)
+        val notifyAcknowledged = getAcknowledgedActionIntent(context, reminderEventIds)
         return PendingIntent.getBroadcast(
             context,
             reminderNotification.reminderNotificationData.notificationId,
@@ -24,7 +23,7 @@ class StockIntentBuilder(private val context: Context, private val reminderNotif
     }
 
     private fun getRefillPendingIntent(): PendingIntent {
-        val notifyRefill = getRefillActionIntent(context, processedNotificationData)
+        val notifyRefill = getRefillActionIntent(context, reminderEventIds)
         return PendingIntent.getBroadcast(
             context,
             reminderNotification.reminderNotificationData.notificationId,

@@ -33,6 +33,7 @@ import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.hasBiometrics
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -41,13 +42,14 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.DurationUnit
@@ -86,6 +88,13 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var activityManager: ActivityManager
+
+    @Inject
+    lateinit var commandBus: ReminderCommandBus
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -323,7 +332,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
-                val reminderNotificationData = ReminderNotificationData.fromBundle(intent.extras!!)
+                val reminderNotificationData = intent.extras!!.toReminderNotificationData()
                 if (reminderNotificationData.valid) {
                     TextInputDialogBuilder(this)
                         .title(com.futsch1.medtimer.core.ui.R.string.snooze_duration)
@@ -332,7 +341,11 @@ class MainActivity : AppCompatActivity() {
                         .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
                         .textSink { snoozeTime: String? ->
                             snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
-                                ?.let { ReminderProcessorBroadcastReceiver.requestSnooze(this, reminderNotificationData, it) }
+                                ?.let { duration ->
+                                    applicationScope.launch {
+                                        commandBus.snooze(reminderNotificationData, duration)
+                                    }
+                                }
                         }
                         .cancelCallback {
                             Log.d(LogTags.REMINDER, "Snooze dialog cancelled")

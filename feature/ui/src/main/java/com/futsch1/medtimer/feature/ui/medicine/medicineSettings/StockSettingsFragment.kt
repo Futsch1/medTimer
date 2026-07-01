@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -18,11 +19,12 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -52,6 +54,13 @@ class StockSettingsFragment : MedicinePreferences(
 
     @Inject
     lateinit var medicineStringFormatter: MedicineStringFormatter
+
+    @Inject
+    lateinit var commandBus: ReminderCommandBus
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
@@ -165,7 +174,8 @@ class StockSettingsFragment : MedicinePreferences(
     }
 
     private fun refillNow() {
-        ReminderProcessorBroadcastReceiver.requestRefill(requireContext(), dataStore.modelData.id)
+        val medicineId = dataStore.modelData.id
+        applicationScope.launch { commandBus.processRefill(medicineId) }
     }
 
     private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {

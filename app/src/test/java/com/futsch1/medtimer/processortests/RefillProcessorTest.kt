@@ -24,7 +24,6 @@ import com.futsch1.medtimer.database.toModel.toEntity
 import com.futsch1.medtimer.feature.reminders.RefillProcessor
 import com.futsch1.medtimer.feature.reminders.TimeAccess
 import com.futsch1.medtimer.feature.reminders.di.TimeAccessModule
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.schedulertests.TestHelper
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -154,7 +153,7 @@ class RefillProcessorTest {
         reminderContext.repositoryFakes.reminderEvents.add(TestHelper.buildReminderEvent(1, 0, 1).toEntity())
 
         runBlocking {
-            refillProcessor.processRefill(ProcessedNotificationData(listOf(1)))
+            refillProcessor.processRefill(listOf(1))
         }
 
         assertEquals(110.0, reminderContext.repositoryFakes.medicines[0].amount)

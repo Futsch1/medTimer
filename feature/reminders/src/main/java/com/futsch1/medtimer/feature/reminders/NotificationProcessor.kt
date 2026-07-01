@@ -10,9 +10,9 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
+import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
 
@@ -40,10 +40,10 @@ class NotificationProcessor @Inject constructor(
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timeAccess: TimeAccess
 ) {
-    suspend fun processReminderEventsInNotification(processedNotificationData: ProcessedNotificationData, status: ReminderEvent.ReminderStatus) {
-        Log.d(LogTags.REMINDER, "Process reminder events in notification $processedNotificationData")
+    suspend fun processReminderEventsInNotification(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {
+        Log.d(LogTags.REMINDER, "Process reminder events in notification $reminderEventIds")
         val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
-        for (reminderEventId in processedNotificationData.reminderEventIds) {
+        for (reminderEventId in reminderEventIds) {
             val reminderEvent = reminderEventRepository.fetch(reminderEventId)
 
             if (reminderEvent != null) {
@@ -73,7 +73,7 @@ class NotificationProcessor @Inject constructor(
         Log.d(LogTags.REMINDER, "Remove reminders from notification nID $notificationId")
         for (notification in notificationManager.activeNotifications) {
             if (notification.id == notificationId) {
-                val reminderNotificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
+                val reminderNotificationData = notification.notification.extras.toReminderNotificationData()
                 reminderNotificationData.notificationId = notificationId
                 Log.d(LogTags.REMINDER, "Remove reIDs $reminderEventIds from notification nID $notificationId")
                 updateNotification(reminderNotificationData, reminderEventIds)

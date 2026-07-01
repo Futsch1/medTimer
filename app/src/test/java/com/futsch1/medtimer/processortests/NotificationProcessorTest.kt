@@ -12,7 +12,6 @@ import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.feature.reminders.di.TimeAccessModule
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
@@ -145,13 +144,12 @@ class NotificationProcessorTest {
     fun singleTaken() {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         val reminderNotificationData = fillWithOneReminder(testReminderContext)
-        val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotificationData)
         testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
         testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
 
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
-                processedNotificationData,
+                reminderNotificationData.reminderEventIds.toList(),
                 ReminderEvent.ReminderStatus.TAKEN
             )
         }
@@ -170,13 +168,12 @@ class NotificationProcessorTest {
     fun takenClearsPendingLocationSnooze() {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         val reminderNotificationData = fillWithOneReminder(testReminderContext)
-        val processedNotificationData = ProcessedNotificationData.fromReminderNotificationData(reminderNotificationData)
         testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
         testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
 
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
-                processedNotificationData,
+                reminderNotificationData.reminderEventIds.toList(),
                 ReminderEvent.ReminderStatus.TAKEN
             )
         }
@@ -194,11 +191,9 @@ class NotificationProcessorTest {
         testReminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
         testReminderContext.notificationManagerFake.add(1, intArrayOf(1, 2), intArrayOf(1, 2))
 
-        val processedNotificationData = ProcessedNotificationData(listOf(2))
-
         runBlocking {
             notificationProcessor.processReminderEventsInNotification(
-                processedNotificationData,
+                listOf(2),
                 ReminderEvent.ReminderStatus.SKIPPED
             )
         }

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
@@ -10,15 +11,16 @@ import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -29,7 +31,9 @@ class ReminderEventActions @AssistedInject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val medicineRepository: MedicineRepository,
     private val reminderRepository: ReminderRepository,
-    private val timePickerDialogFactory: TimePickerDialogFactory
+    private val timePickerDialogFactory: TimePickerDialogFactory,
+    private val commandBus: ReminderCommandBus,
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) : Actions {
 
     @AssistedFactory
@@ -73,7 +77,12 @@ class ReminderEventActions @AssistedInject constructor(
         if (isStockEvent) {
             when (button) {
                 Button.DELETE -> processDeleteReminderEvent(event.reminderEvent)
-                Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(fragmentActivity, event.reminderEvent)
+                Button.ACKNOWLEDGED -> {
+                    applicationScope.launch {
+                        commandBus.markReminderEvents(listOf(event.reminderEvent.reminderEventId), ReminderEvent.ReminderStatus.ACKNOWLEDGED)
+                    }
+                }
+
                 else -> Unit
             }
         } else {
@@ -98,13 +107,14 @@ class ReminderEventActions @AssistedInject constructor(
                     reminderNotificationData.remindInstant = newReminderTime
                     reminderNotificationData.notificationId = reminderEvent.notificationId
                     reminderEventRepository.update(reminderEvent.copy(remindedTimestamp = newReminderTime))
-                    ReminderProcessorBroadcastReceiver.requestShowReminderNotification(fragmentActivity, reminderNotificationData)
+                    applicationScope.launch { commandBus.showReminderNotification(reminderNotificationData) }
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(fragmentActivity, null, reminderEvent, taken)
+        val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
+        applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), status) }
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
@@ -112,7 +122,7 @@ class ReminderEventActions @AssistedInject constructor(
             fragmentActivity.lifecycleScope.launch {
                 undoStock(reminderEvent)
                 reminderEventRepository.delete(reminderEvent)
-                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
+                applicationScope.launch { commandBus.scheduleNextNotification() }
             }
         }, {})
     }
