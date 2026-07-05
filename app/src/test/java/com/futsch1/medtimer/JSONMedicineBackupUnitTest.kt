@@ -25,6 +25,7 @@ internal class JSONMedicineBackupUnitTest {
             reminders = mutableListOf(ReminderBackup().apply {
                 reminderId = 14
                 timeInMinutes = 60
+                createdTimestamp = 100
                 amount = "1"
                 consecutiveDays = 1
                 pauseDays = 0
@@ -91,6 +92,7 @@ internal class JSONMedicineBackupUnitTest {
         {
           "reminderId": 14,
           "timeInMinutes": 60,
+          "createdTimestamp": 100,
           "consecutiveDays": 1,
           "pauseDays": 0,
           "instructions": "Take with water",
@@ -173,6 +175,7 @@ internal class JSONMedicineBackupUnitTest {
 
     private fun compareReminder(reminder: ReminderBackup, reminder1: ReminderBackup) {
         assertEquals(reminder.timeInMinutes, reminder1.timeInMinutes)
+        assertEquals(reminder.createdTimestamp, reminder1.createdTimestamp)
         assertEquals(reminder.consecutiveDays, reminder1.consecutiveDays)
         assertEquals(reminder.instructions, reminder1.instructions)
         assertEquals(reminder.amount, reminder1.amount)
@@ -264,6 +267,7 @@ internal class JSONMedicineBackupUnitTest {
         {
           "reminderId": 1,
           "timeInMinutes": 60,
+          "createdTimestamp": 0,
           "consecutiveDays": 1,
           "pauseDays": 0,
           "instructions": "Take with water",
@@ -319,6 +323,7 @@ internal class JSONMedicineBackupUnitTest {
         {
           "reminderId": 1,
           "timeInMinutes": 60,
+          "createdTimestamp": 0,
           "consecutiveDays": 1,
           "pauseDays": 0,
           "instructions": "Take with water",
@@ -353,6 +358,7 @@ internal class JSONMedicineBackupUnitTest {
         {
           "reminderId": 2,
           "timeInMinutes": 120,
+          "createdTimestamp": 0,
           "consecutiveDays": 2,
           "pauseDays": 1,
           "instructions": "Take after meal",

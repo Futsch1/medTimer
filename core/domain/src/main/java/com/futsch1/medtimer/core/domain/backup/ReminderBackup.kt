@@ -5,6 +5,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 class ReminderBackup(
     var reminderId: Int = 0,
     var timeInMinutes: Int = 0,
+    var createdTimestamp: Long = 0,
     var consecutiveDays: Int = 1,
     var pauseDays: Int = 0,
     var instructions: String? = "",
