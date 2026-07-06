@@ -17,4 +17,7 @@ class ReminderEventBackup(
     var lastIntervalReminderTimeInMinutes: Int = 0,
     var notes: String = "",
     var reminderType: ReminderType = ReminderType.TIME_BASED,
+    var stockBefore: Double = -1.0,
+    var stockAfter: Double = -1.0,
+    var stockUnit: String = "",
 )
