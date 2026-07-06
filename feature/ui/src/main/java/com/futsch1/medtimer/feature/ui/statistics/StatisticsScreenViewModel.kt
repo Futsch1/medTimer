@@ -56,7 +56,13 @@ class StatisticsScreenViewModel @Inject constructor(
     @Dispatcher(MedTimerDispatchers.Default) filterDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    private val _state = MutableStatisticsScreenState()
+    // Seed the screen state from persistence at construction time. Doing this in the constructor
+    // (rather than defaulting to the fallback and mutating in init) avoids a race where the charts'
+    // snapshotFlow reads the default range before the persisted value is visible across dispatchers.
+    private val _state = MutableStatisticsScreenState(
+        activeView = persistentDataDataSource.data.value.activeStatisticsFragment,
+        analysisDays = persistentDataDataSource.data.value.analysisDays,
+    )
     val state: StatisticsScreenState get() = _state
 
     // Search input lives on a flow so the field updates instantly while only the (potentially heavy)
@@ -70,12 +76,6 @@ class StatisticsScreenViewModel @Inject constructor(
         .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
-        // Seed the session selections from persistence before the slices start collecting, so the
-        // charts' snapshotFlow below reads the persisted range as its first value.
-        val initial = persistentDataDataSource.data.value
-        _state.activeView = initial.activeStatisticsFragment
-        _state.analysisDays = initial.analysisDays
-
         // Charts depend on the Analysis range, which now lives in Compose state — bridge it back into
         // the flow world with snapshotFlow so the aggregation stays reactive while the heavy work runs
         // off the main thread. Each slice writes only its own property, so one input recomputes one slice.

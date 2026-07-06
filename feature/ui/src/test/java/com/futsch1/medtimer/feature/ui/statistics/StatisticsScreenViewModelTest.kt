@@ -109,6 +109,7 @@ class StatisticsScreenViewModelTest {
 
         assertEquals(StatisticFragment.TABLE, vm.state.activeView)
         assertEquals(14, vm.state.analysisDays)
+        assertEquals(14, vm.state.charts?.days)
     }
 
     // ── onSelectView ──────────────────────────────────────────────────────────
