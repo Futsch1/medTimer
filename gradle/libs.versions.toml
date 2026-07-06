@@ -42,7 +42,7 @@ android-test-rules = "1.7.0"
 android-test-runner = "1.7.0"
 android-test-orchestrator = "1.6.1"
 screengrab = "2.1.1"
-uiautomator = "2.3.0"
+uiautomator = "2.4.0"
 barista = "4.3.0"
 
 # Build
