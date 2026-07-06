@@ -61,7 +61,7 @@ material3-expressive = "1.5.0-alpha22"
 # 1.5.x in practice (upgraded by the Compose BOM's ui dependency) — no separate window pin.
 material3-adaptive = "1.2.0"
 vico = "3.2.3"
-kotlinx-collections-immutable = "0.5.0"
+kotlinx-collections-immutable = "0.5.1"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
 kotlin-compose-compiler = "2.2.10"
 
