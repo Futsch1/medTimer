@@ -24,6 +24,7 @@ class MedicinesMenu @Inject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) : MenuProvider {
     var medicinesProvider: () -> List<Medicine> = { emptyList() }
+    var onScanBarcode: () -> Unit = {}
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.medicines_settings, menu)
         menu.setGroupDividerEnabled(true)
@@ -33,6 +34,9 @@ class MedicinesMenu @Inject constructor(
         }
         setupMenu(menu, R.id.deactivate_all) {
             setRemindersActive(false)
+        }
+        setupMenu(menu, R.id.scanBarcode) {
+            onScanBarcode()
         }
         setupMenu(menu, R.id.sortByName) {
             sortBy { m -> m.sortedBy { it.name } }

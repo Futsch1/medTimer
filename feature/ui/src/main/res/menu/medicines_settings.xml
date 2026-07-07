@@ -7,6 +7,9 @@
         android:id="@+id/deactivate_all"
         android:title="@string/deactivate_all" >
     </item>
+    <item
+        android:id="@+id/scanBarcode"
+        android:title="@string/scan_barcode" />
     <item android:title="@string/sort" >
         <menu >
             <item android:id="@+id/sortByName" android:title="@string/by_name" />

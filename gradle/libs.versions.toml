@@ -31,6 +31,7 @@ flexbox = "3.0.0"
 preference-extended = "1.1.0"
 reorderable = "3.1.0"
 play-services-location = "21.4.0"
+zxing-android-embedded = "4.3.0"
 
 # Testing
 junit4 = "4.13.2"
@@ -94,6 +95,7 @@ preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "
 preferencex-ringtone = { module = "com.takisoft.preferencex:preferencex-ringtone", version.ref = "preference-extended" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing-android-embedded" }
 
 # Espresso (used both as implementation and androidTest)
 espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espresso" }

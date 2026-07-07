@@ -224,6 +224,13 @@
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
+    <string name="scan_barcode">Scan barcode</string>
+    <string name="scan_barcode_prompt">Align the package barcode within the frame</string>
+    <string name="barcode_camera_permission_denied">Camera permission is required to scan barcodes</string>
+    <string name="link_barcode_title">This barcode is not linked yet. Select the medicine it belongs to:</string>
+    <string name="barcode_no_medicines">Add a medicine before linking a barcode to it</string>
+    <string name="barcode_stock_refilled">Stock refilled: %1$s</string>
+    <string name="barcode_linked_and_refilled">Barcode linked to %1$s. Stock refilled.</string>
     <string name="variable_amount">Enter dosage when taken</string>
     <string name="tags">Tags</string>
     <string name="add_tag">Add tag</string>
