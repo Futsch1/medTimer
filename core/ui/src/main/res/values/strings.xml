@@ -225,11 +225,13 @@
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
     <string name="scan_package">Scan package</string>
-    <string name="package_stock_refilled">Stock refilled: %1$s</string>
-    <string name="ocr_no_text_found">No text found in the photo, try again</string>
+    <string name="package_stock_refilled_amount">%1$s: stock refilled with %2$s</string>
+    <string name="nfc_action_stock_refilled">Stock refilled: %1$s</string>
     <string name="ocr_no_medicines">Add a medicine before scanning a package</string>
     <string name="ocr_pick_medicine_title">Couldn\'t match the package to a medicine. Select which one it is:</string>
-    <string name="ocr_remembered_and_refilled">Got it, linked to %1$s. Stock refilled.</string>
+    <string name="ocr_ask_quantity">How many pills/doses does this package contain?</string>
+    <string name="package_scan_hint">Point the camera at one or more medicine packages. Recognized packages are added to stock automatically.</string>
+    <string name="package_scan_camera_permission_denied">Camera permission is required to scan packages</string>
     <string name="nfc_automation">NFC automation</string>
     <string name="nfc_automation_help">Write one of these links to an NFC tag with any NFC-writing app (as a URI/URL record). Tapping the tag opens MedTimer and runs the action, no Samsung Routines or other automation app required.</string>
     <string name="nfc_copy_take_link">Copy \"mark as taken\" link</string>

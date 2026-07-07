@@ -22,17 +22,17 @@ class RefillProcessor @Inject constructor(
     suspend fun processRefill(processedNotificationData: ProcessedNotificationData) {
         val reminderEvent = reminderEventRepository.fetch(processedNotificationData.reminderEventIds[0])
         val reminder = reminderEvent?.let { reminderRepository.fetch(it.reminderId) }
-        reminder?.let { processRefill(it.medicineRelId, reminderEvent) }
+        reminder?.let { processRefill(it.medicineRelId, reminderEvent = reminderEvent) }
 
     }
 
-    suspend fun processRefill(medicineId: Int?, reminderEvent: ReminderEvent? = null) {
+    suspend fun processRefill(medicineId: Int?, quantity: Double? = null, reminderEvent: ReminderEvent? = null) {
         if (medicineId == null) {
             return
         }
         val medicine = medicineRepository.fetch(medicineId) ?: return
 
-        val refillEvent = processRefillInternal(medicine, medicineRepository)
+        val refillEvent = processRefillInternal(medicine, quantity)
         reminderEventRepository.create(refillEvent)
 
         if (reminderEvent != null) {
@@ -43,22 +43,23 @@ class RefillProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processRefillInternal(medicine: Medicine, medicineRepository: MedicineRepository): ReminderEvent {
-        val medicine = medicine.copy(amount = medicine.amount + medicine.refillSize)
-        medicineRepository.update(medicine)
-        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.name} with ${medicine.refillSize} to amount ${medicine.amount + medicine.refillSize}")
+    private suspend fun processRefillInternal(medicine: Medicine, quantity: Double? = null): ReminderEvent {
+        val addAmount = quantity ?: medicine.refillSize
+        val updatedMedicine = medicine.copy(amount = medicine.amount + addAmount)
+        medicineRepository.update(updatedMedicine)
+        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${updatedMedicine.name} with $addAmount to amount ${updatedMedicine.amount}")
 
-        return buildReminderEvent(medicine)
+        return buildReminderEvent(updatedMedicine, addAmount)
     }
 
-    fun buildReminderEvent(medicine: Medicine): ReminderEvent {
+    fun buildReminderEvent(medicine: Medicine, addAmount: Double = medicine.refillSize): ReminderEvent {
         val reminderEvent = ReminderEvent.default().copy(
             medicineName = medicine.name,
             color = medicine.color,
             useColor = medicine.useColor,
             iconId = medicine.iconId,
             tags = medicine.tags.map { it.name },
-            amount = "${MedicineHelper.formatAmount(medicine.amount - medicine.refillSize, medicine.unit)} ➡ ${
+            amount = "${MedicineHelper.formatAmount(medicine.amount - addAmount, medicine.unit)} ➡ ${
                 MedicineHelper.formatAmount(
                     medicine.amount,
                     medicine.unit

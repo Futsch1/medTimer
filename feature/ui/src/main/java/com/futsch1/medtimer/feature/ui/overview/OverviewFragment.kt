@@ -27,7 +27,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.PackageScanner
+import com.futsch1.medtimer.feature.ui.medicine.ocr.PackageTextRecognizer
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
@@ -78,8 +78,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
     lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
 
     @Inject
-    lateinit var packageScannerFactory: PackageScanner.Factory
-    private lateinit var packageScanner: PackageScanner
+    lateinit var textRecognizer: PackageTextRecognizer
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -114,7 +113,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             false,
             tagFilterViewModel
         )
-        packageScanner = packageScannerFactory.create(this)
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
@@ -248,12 +246,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     private fun setupScanPackage(overview: FragmentSwipeLayout) {
         val scanPackage = overview.findViewById<Button>(R.id.scanPackage)
-        if (!packageScanner.isSupported) {
+        if (!textRecognizer.isSupported) {
             scanPackage.visibility = View.GONE
             return
         }
         scanPackage.setOnClickListener {
-            packageScanner.scan()
+            findNavController().navigate(R.id.action_overviewFragment_to_packageScanFragment)
         }
     }
 

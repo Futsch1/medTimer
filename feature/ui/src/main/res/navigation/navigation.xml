@@ -13,7 +13,14 @@
         <action
             android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
             app:destination="@id/editMedicineFragment" />
+        <action
+            android:id="@+id/action_medicinesFragment_to_packageScanFragment"
+            app:destination="@id/packageScanFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/packageScanFragment"
+        android:name="com.futsch1.medtimer.feature.ui.medicine.scan.PackageScanFragment"
+        android:label="@string/scan_package" />
     <fragment
         android:id="@+id/preferencesFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.PreferencesFragment"
@@ -126,7 +133,11 @@
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.feature.ui.overview.OverviewFragment"
-        android:label="@string/tab_overview" />
+        android:label="@string/tab_overview">
+        <action
+            android:id="@+id/action_overviewFragment_to_packageScanFragment"
+            app:destination="@id/packageScanFragment" />
+    </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesRootFragment"
         android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"

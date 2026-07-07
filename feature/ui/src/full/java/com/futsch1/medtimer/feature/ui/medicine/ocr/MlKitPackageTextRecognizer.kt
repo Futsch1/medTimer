@@ -1,28 +1,27 @@
 package com.futsch1.medtimer.feature.ui.medicine.ocr
 
-import android.content.Context
-import android.net.Uri
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.io.IOException
 import javax.inject.Inject
 
-class MlKitPackageTextRecognizer @Inject constructor(
-    @param:ApplicationContext private val context: Context
-) : PackageTextRecognizer {
+class MlKitPackageTextRecognizer @Inject constructor() : PackageTextRecognizer {
     override val isSupported: Boolean = true
 
-    override suspend fun recognize(imageUri: Uri): String = suspendCancellableCoroutine { continuation ->
-        try {
-            val image = InputImage.fromFilePath(context, imageUri)
-            TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS).process(image)
-                .addOnSuccessListener { continuation.resume(it.text, onCancellation = null) }
-                .addOnFailureListener { continuation.resume("", onCancellation = null) }
-        } catch (_: IOException) {
-            continuation.resume("", onCancellation = null)
+    @OptIn(ExperimentalGetImage::class)
+    override suspend fun recognize(image: ImageProxy): List<String> {
+        val mediaImage = image.image ?: return emptyList()
+        val inputImage = InputImage.fromMediaImage(mediaImage, image.imageInfo.rotationDegrees)
+        return suspendCancellableCoroutine { continuation ->
+            TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS).process(inputImage)
+                .addOnSuccessListener { text ->
+                    continuation.resume(text.textBlocks.map { it.text }, onCancellation = null)
+                }
+                .addOnFailureListener { continuation.resume(emptyList(), onCancellation = null) }
         }
     }
 }

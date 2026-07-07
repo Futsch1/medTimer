@@ -82,6 +82,10 @@ dependencies {
     implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
     "fullImplementation"(libs.mlkit.text.recognition)
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Compose

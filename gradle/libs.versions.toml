@@ -32,6 +32,7 @@ preference-extended = "1.1.0"
 reorderable = "3.1.0"
 play-services-location = "21.4.0"
 mlkit-text-recognition = "16.0.1"
+camerax = "1.5.1"
 
 # Testing
 junit4 = "4.13.2"
@@ -96,6 +97,10 @@ preferencex-ringtone = { module = "com.takisoft.preferencex:preferencex-ringtone
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkit-text-recognition" }
+camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+camerax-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 
 # Espresso (used both as implementation and androidTest)
 espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espresso" }

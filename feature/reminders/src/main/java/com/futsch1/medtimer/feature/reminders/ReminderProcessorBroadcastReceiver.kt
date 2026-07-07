@@ -118,7 +118,12 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
 
     private suspend fun processRefill(intent: Intent) {
         if (intent.hasExtra(ActivityCodes.EXTRA_MEDICINE_ID)) {
-            refillProcessor.processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0))
+            val quantity = if (intent.hasExtra(ActivityCodes.EXTRA_AMOUNT)) {
+                intent.getDoubleExtra(ActivityCodes.EXTRA_AMOUNT, 0.0)
+            } else {
+                null
+            }
+            refillProcessor.processRefill(intent.getIntExtra(ActivityCodes.EXTRA_MEDICINE_ID, 0), quantity)
         } else {
             refillProcessor.processRefill(ProcessedNotificationData.fromBundle(intent.extras!!))
         }
@@ -187,8 +192,8 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(getAcknowledgedActionIntent(context, processedNotificationData), RECEIVER_PERMISSION)
         }
 
-        fun requestRefill(context: Context, medicineId: Int) {
-            val intent = getRefillIntent(context, medicineId)
+        fun requestRefill(context: Context, medicineId: Int, quantity: Double? = null) {
+            val intent = getRefillIntent(context, medicineId, quantity)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
     }

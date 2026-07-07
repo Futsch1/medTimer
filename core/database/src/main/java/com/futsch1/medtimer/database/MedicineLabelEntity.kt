@@ -25,5 +25,6 @@ import androidx.room.PrimaryKey
 )
 class MedicineLabelEntity(
     @PrimaryKey var text: String,
-    @ColumnInfo(name = "medicineId") var medicineId: Int
+    @ColumnInfo(name = "medicineId") var medicineId: Int,
+    @ColumnInfo(name = "quantity") var quantity: Double? = null
 )

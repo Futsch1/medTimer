@@ -28,6 +28,7 @@ import com.futsch1.medtimer.feature.ui.BuildConfig
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
+import com.futsch1.medtimer.feature.ui.medicine.ocr.PackageTextRecognizer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -68,10 +69,9 @@ class MedicinesFragment : Fragment() {
     lateinit var optionsMenuFactory: OptionsMenuFactory
 
     @Inject
-    lateinit var packageScannerFactory: PackageScanner.Factory
+    lateinit var textRecognizer: PackageTextRecognizer
 
     private lateinit var optionsMenu: EntityEditOptionsMenu
-    private lateinit var packageScanner: PackageScanner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +81,6 @@ class MedicinesFragment : Fragment() {
             false,
             medicinesScreenViewModel.tagFilterViewModel
         )
-        packageScanner = packageScannerFactory.create(this)
     }
 
     override fun onCreateView(
@@ -91,8 +90,12 @@ class MedicinesFragment : Fragment() {
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
         requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
         medicinesMenu.medicinesProvider = { medicinesScreenViewModel.medicines.value }
-        medicinesMenu.scanPackageSupported = packageScanner.isSupported
-        medicinesMenu.onScanPackage = { packageScanner.scan() }
+        medicinesMenu.scanPackageSupported = textRecognizer.isSupported
+        medicinesMenu.onScanPackage = {
+            findNavController(requireView()).navigate(
+                MedicinesFragmentDirections.actionMedicinesFragmentToPackageScanFragment()
+            )
+        }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
