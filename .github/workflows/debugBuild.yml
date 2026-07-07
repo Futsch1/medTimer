@@ -3,8 +3,15 @@ name: Debug build
 # On-demand debug APK for manual testing (e.g. on a feature branch before merge).
 # Unlike build.yml, this needs no signing secrets: debug builds are self-signed
 # with the auto-generated debug keystore.
+#
+# Triggers on push to this feature branch too, since GitHub only offers manual
+# workflow_dispatch runs for workflow files that already exist on the default
+# branch - remove the push trigger (or the branch filter) once this merges.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - claude/barcode-entity-data-layer-y9tt6d
 
 env:
   FULL_APK_DEBUG_DIRECTORY: app/build/outputs/apk/full/debug
