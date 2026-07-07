@@ -20,8 +20,7 @@ fun Medicine.toEntity(): MedicineEntity = MedicineEntity(
     showNotificationAsAlarm = showNotificationAsAlarm,
     productionDate = productionDate.toEpochDay(),
     expirationDate = expirationDate.toEpochDay(),
-    cannotBeSkipped = cannotBeSkipped,
-    prescriptionContact = prescriptionContact
+    cannotBeSkipped = cannotBeSkipped
 )
 
 fun FullMedicineEntity.toModel(): Medicine {
@@ -42,7 +41,6 @@ fun FullMedicineEntity.toModel(): Medicine {
         sortOrder = medicine.sortOrder,
         tags = tags.map { it.toModel() },
         reminders = reminders.map { it.toModel() },
-        cannotBeSkipped = medicine.cannotBeSkipped,
-        prescriptionContact = medicine.prescriptionContact ?: ""
+        cannotBeSkipped = medicine.cannotBeSkipped
     )
 }

@@ -84,7 +84,7 @@ class NfcActionActivity : AppCompatActivity() {
             when (uri.host) {
                 "take" -> withMedicineId(uri) { takeDose(it) }
                 "refill" -> withMedicineId(uri) { refill(it) }
-                "requestPrescription" -> withMedicineId(uri) { requestPrescription(it) }
+                "requestPrescription" -> requestPrescription()
                 "takeScheduled" -> takeAllScheduled()
                 else -> withContext(mainDispatcher) {
                     toast(getString(com.futsch1.medtimer.core.ui.R.string.nfc_action_invalid_link))
@@ -178,32 +178,21 @@ class NfcActionActivity : AppCompatActivity() {
         }
     }
 
-    /** Combines every currently out-of-stock medicine sharing this one's prescription contact
-     * into a single SMS draft, and schedules a pickup reminder a configurable number of days out. */
-    private suspend fun requestPrescription(medicineId: Int) {
-        val medicine = medicineRepository.fetch(medicineId) ?: run {
-            withContext(mainDispatcher) {
-                toast(getString(com.futsch1.medtimer.core.ui.R.string.nfc_action_unknown_medicine))
-            }
-            return
-        }
-        val contact = medicine.prescriptionContact
+    /** Combines every currently out-of-stock medicine into a single SMS draft to the configured
+     * prescription contact, and schedules a pickup reminder a configurable number of days out. */
+    private suspend fun requestPrescription() {
+        val preferences = preferencesDataSource.preferences.value
+        val contact = preferences.prescriptionContact
         if (contact.isBlank()) return
 
-        val lowStockNames = medicineRepository.getAll()
-            .filter { it.isOutOfStock() && it.prescriptionContact == contact }
-            .map(Medicine::name)
-            .ifEmpty { listOf(medicine.name) }
+        val lowStockNames = medicineRepository.getAll().filter { it.isOutOfStock() }.map(Medicine::name)
+        if (lowStockNames.isEmpty()) return
 
-        val smsBody = if (lowStockNames.size == 1) {
-            getString(com.futsch1.medtimer.core.ui.R.string.prescription_request_sms, lowStockNames[0])
-        } else {
-            getString(
-                com.futsch1.medtimer.core.ui.R.string.prescription_request_sms_multi,
-                lowStockNames.joinToString(", ")
-            )
-        }
-        val pickupDays = preferencesDataSource.preferences.value.prescriptionPickupDays
+        val smsBody = preferences.prescriptionMessageTemplate.replace(
+            PRESCRIPTION_MEDICINES_PLACEHOLDER,
+            lowStockNames.joinToString(", ")
+        )
+        val pickupDays = preferences.prescriptionPickupDays
         val pickupDate = LocalDate.now().plusDays(pickupDays.toLong())
 
         withContext(mainDispatcher) {
@@ -235,6 +224,10 @@ class NfcActionActivity : AppCompatActivity() {
         private val NON_DOSE_REMINDER_TYPES = setOf(
             ReminderType.OUT_OF_STOCK, ReminderType.EXPIRATION_DATE, ReminderType.REFILL
         )
+
+        /** Token users can put in their custom prescription message template; replaced with the
+         * comma-separated names of every currently out-of-stock medicine. */
+        const val PRESCRIPTION_MEDICINES_PLACEHOLDER = "{medicines}"
 
         fun buildTakeUri(medicineId: Int): Uri =
             Uri.parse("medtimer://take").buildUpon().appendQueryParameter("medicineId", medicineId.toString()).build()

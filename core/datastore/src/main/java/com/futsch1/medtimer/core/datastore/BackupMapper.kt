@@ -43,6 +43,8 @@ fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
     homeLongitude = homeLocation?.longitude,
     homeRadiusMeters = homeLocation?.radiusMeters,
     prescriptionPickupDays = prescriptionPickupDays,
+    prescriptionContact = prescriptionContact,
+    prescriptionMessageTemplate = prescriptionMessageTemplate,
 )
 
 fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
@@ -100,5 +102,9 @@ fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
             PreferencesDataSource.PRESCRIPTION_PICKUP_DAYS,
             prescriptionPickupDays.toString()
         )
+    }
+    prescriptionContact?.let { preferencesDataSource.putString(PreferencesDataSource.PRESCRIPTION_CONTACT, it) }
+    prescriptionMessageTemplate?.let {
+        preferencesDataSource.putString(PreferencesDataSource.PRESCRIPTION_MESSAGE_TEMPLATE, it)
     }
 }

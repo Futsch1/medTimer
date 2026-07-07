@@ -41,7 +41,7 @@ class StockSettingsFragment : MedicinePreferences(
     ),
     mapOf(
     ),
-    listOf("stock_unit", "prescription_contact")
+    listOf("stock_unit")
 ) {
     @Inject
     lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
@@ -102,9 +102,6 @@ class StockSettingsFragment : MedicinePreferences(
     override fun customSetup(modelData: Medicine) {
         setupAmountEdit(findPreference("amount")!!)
         setupAmountEdit(findPreference("stock_refill_size")!!)
-        findPreference<EditTextPreference>("prescription_contact")!!.setOnBindEditTextListener { editText ->
-            editText.inputType = InputType.TYPE_CLASS_PHONE
-        }
 
         observeRunOutDate(modelData.id)
     }

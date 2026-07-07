@@ -58,8 +58,6 @@ class MedicineDataStore @AssistedInject constructor(
                 if (modelData.showNotificationAsAlarm) "2" else "1"
             }
 
-            "prescription_contact" -> modelData.prescriptionContact
-
             else -> defValue
         }
     }
@@ -84,8 +82,6 @@ class MedicineDataStore @AssistedInject constructor(
                     notificationImportance = if (value == "0") Medicine.NotificationImportance.DEFAULT else Medicine.NotificationImportance.HIGH,
                     showNotificationAsAlarm = value == "2"
                 )
-
-            "prescription_contact" -> modelData = modelData.copy(prescriptionContact = value ?: "")
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)

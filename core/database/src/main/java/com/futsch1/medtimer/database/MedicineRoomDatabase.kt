@@ -14,6 +14,7 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration26To27
+import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration28To29
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.MedicineLabelDao
@@ -23,7 +24,7 @@ import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
     entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class, MedicineLabelEntity::class],
-    version = 28,
+    version = 29,
     autoMigrations = [AutoMigration(
         from = 1,
         to = 2,
@@ -69,7 +70,11 @@ import com.futsch1.medtimer.database.dao.TagDao
         from = 26,
         to = 27,
         spec = AutoMigration26To27::class
-    ), AutoMigration(from = 27, to = 28)],
+    ), AutoMigration(from = 27, to = 28), AutoMigration(
+        from = 28,
+        to = 29,
+        spec = AutoMigration28To29::class
+    )],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
@@ -146,4 +151,7 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
 
     @DeleteTable(tableName = "Barcode")
     internal class AutoMigration26To27 : AutoMigrationSpec
+
+    @DeleteColumn(tableName = "Medicine", columnName = "prescriptionContact")
+    internal class AutoMigration28To29 : AutoMigrationSpec
 }

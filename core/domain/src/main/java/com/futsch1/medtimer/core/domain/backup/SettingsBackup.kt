@@ -33,5 +33,7 @@ data class SettingsBackup(
     val homeLatitude: Double?,
     val homeLongitude: Double?,
     val homeRadiusMeters: Float?,
-    val prescriptionPickupDays: Int = 3
+    val prescriptionPickupDays: Int = 3,
+    val prescriptionContact: String? = null,
+    val prescriptionMessageTemplate: String? = null
 )

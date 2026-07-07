@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:selectable="false"
+        app:summary="@string/prescription_settings_help"
+        app:title="@string/prescription_settings_help_title" />
+    <PreferenceCategory app:title="@string/prescription_request">
+        <EditTextPreference
+            app:key="prescription_contact_global"
+            app:title="@string/prescription_contact"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="prescription_message_template"
+            app:summary="@string/prescription_message_template_help"
+            app:title="@string/prescription_message_template" />
+        <EditTextPreference
+            app:key="prescription_pickup_days"
+            app:title="@string/prescription_pickup_days"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

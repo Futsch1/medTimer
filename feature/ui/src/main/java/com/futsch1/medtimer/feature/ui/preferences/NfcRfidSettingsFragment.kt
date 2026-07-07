@@ -3,10 +3,8 @@ package com.futsch1.medtimer.feature.ui.preferences
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.text.InputType
 import android.widget.Toast
 import androidx.core.content.getSystemService
-import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.feature.ui.R
@@ -23,10 +21,6 @@ class NfcRfidSettingsFragment : PreferencesFragment() {
         preferenceManager.preferenceDataStore = preferencesDataSource
 
         setPreferencesFromResource(R.xml.nfc_rfid_settings, rootKey)
-
-        findPreference<EditTextPreference>("prescription_pickup_days")!!.setOnBindEditTextListener { editText ->
-            editText.inputType = InputType.TYPE_CLASS_NUMBER
-        }
 
         val takeScheduledLink = findPreference<Preference>("nfc_take_scheduled_link")!!
         takeScheduledLink.summary = NfcActionActivity.buildTakeScheduledUri().toString()

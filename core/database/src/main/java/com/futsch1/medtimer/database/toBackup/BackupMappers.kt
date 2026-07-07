@@ -31,8 +31,7 @@ fun MedicineEntity.toBackup(): MedicineBackup = MedicineBackup(
     showNotificationAsAlarm = showNotificationAsAlarm,
     productionDate = productionDate,
     expirationDate = expirationDate,
-    cannotBeSkipped = cannotBeSkipped,
-    prescriptionContact = prescriptionContact
+    cannotBeSkipped = cannotBeSkipped
 )
 
 fun MedicineBackup.toEntity(): MedicineEntity = MedicineEntity(
@@ -49,8 +48,7 @@ fun MedicineBackup.toEntity(): MedicineEntity = MedicineEntity(
     showNotificationAsAlarm = showNotificationAsAlarm,
     productionDate = productionDate,
     expirationDate = expirationDate,
-    cannotBeSkipped = cannotBeSkipped,
-    prescriptionContact = prescriptionContact
+    cannotBeSkipped = cannotBeSkipped
 )
 
 // --- Reminder ---

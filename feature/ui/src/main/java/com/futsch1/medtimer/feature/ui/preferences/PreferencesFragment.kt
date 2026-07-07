@@ -65,6 +65,11 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
             "nfc_rfid_settings",
             R.id.action_preferencesFragment_to_nfcRfidSettingsFragment
         )
+        setupPreferencesLink(
+            this,
+            "prescription_settings",
+            R.id.action_preferencesFragment_to_prescriptionSettingsFragment
+        )
     }
 
     private fun setupTheme() {

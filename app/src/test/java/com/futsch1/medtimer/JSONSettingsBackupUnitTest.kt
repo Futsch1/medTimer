@@ -52,7 +52,9 @@ class JSONSettingsBackupUnitTest {
         automaticBackupDirectory = null,
         locationBasedSnooze = true,
         homeLocation = HomeLocation(48.137, 11.576, 200f),
-        prescriptionPickupDays = 5
+        prescriptionPickupDays = 5,
+        prescriptionContact = "+391234567",
+        prescriptionMessageTemplate = "Need: {medicines}"
     )
 
     @Test
