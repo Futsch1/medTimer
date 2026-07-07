@@ -47,6 +47,10 @@ class MedicineRepositoryImpl(
         return medicineDao.decreaseStock(medicineId, decreaseAmount)?.toModel()
     }
 
+    override suspend fun increaseStock(medicineId: Int, increaseAmount: Double): Medicine? {
+        return medicineDao.increaseStock(medicineId, increaseAmount)?.toModel()
+    }
+
     override suspend fun getHighestSortOrder(): Double {
         return medicineDao.getHighestSortOrder()
     }

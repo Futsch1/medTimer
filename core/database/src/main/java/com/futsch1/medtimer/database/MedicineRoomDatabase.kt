@@ -13,14 +13,15 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
+import com.futsch1.medtimer.database.dao.BarcodeDao
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
-    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
-    version = 24,
+    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class, BarcodeEntity::class],
+    version = 25,
     autoMigrations = [AutoMigration(
         from = 1,
         to = 2,
@@ -62,7 +63,7 @@ import com.futsch1.medtimer.database.dao.TagDao
         from = 21,
         to = 22,
         spec = AutoMigration21To22::class
-    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24)],
+    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24), AutoMigration(from = 24, to = 25)],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
@@ -73,6 +74,7 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
     abstract fun reminderEventDao(): ReminderEventDao
     abstract fun tagDao(): TagDao
+    abstract fun barcodeDao(): BarcodeDao
 
     @RenameColumn(
         fromColumnName = "raisedTimestamp",
