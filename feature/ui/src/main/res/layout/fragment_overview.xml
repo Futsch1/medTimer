@@ -114,15 +114,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scanPackage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:clickable="true"
         android:contentDescription="@string/scan_package"
-        app:icon="@drawable/upc_scan"
-        app:layout_constraintBottom_toTopOf="@id/logManualDose"
-        app:layout_constraintEnd_toEndOf="@id/logManualDose" />
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@id/logManualDose"
+        app:layout_constraintEnd_toStartOf="@id/logManualDose"
+        app:srcCompat="@drawable/upc_scan" />
 
 </com.futsch1.medtimer.feature.ui.overview.FragmentSwipeLayout>
