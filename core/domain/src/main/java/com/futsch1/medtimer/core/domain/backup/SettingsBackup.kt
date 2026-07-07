@@ -32,5 +32,6 @@ data class SettingsBackup(
     val locationBasedSnooze: Boolean,
     val homeLatitude: Double?,
     val homeLongitude: Double?,
-    val homeRadiusMeters: Float?
+    val homeRadiusMeters: Float?,
+    val prescriptionPickupDays: Int = 3
 )

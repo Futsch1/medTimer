@@ -18,6 +18,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="medtimer" android:host="refill" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="medtimer" android:host="takeScheduled" />
+            </intent-filter>
         </activity>
     </application>
 

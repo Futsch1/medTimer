@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:selectable="false"
+        app:summary="@string/nfc_rfid_settings_help"
+        app:title="@string/nfc_rfid_settings_help_title" />
+    <PreferenceCategory
+        app:summary="@string/nfc_take_scheduled_help"
+        app:title="@string/nfc_take_scheduled_category">
+        <Preference
+            app:icon="@drawable/check2_circle"
+            app:key="nfc_take_scheduled_link"
+            app:title="@string/nfc_copy_take_scheduled_link" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:summary="@string/prescription_pickup_days_help"
+        app:title="@string/prescription_request">
+        <EditTextPreference
+            app:key="prescription_pickup_days"
+            app:title="@string/prescription_pickup_days"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

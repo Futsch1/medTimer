@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_preferencesFragment_to_snoozeSettingsFragment"
             app:destination="@id/snoozeSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_nfcRfidSettingsFragment"
+            app:destination="@id/nfcRfidSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -112,6 +115,10 @@
         android:id="@+id/snoozeSettingsFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.SnoozeSettingsFragment"
         android:label="@string/snooze_settings" />
+    <fragment
+        android:id="@+id/nfcRfidSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.preferences.NfcRfidSettingsFragment"
+        android:label="@string/nfc_rfid_settings" />
     <fragment
         android:id="@+id/displaySettingsFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.DisplaySettingsFragment"

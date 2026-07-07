@@ -51,7 +51,8 @@ class JSONSettingsBackupUnitTest {
         automaticBackupInterval = BackupInterval.WEEKLY,
         automaticBackupDirectory = null,
         locationBasedSnooze = true,
-        homeLocation = HomeLocation(48.137, 11.576, 200f)
+        homeLocation = HomeLocation(48.137, 11.576, 200f),
+        prescriptionPickupDays = 5
     )
 
     @Test

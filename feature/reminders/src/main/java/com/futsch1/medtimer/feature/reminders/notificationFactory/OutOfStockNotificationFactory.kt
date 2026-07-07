@@ -71,12 +71,17 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
     }
 
     private fun getRequestPrescriptionPendingIntent(medicine: Medicine): PendingIntent {
-        val smsIntent = Intent(Intent.ACTION_SENDTO, "smsto:${medicine.prescriptionContact}".toUri())
-            .putExtra("sms_body", context.getString(R.string.prescription_request_sms, medicine.name))
+        // Explicit intent targeting feature:ui's NfcActionActivity by class name string, not by
+        // ::class.java reference - feature:ui already depends on feature:reminders, so a
+        // compile-time reference the other way round would be a module dependency cycle.
+        val requestPrescriptionIntent = Intent(Intent.ACTION_VIEW).apply {
+            setClassName(context.packageName, "com.futsch1.medtimer.feature.ui.nfc.NfcActionActivity")
+            data = "medtimer://requestPrescription?medicineId=${medicine.id}".toUri()
+        }
         return PendingIntent.getActivity(
             context,
             reminderNotification.reminderNotificationData.notificationId,
-            smsIntent,
+            requestPrescriptionIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }

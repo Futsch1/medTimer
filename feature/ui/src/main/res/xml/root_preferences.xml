@@ -25,4 +25,8 @@
         app:key="weekend_mode"
         app:summary="@string/weekend_mode_summary"
         app:title="@string/weekend_mode" />
+    <Preference
+        app:icon="@drawable/upc_scan"
+        app:key="nfc_rfid_settings"
+        app:title="@string/nfc_rfid_settings" />
 </PreferenceScreen>

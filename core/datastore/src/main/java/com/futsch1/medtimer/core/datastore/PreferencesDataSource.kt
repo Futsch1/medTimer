@@ -232,7 +232,11 @@ class PreferencesDataSource @Inject constructor(
                 LOCATION_SNOOZE_ENABLED,
                 default.locationBasedSnooze
             ),
-            homeLocation = getHomeLocation()
+            homeLocation = getHomeLocation(),
+            prescriptionPickupDays = sharedPreferences.getString(
+                PRESCRIPTION_PICKUP_DAYS,
+                default.prescriptionPickupDays.toString()
+            )?.toIntOrNull() ?: default.prescriptionPickupDays
         )
     }
 
@@ -267,5 +271,6 @@ class PreferencesDataSource @Inject constructor(
         const val AUTOMATIC_BACKUP_DIRECTORY = "automatic_backup_directory"
         const val LOCATION_SNOOZE_ENABLED = "location_snooze_enabled"
         const val HOME_LOCATION = "home_location"
+        const val PRESCRIPTION_PICKUP_DAYS = "prescription_pickup_days"
     }
 }

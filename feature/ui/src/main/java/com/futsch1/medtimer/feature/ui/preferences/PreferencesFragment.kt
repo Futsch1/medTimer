@@ -60,6 +60,11 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
             "snooze_settings",
             R.id.action_preferencesFragment_to_snoozeSettingsFragment
         )
+        setupPreferencesLink(
+            this,
+            "nfc_rfid_settings",
+            R.id.action_preferencesFragment_to_nfcRfidSettingsFragment
+        )
     }
 
     private fun setupTheme() {

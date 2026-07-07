@@ -42,6 +42,7 @@ fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
     homeLatitude = homeLocation?.latitude,
     homeLongitude = homeLocation?.longitude,
     homeRadiusMeters = homeLocation?.radiusMeters,
+    prescriptionPickupDays = prescriptionPickupDays,
 )
 
 fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
@@ -90,5 +91,14 @@ fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
         preferencesDataSource.saveHomeLocation(HomeLocation(lat, lon, homeRadiusMeters ?: 150f))
     } else {
         preferencesDataSource.clearHomeLocation()
+    }
+    // Gson bypasses the constructor default for this field (added after SettingsBackup already
+    // shipped), so an old backup JSON missing the key deserializes it to 0, not 3 - treat 0 as
+    // "not present in this backup" rather than overwriting the current setting with a bogus value.
+    if (prescriptionPickupDays > 0) {
+        preferencesDataSource.putString(
+            PreferencesDataSource.PRESCRIPTION_PICKUP_DAYS,
+            prescriptionPickupDays.toString()
+        )
     }
 }
