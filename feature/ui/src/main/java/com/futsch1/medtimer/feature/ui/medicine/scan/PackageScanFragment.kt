@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -49,6 +50,7 @@ class PackageScanFragment : Fragment() {
 
     private lateinit var packageMatcher: PackageMatcher
     private val analyzing = AtomicBoolean(false)
+    private var hideBannerRunnable: Runnable? = null
 
     private val requestCameraPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -63,7 +65,7 @@ class PackageScanFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        packageMatcher = packageMatcherFactory.create(this)
+        packageMatcher = packageMatcherFactory.create(this) { message -> showRecognizedFeedback(message) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -111,6 +113,20 @@ class PackageScanFragment : Fragment() {
                 // View lifecycle already destroyed by the time the future resolved; nothing to bind to.
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun showRecognizedFeedback(message: String) {
+        val banner = view?.findViewById<TextView>(R.id.recognizedBanner) ?: return
+        hideBannerRunnable?.let { banner.removeCallbacks(it) }
+        banner.animate().cancel()
+        banner.alpha = 1f
+        banner.text = "✓ $message"
+        banner.visibility = View.VISIBLE
+        val hideRunnable = Runnable {
+            banner.animate().alpha(0f).setDuration(300).withEndAction { banner.visibility = View.GONE }.start()
+        }
+        hideBannerRunnable = hideRunnable
+        banner.postDelayed(hideRunnable, 1800)
     }
 
     private fun analyzeFrame(imageProxy: ImageProxy) {

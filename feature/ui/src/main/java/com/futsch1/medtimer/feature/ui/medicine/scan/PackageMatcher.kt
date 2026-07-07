@@ -2,7 +2,6 @@ package com.futsch1.medtimer.feature.ui.medicine.scan
 
 import android.text.InputType
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -37,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class PackageMatcher @AssistedInject constructor(
     @Assisted private val fragment: Fragment,
+    @Assisted private val onRecognized: (String) -> Unit,
     private val medicineRepository: MedicineRepository,
     private val medicineLabelRepository: MedicineLabelRepository,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
@@ -44,7 +44,7 @@ class PackageMatcher @AssistedInject constructor(
 ) {
     @AssistedFactory
     fun interface Factory {
-        fun create(fragment: Fragment): PackageMatcher
+        fun create(fragment: Fragment, onRecognized: (String) -> Unit): PackageMatcher
     }
 
     private val context get() = fragment.requireContext()
@@ -61,18 +61,40 @@ class PackageMatcher @AssistedInject constructor(
         mutex.withLock {
             val medicines = medicineRepository.getAll()
             val labels = medicineLabelRepository.getAll()
+
+            // A single package's text is OCR'd as several separate blocks (brand name, dosage,
+            // pack size, manufacturer...). Only the block containing the medicine's own name (or a
+            // remembered snippet) actually matches anything; the rest are legitimate fragments of
+            // that same, already-identified package, not separate unknown items. So: if this frame
+            // matched a medicine anywhere, don't let its other stray blocks count towards the
+            // "unrecognized package" prompt.
+            val unmatchedBlocks = mutableListOf<String>()
+            var matchedAnyThisBatch = false
             for (block in normalized) {
-                handleBlock(block, medicines, labels)
+                if (handleBlock(block, medicines, labels)) {
+                    matchedAnyThisBatch = true
+                } else {
+                    unmatchedBlocks += block
+                }
+            }
+
+            if (matchedAnyThisBatch) {
+                unmatchedCandidates.clear()
+            } else {
+                for (block in unmatchedBlocks) {
+                    trackUnmatchedCandidate(block, medicines)
+                }
             }
         }
     }
 
-    private suspend fun handleBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>) {
-        if (block in handledBlocks) return
+    /** Returns true if [block] is (or already was) recognized as belonging to a known medicine. */
+    private suspend fun handleBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
+        if (block in handledBlocks) return true
 
         val labelMatch = labels.firstOrNull { block.contains(normalize(it.text)) }
         if (labelMatch != null) {
-            val medicine = medicines.firstOrNull { it.id == labelMatch.medicineId } ?: return
+            val medicine = medicines.firstOrNull { it.id == labelMatch.medicineId } ?: return false
             val quantity = labelMatch.quantity
             if (quantity != null) {
                 handledBlocks += block
@@ -81,12 +103,12 @@ class PackageMatcher @AssistedInject constructor(
                 handledBlocks += block
                 askQuantity(medicine, block)
             }
-            return
+            return true
         }
 
         val nameMatches = medicines.filter { it.name.isNotBlank() && block.contains(normalize(it.name)) }
-        when (nameMatches.size) {
-            0 -> trackUnmatchedCandidate(block, medicines)
+        return when (nameMatches.size) {
+            0 -> false
             1 -> {
                 val medicine = nameMatches[0]
                 val quantity = QuantityParser.parse(block)
@@ -98,11 +120,15 @@ class PackageMatcher @AssistedInject constructor(
                     handledBlocks += block
                     askQuantity(medicine, block)
                 }
+                true
             }
 
-            else -> if (dialogOpen.compareAndSet(false, true)) {
-                handledBlocks += block
-                askWhichMedicine(block, medicines)
+            else -> {
+                if (dialogOpen.compareAndSet(false, true)) {
+                    handledBlocks += block
+                    askWhichMedicine(block, medicines)
+                }
+                true
             }
         }
     }
@@ -123,14 +149,13 @@ class PackageMatcher @AssistedInject constructor(
 
     private suspend fun refill(medicine: Medicine, quantity: Double) {
         ReminderProcessorBroadcastReceiver.requestRefill(context, medicine.id, quantity)
+        val message = context.getString(
+            UiR.string.package_stock_refilled_amount,
+            medicine.name,
+            MedicineHelper.formatAmount(quantity, medicine.unit)
+        )
         withContext(mainDispatcher) {
-            toast(
-                context.getString(
-                    UiR.string.package_stock_refilled_amount,
-                    medicine.name,
-                    MedicineHelper.formatAmount(quantity, medicine.unit)
-                )
-            )
+            onRecognized(message)
         }
     }
 
@@ -199,10 +224,6 @@ class PackageMatcher @AssistedInject constructor(
     private fun dpToPx(dp: Int): Int = (dp * context.resources.displayMetrics.density).toInt()
 
     private fun normalize(text: String): String = text.lowercase().replace(Regex("\\s+"), " ").trim()
-
-    private fun toast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
 
     companion object {
         private const val MIN_BLOCK_LENGTH = 4
