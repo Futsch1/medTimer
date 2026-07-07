@@ -1,12 +1,16 @@
 package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.net.Uri
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
@@ -22,6 +26,7 @@ import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
+import com.futsch1.medtimer.feature.ui.nfc.NfcActionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,6 +62,8 @@ class StockSettingsFragment : MedicinePreferences(
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
             "stock_refill_now" to { _, _ -> refillNow() },
+            "nfc_take_link" to { _, _ -> copyLinkToClipboard(NfcActionActivity.buildTakeUri(dataStore.modelData.id)) },
+            "nfc_refill_link" to { _, _ -> copyLinkToClipboard(NfcActionActivity.buildRefillUri(dataStore.modelData.id)) },
             "production_date" to { activity, preference ->
                 dateEditHandler.show(
                     activity,
@@ -128,6 +135,14 @@ class StockSettingsFragment : MedicinePreferences(
             } else {
                 ""
             }
+        findPreference<Preference>("nfc_take_link")!!.summary = NfcActionActivity.buildTakeUri(modelData.id).toString()
+        findPreference<Preference>("nfc_refill_link")!!.summary = NfcActionActivity.buildRefillUri(modelData.id).toString()
+    }
+
+    private fun copyLinkToClipboard(uri: Uri) {
+        val clipboardManager = requireContext().getSystemService<ClipboardManager>() ?: return
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(uri.toString(), uri.toString()))
+        Toast.makeText(context, com.futsch1.medtimer.core.ui.R.string.nfc_link_copied, Toast.LENGTH_SHORT).show()
     }
 
     private fun observeRunOutDate(medicineId: Int) {
