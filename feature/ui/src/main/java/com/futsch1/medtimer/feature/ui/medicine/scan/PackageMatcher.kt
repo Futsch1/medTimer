@@ -107,7 +107,7 @@ class PackageMatcher @AssistedInject constructor(
         }
     }
 
-    private fun trackUnmatchedCandidate(block: String, medicines: List<Medicine>) {
+    private suspend fun trackUnmatchedCandidate(block: String, medicines: List<Medicine>) {
         if (medicines.isEmpty() || block.length < MIN_UNMATCHED_BLOCK_LENGTH) return
         val hits = (unmatchedCandidates[block] ?: 0) + 1
         if (hits >= STABILITY_THRESHOLD) {
