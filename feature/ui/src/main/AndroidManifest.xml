@@ -8,7 +8,8 @@
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
-            tools:node="merge" />
+            tools:node="merge"
+            tools:replace="android:screenOrientation" />
         <activity
             android:name=".nfc.NfcActionActivity"
             android:exported="true"
