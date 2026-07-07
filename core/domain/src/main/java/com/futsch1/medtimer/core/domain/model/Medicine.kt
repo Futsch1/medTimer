@@ -21,7 +21,8 @@ data class Medicine(
     val sortOrder: Double,
     val tags: List<Tag>,
     val reminders: List<Reminder>,
-    val cannotBeSkipped: Boolean
+    val cannotBeSkipped: Boolean,
+    val prescriptionContact: String = ""
 ) {
     enum class NotificationImportance(val value: Int) {
         DEFAULT(NotificationManager.IMPORTANCE_DEFAULT),
@@ -70,7 +71,8 @@ data class Medicine(
             sortOrder = 1.0,
             tags = emptyList(),
             reminders = emptyList(),
-            cannotBeSkipped = false
+            cannotBeSkipped = false,
+            prescriptionContact = ""
         )
     }
 }

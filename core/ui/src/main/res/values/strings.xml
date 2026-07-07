@@ -239,6 +239,11 @@
     <string name="nfc_action_invalid_link">This link is not a valid MedTimer automation link</string>
     <string name="nfc_action_unknown_medicine">This medicine no longer exists</string>
     <string name="nfc_action_dose_logged">Logged as taken: %1$s</string>
+    <string name="prescription_request">Prescription request</string>
+    <string name="prescription_request_help">Set a phone number to add a one-tap "Request prescription" button to the out-of-stock notification for this medicine.</string>
+    <string name="prescription_contact">Phone number</string>
+    <string name="request_prescription">Request prescription</string>
+    <string name="prescription_request_sms">Hi, I need a new prescription for %1$s, my stock is running low.</string>
     <string name="variable_amount">Enter dosage when taken</string>
     <string name="tags">Tags</string>
     <string name="add_tag">Add tag</string>
