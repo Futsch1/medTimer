@@ -7,12 +7,12 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
- * A scanned barcode mapped to a medicine. The barcode string itself is the primary key,
- * so scanning the same code twice cannot create duplicates. Deleting a medicine cascades
- * to its barcodes.
+ * A normalized snippet of OCR'd package text mapped to a medicine. The text itself is the
+ * primary key, so remembering the same snippet twice cannot create duplicates. Deleting a
+ * medicine cascades to its remembered labels.
  */
 @Entity(
-    tableName = "Barcode",
+    tableName = "MedicineLabel",
     foreignKeys = [
         ForeignKey(
             entity = MedicineEntity::class,
@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["medicineId"])]
 )
-class BarcodeEntity(
-    @PrimaryKey var barcode: String,
+class MedicineLabelEntity(
+    @PrimaryKey var text: String,
     @ColumnInfo(name = "medicineId") var medicineId: Int
 )

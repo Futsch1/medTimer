@@ -122,7 +122,7 @@ class NfcActionActivity : AppCompatActivity() {
         }
         ReminderProcessorBroadcastReceiver.requestRefill(applicationContext, medicineId)
         withContext(mainDispatcher) {
-            toast(getString(com.futsch1.medtimer.core.ui.R.string.barcode_stock_refilled, medicine.name))
+            toast(getString(com.futsch1.medtimer.core.ui.R.string.package_stock_refilled, medicine.name))
         }
     }
 

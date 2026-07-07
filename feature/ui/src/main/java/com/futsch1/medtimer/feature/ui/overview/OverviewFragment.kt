@@ -27,7 +27,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.BarcodeScanner
+import com.futsch1.medtimer.feature.ui.medicine.PackageScanner
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
@@ -78,8 +78,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
     lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
 
     @Inject
-    lateinit var barcodeScannerFactory: BarcodeScanner.Factory
-    private lateinit var barcodeScanner: BarcodeScanner
+    lateinit var packageScannerFactory: PackageScanner.Factory
+    private lateinit var packageScanner: PackageScanner
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -114,7 +114,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             false,
             tagFilterViewModel
         )
-        barcodeScanner = barcodeScannerFactory.create(this)
+        packageScanner = packageScannerFactory.create(this)
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
@@ -157,7 +157,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
         setupReminders(overview)
 
         setupLogManualDose(overview)
-        setupScanBarcode(overview)
+        setupScanPackage(overview)
         FilterToggleGroup(
             overview.findViewById(R.id.filterButtons),
             overviewViewModel,
@@ -246,9 +246,14 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
         }
     }
 
-    private fun setupScanBarcode(overview: FragmentSwipeLayout) {
-        overview.findViewById<Button>(R.id.scanBarcode).setOnClickListener {
-            barcodeScanner.scan()
+    private fun setupScanPackage(overview: FragmentSwipeLayout) {
+        val scanPackage = overview.findViewById<Button>(R.id.scanPackage)
+        if (!packageScanner.isSupported) {
+            scanPackage.visibility = View.GONE
+            return
+        }
+        scanPackage.setOnClickListener {
+            packageScanner.scan()
         }
     }
 

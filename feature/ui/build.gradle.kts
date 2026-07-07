@@ -81,7 +81,7 @@ dependencies {
     implementation(libs.preferencex)
     implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
-    implementation(libs.zxing.android.embedded)
+    "fullImplementation"(libs.mlkit.text.recognition)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Compose

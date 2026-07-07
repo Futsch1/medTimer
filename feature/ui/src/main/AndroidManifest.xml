@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:supportsRtl="true">
-        <!-- zxing-android-embedded's own manifest hardcodes screenOrientation="sensorLandscape"
-             on its CaptureActivity, so the scanner never shows in portrait. Override it here. -->
-        <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:screenOrientation="fullSensor"
-            tools:node="merge"
-            tools:replace="android:screenOrientation" />
         <activity
             android:name=".nfc.NfcActionActivity"
             android:exported="true"

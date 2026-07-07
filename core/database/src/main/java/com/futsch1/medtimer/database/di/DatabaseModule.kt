@@ -3,21 +3,21 @@ package com.futsch1.medtimer.database.di
 import android.content.Context
 import androidx.room.Room
 import com.futsch1.medtimer.core.domain.repository.BackupRepository
-import com.futsch1.medtimer.core.domain.repository.BarcodeRepository
+import com.futsch1.medtimer.core.domain.repository.MedicineLabelRepository
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.database.BackupRepositoryImpl
-import com.futsch1.medtimer.database.BarcodeRepositoryImpl
 import com.futsch1.medtimer.database.DatabaseManager
+import com.futsch1.medtimer.database.MedicineLabelRepositoryImpl
 import com.futsch1.medtimer.database.MedicineRepositoryImpl
 import com.futsch1.medtimer.database.MedicineRoomDatabase
 import com.futsch1.medtimer.database.ReminderEventRepositoryImpl
 import com.futsch1.medtimer.database.ReminderRepositoryImpl
 import com.futsch1.medtimer.database.TagRepositoryImpl
-import com.futsch1.medtimer.database.dao.BarcodeDao
 import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.MedicineLabelDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
@@ -56,8 +56,8 @@ object DatabaseModule {
         database.tagDao()
 
     @Provides
-    fun provideBarcodeDao(database: MedicineRoomDatabase): BarcodeDao =
-        database.barcodeDao()
+    fun provideMedicineLabelDao(database: MedicineRoomDatabase): MedicineLabelDao =
+        database.medicineLabelDao()
 
     @Provides
     @Singleton
@@ -85,9 +85,9 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideBarcodeRepository(
-        barcodeDao: BarcodeDao
-    ): BarcodeRepository = BarcodeRepositoryImpl(barcodeDao)
+    fun provideMedicineLabelRepository(
+        medicineLabelDao: MedicineLabelDao
+    ): MedicineLabelRepository = MedicineLabelRepositoryImpl(medicineLabelDao)
 
     @Provides
     @Singleton

@@ -68,10 +68,10 @@ class MedicinesFragment : Fragment() {
     lateinit var optionsMenuFactory: OptionsMenuFactory
 
     @Inject
-    lateinit var barcodeScannerFactory: BarcodeScanner.Factory
+    lateinit var packageScannerFactory: PackageScanner.Factory
 
     private lateinit var optionsMenu: EntityEditOptionsMenu
-    private lateinit var barcodeScanner: BarcodeScanner
+    private lateinit var packageScanner: PackageScanner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +81,7 @@ class MedicinesFragment : Fragment() {
             false,
             medicinesScreenViewModel.tagFilterViewModel
         )
-        barcodeScanner = barcodeScannerFactory.create(this)
+        packageScanner = packageScannerFactory.create(this)
     }
 
     override fun onCreateView(
@@ -91,7 +91,8 @@ class MedicinesFragment : Fragment() {
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
         requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
         medicinesMenu.medicinesProvider = { medicinesScreenViewModel.medicines.value }
-        medicinesMenu.onScanBarcode = { barcodeScanner.scan() }
+        medicinesMenu.scanPackageSupported = packageScanner.isSupported
+        medicinesMenu.onScanPackage = { packageScanner.scan() }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
