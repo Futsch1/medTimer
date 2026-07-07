@@ -3,6 +3,7 @@ package com.futsch1.medtimer.database
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
+import androidx.room.DeleteTable
 import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -12,6 +13,7 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration16To17
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
+import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration26To27
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 import com.futsch1.medtimer.database.dao.MedicineDao
 import com.futsch1.medtimer.database.dao.MedicineLabelDao
@@ -63,7 +65,11 @@ import com.futsch1.medtimer.database.dao.TagDao
         from = 21,
         to = 22,
         spec = AutoMigration21To22::class
-    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24), AutoMigration(from = 24, to = 25), AutoMigration(from = 25, to = 26), AutoMigration(from = 26, to = 27)],
+    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24), AutoMigration(from = 24, to = 25), AutoMigration(from = 25, to = 26), AutoMigration(
+        from = 26,
+        to = 27,
+        spec = AutoMigration26To27::class
+    )],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
@@ -137,4 +143,7 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminderThreshold")
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
     internal class AutoMigration21To22 : AutoMigrationSpec
+
+    @DeleteTable(tableName = "Barcode")
+    internal class AutoMigration26To27 : AutoMigrationSpec
 }
