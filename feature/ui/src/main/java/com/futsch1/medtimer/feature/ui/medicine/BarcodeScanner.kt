@@ -13,6 +13,7 @@ import com.futsch1.medtimer.core.domain.model.Barcode
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.BarcodeRepository
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.integration.android.IntentIntegrator
 import dagger.assisted.Assisted
@@ -102,7 +103,7 @@ class BarcodeScanner @AssistedInject constructor(
 
     private suspend fun refillAndNotify(medicineId: Int) {
         val medicine = medicineRepository.fetch(medicineId) ?: return
-        medicineRepository.increaseStock(medicineId, medicine.refillSize)
+        ReminderProcessorBroadcastReceiver.requestRefill(context, medicineId)
         withContext(mainDispatcher) {
             toast(context.getString(com.futsch1.medtimer.core.ui.R.string.barcode_stock_refilled, medicine.name))
         }
@@ -124,7 +125,7 @@ class BarcodeScanner @AssistedInject constructor(
     private fun linkAndRefill(barcode: String, medicine: Medicine) {
         fragment.lifecycleScope.launch(dispatcher) {
             barcodeRepository.link(Barcode(barcode, medicine.id))
-            medicineRepository.increaseStock(medicine.id, medicine.refillSize)
+            ReminderProcessorBroadcastReceiver.requestRefill(context, medicine.id)
             withContext(mainDispatcher) {
                 toast(
                     context.getString(
