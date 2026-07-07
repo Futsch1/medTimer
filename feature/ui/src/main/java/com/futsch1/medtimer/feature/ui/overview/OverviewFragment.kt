@@ -27,6 +27,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
+import com.futsch1.medtimer.feature.ui.medicine.BarcodeScanner
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
@@ -76,6 +77,10 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
     @Inject
     lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
 
+    @Inject
+    lateinit var barcodeScannerFactory: BarcodeScanner.Factory
+    private lateinit var barcodeScanner: BarcodeScanner
+
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
     private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
@@ -109,6 +114,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             false,
             tagFilterViewModel
         )
+        barcodeScanner = barcodeScannerFactory.create(this)
 
         onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
@@ -151,6 +157,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
         setupReminders(overview)
 
         setupLogManualDose(overview)
+        setupScanBarcode(overview)
         FilterToggleGroup(
             overview.findViewById(R.id.filterButtons),
             overviewViewModel,
@@ -236,6 +243,12 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
                     overviewViewModel.day
                 ).logManualDose()
             }
+        }
+    }
+
+    private fun setupScanBarcode(overview: FragmentSwipeLayout) {
+        overview.findViewById<Button>(R.id.scanBarcode).setOnClickListener {
+            barcodeScanner.scan()
         }
     }
 
