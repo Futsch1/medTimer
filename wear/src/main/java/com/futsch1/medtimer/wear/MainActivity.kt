@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.wear
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +53,18 @@ class MainActivity : ComponentActivity() {
                             item = current,
                             onAction = { action ->
                                 lifecycleScope.launch {
-                                    WatchActionSender.send(applicationContext, action, current.reminderEventId)
+                                    val sent = WatchActionSender.send(applicationContext, action, current.reminderEventId)
+                                    val messageResId = if (!sent) {
+                                        R.string.phone_not_connected
+                                    } else {
+                                        when (action) {
+                                            WearProtocol.ACTION_TAKEN -> R.string.action_sent_taken
+                                            WearProtocol.ACTION_SKIPPED -> R.string.action_sent_skipped
+                                            WearProtocol.ACTION_SNOOZE -> R.string.action_sent_snooze
+                                            else -> R.string.action_sent_snooze_home
+                                        }
+                                    }
+                                    Toast.makeText(applicationContext, messageResId, Toast.LENGTH_SHORT).show()
                                 }
                                 selected = null
                             },
@@ -85,7 +97,7 @@ private fun ReminderListScreen(items: List<WatchReminderItem>, onSelect: (WatchR
             ) {
                 Column {
                     Text(text = item.medicineName)
-                    Text(text = "${item.amount} · ${formatTime(item.remindedEpochSecond)}")
+                    Text(text = stringResource(R.string.status_pending, item.amount, formatTime(item.remindedEpochSecond)))
                 }
             }
         }

@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.wear.tiles.material)
     implementation(libs.wear.protolayout)
     implementation(libs.wear.protolayout.material)
+    implementation(libs.androidx.concurrent.futures)
     implementation(libs.play.services.wearable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
