@@ -31,11 +31,14 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * A single package's text is OCR'd as several separate blocks (brand name, dosage, pack size,
  * manufacturer...), so this only ever considers ONE candidate block at a time: the instant any
- * block looks like it belongs to a package - whether it resolves immediately or needs a dialog -
- * [handleBlocks] stops looking at anything else until [resumeScanning] is called. This is what
- * keeps stray fragments of an already-handled package from being mistaken for a second, unknown
- * package a frame or two later; letting several blocks race against each other within or across
- * frames was the source of spurious "couldn't recognize this package" prompts after a correct add.
+ * block resolves to a confident or ambiguous-but-recognized match, [handleBlocks] stops looking at
+ * anything else until [resumeScanning] is called. This is what keeps stray fragments of an
+ * already-handled package from being mistaken for a second, unknown package a frame or two later.
+ *
+ * A package that matches nothing gets a few seconds of patience (real elapsed time, not a count of
+ * identical re-reads - OCR text is rarely byte-identical frame to frame, e.g. while the camera is
+ * still focusing) before the "couldn't recognize this package" picker shows, using the longest
+ * candidate block seen during that window.
  *
  * Ambiguous cases (package matches no known medicine, or its pill count can't be parsed) show a
  * dialog and remember the answer as a [MedicineLabel], so the same package is recognized silently
@@ -56,7 +59,7 @@ class PackageMatcher @AssistedInject constructor(
 
     private val context get() = fragment.requireContext()
     private val handledBlocks = mutableSetOf<String>()
-    private val unmatchedCandidates = mutableMapOf<String, Int>()
+    private var strugglingSinceMs: Long? = null
 
     // Set the instant one candidate block is picked up (confident match or ambiguous-needing-a-
     // dialog) and stays set through to a successful refill; only resumeScanning() (called by the
@@ -69,14 +72,39 @@ class PackageMatcher @AssistedInject constructor(
     suspend fun handleBlocks(blocks: List<String>) {
         if (sessionActive.get()) return
         val normalized = blocks.map { normalize(it) }.filter { it.length >= MIN_BLOCK_LENGTH }
-        if (normalized.isEmpty()) return
+        if (normalized.isEmpty()) {
+            strugglingSinceMs = null
+            return
+        }
 
         mutex.withLock {
             if (sessionActive.get()) return@withLock
+
             val medicines = medicineRepository.getAll()
             val labels = medicineLabelRepository.getAll()
+
+            var bestUnmatchedCandidate: String? = null
             for (block in normalized) {
-                if (handleBlock(block, medicines, labels)) break
+                if (block in handledBlocks) continue
+                if (handleConfidentBlock(block, medicines, labels)) return@withLock
+                if (block.length >= MIN_UNMATCHED_BLOCK_LENGTH &&
+                    (bestUnmatchedCandidate == null || block.length > bestUnmatchedCandidate!!.length)
+                ) {
+                    bestUnmatchedCandidate = block
+                }
+            }
+
+            val candidate = bestUnmatchedCandidate
+            if (candidate == null || medicines.isEmpty()) {
+                strugglingSinceMs = null
+                return@withLock
+            }
+            val since = strugglingSinceMs ?: System.currentTimeMillis().also { strugglingSinceMs = it }
+            if (System.currentTimeMillis() - since >= UNMATCHED_PATIENCE_MS) {
+                strugglingSinceMs = null
+                sessionActive.set(true)
+                handledBlocks += candidate
+                askWhichMedicine(candidate, medicines)
             }
         }
     }
@@ -84,18 +112,17 @@ class PackageMatcher @AssistedInject constructor(
     /** Called by the scan screen once the user taps "Next" after a successful recognition. */
     fun resumeScanning() {
         sessionActive.set(false)
-        unmatchedCandidates.clear()
+        strugglingSinceMs = null
     }
 
     private fun cancelSession(block: String) {
         sessionActive.set(false)
+        strugglingSinceMs = null
         handledBlocks.remove(block)
     }
 
-    /** Returns true if [block] started (or already finished) handling a package candidate. */
-    private suspend fun handleBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
-        if (block in handledBlocks) return false
-
+    /** Returns true if [block] resolved to a confident or ambiguous-but-recognized package match. */
+    private suspend fun handleConfidentBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
         val blockKey = fuzzyKey(block)
         val labelMatch = labels.firstOrNull { blockKey.contains(fuzzyKey(it.text)) }
         if (labelMatch != null) {
@@ -113,7 +140,7 @@ class PackageMatcher @AssistedInject constructor(
 
         val nameMatches = medicines.filter { it.name.isNotBlank() && blockKey.contains(fuzzyKey(it.name)) }
         return when (nameMatches.size) {
-            0 -> trackUnmatchedCandidate(block, medicines)
+            0 -> false
             1 -> {
                 val medicine = nameMatches[0]
                 sessionActive.set(true)
@@ -135,20 +162,6 @@ class PackageMatcher @AssistedInject constructor(
                 true
             }
         }
-    }
-
-    private suspend fun trackUnmatchedCandidate(block: String, medicines: List<Medicine>): Boolean {
-        if (medicines.isEmpty() || block.length < MIN_UNMATCHED_BLOCK_LENGTH) return false
-        val hits = (unmatchedCandidates[block] ?: 0) + 1
-        if (hits < STABILITY_THRESHOLD) {
-            unmatchedCandidates[block] = hits
-            return false
-        }
-        unmatchedCandidates.remove(block)
-        sessionActive.set(true)
-        handledBlocks += block
-        askWhichMedicine(block, medicines)
-        return true
     }
 
     private suspend fun refill(medicine: Medicine, quantity: Double) {
@@ -228,6 +241,6 @@ class PackageMatcher @AssistedInject constructor(
     companion object {
         private const val MIN_BLOCK_LENGTH = 4
         private const val MIN_UNMATCHED_BLOCK_LENGTH = 12
-        private const val STABILITY_THRESHOLD = 2
+        private const val UNMATCHED_PATIENCE_MS = 2500L
     }
 }

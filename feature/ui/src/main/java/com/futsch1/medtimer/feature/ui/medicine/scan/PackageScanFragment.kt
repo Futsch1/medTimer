@@ -28,6 +28,7 @@ import com.futsch1.medtimer.feature.ui.medicine.ocr.PackageTextRecognizer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -50,6 +51,10 @@ class PackageScanFragment : Fragment() {
     @Inject
     @Dispatcher(MedTimerDispatchers.IO)
     lateinit var ioDispatcher: CoroutineDispatcher
+
+    @Inject
+    @Dispatcher(MedTimerDispatchers.Main)
+    lateinit var mainDispatcher: CoroutineDispatcher
 
     private lateinit var packageMatcher: PackageMatcher
     private val analyzing = AtomicBoolean(false)
@@ -122,6 +127,7 @@ class PackageScanFragment : Fragment() {
         scanningPaused.set(true)
         val banner = view?.findViewById<TextView>(R.id.recognizedBanner) ?: return
         val nextButton = view?.findViewById<Button>(R.id.nextButton) ?: return
+        view?.findViewById<TextView>(R.id.liveOcrText)?.visibility = View.GONE
         banner.text = "✓ $message"
         banner.visibility = View.VISIBLE
         nextButton.visibility = View.VISIBLE
@@ -133,6 +139,19 @@ class PackageScanFragment : Fragment() {
         }
     }
 
+    // Shows exactly what OCR currently sees, updated every analyzed frame - like a live camera
+    // translation overlay - so it's obvious when the camera simply hasn't gotten a clean read yet
+    // rather than the app having failed to recognize a package it can actually see fine.
+    private fun updateLiveText(blocks: List<String>) {
+        val liveText = view?.findViewById<TextView>(R.id.liveOcrText) ?: return
+        if (blocks.isEmpty()) {
+            liveText.visibility = View.GONE
+        } else {
+            liveText.visibility = View.VISIBLE
+            liveText.text = blocks.joinToString("\n")
+        }
+    }
+
     private fun analyzeFrame(imageProxy: ImageProxy) {
         if (scanningPaused.get() || !analyzing.compareAndSet(false, true)) {
             imageProxy.close()
@@ -141,6 +160,7 @@ class PackageScanFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(ioDispatcher) {
             try {
                 val blocks = textRecognizer.recognize(imageProxy)
+                withContext(mainDispatcher) { updateLiveText(blocks) }
                 if (blocks.isNotEmpty()) {
                     packageMatcher.handleBlocks(blocks)
                 }

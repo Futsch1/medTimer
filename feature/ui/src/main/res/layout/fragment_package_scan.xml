@@ -43,6 +43,24 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="✓ Tachipirina: stock aggiornato con 20 compresse" />
 
+    <TextView
+        android:id="@+id/liveOcrText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="#99000000"
+        android:fontFamily="monospace"
+        android:maxLines="6"
+        android:padding="12dp"
+        android:textColor="#CCFFFFFF"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recognizedBanner"
+        tools:text="DEPAKIN CHRONO\n500 mg\n30 compresse riv." />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
