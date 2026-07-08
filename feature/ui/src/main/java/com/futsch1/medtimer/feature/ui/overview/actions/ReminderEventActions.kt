@@ -118,11 +118,24 @@ class ReminderEventActions @AssistedInject constructor(
     }
 
     private suspend fun undoStock(reminderEvent: ReminderEvent) {
-        if (reminderEvent.stockHandled) {
+        if (reminderEvent.reminderType == ReminderType.REFILL) {
+            undoRefillStock(reminderEvent)
+        } else if (reminderEvent.stockHandled) {
             val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
             val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return
             medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
         }
+    }
+
+    // Refill events aren't tied to a reminder (reminderId is always -1, see RefillProcessor) and
+    // log their effect as a "before ➡ after" amount string rather than a plain delta, so undoing
+    // one needs its own logic instead of the reminderId/stockHandled path regular dose events use.
+    private suspend fun undoRefillStock(reminderEvent: ReminderEvent) {
+        val (beforeText, afterText) = reminderEvent.amount.split(" ➡ ").takeIf { it.size == 2 } ?: return
+        val before = MedicineHelper.parseAmount(beforeText) ?: return
+        val after = MedicineHelper.parseAmount(afterText) ?: return
+        val medicine = medicineRepository.getAll().firstOrNull { it.name == reminderEvent.medicineName } ?: return
+        medicineRepository.decreaseStock(medicine.id, after - before)
     }
 
     private fun processDeleteReminderEvent(reminderEvent: ReminderEvent) {
