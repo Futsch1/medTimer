@@ -124,7 +124,7 @@ class PackageMatcher @AssistedInject constructor(
     /** Returns true if [block] resolved to a confident or ambiguous-but-recognized package match. */
     private suspend fun handleConfidentBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
         val blockKey = fuzzyKey(block)
-        val labelMatch = labels.firstOrNull { blockKey.contains(fuzzyKey(it.text)) }
+        val labelMatch = labels.firstOrNull { matchesByToken(blockKey, it.text) }
         if (labelMatch != null) {
             val medicine = medicines.firstOrNull { it.id == labelMatch.medicineId } ?: return false
             sessionActive.set(true)
@@ -138,7 +138,7 @@ class PackageMatcher @AssistedInject constructor(
             return true
         }
 
-        val nameMatches = medicines.filter { it.name.isNotBlank() && blockKey.contains(fuzzyKey(it.name)) }
+        val nameMatches = medicines.filter { it.name.isNotBlank() && matchesByToken(blockKey, it.name) }
         return when (nameMatches.size) {
             0 -> false
             1 -> {
@@ -237,6 +237,25 @@ class PackageMatcher @AssistedInject constructor(
     // everything down to bare letters/digits makes the containment check tolerant of that noise
     // instead of requiring a byte-for-byte substring match.
     private fun fuzzyKey(text: String): String = text.filter { it.isLetterOrDigit() }
+
+    /**
+     * Checks [blockKey] against [reference] (a medicine name or a remembered label) word by word
+     * instead of as one contiguous substring: OCR noise tends to land *between* words (a misread
+     * logo, an inserted line break, extra characters from a nearby graphic) rather than corrupt a
+     * word itself, so requiring the whole name to appear unbroken was pickier than the packaging
+     * text actually supports. Dosage-looking words (containing a digit, e.g. "500mg") are the
+     * strongest signal - they're what tells "Depakin Chrono 500mg" apart from the 300mg pack - so
+     * they're required outright; the remaining, less distinctive brand words only need a majority.
+     */
+    private fun matchesByToken(blockKey: String, reference: String): Boolean {
+        val tokens = reference.split(Regex("\\s+")).map { fuzzyKey(it) }.filter { it.isNotEmpty() }
+        if (tokens.isEmpty()) return false
+        val (dosageTokens, brandTokens) = tokens.partition { it.any(Char::isDigit) }
+        if (dosageTokens.any { it !in blockKey }) return false
+        if (brandTokens.isEmpty()) return true
+        val matchedBrandCount = brandTokens.count { it in blockKey }
+        return matchedBrandCount * 2 >= brandTokens.size
+    }
 
     companion object {
         private const val MIN_BLOCK_LENGTH = 4

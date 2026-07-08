@@ -121,6 +121,7 @@
     <string name="restore">Restore</string>
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>
+    <string name="backup_folder_permission_lost">Automatic backup failed: access to the backup folder was lost (this can happen after reinstalling the app). Please re-select the folder in the automatic backup settings.</string>
     <string name="export_failed">Export failed</string>
     <string name="restore_successful">Restore successful</string>
     <string name="restore_start">This will replace all medicine settings and/or reminder events.\n\nContinue?</string>
