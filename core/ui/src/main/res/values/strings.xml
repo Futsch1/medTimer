@@ -232,6 +232,16 @@
     <string name="package_scan_hint">Point the camera at a medicine package. Once recognized, tap Next to scan another one.</string>
     <string name="package_scan_camera_permission_denied">Camera permission is required to scan packages</string>
     <string name="package_scan_next">Next</string>
+    <string name="scanned_packages_settings">Scanned packages</string>
+    <string name="scanned_packages_help">MedTimer remembers a package\'s text after you scan and confirm it, so it\'s recognized instantly next time. Fix or remove any remembered package here, for example if a pill count was entered wrong.</string>
+    <string name="scanned_packages_empty">No packages remembered yet. They\'ll show up here after you scan and confirm one.</string>
+    <string name="scanned_packages_quantity">Remembered quantity: %.0f</string>
+    <string name="scanned_packages_quantity_unknown">Quantity not remembered yet</string>
+    <string name="scanned_packages_edit_quantity">Edit remembered quantity</string>
+    <string name="scanned_packages_forget">Forget this package</string>
+    <string name="scanned_packages_forget_confirm">Forget this package? You\'ll be asked to identify it again next time it\'s scanned.</string>
+    <string name="scanned_packages_forget_all">Forget all remembered packages</string>
+    <string name="scanned_packages_forget_all_confirm">Forget all remembered packages? You\'ll be asked to identify each one again next time it\'s scanned.</string>
     <string name="nfc_automation">NFC automation</string>
     <string name="nfc_automation_help">Write one of these links to an NFC tag with any NFC-writing app (as a URI/URL record). Tapping the tag opens MedTimer and runs the action, no Samsung Routines or other automation app required.</string>
     <string name="nfc_copy_take_link">Copy \"mark as taken\" link</string>

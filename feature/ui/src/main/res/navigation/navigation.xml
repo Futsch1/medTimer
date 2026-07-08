@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_preferencesFragment_to_prescriptionSettingsFragment"
             app:destination="@id/prescriptionSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_scannedPackagesFragment"
+            app:destination="@id/scannedPackagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -133,6 +136,10 @@
         android:id="@+id/prescriptionSettingsFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.PrescriptionSettingsFragment"
         android:label="@string/prescription_settings" />
+    <fragment
+        android:id="@+id/scannedPackagesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.medicine.scan.ScannedPackagesFragment"
+        android:label="@string/scanned_packages_settings" />
     <fragment
         android:id="@+id/displaySettingsFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.DisplaySettingsFragment"

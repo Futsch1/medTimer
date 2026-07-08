@@ -70,6 +70,11 @@ open class PreferencesFragment : PreferenceFragmentCompat() {
             "prescription_settings",
             R.id.action_preferencesFragment_to_prescriptionSettingsFragment
         )
+        setupPreferencesLink(
+            this,
+            "scanned_packages_settings",
+            R.id.action_preferencesFragment_to_scannedPackagesFragment
+        )
     }
 
     private fun setupTheme() {

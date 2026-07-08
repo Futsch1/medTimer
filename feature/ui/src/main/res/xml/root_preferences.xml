@@ -33,4 +33,8 @@
         app:icon="@drawable/clipboard_plus"
         app:key="prescription_settings"
         app:title="@string/prescription_settings" />
+    <Preference
+        app:icon="@drawable/box_seam"
+        app:key="scanned_packages_settings"
+        app:title="@string/scanned_packages_settings" />
 </PreferenceScreen>
