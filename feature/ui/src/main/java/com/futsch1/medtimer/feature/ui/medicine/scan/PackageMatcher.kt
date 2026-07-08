@@ -96,7 +96,8 @@ class PackageMatcher @AssistedInject constructor(
     private suspend fun handleBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
         if (block in handledBlocks) return false
 
-        val labelMatch = labels.firstOrNull { block.contains(normalize(it.text)) }
+        val blockKey = fuzzyKey(block)
+        val labelMatch = labels.firstOrNull { blockKey.contains(fuzzyKey(it.text)) }
         if (labelMatch != null) {
             val medicine = medicines.firstOrNull { it.id == labelMatch.medicineId } ?: return false
             sessionActive.set(true)
@@ -110,7 +111,7 @@ class PackageMatcher @AssistedInject constructor(
             return true
         }
 
-        val nameMatches = medicines.filter { it.name.isNotBlank() && block.contains(normalize(it.name)) }
+        val nameMatches = medicines.filter { it.name.isNotBlank() && blockKey.contains(fuzzyKey(it.name)) }
         return when (nameMatches.size) {
             0 -> trackUnmatchedCandidate(block, medicines)
             1 -> {
@@ -215,6 +216,14 @@ class PackageMatcher @AssistedInject constructor(
     private fun dpToPx(dp: Int): Int = (dp * context.resources.displayMetrics.density).toInt()
 
     private fun normalize(text: String): String = text.lowercase().replace(Regex("\\s+"), " ").trim()
+
+    // Used only to compare a block against a medicine name/remembered label, never for
+    // QuantityParser (which needs spaces to tell "500" from "500mg" from "n. 30"). Packaging text
+    // and the app's own medicine names ("Depakin Chrono 500mg") rarely agree on whether there's a
+    // space before a unit, where line breaks fall, or how punctuation is spaced - stripping
+    // everything down to bare letters/digits makes the containment check tolerant of that noise
+    // instead of requiring a byte-for-byte substring match.
+    private fun fuzzyKey(text: String): String = text.filter { it.isLetterOrDigit() }
 
     companion object {
         private const val MIN_BLOCK_LENGTH = 4
