@@ -173,7 +173,7 @@ class BackupManager @AssistedInject constructor(
             )
         }
         if (checkedItems[0] || checkedItems[1]) {
-            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
+            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).createBackup())
             createAndSave(gson.toJson(jsonObject))
         }
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
@@ -253,7 +253,7 @@ class BackupManager @AssistedInject constructor(
                 )
             }
             if (rootElement.has(SETTINGS_KEY)) {
-                JSONSettingsBackup(preferencesDataSource).applyBackup(rootElement[SETTINGS_KEY].toString())
+                JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).applyBackup(rootElement[SETTINGS_KEY].toString())
             }
         } catch (_: JsonSyntaxException) {
             restoreSuccessful = false
@@ -309,7 +309,7 @@ class BackupManager @AssistedInject constructor(
                 backupRepository.getReminderEventBackup()
             )
         )
-        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
+        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).createBackup())
 
         val json = gson.toJson(jsonObject)
         val filename = ExportBackupPath.backupFilename
