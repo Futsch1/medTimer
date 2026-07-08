@@ -24,7 +24,7 @@ import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
     entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class, MedicineLabelEntity::class],
-    version = 29,
+    version = 30,
     autoMigrations = [AutoMigration(
         from = 1,
         to = 2,
@@ -74,7 +74,7 @@ import com.futsch1.medtimer.database.dao.TagDao
         from = 28,
         to = 29,
         spec = AutoMigration28To29::class
-    )],
+    ), AutoMigration(from = 29, to = 30)],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {

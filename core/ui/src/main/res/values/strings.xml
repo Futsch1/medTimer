@@ -243,6 +243,8 @@
     <string name="nfc_action_batch_taken">Marked %1$d medicine(s) as taken</string>
     <string name="nfc_copy_take_scheduled_link">Copy \"mark due doses as taken\" link</string>
     <string name="prescription_request">Prescription request</string>
+    <string name="prescription_request_help">Some medicines don\'t need a prescription, or theirs is renewed only rarely - exclude this one from the combined "request prescription" SMS.</string>
+    <string name="exclude_from_prescription_request">Don\'t include in prescription request</string>
     <string name="prescription_contact">Phone number</string>
     <string name="request_prescription">Request prescription</string>
     <string name="prescription_pickup_event_title">Pick up prescriptions</string>

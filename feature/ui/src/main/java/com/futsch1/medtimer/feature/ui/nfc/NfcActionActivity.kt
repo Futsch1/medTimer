@@ -185,7 +185,9 @@ class NfcActionActivity : AppCompatActivity() {
         val contact = preferences.prescriptionContact
         if (contact.isBlank()) return
 
-        val lowStockNames = medicineRepository.getAll().filter { it.isOutOfStock() }.map(Medicine::name)
+        val lowStockNames = medicineRepository.getAll()
+            .filter { it.isOutOfStock() && !it.excludeFromPrescriptionRequest }
+            .map(Medicine::name)
         if (lowStockNames.isEmpty()) return
 
         val smsBody = preferences.prescriptionMessageTemplate.replace(

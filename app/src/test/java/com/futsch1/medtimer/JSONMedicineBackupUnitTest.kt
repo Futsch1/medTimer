@@ -81,7 +81,8 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": true,
         "productionDate": 1,
         "expirationDate": 2,
-        "cannotBeSkipped": true
+        "cannotBeSkipped": true,
+        "excludeFromPrescriptionRequest": false
       },
       "tags": [
         {
@@ -260,7 +261,8 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": false,
         "productionDate": 0,
         "expirationDate": 0,
-        "cannotBeSkipped": false
+        "cannotBeSkipped": false,
+        "excludeFromPrescriptionRequest": false
       },
       "tags": [],
       "reminders": [
@@ -316,7 +318,8 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": false,
         "productionDate": 0,
         "expirationDate": 0,
-        "cannotBeSkipped": false
+        "cannotBeSkipped": false,
+        "excludeFromPrescriptionRequest": false
       },
       "tags": [],
       "reminders": [

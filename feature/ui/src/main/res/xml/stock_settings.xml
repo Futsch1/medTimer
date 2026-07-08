@@ -27,6 +27,11 @@
             app:key="stock_refill_now"
             app:title="@string/refill_now" />
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/prescription_request" app:summary="@string/prescription_request_help">
+        <SwitchPreferenceCompat
+            app:key="exclude_from_prescription_request"
+            app:title="@string/exclude_from_prescription_request" />
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/nfc_automation" app:summary="@string/nfc_automation_help">
         <Preference
             app:icon="@drawable/check2_circle"

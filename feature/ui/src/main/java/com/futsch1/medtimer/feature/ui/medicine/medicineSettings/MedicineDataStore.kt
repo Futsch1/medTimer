@@ -31,6 +31,7 @@ class MedicineDataStore @AssistedInject constructor(
         return when (key) {
             "use_color" -> modelData.useColor
             "cannot_be_skipped" -> modelData.cannotBeSkipped
+            "exclude_from_prescription_request" -> modelData.excludeFromPrescriptionRequest
             else -> defValue
         }
     }
@@ -39,6 +40,7 @@ class MedicineDataStore @AssistedInject constructor(
         when (key) {
             "use_color" -> modelData = modelData.copy(useColor = value)
             "cannot_be_skipped" -> modelData = modelData.copy(cannotBeSkipped = value)
+            "exclude_from_prescription_request" -> modelData = modelData.copy(excludeFromPrescriptionRequest = value)
         }
         coroutineScope.launch {
             medicineRepository.update(modelData)

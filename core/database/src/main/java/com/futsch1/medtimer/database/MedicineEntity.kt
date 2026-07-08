@@ -22,5 +22,6 @@ class MedicineEntity(
     @ColumnInfo(defaultValue = "false") var showNotificationAsAlarm: Boolean = false,
     @ColumnInfo(defaultValue = "0") var productionDate: Long = 0,
     @ColumnInfo(defaultValue = "0") var expirationDate: Long = 0,
-    @ColumnInfo(defaultValue = "false") var cannotBeSkipped: Boolean = false
+    @ColumnInfo(defaultValue = "false") var cannotBeSkipped: Boolean = false,
+    @ColumnInfo(defaultValue = "false") var excludeFromPrescriptionRequest: Boolean = false
 )
