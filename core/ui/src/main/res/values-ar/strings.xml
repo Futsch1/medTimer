@@ -348,6 +348,6 @@
     <string name="same_as_medicine">نفس الدواء</string>
     <string name="previous_week">الأسبوع السابق</string>
     <string name="next_week">الأسبوع التالي</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">بعد %s</string>
     <string name="move_medicine">نقل الدواء</string>
 </resources>

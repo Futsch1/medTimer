@@ -318,6 +318,6 @@
     <string name="same_as_medicine">與藥品相同</string>
     <string name="previous_week">上一週</string>
     <string name="next_week">下一週</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">在 %s 之後</string>
     <string name="move_medicine">移動藥物</string>
 </resources>
