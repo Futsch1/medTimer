@@ -173,6 +173,11 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
         }
 
+        fun requestLocationSnooze(context: Context, reminderNotificationData: ReminderNotificationData) {
+            val intent = getLocationSnoozeIntent(context, reminderNotificationData)
+            context.sendBroadcast(intent, RECEIVER_PERMISSION)
+        }
+
         fun requestReminderAction(context: Context, reminder: Reminder?, reminderEvent: ReminderEvent, taken: Boolean) {
             val processedNotificationData = ProcessedNotificationData(listOf(reminderEvent.reminderEventId))
 

@@ -31,8 +31,13 @@ flexbox = "3.0.0"
 preference-extended = "1.1.0"
 reorderable = "3.1.0"
 play-services-location = "21.4.0"
+play-services-wearable = "19.0.0"
 mlkit-text-recognition = "16.0.1"
 camerax = "1.5.1"
+wear-compose-material3 = "1.5.0"
+wear-tiles = "1.6.0"
+wear-protolayout = "1.4.0"
+androidx-activity-compose = "1.13.0"
 
 # Testing
 junit4 = "4.13.2"
@@ -53,6 +58,7 @@ documentfile = "1.1.0"
 
 # Coroutines
 kotlinx-coroutines = "1.11.0"
+kotlinx-coroutines-play-services = "1.11.0"
 
 # Compose
 compose-bom = "2026.06.01"
@@ -95,6 +101,15 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbo
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preference-extended" }
 preferencex-ringtone = { module = "com.takisoft.preferencex:preferencex-ringtone", version.ref = "preference-extended" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+play-services-wearable = { module = "com.google.android.gms:play-services-wearable", version.ref = "play-services-wearable" }
+wear-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "wear-compose-material3" }
+wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "wear-compose-material3" }
+wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "wear-tiles" }
+wear-tiles-material = { module = "androidx.wear.tiles:tiles-material", version.ref = "wear-tiles" }
+wear-protolayout = { module = "androidx.wear.protolayout:protolayout", version.ref = "wear-protolayout" }
+wear-protolayout-material = { module = "androidx.wear.protolayout:protolayout-material", version.ref = "wear-protolayout" }
+wear-protolayout-expression = { module = "androidx.wear.protolayout:protolayout-expression", version.ref = "wear-protolayout" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkit-text-recognition" }
 camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
@@ -130,6 +145,7 @@ androidx-documentfile = { group = "androidx.documentfile", name = "documentfile"
 # Coroutines
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines-play-services" }
 
 # Compose (versions managed by the BOM unless an explicit version.ref is given)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

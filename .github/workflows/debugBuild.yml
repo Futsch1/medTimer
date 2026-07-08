@@ -16,6 +16,7 @@ on:
 env:
   FULL_APK_DEBUG_DIRECTORY: app/build/outputs/apk/full/debug
   FOSS_APK_DEBUG_DIRECTORY: app/build/outputs/apk/foss/debug
+  WEAR_APK_DEBUG_DIRECTORY: wear/build/outputs/apk/debug
 
 permissions:
   contents: read
@@ -35,7 +36,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
 
       - name: Assemble debug APKs
-        run: ./gradlew :app:assembleFullDebug :app:assembleFossDebug
+        run: ./gradlew :app:assembleFullDebug :app:assembleFossDebug :wear:assembleDebug
 
       - name: Upload Full debug APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -48,3 +49,9 @@ jobs:
         with:
           name: apk-foss-debug
           path: ${{ env.FOSS_APK_DEBUG_DIRECTORY }}/*.apk
+
+      - name: Upload Wear debug APK
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: apk-wear-debug
+          path: ${{ env.WEAR_APK_DEBUG_DIRECTORY }}/*.apk

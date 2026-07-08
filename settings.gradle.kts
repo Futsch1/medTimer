@@ -30,4 +30,4 @@ include(":core:datastore")
 include(":core:ui")
 include(":feature:reminders")
 include(":feature:ui")
- 
+include(":wear")

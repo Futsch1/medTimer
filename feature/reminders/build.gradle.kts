@@ -61,6 +61,10 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
+    implementation(libs.gson)
+    implementation(libs.kotlinx.coroutines.core)
     "fullImplementation"(libs.play.services.location)
+    "fullImplementation"(libs.play.services.wearable)
+    "fullImplementation"(libs.kotlinx.coroutines.play.services)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
