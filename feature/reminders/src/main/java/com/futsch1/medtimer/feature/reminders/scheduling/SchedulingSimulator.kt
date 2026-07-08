@@ -19,31 +19,20 @@ typealias ScheduledReminderConsumer = (SimulatedReminder, LocalDate) -> Boolean
 
 
 class LastEventsPerReminder(initialReminderEvents: List<ReminderEvent>) {
-    private val latestPastEvent = mutableMapOf<Int, ReminderEvent>()
+    private val latestRemindedEvent = mutableMapOf<Int, ReminderEvent>()
     private val latestProcessedEvent = mutableMapOf<Int, ReminderEvent>()
-    private val futureEvents = mutableMapOf<Int, MutableList<ReminderEvent>>()
+    private val initialEvents = initialReminderEvents.toMutableList()
 
-    init {
-        for (reminderEvent in initialReminderEvents) {
-            futureEvents.getOrPut(reminderEvent.reminderId) { mutableListOf() }.add(reminderEvent)
-        }
-    }
-
+    // Remove events which are of a past day, but keep the latest reminded or processed events of that day.
+    // Reason is that the initial events might contain events for future days. They should only be considered
+    // when that day has been reached and not before.
     fun advanceTo(endOfCurrentDay: Instant) {
-        for ((reminderId, events) in futureEvents) {
-            val promoted = events.filter { it.remindedTimestamp < endOfCurrentDay }
-            if (promoted.isNotEmpty()) {
-                val maxPromoted = promoted.maxBy { it.remindedTimestamp }
-                updateLatest(latestPastEvent, reminderId, maxPromoted) { it.remindedTimestamp }
-
-                val maxProcessed = promoted
-                    .filter { it.processedTimestamp != Instant.EPOCH }
-                    .maxByOrNull { it.processedTimestamp }
-                if (maxProcessed != null) {
-                    updateLatest(latestProcessedEvent, reminderId, maxProcessed) { it.processedTimestamp }
-                }
-                events.removeAll(promoted.toSet())
-            }
+        val pastEvents = initialEvents.filter { it.remindedTimestamp < endOfCurrentDay }
+        for (event in pastEvents) {
+            add(event)
+        }
+        if (pastEvents.isNotEmpty()) {
+            initialEvents.removeAll(pastEvents)
         }
     }
 
@@ -60,14 +49,14 @@ class LastEventsPerReminder(initialReminderEvents: List<ReminderEvent>) {
     }
 
     fun add(reminderEvent: ReminderEvent) {
-        updateLatest(latestPastEvent, reminderEvent.reminderId, reminderEvent) { it.remindedTimestamp }
+        updateLatest(latestRemindedEvent, reminderEvent.reminderId, reminderEvent) { it.remindedTimestamp }
         if (reminderEvent.processedTimestamp != Instant.EPOCH) {
             updateLatest(latestProcessedEvent, reminderEvent.reminderId, reminderEvent) { it.processedTimestamp }
         }
     }
 
     fun get(): List<ReminderEvent> {
-        return (latestPastEvent.values + latestProcessedEvent.values).distinct().toList()
+        return (latestRemindedEvent.values + latestProcessedEvent.values).distinct().toList()
     }
 }
 
