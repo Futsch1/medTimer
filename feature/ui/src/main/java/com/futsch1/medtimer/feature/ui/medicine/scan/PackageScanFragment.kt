@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,10 +32,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 /**
- * Full-screen live scanner: keeps the camera preview running and continuously OCRs frames,
- * matching recognized package text against known medicines and refilling stock automatically -
- * no shutter press needed. Stays open so several distinct packages can be scanned one after the
- * other in the same session; back/up navigation closes it.
+ * Full-screen live scanner: keeps the camera preview running and OCRs frames, matching recognized
+ * package text against known medicines and refilling stock automatically - no shutter press
+ * needed. As soon as one package is recognized (or its ambiguity is resolved via a dialog),
+ * analysis pauses and a "Next" button appears; tapping it resumes scanning for another package.
+ * Stays open so several distinct packages can be scanned one after the other in the same session;
+ * back/up navigation closes it.
  */
 @AndroidEntryPoint
 class PackageScanFragment : Fragment() {
@@ -50,7 +53,7 @@ class PackageScanFragment : Fragment() {
 
     private lateinit var packageMatcher: PackageMatcher
     private val analyzing = AtomicBoolean(false)
-    private var hideBannerRunnable: Runnable? = null
+    private val scanningPaused = AtomicBoolean(false)
 
     private val requestCameraPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -116,21 +119,22 @@ class PackageScanFragment : Fragment() {
     }
 
     private fun showRecognizedFeedback(message: String) {
+        scanningPaused.set(true)
         val banner = view?.findViewById<TextView>(R.id.recognizedBanner) ?: return
-        hideBannerRunnable?.let { banner.removeCallbacks(it) }
-        banner.animate().cancel()
-        banner.alpha = 1f
+        val nextButton = view?.findViewById<Button>(R.id.nextButton) ?: return
         banner.text = "✓ $message"
         banner.visibility = View.VISIBLE
-        val hideRunnable = Runnable {
-            banner.animate().alpha(0f).setDuration(300).withEndAction { banner.visibility = View.GONE }.start()
+        nextButton.visibility = View.VISIBLE
+        nextButton.setOnClickListener {
+            banner.visibility = View.GONE
+            nextButton.visibility = View.GONE
+            packageMatcher.resumeScanning()
+            scanningPaused.set(false)
         }
-        hideBannerRunnable = hideRunnable
-        banner.postDelayed(hideRunnable, 1800)
     }
 
     private fun analyzeFrame(imageProxy: ImageProxy) {
-        if (!analyzing.compareAndSet(false, true)) {
+        if (scanningPaused.get() || !analyzing.compareAndSet(false, true)) {
             imageProxy.close()
             return
         }

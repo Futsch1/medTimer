@@ -107,8 +107,6 @@
     <string name="location_snooze_summary">Re-notify when arriving home after snoozing</string>
     <string name="location_snooze_no_play_services">Location-based snooze requires Google Play Services, which are not available on this device</string>
     <string name="location_snooze_background_permission">To re-notify when arriving home, allow MedTimer to access location in the background</string>
-    <string name="generate_test_data">Generate test data</string>
-    <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>
     <string name="cycle_consecutive_days">Active days</string>
     <string name="theme">Theme</string>
@@ -230,8 +228,9 @@
     <string name="ocr_no_medicines">Add a medicine before scanning a package</string>
     <string name="ocr_pick_medicine_title">Couldn\'t match the package to a medicine. Select which one it is:</string>
     <string name="ocr_ask_quantity">How many pills/doses does this package contain?</string>
-    <string name="package_scan_hint">Point the camera at one or more medicine packages. Recognized packages are added to stock automatically.</string>
+    <string name="package_scan_hint">Point the camera at a medicine package. Once recognized, tap Next to scan another one.</string>
     <string name="package_scan_camera_permission_denied">Camera permission is required to scan packages</string>
+    <string name="package_scan_next">Next</string>
     <string name="nfc_automation">NFC automation</string>
     <string name="nfc_automation_help">Write one of these links to an NFC tag with any NFC-writing app (as a URI/URL record). Tapping the tag opens MedTimer and runs the action, no Samsung Routines or other automation app required.</string>
     <string name="nfc_copy_take_link">Copy \"mark as taken\" link</string>

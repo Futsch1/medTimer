@@ -27,8 +27,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Matches OCR text blocks recognized live from the camera against known medicines, and drives the
  * refill for confident matches. Kept across the lifetime of one scanning session (one
- * [PackageScanFragment] instance) so the same package isn't re-processed on every analyzed frame,
- * and so multiple distinct boxes shown to the camera in sequence each get handled once.
+ * [PackageScanFragment] instance).
+ *
+ * A single package's text is OCR'd as several separate blocks (brand name, dosage, pack size,
+ * manufacturer...), so this only ever considers ONE candidate block at a time: the instant any
+ * block looks like it belongs to a package - whether it resolves immediately or needs a dialog -
+ * [handleBlocks] stops looking at anything else until [resumeScanning] is called. This is what
+ * keeps stray fragments of an already-handled package from being mistaken for a second, unknown
+ * package a frame or two later; letting several blocks race against each other within or across
+ * frames was the source of spurious "couldn't recognize this package" prompts after a correct add.
  *
  * Ambiguous cases (package matches no known medicine, or its pill count can't be parsed) show a
  * dialog and remember the answer as a [MedicineLabel], so the same package is recognized silently
@@ -50,57 +57,54 @@ class PackageMatcher @AssistedInject constructor(
     private val context get() = fragment.requireContext()
     private val handledBlocks = mutableSetOf<String>()
     private val unmatchedCandidates = mutableMapOf<String, Int>()
-    private val dialogOpen = AtomicBoolean(false)
+
+    // Set the instant one candidate block is picked up (confident match or ambiguous-needing-a-
+    // dialog) and stays set through to a successful refill; only resumeScanning() (called by the
+    // scan screen once the user taps "Next") clears it. A cancelled dialog also clears it early,
+    // since nothing was decided and there's no reason to keep the camera frozen.
+    private val sessionActive = AtomicBoolean(false)
     private val mutex = Mutex()
 
     /** Processes one frame's recognized text blocks. Safe to call repeatedly; never overlaps itself. */
     suspend fun handleBlocks(blocks: List<String>) {
+        if (sessionActive.get()) return
         val normalized = blocks.map { normalize(it) }.filter { it.length >= MIN_BLOCK_LENGTH }
         if (normalized.isEmpty()) return
 
         mutex.withLock {
+            if (sessionActive.get()) return@withLock
             val medicines = medicineRepository.getAll()
             val labels = medicineLabelRepository.getAll()
-
-            // A single package's text is OCR'd as several separate blocks (brand name, dosage,
-            // pack size, manufacturer...). Only the block containing the medicine's own name (or a
-            // remembered snippet) actually matches anything; the rest are legitimate fragments of
-            // that same, already-identified package, not separate unknown items. So: if this frame
-            // matched a medicine anywhere, don't let its other stray blocks count towards the
-            // "unrecognized package" prompt.
-            val unmatchedBlocks = mutableListOf<String>()
-            var matchedAnyThisBatch = false
             for (block in normalized) {
-                if (handleBlock(block, medicines, labels)) {
-                    matchedAnyThisBatch = true
-                } else {
-                    unmatchedBlocks += block
-                }
-            }
-
-            if (matchedAnyThisBatch) {
-                unmatchedCandidates.clear()
-            } else {
-                for (block in unmatchedBlocks) {
-                    trackUnmatchedCandidate(block, medicines)
-                }
+                if (handleBlock(block, medicines, labels)) break
             }
         }
     }
 
-    /** Returns true if [block] is (or already was) recognized as belonging to a known medicine. */
+    /** Called by the scan screen once the user taps "Next" after a successful recognition. */
+    fun resumeScanning() {
+        sessionActive.set(false)
+        unmatchedCandidates.clear()
+    }
+
+    private fun cancelSession(block: String) {
+        sessionActive.set(false)
+        handledBlocks.remove(block)
+    }
+
+    /** Returns true if [block] started (or already finished) handling a package candidate. */
     private suspend fun handleBlock(block: String, medicines: List<Medicine>, labels: List<MedicineLabel>): Boolean {
-        if (block in handledBlocks) return true
+        if (block in handledBlocks) return false
 
         val labelMatch = labels.firstOrNull { block.contains(normalize(it.text)) }
         if (labelMatch != null) {
             val medicine = medicines.firstOrNull { it.id == labelMatch.medicineId } ?: return false
+            sessionActive.set(true)
+            handledBlocks += block
             val quantity = labelMatch.quantity
             if (quantity != null) {
-                handledBlocks += block
                 refill(medicine, quantity)
-            } else if (dialogOpen.compareAndSet(false, true)) {
-                handledBlocks += block
+            } else {
                 askQuantity(medicine, block)
             }
             return true
@@ -108,43 +112,42 @@ class PackageMatcher @AssistedInject constructor(
 
         val nameMatches = medicines.filter { it.name.isNotBlank() && block.contains(normalize(it.name)) }
         return when (nameMatches.size) {
-            0 -> false
+            0 -> trackUnmatchedCandidate(block, medicines)
             1 -> {
                 val medicine = nameMatches[0]
+                sessionActive.set(true)
+                handledBlocks += block
                 val quantity = QuantityParser.parse(block)
                 if (quantity != null) {
-                    handledBlocks += block
                     medicineLabelRepository.remember(MedicineLabel(block, medicine.id, quantity))
                     refill(medicine, quantity)
-                } else if (dialogOpen.compareAndSet(false, true)) {
-                    handledBlocks += block
+                } else {
                     askQuantity(medicine, block)
                 }
                 true
             }
 
             else -> {
-                if (dialogOpen.compareAndSet(false, true)) {
-                    handledBlocks += block
-                    askWhichMedicine(block, medicines)
-                }
+                sessionActive.set(true)
+                handledBlocks += block
+                askWhichMedicine(block, medicines)
                 true
             }
         }
     }
 
-    private suspend fun trackUnmatchedCandidate(block: String, medicines: List<Medicine>) {
-        if (medicines.isEmpty() || block.length < MIN_UNMATCHED_BLOCK_LENGTH) return
+    private suspend fun trackUnmatchedCandidate(block: String, medicines: List<Medicine>): Boolean {
+        if (medicines.isEmpty() || block.length < MIN_UNMATCHED_BLOCK_LENGTH) return false
         val hits = (unmatchedCandidates[block] ?: 0) + 1
-        if (hits >= STABILITY_THRESHOLD) {
-            if (dialogOpen.compareAndSet(false, true)) {
-                unmatchedCandidates.remove(block)
-                handledBlocks += block
-                askWhichMedicine(block, medicines)
-            }
-        } else {
+        if (hits < STABILITY_THRESHOLD) {
             unmatchedCandidates[block] = hits
+            return false
         }
+        unmatchedCandidates.remove(block)
+        sessionActive.set(true)
+        handledBlocks += block
+        askWhichMedicine(block, medicines)
+        return true
     }
 
     private suspend fun refill(medicine: Medicine, quantity: Double) {
@@ -170,23 +173,18 @@ class PackageMatcher @AssistedInject constructor(
                 .setMessage(UiR.string.ocr_ask_quantity)
                 .setView(input)
                 .setPositiveButton(UiR.string.ok) { _, _ ->
-                    dialogOpen.set(false)
                     val quantity = input.text.toString().toDoubleOrNull()
                     if (quantity != null && quantity > 0) {
                         fragment.lifecycleScope.launch(dispatcher) {
                             medicineLabelRepository.remember(MedicineLabel(block, medicine.id, quantity))
                             refill(medicine, quantity)
                         }
+                    } else {
+                        cancelSession(block)
                     }
                 }
-                .setNegativeButton(UiR.string.cancel) { _, _ ->
-                    dialogOpen.set(false)
-                    handledBlocks.remove(block)
-                }
-                .setOnCancelListener {
-                    dialogOpen.set(false)
-                    handledBlocks.remove(block)
-                }
+                .setNegativeButton(UiR.string.cancel) { _, _ -> cancelSession(block) }
+                .setOnCancelListener { cancelSession(block) }
                 .show()
         }
     }
@@ -197,26 +195,19 @@ class PackageMatcher @AssistedInject constructor(
             MaterialAlertDialogBuilder(context)
                 .setTitle(UiR.string.ocr_pick_medicine_title)
                 .setItems(names) { _, which ->
-                    dialogOpen.set(false)
                     val medicine = medicines[which]
                     fragment.lifecycleScope.launch(dispatcher) {
                         val quantity = QuantityParser.parse(block)
                         if (quantity != null) {
                             medicineLabelRepository.remember(MedicineLabel(block, medicine.id, quantity))
                             refill(medicine, quantity)
-                        } else if (dialogOpen.compareAndSet(false, true)) {
+                        } else {
                             askQuantity(medicine, block)
                         }
                     }
                 }
-                .setNegativeButton(UiR.string.cancel) { _, _ ->
-                    dialogOpen.set(false)
-                    handledBlocks.remove(block)
-                }
-                .setOnCancelListener {
-                    dialogOpen.set(false)
-                    handledBlocks.remove(block)
-                }
+                .setNegativeButton(UiR.string.cancel) { _, _ -> cancelSession(block) }
+                .setOnCancelListener { cancelSession(block) }
                 .show()
         }
     }

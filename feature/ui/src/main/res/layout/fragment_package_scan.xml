@@ -43,4 +43,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="✓ Tachipirina: stock aggiornato con 20 compresse" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/package_scan_next"
+        android:visibility="gone"
+        app:icon="@drawable/chevron_right"
+        app:layout_constraintBottom_toTopOf="@id/packageScanHint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

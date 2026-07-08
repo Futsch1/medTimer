@@ -71,16 +71,6 @@
     </item>
     <group android:id="@+id/debug">
         <item
-            android:id="@+id/generate_test_data"
-            android:icon="@drawable/x_circle"
-            android:title="@string/generate_test_data"
-            android:visible="false"/>
-        <item
-            android:id="@+id/generate_test_data_and_events"
-            android:icon="@drawable/x_circle"
-            android:title="@string/generate_test_data_and_events"
-            android:visible="false"/>
-        <item
             android:id="@+id/show_app_intro"
             android:title="@string/show_intro" />
     </group>
