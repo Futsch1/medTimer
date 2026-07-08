@@ -126,7 +126,7 @@ class SimulatedRemindersRepository @Inject constructor(
             scheduledDate < endDay
         }
 
-        _simulatedReminders.value = result
+        _simulatedReminders.value = result.sortedBy { it.scheduledReminder.timestamp }
         _stockRunOutDates.value = runOutDates
     }
 
