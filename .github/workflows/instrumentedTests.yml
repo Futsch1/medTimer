@@ -100,7 +100,7 @@ jobs:
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
-        uses: qltysh/qlty-action/coverage@dafbc1e328f1f92525f1a3916724bd5fa01498e8 # v2.2.3
+        uses: qltysh/qlty-action/coverage@08a0a862c159eae9b9003081da6663d96efef637 # v2.3.0
         env:
           JACOCO_SOURCE_PATH: app/src/main/java app/build/generated/java/generateSafeArgsFullDebug app/build/generated/ap_generated_sources/fullDebug/out
         with:
