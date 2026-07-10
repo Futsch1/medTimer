@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
@@ -51,17 +53,14 @@ class SimulatedRemindersRepository @Inject constructor(
         applicationScope.launch {
             triggerChannel.consumeEach { endDay ->
                 try {
-                    val startTime = System.currentTimeMillis()
+                    delay(1000.milliseconds)
                     Log.d(
                         LogTags.SIMULATION,
                         "Triggering future reminders simulation through $endDay"
                     )
+
                     runSimulation(endDay)
                     _simulatedThrough.value = endDay
-                    Log.d(
-                        LogTags.SIMULATION,
-                        "Future reminders simulation finished after ${System.currentTimeMillis() - startTime} ms"
-                    )
                 } catch (e: Exception) {
                     Log.e(LogTags.SIMULATION, "Future reminders simulation failed", e)
                 } finally {
@@ -103,8 +102,9 @@ class SimulatedRemindersRepository @Inject constructor(
         val reminderEvents = reminderEventRepository.getForScheduling(medicines)
         val result = mutableListOf<SimulatedReminder>()
         val runOutDates = mutableMapOf<Int, LocalDate?>()
-        medicines.forEach { runOutDates[it.id] = null }
+        medicines.forEach { runOutDates[it.id] = if (it.isStockManagementActive()) LocalDate.MAX else null }
         var currentEmitDay = LocalDate.MIN
+        val startTime = System.currentTimeMillis()
 
         SchedulingSimulator(
             medicines,
@@ -119,12 +119,17 @@ class SimulatedRemindersRepository @Inject constructor(
                 currentEmitDay = scheduledDate
                 result.add(simulatedReminder)
                 val medicineId = simulatedReminder.scheduledReminder.medicine.id
-                if (simulatedReminder.scheduledReminder.medicine.isStockManagementActive() && simulatedReminder.stockAfter == 0.0 && runOutDates[medicineId] == null) {
+                if (runOutDates[medicineId] == LocalDate.MAX && simulatedReminder.stockAfter == 0.0) {
                     runOutDates[medicineId] = scheduledDate
                 }
             }
-            scheduledDate < endDay
+            scheduledDate < endDay || System.currentTimeMillis() - startTime > 2_000
         }
+
+        Log.d(
+            LogTags.SIMULATION,
+            "Future reminders simulation finished after ${System.currentTimeMillis() - startTime} ms"
+        )
 
         _simulatedReminders.value = result.sortedBy { it.scheduledReminder.timestamp }
         _stockRunOutDates.value = runOutDates

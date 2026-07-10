@@ -146,6 +146,64 @@ class SchedulingSimulatorTest {
     }
 
     @Test
+    fun intervalStartsFromProcessed() = runBlocking {
+        val medicines = listOf(
+            TestHelper.buildTestMedicine(0, "Test")
+        )
+        medicines[0].reminders.add(
+            TestHelper.buildReminder(0, 1, "1", 600, 1).copy(
+                intervalStart = on(1, 600),
+                intervalStartsFromProcessed = true
+            )
+        )
+
+        // Two recent reminder events. The first one was processed (100 minutes after the
+        // reminder), the second one was raised but never processed (default
+        // processedTimestamp = EPOCH). With intervalStartsFromProcessed = true, the
+        // simulator must skip the unprocessed event and base the next reminder on the
+        // processedTimestamp of the processed event.
+        val recentReminders = listOf(
+            TestHelper.buildReminderEvent(1, on(1, 600)).copy(processedTimestamp = on(1, 700)),
+            TestHelper.buildReminderEvent(1, on(1, 800))
+        )
+
+        val simulator = buildSchedulingSimulator(medicines, recentReminders)
+
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
+
+        simulator.simulate { simulatedReminder: SimulatedReminder, _: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            simulatedReminders.size < 3
+        }
+
+        assertEquals(3, simulatedReminders.size)
+        // The next reminder should be processedTimestamp of the processed event (on(1, 700))
+        // plus the interval (600 minutes), i.e. on(1, 1300). The unprocessed reminder at
+        // on(1, 800) must not be used, otherwise the scheduler would return null because
+        // processedTimestamp is EPOCH.
+        assertReminded(
+            simulatedReminders,
+            on(1, 1300),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
+        )
+        assertRemindedAtIndex(
+            simulatedReminders,
+            on(2, 460),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            1
+        )
+        assertRemindedAtIndex(
+            simulatedReminders,
+            on(2, 1060),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0],
+            2
+        )
+    }
+
+    @Test
     fun windowedInterval() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")

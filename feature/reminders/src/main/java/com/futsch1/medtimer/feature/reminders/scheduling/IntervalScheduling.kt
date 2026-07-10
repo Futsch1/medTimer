@@ -30,11 +30,13 @@ open class IntervalScheduling(
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
-                    lastReminderEvent.processedTimestamp
-                else null
-            } else
+                filteredReminderEvents
+                    .filter { it.processedTimestamp != Instant.EPOCH }
+                    .maxByOrNull { it.processedTimestamp }
+                    ?.processedTimestamp
+            } else {
                 lastReminderEvent.remindedTimestamp
+            }
         return instant?.plusSeconds(reminder.time.seconds)
     }
 

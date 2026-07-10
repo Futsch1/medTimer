@@ -330,6 +330,6 @@
     <string name="same_as_medicine">Come per la medicina</string>
     <string name="previous_week">Settimana precedente</string>
     <string name="next_week">Settimana successiva</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Dopo %s</string>
     <string name="move_medicine">Sposta medicinale</string>
 </resources>
