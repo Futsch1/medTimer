@@ -131,7 +131,7 @@ class SimulatedRemindersRepository @Inject constructor(
             "Future reminders simulation finished after ${System.currentTimeMillis() - startTime} ms"
         )
 
-        _simulatedReminders.value = result
+        _simulatedReminders.value = result.sortedBy { it.scheduledReminder.timestamp }
         _stockRunOutDates.value = runOutDates
     }
 
