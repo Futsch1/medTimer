@@ -91,13 +91,13 @@ class MedicineStringFormatter @Inject constructor(
     }
 
     fun getStockRunOutText(runOutDate: LocalDate?, simulatedThrough: LocalDate): String {
-        return when {
-            runOutDate != null -> timeFormatter.localDateToString(runOutDate)
-            simulatedThrough == LocalDate.MAX -> context.getString(
+        return when (runOutDate) {
+            null -> "---"
+            LocalDate.MAX -> context.getString(
                 R.string.stock_after_simulation_end,
                 timeFormatter.localDateToString(simulatedThrough)
             )
-            else -> "---"
+            else -> timeFormatter.localDateToString(runOutDate)
         }
     }
 
