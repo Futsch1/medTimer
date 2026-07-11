@@ -1,17 +1,21 @@
 package com.futsch1.medtimer
 
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.HomeLocation
+import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.database.backup.JSONSettingsBackup
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.time.LocalTime
 import kotlin.test.assertFalse
@@ -20,6 +24,12 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class JSONSettingsBackupUnitTest {
+
+    private fun mockPersistentDataDataSource(persistentData: PersistentData = PersistentData.default()): PersistentDataDataSource {
+        val mock = mock<PersistentDataDataSource>()
+        whenever(mock.data).thenReturn(MutableStateFlow(persistentData))
+        return mock
+    }
 
     private fun buildPreferences(): UserPreferences = UserPreferences(
         weekendStartTime = LocalTime.of(7, 30),
@@ -51,7 +61,10 @@ class JSONSettingsBackupUnitTest {
         automaticBackupInterval = BackupInterval.WEEKLY,
         automaticBackupDirectory = null,
         locationBasedSnooze = true,
-        homeLocation = HomeLocation(48.137, 11.576, 200f)
+        homeLocation = HomeLocation(48.137, 11.576, 200f),
+        prescriptionPickupDays = 5,
+        prescriptionContact = "+391234567",
+        prescriptionMessageTemplate = "Need: {medicines}"
     )
 
     @Test
@@ -59,13 +72,18 @@ class JSONSettingsBackupUnitTest {
         val mockPrefs = mock<PreferencesDataSource>()
         val prefs = buildPreferences()
         whenever(mockPrefs.preferences).thenReturn(MutableStateFlow(prefs))
+        val persistentData = PersistentData.default().copy(analysisDays = 14, lastCustomDose = "1 tablet")
 
-        val backup = JSONSettingsBackup(mockPrefs)
+        val backup = JSONSettingsBackup(mockPrefs, mockPersistentDataDataSource(persistentData))
         val json = Gson().toJson(backup.createBackup())
 
         val mockPrefs2 = mock<PreferencesDataSource>()
-        val backup2 = JSONSettingsBackup(mockPrefs2)
+        val mockPersistentData2 = mockPersistentDataDataSource()
+        val backup2 = JSONSettingsBackup(mockPrefs2, mockPersistentData2)
         assertTrue(backup2.applyBackup(json))
+
+        verify(mockPersistentData2).setAnalysisDays(14)
+        verify(mockPersistentData2).setLastCustomDose("1 tablet")
 
         verify(mockPrefs2).putBoolean(PreferencesDataSource.WEEKEND_MODE, true)
         verify(mockPrefs2).putBoolean(PreferencesDataSource.EXACT_REMINDERS, true)
@@ -106,14 +124,14 @@ class JSONSettingsBackupUnitTest {
     @Test
     fun testInvalidJsonReturnsFalse() {
         val mockPrefs = mock<PreferencesDataSource>()
-        val backup = JSONSettingsBackup(mockPrefs)
+        val backup = JSONSettingsBackup(mockPrefs, mockPersistentDataDataSource())
         assertFalse(backup.applyBackup("not valid json {{{"))
     }
 
     @Test
     fun testEmptyJsonReturnsFalse() {
         val mockPrefs = mock<PreferencesDataSource>()
-        val backup = JSONSettingsBackup(mockPrefs)
+        val backup = JSONSettingsBackup(mockPrefs, mockPersistentDataDataSource())
         assertFalse(backup.applyBackup("{}"))
     }
 
@@ -123,13 +141,35 @@ class JSONSettingsBackupUnitTest {
         val prefs = buildPreferences().copy(homeLocation = null)
         whenever(mockPrefs.preferences).thenReturn(MutableStateFlow(prefs))
 
-        val backup = JSONSettingsBackup(mockPrefs)
+        val backup = JSONSettingsBackup(mockPrefs, mockPersistentDataDataSource())
         val json = Gson().toJson(backup.createBackup())
 
         val mockPrefs2 = mock<PreferencesDataSource>()
-        val backup2 = JSONSettingsBackup(mockPrefs2)
+        val backup2 = JSONSettingsBackup(mockPrefs2, mockPersistentDataDataSource())
         assertTrue(backup2.applyBackup(json))
 
         verify(mockPrefs2).clearHomeLocation()
+    }
+
+    @Test
+    fun testOldBackupWithoutPersistentDataDoesNotOverwriteIt() {
+        // Simulates restoring a backup written before persistentData existed: the field is absent
+        // from the JSON, so Gson leaves SettingsBackup.persistentData null and it must be skipped
+        // rather than wiping the current persistent data with empty/default values.
+        val mockPrefs = mock<PreferencesDataSource>()
+        whenever(mockPrefs.preferences).thenReturn(MutableStateFlow(buildPreferences()))
+        val backup = JSONSettingsBackup(mockPrefs, mockPersistentDataDataSource())
+        val jsonWithoutPersistentData = JsonParser.parseString(Gson().toJson(backup.createBackup()))
+            .asJsonObject
+            .apply { remove("persistentData") }
+            .toString()
+
+        val mockPrefs2 = mock<PreferencesDataSource>()
+        val mockPersistentData2 = mockPersistentDataDataSource()
+        val backup2 = JSONSettingsBackup(mockPrefs2, mockPersistentData2)
+
+        assertTrue(backup2.applyBackup(jsonWithoutPersistentData))
+
+        verifyNoInteractions(mockPersistentData2)
     }
 }

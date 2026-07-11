@@ -3,6 +3,7 @@ package com.futsch1.medtimer.database
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
+import androidx.room.DeleteTable
 import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -12,15 +13,18 @@ import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration16To17
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration1To2
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration20To21
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration21To22
+import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration26To27
+import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration28To29
 import com.futsch1.medtimer.database.MedicineRoomDatabase.AutoMigration5To6
 import com.futsch1.medtimer.database.dao.MedicineDao
+import com.futsch1.medtimer.database.dao.MedicineLabelDao
 import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 
 @Database(
-    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class],
-    version = 24,
+    entities = [MedicineEntity::class, ReminderEntity::class, ReminderEventEntity::class, TagEntity::class, MedicineToTagEntity::class, MedicineLabelEntity::class],
+    version = 30,
     autoMigrations = [AutoMigration(
         from = 1,
         to = 2,
@@ -62,7 +66,15 @@ import com.futsch1.medtimer.database.dao.TagDao
         from = 21,
         to = 22,
         spec = AutoMigration21To22::class
-    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24)],
+    ), AutoMigration(from = 22, to = 23), AutoMigration(from = 23, to = 24), AutoMigration(from = 24, to = 25), AutoMigration(from = 25, to = 26), AutoMigration(
+        from = 26,
+        to = 27,
+        spec = AutoMigration26To27::class
+    ), AutoMigration(from = 27, to = 28), AutoMigration(
+        from = 28,
+        to = 29,
+        spec = AutoMigration28To29::class
+    ), AutoMigration(from = 29, to = 30)],
 )
 @TypeConverters(Converters::class)
 abstract class MedicineRoomDatabase : RoomDatabase() {
@@ -73,6 +85,7 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
     abstract fun reminderEventDao(): ReminderEventDao
     abstract fun tagDao(): TagDao
+    abstract fun medicineLabelDao(): MedicineLabelDao
 
     @RenameColumn(
         fromColumnName = "raisedTimestamp",
@@ -135,4 +148,10 @@ abstract class MedicineRoomDatabase : RoomDatabase() {
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminderThreshold")
     @DeleteColumn(tableName = "Medicine", columnName = "outOfStockReminder")
     internal class AutoMigration21To22 : AutoMigrationSpec
+
+    @DeleteTable(tableName = "Barcode")
+    internal class AutoMigration26To27 : AutoMigrationSpec
+
+    @DeleteColumn(tableName = "Medicine", columnName = "prescriptionContact")
+    internal class AutoMigration28To29 : AutoMigrationSpec
 }

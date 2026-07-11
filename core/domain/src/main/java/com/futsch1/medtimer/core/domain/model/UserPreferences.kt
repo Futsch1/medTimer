@@ -55,7 +55,11 @@ data class UserPreferences(
     val automaticBackupDirectory: Uri?,
     // Location based snooze
     val locationBasedSnooze: Boolean,
-    val homeLocation: HomeLocation?
+    val homeLocation: HomeLocation?,
+    // Automation settings
+    val prescriptionPickupDays: Int,
+    val prescriptionContact: String,
+    val prescriptionMessageTemplate: String
 ) {
     companion object {
         fun default(): UserPreferences {
@@ -89,7 +93,10 @@ data class UserPreferences(
                 automaticBackupInterval = BackupInterval.NEVER,
                 automaticBackupDirectory = null,
                 locationBasedSnooze = false,
-                homeLocation = null
+                homeLocation = null,
+                prescriptionPickupDays = 3,
+                prescriptionContact = "",
+                prescriptionMessageTemplate = "Hi, I'm running low on: {medicines}. Could you send a new prescription? Thank you!"
             )
         }
     }

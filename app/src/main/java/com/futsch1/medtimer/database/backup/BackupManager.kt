@@ -173,7 +173,7 @@ class BackupManager @AssistedInject constructor(
             )
         }
         if (checkedItems[0] || checkedItems[1]) {
-            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
+            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).createBackup())
             createAndSave(gson.toJson(jsonObject))
         }
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
@@ -253,7 +253,7 @@ class BackupManager @AssistedInject constructor(
                 )
             }
             if (rootElement.has(SETTINGS_KEY)) {
-                JSONSettingsBackup(preferencesDataSource).applyBackup(rootElement[SETTINGS_KEY].toString())
+                JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).applyBackup(rootElement[SETTINGS_KEY].toString())
             }
         } catch (_: JsonSyntaxException) {
             restoreSuccessful = false
@@ -309,26 +309,41 @@ class BackupManager @AssistedInject constructor(
                 backupRepository.getReminderEventBackup()
             )
         )
-        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
+        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource, persistentDataDataSource).createBackup())
 
         val json = gson.toJson(jsonObject)
         val filename = ExportBackupPath.backupFilename
-        val success = saveToDirectory(directoryUri, filename, json)
+        val result = saveToDirectory(directoryUri, filename, json)
 
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
-            if (success) {
-                persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
-                Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
-            } else {
-                MaterialAlertDialogBuilder(context)
-                    .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)
-                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
-                    .show()
+            when (result) {
+                SaveResult.SUCCESS -> {
+                    persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
+                    Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
+                }
+                // The most common cause: the SAF permission for the chosen folder was revoked,
+                // which happens whenever the app is reinstalled (a fresh debug build with a
+                // different signature counts as a reinstall too) - the fix is re-selecting the
+                // folder, not retrying, so this gets its own message rather than the generic one.
+                SaveResult.PERMISSION_LOST -> {
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_folder_permission_lost)
+                        .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
+                        .show()
+                }
+                SaveResult.FAILED -> {
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)
+                        .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
+                        .show()
+                }
             }
         }
     }
 
-    private fun saveToDirectory(directoryUri: Uri, filename: String, content: String): Boolean {
+    private enum class SaveResult { SUCCESS, PERMISSION_LOST, FAILED }
+
+    private fun saveToDirectory(directoryUri: Uri, filename: String, content: String): SaveResult {
         return try {
             val root = DocumentFile.fromTreeUri(context, directoryUri)
             val file = root?.createFile("application/json", filename)
@@ -336,13 +351,16 @@ class BackupManager @AssistedInject constructor(
                 context.contentResolver.openOutputStream(file.uri)?.use { outputStream ->
                     outputStream.write(content.toByteArray())
                 }
-                true
+                SaveResult.SUCCESS
             } else {
-                false
+                SaveResult.FAILED
             }
+        } catch (e: SecurityException) {
+            Log.e(LogTags.BACKUP, "Auto backup failed: permission to the backup folder was lost", e)
+            SaveResult.PERMISSION_LOST
         } catch (e: Exception) {
             Log.e(LogTags.BACKUP, "Auto backup failed", e)
-            false
+            SaveResult.FAILED
         }
     }
 

@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +31,8 @@ import javax.inject.Inject
 class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderEventRepository: ReminderEventRepository,
+    private val reminderRepository: ReminderRepository,
+    private val medicineRepository: MedicineRepository,
     private val timeFormatter: TimeFormatter,
 ) : ViewModel() {
 
@@ -126,6 +131,9 @@ class EditEventViewModel @Inject constructor(
             val event = storedEvent ?: return@launch
             val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
             val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
+            val newStatus = status ?: event.status
+
+            val stockHandled = adjustStockForEdit(event, newStatus)
 
             val updatedEvent = event.copy(
                 medicineName = medicineName.value,
@@ -133,11 +141,36 @@ class EditEventViewModel @Inject constructor(
                 notes = notes.value,
                 remindedTimestamp = remindedTimestamp,
                 processedTimestamp = processedTimestamp,
-                status = status ?: event.status
+                status = newStatus,
+                stockHandled = stockHandled
             )
 
             reminderEventRepository.update(updatedEvent)
         }
+    }
+
+    /**
+     * Keeps the medicine's stock in sync with a TAKEN/SKIPPED edit instead of leaving
+     * [ReminderEvent.stockHandled] silently out of step with the actual amount, the way toggling
+     * taken/skipped from a notification or the overview popup menu already does (see
+     * NotificationProcessor.doStockHandling). Stock-type events (refill, out of stock, expiration)
+     * hide the taken/skipped toggle in the UI, so [event.status] is never TAKEN/SKIPPED/RAISED for
+     * those and this is a no-op for them.
+     */
+    private suspend fun adjustStockForEdit(event: ReminderEvent, newStatus: ReminderEvent.ReminderStatus): Boolean {
+        if (event.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) return event.stockHandled
+
+        val wasHandled = event.stockHandled
+        val willBeHandled = newStatus == ReminderEvent.ReminderStatus.TAKEN
+        val oldAmount = if (wasHandled) MedicineHelper.parseAmount(event.amount) ?: 0.0 else 0.0
+        val newAmount = if (willBeHandled) MedicineHelper.parseAmount(amount.value) ?: 0.0 else 0.0
+        val delta = newAmount - oldAmount
+
+        if (delta != 0.0) {
+            val reminder = reminderRepository.fetch(event.reminderId) ?: return willBeHandled
+            medicineRepository.decreaseStock(reminder.medicineRelId, delta)
+        }
+        return willBeHandled
     }
 
     private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {

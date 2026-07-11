@@ -27,6 +27,7 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
+import com.futsch1.medtimer.feature.ui.medicine.ocr.PackageTextRecognizer
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
@@ -75,6 +76,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     @Inject
     lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
+
+    @Inject
+    lateinit var textRecognizer: PackageTextRecognizer
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -151,6 +155,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
         setupReminders(overview)
 
         setupLogManualDose(overview)
+        setupScanPackage(overview)
         FilterToggleGroup(
             overview.findViewById(R.id.filterButtons),
             overviewViewModel,
@@ -236,6 +241,17 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
                     overviewViewModel.day
                 ).logManualDose()
             }
+        }
+    }
+
+    private fun setupScanPackage(overview: FragmentSwipeLayout) {
+        val scanPackage = overview.findViewById<Button>(R.id.scanPackage)
+        if (!textRecognizer.isSupported) {
+            scanPackage.visibility = View.GONE
+            return
+        }
+        scanPackage.setOnClickListener {
+            findNavController().navigate(R.id.action_overviewFragment_to_packageScanFragment)
         }
     }
 

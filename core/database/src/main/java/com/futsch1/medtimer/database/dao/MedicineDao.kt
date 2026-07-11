@@ -22,6 +22,14 @@ abstract class MedicineDao {
     }
 
     @Transaction
+    open suspend fun increaseStock(medicineId: Int, increaseAmount: Double): FullMedicineEntity? {
+        val medicine = fetch(medicineId) ?: return null
+        medicine.amount = maxOf(0.0, medicine.amount + increaseAmount)
+        update(medicine)
+        return getFull(medicineId)
+    }
+
+    @Transaction
     @Query("SELECT * FROM Medicine ORDER BY sortOrder")
     abstract fun getAllFlow(): Flow<List<FullMedicineEntity>>
 

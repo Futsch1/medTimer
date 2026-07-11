@@ -27,6 +27,21 @@
             app:key="stock_refill_now"
             app:title="@string/refill_now" />
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/prescription_request" app:summary="@string/prescription_request_help">
+        <SwitchPreferenceCompat
+            app:key="exclude_from_prescription_request"
+            app:title="@string/exclude_from_prescription_request" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/nfc_automation" app:summary="@string/nfc_automation_help">
+        <Preference
+            app:icon="@drawable/check2_circle"
+            app:key="nfc_take_link"
+            app:title="@string/nfc_copy_take_link" />
+        <Preference
+            app:icon="@drawable/cart2"
+            app:key="nfc_refill_link"
+            app:title="@string/nfc_copy_refill_link" />
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/expiration_settings">
         <Preference
             app:key="production_date"

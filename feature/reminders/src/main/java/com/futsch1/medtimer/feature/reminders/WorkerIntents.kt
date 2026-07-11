@@ -77,10 +77,13 @@ fun getRefillActionIntent(context: Context, processedNotificationData: Processed
     return buildActionIntent(context, processedNotificationData, ProcessorCode.Refill.action)
 }
 
-fun getRefillIntent(context: Context, medicineId: Int): Intent {
+fun getRefillIntent(context: Context, medicineId: Int, quantity: Double? = null): Intent {
     val intent = Intent(ProcessorCode.Refill.action)
     intent.setClass(context, ReminderProcessorBroadcastReceiver::class.java)
     intent.putExtra(ActivityCodes.EXTRA_MEDICINE_ID, medicineId)
+    if (quantity != null) {
+        intent.putExtra(ActivityCodes.EXTRA_AMOUNT, quantity)
+    }
     return intent
 }
 

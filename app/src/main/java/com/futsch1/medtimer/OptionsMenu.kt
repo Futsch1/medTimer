@@ -28,7 +28,6 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.database.DatabaseManager
 import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
@@ -63,8 +62,6 @@ class OptionsMenu @AssistedInject constructor(
     private val csvEventExportFactory: CSVEventExport.Factory,
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
-    private val databaseManager: DatabaseManager,
-    private val generateTestDataFactory: GenerateTestData.Factory,
     @param:Dispatcher(MedTimerDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) val mainDispatcher: CoroutineDispatcher,
     val tagsFragmentFactory: TagsFragment.Factory
@@ -134,7 +131,6 @@ class OptionsMenu @AssistedInject constructor(
         setupAppURL()
         setupClearEvents()
         setupExport()
-        setupGenerateTestData()
         setupShowAppIntro()
 
         handleTagFilter()
@@ -208,31 +204,6 @@ class OptionsMenu @AssistedInject constructor(
         item.setOnMenuItemClickListener { _ ->
             fragment.lifecycleScope.launch { medicineExport(false) }
             true
-        }
-    }
-
-    fun setupGenerateTestData() {
-        val item = menu.findItem(R.id.generate_test_data)
-        val itemWithEvents = menu.findItem(R.id.generate_test_data_and_events)
-        if (BuildConfig.DEBUG) {
-            itemWithEvents.isVisible = true
-            item.isVisible = true
-            val menuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem: MenuItem? ->
-                idlingResource.setBusy()
-                fragment.lifecycleScope.launch(ioDispatcher) {
-                    databaseManager.deleteAll()
-                    generateTestDataFactory.create(menuItem === itemWithEvents)
-                        .generateTestMedicine()
-                    requestScheduleNextNotification(context)
-                    idlingResource.setIdle()
-                }
-                true
-            }
-            item.setOnMenuItemClickListener(menuItemClickListener)
-            itemWithEvents.setOnMenuItemClickListener(menuItemClickListener)
-        } else {
-            item.isVisible = false
-            itemWithEvents.isVisible = false
         }
     }
 

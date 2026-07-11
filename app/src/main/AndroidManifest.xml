@@ -22,6 +22,10 @@
         tools:ignore="FullScreenIntentPolicy" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <attribution
         android:label="@string/audio_playback_attribution"

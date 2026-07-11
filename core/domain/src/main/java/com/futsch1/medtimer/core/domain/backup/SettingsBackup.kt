@@ -32,5 +32,12 @@ data class SettingsBackup(
     val locationBasedSnooze: Boolean,
     val homeLatitude: Double?,
     val homeLongitude: Double?,
-    val homeRadiusMeters: Float?
+    val homeRadiusMeters: Float?,
+    val prescriptionPickupDays: Int = 3,
+    val prescriptionContact: String? = null,
+    val prescriptionMessageTemplate: String? = null,
+    // Nullable and added after this class already shipped: Gson leaves it null (rather than the
+    // JVM zero-value primitives get) when restoring a backup written before this field existed, so
+    // that case is distinguishable from "restoring an empty PersistentDataBackup" for free.
+    val persistentData: PersistentDataBackup? = null
 )

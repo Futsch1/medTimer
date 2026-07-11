@@ -1,15 +1,43 @@
 package com.futsch1.medtimer.core.datastore
 
 import androidx.core.net.toUri
+import com.futsch1.medtimer.core.domain.backup.PersistentDataBackup
 import com.futsch1.medtimer.core.domain.backup.SettingsBackup
 import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.HomeLocation
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.core.domain.model.PersistentData
+import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import java.time.LocalTime
 
-fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
+fun PersistentData.toPersistentDataBackup(): PersistentDataBackup = PersistentDataBackup(
+    analysisDays = analysisDays,
+    iconColor = iconColor,
+    activeStatisticsFragment = activeStatisticsFragment.name,
+    lastCustomDose = lastCustomDose,
+    lastCustomDoseAmount = lastCustomDoseAmount,
+    filterTags = filterTags,
+    checkedFilters = checkedFilters.map { it.name }.toSet()
+)
+
+fun PersistentDataBackup.applyTo(persistentDataDataSource: PersistentDataDataSource) {
+    persistentDataDataSource.setAnalysisDays(analysisDays)
+    persistentDataDataSource.setIconColor(iconColor)
+    persistentDataDataSource.setActiveStatisticsFragment(
+        runCatching { StatisticFragment.valueOf(activeStatisticsFragment) }.getOrDefault(StatisticFragment.CHARTS)
+    )
+    persistentDataDataSource.setLastCustomDose(lastCustomDose)
+    persistentDataDataSource.setLastCustomDoseAmount(lastCustomDoseAmount)
+    persistentDataDataSource.setFilterTags(filterTags)
+    persistentDataDataSource.setCheckedFilters(
+        checkedFilters.mapNotNull { runCatching { OverviewFilter.valueOf(it) }.getOrNull() }.toSet()
+    )
+}
+
+fun UserPreferences.toSettingsBackup(persistentData: PersistentData): SettingsBackup = SettingsBackup(
     weekendStartTimeMinutes = weekendStartTime.toSecondOfDay() / 60,
     weekendEndTimeMinutes = weekendEndTime.toSecondOfDay() / 60,
     weekendMode = weekendMode,
@@ -42,9 +70,14 @@ fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
     homeLatitude = homeLocation?.latitude,
     homeLongitude = homeLocation?.longitude,
     homeRadiusMeters = homeLocation?.radiusMeters,
+    prescriptionPickupDays = prescriptionPickupDays,
+    prescriptionContact = prescriptionContact,
+    prescriptionMessageTemplate = prescriptionMessageTemplate,
+    persistentData = persistentData.toPersistentDataBackup(),
 )
 
-fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
+fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource, persistentDataDataSource: PersistentDataDataSource) {
+    persistentData?.applyTo(persistentDataDataSource)
     preferencesDataSource.setWeekendStartTime(
         LocalTime.of(weekendStartTimeMinutes / 60, weekendStartTimeMinutes % 60)
     )
@@ -90,5 +123,18 @@ fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
         preferencesDataSource.saveHomeLocation(HomeLocation(lat, lon, homeRadiusMeters ?: 150f))
     } else {
         preferencesDataSource.clearHomeLocation()
+    }
+    // Gson bypasses the constructor default for this field (added after SettingsBackup already
+    // shipped), so an old backup JSON missing the key deserializes it to 0, not 3 - treat 0 as
+    // "not present in this backup" rather than overwriting the current setting with a bogus value.
+    if (prescriptionPickupDays > 0) {
+        preferencesDataSource.putString(
+            PreferencesDataSource.PRESCRIPTION_PICKUP_DAYS,
+            prescriptionPickupDays.toString()
+        )
+    }
+    prescriptionContact?.let { preferencesDataSource.putString(PreferencesDataSource.PRESCRIPTION_CONTACT, it) }
+    prescriptionMessageTemplate?.let {
+        preferencesDataSource.putString(PreferencesDataSource.PRESCRIPTION_MESSAGE_TEMPLATE, it)
     }
 }

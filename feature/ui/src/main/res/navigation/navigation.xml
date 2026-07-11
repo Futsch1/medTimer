@@ -13,7 +13,14 @@
         <action
             android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
             app:destination="@id/editMedicineFragment" />
+        <action
+            android:id="@+id/action_medicinesFragment_to_packageScanFragment"
+            app:destination="@id/packageScanFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/packageScanFragment"
+        android:name="com.futsch1.medtimer.feature.ui.medicine.scan.PackageScanFragment"
+        android:label="@string/scan_package" />
     <fragment
         android:id="@+id/preferencesFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.PreferencesFragment"
@@ -36,6 +43,15 @@
         <action
             android:id="@+id/action_preferencesFragment_to_snoozeSettingsFragment"
             app:destination="@id/snoozeSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_nfcRfidSettingsFragment"
+            app:destination="@id/nfcRfidSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_prescriptionSettingsFragment"
+            app:destination="@id/prescriptionSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_scannedPackagesFragment"
+            app:destination="@id/scannedPackagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/weekendModePreferencesFragment"
@@ -113,13 +129,29 @@
         android:name="com.futsch1.medtimer.feature.ui.preferences.SnoozeSettingsFragment"
         android:label="@string/snooze_settings" />
     <fragment
+        android:id="@+id/nfcRfidSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.preferences.NfcRfidSettingsFragment"
+        android:label="@string/nfc_rfid_settings" />
+    <fragment
+        android:id="@+id/prescriptionSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.preferences.PrescriptionSettingsFragment"
+        android:label="@string/prescription_settings" />
+    <fragment
+        android:id="@+id/scannedPackagesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.medicine.scan.ScannedPackagesFragment"
+        android:label="@string/scanned_packages_settings" />
+    <fragment
         android:id="@+id/displaySettingsFragment"
         android:name="com.futsch1.medtimer.feature.ui.preferences.DisplaySettingsFragment"
         android:label="@string/display_settings" />
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.futsch1.medtimer.feature.ui.overview.OverviewFragment"
-        android:label="@string/tab_overview" />
+        android:label="@string/tab_overview">
+        <action
+            android:id="@+id/action_overviewFragment_to_packageScanFragment"
+            app:destination="@id/packageScanFragment" />
+    </fragment>
     <fragment
         android:id="@+id/advancedReminderPreferencesRootFragment"
         android:name="com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"

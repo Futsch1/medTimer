@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MedTimer</string>
+    <string name="empty_today">No reminders for today</string>
+    <string name="action_taken">Taken</string>
+    <string name="action_skipped">Skip</string>
+    <string name="action_snooze">Snooze</string>
+    <string name="action_snooze_home">Snooze until home</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="status_pending">%1$s · %2$s</string>
+    <string name="action_sent_taken">Marked as taken</string>
+    <string name="action_sent_variable_amount">Open your phone to enter the amount</string>
+    <string name="action_sent_skipped">Marked as skipped</string>
+    <string name="action_sent_snooze">Snoozed</string>
+    <string name="action_sent_snooze_home">Will remind when home</string>
+    <string name="phone_not_connected">Phone not connected</string>
+</resources>

@@ -2,8 +2,11 @@ package com.futsch1.medtimer.feature.reminders.notificationFactory
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.net.toUri
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper.formatAmount
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -21,7 +24,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
     @param:ApplicationContext private val context: Context,
     @Assisted val reminderNotification: ReminderNotification,
     notificationManager: NotificationManager,
-    preferencesDataSource: PreferencesDataSource
+    private val preferencesDataSource: PreferencesDataSource
 ) :
     NotificationFactory(
         medicineIcons,
@@ -57,6 +60,30 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
                 context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
                 intentBuilder.pendingRefill
             )
+
+        if (preferencesDataSource.preferences.value.prescriptionContact.isNotBlank()) {
+            builder.addAction(
+                R.drawable.clipboard_plus,
+                context.getString(R.string.request_prescription),
+                getRequestPrescriptionPendingIntent()
+            )
+        }
+    }
+
+    private fun getRequestPrescriptionPendingIntent(): PendingIntent {
+        // Explicit intent targeting feature:ui's NfcActionActivity by class name string, not by
+        // ::class.java reference - feature:ui already depends on feature:reminders, so a
+        // compile-time reference the other way round would be a module dependency cycle.
+        val requestPrescriptionIntent = Intent(Intent.ACTION_VIEW).apply {
+            setClassName(context.packageName, "com.futsch1.medtimer.feature.ui.nfc.NfcActionActivity")
+            data = "medtimer://requestPrescription".toUri()
+        }
+        return PendingIntent.getActivity(
+            context,
+            reminderNotification.reminderNotificationData.notificationId,
+            requestPrescriptionIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     @AssistedFactory

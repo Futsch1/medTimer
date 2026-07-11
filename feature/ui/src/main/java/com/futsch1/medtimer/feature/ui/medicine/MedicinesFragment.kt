@@ -28,6 +28,7 @@ import com.futsch1.medtimer.feature.ui.BuildConfig
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
+import com.futsch1.medtimer.feature.ui.medicine.ocr.PackageTextRecognizer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -67,6 +68,9 @@ class MedicinesFragment : Fragment() {
     @Inject
     lateinit var optionsMenuFactory: OptionsMenuFactory
 
+    @Inject
+    lateinit var textRecognizer: PackageTextRecognizer
+
     private lateinit var optionsMenu: EntityEditOptionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +90,12 @@ class MedicinesFragment : Fragment() {
         requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
         requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
         medicinesMenu.medicinesProvider = { medicinesScreenViewModel.medicines.value }
+        medicinesMenu.scanPackageSupported = textRecognizer.isSupported
+        medicinesMenu.onScanPackage = {
+            findNavController(requireView()).navigate(
+                MedicinesFragmentDirections.actionMedicinesFragmentToPackageScanFragment()
+            )
+        }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
