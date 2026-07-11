@@ -20,6 +20,7 @@ import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
+import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
@@ -37,8 +38,8 @@ class ReminderViewHolder(
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
     val clickDelegate: ClickDelegate,
-    private val actionsFactory: ActionsFactory,
-    private val medicineIcons: MedicineIcons
+    private val medicineIcons: MedicineIcons,
+    private val actionsVisitor: ActionsVisitor
 ) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -55,12 +56,12 @@ class ReminderViewHolder(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
             clickDelegate: ClickDelegate,
-            actionsFactory: ActionsFactory,
-            medicineIcons: MedicineIcons
+            medicineIcons: MedicineIcons,
+            actionsVisitor: ActionsVisitor
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, actionsFactory, medicineIcons)
+            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, medicineIcons, actionsVisitor)
         }
     }
 
@@ -129,7 +130,7 @@ class ReminderViewHolder(
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val actions = actionsFactory.createActions(event, fragmentActivity)
+        val actions = ActionsFactory().createActions(event)
         val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {
@@ -168,7 +169,8 @@ class ReminderViewHolder(
             val buttonView = view.findViewById<View>(button.associatedId)
             buttonView.setOnClickListener {
                 coroutineScope.launch {
-                    actions.buttonClicked(button)
+                    actions.buttonClicked(actionsVisitor)
+                    actionsVisitor.complete(button)
                 }
                 popupWindow.dismiss()
             }

@@ -27,8 +27,8 @@ import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
+import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
@@ -62,12 +62,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
     lateinit var persistentDataDataSource: PersistentDataDataSource
 
     @Inject
-    lateinit var actionsFactory: ActionsFactory
-
-    @Inject
-    lateinit var multipleActionsFactory: MultipleActions.Factory
-
-    @Inject
     lateinit var manualDoseFactory: ManualDose.Factory
 
     @Inject
@@ -75,6 +69,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
 
     @Inject
     lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
+
+    @Inject
+    lateinit var actionsVisitor: ActionsVisitor
 
     private lateinit var adapter: RemindersViewAdapter
     private lateinit var reminders: RecyclerView
@@ -296,9 +293,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
             actionsMenu = null
         } else {
             actionMode?.title = selectedCount.toString()
-            val multipleActions =
-                multipleActionsFactory.create(adapter.getSelectedItems(), requireActivity())
-            actionsMenu = ActionsMenu(actionMode!!.menu, multipleActions)
+            actionsMenu =
+                ActionsMenu(actionMode!!.menu, MultipleActions(adapter.getSelectedItems()))
         }
 
     }
@@ -325,7 +321,8 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
                         item?.itemId ?: return false
                     )
                     lifecycleScope.launch {
-                        actionsMenu?.actions?.buttonClicked(button)
+                        actionsMenu?.actions?.buttonClicked(actionsVisitor)
+                        actionsVisitor.complete(button)
                         mode?.finish()
                     }
                 }

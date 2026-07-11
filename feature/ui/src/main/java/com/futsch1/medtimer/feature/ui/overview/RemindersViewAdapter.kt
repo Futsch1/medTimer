@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.futsch1.medtimer.core.common.helpers.IdlingListAdapter
 import com.futsch1.medtimer.core.ui.MedicineIcons
-import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
+import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,15 +14,18 @@ import dagger.assisted.AssistedInject
 class RemindersViewAdapter @AssistedInject constructor(
     @Assisted diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
     @Assisted val fragmentActivity: FragmentActivity,
-    private val actionsFactory: ActionsFactory,
-    private val medicineIcons: MedicineIcons
+    private val medicineIcons: MedicineIcons,
+    private val actionsVisitor: ActionsVisitor
 ) :
     IdlingListAdapter<OverviewEvent, ReminderViewHolder>(diffCallback),
     ReminderViewHolder.ClickDelegate {
 
     @AssistedFactory
     fun interface Factory {
-        fun create(diffCallback: DiffUtil.ItemCallback<OverviewEvent>, fragmentActivity: FragmentActivity): RemindersViewAdapter
+        fun create(
+            diffCallback: DiffUtil.ItemCallback<OverviewEvent>,
+            fragmentActivity: FragmentActivity
+        ): RemindersViewAdapter
     }
 
     var selectionMode: Boolean = false
@@ -41,7 +44,8 @@ class RemindersViewAdapter @AssistedInject constructor(
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        val holder = ReminderViewHolder.create(parent, fragmentActivity, this, actionsFactory, medicineIcons)
+        val holder =
+            ReminderViewHolder.create(parent, fragmentActivity, this, medicineIcons, actionsVisitor)
         holder.contentContainer.setOnLongClickListener {
             clickListener?.onItemLongClick(holder.layoutPosition)
             true

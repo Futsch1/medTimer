@@ -21,48 +21,40 @@ class ShowReminderNotificationProcessor @Inject constructor(
     suspend fun showReminder(reminderNotificationData: ReminderNotificationData) {
         Log.d(LogTags.REMINDER, "Request show notification for reminder: $reminderNotificationData")
 
-        // Check if given notification ID is already active
-        if (!isNotificationActive(reminderNotificationData)) {
-            alarmProcessor.setSecondaryAlarm(reminderNotificationData)
-        }
+        // Remove pending notifications for those where we want to show the reminder
+        synchronizeNotifications(reminderNotificationData)
+        alarmProcessor.setSecondaryAlarm(reminderNotificationData)
     }
 
-    private suspend fun isNotificationActive(reminderNotificationData: ReminderNotificationData): Boolean {
-        val notificationData = getNotificationData(reminderNotificationData)
-        if (notificationData != null) {
-            // Check if all reminder event IDs from the notification are also in the reminder notification data
-            val reminderEventIds = reminderNotificationData.reminderEventIds.toList()
-            val notificationReminderEventIds = notificationData.reminderEventIds.toList()
-            if (notificationData.remindInstant != reminderNotificationData.remindInstant) {
+    private suspend fun synchronizeNotifications(reminderNotificationData: ReminderNotificationData) {
+        val notificationDataToEventIds = mutableMapOf<ReminderNotificationData, MutableList<Int>>()
+        for (reminderEventId in reminderNotificationData.reminderEventIds) {
+            val notificationData = getShownNotificationData(reminderEventId)
+            if (notificationData != null) {
                 Log.d(
                     LogTags.REMINDER,
                     "Notification nID ${reminderNotificationData.notificationId} found, but reminder was rescheduled"
                 )
-                notificationProcessor.removeRemindersFromNotification(
-                    reminderNotificationData.notificationId,
-                    reminderNotificationData.reminderEventIds.toList()
-                )
-                return false
-            }
-            if (notificationReminderEventIds.containsAll(reminderEventIds)) {
-                Log.d(
-                    LogTags.REMINDER,
-                    "Notification nID ${reminderNotificationData.notificationId} found, reminder event IDs $reminderEventIds are in covered IDs $notificationReminderEventIds"
-                )
-                return true
+                notificationDataToEventIds.getOrPut(notificationData) { mutableListOf() }.add(reminderEventId)
             }
         }
-        return false
+
+        for ((notificationData, reminderEventIds) in notificationDataToEventIds) {
+            Log.d(
+                LogTags.REMINDER,
+                "Notification nID ${reminderNotificationData.notificationId} will be rescheduled"
+            )
+            notificationProcessor.removeRemindersFromNotification(
+                notificationData.notificationId,
+                reminderEventIds
+            )
+        }
     }
 
-    private fun getNotificationData(reminderNotificationData: ReminderNotificationData): ReminderNotificationData? {
+    private fun getShownNotificationData(reminderEventId: Int): ReminderNotificationData? {
         for (notification in notificationManager.activeNotifications) {
             val notificationData = ReminderNotificationData.fromBundle(notification.notification.extras)
-            if (notificationData.notificationId == reminderNotificationData.notificationId || notificationData.reminderEventIds.all {
-                    reminderNotificationData.reminderEventIds.contains(
-                        it
-                    )
-                }) {
+            if (notificationData.reminderEventIds.contains(reminderEventId)) {
                 return notificationData
             }
         }
