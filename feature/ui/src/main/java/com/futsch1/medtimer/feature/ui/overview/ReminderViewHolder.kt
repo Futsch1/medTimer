@@ -199,8 +199,9 @@ class ReminderViewHolder(
             val buttonView = view.findViewById<View>(button.associatedId)
             buttonView.setOnClickListener {
                 coroutineScope.launch {
-                    actions.buttonClicked(actionsVisitor)
-                    actionsVisitor.complete(button)
+                    actionsVisitor.startVisit(button).use {
+                        actions.buttonClicked(actionsVisitor)
+                    }
                 }
                 popupWindow.dismiss()
             }

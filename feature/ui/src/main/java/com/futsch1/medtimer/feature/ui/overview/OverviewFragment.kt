@@ -321,8 +321,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener,
                         item?.itemId ?: return false
                     )
                     lifecycleScope.launch {
-                        actionsMenu?.actions?.buttonClicked(actionsVisitor)
-                        actionsVisitor.complete(button)
+                        actionsVisitor.startVisit(button).use {
+                            actionsMenu?.actions?.buttonClicked(actionsVisitor)
+                        }
                         mode?.finish()
                     }
                 }

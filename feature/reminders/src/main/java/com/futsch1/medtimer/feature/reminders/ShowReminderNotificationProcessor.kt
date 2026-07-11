@@ -33,17 +33,13 @@ class ShowReminderNotificationProcessor @Inject constructor(
             if (notificationData != null) {
                 Log.d(
                     LogTags.REMINDER,
-                    "Notification nID ${reminderNotificationData.notificationId} found, but reminder was rescheduled"
+                    "Notification nID ${notificationData.notificationId} found, but reminder ${reminderEventId} was rescheduled"
                 )
                 notificationDataToEventIds.getOrPut(notificationData) { mutableListOf() }.add(reminderEventId)
             }
         }
 
         for ((notificationData, reminderEventIds) in notificationDataToEventIds) {
-            Log.d(
-                LogTags.REMINDER,
-                "Notification nID ${reminderNotificationData.notificationId} will be rescheduled"
-            )
             notificationProcessor.removeRemindersFromNotification(
                 notificationData.notificationId,
                 reminderEventIds

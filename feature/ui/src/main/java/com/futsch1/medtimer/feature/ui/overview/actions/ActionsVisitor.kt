@@ -33,6 +33,17 @@ class ActionsVisitor @Inject constructor(
 ) {
     private val visitScheduledReminder: MutableList<ScheduledReminder> = mutableListOf()
     private val visitedPastReminderEvents: MutableList<PastReminderEvent> = mutableListOf()
+
+    fun startVisit(button: Button): AutoCloseable {
+        visitScheduledReminder.clear()
+        visitedPastReminderEvents.clear()
+        return AutoCloseable {
+            fragmentActivity.lifecycleScope.launch {
+                complete(button)
+            }
+        }
+    }
+
     fun visit(scheduledReminder: ScheduledReminder) {
         visitScheduledReminder.add(scheduledReminder)
     }
@@ -41,7 +52,7 @@ class ActionsVisitor @Inject constructor(
         visitedPastReminderEvents.add(pastReminderEvent)
     }
 
-    suspend fun complete(button: Button) {
+    private suspend fun complete(button: Button) {
         if (button == Button.RESCHEDULE) {
             rescheduleReminders()
         } else {
