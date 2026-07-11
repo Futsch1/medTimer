@@ -7,6 +7,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject
+import androidx.test.uiautomator.UiSelector
+import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
@@ -21,18 +24,15 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.ope
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import com.futsch1.medtimer.utilities.waitForView
+import com.futsch1.medtimer.utilities.openNotification
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import java.text.DateFormat
-import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
-import java.time.format.TextStyle
 import java.util.Calendar
-import java.util.Locale
+import kotlin.test.assertNull
 
 
 class ReminderTest : BaseTestHelper() {
@@ -403,7 +403,15 @@ class ReminderTest : BaseTestHelper() {
         device.findObject(By.desc(context.getString(R.string.tabular_view)))?.click()
         AndroidTestHelper.waitForIdle(1_000)
 
-        internalAssert(device.findObject(By.textContains(timeFormatter().toDateTimeString(newReminded))) != null)
+        internalAssert(
+            device.findObject(
+                By.textContains(
+                    timeFormatter().toDateTimeString(
+                        newReminded
+                    )
+                )
+            ) != null
+        )
         internalAssert(device.findObject(By.textContains(timeFormatter().toDateTimeString(newTaken))) != null)
     }
 
@@ -415,10 +423,18 @@ class ReminderTest : BaseTestHelper() {
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickListItemChild(
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            0,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton
+        )
         clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
+        clickListItemChild(
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            0,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton
+        )
         clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
         clickDialogPositiveButton()
 
@@ -562,26 +578,21 @@ class ReminderTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun reschedule() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         AndroidTestHelper.createMedicine("Test")
-        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
+        AndroidTestHelper.createIntervalReminder("1", 60)
 
         AndroidTestHelper.navigateTo(MainMenu.OVERVIEW)
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         AndroidTestHelper.waitForIdle(2_000)
-        // Wait until the raised reminder is actually shown before clicking position 0.
-        // The raise is asynchronous (broadcast -> DB -> overview Flow -> rebind);
-        // until it lands, the only row is the still-pending scheduled occurrence, so a position-0 click would reschedule that instead,
-        // creating a second event and leaving the raised one at the top.
-        // The raised event sorts first (earlier timestamp), so once it appears, it owns position 0.
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-            .waitForView(By.desc(context.getString(R.string.reminded)), 5_000)
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.rescheduleButton)
+        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
+        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
+
+        val menuButton: UiObject =
+            device.findObject(UiSelector().description("More options"))
+        menuButton.click()
+
+        clickOn(R.string.reschedule_reminder)
+
         AndroidTestHelper.setTime(19, 0, false)
 
         assertContains(timeFormatter().minutesToTimeString(19 * 60))
@@ -591,26 +602,19 @@ class ReminderTest : BaseTestHelper() {
             com.futsch1.medtimer.feature.ui.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
-
-        val secondDay =
-            DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
-        clickOn(secondDay)
-
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.rescheduleButton)
-        AndroidTestHelper.setTime(23, 0, false)
-
-        assertContains(timeFormatter().minutesToTimeString(23 * 60))
         assertCustomAssertionAtPosition(
             com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
+            1,
             com.futsch1.medtimer.feature.ui.R.id.stateButton,
             matches(withTagValue(equalTo(R.drawable.alarm)))
         )
+
+        openNotification().use {
+            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
+
+            assertNull(notification)
+        }
+
     }
 
     private class CyclicReminderInfo(
