@@ -27,21 +27,22 @@ class ShowReminderNotificationProcessor @Inject constructor(
     }
 
     private suspend fun synchronizeNotifications(reminderNotificationData: ReminderNotificationData) {
-        val notificationDataToEventIds = mutableMapOf<ReminderNotificationData, MutableList<Int>>()
+        val notificationDataToEventIds = mutableMapOf<Int, MutableList<Int>>()
         for (reminderEventId in reminderNotificationData.reminderEventIds) {
             val notificationData = getShownNotificationData(reminderEventId)
             if (notificationData != null) {
                 Log.d(
                     LogTags.REMINDER,
-                    "Notification nID ${notificationData.notificationId} found, but reminder ${reminderEventId} was rescheduled"
+                    "Notification nID ${notificationData.notificationId} found, but reminder $reminderEventId was rescheduled"
                 )
-                notificationDataToEventIds.getOrPut(notificationData) { mutableListOf() }.add(reminderEventId)
+                notificationDataToEventIds.getOrPut(notificationData.notificationId) { mutableListOf() }
+                    .add(reminderEventId)
             }
         }
 
-        for ((notificationData, reminderEventIds) in notificationDataToEventIds) {
+        for ((notificationId, reminderEventIds) in notificationDataToEventIds) {
             notificationProcessor.removeRemindersFromNotification(
-                notificationData.notificationId,
+                notificationId,
                 reminderEventIds
             )
         }
