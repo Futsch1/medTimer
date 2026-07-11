@@ -204,6 +204,10 @@
     <string name="hours_string">שעות</string>
     <string name="days_string">ימים</string>
     <string name="weeks_string">שבועות</string>
+    <string name="minutes_abbr">דק</string>
+    <string name="hours_abbr">שע</string>
+    <string name="days_abbr">ימ</string>
+    <string name="weeks_abbr">שב</string>
     <string name="create_reminder">צרו תזכורת</string>
     <string name="interval">מחזור</string>
     <string name="interval_start_time">זמן תחילת מחזור</string>

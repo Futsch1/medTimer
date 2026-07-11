@@ -225,6 +225,10 @@
     <string name="hours_string">ساعات</string>
     <string name="days_string">أيام</string>
     <string name="weeks_string">أسابيع</string>
+    <string name="minutes_abbr">د</string>
+    <string name="hours_abbr">س</string>
+    <string name="days_abbr">ي</string>
+    <string name="weeks_abbr">أ</string>
     <string name="create_reminder">أنشئ تذكير</string>
     <string name="interval">الفاصل الزمني</string>
     <string name="interval_start_time">وقت بداية الفاصل الزمني</string>

@@ -207,6 +207,10 @@
     <string name="hours_string">Ore</string>
     <string name="days_string">Giorni</string>
     <string name="weeks_string">Settimane</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">g</string>
+    <string name="weeks_abbr">s</string>
     <string name="create_reminder">Crea il promemoria</string>
     <string name="interval">Intervallo</string>
     <string name="interval_start_time">Orario di inizio dell\'intervallo</string>

@@ -201,6 +201,10 @@
     <string name="hours_string">Saatler</string>
     <string name="days_string">Günler</string>
     <string name="weeks_string">Haftalar</string>
+    <string name="minutes_abbr">d</string>
+    <string name="hours_abbr">s</string>
+    <string name="days_abbr">g</string>
+    <string name="weeks_abbr">h</string>
     <string name="create_reminder">Hatırlatma oluşturun</string>
     <string name="interval">Aralık</string>
     <string name="interval_start_time">Aralık başlangıç zamanı</string>

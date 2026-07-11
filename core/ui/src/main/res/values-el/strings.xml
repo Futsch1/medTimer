@@ -201,6 +201,10 @@
     <string name="hours_string">Ώρες</string>
     <string name="days_string">Ημέρες</string>
     <string name="weeks_string">Εβδομάδες</string>
+    <string name="minutes_abbr">λ</string>
+    <string name="hours_abbr">ώ</string>
+    <string name="days_abbr">η</string>
+    <string name="weeks_abbr">ε</string>
     <string name="create_reminder">Δημιουργία υπενθύμισης</string>
     <string name="interval">Χρονικό διάστημα</string>
     <string name="interval_start_time">Ώρα έναρξης χρονικού διαστήματος</string>
