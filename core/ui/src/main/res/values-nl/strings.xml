@@ -328,6 +328,6 @@
     <string name="same_as_medicine">Hetzelfde als medicijn</string>
     <string name="previous_week">Vorige week</string>
     <string name="next_week">Volgende week</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Na %s</string>
     <string name="move_medicine">Medicijn verplaatsen</string>
 </resources>

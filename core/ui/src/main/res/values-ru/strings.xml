@@ -336,6 +336,6 @@
     <string name="same_as_medicine">Как у лекарства</string>
     <string name="previous_week">Предыдущая неделя</string>
     <string name="next_week">Следующая неделя</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">После %s</string>
     <string name="move_medicine">Переместить лекарство</string>
 </resources>
