@@ -6,6 +6,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.buildReminderEvent
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +19,11 @@ class ReminderEventCreator @Inject constructor(
     suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
         val existingReminderEvent = reminderEventRepository.fetch(scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond)
         if (existingReminderEvent != null) {
+            if (existingReminderEvent.remindedTimestamp.epochSecond != reminderTimeStamp) {
+                val rescheduledEvent = existingReminderEvent.copy(remindedTimestamp = Instant.ofEpochSecond(reminderTimeStamp))
+                reminderEventRepository.update(rescheduledEvent)
+                return rescheduledEvent
+            }
             return existingReminderEvent
         }
 
