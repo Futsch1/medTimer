@@ -202,6 +202,10 @@
     <string name="hours_string">Tuntia</string>
     <string name="days_string">Päivää</string>
     <string name="weeks_string">Viikkoa</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">t</string>
+    <string name="days_abbr">p</string>
+    <string name="weeks_abbr">v</string>
     <string name="create_reminder">Luo muistutus</string>
     <string name="interval">Väliaika</string>
     <string name="interval_start_time">Väliajan aloitusaika</string>

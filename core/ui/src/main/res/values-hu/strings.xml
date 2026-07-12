@@ -202,6 +202,10 @@
     <string name="hours_string">Óra</string>
     <string name="days_string">Nap</string>
     <string name="weeks_string">Hét</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">ó</string>
+    <string name="days_abbr">n</string>
+    <string name="weeks_abbr">h</string>
     <string name="create_reminder">Emlékeztető létrehozása</string>
     <string name="interval">Ismétlési idő</string>
     <string name="interval_start_time">Ismétlés kezdete</string>

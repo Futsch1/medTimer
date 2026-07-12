@@ -55,7 +55,9 @@ class RepositoryFakes {
         }
 
         // ReminderRepository mocks
-        `when`(runBlocking { reminderRepositoryMock.fetch(anyInt()) }).thenAnswer { reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel() }
+        `when`(runBlocking { reminderRepositoryMock.fetch(anyInt()) }).thenAnswer {
+            reminders.firstOrNull { r -> r.reminderId == it.arguments[0] }?.toModel()
+        }
 
         // ReminderEventRepository mocks
         `when`(runBlocking { reminderEventRepositoryMock.getForScheduling(anyList()) }).thenAnswer { reminderEvents.map { it.toModel() } }
@@ -94,7 +96,8 @@ class RepositoryFakes {
         return medicines.map { medicineEntity ->
             val fullMedicine = FullMedicineEntity()
             fullMedicine.medicine = medicineEntity
-            fullMedicine.reminders = this.reminders.filter { r -> r.medicineRelId == medicineEntity.medicineId }.toMutableList()
+            fullMedicine.reminders =
+                this.reminders.filter { r -> r.medicineRelId == medicineEntity.medicineId }.toMutableList()
             fullMedicine.tags = listOf()
             fullMedicine.toModel()
         }
@@ -121,7 +124,12 @@ class NotificationManagerFake {
         return statusBarNotifications.toTypedArray()
     }
 
-    fun add(id: Int, reminderIds: IntArray = intArrayOf(), reminderEventIds: IntArray = intArrayOf(), remindTimestamp: Long = 0) {
+    fun add(
+        id: Int,
+        reminderIds: IntArray = intArrayOf(),
+        reminderEventIds: IntArray = intArrayOf(),
+        remindTimestamp: Long = 0
+    ) {
         val notificationMock = mock<Notification>()
         val bundleMock = mock<Bundle>()
         notificationMock.extras = bundleMock
@@ -129,6 +137,7 @@ class NotificationManagerFake {
         `when`(bundleMock.getIntArray(ActivityCodes.EXTRA_REMINDER_EVENT_ID_LIST)).thenReturn(reminderEventIds)
         `when`(bundleMock.getLong(ActivityCodes.EXTRA_REMIND_INSTANT)).thenReturn(remindTimestamp)
         `when`(bundleMock.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID)).thenReturn(id)
+        `when`(bundleMock.getInt(ActivityCodes.EXTRA_NOTIFICATION_ID, -1)).thenReturn(id)
         activeNotifications[id] = notificationMock
     }
 }
@@ -157,7 +166,9 @@ class TestReminderContext {
         `when`(localPreferencesMock.getInt(eq("notificationId"), anyInt())).thenAnswer { notificationId }
         val editMock = mock<SharedPreferences.Editor>()
         `when`(localPreferencesMock.edit()).thenReturn(editMock)
-        `when`(editMock.putInt(eq("notificationId"), anyInt())).then { notificationId = it.arguments[1] as Int; editMock }
+        `when`(editMock.putInt(eq("notificationId"), anyInt())).then {
+            notificationId = it.arguments[1] as Int; editMock
+        }
 
         `when`(notificationChannelMock.id).thenReturn("channel")
 

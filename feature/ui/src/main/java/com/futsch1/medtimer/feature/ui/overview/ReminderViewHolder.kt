@@ -20,6 +20,7 @@ import com.futsch1.medtimer.core.ui.ViewColorHelper
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
+import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
@@ -37,8 +38,8 @@ class ReminderViewHolder(
     val parent: ViewGroup,
     val fragmentActivity: FragmentActivity,
     val clickDelegate: ClickDelegate,
-    private val actionsFactory: ActionsFactory,
-    private val medicineIcons: MedicineIcons
+    private val medicineIcons: MedicineIcons,
+    private val actionsVisitor: ActionsVisitor
 ) : RecyclerView.ViewHolder(itemView) {
 
     val reminderText: TextView = itemView.findViewById(R.id.reminderText)
@@ -55,12 +56,19 @@ class ReminderViewHolder(
             parent: ViewGroup,
             fragmentActivity: FragmentActivity,
             clickDelegate: ClickDelegate,
-            actionsFactory: ActionsFactory,
-            medicineIcons: MedicineIcons
+            medicineIcons: MedicineIcons,
+            actionsVisitor: ActionsVisitor
         ): ReminderViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.overview_item, parent, false)
-            return ReminderViewHolder(view, parent, fragmentActivity, clickDelegate, actionsFactory, medicineIcons)
+            return ReminderViewHolder(
+                view,
+                parent,
+                fragmentActivity,
+                clickDelegate,
+                medicineIcons,
+                actionsVisitor
+            )
         }
     }
 
@@ -71,7 +79,12 @@ class ReminderViewHolder(
         reminderText.text = event.text
         setBarsVisibility(event.eventPosition)
         setBackgrounds()
-        ViewColorHelper.setIconToImageView(medicineIcons, contentContainer, reminderIcon, event.icon)
+        ViewColorHelper.setIconToImageView(
+            medicineIcons,
+            contentContainer,
+            reminderIcon,
+            event.icon
+        )
 
         setStateButton(event.state)
         setupStateMenu()
@@ -86,7 +99,13 @@ class ReminderViewHolder(
         }
         if (selected) {
             contentContainer.backgroundTintList =
-                ColorStateList.valueOf(MaterialColors.getColor(contentContainer, com.google.android.material.R.attr.colorSecondaryContainer))
+                ColorStateList.valueOf(
+                    MaterialColors.getColor(
+                        contentContainer,
+                        com.google.android.material.R.attr.colorSecondaryContainer
+                    )
+                )
+            contentContainer.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
             stateButton.backgroundTintList = contentContainer.backgroundTintList
         } else {
             if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.color != null) {
@@ -124,18 +143,25 @@ class ReminderViewHolder(
 
     @SuppressLint("InflateParams")
     private fun popupStateMenu(view: View) {
-        val popupView: View = LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_overview_event, null)
-        val popupWindow = PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val popupView: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.circular_menu_overview_event, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         popupWindow.isFocusable = true
         popupWindow.isOutsideTouchable = true
 
-        val actions = actionsFactory.createActions(event, fragmentActivity)
-        val visible = createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
+        val actions = ActionsFactory().createActions(event)
+        val visible =
+            createActionsView(actions!!, popupView, popupWindow, fragmentActivity.lifecycleScope)
 
         if (visible) {
             // Position the view at the vertical center of the button
             val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            val heightMeasureSpec =
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
             popupView.measure(widthMeasureSpec, heightMeasureSpec)
 
             val location = IntArray(2)
@@ -146,7 +172,12 @@ class ReminderViewHolder(
         }
     }
 
-    private fun createActionsView(actions: Actions, view: View, popupWindow: PopupWindow, coroutineScope: CoroutineScope): Boolean {
+    private fun createActionsView(
+        actions: Actions,
+        view: View,
+        popupWindow: PopupWindow,
+        coroutineScope: CoroutineScope
+    ): Boolean {
         view.setOnClickListener {
             popupWindow.dismiss()
         }
@@ -168,7 +199,9 @@ class ReminderViewHolder(
             val buttonView = view.findViewById<View>(button.associatedId)
             buttonView.setOnClickListener {
                 coroutineScope.launch {
-                    actions.buttonClicked(button)
+                    actionsVisitor.startVisit(button).use {
+                        actions.buttonClicked(actionsVisitor)
+                    }
                 }
                 popupWindow.dismiss()
             }
@@ -197,8 +230,10 @@ class ReminderViewHolder(
     }
 
     private fun setBarsVisibility(position: EventPosition) {
-        topBar.visibility = if (position == EventPosition.FIRST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
-        bottomBar.visibility = if (position == EventPosition.LAST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
+        topBar.visibility =
+            if (position == EventPosition.FIRST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
+        bottomBar.visibility =
+            if (position == EventPosition.LAST || position == EventPosition.ONLY) View.GONE else View.VISIBLE
     }
 
     fun interface ClickDelegate {

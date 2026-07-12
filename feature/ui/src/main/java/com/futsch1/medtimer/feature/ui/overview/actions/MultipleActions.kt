@@ -1,26 +1,15 @@
 package com.futsch1.medtimer.feature.ui.overview.actions
 
-import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 
-class MultipleActions @AssistedInject constructor(
-    private val actionsFactory: ActionsFactory,
-    @Assisted val events: List<OverviewEvent>,
-    @Assisted fragmentActivity: FragmentActivity
+class MultipleActions(
+    val events: List<OverviewEvent>
 ) : Actions {
 
-    @AssistedFactory
-    fun interface Factory {
-        fun create(events: List<OverviewEvent>, fragmentActivity: FragmentActivity): MultipleActions
-    }
-
-    val allActions = events.map { actionsFactory.createActions(it, fragmentActivity) }
-    override suspend fun buttonClicked(button: Button) {
+    val allActions = events.map { ActionsFactory().createActions(it) }
+    override suspend fun buttonClicked(visitor: ActionsVisitor) {
         for (action in allActions) {
-            action?.buttonClicked(button)
+            action?.buttonClicked(visitor)
         }
     }
 

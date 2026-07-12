@@ -230,6 +230,10 @@
     <string name="advanced_settings">Zaawansowane</string>
     <string name="days_string">Dni</string>
     <string name="weeks_string">Tygodnie</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">g</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">t</string>
     <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
     <string name="notification_settings_high">Wysoki priorytet</string>
     <string name="notification_settings_out_of_stock">Ustawienia przypomnienia o wyczerpaniu zapasów</string>

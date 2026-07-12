@@ -198,6 +198,10 @@
     <string name="hours_string">Timer</string>
     <string name="days_string">Dage</string>
     <string name="weeks_string">Uger</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">t</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">u</string>
     <string name="create_reminder">Opret påmindelse</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval starttid</string>

@@ -80,7 +80,8 @@ class ShowReminderNotificationProcessorTest {
     val boundReminderRepository: ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
 
     @BindValue
-    val boundReminderEventRepository: ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
+    val boundReminderEventRepository: ReminderEventRepository =
+        reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
     val boundPreferencesDataSource: PreferencesDataSource = reminderContext.preferencesDataSourceMock
@@ -159,11 +160,11 @@ class ShowReminderNotificationProcessorTest {
         }
 
         // Never cancel a notification
-        verify(reminderContext.notificationManagerFake.mock, never()).cancel(anyInt())
+        verify(reminderContext.notificationManagerFake.mock, times(1)).cancel(1)
         // Never raise a new one
         verify(reminderContext.notificationManagerFake.mock, never()).notify(anyInt(), any())
         // No alarm set when notification is already active
-        verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), anyLong(), any())
+        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), anyLong(), any())
     }
 
     @Test
@@ -197,8 +198,6 @@ class ShowReminderNotificationProcessorTest {
         reminderNotificationData.notificationId = 1
         reminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1, 2))
 
-        reminderNotificationData.remindInstant = reminderNotificationData.remindInstant.plusSeconds(10)
-
         runBlocking {
             showReminderNotificationProcessor.showReminder(
                 reminderNotificationData
@@ -208,6 +207,6 @@ class ShowReminderNotificationProcessorTest {
         // Cancel the notification
         verify(reminderContext.notificationManagerFake.mock, times(1)).cancel(1)
         // The rescheduled reminder
-        verify(reminderContext.alarmManagerMock, never()).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
+        verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
     }
 }

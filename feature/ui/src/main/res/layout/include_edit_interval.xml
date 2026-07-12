@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/minutes_string" />
+            android:text="@string/minutes_abbr" />
 
         <Button
             android:id="@+id/intervalHours"
@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/hours_string" />
+            android:text="@string/hours_abbr" />
 
         <Button
             android:id="@+id/intervalDays"
@@ -51,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/days_string" />
+            android:text="@string/days_abbr" />
 
         <Button
             android:id="@+id/intervalWeeks"
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/weeks_string" />
+            android:text="@string/weeks_abbr" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 

@@ -204,6 +204,10 @@
     <string name="hours_string">Timmar</string>
     <string name="days_string">Dagar</string>
     <string name="weeks_string">Veckor</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">t</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">v</string>
     <string name="create_reminder">Skapa påminnelse</string>
     <string name="interval">Intervall</string>
     <string name="interval_start_time">Starttid för intervall</string>

@@ -209,6 +209,10 @@
     <string name="hours_string">Часы</string>
     <string name="days_string">Дни</string>
     <string name="weeks_string">Недели</string>
+    <string name="minutes_abbr">м</string>
+    <string name="hours_abbr">ч</string>
+    <string name="days_abbr">д</string>
+    <string name="weeks_abbr">н</string>
     <string name="create_reminder">Создать напоминание</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Время начала интервала</string>

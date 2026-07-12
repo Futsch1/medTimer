@@ -201,6 +201,10 @@
     <string name="hours_string">Stunden</string>
     <string name="days_string">Tage</string>
     <string name="weeks_string">Wochen</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">t</string>
+    <string name="weeks_abbr">w</string>
     <string name="create_reminder">Erinnerung erstellen</string>
     <string name="interval">Intervall</string>
     <string name="interval_start_time">Startzeit des Intervalls</string>
