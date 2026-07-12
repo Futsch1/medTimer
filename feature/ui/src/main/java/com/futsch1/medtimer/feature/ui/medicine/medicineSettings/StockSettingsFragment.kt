@@ -148,6 +148,14 @@ class StockSettingsFragment : MedicinePreferences(
                     val summary = medicineStringFormatter.getStockRunOutText(runOutDate, simulatedThrough)
                     withContext(mainDispatcher) {
                         findPreference<EditTextPreference>("stock_run_out_date")?.summary = summary
+
+                        if (runOutDate == null) {
+                            findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = false
+                            findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = false
+                        } else {
+                            findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = true
+                            findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = true
+                        }
                     }
                 }
         }

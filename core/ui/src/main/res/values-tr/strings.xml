@@ -201,6 +201,10 @@
     <string name="hours_string">Saatler</string>
     <string name="days_string">Günler</string>
     <string name="weeks_string">Haftalar</string>
+    <string name="minutes_abbr">d</string>
+    <string name="hours_abbr">s</string>
+    <string name="days_abbr">g</string>
+    <string name="weeks_abbr">h</string>
     <string name="create_reminder">Hatırlatma oluşturun</string>
     <string name="interval">Aralık</string>
     <string name="interval_start_time">Aralık başlangıç zamanı</string>
@@ -324,6 +328,6 @@
     <string name="same_as_medicine">İlaçla aynı</string>
     <string name="previous_week">Önceki hafta</string>
     <string name="next_week">Sonraki hafta</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">%s sonrası</string>
     <string name="move_medicine">İlacı taşı</string>
 </resources>

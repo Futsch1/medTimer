@@ -31,6 +31,7 @@
         android:id="@+id/overviewWeek"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:cv_daySize="seventhWidth"
         app:cv_dayViewResource="@layout/calendar_day_layout"
         app:layout_constraintEnd_toStartOf="@id/overviewNextWeek"
         app:layout_constraintStart_toEndOf="@id/overviewPrevWeek"

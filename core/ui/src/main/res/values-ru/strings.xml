@@ -209,6 +209,10 @@
     <string name="hours_string">Часы</string>
     <string name="days_string">Дни</string>
     <string name="weeks_string">Недели</string>
+    <string name="minutes_abbr">м</string>
+    <string name="hours_abbr">ч</string>
+    <string name="days_abbr">д</string>
+    <string name="weeks_abbr">н</string>
     <string name="create_reminder">Создать напоминание</string>
     <string name="interval">Интервал</string>
     <string name="interval_start_time">Время начала интервала</string>
@@ -332,6 +336,6 @@
     <string name="same_as_medicine">Как у лекарства</string>
     <string name="previous_week">Предыдущая неделя</string>
     <string name="next_week">Следующая неделя</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">После %s</string>
     <string name="move_medicine">Переместить лекарство</string>
 </resources>

@@ -25,7 +25,6 @@ import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -54,10 +52,8 @@ import com.patrykandpatrick.vico.compose.cartesian.Zoom
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModel
-import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.ColumnCartesianLayerModel
-import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
@@ -398,12 +394,6 @@ private fun MedicinePerDayBarChart(
     val resolvedColors = remember(seriesColors, hasData) {
         if (hasData) seriesColors.map { Color(it) } else listOf(Color.Transparent)
     }
-    val modelProducer = remember { CartesianChartModelProducer() }
-    // Plot against the real epoch-day x-values so labels can be derived from the x-value itself.
-    LaunchedEffect(epochDays, plotSeries) {
-        modelProducer.runTransaction { columnSeries { plotSeries.forEach { series(x = epochDays, y = it) } } }
-    }
-
     // Vico 3.x throws if the formatter ever returns a blank string, so the fallback must be non-blank.
     val labelByEpoch = remember(epochDays, dayLabels) { epochDays.zip(dayLabels).toMap() }
     val bottomAxisValueFormatter = remember(labelByEpoch) {
@@ -450,6 +440,12 @@ private fun MedicinePerDayBarChart(
             null
         },
     )
+    // Build the model synchronously on composition.
+    val model = remember(epochDays, plotSeries) {
+        CartesianChartModel(
+            ColumnCartesianLayerModel.build { plotSeries.forEach { series(x = epochDays, y = it) } },
+        )
+    }
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = remember { Zoom.Content })
     val hostModifier = Modifier.fillMaxSize().padding(16.dp)
 
@@ -457,18 +453,6 @@ private fun MedicinePerDayBarChart(
         modifier = modifier.fillMaxSize(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
-        if (LocalInspectionMode.current) {
-            // @Preview renders don't run the LaunchedEffect that fills the producer, so the bars would
-            // be blank. Build the model synchronously here; production keeps the producer for its
-            // difference animations.
-            val previewModel = remember(epochDays, plotSeries) {
-                CartesianChartModel(
-                    ColumnCartesianLayerModel.build { plotSeries.forEach { series(x = epochDays, y = it) } },
-                )
-            }
-            CartesianChartHost(chart = chart, model = previewModel, modifier = hostModifier, zoomState = zoomState)
-        } else {
-            CartesianChartHost(chart = chart, modelProducer = modelProducer, modifier = hostModifier, zoomState = zoomState)
-        }
+        CartesianChartHost(chart = chart, model = model, modifier = hostModifier, zoomState = zoomState)
     }
 }

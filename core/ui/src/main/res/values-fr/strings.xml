@@ -207,6 +207,10 @@
     <string name="hours_string">Heures</string>
     <string name="days_string">Jours</string>
     <string name="weeks_string">Semaines</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">j</string>
+    <string name="weeks_abbr">s</string>
     <string name="create_reminder">Créer un rappel</string>
     <string name="interval">Intervalle</string>
     <string name="interval_start_time">Heure de début de l\'intervalle</string>
@@ -330,6 +334,6 @@
     <string name="same_as_medicine">Identique au médicament</string>
     <string name="previous_week">Semaine précédente</string>
     <string name="next_week">Semaine suivante</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Après %s</string>
     <string name="move_medicine">Déplacer le médicament</string>
 </resources>

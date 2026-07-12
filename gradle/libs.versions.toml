@@ -42,7 +42,7 @@ android-test-rules = "1.7.0"
 android-test-runner = "1.7.0"
 android-test-orchestrator = "1.6.1"
 screengrab = "2.1.1"
-uiautomator = "2.3.0"
+uiautomator = "2.4.0"
 barista = "4.3.0"
 
 # Build
@@ -53,15 +53,15 @@ documentfile = "1.1.0"
 kotlinx-coroutines = "1.11.0"
 
 # Compose
-compose-bom = "2026.06.00"
+compose-bom = "2026.06.01"
 # material3 is hand-pinned to the 1.5.0-alpha line (overriding the BOM) because MaterialExpressiveTheme
 # is still internal on the stable 1.4.x line; revert to BOM-managed once Expressive ships stable.
-material3-expressive = "1.5.0-alpha22"
+material3-expressive = "1.5.0-alpha23"
 # Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; resolves to androidx.window
 # 1.5.x in practice (upgraded by the Compose BOM's ui dependency) — no separate window pin.
 material3-adaptive = "1.2.0"
 vico = "3.2.3"
-kotlinx-collections-immutable = "0.5.0"
+kotlinx-collections-immutable = "0.5.1"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
 kotlin-compose-compiler = "2.2.10"
 

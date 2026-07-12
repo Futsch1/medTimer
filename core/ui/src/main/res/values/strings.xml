@@ -213,6 +213,10 @@
     <string name="hours_string">Hours</string>
     <string name="days_string">Days</string>
     <string name="weeks_string">Weeks</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">w</string>
     <string name="create_reminder">Create reminder</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Interval start time</string>

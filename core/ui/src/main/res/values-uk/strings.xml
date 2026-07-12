@@ -207,6 +207,10 @@
     <string name="hours_string">Години</string>
     <string name="days_string">Дні</string>
     <string name="weeks_string">Тижні</string>
+    <string name="minutes_abbr">х</string>
+    <string name="hours_abbr">г</string>
+    <string name="days_abbr">д</string>
+    <string name="weeks_abbr">т</string>
     <string name="create_reminder">Створити нагадування</string>
     <string name="interval">Інтервал</string>
     <string name="interval_start_time">Початок інтервалу</string>
@@ -336,6 +340,6 @@
     <string name="same_as_medicine">Як у ліках</string>
     <string name="previous_week">Попередній тиждень</string>
     <string name="next_week">Наступний тиждень</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Після %s</string>
     <string name="move_medicine">Перемістити ліки</string>
 </resources>

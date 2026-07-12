@@ -54,7 +54,10 @@ internal class JSONReminderEventBackupUnitTest {
       ],
       "lastIntervalReminderTimeInMinutes": 12,
       "notes": "Notes",
-      "reminderType": "LINKED"
+      "reminderType": "LINKED",
+      "stockBefore": -1.0,
+      "stockAfter": -1.0,
+      "stockUnit": ""
     }
   ]
 }
@@ -95,5 +98,8 @@ internal class JSONReminderEventBackupUnitTest {
         )
         assertEquals(reminderEvent1.notes, reminderEvent2.notes)
         assertEquals(reminderEvent1.reminderType, reminderEvent2.reminderType)
+        assertEquals(reminderEvent1.stockBefore, reminderEvent2.stockBefore)
+        assertEquals(reminderEvent1.stockAfter, reminderEvent2.stockAfter)
+        assertEquals(reminderEvent1.stockUnit, reminderEvent2.stockUnit)
     }
 }

@@ -196,6 +196,10 @@
     <string name="interval_based_reminder">間隔型提醒</string>
     <string name="days_string">天</string>
     <string name="weeks_string">週</string>
+    <string name="minutes_abbr">分</string>
+    <string name="hours_abbr">時</string>
+    <string name="days_abbr">天</string>
+    <string name="weeks_abbr">週</string>
     <string name="create_reminder">建立提醒</string>
     <string name="interval">間隔</string>
     <string name="interval_start_time">間隔開始時間</string>
@@ -318,6 +322,6 @@
     <string name="same_as_medicine">與藥品相同</string>
     <string name="previous_week">上一週</string>
     <string name="next_week">下一週</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">在 %s 之後</string>
     <string name="move_medicine">移動藥物</string>
 </resources>

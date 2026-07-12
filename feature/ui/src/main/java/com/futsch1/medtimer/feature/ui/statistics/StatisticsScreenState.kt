@@ -37,10 +37,18 @@ interface StatisticsScreenState {
  * Mutable implementation owned by [StatisticsScreenViewModel]. Repository flows are collected in the
  * view-model and written into these properties; user actions go through view-model methods that
  * mutate them. The screen never writes here — it only reads the [StatisticsScreenState] interface.
+ *
+ * @param activeView Initial active view, seeded from persistence so the first emission matches the
+ *   user's last selection.
+ * @param analysisDays Initial analysis range in days, seeded from persistence so the first chart
+ *   computation uses the saved range rather than the fallback default.
  */
-class MutableStatisticsScreenState : StatisticsScreenState {
-    override var activeView by mutableStateOf(StatisticFragment.CHARTS)
-    override var analysisDays by mutableIntStateOf(DEFAULT_ANALYSIS_DAYS)
+class MutableStatisticsScreenState(
+    activeView: StatisticFragment = StatisticFragment.CHARTS,
+    analysisDays: Int = DEFAULT_ANALYSIS_DAYS,
+) : StatisticsScreenState {
+    override var activeView by mutableStateOf(activeView)
+    override var analysisDays by mutableIntStateOf(analysisDays)
     override var charts by mutableStateOf<ChartsState?>(null)
     override var query by mutableStateOf("")
     override var calendarDayEvents by mutableStateOf<ImmutableMap<LocalDate, List<CalendarDayEvent>>>(persistentMapOf())

@@ -56,6 +56,7 @@ fun MedicineBackup.toEntity(): MedicineEntity = MedicineEntity(
 fun ReminderEntity.toBackup(): ReminderBackup = ReminderBackup(
     reminderId = reminderId,
     timeInMinutes = timeInMinutes,
+    createdTimestamp = createdTimestamp,
     consecutiveDays = consecutiveDays,
     pauseDays = pauseDays,
     instructions = instructions,
@@ -83,6 +84,7 @@ fun ReminderEntity.toBackup(): ReminderBackup = ReminderBackup(
 fun ReminderBackup.toEntity(): ReminderEntity = ReminderEntity(
     reminderId = reminderId,
     timeInMinutes = timeInMinutes,
+    createdTimestamp = createdTimestamp,
     consecutiveDays = consecutiveDays,
     pauseDays = pauseDays,
     instructions = instructions,
@@ -129,6 +131,9 @@ fun ReminderEventEntity.toBackup(): ReminderEventBackup = ReminderEventBackup(
     lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
     notes = notes,
     reminderType = ReminderType.valueOf(reminderType.name),
+    stockBefore = stockBefore,
+    stockAfter = stockAfter,
+    stockUnit = stockUnit,
 )
 
 fun ReminderEventBackup.toEntity(): ReminderEventEntity = ReminderEventEntity(
@@ -145,6 +150,9 @@ fun ReminderEventBackup.toEntity(): ReminderEventEntity = ReminderEventEntity(
     lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
     notes = notes,
     reminderType = ReminderEntityType.valueOf(reminderType.name),
+    stockBefore = stockBefore,
+    stockAfter = stockAfter,
+    stockUnit = stockUnit,
 )
 
 // --- FullMedicine ---

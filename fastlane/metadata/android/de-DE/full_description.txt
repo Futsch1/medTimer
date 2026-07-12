@@ -1,4 +1,6 @@
-Behalten Sie den Überblick über Ihre Medikamente mit MedTimer
+Medizinische Erinnerungen und Verlauf mit vollständiger Offline-Privatsphäre
+
+Behalte den Überblick über deine Medikamente mit MedTimer
 
 MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamenten, mit der du deine Medikamente effektiv und mit voller Kontrolle über deine sensiblen Daten verwalten kannst.
 
@@ -7,8 +9,8 @@ Flexible und personalisierte Erinnerungen:
 - Verwalte eine unbegrenzte Anzahl Medikamente mit individuellen Erinnerungen pro Medikament (mit einfacher Standardeinstellung für tägliche Erinnerungen).
 - Erstelle flexible Erinnerungen mit Pausen und nur für bestimmten Tage (z.B. für die Antibabypille).
 - Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
-- Verschiebe ("snooze") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
-- Standortbasierter Snooze: Erneute Benachrichtigung bei Heimkehr nach einem Snooze.
+- Verschiebe ("schlummern") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
+- Standortbasiertes Schlummern: Erneute Benachrichtigung bei Heimkehr nach einem Snooze.
 - Protokolliere zusätzliche, ungeplante Einnahmen.
 - Erstelle intervallbasierte Erinnerungen und solche, die auf vorherige Einnahmen nach einer gewissen Zeit folgen.
 

@@ -201,6 +201,10 @@
     <string name="hours_string">Uren</string>
     <string name="days_string">Dagen</string>
     <string name="weeks_string">Weken</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">u</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">w</string>
     <string name="create_reminder">Herinnering maken</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Starttijd interval</string>
@@ -324,6 +328,6 @@
     <string name="same_as_medicine">Hetzelfde als medicijn</string>
     <string name="previous_week">Vorige week</string>
     <string name="next_week">Volgende week</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Na %s</string>
     <string name="move_medicine">Medicijn verplaatsen</string>
 </resources>

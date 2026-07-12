@@ -214,6 +214,10 @@
     <string name="hours_string">Hodiny</string>
     <string name="days_string">Dny</string>
     <string name="weeks_string">Týdny</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">t</string>
     <string name="create_reminder">Vytvořit připomenutí</string>
     <string name="interval">Interval</string>
     <string name="interval_start_time">Čas začátku intervalu</string>
@@ -336,6 +340,6 @@
     <string name="same_as_medicine">Stejné jako lék</string>
     <string name="previous_week">Předchozí týden</string>
     <string name="next_week">Příští týden</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Po %s</string>
     <string name="move_medicine">Přesunout lék</string>
 </resources>

@@ -207,6 +207,10 @@
     <string name="hours_string">Ore</string>
     <string name="days_string">Giorni</string>
     <string name="weeks_string">Settimane</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">h</string>
+    <string name="days_abbr">g</string>
+    <string name="weeks_abbr">s</string>
     <string name="create_reminder">Crea il promemoria</string>
     <string name="interval">Intervallo</string>
     <string name="interval_start_time">Orario di inizio dell\'intervallo</string>
@@ -330,6 +334,6 @@
     <string name="same_as_medicine">Come per la medicina</string>
     <string name="previous_week">Settimana precedente</string>
     <string name="next_week">Settimana successiva</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Dopo %s</string>
     <string name="move_medicine">Sposta medicinale</string>
 </resources>

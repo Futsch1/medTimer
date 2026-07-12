@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.Geofence
@@ -41,6 +42,11 @@ class GmsGeofenceRegistrar @Inject constructor(
         }
         if (!hasRequiredPermissions()) {
             Log.w(LogTags.LOCATION, "Location permissions not granted, cannot register geofence")
+            return false
+        }
+
+        if (!isValid(homeLocation)) {
+            Log.w(LogTags.LOCATION, "Invalid home location parameters: $homeLocation")
             return false
         }
 
@@ -87,6 +93,12 @@ class GmsGeofenceRegistrar @Inject constructor(
             context, 0, intent,
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
+    }
+
+    private fun isValid(homeLocation: HomeLocation): Boolean {
+        return homeLocation.latitude in -90.0..90.0 &&
+                homeLocation.longitude in -180.0..180.0 &&
+                homeLocation.radiusMeters > 0
     }
 
     override fun hasRequiredPermissions(): Boolean {

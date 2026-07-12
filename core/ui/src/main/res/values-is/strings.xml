@@ -177,6 +177,10 @@
     <string name="hours_string">Klukkustundir</string>
     <string name="days_string">Dagar</string>
     <string name="weeks_string">Vikur</string>
+    <string name="minutes_abbr">m</string>
+    <string name="hours_abbr">k</string>
+    <string name="days_abbr">d</string>
+    <string name="weeks_abbr">v</string>
     <string name="create_reminder">Búa til áminningu</string>
     <string name="interval">Tímabil</string>
     <string name="interval_start_time">Byrjun tímabils</string>
@@ -203,5 +207,5 @@
     <string name="show_home_location_on_map">Sýna heimilisstaðsetningu á korti</string>
     <string name="set_home_location_confirm">Setja heimilisstaðsetningu á\n%1$s, %2$s?</string>
     <string name="home_location_error">Ekki tókst að ákvarða núverandi staðsetningu þína</string>
-    <string name="stock_after_simulation_end">After %s</string>
+    <string name="stock_after_simulation_end">Eftir %s</string>
 </resources>
