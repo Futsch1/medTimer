@@ -593,11 +593,14 @@ class ReminderTest : BaseTestHelper() {
         AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
         clickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 1)
 
-        val menuButton: UiObject =
-            device.findObject(UiSelector().description("More options"))
-        menuButton.click()
-
-        clickOn(R.string.reschedule_reminder)
+        try {
+            clickOn(com.futsch1.medtimer.feature.ui.R.id.rescheduleButton)
+        } catch (_: Exception) {
+            val menuButton: UiObject =
+                device.findObject(UiSelector().description("More options"))
+            menuButton.click()
+            clickOn(R.string.reschedule_reminder)
+        }
 
         AndroidTestHelper.setTime(19, 0, false)
 
