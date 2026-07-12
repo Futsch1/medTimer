@@ -129,6 +129,8 @@ class ActionsVisitor @Inject constructor(
                         newReminderEvents.add(newReminderEvent)
                     }
 
+                    applicationScope.launch { commandBus.scheduleNextNotification() }
+
                     if (preferencesDataSource.preferences.value.combineNotifications) {
                         requestShowReminders(newReminderEvents, newReminderTime)
                     } else {
