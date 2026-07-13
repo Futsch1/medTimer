@@ -84,14 +84,14 @@ filters by a single selected medicine instead.
 
 **Stock run-out date**:
 The predicted date a medicine's remaining stock reaches zero, derived from the scheduling simulation.
-Exposed as `FutureRemindersRepository.stockRunOutDates: StateFlow<Map<Int, LocalDate?>>`. A `null`
+Exposed as `SimulatedRemindersRepository.stockRunOutDates: StateFlow<Map<Int, LocalDate?>>`. A `null`
 value means the stock does not run out within the active simulation window; the UI renders this as
 "After [simulatedThrough date]". Medicine-list display is deferred to the Compose migration; stock
 settings consumes this signal today.
 _Avoid_: expiry date (that is the physical expiration, a separate field), depletion date.
 
 **Simulation window**:
-The time horizon, in days from today, that `FutureRemindersRepository` simulates into the future.
+The time horizon, in days from today, that `SimulatedRemindersRepository` simulates into the future.
 Dynamic: each UI consumer registers its required number of days via `requestWindow(consumerId, days)`;
 the repository uses the maximum of all active registrations, falling back to `DEFAULT_SIMULATION_DAYS`
 (28) when no consumer is registered. A consumer releases its claim via `releaseWindow(consumerId)`.

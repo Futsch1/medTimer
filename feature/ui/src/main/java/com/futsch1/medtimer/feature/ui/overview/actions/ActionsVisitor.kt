@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
@@ -12,10 +13,12 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -29,7 +32,9 @@ class ActionsVisitor @Inject constructor(
     private val timePickerDialogFactory: TimePickerDialogFactory,
     private val fragmentActivity: FragmentActivity,
     private val reminderEventCreator: ReminderEventCreator,
-    private val preferencesDataSource: PreferencesDataSource
+    private val preferencesDataSource: PreferencesDataSource,
+    private val commandBus: ReminderCommandBus,
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private val visitScheduledReminder: MutableList<ScheduledReminder> = mutableListOf()
     private val visitedPastReminderEvents: MutableList<PastReminderEvent> = mutableListOf()
@@ -70,10 +75,12 @@ class ActionsVisitor @Inject constructor(
                     Button.SKIPPED -> processTakenOrSkipped(pastReminderEvent.reminderEvent, false)
                     Button.RERAISE -> processDeleteReRaiseReminderEvent(pastReminderEvent.reminderEvent)
                     Button.DELETE -> processDeleteReminderEvent(pastReminderEvent.reminderEvent)
-                    Button.ACKNOWLEDGED -> ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(
-                        fragmentActivity,
-                        pastReminderEvent.reminderEvent
-                    )
+                    Button.ACKNOWLEDGED -> applicationScope.launch {
+                        commandBus.markReminderEvents(
+                            listOf(pastReminderEvent.reminderEvent.reminderEventId),
+                            ReminderEvent.ReminderStatus.ACKNOWLEDGED
+                        )
+                    }
 
                     else -> Unit
                 }
@@ -122,6 +129,8 @@ class ActionsVisitor @Inject constructor(
                         newReminderEvents.add(newReminderEvent)
                     }
 
+                    applicationScope.launch { commandBus.scheduleNextNotification() }
+
                     if (preferencesDataSource.preferences.value.combineNotifications) {
                         requestShowReminders(newReminderEvents, newReminderTime)
                     } else {
@@ -141,19 +150,12 @@ class ActionsVisitor @Inject constructor(
             reminderEventIds,
             remindInstant
         )
-        ReminderProcessorBroadcastReceiver.requestShowReminderNotification(
-            fragmentActivity,
-            reminderNotificationData
-        )
+        applicationScope.launch { commandBus.showReminderNotification(reminderNotificationData) }
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {
-        ReminderProcessorBroadcastReceiver.requestReminderAction(
-            fragmentActivity,
-            null,
-            reminderEvent,
-            taken
-        )
+        val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
+        applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), status) }
     }
 
     private fun processDeleteReRaiseReminderEvent(reminderEvent: ReminderEvent) {
@@ -161,7 +163,7 @@ class ActionsVisitor @Inject constructor(
             fragmentActivity.lifecycleScope.launch {
                 undoStock(reminderEvent)
                 reminderEventRepository.delete(reminderEvent)
-                ReminderProcessorBroadcastReceiver.requestScheduleNextNotification(fragmentActivity)
+                applicationScope.launch { commandBus.scheduleNextNotification() }
             }
         }, {})
     }
@@ -196,12 +198,14 @@ class ActionsVisitor @Inject constructor(
             scheduledReminder,
             scheduledReminder.timestamp.epochSecond
         )
-        ReminderProcessorBroadcastReceiver.requestReminderAction(
-            fragmentActivity,
-            scheduledReminder.reminder,
-            reminderEvent,
-            taken
-        )
+        if (taken && scheduledReminder.reminder.variableAmount) {
+            fragmentActivity.startActivity(
+                getVariableAmountActivityIntent(fragmentActivity, ReminderNotificationData.fromReminderEvent(reminderEvent))
+            )
+        } else {
+            val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
+            applicationScope.launch { commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), status) }
+        }
     }
 
     private suspend fun processStockAcknowledged(scheduledReminder: ScheduledReminder) {
@@ -209,9 +213,8 @@ class ActionsVisitor @Inject constructor(
             scheduledReminder,
             scheduledReminder.timestamp.epochSecond
         )
-        ReminderProcessorBroadcastReceiver.requestStockReminderAcknowledged(
-            fragmentActivity,
-            reminderEvent
-        )
+        applicationScope.launch {
+            commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), ReminderEvent.ReminderStatus.ACKNOWLEDGED)
+        }
     }
 }

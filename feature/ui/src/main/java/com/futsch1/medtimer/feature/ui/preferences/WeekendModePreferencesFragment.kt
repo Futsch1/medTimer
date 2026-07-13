@@ -9,6 +9,7 @@ import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceFragmentCompat
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKEND_DAYS
@@ -17,9 +18,10 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKE
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKEND_TIME
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.requestScheduleNextNotification
+import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.util.stream.Collectors
@@ -35,6 +37,13 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
 
     @Inject
     lateinit var timeFormatter: TimeFormatter
+
+    @Inject
+    lateinit var commandBus: ReminderCommandBus
+
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     private var currentSettings: UserPreferences? = null
 
@@ -126,9 +135,6 @@ class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun requestReschedule() {
-        val context = getContext()
-        if (context != null) {
-            requestScheduleNextNotification(context)
-        }
+        applicationScope.launch { commandBus.scheduleNextNotification() }
     }
 }

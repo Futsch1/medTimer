@@ -10,7 +10,6 @@ import com.futsch1.medtimer.feature.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.feature.reminders.getSnoozeIntent
 import com.futsch1.medtimer.feature.reminders.getTakenActionIntent
 import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
-import com.futsch1.medtimer.feature.reminders.notificationData.ProcessedNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,8 +26,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
         fun create(reminderNotification: ReminderNotification): NotificationIntentBuilder
     }
 
-    val processedNotificationData =
-        ProcessedNotificationData.fromReminderNotificationData(reminderNotification.reminderNotificationData)
+    private val reminderEventIds = reminderNotification.reminderNotificationData.reminderEventIds.toList()
 
     val pendingSnooze = getSnoozePendingIntent()
     val pendingLocationSnooze = getLocationSnoozePendingIntent()
@@ -54,7 +52,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         } else {
-            val notifyTaken = getTakenActionIntent(context, processedNotificationData)
+            val notifyTaken = getTakenActionIntent(context, reminderEventIds)
             PendingIntent.getBroadcast(
                 context,
                 reminderNotification.reminderNotificationData.notificationId,
@@ -69,7 +67,7 @@ class NotificationIntentBuilder @AssistedInject constructor(
             preferencesDataSource.preferences.value.cannotSkipReminders) {
             return null
         }
-        val notifySkipped = getSkippedActionIntent(context, processedNotificationData)
+        val notifySkipped = getSkippedActionIntent(context, reminderEventIds)
         return PendingIntent.getBroadcast(
             context,
             reminderNotification.reminderNotificationData.notificationId,
