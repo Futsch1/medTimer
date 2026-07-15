@@ -124,7 +124,7 @@ class SimulatedRemindersRepository @Inject constructor(
                     runOutDates[medicineId] = scheduledDate
                 }
             }
-            scheduledDate < endDay || System.currentTimeMillis() - startTime > 2_000
+            scheduledDate < endDay && System.currentTimeMillis() - startTime < 2_000
         }
 
         Log.d(
