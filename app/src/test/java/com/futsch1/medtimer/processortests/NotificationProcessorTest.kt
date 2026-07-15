@@ -11,7 +11,7 @@ import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
-import com.futsch1.medtimer.feature.reminders.di.TimeAccessModule
+import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
@@ -80,7 +80,7 @@ class NotificationProcessorTest {
     val boundPersistentDataDataSource: com.futsch1.medtimer.core.datastore.PersistentDataDataSource = testReminderContext.persistentDataDataSourceMock
 
     @BindValue
-    val boundTimeAccess: com.futsch1.medtimer.feature.reminders.TimeAccess = object : com.futsch1.medtimer.feature.reminders.TimeAccess {
+    val boundTimeAccess: com.futsch1.medtimer.core.common.time.TimeAccess = object : com.futsch1.medtimer.core.common.time.TimeAccess {
         override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
         override fun localDate(): java.time.LocalDate = testReminderContext.localDate
         override fun now(): Instant = testReminderContext.instant

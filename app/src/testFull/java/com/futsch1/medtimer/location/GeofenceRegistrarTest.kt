@@ -1,10 +1,12 @@
-package com.futsch1.medtimer.feature.reminders.location
+package com.futsch1.medtimer.location
 
 import android.Manifest
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.futsch1.medtimer.core.domain.model.UserPreferences
+import com.futsch1.medtimer.core.location.GeofenceRegistrar
+import com.futsch1.medtimer.core.location.GmsGeofenceRegistrar
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.GeofencingClient

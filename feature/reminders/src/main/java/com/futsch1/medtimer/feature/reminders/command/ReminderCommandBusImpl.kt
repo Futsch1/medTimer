@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.reminders.command
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.feature.reminders.RefillProcessor
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationProcessor
@@ -23,6 +24,7 @@ class ReminderCommandBusImpl @Inject constructor(
     private val scheduleNextReminderNotificationProcessor: ScheduleNextReminderNotificationProcessor,
     private val showReminderNotificationProcessor: ShowReminderNotificationProcessor,
     private val stockHandlingProcessor: StockHandlingProcessor,
+    private val locationSnoozeProcessor: LocationSnoozeProcessor,
 ) : ReminderCommandBus {
 
     override suspend fun scheduleNextNotification() {
@@ -45,6 +47,10 @@ class ReminderCommandBusImpl @Inject constructor(
 
     override suspend fun processLocationSnooze(data: ReminderNotificationData) {
         snoozeProcessor.processLocationSnooze(data)
+    }
+
+    override suspend fun restoreLocationSnoozes() {
+        locationSnoozeProcessor.processLocationSnooze()
     }
 
     override suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {

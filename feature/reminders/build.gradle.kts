@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
     implementation(project(":core:ui"))
+    implementation(project(":core:location"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
@@ -61,6 +62,5 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
-    "fullImplementation"(libs.play.services.location)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

@@ -2,7 +2,7 @@ package com.futsch1.medtimer.feature.reminders.scheduling
 
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.feature.reminders.TimeAccess
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import java.time.Instant
 
 class WeekendModeSchedulingDecorator(

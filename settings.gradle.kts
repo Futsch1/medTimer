@@ -28,6 +28,7 @@ include(":core:database")
 include(":core:common")
 include(":core:datastore")
 include(":core:ui")
+include(":core:location")
 include(":feature:reminders")
 include(":feature:ui")
  

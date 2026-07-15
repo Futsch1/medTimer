@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
     implementation(project(":core:ui"))
+    implementation(project(":core:location"))
     implementation(project(":feature:reminders"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

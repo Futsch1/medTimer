@@ -93,6 +93,8 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             ProcessorCode.LocationSnooze -> commandBus.processLocationSnooze(
                 (intent.extras ?: Bundle()).toReminderNotificationData()
             )
+
+            ProcessorCode.GeofenceEntered -> commandBus.restoreLocationSnoozes()
         }
     }
 

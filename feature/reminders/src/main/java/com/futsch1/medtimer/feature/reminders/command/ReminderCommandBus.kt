@@ -23,6 +23,8 @@ interface ReminderCommandBus {
 
     suspend fun processLocationSnooze(data: ReminderNotificationData)
 
+    suspend fun restoreLocationSnoozes()
+
     suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus)
 
     suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long)

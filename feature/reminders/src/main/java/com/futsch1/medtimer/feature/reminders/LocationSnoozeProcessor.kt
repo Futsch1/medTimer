@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.reminders
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
-import com.futsch1.medtimer.feature.reminders.location.GeofenceRegistrar
+import com.futsch1.medtimer.core.location.GeofenceRegistrar
 import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
 import javax.inject.Inject
 
