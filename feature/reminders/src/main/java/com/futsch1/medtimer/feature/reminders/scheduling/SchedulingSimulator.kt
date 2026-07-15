@@ -20,7 +20,6 @@ typealias ScheduledReminderConsumer = (SimulatedReminder, LocalDate) -> Boolean
 
 class LastEventsPerReminder(initialReminderEvents: List<ReminderEvent>) {
     private val latestRemindedEvent = mutableMapOf<Int, ReminderEvent>()
-    private val latestProcessedEvent = mutableMapOf<Int, ReminderEvent>()
     private val initialEvents = initialReminderEvents.toMutableList()
 
     // Remove events which are of a past day, but keep the latest reminded or processed events of that day.
@@ -37,26 +36,24 @@ class LastEventsPerReminder(initialReminderEvents: List<ReminderEvent>) {
     }
 
     private fun updateLatest(
-        map: MutableMap<Int, ReminderEvent>,
-        reminderId: Int,
-        event: ReminderEvent,
-        selector: (ReminderEvent) -> Instant
+        event: ReminderEvent
     ) {
-        val current = map[reminderId]
-        if (current == null || selector(current) < selector(event)) {
-            map[reminderId] = event
+        val current = latestRemindedEvent[event.reminderId]
+        if (current == null || current.remindedTimestamp < event.remindedTimestamp) {
+            latestRemindedEvent[event.reminderId] = event
         }
     }
 
     fun add(reminderEvent: ReminderEvent) {
-        updateLatest(latestRemindedEvent, reminderEvent.reminderId, reminderEvent) { it.remindedTimestamp }
-        if (reminderEvent.processedTimestamp != Instant.EPOCH) {
-            updateLatest(latestProcessedEvent, reminderEvent.reminderId, reminderEvent) { it.processedTimestamp }
+        if (reminderEvent.processedTimestamp == Instant.EPOCH) {
+            updateLatest(reminderEvent.copy(processedTimestamp = reminderEvent.remindedTimestamp))
+        } else {
+            updateLatest(reminderEvent)
         }
     }
 
     fun get(): List<ReminderEvent> {
-        return (latestRemindedEvent.values + latestProcessedEvent.values).distinct().toList()
+        return latestRemindedEvent.values.toList()
     }
 }
 

@@ -8,6 +8,7 @@ import org.mockito.Mockito
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ReminderSchedulerIntervalUnitTest {
     @Test
@@ -108,6 +109,46 @@ class ReminderSchedulerIntervalUnitTest {
             TestHelper.on(3, 0),
             fullMedicine.toMedicine(),
             reminder
+        )
+    }
+
+    @Test
+    fun intervalStartsFromProcessedDoesNotLoopOnUnprocessedEvent() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 60, 1).copy(
+            intervalStart = java.time.Instant.ofEpochSecond(1),
+            intervalStartsFromProcessed = true
+        )
+        medicine.reminders.add(reminder)
+
+        val processedTime = TestHelper.on(1, 120)
+        val processedEvent = TestHelper.buildReminderEvent(1, processedTime).copy(
+            processedTimestamp = processedTime,
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
+
+        var scheduledReminders = scheduler.schedule(
+            listOf(medicine.toMedicine()),
+            listOf(processedEvent)
+        )
+        assertEquals(1, scheduledReminders.size)
+        assertEquals(processedTime.plusSeconds(60 * 60L), scheduledReminders[0].timestamp)
+
+        val unprocessedEvent = TestHelper.buildReminderEvent(1, processedTime.plusSeconds(60 * 60L))
+        scheduledReminders = scheduler.schedule(
+            listOf(medicine.toMedicine()),
+            listOf(processedEvent, unprocessedEvent)
+        )
+
+        assertTrue(
+            scheduledReminders.isEmpty(),
+            "An unprocessed event at the next interval must block re-scheduling, " +
+                    "otherwise the notification loop would fire continuously"
         )
     }
 }

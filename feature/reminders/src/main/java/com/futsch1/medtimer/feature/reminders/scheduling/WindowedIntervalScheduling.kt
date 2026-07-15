@@ -61,23 +61,17 @@ class WindowedIntervalScheduling(
     }
 
     private fun getNextIntervalTimeFromReminderEvent(lastReminderEvent: ReminderEvent): Instant? {
-        val lastReminderEventForInterval = if (reminder.intervalStartsFromProcessed) {
-            filteredReminderEvents
-                .filter { it.processedTimestamp != Instant.EPOCH }
-                .maxByOrNull { it.processedTimestamp }
-                ?: return null
-        } else {
-            lastReminderEvent
-        }
-        val lastRemindedInstant = lastReminderEventForInterval.remindedTimestamp
+        val lastRemindedInstant = lastReminderEvent.remindedTimestamp
 
         val instant =
             if (reminder.intervalStartsFromProcessed) {
-                lastReminderEventForInterval.processedTimestamp
-            } else {
+                if (lastReminderEvent.processedTimestamp != Instant.EPOCH)
+                    lastReminderEvent.processedTimestamp
+                else null
+            } else
                 lastRemindedInstant
-            }
-        val nextTime = instant.plusSeconds(reminder.time.seconds)
+
+        val nextTime = instant?.plusSeconds(reminder.time.seconds)
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
         return if (nextTime != null) {
             val interval = Interval(reminder, timeAccess.localDate(), timeAccess)

@@ -177,26 +177,24 @@ class SchedulingSimulatorTest {
         }
 
         assertEquals(3, simulatedReminders.size)
-        // The next reminder should be processedTimestamp of the processed event (on(1, 700))
-        // plus the interval (600 minutes), i.e. on(1, 1300). The unprocessed reminder at
-        // on(1, 800) must not be used, otherwise the scheduler would return null because
-        // processedTimestamp is EPOCH.
+        // The next reminder should be remindedTimestamp of the unprocessed event (on(1, 700))
+        // plus the interval (600 minutes), i.e. on(1, 1400).
         assertReminded(
             simulatedReminders,
-            on(1, 1300),
+            on(1, 1400),
             medicines[0].toMedicine(),
             medicines[0].reminders[0]
         )
         assertRemindedAtIndex(
             simulatedReminders,
-            on(2, 460),
+            on(2, 560),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             1
         )
         assertRemindedAtIndex(
             simulatedReminders,
-            on(2, 1060),
+            on(2, 1160),
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             2

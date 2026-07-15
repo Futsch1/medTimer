@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ReminderSchedulerWindowedIntervalUnitTest {
     @Test
@@ -207,6 +208,49 @@ class ReminderSchedulerWindowedIntervalUnitTest {
             TestHelper.on(3, 1000),
             medicine.toMedicine(),
             reminder
+        )
+    }
+
+    @Test
+    fun windowedIntervalStartsFromProcessedDoesNotLoopOnUnprocessedEvent() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH)
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 60, 1).copy(
+            intervalStart = Instant.ofEpochSecond(1),
+            windowedInterval = true,
+            intervalStartsFromProcessed = true,
+            intervalStartTimeOfDay = LocalTime.of(0, 0),
+            intervalEndTimeOfDay = LocalTime.of(23, 59)
+        )
+        medicine.reminders.add(reminder)
+
+        val processedTime = TestHelper.on(1, 120)
+        val processedEvent = TestHelper.buildReminderEvent(1, processedTime).copy(
+            processedTimestamp = processedTime,
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
+
+        var scheduledReminders = scheduler.schedule(
+            listOf(medicine.toMedicine()),
+            listOf(processedEvent)
+        )
+        assertEquals(1, scheduledReminders.size)
+        assertEquals(processedTime.plusSeconds(60 * 60L), scheduledReminders[0].timestamp)
+
+        val unprocessedEvent = TestHelper.buildReminderEvent(1, processedTime.plusSeconds(60 * 60L))
+        scheduledReminders = scheduler.schedule(
+            listOf(medicine.toMedicine()),
+            listOf(processedEvent, unprocessedEvent)
+        )
+
+        assertTrue(
+            scheduledReminders.isEmpty(),
+            "An unprocessed event at the next windowed interval must block re-scheduling, " +
+                    "otherwise the notification loop would fire continuously"
         )
     }
 }
