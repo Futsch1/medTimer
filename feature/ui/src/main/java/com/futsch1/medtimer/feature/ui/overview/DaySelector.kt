@@ -14,7 +14,7 @@ import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -27,7 +27,7 @@ class DaySelector(
 ) {
     private var currentDay: WeekDay = WeekDay(startDay, WeekDayPosition.RangeDate)
     private val rangeStartDay: LocalDate = LocalDate.now().minusYears(3)
-    var rangeEndDay: LocalDate = LocalDate.now().plusDays(SimulatedRemindersRepository.DEFAULT_SIMULATION_DAYS)
+    var rangeEndDay: LocalDate = LocalDate.now().plusDays(SimulatedReminders.DEFAULT_SIMULATION_DAYS)
 
     init {
         setupDayBinder()

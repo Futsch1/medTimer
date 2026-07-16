@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.feature.reminders.scheduling
+package com.futsch1.medtimer.feature.reminders.api.scheduling
 
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.Reminder

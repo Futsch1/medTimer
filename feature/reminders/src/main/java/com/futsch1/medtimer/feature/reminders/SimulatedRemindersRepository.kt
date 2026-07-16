@@ -9,7 +9,8 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.scheduling.SchedulingSimulator
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
+import com.futsch1.medtimer.feature.reminders.api.scheduling.SchedulingSimulator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -32,15 +33,15 @@ class SimulatedRemindersRepository @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val timeAccess: TimeAccess,
     @param:ApplicationScope private val applicationScope: CoroutineScope
-) {
+) : SimulatedReminders {
     private val _simulatedReminders = MutableStateFlow<List<SimulatedReminder>>(emptyList())
-    val simulatedReminders: StateFlow<List<SimulatedReminder>> = _simulatedReminders.asStateFlow()
+    override val simulatedReminders: StateFlow<List<SimulatedReminder>> = _simulatedReminders.asStateFlow()
 
     private val _simulatedThrough = MutableStateFlow(LocalDate.MIN)
-    val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
+    override val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
 
     private val _stockRunOutDates = MutableStateFlow<Map<Int, LocalDate?>>(emptyMap())
-    val stockRunOutDates: StateFlow<Map<Int, LocalDate?>> = _stockRunOutDates.asStateFlow()
+    override val stockRunOutDates: StateFlow<Map<Int, LocalDate?>> = _stockRunOutDates.asStateFlow()
 
     private val triggerChannel = Channel<LocalDate>(Channel.CONFLATED)
 
@@ -73,7 +74,7 @@ class SimulatedRemindersRepository @Inject constructor(
         }
     }
 
-    fun requestWindow(consumerId: String, days: Long) {
+    override fun requestWindow(consumerId: String, days: Long) {
         val previousMax = effectiveWindowDays()
         consumerWindows[consumerId] = days
         val newMax = effectiveWindowDays()
@@ -82,13 +83,13 @@ class SimulatedRemindersRepository @Inject constructor(
         }
     }
 
-    fun releaseWindow(consumerId: String) {
+    override fun releaseWindow(consumerId: String) {
         consumerWindows.remove(consumerId)
         // Window shrinkage takes effect on next natural trigger — no immediate re-simulation on release
     }
 
     private fun effectiveWindowDays(): Long =
-        consumerWindows.values.maxOrNull() ?: DEFAULT_SIMULATION_DAYS
+        consumerWindows.values.maxOrNull() ?: SimulatedReminders.DEFAULT_SIMULATION_DAYS
 
     fun triggerCalculation(
         endDay: LocalDate = timeAccess.localDate().plusDays(effectiveWindowDays())
@@ -134,9 +135,5 @@ class SimulatedRemindersRepository @Inject constructor(
 
         _simulatedReminders.value = result.sortedBy { it.scheduledReminder.timestamp }
         _stockRunOutDates.value = runOutDates
-    }
-
-    companion object {
-        const val DEFAULT_SIMULATION_DAYS = 28L
     }
 }

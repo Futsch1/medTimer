@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.reminders.command
 
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

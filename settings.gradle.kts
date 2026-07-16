@@ -30,5 +30,6 @@ include(":core:datastore")
 include(":core:ui")
 include(":core:location")
 include(":feature:reminders")
+include(":feature:reminders:api")
 include(":feature:ui")
  

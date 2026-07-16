@@ -46,6 +46,7 @@ androidComponents {
 
 dependencies {
     api(project(":core:domain"))
+    api(project(":feature:reminders:api"))
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
     implementation(project(":core:ui"))

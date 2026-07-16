@@ -8,7 +8,7 @@ import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -35,7 +35,7 @@ class CalendarEventsProvider @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource,
-    private val simulatedRemindersRepository: SimulatedRemindersRepository,
+    private val simulatedRemindersRepository: SimulatedReminders,
 ) {
 
     // Combines a Room-backed past-events flow (re-emits on DB writes) with the simulated future

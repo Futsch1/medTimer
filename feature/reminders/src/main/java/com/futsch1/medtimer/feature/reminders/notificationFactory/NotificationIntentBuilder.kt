@@ -9,7 +9,7 @@ import com.futsch1.medtimer.feature.reminders.getLocationSnoozeIntent
 import com.futsch1.medtimer.feature.reminders.getSkippedActionIntent
 import com.futsch1.medtimer.feature.reminders.getSnoozeIntent
 import com.futsch1.medtimer.feature.reminders.getTakenActionIntent
-import com.futsch1.medtimer.feature.reminders.getVariableAmountActivityIntent
+import com.futsch1.medtimer.feature.reminders.api.getVariableAmountActivityIntent
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

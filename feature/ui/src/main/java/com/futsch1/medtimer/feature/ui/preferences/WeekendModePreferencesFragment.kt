@@ -18,7 +18,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKE
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.WEEKEND_TIME
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

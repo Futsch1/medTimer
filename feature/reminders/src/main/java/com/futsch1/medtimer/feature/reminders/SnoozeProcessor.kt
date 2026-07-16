@@ -4,7 +4,7 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.location.GeofenceRegistrar
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.toPendingSnooze
 import java.time.Instant
 import javax.inject.Inject

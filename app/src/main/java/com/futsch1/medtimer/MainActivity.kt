@@ -43,8 +43,8 @@ import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
-import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.notificationData.toReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
