@@ -64,6 +64,16 @@ jobs:
             ~/.android/adb*
           key: avd-${{ inputs.api-level }}-${{ env.EMULATOR_TARGET }}-${{ env.EMULATOR_ARCH }}-${{ inputs.profile }}
 
+      - name: Build test APKs
+        run: ./gradlew packageFullDebug packageFullDebugUnitTest
+
+      - name: Restart ADB server
+        run: |
+          free -h
+          adb kill-server || true
+          adb start-server
+          adb devices
+
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
@@ -75,6 +85,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
+          emulator-boot-timeout: 900
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run device tests
@@ -87,16 +98,14 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
+          emulator-boot-timeout: 900
           script: |
-            ./gradlew packageFullDebug packageFullDebugUnitTest
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
             EXIT_CODE=0 && ./gradlew ${{ inputs.gradle-task }} || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
-          # ubuntu-latest is limited to 2 cores
-          cores: 2
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
