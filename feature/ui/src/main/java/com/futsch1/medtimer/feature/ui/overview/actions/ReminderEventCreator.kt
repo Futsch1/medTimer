@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview.actions
 
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -15,6 +16,7 @@ class ReminderEventCreator @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter,
+    private val preferencesDataSource: PreferencesDataSource
 ) {
     suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
         val existingReminderEvent = reminderEventRepository.fetch(scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond)
@@ -29,7 +31,7 @@ class ReminderEventCreator @Inject constructor(
 
         val reminder = reminderRepository.fetch(scheduledReminder.reminder.id) ?: scheduledReminder.reminder
         val newReminderEvent = buildReminderEvent(
-            reminderTimeStamp, scheduledReminder.medicine, reminder, reminderEventRepository
+            reminderTimeStamp, scheduledReminder.medicine, reminder, reminderEventRepository, preferencesDataSource.preferences.value.numberOfRepetitions
         ) { timeFormatter.localDateToString(it) }
         return reminderEventRepository.create(newReminderEvent)
     }
