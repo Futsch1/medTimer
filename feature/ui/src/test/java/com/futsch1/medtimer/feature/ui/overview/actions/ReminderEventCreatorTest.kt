@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview.actions
 
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -20,8 +21,9 @@ class ReminderEventCreatorTest {
     private val reminderEventRepository: ReminderEventRepository = mock()
     private val reminderRepository: ReminderRepository = mock()
     private val timeFormatter: TimeFormatter = mock()
+    private val preferencesDataSource: PreferencesDataSource = mock()
 
-    private val creator = ReminderEventCreator(reminderEventRepository, reminderRepository, timeFormatter)
+    private val creator = ReminderEventCreator(reminderEventRepository, reminderRepository, timeFormatter, preferencesDataSource)
 
     @Test
     fun `getOrCreateReminderEvent moves an already-materialized event to the requested time`() = runTest {
