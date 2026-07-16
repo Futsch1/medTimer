@@ -21,6 +21,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+    buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
+    }
 }
 
 // No instrumented tests live in this module; disable the androidTest variant
