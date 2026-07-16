@@ -115,7 +115,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28, 36 ]
-        profile: [ medium_phone, small_tablet ]
+        profile: [ medium_phone, medium_tablet ]
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: ${{ matrix.api-level }}
