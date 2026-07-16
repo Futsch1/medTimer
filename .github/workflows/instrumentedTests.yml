@@ -64,9 +64,6 @@ jobs:
             ~/.android/adb*
           key: avd-${{ inputs.api-level }}-${{ env.EMULATOR_TARGET }}-${{ env.EMULATOR_ARCH }}-${{ inputs.profile }}
 
-      - name: Build test APKs
-        run: ./gradlew packageFullDebug packageFullDebugUnitTest
-
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
@@ -93,6 +90,7 @@ jobs:
           disable-animations: true
           emulator-boot-timeout: 900
           script: |
+            ./gradlew packageFullDebug packageFullDebugUnitTest
             adb shell input keyevent 3
             adb shell settings put secure long_press_timeout 1500
             adb uninstall com.futsch1.medtimer || true
