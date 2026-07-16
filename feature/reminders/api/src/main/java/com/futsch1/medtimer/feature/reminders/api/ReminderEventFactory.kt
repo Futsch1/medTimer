@@ -16,6 +16,7 @@ suspend fun buildReminderEvent(
     medicine: Medicine,
     reminder: Reminder,
     reminderEventRepository: ReminderEventRepository,
+    remainingRepeats: Int,
     formatExpirationDate: (LocalDate) -> String
 ): ReminderEvent {
     val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
@@ -56,7 +57,7 @@ suspend fun buildReminderEvent(
         processedTimestamp = Instant.EPOCH,
         notificationId = 0,
         iconId = medicine.iconId,
-        remainingRepeats = 0,
+        remainingRepeats = remainingRepeats,
         notes = "",
         reminderType = reminder.reminderType,
         stockHandled = false,
