@@ -211,7 +211,7 @@ sonar {
         property("sonar.android.lint.report", "build/reports/lint-results-fullDebug.xml")
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/jacoco/JacocoFullDebugCodeCoverage/JacocoFullDebugCodeCoverage.xml"
+            "build/reports/jacoco/jacocoFullDebugCodeCoverage/jacocoFullDebugCodeCoverage.xml"
         )
     }
 }
@@ -228,7 +228,6 @@ tasks.withType(Test::class) {
 }
 
 // Define task names for unit tests and Android tests
-val unitTests = "testFullDebugUnitTest"
 val androidTests = "connectedFullDebugAndroidTest"
 val exclusions = listOf(
     "**/R.class",
@@ -240,10 +239,30 @@ val exclusions = listOf(
     "**/*Directions.*"
 )
 
+// Modules included in the aggregated coverage report. The variant is the one built
+// when running the full-flavor test tasks; modules without flavors use the debug variant.
+val coverageModules = mapOf(
+    project(":app") to "fullDebug",
+    project(":core:common") to "debug",
+    project(":core:domain") to "debug",
+    project(":core:database") to "debug",
+    project(":core:datastore") to "debug",
+    project(":core:ui") to "debug",
+    project(":core:location") to "fullDebug",
+    project(":feature:reminders") to "fullDebug",
+    project(":feature:ui") to "fullDebug"
+)
+
 // Register a JacocoReport task for code coverage analysis
 tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
     // Depend on unit tests and Android tests tasks
-    dependsOn(listOf(unitTests, androidTests))
+    dependsOn(
+        coverageModules.map { (proj, variant) ->
+            val taskName = if (variant == "fullDebug") "testFullDebugUnitTest" else "testDebugUnitTest"
+            proj.tasks.named(taskName)
+        }
+    )
+    dependsOn(androidTests)
     // Set task grouping and description
     group = "Reporting"
     description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
@@ -252,24 +271,35 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
         xml.required.set(true)
         html.required.set(true)
     }
-    // Set source directories to the main source directory
+    // Set source directories to the main and full-flavor source directories of all modules
     sourceDirectories.setFrom(
-        layout.projectDirectory.dir("src/main/java"),
-        layout.projectDirectory.dir("src/main/full/java")
+        coverageModules.flatMap { (proj, _) ->
+            listOfNotNull(
+                proj.layout.projectDirectory.dir("src/main/java").takeIf { it.asFile.exists() },
+                proj.layout.projectDirectory.dir("src/main/full/java").takeIf { it.asFile.exists() }
+            )
+        }
     )
-    // Set class directories to compiled Java and Kotlin classes, excluding specified exclusions
+    // Set class directories to compiled Java and Kotlin classes of all modules,
+    // excluding generated classes and test classes
     classDirectories.setFrom(
-        files(
-            fileTree(layout.buildDirectory.dir("intermediates/javac/fullDebug/")) {
-                exclude(exclusions)
-            },
-            fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/fullDebug/")) {
-                exclude(exclusions)
-            }
-        ))
-    // Collect execution data from .exec and .ec files generated during test execution
+        coverageModules.flatMap { (proj, variant) ->
+            listOf(
+                fileTree(proj.layout.buildDirectory.dir("intermediates/javac/$variant/")) {
+                    exclude(exclusions)
+                },
+                fileTree(proj.layout.buildDirectory.dir("intermediates/built_in_kotlinc/$variant/")) {
+                    exclude(exclusions)
+                }
+            )
+        }
+    )
+    // Collect execution data from .exec and .ec files generated during test execution in all modules
     executionData.setFrom(
         files(
-            fileTree(layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
-        ))
+            coverageModules.map { (proj, _) ->
+                fileTree(proj.layout.buildDirectory) { include(listOf("**/*.exec", "**/*.ec")) }
+            }
+        )
+    )
 }
