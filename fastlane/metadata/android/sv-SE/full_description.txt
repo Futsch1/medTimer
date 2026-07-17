@@ -7,7 +7,7 @@ MedTimer is an open-source medication reminder app designed to help you manage y
 Flexible & Personalized Reminders:
 
 - Manage unlimited medications with customizable reminders per medication (including simple defaults
-  for daily reminders).
+ for daily reminders).
 - Create flexible reminders with breaks and specific days (e.g. for birth control pills).
 - Weekend mode: Delay reminders to a defined time on chosen days.
 - Snooze notifications for later reminders or be reminded repeatedly.
