@@ -5,7 +5,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 # Cancel in-progress runs when new commits are pushed to the same branch/PR.
 # Keep main and release tags running to completion.
