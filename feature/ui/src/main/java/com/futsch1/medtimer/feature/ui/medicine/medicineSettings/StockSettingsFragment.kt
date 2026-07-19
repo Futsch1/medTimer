@@ -153,7 +153,9 @@ class StockSettingsFragment : MedicinePreferences(
                             findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = false
                             findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = false
                         } else {
-                            findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = true
+                            if (runOutDate != LocalDate.MAX) {
+                                findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = true
+                            }
                             findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = true
                         }
                     }
