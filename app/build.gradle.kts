@@ -236,7 +236,23 @@ val exclusions = listOf(
     "**/Manifest*.*",
     "**/*Test*.*",
     "**/*Args.*",
-    "**/*Directions.*"
+    "**/*Directions.*",
+    // Dagger / Hilt generated code
+    "**/*_Factory*.class",
+    "**/*_Factory_Impl*.class",
+    "**/*_MembersInjector*.class",
+    "**/*_GeneratedInjector*.class",
+    "**/Hilt_*.class",
+    "**/*_HiltModules*.class",
+    "**/*Module_Provide*Factory*.class",
+    "**/*Module_Companion_Provide*Factory*.class",
+    "**/hilt_aggregated_deps/**",
+    // Room generated code
+    "**/*_Impl*.class",
+    "**/*Dao_Impl*.class",
+    "**/*Database_Impl*.class",
+    // Data binding generated code
+    "**/databinding/**"
 )
 
 // Modules included in the aggregated coverage report. The variant is the one built
