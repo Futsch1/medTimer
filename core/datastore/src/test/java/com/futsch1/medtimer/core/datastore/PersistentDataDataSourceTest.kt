@@ -241,6 +241,9 @@ class PersistentDataDataSourceTest {
     }
 
     @Test
+    // BUG: setShowNotifications writes to medTimerSharedPreferences but
+    // getPersistentData() reads from defaultSharedPreferences →
+    // roundtrip always returns the default (true).
     fun `setShowNotifications roundtrip`() {
         dataSource.setShowNotifications(false)
         assertEquals(false, dataSource.data.value.showNotifications)
@@ -442,11 +445,12 @@ class PersistentDataDataSourceTest {
     }
 
     @Test
+    // BUG: Gson.fromJson throws JsonSyntaxException instead of returning
+    // null on corrupt data → the expected emptyList is never reached.
     fun `corrupt JSON in pending snoozes returns empty list`() {
         medTimerPrefs.edit().putString(PersistentDataDataSource.PENDING_SNOOZES, "not valid json at all").commit()
 
         val result = dataSource.getPendingLocationSnoozes()
-        // Gson.fromJson on invalid JSON returns null, which the code converts to emptyList
         assertTrue(result.isEmpty())
     }
 
