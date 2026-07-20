@@ -67,7 +67,11 @@ class PreferencesDataSource @Inject constructor(
 
     private fun getHomeLocation(): HomeLocation? {
         val json = sharedPreferences.getString(HOME_LOCATION, null) ?: return null
-        return gson.fromJson(json, HomeLocation::class.java)
+        return try {
+            gson.fromJson(json, HomeLocation::class.java)
+        } catch (_: Exception) {
+            null
+        }
     }
 
     fun clearHomeLocation() {
@@ -142,19 +146,19 @@ class PreferencesDataSource @Inject constructor(
                 NUMBER_OF_REPETITIONS,
                 default.numberOfRepetitions.toString()
             )
-                ?.toInt()
+                ?.toIntOrNull()
                 ?: 3,
             repeatDelay = (sharedPreferences.getString(
                 REPEAT_DELAY,
                 default.repeatDelay.inWholeMinutes.toString()
             )
-                ?.toInt()
+                ?.toIntOrNull()
                 ?: 10).toDuration(DurationUnit.MINUTES),
             snoozeDuration = (sharedPreferences.getString(
                 SNOOZE_DURATION,
                 default.snoozeDuration.inWholeMinutes.toString()
             )
-                ?.toInt()
+                ?.toIntOrNull()
                 ?: 15).toDuration(DurationUnit.MINUTES),
             overrideDnd = sharedPreferences.getBoolean(OVERRIDE_DND, default.overrideDnd),
             stickyOnLockscreen = sharedPreferences.getBoolean(
@@ -204,7 +208,7 @@ class PreferencesDataSource @Inject constructor(
             ),
             useSecureWindow = sharedPreferences.getBoolean(SECURE_WINDOW, default.useSecureWindow),
             disableWidget = sharedPreferences.getBoolean(DISABLE_WIDGET, default.disableWidget),
-            alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.toUri()
+            alarmRingtone = sharedPreferences.getString(ALARM_RINGTONE, null)?.takeIf { it.isNotEmpty() }?.toUri()
                 ?: default.alarmRingtone,
             noAlarmSoundWhenSilent = sharedPreferences.getBoolean(
                 NO_ALARM_SOUND_WHEN_SILENT,
@@ -226,8 +230,8 @@ class PreferencesDataSource @Inject constructor(
                 },
             automaticBackupDirectory = sharedPreferences.getString(
                 AUTOMATIC_BACKUP_DIRECTORY,
-                default.automaticBackupDirectory.toString()
-            )?.toUri(),
+                null
+            )?.takeIf { it.isNotEmpty() }?.toUri(),
             locationBasedSnooze = sharedPreferences.getBoolean(
                 LOCATION_SNOOZE_ENABLED,
                 default.locationBasedSnooze
