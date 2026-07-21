@@ -20,6 +20,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class SchedulingSimulatorTest {
     private fun buildSchedulingSimulator(
@@ -470,6 +471,65 @@ class SchedulingSimulatorTest {
             medicines[0].toMedicine(),
             medicines[0].reminders[0],
             1
+        )
+    }
+
+    /**
+     * Regression test for https://github.com/Futsch1/medTimer/issues/1543.
+     *
+     * A "start from taken" continuous interval reminder event can become "poisoned": its
+     * remindedTimestamp was edited independently of its processedTimestamp and now lies further
+     * in the future than any timestamp the scheduler would otherwise produce for the day it falls
+     * on. When the simulation reaches that day, getNextScheduledTime() keeps deriving a timestamp
+     * from the (unaffected) processedTimestamp of the poisoned event, but LastEventsPerReminder.add()
+     * refuses to record it because it is not strictly newer than the poisoned event's remindedTimestamp.
+     * The scheduler then returns the exact same timestamp again forever, and simulateDay() never
+     * returns, so the day never advances (mirroring how the real consumer in
+     * SimulatedRemindersRepository keeps requesting more events until a target date is reached).
+     * The safeguard in SchedulingSimulator.simulateDay() must break out of the do/while loop once
+     * the same reminder/timestamp pair is produced twice in a row, instead of hanging forever.
+     */
+    @Test(timeout = 5_000)
+    fun poisonedIntervalEventDoesNotHang() = runBlocking {
+        val medicines = listOf(
+            TestHelper.buildTestMedicine(0, "Test")
+        )
+        // 24 hour continuous interval, starting from the processed (taken) timestamp.
+        medicines[0].reminders.add(
+            TestHelper.buildReminder(0, 1, "1", 1440, 1).copy(
+                intervalStart = on(1, 30),
+                intervalStartsFromProcessed = true
+            )
+        )
+
+        // A single historical event: today's first dose was taken at on(1, 30), but its
+        // remindedTimestamp was later edited independently to a future timestamp that is more
+        // than one interval past the first scheduled event of the day (on(3, 60)), poisoning it.
+        val poisonedEvent = TestHelper.buildReminderEvent(1, on(3, 60)).copy(
+            processedTimestamp = on(1, 30),
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
+
+        val simulator = buildSchedulingSimulator(medicines, listOf(poisonedEvent))
+
+        val simulatedReminders = mutableListOf<SimulatedReminder>()
+
+        // Mirrors the real consumer (SimulatedRemindersRepository): keep going purely based on the
+        // target date, not on a fixed number of events. Without the safeguard, the simulation never
+        // gets past LocalDate.EPOCH.plusDays(2) (day 3) because simulateDay() never returns there,
+        // and this test would time out instead of completing.
+        val targetDay = LocalDate.EPOCH.plusDays(5)
+        simulator.simulate { simulatedReminder: SimulatedReminder, localDate: LocalDate ->
+            simulatedReminders.add(simulatedReminder)
+            localDate < targetDay
+        }
+
+        assertTrue(simulatedReminders.isNotEmpty())
+        assertReminded(
+            simulatedReminders,
+            on(1, 30),
+            medicines[0].toMedicine(),
+            medicines[0].reminders[0]
         )
     }
 

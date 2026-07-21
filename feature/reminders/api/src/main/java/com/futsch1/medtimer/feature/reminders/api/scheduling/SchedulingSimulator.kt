@@ -102,6 +102,7 @@ class SchedulingSimulator(
     private fun simulateDay(scheduledReminderConsumer: ScheduledReminderConsumer): Boolean {
         totalEvents.advanceTo(endOfCurrentDay)
         for (medicine in medicines.values) {
+            var lastNextInstance: Pair<Int, Instant>? = null
             do {
                 val eventsSnapshot = totalEvents.get()
                 var earliest: ScheduledReminder? = null
@@ -113,6 +114,15 @@ class SchedulingSimulator(
                     }
                 }
                 val next = earliest ?: break
+                // Safeguard: if the scheduler keeps returning the same reminder/timestamp pair,
+                // it means the newly generated event was not accepted into totalEvents (e.g. it was
+                // not strictly newer than an already recorded, out-of-order event). Without this
+                // check, the loop would spin forever on the same instant.
+                val nextInstance = next.reminder.id to next.timestamp
+                if (nextInstance == lastNextInstance) {
+                    break
+                }
+                lastNextInstance = nextInstance
                 if (!processScheduledReminder(next, scheduledReminderConsumer)) {
                     return false
                 }
