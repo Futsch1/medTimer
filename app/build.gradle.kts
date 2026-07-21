@@ -286,7 +286,7 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
             proj.tasks.named(taskName)
         }
     )
-    //dependsOn(androidTests)
+    dependsOn(androidTests)
     // Set task grouping and description
     group = "Reporting"
     description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
