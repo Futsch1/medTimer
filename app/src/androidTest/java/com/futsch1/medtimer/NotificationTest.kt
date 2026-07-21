@@ -812,10 +812,9 @@ class NotificationTest : BaseTestHelper() {
         device: UiDevice,
         context: Context
     ) {
-        val o1 = device.findObject(By.desc(context.getString(R.string.taken)))
         while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
             try {
-                o1.click()
+                device.findObject(By.desc(context.getString(R.string.taken)))?.click()
             } catch (_: StaleObjectException) {
                 // Ignore
             }
