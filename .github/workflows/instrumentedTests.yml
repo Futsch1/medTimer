@@ -105,20 +105,18 @@ jobs:
         env:
           JACOCO_SOURCE_PATH: >-
             app/src/main/java
-            app/src/main/full/java
+            app/src/full/java
             core/common/src/main/java
             core/domain/src/main/java
             core/database/src/main/java
             core/datastore/src/main/java
             core/ui/src/main/java
             core/location/src/main/java
-            core/location/src/main/full/java
+            core/location/src/full/java
             feature/reminders/src/main/java
-            feature/reminders/src/main/full/java
+            feature/reminders/src/full/java
             feature/ui/src/main/java
-            feature/ui/src/main/full/java
-            app/build/generated/java/generateSafeArgsFullDebug
-            app/build/generated/ap_generated_sources/fullDebug/out
+            feature/ui/src/full/java
         with:
           oidc: true
           files: app/build/reports/jacoco/jacocoFullDebugCodeCoverage/jacocoFullDebugCodeCoverage.xml

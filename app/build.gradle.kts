@@ -236,7 +236,9 @@ val exclusions = listOf(
     "**/Manifest*.*",
     "**/*Test*.*",
     "**/*Args.*",
+    "**/*Args$*.class",
     "**/*Directions.*",
+    "**/*Directions$*.class",
     // Dagger / Hilt generated code
     "**/*_Factory*.class",
     "**/*_Factory_Impl*.class",
@@ -247,12 +249,17 @@ val exclusions = listOf(
     "**/*Module_Provide*Factory*.class",
     "**/*Module_Companion_Provide*Factory*.class",
     "**/hilt_aggregated_deps/**",
+    "**/dagger/hilt/internal/aggregatedroot/codegen/**",
     // Room generated code
     "**/*_Impl*.class",
     "**/*Dao_Impl*.class",
     "**/*Database_Impl*.class",
     // Data binding generated code
-    "**/databinding/**"
+    "**/databinding/**",
+    // Kotlin compiler-synthetic classes from inlined stdlib functions
+    // (sourcefilename points to non-existent files like Emitters.kt, Comparisons.kt, etc.)
+    "**/*\$\$inlined*.class",
+    "**/*\$\$special\$*.class"
 )
 
 // Modules included in the aggregated coverage report. The variant is the one built
