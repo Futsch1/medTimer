@@ -14,7 +14,7 @@ import com.futsch1.medtimer.database.dao.ReminderDao
 import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
-import com.futsch1.medtimer.feature.reminders.RepeatProcessor
+import com.futsch1.medtimer.feature.reminders.impl.RepeatProcessor
 import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule

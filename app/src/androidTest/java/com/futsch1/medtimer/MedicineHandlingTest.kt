@@ -30,7 +30,7 @@ class MedicineHandlingTest : BaseTestHelper() {
         dragMedicineItem(0, 1)
         assertMedicineAtPosition(0, TEST_MED_2)
         clickMedicineItem(0)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, TEST_MED_2 + "_")
+        writeTo(com.futsch1.medtimer.feature.ui.impl.R.id.editMedicineName, TEST_MED_2 + "_")
         pressBack()
         assertMedicineAtPosition(0, TEST_MED_2 + '_')
 

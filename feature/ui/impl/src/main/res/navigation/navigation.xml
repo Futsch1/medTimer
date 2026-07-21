@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    android:label="@string/app_name"
+    app:startDestination="@id/overviewFragment">
+
+    <fragment
+        android:id="@+id/medicinesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.MedicinesFragment"
+        android:label="@string/tab_medicine">
+        <action
+            android:id="@+id/action_medicinesFragment_to_editMedicineFragment"
+            app:destination="@id/editMedicineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.PreferencesFragment"
+        android:label="@string/tab_settings">
+        <action
+            android:id="@+id/action_preferencesFragment_to_weekendModePreferencesFragment"
+            app:destination="@id/weekendModePreferencesFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_privacyPreferencesFragment"
+            app:destination="@id/privacyPreferencesFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_notificationSettingsFragment"
+            app:destination="@id/notificationSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_displaySettingsFragment"
+            app:destination="@id/displaySettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_alarmSettingsFragment"
+            app:destination="@id/alarmSettingsFragment" />
+        <action
+            android:id="@+id/action_preferencesFragment_to_snoozeSettingsFragment"
+            app:destination="@id/snoozeSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weekendModePreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.WeekendModePreferencesFragment"
+        android:label="@string/weekend_mode" />
+    <fragment
+        android:id="@+id/repeatRemindersPreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.RepeatRemindersPreferencesFragment"
+        android:label="@string/repeat_reminders" />
+    <fragment
+        android:id="@+id/editMedicineFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.EditMedicineFragment"
+        tools:layout="@layout/fragment_edit_medicine">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_medicineCalendarFragment"
+            app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesRootFragment"
+            app:destination="@id/advancedReminderPreferencesRootFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_stockSettingsFragment"
+            app:destination="@id/stockSettingsFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_advancedReminderPreferencesStockExpirationFragment"
+            app:destination="@id/advancedReminderPreferencesStockFragment" />
+        <action
+            android:id="@+id/action_editMedicineFragment_to_medicineSettingsFragment"
+            app:destination="@id/medicineSettingsFragment" />
+    </fragment>
+    <argument
+        android:name="reminderId"
+        app:argType="integer" />
+    <argument
+        android:name="medicineName"
+        app:argType="string" />
+    <action
+        android:id="@+id/action_global_preferencesFragment"
+        app:destination="@id/preferencesFragment"
+        app:launchSingleTop="true" />
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.statistics.StatisticsFragment"
+        android:label="@string/analysis" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.statistics.CalendarFragment"
+        android:label="@string/calendar">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+        <argument
+            android:name="pastMonths"
+            app:argType="integer" />
+        <argument
+            android:name="futureMonths"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacyPreferencesFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.PrivacyPreferencesFragment"
+        android:label="@string/privacy_settings" />
+    <fragment
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.NotificationSettingsFragment"
+        android:label="@string/notification_reminder_settings">
+        <action
+            android:id="@+id/action_notificationSettingsFragment_to_repeatRemindersPreferencesFragment"
+            app:destination="@id/repeatRemindersPreferencesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/snoozeSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.SnoozeSettingsFragment"
+        android:label="@string/snooze_settings" />
+    <fragment
+        android:id="@+id/displaySettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.DisplaySettingsFragment"
+        android:label="@string/display_settings" />
+    <fragment
+        android:id="@+id/overviewFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.overview.OverviewFragment"
+        android:label="@string/tab_overview" />
+    <fragment
+        android:id="@+id/advancedReminderPreferencesRootFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesRootFragment"
+        android:label="@string/advanced_settings">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesInstructionsFragment"
+            app:destination="@id/advancedReminderPreferencesInstructionsFragment" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesStatusFragment"
+            app:destination="@id/advancedReminderPreferencesStatusFragment" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesRootFragment_to_advancedReminderPreferencesCyclicFragment"
+            app:destination="@id/advancedReminderPreferencesCyclicFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesInstructionsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesInstructionsFragment"
+        android:label="@string/dosing_instructions">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesStatusFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStatusFragment"
+        android:label="@string/reminder_status">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesCyclicFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesCyclicFragment"
+        android:label="@string/cycle_reminder">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/alarmSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.preferences.AlarmSettingsFragment"
+        android:label="@string/alarm_settings" />
+    <fragment
+        android:id="@+id/stockSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.medicineSettings.StockSettingsFragment"
+        android:label="@string/medicine_stock_settings">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/advancedReminderPreferencesStockFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.advancedReminderPreferences.AdvancedReminderPreferencesStockFragment"
+        android:label="@string/advanced_settings">
+        <argument
+            android:name="reminderId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_advancedReminderPreferencesStockExpirationFragment_to_stockSettingsFragment"
+            app:destination="@id/stockSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineSettingsFragment"
+        android:name="com.futsch1.medtimer.feature.ui.impl.medicine.medicineSettings.MedicineSettingsFragment"
+        android:label="@string/medicine_settings">
+        <argument
+            android:name="medicineId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

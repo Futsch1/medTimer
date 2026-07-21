@@ -26,7 +26,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
-import com.futsch1.medtimer.feature.ui.R as FeatureUiR
+import com.futsch1.medtimer.feature.ui.impl.R as FeatureUiR
 
 /** Stable testTags for the top-level nav items; exposed to instrumented tests as resource-ids. */
 object NavTestTags {

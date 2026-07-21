@@ -23,20 +23,20 @@ class CalendarTest : BaseTestHelper() {
         openMenu()
         clickOn(R.string.generate_test_data)
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
+        clickListItemChild(com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.takenButton)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
         AndroidTestHelper.clickMedicineItem(0)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openCalendar)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Omega 3 (EPA/DHA 500mg)")
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.openCalendar)
+        assertContains(com.futsch1.medtimer.feature.ui.impl.R.id.currentDayEvents, "Omega 3 (EPA/DHA 500mg)")
         Espresso.pressBack()
 
         navigateTo(AndroidTestHelper.MainMenu.ANALYSIS)
@@ -56,7 +56,7 @@ class CalendarTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun testDeletedEventNotInCalendarView() {
         // Create event
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.logManualDose)
         clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
         clickDialogPositiveButton(false)
@@ -65,9 +65,9 @@ class CalendarTest : BaseTestHelper() {
 
         // Delete event
         clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton
+            com.futsch1.medtimer.feature.ui.impl.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.impl.R.id.stateButton
         )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+        clickOn(com.futsch1.medtimer.feature.ui.impl.R.id.deleteButton)
         clickDialogPositiveButton()
 
         // Check that the event is not listed in the calendar view
