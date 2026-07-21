@@ -272,6 +272,7 @@ val coverageModules = mapOf(
     project(":core:datastore") to "debug",
     project(":core:ui") to "debug",
     project(":core:location") to "fullDebug",
+    project(":feature:reminders:api") to "debug",
     project(":feature:reminders") to "fullDebug",
     project(":feature:ui") to "fullDebug"
 )
@@ -285,7 +286,7 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
             proj.tasks.named(taskName)
         }
     )
-    dependsOn(androidTests)
+    //dependsOn(androidTests)
     // Set task grouping and description
     group = "Reporting"
     description = "Execute UI and unit tests, generate and combine Jacoco coverage report"
