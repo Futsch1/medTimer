@@ -112,6 +112,7 @@ jobs:
             core/ui/src/main/java
             core/location/src/main/java
             core/location/src/full/java
+            feature/reminders/api/src/main/java
             feature/reminders/src/main/java
             feature/ui/src/main/java
         with:
