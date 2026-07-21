@@ -299,7 +299,7 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
         coverageModules.flatMap { (proj, _) ->
             listOfNotNull(
                 proj.layout.projectDirectory.dir("src/main/java").takeIf { it.asFile.exists() },
-                proj.layout.projectDirectory.dir("src/main/full/java").takeIf { it.asFile.exists() }
+                proj.layout.projectDirectory.dir("src/full/java").takeIf { it.asFile.exists() }
             )
         }
     )
