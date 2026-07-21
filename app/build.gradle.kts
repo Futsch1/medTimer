@@ -236,7 +236,30 @@ val exclusions = listOf(
     "**/Manifest*.*",
     "**/*Test*.*",
     "**/*Args.*",
-    "**/*Directions.*"
+    "**/*Args$*.class",
+    "**/*Directions.*",
+    "**/*Directions$*.class",
+    // Dagger / Hilt generated code
+    "**/*_Factory*.class",
+    "**/*_Factory_Impl*.class",
+    "**/*_MembersInjector*.class",
+    "**/*_GeneratedInjector*.class",
+    "**/Hilt_*.class",
+    "**/*_HiltModules*.class",
+    "**/*Module_Provide*Factory*.class",
+    "**/*Module_Companion_Provide*Factory*.class",
+    "**/hilt_aggregated_deps/**",
+    "**/dagger/hilt/internal/aggregatedroot/codegen/**",
+    // Room generated code
+    "**/*_Impl*.class",
+    "**/*Dao_Impl*.class",
+    "**/*Database_Impl*.class",
+    // Data binding generated code
+    "**/databinding/**",
+    // Kotlin compiler-synthetic classes from inlined stdlib functions
+    // (sourcefilename points to non-existent files like Emitters.kt, Comparisons.kt, etc.)
+    "**/*\$\$inlined*.class",
+    "**/*\$\$special\$*.class"
 )
 
 // Modules included in the aggregated coverage report. The variant is the one built
@@ -249,6 +272,7 @@ val coverageModules = mapOf(
     project(":core:datastore") to "debug",
     project(":core:ui") to "debug",
     project(":core:location") to "fullDebug",
+    project(":feature:reminders:api") to "debug",
     project(":feature:reminders") to "fullDebug",
     project(":feature:ui") to "fullDebug"
 )
@@ -276,7 +300,7 @@ tasks.register<JacocoReport>("jacocoFullDebugCodeCoverage") {
         coverageModules.flatMap { (proj, _) ->
             listOfNotNull(
                 proj.layout.projectDirectory.dir("src/main/java").takeIf { it.asFile.exists() },
-                proj.layout.projectDirectory.dir("src/main/full/java").takeIf { it.asFile.exists() }
+                proj.layout.projectDirectory.dir("src/full/java").takeIf { it.asFile.exists() }
             )
         }
     )

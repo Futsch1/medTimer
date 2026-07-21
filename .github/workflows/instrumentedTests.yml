@@ -56,6 +56,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: AVD cache
+        if: inputs.api-level != '28'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: avd-cache
         with:
@@ -104,20 +105,16 @@ jobs:
         env:
           JACOCO_SOURCE_PATH: >-
             app/src/main/java
-            app/src/main/full/java
             core/common/src/main/java
             core/domain/src/main/java
             core/database/src/main/java
             core/datastore/src/main/java
             core/ui/src/main/java
             core/location/src/main/java
-            core/location/src/main/full/java
+            core/location/src/full/java
+            feature/reminders/api/src/main/java
             feature/reminders/src/main/java
-            feature/reminders/src/main/full/java
             feature/ui/src/main/java
-            feature/ui/src/main/full/java
-            app/build/generated/java/generateSafeArgsFullDebug
-            app/build/generated/ap_generated_sources/fullDebug/out
         with:
           oidc: true
           files: app/build/reports/jacoco/jacocoFullDebugCodeCoverage/jacocoFullDebugCodeCoverage.xml
@@ -134,6 +131,6 @@ jobs:
         with:
           name: ${{ inputs.artifact-name }}
           path: |
-            app/build/reports/jacoco/jacocoFullDebugCodeCoverage/html
+            app/build/reports/jacoco/jacocoFullDebugCodeCoverage
             app/build/reports/androidTest/connected/fullDebug
             app/build/outputs/androidTest-results
