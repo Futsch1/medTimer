@@ -105,7 +105,6 @@ jobs:
         env:
           JACOCO_SOURCE_PATH: >-
             app/src/main/java
-            app/src/full/java
             core/common/src/main/java
             core/domain/src/main/java
             core/database/src/main/java
@@ -114,9 +113,7 @@ jobs:
             core/location/src/main/java
             core/location/src/full/java
             feature/reminders/src/main/java
-            feature/reminders/src/full/java
             feature/ui/src/main/java
-            feature/ui/src/full/java
         with:
           oidc: true
           files: app/build/reports/jacoco/jacocoFullDebugCodeCoverage/jacocoFullDebugCodeCoverage.xml
