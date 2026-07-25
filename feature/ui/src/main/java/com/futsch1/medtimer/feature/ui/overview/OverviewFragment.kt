@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
+import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
@@ -38,6 +39,9 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
 
     @Inject
     lateinit var actionsVisitor: ActionsVisitor
+
+    @Inject
+    lateinit var medicineIcons: MedicineIcons
 
     @Inject
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
@@ -73,6 +77,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             MedTimerTheme {
                 OverviewScreen(
                     viewModel = overviewViewModel,
+                    medicineIcons = medicineIcons,
                     warningsState = warningsViewModel.state,
                     onDismissBatteryWarning = warningsViewModel::dismissBatteryWarning,
                     onDismissExactRemindersWarning = warningsViewModel::dismissExactRemindersWarning,

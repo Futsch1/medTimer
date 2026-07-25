@@ -28,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -51,6 +54,7 @@ private val STATE_BUTTON_SIZE = 48.dp
 @Composable
 fun OverviewEventItem(
     event: OverviewEvent,
+    icon: ImageBitmap?,
     isSelected: Boolean,
     isInSelectionMode: Boolean,
     actions: Actions?,
@@ -62,6 +66,7 @@ fun OverviewEventItem(
 ) {
     val context = LocalContext.current
     var showActions by remember { mutableStateOf(false) }
+    val containerColor = eventContainerColor(event, isSelected)
     val railColor = MaterialTheme.colorScheme.primary
 
     Row(
@@ -118,7 +123,10 @@ fun OverviewEventItem(
             onClick = onClick,
             onToggleSelection = onToggleSelection,
             onEnterSelectionMode = onEnterSelectionMode,
-            colors = CardDefaults.cardColors(containerColor = eventContainerColor(event, isSelected)),
+            colors = CardDefaults.cardColors(
+                containerColor = containerColor,
+                contentColor = contentColorFor(containerColor),
+            ),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
                 .padding(start = 4.dp, top = 1.dp, bottom = 1.dp),
@@ -132,16 +140,18 @@ fun OverviewEventItem(
                     modifier = Modifier
                         .weight(1f)
                         .testTag(OverviewTestTags.EVENT_TEXT),
-                    color = MaterialTheme.colorScheme.onSurface,
                 )
-                Icon(
-                    painter = painterResource(event.icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 4.dp)
-                        .size(32.dp),
-                    tint = Color.Unspecified,
-                )
+                // A medicine's iconId indexes the icon pack, not the app's drawables, and 0 means
+                // "no icon" — the caller resolves it to a bitmap.
+                if (icon != null) {
+                    Icon(
+                        bitmap = icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(start = 2.dp, end = 4.dp)
+                            .size(32.dp),
+                    )
+                }
             }
         }
     }
@@ -160,6 +170,22 @@ private fun ColumnScope.RailSegment(visible: Boolean, color: Color) {
 @Composable
 private fun eventContainerColor(event: OverviewEvent, isSelected: Boolean) = when {
     isSelected -> MaterialTheme.colorScheme.secondaryContainer
-    event.color != null -> Color(event.color!!)
+    event.color != null -> Color(event.color!!).copy(alpha = 1f)
     else -> MaterialTheme.colorScheme.surfaceContainerHighest
+}
+
+/**
+ * Picks whichever of onSurface/onPrimary reads better on [background] — medicine colours are
+ * user-chosen and can land anywhere on the light/dark range.
+ */
+@Composable
+private fun contentColorFor(background: Color): Color {
+    val onSurface = MaterialTheme.colorScheme.onSurface
+    val onPrimary = MaterialTheme.colorScheme.onPrimary
+    return remember(background, onSurface, onPrimary) {
+        val bg = background.toArgb() or -0x1000000
+        if (ColorUtils.calculateContrast(onSurface.toArgb(), bg) >
+            ColorUtils.calculateContrast(onPrimary.toArgb(), bg)
+        ) onSurface else onPrimary
+    }
 }

@@ -31,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.asImageBitmap
+import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
@@ -46,6 +48,7 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 @Composable
 fun OverviewScreen(
     viewModel: OverviewViewModel,
+    medicineIcons: MedicineIcons,
     warningsState: OverviewWarningsState,
     onDismissBatteryWarning: () -> Unit,
     onDismissExactRemindersWarning: () -> Unit,
@@ -128,6 +131,9 @@ fun OverviewScreen(
                 items(events, key = { it.id }) { event ->
                     OverviewEventItem(
                         event = event,
+                        icon = remember(event.icon) {
+                            if (event.icon != 0) medicineIcons.getIconBitmapUntinted(event.icon).asImageBitmap() else null
+                        },
                         isSelected = selection.isSelected(event),
                         isInSelectionMode = selection.isInSelectionMode,
                         actions = remember(event) { ActionsFactory().createActions(event) },
@@ -135,8 +141,12 @@ fun OverviewScreen(
                         onToggleSelection = { selection.toggleSelection(event) },
                         onEnterSelectionMode = {
                             selection.enterSelectionMode()
+                            // Matches the pre-Compose behaviour: with combined notifications a long
+                            // press grabs every event at that time, otherwise just this one.
                             if (viewModel.combineNotifications) {
                                 viewModel.selectSameTimeEvents(event)
+                            } else {
+                                selection.toggleSelection(event)
                             }
                         },
                         onAction = { button -> onAction(button, listOf(event)) },
