@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.WeekDay
@@ -48,14 +49,22 @@ fun OverviewWeekSelector(
     modifier: Modifier = Modifier,
 ) {
     val rangeStart = remember { LocalDate.now().minusYears(3) }
+    // simulatedThrough is LocalDate.MIN until the simulation repository first emits, which would
+    // otherwise hand the calendar an end date before its start date.
+    val effectiveRangeEnd = maxOf(rangeEnd, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
     val state = rememberWeekCalendarState(
         startDate = rangeStart,
-        endDate = rangeEnd,
+        endDate = effectiveRangeEnd,
         firstVisibleWeekDate = selectedDay,
         // Offsetting the week start by 3 days puts today at position 4 of 7 on first open.
         firstDayOfWeek = LocalDate.now().minusDays(3).dayOfWeek,
     )
     val scope = rememberCoroutineScope()
+
+    // rememberWeekCalendarState only reads endDate on first composition.
+    LaunchedEffect(effectiveRangeEnd) {
+        state.endDate = effectiveRangeEnd
+    }
 
     LaunchedEffect(selectedDay) {
         state.animateScrollToWeek(selectedDay)
