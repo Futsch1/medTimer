@@ -1,14 +1,19 @@
 package com.futsch1.medtimer
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.assertMedicineAtPosition
 import com.futsch1.medtimer.AndroidTestHelper.clickMedicineItem
 import com.futsch1.medtimer.AndroidTestHelper.dragMedicineItem
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.utilities.openNotification
 import org.junit.Test
 
 const val TEST_MED_1 = "Test"
@@ -49,5 +54,44 @@ class MedicineHandlingTest : BaseTestHelper() {
         assertMedicineAtPosition(0, TEST_MED_3)
         assertMedicineAtPosition(1, TEST_MED_1)
         assertMedicineAtPosition(2, TEST_MED_2 + '_')
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun medicineCannotBeSkippedTest() {
+        AndroidTestHelper.createMedicine(TEST_MED_1)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickOn(R.string.medicine_cannot_be_skipped)
+        pressBack()
+
+        AndroidTestHelper.createIntervalReminder("1", 60)
+
+        pressBack()
+
+        openNotification().use {
+            assert(
+                !clickNotificationButton(
+                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()),
+                    getNotificationText(R.string.skipped)
+                )
+            )
+        }
+
+        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+
+        clickListItemChild(
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            0,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton
+        )
+        assertNotDisplayed(R.string.skipped)
+        pressBack()
+
+        clickListItemChild(
+            com.futsch1.medtimer.feature.ui.R.id.reminders,
+            1,
+            com.futsch1.medtimer.feature.ui.R.id.stateButton
+        )
+        assertNotDisplayed(R.string.skipped)
     }
 }
