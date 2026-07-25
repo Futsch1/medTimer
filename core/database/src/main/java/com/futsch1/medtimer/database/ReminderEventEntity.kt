@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 import com.futsch1.medtimer.database.ReminderEventEntity.ReminderEntityStatus
 
 val allStatusValues: List<ReminderEntityStatus> = ReminderEntityStatus.entries
-val statusValuesWithoutDelete: List<ReminderEntityStatus> = ReminderEntityStatus.entries.filterNot { it == ReminderEntityStatus.DELETED }
+val statusValuesWithoutDelete: List<ReminderEntityStatus> =
+    ReminderEntityStatus.entries.filterNot { it == ReminderEntityStatus.DELETED }
 val statusValuesWithoutDeletedAndAcknowledged: List<ReminderEntityStatus> =
     ReminderEntityStatus.entries.filterNot { it == ReminderEntityStatus.ACKNOWLEDGED || it == ReminderEntityStatus.DELETED }
 
@@ -35,6 +36,7 @@ class ReminderEventEntity(
     @ColumnInfo(defaultValue = "-1.0") var stockBefore: Double = -1.0,
     @ColumnInfo(defaultValue = "-1.0") var stockAfter: Double = -1.0,
     @ColumnInfo(defaultValue = "") var stockUnit: String = "",
+    @ColumnInfo(defaultValue = "false") var cannotBeSkipped: Boolean = false
 ) {
     enum class ReminderEntityStatus {
         RAISED,

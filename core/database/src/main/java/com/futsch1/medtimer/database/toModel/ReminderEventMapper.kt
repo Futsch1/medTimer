@@ -28,7 +28,8 @@ fun ReminderEventEntity.toModel(): ReminderEvent =
         lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
         stockBefore = stockBefore,
         stockAfter = stockAfter,
-        stockUnit = stockUnit
+        stockUnit = stockUnit,
+        cannotBeSkipped = cannotBeSkipped
     )
 
 fun ReminderEvent.toEntity(): ReminderEventEntity = ReminderEventEntity(
@@ -52,7 +53,8 @@ fun ReminderEvent.toEntity(): ReminderEventEntity = ReminderEventEntity(
     lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
     stockBefore = stockBefore,
     stockAfter = stockAfter,
-    stockUnit = stockUnit
+    stockUnit = stockUnit,
+    cannotBeSkipped = cannotBeSkipped
 )
 
 fun ReminderEventEntity.ReminderEntityStatus.toModel(): ReminderEvent.ReminderStatus =

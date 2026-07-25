@@ -16,7 +16,9 @@ class ScheduledReminderActions(
             visibleButtons.add(Button.RESCHEDULE)
         } else {
             visibleButtons.add(Button.TAKEN)
-            visibleButtons.add(Button.SKIPPED)
+            if (!scheduledReminder.medicine.cannotBeSkipped) {
+                visibleButtons.add(Button.SKIPPED)
+            }
             visibleButtons.add(Button.RESCHEDULE)
         }
     }

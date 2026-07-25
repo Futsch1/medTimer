@@ -24,7 +24,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.sidesheet.SideSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
@@ -88,41 +88,64 @@ class EditEventSheetDialogFragment : DialogFragment() {
         setupStatusDependentUI(editEventSheetDialog)
         setupToggleGroupListener()
 
-        editEventSheetDialog.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar)?.setNavigationOnClickListener {
-            editEventSheetDialog.dismiss()
-        }
+        editEventSheetDialog.findViewById<MaterialToolbar>(R.id.editEventSideSheetToolbar)
+            ?.setNavigationOnClickListener {
+                editEventSheetDialog.dismiss()
+            }
 
         return editEventSheetDialog
     }
 
     private fun setupTextFieldBindings() {
-        viewModel.medicineName.onEach { if (editEventName.text.toString() != it) editEventName.setText(it) }.launchIn(lifecycleScope)
+        viewModel.medicineName.onEach { if (editEventName.text.toString() != it) editEventName.setText(it) }
+            .launchIn(lifecycleScope)
         editEventName.doAfterTextChanged { viewModel.setMedicineName(it?.toString() ?: "") }
 
-        viewModel.amount.onEach { if (editEventAmount.text.toString() != it) editEventAmount.setText(it) }.launchIn(lifecycleScope)
+        viewModel.amount.onEach { if (editEventAmount.text.toString() != it) editEventAmount.setText(it) }
+            .launchIn(lifecycleScope)
         editEventAmount.doAfterTextChanged { viewModel.setAmount(it?.toString() ?: "") }
 
-        viewModel.notes.onEach { if (editEventNotes.text.toString() != it) editEventNotes.setText(it) }.launchIn(lifecycleScope)
+        viewModel.notes.onEach { if (editEventNotes.text.toString() != it) editEventNotes.setText(it) }
+            .launchIn(lifecycleScope)
         editEventNotes.doAfterTextChanged { viewModel.setNotes(it?.toString() ?: "") }
     }
 
     private fun setupRemindedTimeDateFields() {
-        viewModel.remindedTimeString.onEach { if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(it) }
+        viewModel.remindedTimeString.onEach {
+            if (editEventRemindedTimestamp.text.toString() != it) editEventRemindedTimestamp.setText(
+                it
+            )
+        }
             .launchIn(lifecycleScope)
         setupTimePicker(editEventRemindedTimestamp, { viewModel.remindedMinutes }, { viewModel.remindedMinutes = it })
 
-        viewModel.remindedDateString.onEach { if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(it) }.launchIn(lifecycleScope)
+        viewModel.remindedDateString.onEach {
+            if (editEventRemindedDate.text.toString() != it) editEventRemindedDate.setText(
+                it
+            )
+        }.launchIn(lifecycleScope)
         setupDatePicker(editEventRemindedDate, { viewModel.remindedDate }, { viewModel.remindedDate = it })
     }
 
     private fun setupStatusDependentUI(editEventSheetDialog: AppCompatDialog) {
-        viewModel.reminderStatus.filterNotNull().take(1).onEach { status ->
-            configureTakenText(editEventSheetDialog, status)
-            if (status != ReminderEvent.ReminderStatus.RAISED) {
-                viewModel.processedTimeString.onEach { if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(it) }
+        viewModel.reminderStatus.filter { it.first != null }.take(1).onEach { status ->
+            configureTakenText(editEventSheetDialog, status.first!!)
+            if (status.first != ReminderEvent.ReminderStatus.RAISED) {
+                viewModel.processedTimeString.onEach {
+                    if (editEventTakenTimestamp.text.toString() != it) editEventTakenTimestamp.setText(
+                        it
+                    )
+                }
                     .launchIn(lifecycleScope)
-                setupTimePicker(editEventTakenTimestamp, { viewModel.processedMinutes }, { viewModel.processedMinutes = it })
-                viewModel.processedDateString.onEach { if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(it) }.launchIn(lifecycleScope)
+                setupTimePicker(
+                    editEventTakenTimestamp,
+                    { viewModel.processedMinutes },
+                    { viewModel.processedMinutes = it })
+                viewModel.processedDateString.onEach {
+                    if (editEventTakenDate.text.toString() != it) editEventTakenDate.setText(
+                        it
+                    )
+                }.launchIn(lifecycleScope)
                 setupDatePicker(editEventTakenDate, { viewModel.processedDate }, { viewModel.processedDate = it })
             } else {
                 editEventTakenTimestamp.visibility = View.GONE
@@ -148,8 +171,12 @@ class EditEventSheetDialogFragment : DialogFragment() {
         super.onDismiss(dialog)
     }
 
-    private fun setupToggleGroup(status: ReminderEvent.ReminderStatus) {
-        when (status) {
+    private fun setupToggleGroup(status: Pair<ReminderEvent.ReminderStatus?, Boolean>) {
+        if (status.second) {
+            editEventToggleGroup.visibility = View.GONE
+            return
+        }
+        when (status.first!!) {
             ReminderEvent.ReminderStatus.TAKEN -> editEventToggleGroup.check(R.id.takenToggleButton)
             ReminderEvent.ReminderStatus.SKIPPED, ReminderEvent.ReminderStatus.RAISED -> editEventToggleGroup.check(R.id.skippedToggleButton)
             else -> editEventToggleGroup.visibility = View.GONE
