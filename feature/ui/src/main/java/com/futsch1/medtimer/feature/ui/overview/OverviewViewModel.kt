@@ -10,9 +10,9 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
-import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.list.SelectionListController
@@ -69,6 +69,10 @@ class OverviewViewModel @AssistedInject constructor(
         val day: LocalDate,
         val tick: Long
     )
+
+    /** Snapshot state so the filter row recomposes when a filter is toggled. */
+    var activeFilters: Set<OverviewFilter> by mutableStateOf(emptySet())
+        private set
 
     /** Selection state for the multi-select contextual bar. */
     val selection = SelectionListController<OverviewEvent> { it.id }
@@ -170,15 +174,14 @@ class OverviewViewModel @AssistedInject constructor(
         filterState.update { it.copy(tick = it.tick + 1) }
     }
 
-    val activeFilters: Set<OverviewFilter> get() = filterState.value.activeFilters
 
     fun toggleFilter(f: OverviewFilter) {
-        val filters = filterState.value.activeFilters
-        setFilters(if (f in filters) filters - f else filters + f)
-        persistentDataDataSource.setCheckedFilters(filterState.value.activeFilters)
+        setFilters(if (f in activeFilters) activeFilters - f else activeFilters + f)
+        persistentDataDataSource.setCheckedFilters(activeFilters)
     }
 
     fun setFilters(filters: Set<OverviewFilter>) {
+        activeFilters = filters
         filterState.update { it.copy(activeFilters = filters) }
     }
 
