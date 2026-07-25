@@ -1,8 +1,12 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
+import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
@@ -11,6 +15,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
@@ -44,7 +49,8 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel(assistedFactory = OverviewViewModel.Factory::class)
 class OverviewViewModel @AssistedInject constructor(
-    preferencesDataSource: PreferencesDataSource,
+    private val preferencesDataSource: PreferencesDataSource,
+    private val persistentDataDataSource: PersistentDataDataSource,
     medicineRepository: MedicineRepository,
     reminderEventRepository: ReminderEventRepository,
     private val simulatedRemindersRepository: SimulatedReminders,
@@ -64,6 +70,9 @@ class OverviewViewModel @AssistedInject constructor(
         val tick: Long
     )
 
+    /** Selection state for the multi-select contextual bar. */
+    val selection = SelectionListController<OverviewEvent> { it.id }
+
     private var _initialized = false
     val initialized get() = _initialized
 
@@ -74,11 +83,14 @@ class OverviewViewModel @AssistedInject constructor(
 
     val simulatedThrough: StateFlow<LocalDate> = simulatedRemindersRepository.simulatedThrough
 
-    var day: LocalDate
-        get() = filterState.value.day
-        set(value) {
-            filterState.update { it.copy(day = value) }
-        }
+    /** The day being shown. Snapshot state so the Compose screen recomposes on change. */
+    var day: LocalDate by mutableStateOf(LocalDate.now())
+        private set
+
+    fun selectDay(value: LocalDate) {
+        day = value
+        filterState.update { it.copy(day = value) }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val reminderEvents: Flow<List<ReminderEvent>> =
@@ -115,6 +127,9 @@ class OverviewViewModel @AssistedInject constructor(
         }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
+        selection.bind(viewModelScope, overviewEvents)
+        setFilters(persistentDataDataSource.data.value.checkedFilters)
+
         viewModelScope.launch {
             simulatedRemindersRepository.simulatedReminders.collect { reminders ->
                 _simulatedReminders.value = reminders
@@ -155,17 +170,24 @@ class OverviewViewModel @AssistedInject constructor(
         filterState.update { it.copy(tick = it.tick + 1) }
     }
 
-    fun addFilter(f: OverviewFilter) {
-        filterState.update { it.copy(activeFilters = it.activeFilters + f) }
-    }
+    val activeFilters: Set<OverviewFilter> get() = filterState.value.activeFilters
 
-    fun removeFilter(f: OverviewFilter) {
-        filterState.update { it.copy(activeFilters = it.activeFilters - f) }
+    fun toggleFilter(f: OverviewFilter) {
+        val filters = filterState.value.activeFilters
+        setFilters(if (f in filters) filters - f else filters + f)
+        persistentDataDataSource.setCheckedFilters(filterState.value.activeFilters)
     }
 
     fun setFilters(filters: Set<OverviewFilter>) {
         filterState.update { it.copy(activeFilters = filters) }
     }
+
+    /** Long-pressing one event selects every event scheduled for the same time. */
+    fun selectSameTimeEvents(event: OverviewEvent) {
+        selection.items.filter { it.timestamp == event.timestamp }.forEach(selection::toggleSelection)
+    }
+
+    val combineNotifications: Boolean get() = preferencesDataSource.preferences.value.combineNotifications
 
     private fun getFiltered(
         events: List<ReminderEvent>,

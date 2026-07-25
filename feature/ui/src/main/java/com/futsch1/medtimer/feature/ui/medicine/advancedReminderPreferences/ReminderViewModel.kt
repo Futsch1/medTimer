@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences
 
-import com.futsch1.medtimer.core.common.helpers.ModelDataViewModel
+import com.futsch1.medtimer.core.ui.preferences.ModelDataViewModel
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -16,20 +16,14 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.navigateUp
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
@@ -58,9 +52,7 @@ import kotlin.time.toDuration
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var autostartService: AutostartService
-    private var appBarConfiguration: AppBarConfiguration? = null
     private var navHostFragment: NavHostFragment? = null
-    private val mainViewModel: MainViewModel by viewModels()
     private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
@@ -165,9 +157,6 @@ class MainActivity : AppCompatActivity() {
                 setContent {
                     MedTimerTheme {
                         AppNavigationScaffold(
-                            state = mainViewModel.state,
-                            onDismissBatteryWarning = mainViewModel::dismissBatteryWarning,
-                            onDismissExactRemindersWarning = mainViewModel::dismissExactRemindersWarning,
                             onContentBound = ::onContentBound,
                             onNavItemClick = ::onNavItemClick,
                         )
@@ -196,7 +185,7 @@ class MainActivity : AppCompatActivity() {
         this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    private fun onContentBound(toolbar: Toolbar, navHostFragment: NavHostFragment) {
+    private fun onContentBound(navHostFragment: NavHostFragment) {
         this.navHostFragment = navHostFragment
         val navController = navHostFragment.navController
         // Track the tab whose area we're in. Detail screens (e.g. editMedicineFragment) are flat siblings
@@ -207,13 +196,6 @@ class MainActivity : AppCompatActivity() {
                 currentTabId = destination.id
             }
         }
-        setSupportActionBar(toolbar)
-        appBarConfiguration = AppBarConfiguration.Builder(
-            com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
-            com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
-            com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
-        ).build()
-        setupActionBarWithNavController(this, navController, appBarConfiguration!!)
     }
 
     private val topLevelTabIds = setOf(
@@ -290,9 +272,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        backupManagerFactory.create(this, this, null, null, null, supportFragmentManager).autoBackup()
-
-        mainViewModel.refresh()
+        backupManagerFactory.create(this, this, null, null, supportFragmentManager).autoBackup()
     }
 
     private suspend fun dispatchIntent(intent: Intent) {
@@ -331,16 +311,6 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         lifecycleScope.launch {
             dispatchIntent(intent)
-        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        try {
-            val navController = this.findNavController(R.id.navHost)
-            return appBarConfiguration?.let { navigateUp(navController, it) } == true
-                    || super.onSupportNavigateUp()
-        } catch (_: IllegalStateException) {
-            return false
         }
     }
 }

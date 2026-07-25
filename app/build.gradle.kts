@@ -180,6 +180,9 @@ dependencies {
     androidTestImplementation(libs.uiautomator)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     androidTestUtil(libs.androidx.test.orchestrator)
 
     ksp(libs.androidx.room.compiler)

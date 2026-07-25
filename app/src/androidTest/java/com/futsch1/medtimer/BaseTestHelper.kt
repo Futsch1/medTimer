@@ -5,6 +5,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.RemoteException
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
@@ -15,6 +27,9 @@ import androidx.test.uiautomator.UiSelector
 import com.adevinta.android.barista.rule.BaristaRule
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.di.TimeFormatterEntryPoint
+import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
+import com.futsch1.medtimer.feature.ui.medicine.MedicinesMenuTestTags
+import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import com.futsch1.medtimer.utilities.grantAppPermission
 import dagger.hilt.android.EntryPointAccessors
 import org.junit.Before
@@ -23,11 +38,18 @@ import org.junit.Rule
 import org.junit.rules.TestName
 import java.io.IOException
 import java.time.LocalDate
+import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
 
 abstract class BaseTestHelper {
     @JvmField
     @Rule
     var baristaRule: BaristaRule<MainActivity> = BaristaRule.create(MainActivity::class.java)
+
+    // Empty rather than createAndroidComposeRule: BaristaRule already launches the activity, and two
+    // launching rules would conflict. This one only attaches to the existing Compose hierarchy.
+    @get:Rule
+    val composeTestRule = createEmptyComposeRule()
 
     @Rule
     @JvmField
@@ -89,6 +111,69 @@ abstract class BaseTestHelper {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
     }
+
+    /** Opens the overflow shared by the three top-level screens. */
+    protected fun openAppOptionsMenu() = clickTag(AppOptionsTestTags.OVERFLOW)
+
+    /** Opens the medicine-list menu (bulk activation, sorting). */
+    protected fun openMedicinesMenu() = clickTag(MedicinesMenuTestTags.OVERFLOW)
+
+    /** Opens the menu of the medicine currently being edited. */
+    protected fun openEditMedicineMenu() = clickTag(EditMedicineTestTags.OVERFLOW)
+
+    /** Clicks the state button of the Overview event at [index], opening its quick-action menu. */
+    protected fun clickOverviewEventState(index: Int) {
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_STATE_BUTTON)[index].performClick()
+    }
+
+    protected fun clickOverviewEvent(index: Int) {
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_CARD)[index].performClick()
+    }
+
+    protected fun longClickOverviewEvent(index: Int) {
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_CARD)[index]
+            .performTouchInput { longClick() }
+    }
+
+    protected fun overviewEventCount(): Int =
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_CARD).fetchSemanticsNodes().size
+
+    protected fun assertOverviewEventTextContains(index: Int, substring: String) {
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_TEXT)[index]
+            .assertTextContains(substring, substring = true)
+    }
+
+    /** The day-of-month currently selected in the Overview week strip. */
+    protected fun selectedOverviewDay(): String =
+        composeTestRule.onNodeWithTag(OverviewTestTags.SELECTED_DAY)
+            .fetchSemanticsNode().config[SemanticsProperties.Text].first().text
+
+    protected fun toggleOverviewFilter(filter: OverviewFilter) = clickTag(OverviewTestTags.filter(filter))
+
+    protected fun clickTag(tag: String) {
+        composeTestRule.onNodeWithTag(tag).performClick()
+    }
+
+    /** Asserts the Overview event at [index] shows the state named by [stateRes]. */
+    protected fun assertOverviewEventState(index: Int, @StringRes stateRes: Int) {
+        composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_STATE_BUTTON)[index]
+            .assertContentDescriptionEquals(getString(stateRes))
+    }
+
+    protected fun assertMenuItemDisplayed(@StringRes textRes: Int) {
+        composeTestRule.onNodeWithText(getString(textRes)).assertIsDisplayed()
+    }
+
+    protected fun assertMenuItemNotDisplayed(@StringRes textRes: Int) {
+        composeTestRule.onNodeWithText(getString(textRes)).assertDoesNotExist()
+    }
+
+    protected fun clickMenuItem(@StringRes textRes: Int) {
+        composeTestRule.onNodeWithText(getString(textRes)).performClick()
+    }
+
+    protected fun getString(@StringRes textRes: Int): String =
+        InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes)
 
     protected fun internalAssert(b: Boolean) {
         if (!b) {

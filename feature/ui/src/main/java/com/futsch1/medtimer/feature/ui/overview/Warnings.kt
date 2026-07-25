@@ -1,4 +1,4 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -25,12 +25,12 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /**
- * The shell's dismissible warning cards. [MainViewModel] gates both on release builds, so the
- * previews below are the only way to see them without building a release APK.
+ * Overview's dismissible warning cards. [OverviewWarningsViewModel] gates both on release builds, so
+ * the previews below are the only way to see them without building a release APK.
  */
 @Composable
 fun Warnings(
-    state: MainScreenState,
+    state: OverviewWarningsState,
     onDismissBatteryWarning: () -> Unit,
     onDismissExactRemindersWarning: () -> Unit,
     modifier: Modifier = Modifier,
@@ -110,17 +110,17 @@ private fun WarningCard(
     }
 }
 
-private class PreviewMainScreenState(
+private class PreviewOverviewWarningsState(
     override val showBatteryOptimizationWarning: Boolean,
     override val showExactRemindersWarning: Boolean,
-) : MainScreenState
+) : OverviewWarningsState
 
 @Preview(name = "Warnings — both")
 @Composable
 private fun WarningsBothPreview() {
     MedTimerTheme {
         Warnings(
-            state = PreviewMainScreenState(showBatteryOptimizationWarning = true, showExactRemindersWarning = true),
+            state = PreviewOverviewWarningsState(showBatteryOptimizationWarning = true, showExactRemindersWarning = true),
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
         )
@@ -132,7 +132,7 @@ private fun WarningsBothPreview() {
 private fun WarningsExactRemindersPreview() {
     MedTimerTheme {
         Warnings(
-            state = PreviewMainScreenState(showBatteryOptimizationWarning = false, showExactRemindersWarning = true),
+            state = PreviewOverviewWarningsState(showBatteryOptimizationWarning = false, showExactRemindersWarning = true),
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
         )

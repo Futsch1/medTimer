@@ -5,7 +5,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -14,28 +13,30 @@ import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
+import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 
 
 class CalendarTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun calendarTest() {
-        openMenu()
-        clickOn(R.string.generate_test_data)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 2, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 3, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 4, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
+        clickOverviewEventState(2)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
+        clickOverviewEventState(3)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
+        clickOverviewEventState(4)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
 
         navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
 
         AndroidTestHelper.clickMedicineItem(0)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openCalendar)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.calendar)
         assertContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, "Omega 3 (EPA/DHA 500mg)")
         Espresso.pressBack()
 
@@ -56,7 +57,7 @@ class CalendarTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun testDeletedEventNotInCalendarView() {
         // Create event
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
+        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
         clickOn(R.string.custom)
         writeTo(android.R.id.input, "Test")
         clickDialogPositiveButton(false)
@@ -64,10 +65,8 @@ class CalendarTest : BaseTestHelper() {
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
         // Delete event
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.deleteButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.delete)
         clickDialogPositiveButton()
 
         // Check that the event is not listed in the calendar view

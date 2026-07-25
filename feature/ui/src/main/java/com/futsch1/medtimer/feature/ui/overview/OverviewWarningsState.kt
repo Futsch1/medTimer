@@ -1,16 +1,16 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-/** See `docs/guidelines/jetpack-compose.md` §State holders. [MainViewModel] is the only writer. */
-interface MainScreenState {
+/** See `docs/guidelines/jetpack-compose.md` §State holders. [OverviewWarningsViewModel] is the only writer. */
+interface OverviewWarningsState {
     val showBatteryOptimizationWarning: Boolean
     val showExactRemindersWarning: Boolean
 }
 
-class MutableMainScreenState : MainScreenState {
+class MutableOverviewWarningsState : OverviewWarningsState {
     override var showBatteryOptimizationWarning by mutableStateOf(false)
     override var showExactRemindersWarning by mutableStateOf(false)
 }

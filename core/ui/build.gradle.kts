@@ -51,9 +51,12 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.icondialog)
+    // ModelDataPreferencesFragment drives a SimpleIdlingResource for the instrumented tests.
+    implementation(libs.espresso.idling.resource)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Compose

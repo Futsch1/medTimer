@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
     implementation(libs.calendar.compose)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.reorderable)
     debugImplementation(libs.androidx.compose.ui.tooling)
 

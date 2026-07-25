@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -37,9 +38,9 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     lateinit var timeFormatter: TimeFormatter
 
     @Inject
-    lateinit var menuProviderFactory: AdvancedReminderSettingsMenuProvider.Factory
+    lateinit var settingsActionsFactory: AdvancedReminderSettingsActions.Factory
 
-    val menuProvider by lazy { menuProviderFactory.create(this) }
+    val settingsActions by lazy { settingsActionsFactory.create(this) }
     var medicine: Medicine? = null
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
@@ -54,7 +55,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
     override fun onModelDataUpdated(modelData: Reminder) {
         super.onModelDataUpdated(modelData)
 
-        menuProvider.reminder = modelData
+        settingsActions.reminder = modelData
 
         findPreference<Preference>("stock_threshold")?.summary =
             MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
@@ -96,15 +97,8 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-
-        requireActivity().addMenuProvider(
-            menuProvider,
-            getViewLifecycleOwner()
-        )
-
-        return view
-    }
+    ): View = withTopAppBar(
+        super.onCreateView(inflater, container, savedInstanceState)
+    ) { AdvancedReminderSettingsMenu(settingsActions) }
 
 }

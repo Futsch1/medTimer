@@ -8,7 +8,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
-import androidx.preference.PreferenceFragmentCompat
+import com.futsch1.medtimer.core.ui.preferences.MedTimerPreferenceFragment
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -28,7 +28,7 @@ import java.util.stream.Collectors
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WeekendModePreferencesFragment : PreferenceFragmentCompat() {
+class WeekendModePreferencesFragment : MedTimerPreferenceFragment() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
 

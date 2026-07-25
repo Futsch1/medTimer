@@ -1,4 +1,4 @@
-package com.futsch1.medtimer.di
+package com.futsch1.medtimer.core.common.di
 
 import javax.inject.Qualifier
 

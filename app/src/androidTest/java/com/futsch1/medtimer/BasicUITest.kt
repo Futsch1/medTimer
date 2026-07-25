@@ -16,7 +16,6 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
@@ -35,6 +34,9 @@ import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
+import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 
 
 class BasicUITest : BaseTestHelper() {
@@ -63,8 +65,8 @@ class BasicUITest : BaseTestHelper() {
         AndroidTestHelper.clickMedicineItem(0)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        openMenu()
-        clickOn(R.string.duplicate)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.duplicate)
 
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
 
@@ -142,7 +144,7 @@ class BasicUITest : BaseTestHelper() {
         // Test saving notes
         val notes = "Contains catnip\n\nmeow :3"
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.notes)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
         closeKeyboard()
         clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
@@ -151,7 +153,7 @@ class BasicUITest : BaseTestHelper() {
         AndroidTestHelper.clickMedicineItem(0)
 
         // Check if the note is saved
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.notes)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
 
         // Test cancelling saving notes
@@ -160,16 +162,16 @@ class BasicUITest : BaseTestHelper() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
 
         // Check that the note is unmodified
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openNotes)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.notes)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun appIntro() {
-        openMenu()
+        openAppOptionsMenu()
 
-        clickOn(R.string.show_intro)
+        clickTag(AppOptionsTestTags.SHOW_INTRO)
 
         assertDisplayed(R.string.intro_welcome)
         assertDisplayed(R.string.intro_welcome_description)
@@ -190,42 +192,38 @@ class BasicUITest : BaseTestHelper() {
         navigateTo(MainMenu.OVERVIEW)
         assertContains(TEST_2)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
+        toggleOverviewFilter(OverviewFilter.RAISED)
         assertContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
+        toggleOverviewFilter(OverviewFilter.RAISED)
 
         assertContains(TEST_2)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
+        toggleOverviewFilter(OverviewFilter.TAKEN)
         assertNotContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
+        toggleOverviewFilter(OverviewFilter.TAKEN)
 
         assertContains(TEST_2)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
+        toggleOverviewFilter(OverviewFilter.TAKEN)
         assertContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterTaken)
+        toggleOverviewFilter(OverviewFilter.TAKEN)
 
         assertContains(TEST_2)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
+        toggleOverviewFilter(OverviewFilter.RAISED)
         assertNotContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterRaised)
+        toggleOverviewFilter(OverviewFilter.RAISED)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterSkipped)
+        toggleOverviewFilter(OverviewFilter.SKIPPED)
         assertNotContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterSkipped)
+        toggleOverviewFilter(OverviewFilter.SKIPPED)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
+        toggleOverviewFilter(OverviewFilter.SCHEDULED)
         assertNotContains(TEST_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
+        toggleOverviewFilter(OverviewFilter.SCHEDULED)
 
         navigateTo(MainMenu.MEDICINES)
         AndroidTestHelper.clickMedicineItem(0)
@@ -235,7 +233,7 @@ class BasicUITest : BaseTestHelper() {
 
         assertContains("Test (1)")
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.filterScheduled)
+        toggleOverviewFilter(OverviewFilter.SCHEDULED)
         assertContains("Test (1)")
     }
 
@@ -243,46 +241,34 @@ class BasicUITest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     // Using internal assert
     fun overviewDaySelection() {
-        openMenu()
-        clickOn(R.string.generate_test_data_and_events)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA_AND_EVENTS)
 
         val secondDay =
             DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
         val today = DayOfWeek.FRIDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n1"
 
         clickOn(secondDay)
-        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+        internalAssert(overviewEventCount() > 0)
 
         navigateTo(MainMenu.MEDICINES)
 
         navigateTo(MainMenu.OVERVIEW)
 
-        val view = AtomicReference<View>()
-        view.set(
-            baristaRule.activityTestRule.getActivity()
-                .findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
-        )
-
-        var currentDay = view.get().findViewWithTag<TextView>("selected")
-        internalAssert(currentDay.text == secondDay)
+        internalAssert(selectedOverviewDay() == secondDay)
 
         navigateTo(MainMenu.OVERVIEW)
 
         navigateTo(MainMenu.OVERVIEW)
-        view.set(
-            baristaRule.activityTestRule.getActivity()
-                .findViewById(com.futsch1.medtimer.feature.ui.R.id.overviewWeek)
-        )
-        currentDay = view.get().findViewWithTag("selected")
-        internalAssert(currentDay.text == today)
-        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+        internalAssert(selectedOverviewDay() == today)
+        internalAssert(overviewEventCount() > 0)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewNextWeek)
-        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+        clickTag(OverviewTestTags.NEXT_WEEK)
+        internalAssert(overviewEventCount() > 0)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewPrevWeek)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewPrevWeek)
-        assertListNotEmpty(com.futsch1.medtimer.feature.ui.R.id.reminders)
+        clickTag(OverviewTestTags.PREV_WEEK)
+        clickTag(OverviewTestTags.PREV_WEEK)
+        internalAssert(overviewEventCount() > 0)
     }
 
     companion object {

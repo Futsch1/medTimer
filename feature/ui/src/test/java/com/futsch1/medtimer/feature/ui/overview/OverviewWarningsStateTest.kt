@@ -1,10 +1,10 @@
-package com.futsch1.medtimer
+package com.futsch1.medtimer.feature.ui.overview
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class MainScreenStateTest {
+class OverviewWarningsStateTest {
 
     @Test
     fun `battery warning shows when not exempt, not dismissed and not suppressed`() {

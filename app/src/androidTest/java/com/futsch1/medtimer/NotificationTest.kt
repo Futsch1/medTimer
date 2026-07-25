@@ -27,7 +27,6 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.MainMenu
 import com.futsch1.medtimer.AndroidTestHelper.navigateTo
@@ -43,6 +42,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
 
 
 const val TEST_MED = "Test med"
@@ -102,7 +102,7 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.createMedicine(TEST_MED)
 
         // Set color and icon
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
         clickOn(R.string.color)
         clickOn(R.string.select_color)
         onView(withResourceName("hexEdit")).perform(
@@ -147,10 +147,10 @@ class NotificationTest : BaseTestHelper() {
     @AllowFlaky(attempts = 3)
     fun actionOnDismissedNotification() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        openMenu()
+        openAppOptionsMenu()
 
         // Skip reminder on dismiss
-        clickOn(R.string.tab_settings)
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.skip_reminder)
@@ -169,18 +169,13 @@ class NotificationTest : BaseTestHelper() {
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.skipped)
 
         // Now change to action taken on dismiss
-        openMenu()
+        openAppOptionsMenu()
 
         // Skip reminder on dismiss
-        clickOn(R.string.tab_settings)
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.taken)
@@ -188,9 +183,9 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         // Clear event data (causes reminder to be re-raised)
-        openMenu()
+        openAppOptionsMenu()
         clickOn(R.string.event_data)
-        clickOn(R.string.clear_events)
+        clickTag(AppOptionsTestTags.CLEAR_EVENTS)
         clickDialogPositiveButton()
 
         navigateTo(MainMenu.ANALYSIS)
@@ -198,21 +193,16 @@ class NotificationTest : BaseTestHelper() {
 
         // Check overview and next reminders
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.taken)
     }
 
     @Test
     fun repeatingReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        openMenu()
+        openAppOptionsMenu()
 
         // Repeat reminder every minute and enable exact reminders
-        clickOn(R.string.tab_settings)
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.notification_reminder_settings)
         AndroidTestHelper.scrollDown()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -257,12 +247,8 @@ class NotificationTest : BaseTestHelper() {
         }
         navigateTo(MainMenu.OVERVIEW)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
         navigateTo(MainMenu.ANALYSIS)
 
         openNotification().use {
@@ -289,8 +275,8 @@ class NotificationTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun variableAmount() {
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.display_settings)
         clickOn(R.string.combine_notifications)
         pressBack()
@@ -304,8 +290,8 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.scrollDown()
         clickOn(R.string.variable_amount)
         pressBack()
-        openMenu()
-        clickOn(R.string.duplicate_including_reminders)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.duplicate_including_reminders)
 
         AndroidTestHelper.clickMedicineItem(1)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, SECOND_ONE)
@@ -338,8 +324,8 @@ class NotificationTest : BaseTestHelper() {
     @Test
     @AllowFlaky(attempts = 3)
     fun variableAmountBigButton() {
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.display_settings)
         clickOn(R.string.big_notifications)
         clickOn(R.string.combine_notifications)
@@ -354,8 +340,8 @@ class NotificationTest : BaseTestHelper() {
         AndroidTestHelper.scrollDown()
         clickOn(R.string.variable_amount)
         pressBack()
-        openMenu()
-        clickOn(R.string.duplicate_including_reminders)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.duplicate_including_reminders)
         AndroidTestHelper.clickMedicineItem(0)
         AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
         pressBack()
@@ -396,12 +382,8 @@ class NotificationTest : BaseTestHelper() {
         val nextDay =
             DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
         clickOn(nextDay)
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
 
@@ -413,8 +395,8 @@ class NotificationTest : BaseTestHelper() {
     fun customSnooze() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.snooze_settings)
         clickOn(R.string.snooze_duration)
         clickOn(R.string.custom)
@@ -441,17 +423,12 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.OVERVIEW)
 
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.reminded)
 
         navigateTo(MainMenu.ANALYSIS)
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.notification_reminder_settings)
         clickOn(R.string.dismiss_notification_action)
         clickOn(R.string.taken)
@@ -474,12 +451,7 @@ class NotificationTest : BaseTestHelper() {
         clickDialogPositiveButton()
 
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
-        )
+        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.reminded)
     }
 
     @Test
@@ -487,8 +459,8 @@ class NotificationTest : BaseTestHelper() {
     fun hiddenMedicineName() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.privacy_settings)
         clickOn(R.string.hide_med_name)
 
@@ -511,8 +483,8 @@ class NotificationTest : BaseTestHelper() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val packageName = device.currentPackageName
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.display_settings)
         clickOn(R.string.big_notifications)
 
@@ -551,8 +523,8 @@ class NotificationTest : BaseTestHelper() {
     fun sameTimeReminders() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.display_settings)
         clickOn(R.string.combine_notifications)
         pressBack()
@@ -583,34 +555,14 @@ class NotificationTest : BaseTestHelper() {
         }
 
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
-        )
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.taken)
+        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.taken)
 
-        AndroidTestHelper.longClickListItem(com.futsch1.medtimer.feature.ui.R.id.reminders, 0)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedButton)
+        longClickOverviewEvent(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.skipped)
 
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
-        )
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.x_circle)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.skipped)
+        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.skipped)
     }
 
     @Test
@@ -628,12 +580,7 @@ class NotificationTest : BaseTestHelper() {
         pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.alarm)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.please_wait)
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
         device.wait(
@@ -662,19 +609,15 @@ class NotificationTest : BaseTestHelper() {
 
         AndroidTestHelper.createMedicine(TEST_MED)
         AndroidTestHelper.createIntervalReminder("1", 2)
-        openMenu()
-        clickOn(R.string.medicine_settings)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.medicine_settings)
         clickOn(R.string.notification_importance)
         clickOn(R.string.high_and_alarm)
         pressBack()
 
         navigateTo(MainMenu.OVERVIEW)
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        clickOverviewEventState(0)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
 
         device.waitForIdle(2_000)
 
@@ -689,12 +632,7 @@ class NotificationTest : BaseTestHelper() {
         internalAssert(o != null)
         clickTakenOnAlarmScreen(device, context)
 
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
-        )
+        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.taken)
 
         device.waitForIdle(2_000)
 
@@ -709,18 +647,8 @@ class NotificationTest : BaseTestHelper() {
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
         clickTakenOnAlarmScreen(device, context)
 
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            2,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.check2_circle)))
-        )
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            3,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
-        )
+        assertOverviewEventState(2, com.futsch1.medtimer.core.ui.R.string.taken)
+        assertOverviewEventState(3, com.futsch1.medtimer.core.ui.R.string.reminded)
     }
 
     @Test
@@ -732,11 +660,7 @@ class NotificationTest : BaseTestHelper() {
 
         navigateTo(MainMenu.OVERVIEW)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
+        clickOverviewEventState(0)
         clickOn(R.string.reschedule_reminder)
 
         AndroidTestHelper.setTime(4, 0, false)
@@ -753,7 +677,7 @@ class NotificationTest : BaseTestHelper() {
         val packageName = device.currentPackageName
 
         AndroidTestHelper.createMedicine(TEST_MED)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
         AndroidTestHelper.createIntervalReminder("1", 120)
@@ -769,15 +693,10 @@ class NotificationTest : BaseTestHelper() {
         }
 
         navigateTo(MainMenu.OVERVIEW)
-        assertCustomAssertionAtPosition(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton,
-            matches(withTagValue(equalTo(R.drawable.bell)))
-        )
+        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.reminded)
 
-        openMenu()
-        clickOn(R.string.tab_settings)
+        openAppOptionsMenu()
+        clickTag(AppOptionsTestTags.SETTINGS)
         clickOn(R.string.display_settings)
         clickOn(R.string.big_notifications)
         pressBack()
@@ -785,7 +704,7 @@ class NotificationTest : BaseTestHelper() {
         navigateTo(MainMenu.MEDICINES)
 
         AndroidTestHelper.createMedicine(TEST_MED_2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
+        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
         AndroidTestHelper.createIntervalReminder("1", 120)

@@ -3,7 +3,6 @@ package com.futsch1.medtimer
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.AndroidTestHelper.assertMedicineAtPosition
 import com.futsch1.medtimer.AndroidTestHelper.clickMedicineItem
@@ -43,9 +42,8 @@ class MedicineHandlingTest : BaseTestHelper() {
 
         assertMedicineAtPosition(2, TEST_MED_3)
 
-        openMenu()
-        clickOn(R.string.sort)
-        clickOn(R.string.by_name)
+        openMedicinesMenu()
+        clickMenuItem(R.string.by_name)
         assertMedicineAtPosition(0, TEST_MED_3)
         assertMedicineAtPosition(1, TEST_MED_1)
         assertMedicineAtPosition(2, TEST_MED_2 + '_')

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
@@ -58,7 +59,7 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
     )
 ) {
     @Inject
-    lateinit var menuProviderFactory: AdvancedReminderSettingsMenuProvider.Factory
+    lateinit var settingsActionsFactory: AdvancedReminderSettingsActions.Factory
 
     @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
@@ -108,12 +109,12 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
             }
         )
 
-    val menuProvider by lazy { menuProviderFactory.create(this) }
+    val settingsActions by lazy { settingsActionsFactory.create(this) }
 
     override fun onModelDataUpdated(modelData: Reminder) {
         super.onModelDataUpdated(modelData)
 
-        menuProvider.reminder = modelData
+        settingsActions.reminder = modelData
 
         findPreference<Preference>("reminder_status")?.summary = getDateRangeSummary(modelData)
         findPreference<Preference>("interval")?.summary =
@@ -195,16 +196,9 @@ class AdvancedReminderPreferencesRootFragment : AdvancedReminderPreferencesFragm
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-
-        requireActivity().addMenuProvider(
-            menuProvider,
-            getViewLifecycleOwner()
-        )
-
-        return view
-    }
+    ): View = withTopAppBar(
+        super.onCreateView(inflater, container, savedInstanceState)
+    ) { AdvancedReminderSettingsMenu(settingsActions) }
 
     private fun showTimeEdit(activity: FragmentActivity, preference: Preference) {
         val currentTimeString = preference.preferenceDataStore?.getString(preference.key, null)

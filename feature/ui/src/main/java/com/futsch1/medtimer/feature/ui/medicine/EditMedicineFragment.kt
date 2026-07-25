@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.fragment.app.Fragment
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -17,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
-import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
 import com.futsch1.medtimer.core.common.helpers.SwipeHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -71,7 +74,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var editMedicineSubmenusFactory: EditMedicineSubmenus.Factory
 
     @Inject
-    lateinit var editMedicineMenuProviderFactory: EditMedicineMenuProvider.Factory
+    lateinit var editMedicineActionsFactory: EditMedicineActions.Factory
 
     @Inject
     lateinit var medicineIcons: MedicineIcons
@@ -88,7 +91,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private var medicine: Medicine? = null
     private lateinit var fragmentView: View
     private var fragmentReady = false
-    private lateinit var optionsMenu: EntityEditOptionsMenu
+    // Assigned once the medicine has loaded; the bar renders its actions only from that point on.
+    private var editMedicineActions by mutableStateOf<EditMedicineActions?>(null)
+    private var medicineName by mutableStateOf("")
 
     private val idlingResource = SimpleIdlingResource(EditMedicineFragment::class.java.name)
 
@@ -102,7 +107,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         savedInstanceState: Bundle?
     ): View {
         idlingResource.setBusy()
-        fragmentView = inflater.inflate(R.layout.fragment_edit_medicine, container, false)
+        fragmentView = withTopAppBar(
+            inflater.inflate(R.layout.fragment_edit_medicine, container, false),
+            title = medicineName,
+        ) {
+            editMedicineActions?.let { EditMedicineMenu(it) }
+        }
 
         // Do not enter fragment just yet, first fetch entity from database and setup UI
         postponeEnterTransition()
@@ -118,12 +128,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
             this@EditMedicineFragment.medicine = medicine
 
-            setupMenu(navController, medicine)
-
             withContext(mainDispatcher) {
-                if (::optionsMenu.isInitialized) {
-                    requireActivity().addMenuProvider(optionsMenu, viewLifecycleOwner)
-                }
+                medicineName = medicine.name
+                editMedicineActions = editMedicineActionsFactory.create(medicine, this@EditMedicineFragment, navController)
 
                 // Signal that entity was loaded
                 onMedicineLoaded(medicine)
@@ -141,16 +148,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         startPostponedEnterTransition()
     }
 
-    private fun setupMenu(navController: NavController, medicine: Medicine) {
-        optionsMenu = editMedicineMenuProviderFactory.create(medicine, this, navController)
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         idlingResource.destroy()
-        if (::optionsMenu.isInitialized) {
-            optionsMenu.onDestroy()
-        }
     }
 
     override fun onStop() {
