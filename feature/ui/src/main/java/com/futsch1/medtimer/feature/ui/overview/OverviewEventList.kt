@@ -48,9 +48,6 @@ fun OverviewEventList(
     val railColor = MaterialTheme.colorScheme.primary
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
     var listTop by remember { mutableFloatStateOf(0f) }
-    // Rendered once here, on top of both the list and the pills, so the boundary stretch covers
-    // them together instead of leaving the pills (drawn outside the list's own overscroll node)
-    // undistorted. LazyColumn only gets the event-handling half so it doesn't also render its own.
     val overscrollEffect = rememberOverscrollEffect()
 
     LazyColumn(

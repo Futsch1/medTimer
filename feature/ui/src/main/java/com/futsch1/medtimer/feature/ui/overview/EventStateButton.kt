@@ -12,14 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -52,6 +50,7 @@ internal fun EventStateButton(
 ) {
     val context = LocalContext.current
     var showActions by remember { mutableStateOf(false) }
+    var anchorCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
     IconButton(
         onClick = { showActions = true },
@@ -60,7 +59,8 @@ internal fun EventStateButton(
             .padding(EVENT_STATE_BUTTON_MARGIN)
             .size(EVENT_STATE_BUTTON_SIZE)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .onGloballyPositioned { anchorCoordinates = it },
     ) {
         val slideSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
         val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
@@ -84,20 +84,17 @@ internal fun EventStateButton(
             )
         }
     }
-    DropdownMenu(expanded = showActions, onDismissRequest = { showActions = false }) {
-        actions?.visibleButtons.orEmpty().forEach { button ->
-            DropdownMenuItem(
-                text = { Text(stringResource(button.labelRes)) },
-                onClick = {
-                    showActions = false
-                    onAction(button)
-                },
-                leadingIcon = {
-                    Icon(painterResource(button.iconRes), contentDescription = null)
-                },
-            )
-        }
-    }
+
+    ArcActionMenu(
+        expanded = showActions,
+        buttons = actions?.visibleButtons.orEmpty(),
+        anchorCoordinates = anchorCoordinates,
+        onDismissRequest = { showActions = false },
+        onAction = { button ->
+            showActions = false
+            onAction(button)
+        },
+    )
 }
 
 @Preview(name = "EventStateButton — Pending")

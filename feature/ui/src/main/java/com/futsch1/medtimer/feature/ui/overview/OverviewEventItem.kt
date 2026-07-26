@@ -93,8 +93,6 @@ fun OverviewEventItem(
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            // Reported from the placed coordinates rather than the list's layoutInfo, which
-            // exposes target offsets only and so runs ahead of animateItem's placement spring.
             modifier = Modifier.onGloballyPositioned {
                 onRailAnchor(it.positionInRoot().y + it.size.height / 2f)
             },
