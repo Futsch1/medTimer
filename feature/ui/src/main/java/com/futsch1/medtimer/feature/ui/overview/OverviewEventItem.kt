@@ -4,36 +4,23 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -42,9 +29,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -59,8 +43,6 @@ import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.StockChange
-import com.futsch1.medtimer.feature.ui.overview.model.getImage
-import com.futsch1.medtimer.feature.ui.overview.model.toString
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -101,8 +83,6 @@ fun OverviewEventItem(
     modifier: Modifier = Modifier,
     onRailAnchor: (Float) -> Unit = {},
 ) {
-    val context = LocalContext.current
-    var showActions by remember { mutableStateOf(false) }
     val containerColor = eventContainerColor(color, isSelected)
 
     Row(
@@ -119,52 +99,11 @@ fun OverviewEventItem(
                 onRailAnchor(it.positionInRoot().y + it.size.height / 2f)
             },
         ) {
-            IconButton(
-                onClick = { showActions = true },
-                modifier = Modifier
-                    .testTag(OverviewTestTags.EVENT_STATE_BUTTON)
-                    .padding(EVENT_STATE_BUTTON_MARGIN)
-                    .size(EVENT_STATE_BUTTON_SIZE)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-            ) {
-                val slideSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
-                val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
-                AnimatedContent(
-                    targetState = state,
-                    transitionSpec = {
-                        slideInHorizontally(slideSpec) { it } + fadeIn(fadeSpec) togetherWith
-                                slideOutHorizontally(slideSpec) { -it } + fadeOut(fadeSpec) using
-                                SizeTransform(clip = false)
-                    },
-                    label = "event_state",
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(EVENT_STATE_BUTTON_MARGIN)
-                        .clip(CircleShape),
-                ) { animatedState ->
-                    Icon(
-                        painter = painterResource(animatedState.getImage()),
-                        contentDescription = animatedState.toString(context),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                }
-            }
-            DropdownMenu(expanded = showActions, onDismissRequest = { showActions = false }) {
-                actions?.visibleButtons.orEmpty().forEach { button ->
-                    DropdownMenuItem(
-                        text = { Text(stringResource(button.labelRes)) },
-                        onClick = {
-                            showActions = false
-                            onAction(button)
-                        },
-                        leadingIcon = {
-                            Icon(painterResource(button.iconRes), contentDescription = null)
-                        },
-                    )
-                }
-            }
+            EventStateButton(
+                state = state,
+                actions = actions,
+                onAction = onAction,
+            )
         }
 
         SelectableCard(
