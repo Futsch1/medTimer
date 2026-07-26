@@ -13,12 +13,12 @@ import android.os.Handler
 import android.os.PowerManager
 import android.text.InputType
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.appcompat.widget.Toolbar
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
@@ -40,7 +40,6 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.database.backup.BackupManager
-import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
@@ -60,9 +59,8 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var autostartService: AutostartService
     private var appBarConfiguration: AppBarConfiguration? = null
-    private var batteryOptimizationWarning: CardView? = null
-    private var exactReminderWarning: CardView? = null
     private var navHostFragment: NavHostFragment? = null
+    private val mainViewModel: MainViewModel by viewModels()
     private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
@@ -167,6 +165,9 @@ class MainActivity : AppCompatActivity() {
                 setContent {
                     MedTimerTheme {
                         AppNavigationScaffold(
+                            state = mainViewModel.state,
+                            onDismissBatteryWarning = mainViewModel::dismissBatteryWarning,
+                            onDismissExactRemindersWarning = mainViewModel::dismissExactRemindersWarning,
                             onContentBound = ::onContentBound,
                             onNavItemClick = ::onNavItemClick,
                         )
@@ -195,7 +196,7 @@ class MainActivity : AppCompatActivity() {
         this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    private fun onContentBound(binding: ContentMainBinding, navHostFragment: NavHostFragment) {
+    private fun onContentBound(toolbar: Toolbar, navHostFragment: NavHostFragment) {
         this.navHostFragment = navHostFragment
         val navController = navHostFragment.navController
         // Track the tab whose area we're in. Detail screens (e.g. editMedicineFragment) are flat siblings
@@ -206,24 +207,13 @@ class MainActivity : AppCompatActivity() {
                 currentTabId = destination.id
             }
         }
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration.Builder(
             com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
             com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
             com.futsch1.medtimer.feature.ui.R.id.statisticsFragment
         ).build()
         setupActionBarWithNavController(this, navController, appBarConfiguration!!)
-
-        batteryOptimizationWarning = binding.batteryOptimizationWarning
-        binding.dismissBatteryWarning.setOnClickListener {
-            persistentDataDataSource.setBatteryWarningShown(true)
-            checkBatteryOptimization()
-        }
-        exactReminderWarning = binding.exactRemindersWarning
-        binding.dismissExactReminderWarning.setOnClickListener {
-            persistentDataDataSource.setExactRemindersWarningShown(true)
-            checkExactReminders()
-        }
     }
 
     private val topLevelTabIds = setOf(
@@ -276,24 +266,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkBatteryOptimization() {
-        if (!powerManager.isIgnoringBatteryOptimizations(packageName) && !persistentDataDataSource.data.value.batteryWarningShown && !BuildConfig.DEBUG) {
-            Log.d(LogTags.MAIN, "Show battery optimization")
-            batteryOptimizationWarning?.visibility = View.VISIBLE
-        } else {
-            batteryOptimizationWarning?.visibility = View.GONE
-        }
-    }
-
-    private fun checkExactReminders() {
-        if (!preferencesDataSource.preferences.value.exactReminders && !persistentDataDataSource.data.value.exactRemindersWarningShown && !BuildConfig.DEBUG) {
-            Log.d(LogTags.MAIN, "Show exact reminders warning")
-            exactReminderWarning?.visibility = View.VISIBLE
-        } else {
-            exactReminderWarning?.visibility = View.GONE
-        }
-    }
-
     private suspend fun checkForceStopped() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val exitInfos: List<ApplicationExitInfo> = activityManager.getHistoricalProcessExitReasons(null, 0, 1)
@@ -320,8 +292,7 @@ class MainActivity : AppCompatActivity() {
 
         backupManagerFactory.create(this, this, null, null, null, supportFragmentManager).autoBackup()
 
-        checkBatteryOptimization()
-        checkExactReminders()
+        mainViewModel.refresh()
     }
 
     private suspend fun dispatchIntent(intent: Intent) {

@@ -1,5 +1,12 @@
 package com.futsch1.medtimer
 
+import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
@@ -7,6 +14,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +33,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.fragment.NavHostFragment
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.futsch1.medtimer.databinding.ContentMainBinding
+import com.futsch1.medtimer.databinding.ToolbarBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R as FeatureUiR
 
@@ -48,6 +57,13 @@ fun navSuiteType(windowAdaptiveInfo: WindowAdaptiveInfo): NavigationSuiteType =
         NavigationSuiteType.NavigationBar
     }
 
+/**
+ * Whether the shell content has to pad the bottom system-bar inset itself. The NavigationBar consumes
+ * it; the rail sits on the side and leaves the gesture bar to the content.
+ */
+fun consumesBottomInset(navigationSuiteType: NavigationSuiteType): Boolean =
+    navigationSuiteType == NavigationSuiteType.NavigationRail
+
 private data class TopLevelNavItem(
     val destinationId: Int,
     val iconRes: Int,
@@ -70,17 +86,37 @@ private fun topLevelDestinationId(destination: NavDestination): Int =
     destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id ?: 0
 
 /**
- * Top-level navigation as an adaptive bar/rail. The Toolbar, warnings and the Fragment NavHost stay as
- * Views, embedded via AndroidViewBinding; [onContentBound] hands them back to the activity for wiring
- * (support action bar, warning buttons). Selection follows the NavController's current destination.
+ * Top-level navigation as an adaptive bar/rail. The Toolbar and the Fragment NavHost stay as Views,
+ * embedded either side of the Compose [Warnings]; [onContentBound] hands them back to the activity
+ * for wiring. Selection follows the NavController's current destination.
  */
 @Composable
 fun AppNavigationScaffold(
-    onContentBound: (ContentMainBinding, NavHostFragment) -> Unit,
+    state: MainScreenState,
+    onDismissBatteryWarning: () -> Unit,
+    onDismissExactRemindersWarning: () -> Unit,
+    onContentBound: (Toolbar, NavHostFragment) -> Unit,
     onNavItemClick: (NavController, Int) -> Unit,
 ) {
     var navController by remember { mutableStateOf<NavController?>(null) }
     var currentDestinationId by remember { mutableIntStateOf(0) }
+    var toolbar by remember { mutableStateOf<Toolbar?>(null) }
+    var navHostFragment by remember { mutableStateOf<NavHostFragment?>(null) }
+
+    // Wire once both nodes exist rather than relying on Column's top-down order: setSupportActionBar
+    // must precede setupActionBarWithNavController, and getting that backwards fails silently.
+    LaunchedEffect(toolbar, navHostFragment) {
+        val boundToolbar = toolbar ?: return@LaunchedEffect
+        val boundNavHost = navHostFragment ?: return@LaunchedEffect
+        onContentBound(boundToolbar, boundNavHost)
+    }
+
+    val navigationSuiteType = navSuiteType(currentWindowAdaptiveInfo())
+    val insetSides = if (consumesBottomInset(navigationSuiteType)) {
+        WindowInsetsSides.Top + WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+    } else {
+        WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+    }
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -94,19 +130,29 @@ fun AppNavigationScaffold(
                 )
             }
         },
-        layoutType = navSuiteType(currentWindowAdaptiveInfo()),
+        layoutType = navigationSuiteType,
         modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
-        AndroidViewBinding(ContentMainBinding::inflate) {
-            // The update block runs on every recomposition; set up exactly once.
-            if (navController == null) {
-                val navHostFragment = navHost.getFragment<NavHostFragment>()
-                val controller = navHostFragment.navController
-                controller.addOnDestinationChangedListener { _, destination, _ ->
-                    currentDestinationId = topLevelDestinationId(destination)
+        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars.only(insetSides))) {
+            AndroidViewBinding(ToolbarBinding::inflate) {
+                toolbar = root
+            }
+            Warnings(
+                state = state,
+                onDismissBatteryWarning = onDismissBatteryWarning,
+                onDismissExactRemindersWarning = onDismissExactRemindersWarning,
+            )
+            AndroidViewBinding(ContentMainBinding::inflate, Modifier.weight(1f)) {
+                // The update block runs on every recomposition; set up exactly once.
+                if (navController == null) {
+                    val fragment = root.getFragment<NavHostFragment>()
+                    val controller = fragment.navController
+                    controller.addOnDestinationChangedListener { _, destination, _ ->
+                        currentDestinationId = topLevelDestinationId(destination)
+                    }
+                    navController = controller
+                    navHostFragment = fragment
                 }
-                navController = controller
-                onContentBound(this, navHostFragment)
             }
         }
     }
