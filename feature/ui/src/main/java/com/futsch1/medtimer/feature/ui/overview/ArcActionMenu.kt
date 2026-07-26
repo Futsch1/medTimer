@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionOnScreen
@@ -50,7 +49,9 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import kotlinx.coroutines.delay
 import kotlin.math.abs
+import kotlin.math.ceil
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
@@ -192,8 +193,6 @@ private fun ArcActionButtons(
     val radiusXPx = with(density) { ARC_RADIUS_X.toPx() }
     val yStepPx = with(density) { ARC_Y_STEP.toPx() }
     val orderedButtons = remember(buttons) { buttons.sortedByDescending(ARC_BUTTON_TOP_TO_BOTTOM_ORDER::indexOf) }
-    val angles = remember(orderedButtons.size) { arcAngles(orderedButtons.size) }
-    val yPositions = remember(orderedButtons.size, yStepPx) { arcYPositions(orderedButtons.size, yStepPx) }
 
     Layout(
         modifier = Modifier
@@ -229,10 +228,26 @@ private fun ArcActionButtons(
             }
         },
     ) { measurables, constraints ->
-        val targets = arcTargets(measurables.drop(1), angles, yPositions, radiusXPx)
+        val placeables = measurables.drop(1).map { it.measure(Constraints()) }
+        // Slots for the full group, not just the buttons composed on this frame: the reveal is in
+        // order, so the composed ones always take the leading slots, and the layout stays put as
+        // the rest stagger in.
+        val slots = arcSlots(
+            count = orderedButtons.size,
+            shift = arcSlotShift(
+                count = orderedButtons.size,
+                stepPx = yStepPx,
+                buttonHeight = placeables.maxOfOrNull { it.height } ?: 0,
+                anchorY = anchorCenter.y,
+                availableHeight = constraints.maxHeight,
+            ),
+        )
+        val targets = placeables.mapIndexed { index, placeable ->
+            ArcTarget(arcStartX(slots[index], radiusXPx), slots[index] * yStepPx, placeable)
+        }
         val scrimRadius = hypot(
             targets.arcWidth().toFloat(),
-            arcHalfHeight(yPositions, targets).toFloat(),
+            arcHalfHeight(slots.map { it * yStepPx }, targets).toFloat(),
         ) + ARC_SCRIM_BLEED.toPx()
         val scrimSide = (scrimRadius * 2f).roundToInt().coerceAtLeast(0)
         val scrim = measurables.first().measure(Constraints.fixed(scrimSide, scrimSide))
@@ -250,18 +265,6 @@ private fun ArcActionButtons(
 
 /** Each button's measured [placeable], with its arc anchor point (the near/start edge it grows from). */
 private data class ArcTarget(val startX: Float, val centerY: Float, val placeable: Placeable)
-
-private fun arcTargets(
-    measurables: List<Measurable>,
-    angles: List<Float>,
-    yPositionsPx: List<Float>,
-    radiusXPx: Float,
-): List<ArcTarget> =
-    measurables.mapIndexed { index, measurable ->
-        val angleRad = Math.toRadians(angles[index].toDouble())
-        val startX = (radiusXPx * cos(angleRad)).toFloat()
-        ArcTarget(startX, yPositionsPx[index], measurable.measure(Constraints()))
-    }
 
 /** Tight-fit width around the buttons — not doubled, since startX is always >= 0 (no content on the far side). */
 private fun List<ArcTarget>.arcWidth(): Int =
@@ -302,18 +305,46 @@ private fun Placeable.PlacementScope.placeArcTargets(
     }
 }
 
-/** Evenly spaced angles (degrees), [ARC_STEP_ANGLE_DEG] apart, centred on 0° — shapes the horizontal bulge only. */
-private fun arcAngles(count: Int): List<Float> {
-    if (count == 1) return listOf(0f)
-    val half = ARC_STEP_ANGLE_DEG * (count - 1) / 2f
-    return List(count) { index -> -half + ARC_STEP_ANGLE_DEG * index }
+/**
+ * Each button's position along the arc, in whole steps from the anchor — positive below it,
+ * negative above — ordered bottom-most first. Both the vertical spacing and the horizontal bulge
+ * derive from this, so a slot is one full position on the arc rather than a free offset.
+ *
+ * [shift] slides the whole group along the arc without changing where the arc is centred.
+ */
+private fun arcSlots(count: Int, shift: Int): List<Float> =
+    List(count) { index -> (count - 1) / 2f - index + shift }
+
+/**
+ * How far to slide the group so no button falls off the top or bottom edge, in whole slots.
+ *
+ * Whole slots rather than a free translation: every button stays on a real arc position, so the
+ * bulge still peaks level with the anchor and the group simply leaves empty slots at the crowded
+ * end. Returns 0 when the group cannot fit either way, which keeps it centred on the anchor.
+ */
+private fun arcSlotShift(
+    count: Int,
+    stepPx: Float,
+    buttonHeight: Int,
+    anchorY: Float,
+    availableHeight: Int,
+): Int {
+    if (stepPx <= 0f) return 0
+    val halfButton = buttonHeight / 2f
+    val outermost = (count - 1) / 2f
+    val lowest = ceil((halfButton - anchorY) / stepPx + outermost)
+    val highest = floor((availableHeight - halfButton - anchorY) / stepPx - outermost)
+    if (lowest > highest) return 0
+    return 0f.coerceIn(lowest, highest).toInt()
 }
 
-/** Evenly spaced Y positions (px), [yStepPx] apart, ascending from bottom-most (largest Y) to top-most. */
-private fun arcYPositions(count: Int, yStepPx: Float): List<Float> {
-    if (count == 1) return listOf(0f)
-    val half = yStepPx * (count - 1) / 2f
-    return List(count) { index -> half - yStepPx * index }
+/**
+ * Horizontal reach of a [slot], bulging widest level with the anchor. The angle is clamped to a
+ * quarter turn so slots far from the anchor flatten against it rather than curving back behind it.
+ */
+private fun arcStartX(slot: Float, radiusXPx: Float): Float {
+    val angle = (ARC_STEP_ANGLE_DEG * slot).coerceIn(-90f, 90f)
+    return (radiusXPx * cos(Math.toRadians(angle.toDouble()))).toFloat()
 }
 
 @Preview(widthDp = 360, heightDp = 360, name = "ArcActionMenu —2 buttons")
