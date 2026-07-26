@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -12,10 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
-import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -53,11 +55,17 @@ abstract class ModelDataPreferencesFragment<T>(
         idlingResource.setBusy()
     }
 
-    override fun onCreateView(
+    /** Subclasses add their bar menu here rather than wrapping the view again, which would stack a second bar. */
+    open val topAppBarActions: @Composable RowScope.() -> Unit = {}
+
+    final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = withTopAppBar(super.onCreateView(inflater, container, savedInstanceState))
+    ): View = withTopAppBar(
+        super.onCreateView(inflater, container, savedInstanceState),
+        actions = topAppBarActions
+    )
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         postponeEnterTransition()

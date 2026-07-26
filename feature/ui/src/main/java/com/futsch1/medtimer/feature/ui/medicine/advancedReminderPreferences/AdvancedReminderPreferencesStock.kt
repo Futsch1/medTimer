@@ -1,10 +1,7 @@
 package com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.futsch1.medtimer.core.ui.component.withTopAppBar
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -93,12 +90,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = withTopAppBar(
-        super.onCreateView(inflater, container, savedInstanceState)
-    ) { AdvancedReminderSettingsMenu(settingsActions) }
+    override val topAppBarActions: @Composable RowScope.() -> Unit =
+        { AdvancedReminderSettingsMenu(settingsActions) }
 
 }

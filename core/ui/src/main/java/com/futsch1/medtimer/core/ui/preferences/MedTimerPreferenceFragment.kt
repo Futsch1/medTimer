@@ -9,7 +9,7 @@ import com.futsch1.medtimer.core.ui.component.withTopAppBar
 
 /** Base for the plain preference screens, giving each one its own top bar. */
 abstract class MedTimerPreferenceFragment : PreferenceFragmentCompat() {
-    override fun onCreateView(
+    final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
