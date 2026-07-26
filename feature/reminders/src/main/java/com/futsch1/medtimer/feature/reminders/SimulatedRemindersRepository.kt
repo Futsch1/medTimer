@@ -105,7 +105,6 @@ class SimulatedRemindersRepository @Inject constructor(
         val result = mutableListOf<SimulatedReminder>()
         val runOutDates = mutableMapOf<Int, LocalDate?>()
         medicines.forEach { runOutDates[it.id] = if (it.isStockManagementActive()) LocalDate.MAX else null }
-        var currentEmitDay = LocalDate.MIN
         val startTime = System.currentTimeMillis()
 
         SchedulingSimulator(
@@ -115,10 +114,6 @@ class SimulatedRemindersRepository @Inject constructor(
             preferencesDataSource
         ).simulate { simulatedReminder, scheduledDate ->
             if (scheduledDate < endDay) {
-                if (scheduledDate > currentEmitDay && currentEmitDay != LocalDate.MIN) {
-                    _simulatedReminders.value = result.toList()
-                }
-                currentEmitDay = scheduledDate
                 result.add(simulatedReminder)
                 val medicineId = simulatedReminder.scheduledReminder.medicine.id
                 if (runOutDates[medicineId] == LocalDate.MAX && simulatedReminder.stockAfter == 0.0) {

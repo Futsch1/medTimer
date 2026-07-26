@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -75,9 +74,6 @@ class OverviewViewModel @AssistedInject constructor(
 
     /** Selection state for the multi-select contextual bar. */
     val selection = SelectionListController<OverviewEvent> { it.id }
-
-    private var _initialized = false
-    val initialized get() = _initialized
 
     private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
 
@@ -127,7 +123,7 @@ class OverviewViewModel @AssistedInject constructor(
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
         combine(reminderEvents, simulatedReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
-        }.onEach { _initialized = true }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
+        }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         selection.bind(viewModelScope, overviewEvents)
@@ -204,8 +200,12 @@ class OverviewViewModel @AssistedInject constructor(
             }
         }
 
+        val coveredSlots = events.map { it.reminderId to it.remindedTimestamp.epochSecond }.toSet()
+
         for (simulatedReminder in reminders) {
-            if (isScheduledReminderVisible(simulatedReminder.scheduledReminder, filterState)) {
+            val scheduledReminder = simulatedReminder.scheduledReminder
+            val slot = scheduledReminder.reminder.id to scheduledReminder.timestamp.epochSecond
+            if (slot !in coveredSlots && isScheduledReminderVisible(scheduledReminder, filterState)) {
                 filteredOverviewEvents.add(simulatedReminderEventFactory.create(simulatedReminder))
             }
         }
