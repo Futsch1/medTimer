@@ -20,14 +20,13 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.list.SelectionListController
+import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
@@ -38,7 +37,6 @@ fun OverviewEventList(
     events: ImmutableList<OverviewEvent>,
     selection: SelectionListController<OverviewEvent>,
     listState: LazyListState,
-    medicineIcons: MedicineIcons,
     onEventClick: (OverviewEvent) -> Unit,
     onEnterSelectionMode: (OverviewEvent) -> Unit,
     onAction: (Button, OverviewEvent) -> Unit,
@@ -66,9 +64,7 @@ fun OverviewEventList(
                 content = event.content,
                 state = event.state,
                 color = event.color,
-                icon = remember(event.icon) {
-                    if (event.icon != 0) medicineIcons.getIconBitmapUntinted(event.icon).asImageBitmap() else null
-                },
+                icon = rememberMedicineIcon(event.icon),
                 isSelected = selection.isSelected(event),
                 isInSelectionMode = selection.isInSelectionMode,
                 actions = remember(event) { ActionsFactory().createActions(event) },

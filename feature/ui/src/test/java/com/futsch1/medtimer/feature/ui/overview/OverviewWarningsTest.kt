@@ -4,7 +4,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class OverviewWarningsStateTest {
+class OverviewWarningsTest {
 
     @Test
     fun `battery warning shows when not exempt, not dismissed and not suppressed`() {

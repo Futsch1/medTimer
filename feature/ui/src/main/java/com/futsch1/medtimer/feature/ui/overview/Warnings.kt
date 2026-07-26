@@ -24,13 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
-/**
- * Overview's dismissible warning cards. [OverviewWarningsViewModel] gates both on release builds, so
- * the previews below are the only way to see them without building a release APK.
- */
 @Composable
 fun Warnings(
-    state: OverviewWarningsState,
+    state: OverviewWarnings,
     onDismissBatteryWarning: () -> Unit,
     onDismissExactRemindersWarning: () -> Unit,
     modifier: Modifier = Modifier,
@@ -110,17 +106,15 @@ private fun WarningCard(
     }
 }
 
-private class PreviewOverviewWarningsState(
-    override val showBatteryOptimizationWarning: Boolean,
-    override val showExactRemindersWarning: Boolean,
-) : OverviewWarningsState
-
 @Preview(name = "Warnings — both")
 @Composable
 private fun WarningsBothPreview() {
     MedTimerTheme {
         Warnings(
-            state = PreviewOverviewWarningsState(showBatteryOptimizationWarning = true, showExactRemindersWarning = true),
+            state = MutableOverviewWarnings().apply {
+                showBatteryOptimizationWarning = true
+                showExactRemindersWarning = true
+            },
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
         )
@@ -132,7 +126,10 @@ private fun WarningsBothPreview() {
 private fun WarningsExactRemindersPreview() {
     MedTimerTheme {
         Warnings(
-            state = PreviewOverviewWarningsState(showBatteryOptimizationWarning = false, showExactRemindersWarning = true),
+            state = MutableOverviewWarnings().apply {
+                showBatteryOptimizationWarning = false
+                showExactRemindersWarning = true
+            },
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
         )

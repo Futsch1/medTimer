@@ -64,6 +64,7 @@ dependencies {
     api(project(":core:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
+    implementation(libs.gson)
     implementation(project(":core:ui"))
     implementation(project(":core:location"))
     implementation(project(":feature:reminders:api"))

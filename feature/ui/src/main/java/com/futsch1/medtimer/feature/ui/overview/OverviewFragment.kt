@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
-import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
@@ -41,9 +40,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     lateinit var actionsVisitor: ActionsVisitor
 
     @Inject
-    lateinit var medicineIcons: MedicineIcons
-
-    @Inject
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
 
     @Inject
@@ -60,7 +56,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             }
         }
     )
-    private val warningsViewModel: OverviewWarningsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,10 +72,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
             MedTimerTheme {
                 OverviewScreen(
                     viewModel = overviewViewModel,
-                    medicineIcons = medicineIcons,
-                    warningsState = warningsViewModel.state,
-                    onDismissBatteryWarning = warningsViewModel::dismissBatteryWarning,
-                    onDismissExactRemindersWarning = warningsViewModel::dismissExactRemindersWarning,
                     onEventClick = ::onEventClick,
                     onAction = ::onAction,
                     onLogManualDose = ::onLogManualDose,
@@ -101,7 +92,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     override fun onResume() {
         super.onResume()
         // The battery exemption may have been granted in system settings while we were away.
-        warningsViewModel.refresh()
+        overviewViewModel.refreshWarnings()
     }
 
     override fun onDestroy() {
@@ -147,7 +138,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
                 requireContext(),
                 overviewViewModel.medicines.value,
                 requireActivity(),
-                overviewViewModel.day
+                overviewViewModel.state.day
             ).logManualDose()
         }
     }
