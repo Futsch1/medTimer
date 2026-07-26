@@ -1,17 +1,15 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
-import android.text.Spanned
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.ui.ReminderStringFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import java.time.Duration
 import java.time.Instant
 
 class PastReminderEvent @AssistedInject constructor(
-    reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     val persistentDataDataSource: PersistentDataDataSource,
     @Assisted val reminderEvent: ReminderEvent
@@ -23,7 +21,18 @@ class PastReminderEvent @AssistedInject constructor(
         fun create(reminderEvent: ReminderEvent): PastReminderEvent
     }
 
-    override val text: Spanned = reminderStringFormatter.formatReminderEvent(reminderEvent)
+    private val preferences = preferencesDataSource.preferences.value
+
+    override val content: OverviewEventContent = OverviewEventContent(
+        reminderType = reminderEvent.reminderType,
+        time = reminderEvent.remindedTimestamp,
+        medicineName = reminderEvent.medicineName,
+        dose = reminderEvent.amount,
+        takenTime = takenTime(reminderEvent),
+        interval = interval(reminderEvent),
+        stock = stockChange(reminderEvent),
+        useRelativeTime = preferences.useRelativeDateTime,
+    )
 
     override val id: Int
         get() = reminderEvent.reminderEventId
@@ -37,6 +46,25 @@ class PastReminderEvent @AssistedInject constructor(
         get() = mapReminderEventState(reminderEvent)
     override val reminderId: Int
         get() = reminderEvent.reminderId
+
+    private fun takenTime(reminderEvent: ReminderEvent) =
+        reminderEvent.processedTimestamp.takeIf {
+            it.epochSecond != 0L && reminderEvent.isTaken && preferences.showTakenTimeInOverview
+        }
+
+    private fun interval(reminderEvent: ReminderEvent): Duration? {
+        val lastIntervalMinutes = reminderEvent.lastIntervalReminderTimeInMinutes
+        if (lastIntervalMinutes <= 0 || reminderEvent.status != ReminderEvent.ReminderStatus.TAKEN) return null
+        val elapsed = Duration.ofSeconds(reminderEvent.processedTimestamp.epochSecond - lastIntervalMinutes * 60L)
+        return elapsed.takeIf { !it.isNegative }
+    }
+
+    private fun stockChange(reminderEvent: ReminderEvent) =
+        if (reminderEvent.stockBefore == reminderEvent.stockAfter) {
+            null
+        } else {
+            StockChange(reminderEvent.stockBefore, reminderEvent.stockAfter, reminderEvent.stockUnit)
+        }
 
     private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
         return when (reminderEvent.status) {
@@ -61,3 +89,6 @@ class PastReminderEvent @AssistedInject constructor(
         return persistentDataDataSource.getPendingLocationSnoozes().any { it.reminderEventIds.contains(reminderEvent.reminderEventId) }
     }
 }
+
+private val ReminderEvent.isTaken: Boolean
+    get() = status == ReminderEvent.ReminderStatus.TAKEN || status == ReminderEvent.ReminderStatus.ACKNOWLEDGED

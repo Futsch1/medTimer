@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
@@ -68,7 +67,7 @@ class CSVExportUnitTest {
         context = RuntimeEnvironment.getApplication()
         val preferences = MutableStateFlow(UserPreferences.default())
         `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        timeFormatter = TimeFormatter(context, mockPreferenceDataSource, LocaleContextAccessor(context))
+        timeFormatter = TimeFormatter(context, mockPreferenceDataSource)
         reminderSummaryFormatter = ReminderSummaryFormatter(context, mockReminderRepository, timeFormatter)
     }
 

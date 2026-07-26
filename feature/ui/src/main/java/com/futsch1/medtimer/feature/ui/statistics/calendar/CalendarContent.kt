@@ -49,6 +49,7 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 import androidx.window.core.layout.computeWindowSizeClass
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.core.ui.time.currentLocale
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
@@ -120,7 +121,9 @@ fun CalendarContent(
             modifier = cardModifier,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         ) {
-            Column(modifier = if (isTabletLandscape) Modifier.fillMaxSize().padding(8.dp) else Modifier.padding(8.dp)) {
+            Column(modifier = if (isTabletLandscape) Modifier
+                .fillMaxSize()
+                .padding(8.dp) else Modifier.padding(8.dp)) {
                 CalendarNavigationRow(
                     yearMonth = visibleMonth,
                     startMonth = startMonth,
@@ -141,16 +144,22 @@ fun CalendarContent(
                     // Fill the height under the nav row and size the grid to the largest square cells that fit
                     // both axes: 7 columns, and one row-height reserved for the weekday header above the six
                     // week rows of the EndOfGrid grid. The grid scales up while keeping its square aspect.
-                    BoxWithConstraints(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                    BoxWithConstraints(modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()) {
                         val cellSize = minOf(maxWidth / 7, maxHeight / 7)
                         calendarGrid(
-                            Modifier.width(cellSize * 7).align(Alignment.TopCenter),
+                            Modifier
+                                .width(cellSize * 7)
+                                .align(Alignment.TopCenter),
                             cellSize,
                         )
                     }
                 } else {
                     calendarGrid(
-                        Modifier.widthIn(max = 400.dp).align(Alignment.CenterHorizontally),
+                        Modifier
+                            .widthIn(max = 400.dp)
+                            .align(Alignment.CenterHorizontally),
                         48.dp,
                     )
                 }
@@ -177,7 +186,9 @@ fun CalendarContent(
 
     if (isTabletLandscape) {
         Row(modifier = modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            calendarCard(Modifier.weight(2f).fillMaxHeight())
+            calendarCard(Modifier
+                .weight(2f)
+                .fillMaxHeight())
             eventPanel(Modifier.weight(1f))
         }
     } else {
@@ -195,7 +206,7 @@ fun CalendarContent(
 
 @Composable
 private fun WeekDaysRow(firstDayOfWeek: DayOfWeek) {
-    val locale = LocalConfiguration.current.locales[0]
+    val locale = currentLocale
     val weekDays = remember(firstDayOfWeek) { daysOfWeek(firstDayOfWeek = firstDayOfWeek) }
     Row(modifier = Modifier.fillMaxWidth()) {
         weekDays.forEach { dayOfWeek ->

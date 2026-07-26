@@ -1,8 +1,5 @@
 package com.futsch1.medtimer.feature.ui.statistics.calendar
 
-import android.icu.text.MeasureFormat
-import android.icu.util.Measure
-import android.icu.util.MeasureUnit
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,12 +28,12 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.getIcon
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.core.ui.time.formatDuration
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 
 @Composable
 fun DayEventsCard(
@@ -88,7 +85,7 @@ fun DayEventsCard(
                 val intervalText = event.interval?.let {
                     "(${stringResource(
                         R.string.interval_time,
-                        formatInterval(it)
+                        formatDuration(it)
                     )})"
                 }
                 // A divider before every row, including the first, separates the date title from the
@@ -181,20 +178,6 @@ private fun statusIconRes(status: CalendarDayEvent.Status): Int? = when (status)
     CalendarDayEvent.Status.SKIPPED -> R.drawable.x_circle
     CalendarDayEvent.Status.RAISED -> R.drawable.bell
     CalendarDayEvent.Status.SCHEDULED -> null
-}
-
-// Formats an interval as a locale-aware short measure ("2 h 30 min"), mirroring the legacy overview
-// formatter: the hour part is dropped when zero, the minute part is always shown.
-private fun formatInterval(interval: Duration): String {
-    val totalSeconds = interval.seconds
-    val hours = totalSeconds / 3600
-    val minutes = (totalSeconds % 3600) / 60
-    val measures = buildList {
-        if (hours > 0) add(Measure(hours, MeasureUnit.HOUR))
-        add(Measure(minutes, MeasureUnit.MINUTE))
-    }
-    return MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
-        .formatMeasures(*measures.toTypedArray())
 }
 
 @MedTimerPreview

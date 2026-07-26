@@ -18,7 +18,6 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
@@ -211,20 +210,7 @@ class OverviewViewModel @AssistedInject constructor(
             }
         }
 
-        return assignPositions(filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id }))
-    }
-
-    private fun assignPositions(overviewEvents: List<OverviewEvent>): List<OverviewEvent> {
-        overviewEvents.forEach { overviewEvent ->
-            overviewEvent.eventPosition = EventPosition.MIDDLE
-        }
-        if (overviewEvents.size == 1) {
-            overviewEvents[0].eventPosition = EventPosition.ONLY
-        } else {
-            overviewEvents.firstOrNull()?.eventPosition = EventPosition.FIRST
-            overviewEvents.lastOrNull()?.eventPosition = EventPosition.LAST
-        }
-        return overviewEvents
+        return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
     }
 
     private fun isScheduledReminderVisible(

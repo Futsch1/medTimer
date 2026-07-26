@@ -49,8 +49,6 @@ fun SelectableCard(
                 onClick = { if (isInSelectionMode) onToggleSelection() else onClick() },
                 onLongClick = {
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                    // Entering selection mode owns the initial selection, so the item is not toggled
-                    // here as well — that would immediately deselect it again.
                     if (isInSelectionMode) onToggleSelection() else onEnterSelectionMode()
                 },
             ),

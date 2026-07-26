@@ -1,23 +1,30 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,31 +36,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.ColorUtils
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toBitmap
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.component.SelectableCard
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
-import com.futsch1.medtimer.feature.ui.overview.model.EventPosition
-import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
+import com.futsch1.medtimer.feature.ui.overview.model.StockChange
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
 import com.futsch1.medtimer.feature.ui.overview.model.toString
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
-private val TIMELINE_WIDTH = 16.dp
-private val STATE_BUTTON_SIZE = 48.dp
+internal val EVENT_STATE_BUTTON_SIZE = 48.dp
+internal val EVENT_STATE_BUTTON_MARGIN = 8.dp
+
+internal val EVENT_SPACING = 20.dp
+
+/** Horizontal centre of the state buttons, which the list draws its connecting pills along. */
+internal val RAIL_CENTER_X = EVENT_STATE_BUTTON_MARGIN + EVENT_STATE_BUTTON_SIZE / 2
+internal val RAIL_PILL_WIDTH = 6.dp
+internal val RAIL_PILL_RESTING_HEIGHT = RAIL_PILL_WIDTH * 2
 
 /**
- * One timeline row: the state button on a connecting rail, and the event's own card beside it. The
- * rail segments are hidden at the ends of the list so the timeline starts and stops with the events.
+ * Distance a pill keeps from each neighbouring button circle. Derived so that two min-height
+ * neighbours produce [RAIL_PILL_RESTING_HEIGHT]; changing the spacing keeps the resting look.
  */
+internal val RAIL_INSET =
+    (EVENT_SPACING + EVENT_STATE_BUTTON_MARGIN * 2 - RAIL_PILL_RESTING_HEIGHT) / 2
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun OverviewEventItem(
-    event: OverviewEvent,
+    content: OverviewEventContent,
+    state: OverviewState,
+    color: Int?,
     icon: ImageBitmap?,
     isSelected: Boolean,
     isInSelectionMode: Boolean,
@@ -63,43 +99,57 @@ fun OverviewEventItem(
     onEnterSelectionMode: () -> Unit,
     onAction: (Button) -> Unit,
     modifier: Modifier = Modifier,
+    onRailAnchor: (Float) -> Unit = {},
 ) {
     val context = LocalContext.current
     var showActions by remember { mutableStateOf(false) }
-    val containerColor = eventContainerColor(event, isSelected)
-    val railColor = MaterialTheme.colorScheme.primary
+    val containerColor = eventContainerColor(color, isSelected)
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 64.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Column(Modifier.fillMaxHeight()) {
-                RailSegment(
-                    visible = event.eventPosition != EventPosition.FIRST && event.eventPosition != EventPosition.ONLY,
-                    color = railColor,
-                )
-                RailSegment(
-                    visible = event.eventPosition != EventPosition.LAST && event.eventPosition != EventPosition.ONLY,
-                    color = railColor,
-                )
-            }
+        Box(
+            contentAlignment = Alignment.Center,
+            // Reported from the placed coordinates rather than the list's layoutInfo, which
+            // exposes target offsets only and so runs ahead of animateItem's placement spring.
+            modifier = Modifier.onGloballyPositioned {
+                onRailAnchor(it.positionInRoot().y + it.size.height / 2f)
+            },
+        ) {
             IconButton(
                 onClick = { showActions = true },
                 modifier = Modifier
                     .testTag(OverviewTestTags.EVENT_STATE_BUTTON)
-                    .padding(start = 8.dp)
-                    .size(STATE_BUTTON_SIZE)
+                    .padding(EVENT_STATE_BUTTON_MARGIN)
+                    .size(EVENT_STATE_BUTTON_SIZE)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primaryContainer),
             ) {
-                Icon(
-                    painter = painterResource(event.state.getImage()),
-                    contentDescription = event.state.toString(context),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
+                val slideSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
+                val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
+                AnimatedContent(
+                    targetState = state,
+                    transitionSpec = {
+                        slideInHorizontally(slideSpec) { it } + fadeIn(fadeSpec) togetherWith
+                                slideOutHorizontally(slideSpec) { -it } + fadeOut(fadeSpec) using
+                                SizeTransform(clip = false)
+                    },
+                    label = "event_state",
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(EVENT_STATE_BUTTON_MARGIN)
+                        .clip(CircleShape),
+                ) { animatedState ->
+                    Icon(
+                        painter = painterResource(animatedState.getImage()),
+                        contentDescription = animatedState.toString(context),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
             }
             DropdownMenu(expanded = showActions, onDismissRequest = { showActions = false }) {
                 actions?.visibleButtons.orEmpty().forEach { button ->
@@ -129,49 +179,94 @@ fun OverviewEventItem(
             ),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
-                .padding(start = 4.dp, top = 1.dp, bottom = 1.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp),
+                modifier = Modifier.padding(8.dp),
             ) {
-                Text(
-                    text = event.text.toString(),
+                EventContent(
+                    content = content,
                     modifier = Modifier
                         .weight(1f)
                         .testTag(OverviewTestTags.EVENT_TEXT),
                 )
-                // A medicine's iconId indexes the icon pack, not the app's drawables, and 0 means
-                // "no icon" — the caller resolves it to a bitmap.
-                if (icon != null) {
-                    Icon(
-                        bitmap = icon,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 2.dp, end = 4.dp)
-                            .size(32.dp),
-                    )
+                val iconFadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
+                val iconSizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
+                AnimatedContent(
+                    targetState = icon,
+                    transitionSpec = {
+                        fadeIn(iconFadeSpec) togetherWith fadeOut(iconFadeSpec) using
+                                SizeTransform(clip = false) { _, _ -> iconSizeSpec }
+                    },
+                    label = "medicine_icon",
+                ) { animatedIcon ->
+                    if (animatedIcon != null) {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            )
+                        ) {
+                            Icon(
+                                bitmap = animatedIcon,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(EVENT_STATE_BUTTON_MARGIN)
+                                    .size(32.dp),
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+private val PREVIEW_TIME: Instant = LocalDate.of(2026, 5, 28).atTime(8, 0).atZone(ZoneId.systemDefault()).toInstant()
+
+// At runtime the icon comes from the medicine icon pack, which previews cannot load.
 @Composable
-private fun ColumnScope.RailSegment(visible: Boolean, color: Color) {
-    Box(
-        Modifier
-            .weight(1f)
-            .width(TIMELINE_WIDTH)
-            .background(if (visible) color else Color.Transparent)
-    )
+private fun previewMedicineIcon(): ImageBitmap? {
+    val context = LocalContext.current
+    return remember(context) {
+        ContextCompat.getDrawable(context, CoreUiR.drawable.capsule)?.toBitmap()?.asImageBitmap()
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun OverviewEventItemPreview() {
+    MedTimerTheme {
+        Surface {
+            OverviewEventItem(
+                content = OverviewEventContent(
+                    reminderType = ReminderType.TIME_BASED,
+                    time = PREVIEW_TIME,
+                    medicineName = "Vitamin D",
+                    dose = "1 tablet",
+                    takenTime = PREVIEW_TIME.plus(Duration.ofMinutes(42)),
+                    interval = Duration.ofMinutes(150),
+                    stock = StockChange(before = 12.0, after = 11.0, unit = "pcs"),
+                ),
+                state = OverviewState.TAKEN,
+                color = null,
+                icon = previewMedicineIcon(),
+                isSelected = false,
+                isInSelectionMode = false,
+                actions = null,
+                onClick = {},
+                onToggleSelection = {},
+                onEnterSelectionMode = {},
+                onAction = {},
+            )
+        }
+    }
 }
 
 @Composable
-private fun eventContainerColor(event: OverviewEvent, isSelected: Boolean) = when {
+private fun eventContainerColor(color: Int?, isSelected: Boolean) = when {
     isSelected -> MaterialTheme.colorScheme.secondaryContainer
-    event.color != null -> Color(event.color!!).copy(alpha = 1f)
-    else -> MaterialTheme.colorScheme.surfaceContainerHighest
+    color != null -> Color(color).copy(alpha = 1f)
+    else -> MaterialTheme.colorScheme.surfaceContainer
 }
 
 /**

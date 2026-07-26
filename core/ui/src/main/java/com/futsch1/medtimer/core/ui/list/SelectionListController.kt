@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -23,7 +22,7 @@ import kotlinx.coroutines.flow.onEach
 class SelectionListController<T : Any>(
     private val idOf: (T) -> Any,
 ) {
-    var items: PersistentList<T> by mutableStateOf(persistentListOf())
+    var items: ImmutableList<T> by mutableStateOf(persistentListOf())
         private set
 
     var isInSelectionMode: Boolean by mutableStateOf(false)

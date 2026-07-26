@@ -1,15 +1,12 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -23,8 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,15 +27,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.MedicineIcons
-import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
+import com.futsch1.medtimer.core.ui.time.rememberFormattedDate
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 @Composable
@@ -75,9 +68,10 @@ fun OverviewScreen(
 
     BackHandler(enabled = selection.isInSelectionMode) { selection.exitSelectionMode() }
 
+    val title = "${stringResource(CoreUiR.string.tab_overview)} - ${rememberFormattedDate(day, "MMMMy")}"
     Column(modifier.semantics { testTagsAsResourceId = true }) {
         OverviewTopBar(
-            title = overviewTitle(day),
+            title = title,
             isInSelectionMode = selection.isInSelectionMode,
             selectedCount = selection.selectedIds.size,
             selectionActions = remember(selection.selectedItems) {
@@ -115,39 +109,22 @@ fun OverviewScreen(
         )
 
         Box(Modifier.fillMaxSize()) {
-            LazyColumn(
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(0.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 4.dp)
-                    .testTag(OverviewTestTags.EVENT_LIST),
-            ) {
-                items(events, key = { it.id }) { event ->
-                    OverviewEventItem(
-                        event = event,
-                        icon = remember(event.icon) {
-                            if (event.icon != 0) medicineIcons.getIconBitmapUntinted(event.icon).asImageBitmap() else null
-                        },
-                        isSelected = selection.isSelected(event),
-                        isInSelectionMode = selection.isInSelectionMode,
-                        actions = remember(event) { ActionsFactory().createActions(event) },
-                        onClick = { onEventClick(event) },
-                        onToggleSelection = { selection.toggleSelection(event) },
-                        onEnterSelectionMode = {
-                            selection.enterSelectionMode()
-                            // Matches the pre-Compose behaviour: with combined notifications a long
-                            // press grabs every event at that time, otherwise just this one.
-                            if (viewModel.combineNotifications) {
-                                viewModel.selectSameTimeEvents(event)
-                            } else {
-                                selection.toggleSelection(event)
-                            }
-                        },
-                        onAction = { button -> onAction(button, listOf(event)) },
-                    )
-                }
-            }
+            OverviewEventList(
+                events = events,
+                selection = selection,
+                listState = listState,
+                medicineIcons = medicineIcons,
+                onEventClick = onEventClick,
+                onEnterSelectionMode = { event ->
+                    selection.enterSelectionMode()
+                    if (viewModel.combineNotifications) {
+                        viewModel.selectSameTimeEvents(event)
+                    } else {
+                        selection.toggleSelection(event)
+                    }
+                },
+                onAction = { button, event -> onAction(button, listOf(event)) },
+            )
 
             ExtendedFloatingActionButton(
                 onClick = onLogManualDose,
@@ -160,12 +137,4 @@ fun OverviewScreen(
             )
         }
     }
-}
-
-@Composable
-private fun overviewTitle(day: LocalDate): String {
-    // Read via the configuration so a locale change recomposes the title.
-    val locale = LocalConfiguration.current.locales[0]
-    return stringResource(CoreUiR.string.tab_overview) + " - " +
-            day.format(DateTimeFormatter.ofPattern("MMMM yyyy", locale))
 }

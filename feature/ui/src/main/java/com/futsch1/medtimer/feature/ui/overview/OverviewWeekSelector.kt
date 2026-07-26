@@ -21,12 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.ui.time.currentLocale
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
@@ -133,7 +133,7 @@ private fun WeekDayCell(day: WeekDay, isSelected: Boolean, onClick: () -> Unit) 
             .clickable(onClick = onClick),
     ) {
         Text(
-            text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, LocalConfiguration.current.locales[0]),
+            text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, currentLocale),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

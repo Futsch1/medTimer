@@ -52,7 +52,7 @@ class MedicineStringFormatterTest {
         val preferences = MutableStateFlow(UserPreferences.default())
         `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
         val timeFormatter =
-            TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor(app))
+            TimeFormatter(app, mockPreferenceDataSource)
         formatter = MedicineStringFormatter(app, mockPreferenceDataSource, timeFormatter)
     }
 
