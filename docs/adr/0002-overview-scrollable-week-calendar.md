@@ -14,6 +14,15 @@ Future reminders require simulation (see ADR-0001). We maintain a prefetch buffe
 
 `WeekCalendarView.weekScrollListener` fires when the scroll settles on a new week. The listener auto-selects: today if the week contains today, otherwise the first day of the week. This keeps the overview always showing real data when scrolling, without requiring an explicit tap.
 
+## Week start
+
+Each visible week starts on the locale's culturally-correct first day of week (`WeekFields.of(locale).firstDayOfWeek`, via `rememberFirstDayOfWeek()`), matching
+the Statistics month calendar. Today lands wherever it falls in that week — it is not visually centered.
+
+An earlier version pinned `firstDayOfWeek` to `today - 3 days` so today always rendered in column 4 of 7, independent of locale. That produced a week grid with
+no real-world meaning (its boundaries didn't correspond to a calendar week in any locale), and it drifted daily since it was recomputed from `LocalDate.now()`
+on every composition. Locale-based weeks are stable and match user expectation.
+
 ## Considered options
 
 **Constrain forward scrolling to 14 days** — rejected. Simulation cost is low enough that extending on demand is acceptable, and a hard cap would feel arbitrary.
@@ -21,3 +30,6 @@ Future reminders require simulation (see ADR-0001). We maintain a prefetch buffe
 **Dynamic past query (`now - selectedDay - buffer`)** — rejected. Re-creating the Flow on each scroll is complex and unnecessary; expanding to `Instant.EPOCH` only when the user first scrolls past the default window is simpler and queries use the timestamp index.
 
 **`LocalDate.MIN` as calendar start** — rejected. The library pre-computes week entries for the full range; an unbounded past would exhaust memory.
+
+**Keep today centered, but derive the offset from locale (e.g. locale's first day + 3)** — rejected. This still produces week boundaries divorced from any real
+calendar week, just with different padding per locale; it inherits the same drift and confusion as the original hack, only harder to reason about.

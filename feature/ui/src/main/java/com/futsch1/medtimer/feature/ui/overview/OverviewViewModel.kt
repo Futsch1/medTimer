@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.PowerManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.IsDebugBuild
+import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -28,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +40,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
@@ -62,6 +66,7 @@ class OverviewViewModel @AssistedInject constructor(
     private val powerManager: PowerManager,
     @param:ApplicationContext private val context: Context,
     @param:IsDebugBuild private val isDebugBuild: Boolean,
+    @Dispatcher(MedTimerDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
     @Assisted private val tagFilterViewModel: TagFilterViewModel
 ) : ViewModel() {
 
@@ -124,7 +129,8 @@ class OverviewViewModel @AssistedInject constructor(
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
         combine(reminderEvents, simulatedReminders, filterState) { events, reminders, fs ->
             getFiltered(events, reminders, fs)
-        }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
+        }.flowOn(defaultDispatcher)
+            .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         selection.bind(viewModelScope, overviewEvents)

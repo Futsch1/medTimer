@@ -28,10 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.time.currentLocale
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
+import com.futsch1.medtimer.feature.ui.rememberFirstDayOfWeek
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.WeekDay
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import com.futsch1.medtimer.core.ui.R as CoreUiR
@@ -52,12 +54,12 @@ fun OverviewWeekSelector(
     // simulatedThrough is LocalDate.MIN until the simulation repository first emits, which would
     // otherwise hand the calendar an end date before its start date.
     val effectiveRangeEnd = maxOf(rangeEnd, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
+    val firstDayOfWeek = rememberFirstDayOfWeek()
     val state = rememberWeekCalendarState(
         startDate = rangeStart,
         endDate = effectiveRangeEnd,
-        firstVisibleWeekDate = selectedDay,
-        // Offsetting the week start by 3 days puts today at position 4 of 7 on first open.
-        firstDayOfWeek = LocalDate.now().minusDays(3).dayOfWeek,
+        firstVisibleWeekDate = remember { selectedDay },
+        firstDayOfWeek = firstDayOfWeek,
     )
     val scope = rememberCoroutineScope()
 
@@ -86,8 +88,11 @@ fun OverviewWeekSelector(
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(
             onClick = {
-                scope.launch { state.animateScrollToWeek(selectedDay.minusWeeks(1)) }
-                onDaySelected(selectedDay.minusWeeks(1))
+                val previousWeekStart = weekStart(selectedDay, firstDayOfWeek).minusWeeks(1)
+                val previousWeekEnd = previousWeekStart.plusDays(6)
+                val target = LocalDate.now().takeIf { it in previousWeekStart..previousWeekEnd } ?: previousWeekEnd
+                scope.launch { state.animateScrollToWeek(target) }
+                onDaySelected(target)
             },
             modifier = Modifier.testTag(OverviewTestTags.PREV_WEEK),
         ) {
@@ -109,8 +114,11 @@ fun OverviewWeekSelector(
         )
         IconButton(
             onClick = {
-                scope.launch { state.animateScrollToWeek(selectedDay.plusWeeks(1)) }
-                onDaySelected(selectedDay.plusWeeks(1))
+                val nextWeekStart = weekStart(selectedDay, firstDayOfWeek).plusWeeks(1)
+                val nextWeekEnd = nextWeekStart.plusDays(6)
+                val target = LocalDate.now().takeIf { it in nextWeekStart..nextWeekEnd } ?: nextWeekStart
+                scope.launch { state.animateScrollToWeek(target) }
+                onDaySelected(target)
             },
             modifier = Modifier.testTag(OverviewTestTags.NEXT_WEEK),
         ) {
@@ -120,6 +128,12 @@ fun OverviewWeekSelector(
             )
         }
     }
+}
+
+/** The first date of the week containing [date], per [firstDayOfWeek]. */
+private fun weekStart(date: LocalDate, firstDayOfWeek: DayOfWeek): LocalDate {
+    val daysFromWeekStart = (date.dayOfWeek.value - firstDayOfWeek.value + 7) % 7
+    return date.minusDays(daysFromWeekStart.toLong())
 }
 
 @Composable

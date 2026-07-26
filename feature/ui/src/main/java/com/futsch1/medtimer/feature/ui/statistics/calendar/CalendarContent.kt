@@ -50,11 +50,11 @@ import androidx.window.core.layout.computeWindowSizeClass
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.core.ui.time.currentLocale
+import com.futsch1.medtimer.feature.ui.rememberFirstDayOfWeek
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
@@ -77,7 +77,7 @@ fun CalendarContent(
     var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(LocalDate.now()) }
     val startMonth = remember { YearMonth.now().minusMonths(pastMonths.toLong()) }
     val endMonth = remember { YearMonth.now().plusMonths(futureMonths.toLong()) }
-    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
+    val firstDayOfWeek = rememberFirstDayOfWeek()
 
     val calendarState = rememberCalendarState(
         startMonth = startMonth,
