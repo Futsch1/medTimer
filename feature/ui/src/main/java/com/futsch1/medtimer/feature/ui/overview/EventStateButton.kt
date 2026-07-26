@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
@@ -74,8 +75,7 @@ internal fun EventStateButton(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(EVENT_STATE_BUTTON_MARGIN)
-                .clip(CircleShape),
+                .padding(8.dp),
         ) { animatedState ->
             Icon(
                 painter = painterResource(animatedState.getImage()),
