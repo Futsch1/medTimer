@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -207,7 +209,7 @@ private fun ArcActionButtons(
             orderedButtons.forEachIndexed { index, button ->
                 AnimatedVisibility(
                     visible = index < revealedCount,
-                    enter = fadeIn(MaterialTheme.motionScheme.slowEffectsSpec()),
+                    enter = fadeIn(spring(stiffness = Spring.StiffnessLow)),
                     exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
                     SmallFloatingActionButton(onClick = { onAction(button) }) {
