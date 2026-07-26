@@ -2,8 +2,11 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,6 +53,9 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import com.futsch1.medtimer.core.ui.R as CoreUiR
+
+/** Below this width the week selector and filter row don't both fit on one line and stack instead. */
+private val NAVIGATION_ROW_MIN_WIDTH = 600.dp
 
 @Composable
 fun OverviewScreen(
@@ -140,20 +146,45 @@ fun OverviewScreen(
             onDismissExactRemindersWarning = onDismissExactRemindersWarning,
         )
 
-        OverviewWeekSelector(
-            selectedDay = state.day,
-            rangeEnd = state.simulatedThrough,
-            onDaySelected = onDaySelected,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        BoxWithConstraints(Modifier.fillMaxWidth()) {
+            if (maxWidth >= NAVIGATION_ROW_MIN_WIDTH) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                ) {
+                    OverviewWeekSelector(
+                        selectedDay = state.day,
+                        rangeEnd = state.simulatedThrough,
+                        onDaySelected = onDaySelected,
+                        modifier = Modifier.weight(1f),
+                    )
 
-        OverviewFilterRow(
-            activeFilters = state.activeFilters,
-            onToggleFilter = onToggleFilter,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 8.dp),
-        )
+                    OverviewFilterRow(
+                        activeFilters = state.activeFilters,
+                        onToggleFilter = onToggleFilter,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
+            } else {
+                Column {
+                    OverviewWeekSelector(
+                        selectedDay = state.day,
+                        rangeEnd = state.simulatedThrough,
+                        onDaySelected = onDaySelected,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    OverviewFilterRow(
+                        activeFilters = state.activeFilters,
+                        onToggleFilter = onToggleFilter,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp),
+                    )
+                }
+            }
+        }
 
         Box(Modifier.fillMaxSize()) {
             OverviewEventList(
@@ -163,6 +194,7 @@ fun OverviewScreen(
                 onEventClick = onEventClick,
                 onEnterSelectionMode = onEnterSelectionMode,
                 onAction = { button, event -> onAction(button, listOf(event)) },
+                modifier = Modifier.padding(end = 8.dp)
             )
 
             ExtendedFloatingActionButton(
