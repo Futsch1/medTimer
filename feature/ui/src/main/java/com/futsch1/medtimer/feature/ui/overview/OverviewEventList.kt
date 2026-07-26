@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.foundation.withoutVisualEffect
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -45,14 +48,20 @@ fun OverviewEventList(
     val railColor = MaterialTheme.colorScheme.primary
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
     var listTop by remember { mutableFloatStateOf(0f) }
+    // Rendered once here, on top of both the list and the pills, so the boundary stretch covers
+    // them together instead of leaving the pills (drawn outside the list's own overscroll node)
+    // undistorted. LazyColumn only gets the event-handling half so it doesn't also render its own.
+    val overscrollEffect = rememberOverscrollEffect()
 
     LazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(EVENT_SPACING),
+        overscrollEffect = overscrollEffect?.withoutVisualEffect(),
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 4.dp)
             .onGloballyPositioned { listTop = it.positionInRoot().y }
+            .overscroll(overscrollEffect)
             .drawBehind { drawRailPills(railAnchors.values, listTop, railColor) }
             .testTag(OverviewTestTags.EVENT_LIST),
     ) {
