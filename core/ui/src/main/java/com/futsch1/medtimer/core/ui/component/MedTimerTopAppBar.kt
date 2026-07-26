@@ -38,7 +38,7 @@ fun MedTimerTopAppBar(
             if (onNavigateUp != null) {
                 IconButton(onClick = onNavigateUp) {
                     Icon(
-                        painter = painterResource(R.drawable.chevron_left),
+                        painter = painterResource(R.drawable.arrow_back),
                         contentDescription = stringResource(R.string.navigate_up),
                     )
                 }

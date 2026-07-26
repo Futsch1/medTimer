@@ -88,7 +88,7 @@ private fun OverviewSelectionTopBar(
         navigationIcon = {
             IconButton(onClick = onExitSelectionMode, modifier = Modifier.testTag(OverviewTestTags.EXIT_SELECTION)) {
                 Icon(
-                    painter = painterResource(CoreUiR.drawable.x_circle),
+                    painter = painterResource(CoreUiR.drawable.close),
                     contentDescription = stringResource(CoreUiR.string.close),
                 )
             }

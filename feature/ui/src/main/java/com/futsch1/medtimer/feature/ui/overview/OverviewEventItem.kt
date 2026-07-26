@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -138,9 +140,18 @@ fun OverviewEventItem(
                     label = "medicine_icon",
                 ) { animatedIcon ->
                     if (animatedIcon != null) {
+                        val iconContainerColor by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.surfaceContainerHighest
+                            },
+                            animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
+                            label = "medicine_icon_container_color",
+                        )
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                containerColor = iconContainerColor,
                             )
                         ) {
                             Icon(
