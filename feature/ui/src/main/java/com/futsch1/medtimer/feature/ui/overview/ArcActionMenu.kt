@@ -6,7 +6,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -24,11 +26,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionOnScreen
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +51,7 @@ import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.hypot
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -63,8 +68,8 @@ private val ARC_Y_STEP = 48.dp
 /** Angular step shaping the horizontal bulge only (via cosine); see [ARC_Y_STEP] for vertical spacing. */
 private const val ARC_STEP_ANGLE_DEG = 45f
 
-private val ARC_ENTER_STAGGER_DELAY = 80.milliseconds
-private val ARC_EXIT_STAGGER_DELAY = 50.milliseconds
+private val ARC_ENTER_STAGGER_DELAY = 70.milliseconds
+private val ARC_EXIT_STAGGER_DELAY = 40.milliseconds
 private val ARC_EXIT_DURATION = 220.milliseconds
 
 /** Display order top-to-bottom; buttons not visible for a given event are simply skipped. */
@@ -78,10 +83,11 @@ private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
 )
 
 /**
- * Fans [buttons] out along an arc to the right of the anchor (mirrored left in RTL).
+ * Fans [buttons] out along an arc to the right of the anchor (mirrored left in RTL), over a
+ * radial scrim radiating from that same point.
  * Buttons reveal bottom-most first and collapse in reverse before the popup unmounts.
- * Positioned via an explicit [PopupPositionProvider] anchored to [anchorCoordinates],
- * the state button's own measured position.
+ * Runs in a window-sized popup, with everything positioned against [anchorCoordinates] — the state
+ * button's own measured position — rather than by anchoring the popup window itself.
  */
 @Composable
 internal fun ArcActionMenu(
@@ -115,48 +121,58 @@ internal fun ArcActionMenu(
     }
 
     if (popupVisible && anchorCoordinates != null) {
-        val positionProvider = remember(anchorCoordinates) {
-            centeredOnAnchorPositionProvider(anchorCoordinates)
+        val anchorOnScreen = remember(anchorCoordinates) {
+            val position = anchorCoordinates.positionOnScreen()
+            Offset(
+                position.x + anchorCoordinates.size.width / 2f,
+                position.y + anchorCoordinates.size.height / 2f,
+            )
         }
 
         Popup(
-            popupPositionProvider = positionProvider,
+            popupPositionProvider = WindowOriginPositionProvider,
             onDismissRequest = onDismissRequest,
-            properties = PopupProperties(focusable = true),
+            properties = PopupProperties(focusable = true, usePlatformDefaultWidth = false),
         ) {
-            ArcActionButtons(
-                buttons = buttons,
-                revealedCount = revealedCount,
-                onDismissRequest = onDismissRequest,
-                onAction = onAction,
-            )
+            // The popup lives in its own window, whose origin need not line up with the host
+            // window's (system bar insets shift it). Screen coordinates are the one space both
+            // agree on, so the anchor is translated into popup-local space through them.
+            var contentOnScreen by remember { mutableStateOf(Offset.Zero) }
+
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned { contentOnScreen = it.positionOnScreen() }
+            ) {
+                ArcActionButtons(
+                    buttons = buttons,
+                    revealedCount = revealedCount,
+                    expanded = expanded,
+                    anchorCenter = anchorOnScreen - contentOnScreen,
+                    onDismissRequest = onDismissRequest,
+                    onAction = onAction,
+                )
+            }
         }
     }
 }
 
-/** Aligns the popup's start edge (left in LTR, right in RTL) to the anchor's vertical center. */
-private fun centeredOnAnchorPositionProvider(anchorCoordinates: LayoutCoordinates) =
-    object : PopupPositionProvider {
-        override fun calculatePosition(
-            anchorBounds: IntRect,
-            windowSize: IntSize,
-            layoutDirection: LayoutDirection,
-            popupContentSize: IntSize,
-        ): IntOffset {
-            val anchorWindowPosition = anchorCoordinates.positionInWindow()
-            val anchorCenterX = anchorWindowPosition.x + anchorCoordinates.size.width / 2f
-            val anchorCenterY = anchorWindowPosition.y + anchorCoordinates.size.height / 2f
-            val left = if (layoutDirection == LayoutDirection.Ltr) {
-                anchorCenterX
-            } else {
-                anchorCenterX - popupContentSize.width
-            }
-            return IntOffset(
-                left.roundToInt(),
-                (anchorCenterY - popupContentSize.height / 2f).roundToInt(),
-            )
-        }
-    }
+/**
+ * Pins the popup window to the host window's origin so it spans the whole screen, letting the
+ * content position itself against [LayoutCoordinates.positionOnScreen] coordinates directly.
+ *
+ * Anchoring the window itself is not viable here: the scrim reaches well past the screen edge next
+ * to a left-aligned anchor, and WindowManager shoves an oversized window back on-screen, dragging
+ * the buttons with it.
+ */
+private object WindowOriginPositionProvider : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ) = IntOffset.Zero
+}
 
 /**
  * The arc's visual content,
@@ -167,6 +183,8 @@ private fun centeredOnAnchorPositionProvider(anchorCoordinates: LayoutCoordinate
 private fun ArcActionButtons(
     buttons: List<Button>,
     revealedCount: Int,
+    expanded: Boolean,
+    anchorCenter: Offset,
     onDismissRequest: () -> Unit,
     onAction: (Button) -> Unit,
 ) {
@@ -176,20 +194,22 @@ private fun ArcActionButtons(
     val orderedButtons = remember(buttons) { buttons.sortedByDescending(ARC_BUTTON_TOP_TO_BOTTOM_ORDER::indexOf) }
     val angles = remember(orderedButtons.size) { arcAngles(orderedButtons.size) }
     val yPositions = remember(orderedButtons.size, yStepPx) { arcYPositions(orderedButtons.size, yStepPx) }
-    val fadeSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
 
     Layout(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onDismissRequest,
-        ),
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onDismissRequest,
+            ),
         content = {
+            ArcScrim(expanded)
             orderedButtons.forEachIndexed { index, button ->
                 AnimatedVisibility(
                     visible = index < revealedCount,
-                    enter = fadeIn(fadeSpec),
-                    exit = fadeOut(fadeSpec),
+                    enter = fadeIn(MaterialTheme.motionScheme.slowEffectsSpec()),
+                    exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
                     SmallFloatingActionButton(onClick = { onAction(button) }) {
                         Row(
@@ -208,15 +228,25 @@ private fun ArcActionButtons(
                 }
             }
         },
-    ) { measurables, _ ->
-        val targets = arcTargets(measurables, angles, yPositions, radiusXPx)
-        val width = targets.arcWidth()
-        val halfHeight = arcHalfHeight(yPositions, targets)
-        layout(width, halfHeight * 2) {
-            placeArcTargets(targets, halfHeight)
+    ) { measurables, constraints ->
+        val targets = arcTargets(measurables.drop(1), angles, yPositions, radiusXPx)
+        val scrimRadius = hypot(
+            targets.arcWidth().toFloat(),
+            arcHalfHeight(yPositions, targets).toFloat(),
+        ) + ARC_SCRIM_BLEED.toPx()
+        val scrimSide = (scrimRadius * 2f).roundToInt().coerceAtLeast(0)
+        val scrim = measurables.first().measure(Constraints.fixed(scrimSide, scrimSide))
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            scrim.place(
+                (anchorCenter.x - scrimRadius).roundToInt(),
+                (anchorCenter.y - scrimRadius).roundToInt(),
+            )
+            placeArcTargets(targets, anchorCenter, layoutDirection)
         }
     }
 }
+
 
 /** Each button's measured [placeable], with its arc anchor point (the near/start edge it grows from). */
 private data class ArcTarget(val startX: Float, val centerY: Float, val placeable: Placeable)
@@ -251,10 +281,24 @@ private fun arcHalfHeight(yPositions: List<Float>, targets: List<ArcTarget>): In
     return (maxAbsY + referenceHeight / 2f).roundToInt().coerceAtLeast(0)
 }
 
-private fun Placeable.PlacementScope.placeArcTargets(targets: List<ArcTarget>, halfHeight: Int) {
+/**
+ * Places each button relative to [anchorCenter], mirroring about the anchor in RTL. `placeRelative`
+ * is deliberately avoided: the container spans the whole window, so it would mirror about the
+ * screen's centre rather than the anchor's.
+ */
+private fun Placeable.PlacementScope.placeArcTargets(
+    targets: List<ArcTarget>,
+    anchorCenter: Offset,
+    layoutDirection: LayoutDirection,
+) {
     targets.forEach { (startX, centerY, placeable) ->
-        val y = halfHeight + centerY.roundToInt() - placeable.height / 2
-        placeable.placeRelative(startX.roundToInt(), y)
+        val x = if (layoutDirection == LayoutDirection.Ltr) {
+            anchorCenter.x + startX
+        } else {
+            anchorCenter.x - startX - placeable.width
+        }
+        val y = (anchorCenter.y + centerY).roundToInt() - placeable.height / 2
+        placeable.place(x.roundToInt(), y)
     }
 }
 
@@ -272,19 +316,19 @@ private fun arcYPositions(count: Int, yStepPx: Float): List<Float> {
     return List(count) { index -> half - yStepPx * index }
 }
 
-@Preview(name = "ArcActionMenu — 2 buttons")
+@Preview(widthDp = 360, heightDp = 360, name = "ArcActionMenu —2 buttons")
 @Composable
 private fun ArcActionMenuTwoButtonsPreview() {
     ArcActionMenuPreview(listOf(Button.TAKEN, Button.SKIPPED))
 }
 
-@Preview(name = "ArcActionMenu — 3 buttons")
+@Preview(widthDp = 360, heightDp = 360, name = "ArcActionMenu —3 buttons")
 @Composable
 private fun ArcActionMenuThreeButtonsPreview() {
     ArcActionMenuPreview(listOf(Button.TAKEN, Button.RERAISE, Button.DELETE))
 }
 
-@Preview(name = "ArcActionMenu — 4 buttons")
+@Preview(widthDp = 360, heightDp = 360, name = "ArcActionMenu —4 buttons")
 @Composable
 private fun ArcActionMenuFourButtonsPreview() {
     ArcActionMenuPreview(listOf(Button.TAKEN, Button.SKIPPED, Button.RERAISE, Button.DELETE))
@@ -293,10 +337,14 @@ private fun ArcActionMenuFourButtonsPreview() {
 @Composable
 private fun ArcActionMenuPreview(buttons: List<Button>) {
     MedTimerTheme {
-        Surface {
+        Surface(Modifier.fillMaxSize()) {
+            // Stands in for the state button's position, which at runtime comes from the anchor.
+            val anchorCenter = with(LocalDensity.current) { Offset(48.dp.toPx(), 180.dp.toPx()) }
             ArcActionButtons(
                 buttons = buttons,
                 revealedCount = buttons.size,
+                expanded = true,
+                anchorCenter = anchorCenter,
                 onDismissRequest = {},
                 onAction = {},
             )
