@@ -7,13 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.IsDebugBuild
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
-import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -42,6 +40,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -126,9 +125,16 @@ class OverviewViewModel @AssistedInject constructor(
             tagFilterViewModel.getFiltered(reminders, tagIds ?: emptySet())
         }.shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
+    private val reminderEventsByDay: Flow<Map<Long, List<ReminderEvent>>> =
+        reminderEvents.map { events -> events.groupBy { it.remindedTimestamp.epochDay() } }
+
+    private val simulatedRemindersByDay: Flow<Map<Long, List<SimulatedReminder>>> =
+        simulatedReminders.map { reminders -> reminders.groupBy { it.scheduledReminder.timestamp.epochDay() } }
+
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEvents, simulatedReminders, filterState) { events, reminders, fs ->
-            getFiltered(events, reminders, fs)
+        combine(reminderEventsByDay, simulatedRemindersByDay, filterState) { eventsByDay, remindersByDay, fs ->
+            val day = fs.day.toEpochDay()
+            getFiltered(eventsByDay[day].orEmpty(), remindersByDay[day].orEmpty(), fs)
         }.flowOn(defaultDispatcher)
             .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
@@ -242,7 +248,7 @@ class OverviewViewModel @AssistedInject constructor(
         for (simulatedReminder in reminders) {
             val scheduledReminder = simulatedReminder.scheduledReminder
             val slot = scheduledReminder.reminder.id to scheduledReminder.timestamp.epochSecond
-            if (slot !in coveredSlots && isScheduledReminderVisible(scheduledReminder, filterState)) {
+            if (slot !in coveredSlots && isScheduledReminderVisible(filterState)) {
                 filteredOverviewEvents.add(simulatedReminderEventFactory.create(simulatedReminder))
             }
         }
@@ -250,24 +256,15 @@ class OverviewViewModel @AssistedInject constructor(
         return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
     }
 
-    private fun isScheduledReminderVisible(
-        scheduledReminder: ScheduledReminder,
-        filterState: FilterState
-    ): Boolean {
-        val scheduledRemindersVisible =
-            filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilter.SCHEDULED)
-        return TimeHelper.isOnDay(
-            scheduledReminder.timestamp.epochSecond,
-            filterState.day.toEpochDay(),
-            ZoneId.systemDefault()
-        ) && scheduledRemindersVisible
+    private fun isScheduledReminderVisible(filterState: FilterState): Boolean {
+        return filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilter.SCHEDULED)
     }
 
     private fun isReminderEventVisible(
         reminderEvent: ReminderEvent,
         filterState: FilterState
     ): Boolean {
-        val reminderEventVisible = filterState.activeFilters.isEmpty() ||
+        return filterState.activeFilters.isEmpty() ||
                 ((reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) && filterState.activeFilters.contains(
                     OverviewFilter.TAKEN
                 )) ||
@@ -277,10 +274,7 @@ class OverviewViewModel @AssistedInject constructor(
                 (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(
                     OverviewFilter.RAISED
                 ))
-        return TimeHelper.isOnDay(
-            reminderEvent.remindedTimestamp.epochSecond,
-            filterState.day.toEpochDay(),
-            ZoneId.systemDefault()
-        ) && reminderEventVisible
     }
+
+    private fun Instant.epochDay(): Long = atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay()
 }

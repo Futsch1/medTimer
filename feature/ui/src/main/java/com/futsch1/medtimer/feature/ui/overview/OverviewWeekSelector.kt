@@ -58,7 +58,7 @@ fun OverviewWeekSelector(
     val state = rememberWeekCalendarState(
         startDate = rangeStart,
         endDate = effectiveRangeEnd,
-        firstVisibleWeekDate = remember { selectedDay },
+        firstVisibleWeekDate = selectedDay,
         firstDayOfWeek = firstDayOfWeek,
     )
     val scope = rememberCoroutineScope()
