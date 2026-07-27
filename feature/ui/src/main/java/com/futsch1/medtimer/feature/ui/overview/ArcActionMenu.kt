@@ -77,8 +77,8 @@ private val ARC_EXIT_DURATION = 220.milliseconds
 
 /** Display order top-to-bottom; buttons not visible for a given event are simply skipped. */
 private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
-    Button.SKIPPED,
     Button.TAKEN,
+    Button.SKIPPED,
     Button.ACKNOWLEDGED,
     Button.RERAISE,
     Button.RESCHEDULE,
