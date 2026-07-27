@@ -125,7 +125,7 @@ class ReminderViewHolder(
             if (!clickDelegate.onItemClick(layoutPosition)) {
                 if (event is PastReminderEvent && event.state != OverviewState.RAISED && event.state != OverviewState.PENDING && event.state != OverviewState.LOCATION) {
                     EditEventSheetDialogFragment.newInstance(
-                        (event as PastReminderEvent).reminderEvent.reminderEventId
+                        event.id
                     ).show(fragmentActivity.supportFragmentManager, "EditEventDialog")
                 } else {
                     ShowMedicineSheetDialogFragment.newInstance(event.reminderId)

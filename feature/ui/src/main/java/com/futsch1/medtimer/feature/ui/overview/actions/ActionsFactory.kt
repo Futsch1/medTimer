@@ -9,7 +9,7 @@ class ActionsFactory(
     fun createActions(event: OverviewEvent): Actions? {
         return when (event) {
             is PastReminderEvent -> ReminderEventActions(event)
-            is SimulatedReminderEvent -> ScheduledReminderActions(event.scheduledReminder)
+            is SimulatedReminderEvent -> ScheduledReminderActions(event)
             else -> null
         }
     }

@@ -14,6 +14,10 @@ abstract class OverviewEvent(private val preferencesDataSource: PreferencesDataS
     val updateValue: Long
         get() = if (preferencesDataSource.preferences.value.useRelativeDateTime) System.currentTimeMillis() / 60_000 else 0
     var eventPosition: EventPosition = EventPosition.MIDDLE
+    abstract val cannotSkipMedicine: Boolean
+
+    val cannotBeSkipped: Boolean
+        get() = preferencesDataSource.preferences.value.cannotSkipReminders || cannotSkipMedicine
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
