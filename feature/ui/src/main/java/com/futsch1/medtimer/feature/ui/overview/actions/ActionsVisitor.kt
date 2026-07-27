@@ -162,14 +162,14 @@ class ActionsVisitor @Inject constructor(
         DeleteHelper.deleteItem(fragmentActivity, R.string.delete_re_raise_event, {
             fragmentActivity.lifecycleScope.launch {
                 undoStock(reminderEvent)
-                reminderEventRepository.update(
-                    reminderEvent.copy(
-                        status = ReminderEvent.ReminderStatus.RAISED,
-                        processedTimestamp = Instant.EPOCH,
-                        stockHandled = false
-                    )
+                val raisedReminderEvent = reminderEvent.copy(
+                    status = ReminderEvent.ReminderStatus.RAISED,
+                    processedTimestamp = Instant.EPOCH,
+                    stockHandled = false
                 )
+                reminderEventRepository.update(raisedReminderEvent)
                 applicationScope.launch { commandBus.scheduleNextNotification() }
+                requestShowReminders(listOf(raisedReminderEvent), raisedReminderEvent.remindedTimestamp)
             }
         }, {})
     }

@@ -24,6 +24,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verifyBlocking
@@ -117,6 +118,12 @@ class ActionsVisitorReRaiseTest {
                     stockHandled = false
                 )
             )
+        }
+        verifyBlocking(commandBus) {
+            showReminderNotification(argThat {
+                reminderEventIds == listOf(reminderEvent.reminderEventId) &&
+                        reminderIds == listOf(reminderEvent.reminderId)
+            })
         }
     }
 }
