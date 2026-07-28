@@ -50,6 +50,7 @@ import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -92,12 +93,16 @@ private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
  * Buttons reveal bottom-most first and collapse in reverse before the popup unmounts.
  * Runs in a window-sized popup, with everything positioned against [anchorCoordinates] — the state
  * button's own measured position — rather than by anchoring the popup window itself.
+ *
+ * [anchorContent] restates the anchor's own visual centred on that point and above the scrim, so
+ * it keeps reading as undimmed without the scrim having to cut a hole around it; see [ArcScrim].
  */
 @Composable
 internal fun ArcActionMenu(
     expanded: Boolean,
     buttons: List<Button>,
     anchorCoordinates: LayoutCoordinates?,
+    anchorContent: @Composable () -> Unit,
     onDismissRequest: () -> Unit,
     onAction: (Button) -> Unit,
 ) {
@@ -153,6 +158,7 @@ internal fun ArcActionMenu(
                     revealedCount = revealedCount,
                     expanded = expanded,
                     anchorCenter = anchorOnScreen - contentOnScreen,
+                    anchorContent = anchorContent,
                     onDismissRequest = onDismissRequest,
                     onAction = onAction,
                 )
@@ -189,6 +195,7 @@ private fun ArcActionButtons(
     revealedCount: Int,
     expanded: Boolean,
     anchorCenter: Offset,
+    anchorContent: @Composable () -> Unit,
     onDismissRequest: () -> Unit,
     onAction: (Button) -> Unit,
 ) {
@@ -230,12 +237,12 @@ private fun ArcActionButtons(
                     }
                 }
             }
+            anchorContent()
         },
     ) { measurables, constraints ->
-        val placeables = measurables.drop(1).map { it.measure(Constraints()) }
-        // Slots for the full group, not just the buttons composed on this frame: the reveal is in
-        // order, so the composed ones always take the leading slots, and the layout stays put as
-        // the rest stagger in.
+        val anchorMeasurable = measurables.last()
+        val placeables = measurables.subList(1, measurables.lastIndex).map { it.measure(Constraints()) }
+
         val slots = arcSlots(
             count = orderedButtons.size,
             shift = arcSlotShift(
@@ -255,6 +262,7 @@ private fun ArcActionButtons(
         ) + ARC_SCRIM_BLEED.toPx()
         val scrimSide = (scrimRadius * 2f).roundToInt().coerceAtLeast(0)
         val scrim = measurables.first().measure(Constraints.fixed(scrimSide, scrimSide))
+        val anchor = anchorMeasurable.measure(Constraints())
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             scrim.place(
@@ -262,6 +270,10 @@ private fun ArcActionButtons(
                 (anchorCenter.y - scrimRadius).roundToInt(),
             )
             placeArcTargets(targets, anchorCenter, layoutDirection)
+            anchor.place(
+                (anchorCenter.x - anchor.width / 2f).roundToInt(),
+                (anchorCenter.y - anchor.height / 2f).roundToInt(),
+            )
         }
     }
 }
@@ -380,6 +392,7 @@ private fun ArcActionMenuPreview(buttons: List<Button>) {
                 revealedCount = buttons.size,
                 expanded = true,
                 anchorCenter = anchorCenter,
+                anchorContent = { EventStateButtonFace(OverviewState.RAISED) },
                 onDismissRequest = {},
                 onAction = {},
             )

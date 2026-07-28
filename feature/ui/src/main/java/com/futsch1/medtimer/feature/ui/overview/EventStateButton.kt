@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,6 +31,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -40,7 +42,6 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
 import com.futsch1.medtimer.feature.ui.overview.model.toString
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun EventStateButton(
     state: OverviewState,
@@ -48,7 +49,6 @@ internal fun EventStateButton(
     onAction: (Button) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     var showActions by remember { mutableStateOf(false) }
     var anchorCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
@@ -58,12 +58,41 @@ internal fun EventStateButton(
             .testTag(OverviewTestTags.EVENT_STATE_BUTTON)
             .padding(EVENT_STATE_BUTTON_MARGIN)
             .size(EVENT_STATE_BUTTON_SIZE)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
             .onGloballyPositioned { anchorCoordinates = it },
     ) {
-        val slideSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
-        val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
+        EventStateButtonFace(state, Modifier.fillMaxSize())
+    }
+
+    ArcActionMenu(
+        expanded = showActions,
+        buttons = actions?.visibleButtons.orEmpty(),
+        anchorCoordinates = anchorCoordinates,
+        anchorContent = { EventStateButtonFace(state, Modifier.clearAndSetSemantics {}) },
+        onDismissRequest = { showActions = false },
+        onAction = { button ->
+            showActions = false
+            onAction(button)
+        },
+    )
+}
+
+/**
+ * The button's visual only, with no click handling, so [ArcActionMenu] can restate it on top of
+ * the scrim while the real button sits dimmed underneath in the host window.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun EventStateButtonFace(state: OverviewState, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val slideSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
+    val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
+
+    Box(
+        modifier
+            .size(EVENT_STATE_BUTTON_SIZE)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primaryContainer),
+    ) {
         AnimatedContent(
             targetState = state,
             transitionSpec = {
@@ -84,17 +113,6 @@ internal fun EventStateButton(
             )
         }
     }
-
-    ArcActionMenu(
-        expanded = showActions,
-        buttons = actions?.visibleButtons.orEmpty(),
-        anchorCoordinates = anchorCoordinates,
-        onDismissRequest = { showActions = false },
-        onAction = { button ->
-            showActions = false
-            onAction(button)
-        },
-    )
 }
 
 @Preview(name = "EventStateButton — Pending")
