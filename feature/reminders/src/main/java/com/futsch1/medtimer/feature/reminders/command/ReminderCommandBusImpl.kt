@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.feature.reminders.command
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.LocationSnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.NotificationProcessor
 import com.futsch1.medtimer.feature.reminders.RefillProcessor
@@ -10,6 +9,7 @@ import com.futsch1.medtimer.feature.reminders.ScheduleNextReminderNotificationPr
 import com.futsch1.medtimer.feature.reminders.ShowReminderNotificationProcessor
 import com.futsch1.medtimer.feature.reminders.SnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.StockHandlingProcessor
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import java.time.Instant
 import javax.inject.Inject
@@ -39,9 +39,8 @@ class ReminderCommandBusImpl @Inject constructor(
     }
 
     override suspend fun showReminders(data: ReminderNotificationData) {
-        if (reminderNotificationProcessor.processReminders(data)) {
-            scheduleNextReminderNotificationProcessor.scheduleNextReminder()
-        }
+        reminderNotificationProcessor.processReminders(data)
+        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
     override suspend fun snooze(data: ReminderNotificationData, duration: Duration) {
