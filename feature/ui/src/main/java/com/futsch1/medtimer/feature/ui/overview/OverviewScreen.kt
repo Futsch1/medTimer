@@ -200,7 +200,7 @@ fun OverviewScreen(
                 onClick = onLogManualDose,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(8.dp)
+                    .padding(16.dp)
                     .testTag(OverviewTestTags.LOG_MANUAL_DOSE),
                 icon = { Icon(painterResource(CoreUiR.drawable.capsule), contentDescription = null) },
                 text = { Text(stringResource(CoreUiR.string.log_additional_dose), maxLines = 2) },
