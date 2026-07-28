@@ -60,6 +60,7 @@ fun MedicineCard(
             defaultElevation = 2.dp,
             draggedElevation = if (isDragging) 8.dp else 2.dp
         ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         onClick = { onMedicineEdit(medicine.id) }
     ) {
         Row(
