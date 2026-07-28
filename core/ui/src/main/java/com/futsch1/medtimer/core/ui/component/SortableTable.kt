@@ -65,7 +65,10 @@ data class SortableTableRow(
 enum class SortDirection { DESCENDING, ASCENDING, UNSORTED }
 
 object SortableTableTestTags {
-    fun header(title: String) = "table_header_$title"
+    const val TABLE = "sortable_table"
+
+    /** Scopes the column headers; each is then selected by its own title. */
+    const val HEADER_ROW = "sortable_table_header_row"
 }
 
 @Composable
@@ -84,7 +87,11 @@ fun SortableTable(
         sortRows(rows, sortColumn, sortDirection)
     }
 
-    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+    BoxWithConstraints(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(SortableTableTestTags.TABLE)
+    ) {
         val availableWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
         val totalMinWidth = columns.sumOf { it.minWidth.value.toDouble() }.dp
         val columnWidths = remember(columns, availableWidth) {
@@ -166,12 +173,16 @@ private fun HeaderRow(
     sortDirection: SortDirection,
     onHeaderClick: (Int) -> Unit,
 ) {
-    Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .testTag(SortableTableTestTags.HEADER_ROW),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         columns.forEachIndexed { index, column ->
             Row(
                 modifier = Modifier
                     .width(columnWidths[index])
-                    .testTag(SortableTableTestTags.header(column.title))
                     .then(if (column.sortable) Modifier.clickable { onHeaderClick(index) } else Modifier)
                     .padding(horizontal = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,

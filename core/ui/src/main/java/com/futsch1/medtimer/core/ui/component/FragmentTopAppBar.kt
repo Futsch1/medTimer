@@ -6,11 +6,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -35,7 +32,6 @@ fun Fragment.withTopAppBar(
         setContent {
             MedTimerTheme {
                 MedTimerTopAppBar(
-                    modifier = Modifier.semantics { testTagsAsResourceId = true },
                     title = barTitle,
                     onNavigateUp = if (canNavigateUp) ({ navController.navigateUp() }) else null,
                     actions = actions,

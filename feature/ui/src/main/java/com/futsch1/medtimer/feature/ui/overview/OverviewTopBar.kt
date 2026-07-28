@@ -25,14 +25,11 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 object OverviewTestTags {
     const val SELECTION_BAR = "overview_selection_bar"
-    const val SELECT_ALL = "overview_select_all"
-    const val EXIT_SELECTION = "overview_exit_selection"
+    const val ACTION_MENU = "overview_action_menu"
     const val EVENT_LIST = "overview_event_list"
     const val EVENT_CARD = "overview_event_card"
     const val EVENT_STATE_BUTTON = "overview_event_state"
     const val EVENT_TEXT = "overview_event_text"
-    const val PREV_WEEK = "overview_prev_week"
-    const val NEXT_WEEK = "overview_next_week"
 
     fun day(date: java.time.LocalDate) = "overview_day_$date"
 
@@ -87,7 +84,7 @@ private fun OverviewSelectionTopBar(
         title = { Text(selectedCount.toString()) },
         modifier = Modifier.testTag(OverviewTestTags.SELECTION_BAR),
         navigationIcon = {
-            IconButton(onClick = onExitSelectionMode, modifier = Modifier.testTag(OverviewTestTags.EXIT_SELECTION)) {
+            IconButton(onClick = onExitSelectionMode) {
                 Icon(
                     painter = painterResource(CoreUiR.drawable.close),
                     contentDescription = stringResource(CoreUiR.string.close),
@@ -105,7 +102,7 @@ private fun OverviewSelectionTopBar(
                     }
                 }
             }
-            IconButton(onClick = onSelectAll, modifier = Modifier.testTag(OverviewTestTags.SELECT_ALL)) {
+            IconButton(onClick = onSelectAll) {
                 Icon(
                     painter = painterResource(CoreUiR.drawable.check2_all),
                     contentDescription = stringResource(CoreUiR.string.select_all),

@@ -34,13 +34,8 @@ import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 object EditMedicineTestTags {
-    const val OVERFLOW = "edit_medicine_overflow"
-    const val DELETE = "edit_medicine_delete"
-    const val OPEN_TAGS = "edit_medicine_open_tags"
-    const val OPEN_NOTES = "edit_medicine_open_notes"
-    const val OPEN_STOCK = "edit_medicine_open_stock"
-    const val OPEN_SETTINGS = "edit_medicine_open_settings"
-    const val OPEN_CALENDAR = "edit_medicine_open_calendar"
+    /** Scopes the entries to this menu; each one is then selected by its own label. */
+    const val MENU = "edit_medicine_menu"
 }
 
 /** Actions on the medicine being edited: sub-screen links, bulk activation, duplication, deletion. */
@@ -126,55 +121,53 @@ fun RowScope.EditMedicineMenu(actions: EditMedicineActions) {
     var expanded by remember { mutableStateOf(false) }
 
     Box {
-        IconButton(onClick = { expanded = true }, modifier = Modifier.testTag(EditMedicineTestTags.OVERFLOW)) {
+        IconButton(onClick = { expanded = true }) {
             Icon(
                 painter = painterResource(CoreUiR.drawable.three_dots_vertical),
                 contentDescription = stringResource(CoreUiR.string.more_options),
             )
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(EditMedicineTestTags.MENU),
+        ) {
             @Composable
-            fun item(labelRes: Int, iconRes: Int?, testTag: String?, onClick: () -> Unit) {
+            fun item(labelRes: Int, iconRes: Int?, onClick: () -> Unit) {
                 DropdownMenuItem(
                     text = { Text(stringResource(labelRes)) },
                     onClick = {
                         expanded = false
                         onClick()
                     },
-                    modifier = testTag?.let { Modifier.testTag(it) } ?: Modifier,
                     leadingIcon = iconRes?.let { { Icon(painterResource(it), contentDescription = null) } },
                 )
             }
 
-            item(CoreUiR.string.medicine_settings, CoreUiR.drawable.gear, EditMedicineTestTags.OPEN_SETTINGS) {
+            item(CoreUiR.string.medicine_settings, CoreUiR.drawable.gear) {
                 actions.open(EditMedicineSubmenus.Submenu.SETTINGS)
             }
-            item(CoreUiR.string.notes, CoreUiR.drawable.journal_text, EditMedicineTestTags.OPEN_NOTES) {
+            item(CoreUiR.string.notes, CoreUiR.drawable.journal_text) {
                 actions.open(EditMedicineSubmenus.Submenu.NOTES)
             }
-            item(CoreUiR.string.tags, CoreUiR.drawable.tag, EditMedicineTestTags.OPEN_TAGS) {
+            item(CoreUiR.string.tags, CoreUiR.drawable.tag) {
                 actions.open(EditMedicineSubmenus.Submenu.TAGS)
             }
-            item(CoreUiR.string.medicine_stock_settings, CoreUiR.drawable.box_seam, EditMedicineTestTags.OPEN_STOCK) {
+            item(CoreUiR.string.medicine_stock_settings, CoreUiR.drawable.box_seam) {
                 actions.open(EditMedicineSubmenus.Submenu.STOCK_TRACKING)
             }
-            item(CoreUiR.string.calendar, CoreUiR.drawable.calendar_week, EditMedicineTestTags.OPEN_CALENDAR) {
+            item(CoreUiR.string.calendar, CoreUiR.drawable.calendar_week) {
                 actions.open(EditMedicineSubmenus.Submenu.CALENDAR)
             }
 
             HorizontalDivider()
-            item(CoreUiR.string.activate_all, null, null) { actions.setRemindersActive(true) }
-            item(CoreUiR.string.deactivate_all, null, null) { actions.setRemindersActive(false) }
+            item(CoreUiR.string.activate_all, null) { actions.setRemindersActive(true) }
+            item(CoreUiR.string.deactivate_all, null) { actions.setRemindersActive(false) }
 
             HorizontalDivider()
-            item(CoreUiR.string.duplicate, CoreUiR.drawable.copy, null, actions::duplicate)
-            item(
-                CoreUiR.string.duplicate_including_reminders,
-                CoreUiR.drawable.copy,
-                null,
-                actions::duplicateIncludingReminders,
-            )
-            item(CoreUiR.string.delete, CoreUiR.drawable.trash, EditMedicineTestTags.DELETE, actions::delete)
+            item(CoreUiR.string.duplicate, CoreUiR.drawable.copy, actions::duplicate)
+            item(CoreUiR.string.duplicate_including_reminders, CoreUiR.drawable.copy, actions::duplicateIncludingReminders)
+            item(CoreUiR.string.delete, CoreUiR.drawable.trash, actions::delete)
         }
     }
 }

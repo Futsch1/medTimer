@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,15 +24,14 @@ import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.feature.ui.BuildConfig
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.res.stringResource
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
 import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
+import com.futsch1.medtimer.feature.ui.BuildConfig
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -94,7 +94,7 @@ class MedicinesFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MedTimerTheme {
-                  Column(Modifier.semantics { testTagsAsResourceId = true }) {
+                    Column(Modifier.testTag(ScreenTestTags.MEDICINES)) {
                     MedTimerTopAppBar(
                         title = stringResource(com.futsch1.medtimer.core.ui.R.string.tab_medicine),
                         actions = {

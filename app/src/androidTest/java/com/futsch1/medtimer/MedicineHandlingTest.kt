@@ -40,8 +40,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
         medicines.assertCount(3)
         medicines.assertAtPosition(2, TEST_MED_3)
 
-        openMedicinesMenu()
-        clickMenuItem(R.string.by_name)
+        menus.clickMedicinesOption(R.string.by_name)
         medicines.assertAtPosition(0, TEST_MED_3)
         medicines.assertAtPosition(1, TEST_MED_1)
         medicines.assertAtPosition(2, TEST_MED_2 + '_')

@@ -9,7 +9,6 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.time.LocalDate
@@ -38,23 +37,23 @@ class MedicineStockTest : MedTimerTestBase() {
 
         // Mark reminder as taken, no out of stock reminder expected (7 left)
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
         overview.assertEventContains(MedicineHelper.formatAmount(7.0, "pills"))
         notifications.inShade { assertHidden(notificationTitle) }
 
         // Mark reminder as skipped (10.5 left)
         overview.clickEventState(0)
-        clickMenuItem(R.string.skipped)
+        overview.clickAction(R.string.skipped)
         notifications.inShade { assertHidden(notificationTitle) }
 
         // Mark reminder as taken again, no out of stock reminder expected (7 left)
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
         notifications.inShade { assertHidden(notificationTitle) }
 
         // Mark next instance as taken, out of stock reminder expected (3.5 left)
         overview.clickEventState(1)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
         notifications.inShade {
             assertShows(notificationTitle)
             assertShows(amount(3.5))
@@ -68,7 +67,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.assertStockAmount(MedicineHelper.formatAmount(3.5, "pills"))
 
         navigation.toOverview()
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         clickDialogItem("Test")
         writeTo(android.R.id.input, "12")
         clickDialogPositiveButton()
@@ -103,7 +102,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         navigation.toOverview()
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         notifications.inShade {
             await(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))
@@ -223,7 +222,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         overview.assertEventState(0, R.string.reminded)
         overview.clickEventState(0)
-        assertMenuItemDisplayed(R.string.acknowledged)
+        overview.assertActionDisplayed(R.string.acknowledged)
         pressBack()
 
         notifications.inShade {
@@ -233,7 +232,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         overview.assertEventState(0, R.string.taken)
         overview.clickEventState(0)
-        clickMenuItem(R.string.delete)
+        overview.clickAction(R.string.delete)
         clickDialogPositiveButton()
 
         notifications.inShade { assertHidden(notificationTitle) }
@@ -251,7 +250,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -259,7 +258,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         navigation.toOverview()
         overview.clickEventState(0)
-        clickMenuItem(R.string.delete)
+        overview.clickAction(R.string.delete)
         clickDialogPositiveButton()
 
         navigation.toMedicines()
@@ -278,7 +277,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -286,7 +285,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         navigation.toOverview()
         overview.clickEventState(0)
-        clickMenuItem(R.string.re_raise_event)
+        overview.clickAction(R.string.re_raise_event)
         clickDialogPositiveButton()
 
         navigation.toMedicines()

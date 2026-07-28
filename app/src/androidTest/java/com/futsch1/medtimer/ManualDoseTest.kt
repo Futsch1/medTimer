@@ -7,8 +7,6 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
-import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
@@ -21,12 +19,11 @@ class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testManualDose() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
+        menus.clickAppOption(R.string.generate_test_data)
 
         navigation.toOverview()
 
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
 
         clickDialogItem(GINSENG)
         writeTo(android.R.id.input, "12")
@@ -35,7 +32,7 @@ class ManualDoseTest : MedTimerTestBase() {
 
         overview.assertEventContains("Ginseng (200mg) (12)")
 
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         clickDialogItem(R.string.custom)
         writeTo(android.R.id.input, "Test")
         clickDialogPositiveButton(false)
@@ -44,7 +41,7 @@ class ManualDoseTest : MedTimerTestBase() {
         overview.assertEventContains("Test")
         overview.assertNoEventContains("Test (")
 
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         assertContains(com.futsch1.medtimer.feature.ui.R.id.entry_text, "Test")
         overview.assertNoEventContains("Test (")
         clickDialogItem("Test")
@@ -54,7 +51,7 @@ class ManualDoseTest : MedTimerTestBase() {
 
         overview.assertEventContains(TEST_13_)
 
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         assertContains(com.futsch1.medtimer.feature.ui.R.id.entry_text, TEST_13_)
         clickDialogItem(TEST_13_)
         assertContains(android.R.id.input, "13")
@@ -62,11 +59,10 @@ class ManualDoseTest : MedTimerTestBase() {
 
         navigation.toMedicines()
 
-        openMedicinesMenu()
-        clickMenuItem(R.string.deactivate_all)
+        menus.clickMedicinesOption(R.string.deactivate_all)
 
         navigation.toOverview()
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         assertDialogItemDisplayed(SELEN_1)
         clickDialogItem(SELEN_1)
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
@@ -85,7 +81,7 @@ class ManualDoseTest : MedTimerTestBase() {
 
         // Create manual dose of the disabled reminder
         navigation.toOverview()
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
         clickDialogItem(TEST_1_PILL)
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
@@ -99,7 +95,7 @@ class ManualDoseTest : MedTimerTestBase() {
 
         // Check that re-raise is not shown
         overview.clickEventState(0)
-        assertMenuItemNotDisplayed(R.string.re_raise_event)
+        overview.assertActionAbsent(R.string.re_raise_event)
     }
 
 }

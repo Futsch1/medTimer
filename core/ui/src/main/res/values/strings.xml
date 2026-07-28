@@ -120,6 +120,10 @@
     <string name="medicine_data">Medicine data</string>
     <string name="export_csv">Export as CSV</string>
     <string name="export_pdf">Export as PDF</string>
+    <string name="export_events_pdf">Export events as PDF</string>
+    <string name="export_events_csv">Export events as CSV</string>
+    <string name="export_medicines_pdf">Export medicines as PDF</string>
+    <string name="export_medicines_csv">Export medicines as CSV</string>
     <string name="restore">Restore</string>
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>

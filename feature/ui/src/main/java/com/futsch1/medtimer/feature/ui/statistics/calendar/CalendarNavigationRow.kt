@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
@@ -44,7 +45,7 @@ fun CalendarNavigationRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         IconButton(onClick = onPrev, enabled = yearMonth > startMonth) {
-            Icon(painterResource(R.drawable.chevron_left), contentDescription = null)
+            Icon(painterResource(R.drawable.chevron_left), stringResource(R.string.previous_month))
         }
 
         YearMonthTitle(
@@ -55,7 +56,7 @@ fun CalendarNavigationRow(
         )
 
         IconButton(onClick = onNext, enabled = yearMonth < endMonth) {
-            Icon(painterResource(R.drawable.chevron_right), contentDescription = null)
+            Icon(painterResource(R.drawable.chevron_right), stringResource(R.string.next_month))
         }
     }
 }

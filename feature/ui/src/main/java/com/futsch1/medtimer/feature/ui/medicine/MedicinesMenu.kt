@@ -31,9 +31,8 @@ import javax.inject.Inject
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 object MedicinesMenuTestTags {
-    const val OVERFLOW = "medicines_menu_overflow"
-    const val ACTIVATE_ALL = "medicines_menu_activate_all"
-    const val DEACTIVATE_ALL = "medicines_menu_deactivate_all"
+    /** Scopes the entries to this menu; each one is then selected by its own label. */
+    const val MENU = "medicines_menu"
 }
 
 /** The medicine-list specific actions: bulk activation and sorting. */
@@ -73,36 +72,39 @@ fun RowScope.MedicinesMenuActions(menu: MedicinesMenu) {
     var expanded by remember { mutableStateOf(false) }
 
     Box {
-        IconButton(onClick = { expanded = true }, modifier = Modifier.testTag(MedicinesMenuTestTags.OVERFLOW)) {
+        IconButton(onClick = { expanded = true }) {
             Icon(
                 painter = painterResource(CoreUiR.drawable.capsule),
                 contentDescription = stringResource(CoreUiR.string.tab_medicine),
             )
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(MedicinesMenuTestTags.MENU),
+        ) {
             @Composable
-            fun item(labelRes: Int, testTag: String?, onClick: () -> Unit) {
-                MenuItem(labelRes, testTag) {
+            fun item(labelRes: Int, onClick: () -> Unit) {
+                MenuItem(labelRes) {
                     expanded = false
                     onClick()
                 }
             }
 
-            item(CoreUiR.string.activate_all, MedicinesMenuTestTags.ACTIVATE_ALL) { menu.setRemindersActive(true) }
-            item(CoreUiR.string.deactivate_all, MedicinesMenuTestTags.DEACTIVATE_ALL) { menu.setRemindersActive(false) }
+            item(CoreUiR.string.activate_all) { menu.setRemindersActive(true) }
+            item(CoreUiR.string.deactivate_all) { menu.setRemindersActive(false) }
             HorizontalDivider()
-            item(CoreUiR.string.by_name, null, menu::sortByName)
-            item(CoreUiR.string.by_creation_date_ascending, null, menu::sortByCreationDateAscending)
-            item(CoreUiR.string.by_creation_date_descending, null, menu::sortByCreationDateDescending)
+            item(CoreUiR.string.by_name, menu::sortByName)
+            item(CoreUiR.string.by_creation_date_ascending, menu::sortByCreationDateAscending)
+            item(CoreUiR.string.by_creation_date_descending, menu::sortByCreationDateDescending)
         }
     }
 }
 
 @Composable
-private fun MenuItem(labelRes: Int, testTag: String?, onClick: () -> Unit) {
+private fun MenuItem(labelRes: Int, onClick: () -> Unit) {
     DropdownMenuItem(
         text = { Text(stringResource(labelRes)) },
         onClick = onClick,
-        modifier = testTag?.let { Modifier.testTag(it) } ?: Modifier,
     )
 }

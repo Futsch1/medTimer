@@ -40,9 +40,10 @@ import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTable
 
 object StatisticsTestTags {
     const val RANGE_DROPDOWN = "statistics_range_dropdown"
-    const val TABLE_FILTER = "statistics_table_filter"
 
-    fun rangeOption(days: Int) = "statistics_range_$days"
+    /** Scopes the range entries; each is then selected by its own label. */
+    const val RANGE_MENU = "statistics_range_menu"
+    const val TABLE_FILTER = "statistics_table_filter"
 
     fun viewChip(view: StatisticFragment) = "statistics_view_${view.name}"
 }

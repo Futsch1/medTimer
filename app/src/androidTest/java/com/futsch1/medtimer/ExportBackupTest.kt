@@ -3,7 +3,6 @@ package com.futsch1.medtimer
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
@@ -11,28 +10,25 @@ class ExportBackupTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testTriggerExport() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
+        menus.clickAppOption(R.string.generate_test_data)
 
         navigation.toMedicines()
-        clickTag(AppOptionsTestTags.TAG_FILTER)
+        menus.openTagFilter()
         clickTagChip("Supplements")
         pressBack()
 
-        exportViaAppOptions(AppOptionsTestTags.EXPORT_EVENTS_CSV)
-        exportViaAppOptions(AppOptionsTestTags.EXPORT_EVENTS_PDF)
-        exportViaAppOptions(AppOptionsTestTags.EXPORT_MEDICINES_CSV)
-        exportViaAppOptions(AppOptionsTestTags.EXPORT_MEDICINES_PDF)
+        exportViaAppOptions(R.string.export_events_csv)
+        exportViaAppOptions(R.string.export_events_pdf)
+        exportViaAppOptions(R.string.export_medicines_csv)
+        exportViaAppOptions(R.string.export_medicines_pdf)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun testTriggerBackup() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
+        menus.clickAppOption(R.string.generate_test_data)
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.BACKUP_CREATE)
+        menus.clickAppOption(R.string.backup)
 
         assertDialogItemChecked(R.string.medicine_data)
         assertDialogItemChecked(R.string.event_data)

@@ -28,12 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -122,7 +121,7 @@ fun OverviewScreen(
     BackHandler(enabled = selection.isInSelectionMode) { selection.exitSelectionMode() }
 
     val title = "${stringResource(CoreUiR.string.tab_overview)} - ${rememberFormattedDate(state.day, "MMMMy")}"
-    Column(modifier.semantics { testTagsAsResourceId = true }) {
+    Column(modifier.testTag(ScreenTestTags.OVERVIEW)) {
         OverviewTopBar(
             title = title,
             isInSelectionMode = selection.isInSelectionMode,

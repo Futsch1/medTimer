@@ -3,8 +3,8 @@ package com.futsch1.medtimer.robots
 import androidx.annotation.StringRes
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.onAllNodesWithContentDescription
-import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.onView
@@ -13,19 +13,21 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.futsch1.medtimer.NavTestTags
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.feature.ui.medicine.MedicineTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import kotlin.test.assertTrue
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
-/** The medicine list: creating, opening, and asserting on its cards. */
-class MedicinesRobot(private val ui: ComposeUi, private val queries: SemanticsQueries) {
+/** The medicine list: creating, opening, reordering, and asserting on its cards. */
+class MedicinesRobot(private val ui: ComposeUi, private val navigation: NavigationRobot) {
 
-    private val rule get() = ui.rule
+    private val screen get() = ui.scope(ScreenTestTags.MEDICINES)
+    private val list get() = screen.scope(MedicineTestTags.MEDICINE_LIST)
 
     fun create(name: String) {
         showList()
-        ui.clickTag(MedicineTestTags.ADD_MEDICINE)
+        screen.click(ADD_MEDICINE)
         onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.medicineName))
             .inRoot(RootMatchers.isDialog())
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
@@ -36,22 +38,20 @@ class MedicinesRobot(private val ui: ComposeUi, private val queries: SemanticsQu
 
     /** A medicine detail screen may sit on the tab's back stack, and a tab tap no longer pops it. */
     fun showList() {
-        ui.clickTag(NavTestTags.MEDICINES)
+        navigation.toMedicines()
         repeat(3) {
-            if (queries.exists(MedicineTestTags.ADD_MEDICINE)) return
+            if (screen.exists(ADD_MEDICINE)) return
             pressBack()
-            rule.waitForIdle()
+            screen.waitForIdle()
         }
     }
 
-    fun count(): Int = queries.count(MedicineTestTags.MEDICINE_ITEM)
+    fun count(): Int = list.count(MEDICINE_ITEM)
 
     fun clickItem(position: Int) {
         showList()
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { count() > position }
-        rule.onAllNodesWithTag(MedicineTestTags.MEDICINE_ITEM)[
-            queries.indicesTopToBottom(MedicineTestTags.MEDICINE_ITEM)[position]
-        ].performClick()
+        list.await { count() > position }
+        list.nodeAt(MEDICINE_ITEM, position).performClick()
         ui.settle()
     }
 
@@ -60,7 +60,7 @@ class MedicinesRobot(private val ui: ComposeUi, private val queries: SemanticsQu
      * needed for Compose's reorderable pointer input to read the gesture as a drag rather than a tap.
      */
     fun dragItem(from: Int, to: Int) {
-        val handles = dragHandleNodes()
+        val handles = list.boundsTopToBottom(dragHandle(), useUnmergedTree = true)
         val distance = handles[to].second - handles[from].second
         // Straight down the handle column: a diagonal drag towards the card's centre leaves the
         // handle early and the reorder never starts.
@@ -69,40 +69,30 @@ class MedicinesRobot(private val ui: ComposeUi, private val queries: SemanticsQu
             repeat(DRAG_STEPS) { moveBy(Offset(0f, distance / DRAG_STEPS)) }
             up()
         }
-        rule.waitForIdle()
+        list.waitForIdle()
     }
 
-    /** Indices into the semantics collection paired with their y position, in visual order. */
-    private fun dragHandleNodes(): List<Pair<Int, Float>> =
-        dragHandles()
-            .fetchSemanticsNodes()
-            .withIndex()
-            .map { it.index to it.value.boundsInRoot.center.y }
-            .sortedBy { it.second }
-
-    private fun handleAt(index: Int): SemanticsNodeInteraction = dragHandles()[index]
+    private fun dragHandle() = hasContentDescription(ui.getString(CoreUiR.string.move_medicine))
 
     /**
      * Unmerged: the card is clickable, so it merges the handle's content description into itself and
      * the merged match is the whole card - a touch at its centre misses the handle entirely.
      */
-    private fun dragHandles() = rule.onAllNodesWithContentDescription(
-        ui.getString(com.futsch1.medtimer.core.ui.R.string.move_medicine),
-        useUnmergedTree = true
-    )
+    private fun handleAt(index: Int): SemanticsNodeInteraction =
+        list.nodes(dragHandle(), useUnmergedTree = true)[index]
 
     fun clickNamed(name: String) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { names().any { it.startsWith(name) } }
+        list.await { names().any { it.startsWith(name) } }
         clickItem(names().indexOfFirst { it.startsWith(name) })
     }
 
     fun assertCount(expected: Int) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { count() == expected }
+        list.await { count() == expected }
     }
 
     fun assertAtPosition(position: Int, expectedName: String) {
         // A reorder reaches the list through the database, so the new order can lag the gesture.
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { matchesAtPosition(position, expectedName) }
+        list.await { matchesAtPosition(position, expectedName) }
     }
 
     /** The list appends a reminder count, e.g. "Test (2)". */
@@ -112,34 +102,37 @@ class MedicinesRobot(private val ui: ComposeUi, private val queries: SemanticsQu
     }
 
     fun assertNameContains(text: String) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { names().any { it.contains(text) } }
+        list.await { names().any { it.contains(text) } }
     }
 
     fun assertNameNotContains(text: String) {
-        rule.waitForIdle()
+        list.self().assertExists()
+        list.waitForIdle()
         val names = names()
         assertTrue(names.none { it.contains(text) }, "A medicine name contains '$text' but should not: $names")
     }
 
     fun assertListContains(text: String) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) {
-            queries.textsUnder(MedicineTestTags.MEDICINE_ITEM).any { it.contains(text) }
-        }
+        list.await { list.textsUnder(MEDICINE_ITEM).any { it.contains(text) } }
     }
 
     fun assertListContains(@StringRes textRes: Int) = assertListContains(ui.getString(textRes))
 
     fun assertListDoesNotContain(text: String) {
-        rule.waitForIdle()
-        val texts = queries.textsUnder(MedicineTestTags.MEDICINE_ITEM)
+        list.self().assertExists()
+        list.waitForIdle()
+        val texts = list.textsUnder(MEDICINE_ITEM)
         assertTrue(texts.none { it.contains(text) }, "A medicine card contains '$text': $texts")
     }
 
     fun assertListDoesNotContain(@StringRes textRes: Int) = assertListDoesNotContain(ui.getString(textRes))
 
-    private fun names(): List<String> = queries.textsUnder(MedicineTestTags.MEDICINE_NAME)
+    private fun names(): List<String> = list.textsUnder(MEDICINE_NAME)
 
     private companion object {
+        val ADD_MEDICINE = hasTestTag(MedicineTestTags.ADD_MEDICINE)
+        val MEDICINE_ITEM = hasTestTag(MedicineTestTags.MEDICINE_ITEM)
+        val MEDICINE_NAME = hasTestTag(MedicineTestTags.MEDICINE_NAME)
         const val DRAG_STEPS = 10
     }
 }

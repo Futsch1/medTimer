@@ -6,7 +6,6 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
 import com.futsch1.medtimer.feature.ui.statistics.ANALYSIS_RANGES
 import org.junit.ClassRule
 import org.junit.Test
@@ -31,8 +30,7 @@ class ScreenshotsTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
+        menus.clickAppOption(R.string.generate_test_data)
 
         overview.clickEvent(0)
         assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineNotes, "Some note")
@@ -73,7 +71,7 @@ class ScreenshotsTest : MedTimerTestBase() {
 
         statistics.filter("B")
         statistics.assertTableContains("B12")
-        clickContentDescription(R.string.cancel)
+        statistics.clearFilter()
 
         statistics.selectView(StatisticFragment.CALENDAR)
         Screengrab.screenshot("8")

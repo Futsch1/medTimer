@@ -53,10 +53,13 @@ internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mo
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                 .testTag(StatisticsTestTags.RANGE_DROPDOWN),
         )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(StatisticsTestTags.RANGE_MENU),
+        ) {
             ANALYSIS_RANGES.forEach { (labelRes, value) ->
                 DropdownMenuItem(
-                    modifier = Modifier.testTag(StatisticsTestTags.rangeOption(value)),
                     text = { Text(stringResource(labelRes)) },
                     onClick = {
                         expanded = false

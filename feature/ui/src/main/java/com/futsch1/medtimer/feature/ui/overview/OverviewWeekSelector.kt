@@ -103,7 +103,6 @@ fun OverviewWeekSelector(
                 scope.launch { state.animateScrollToWeek(target) }
                 onDaySelected(target)
             },
-            modifier = Modifier.testTag(OverviewTestTags.PREV_WEEK),
         ) {
             Icon(
                 painter = painterResource(CoreUiR.drawable.chevron_left),
@@ -129,7 +128,6 @@ fun OverviewWeekSelector(
                 scope.launch { state.animateScrollToWeek(target) }
                 onDaySelected(target)
             },
-            modifier = Modifier.testTag(OverviewTestTags.NEXT_WEEK),
         ) {
             Icon(
                 painter = painterResource(CoreUiR.drawable.chevron_right),

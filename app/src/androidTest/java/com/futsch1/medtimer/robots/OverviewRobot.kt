@@ -3,33 +3,38 @@ package com.futsch1.medtimer.robots
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import java.time.LocalDate
 import kotlin.test.assertTrue
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
-/** The Overview screen: its event list, day strip, filter chips and selection bar. */
-class OverviewRobot(private val ui: ComposeUi, private val queries: SemanticsQueries) {
+/** The Overview screen: its event list, day strip, filter chips, selection bar and action menu. */
+class OverviewRobot(private val ui: ComposeUi) {
 
-    private val rule get() = ui.rule
+    private val screen get() = ui.scope(ScreenTestTags.OVERVIEW)
+    private val list get() = screen.scope(OverviewTestTags.EVENT_LIST)
+    private val selectionBar get() = screen.scope(OverviewTestTags.SELECTION_BAR)
 
-    fun eventCount(): Int = queries.count(OverviewTestTags.EVENT_CARD)
+    /** The arc menu renders in its own popup window, so it anchors on itself, not on the screen. */
+    private val actionMenu get() = ui.scope(OverviewTestTags.ACTION_MENU)
+
+    fun eventCount(): Int = list.count(EVENT_CARD)
 
     /** Waits for the list to settle on [expected] rather than sampling it once. */
     fun assertEventCount(expected: Int) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) { eventCount() == expected }
+        list.await { eventCount() == expected }
     }
 
     fun assertEventCountAtLeast(expected: Int) {
-        rule.waitUntil(10_000) { eventCount() >= expected }
+        list.await(LONG_TIMEOUT) { eventCount() >= expected }
     }
 
     fun clickEventState(index: Int) {
@@ -48,89 +53,96 @@ class OverviewRobot(private val ui: ComposeUi, private val queries: SemanticsQue
     }
 
     fun assertEventState(index: Int, @StringRes stateRes: Int) {
-        queries.awaitAtLeast(OverviewTestTags.EVENT_STATE_BUTTON, index + 1)
+        list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
         stateButton(index).assertContentDescriptionEquals(ui.getString(stateRes))
     }
 
     fun assertEventTextContains(index: Int, substring: String) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) {
-            eventTexts().getOrNull(index)?.contains(substring) == true
-        }
+        list.await { eventTexts().getOrNull(index)?.contains(substring) == true }
     }
 
     fun assertEventContains(substring: String) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) {
-            allEventTexts().any { it.contains(substring) }
-        }
+        list.await { allEventTexts().any { it.contains(substring) } }
     }
 
     fun assertNoEventContains(substring: String) {
-        rule.waitForIdle()
+        list.self().assertExists()
+        list.waitForIdle()
         val texts = allEventTexts()
         assertTrue(texts.none { it.contains(substring) }, "An Overview event contains '$substring': $texts")
     }
 
-    fun take(substring: String) = actOnEventContaining(substring, com.futsch1.medtimer.core.ui.R.string.taken)
+    fun take(substring: String) = actOnEventContaining(substring, CoreUiR.string.taken)
 
-    fun skip(substring: String) = actOnEventContaining(substring, com.futsch1.medtimer.core.ui.R.string.skipped)
+    fun skip(substring: String) = actOnEventContaining(substring, CoreUiR.string.skipped)
 
-    /** The Overview filter chips carry the same descriptions as the selection actions, so scope to the bar. */
-    fun clickSelectionAction(@StringRes textRes: Int) {
-        rule.onNode(
-            hasContentDescription(ui.getString(textRes)) and hasAnyAncestor(hasTestTag(OverviewTestTags.SELECTION_BAR))
-        ).performClick()
-        ui.settle()
-    }
+    /** Acts on the arc menu opened by an event's state button. */
+    fun clickAction(@StringRes labelRes: Int) = actionMenu.click(hasText(ui.getString(labelRes)))
+
+    fun assertActionDisplayed(@StringRes labelRes: Int) =
+        actionMenu.assertDisplayed(hasText(ui.getString(labelRes)))
+
+    fun assertActionAbsent(@StringRes labelRes: Int) =
+        actionMenu.assertAbsent(hasText(ui.getString(labelRes)))
+
+    fun logManualDose() = screen.click(hasTestTag(OverviewTestTags.LOG_MANUAL_DOSE))
+
+    fun previousWeek() = screen.click(description(CoreUiR.string.previous_week))
+
+    fun nextWeek() = screen.click(description(CoreUiR.string.next_week))
+
+    /** The Overview filter chips carry descriptions too, so the selection actions scope to the bar. */
+    fun clickSelectionAction(@StringRes textRes: Int) = selectionBar.click(description(textRes))
+
+    fun selectAll() = selectionBar.click(description(CoreUiR.string.select_all))
+
+    fun exitSelectionMode() = selectionBar.click(description(CoreUiR.string.close))
 
     fun assertSelectionCount(count: Int) {
-        rule.waitUntil(SemanticsQueries.DEFAULT_TIMEOUT) {
-            queries.textsUnder(OverviewTestTags.SELECTION_BAR).any { it.contains(count.toString()) }
-        }
+        screen.await { screen.textsUnder(SELECTION_BAR).any { it.contains(count.toString()) } }
     }
 
-    fun toggleFilter(filter: OverviewFilter) = ui.clickTag(OverviewTestTags.filter(filter))
+    fun toggleFilter(filter: OverviewFilter) = screen.click(hasTestTag(OverviewTestTags.filter(filter)))
 
     fun assertDaySelected(date: LocalDate) {
-        rule.onNodeWithTag(OverviewTestTags.day(date)).assertIsSelected()
+        screen.node(hasTestTag(OverviewTestTags.day(date))).assertIsSelected()
     }
 
     /** [date] must be in the week currently shown; this does not page the strip. */
-    fun clickDay(date: LocalDate) {
-        val tag = OverviewTestTags.day(date)
-        queries.awaitExists(tag)
-        rule.onNodeWithTag(tag).performClick()
-        ui.settle()
-    }
+    fun clickDay(date: LocalDate) = screen.click(hasTestTag(OverviewTestTags.day(date)))
 
     /** Scrolls the event list so the item at [index] is composed (the LazyColumn virtualizes it otherwise). */
     private fun scrollToEvent(index: Int) {
-        queries.awaitAtLeast(OverviewTestTags.EVENT_STATE_BUTTON, index + 1)
-        queries.scrollTo(OverviewTestTags.EVENT_LIST, index)
+        list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
+        list.scrollToIndex(index)
     }
 
     private fun actOnEventContaining(substring: String, @StringRes actionRes: Int) {
-        queries.scrollUntilTextIn(
-            OverviewTestTags.EVENT_LIST, OverviewTestTags.EVENT_CARD, OverviewTestTags.EVENT_TEXT, substring
-        )
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
 
         val index = eventTexts().indexOfFirst { it.contains(substring) }
         assertTrue(index >= 0, "No Overview event contains '$substring': ${eventTexts()}")
         stateButton(index).performClick()
-        ui.clickMenuItem(actionRes)
+        clickAction(actionRes)
         stateButton(index).assertContentDescriptionEquals(ui.getString(actionRes))
     }
 
     /** Indices are visual, matching the event texts; the semantics tree is not necessarily in that order. */
-    private fun stateButton(index: Int) = nodeAt(OverviewTestTags.EVENT_STATE_BUTTON, index)
+    private fun stateButton(index: Int) = list.nodeAt(EVENT_STATE_BUTTON, index)
 
-    private fun eventCard(index: Int) = nodeAt(OverviewTestTags.EVENT_CARD, index)
+    private fun eventCard(index: Int) = list.nodeAt(EVENT_CARD, index)
 
-    private fun nodeAt(tag: String, index: Int) =
-        rule.onAllNodesWithTag(tag)[queries.indicesTopToBottom(tag)[index]]
+    private fun eventTexts(): List<String> = list.textsUnder(EVENT_TEXT)
 
-    private fun eventTexts(): List<String> = queries.textsUnder(OverviewTestTags.EVENT_TEXT)
+    private fun allEventTexts(): List<String> = list.allTexts(EVENT_CARD, EVENT_TEXT)
 
-    private fun allEventTexts(): List<String> = queries.allTextsIn(
-        OverviewTestTags.EVENT_LIST, OverviewTestTags.EVENT_CARD, OverviewTestTags.EVENT_TEXT
-    )
+    private fun description(@StringRes textRes: Int) = hasContentDescription(ui.getString(textRes))
+
+    private companion object {
+        val EVENT_CARD = hasTestTag(OverviewTestTags.EVENT_CARD)
+        val EVENT_STATE_BUTTON = hasTestTag(OverviewTestTags.EVENT_STATE_BUTTON)
+        val EVENT_TEXT = hasTestTag(OverviewTestTags.EVENT_TEXT)
+        val SELECTION_BAR = hasTestTag(OverviewTestTags.SELECTION_BAR)
+        const val LONG_TIMEOUT = 10_000L
+    }
 }

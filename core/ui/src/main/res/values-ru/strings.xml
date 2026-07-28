@@ -117,6 +117,10 @@
     <string name="medicine_data">Данные лекарства</string>
     <string name="export_csv">Экспортировать как CSV</string>
     <string name="export_pdf">Экспортировать как PDF</string>
+    <string name="export_events_pdf">Экспортировать события как PDF</string>
+    <string name="export_events_csv">Экспортировать события как CSV</string>
+    <string name="export_medicines_pdf">Экспортировать лекарства как PDF</string>
+    <string name="export_medicines_csv">Экспортировать лекарства как CSV</string>
     <string name="restore">Восстановить</string>
     <string name="restore_failed">Восстановление не удалось</string>
     <string name="backup_failed">Резервное копирование не удалось</string>

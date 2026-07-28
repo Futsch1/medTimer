@@ -12,8 +12,6 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderTestTags
-import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.text.DateFormat
@@ -124,8 +122,7 @@ class ReminderTest : MedTimerTestBase() {
         pressBack()
 
         medicines.clickItem(0)
-        openEditMedicineMenu()
-        clickMenuItem(R.string.activate_all)
+        menus.clickEditMedicineOption(R.string.activate_all)
 
         medicineEditor.openAdvancedSettings()
         assertPreferenceSummary(
@@ -162,7 +159,7 @@ class ReminderTest : MedTimerTestBase() {
             com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
         )
 
-        clickTag(AdvancedReminderTestTags.DELETE)
+        medicineEditor.deleteReminder()
         clickDialogPositiveButton()
 
         // Check that the reminder list is empty
@@ -214,8 +211,7 @@ class ReminderTest : MedTimerTestBase() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
         // Check calendar view not crashing
-        openEditMedicineMenu()
-        clickMenuItem(R.string.calendar)
+        menus.clickEditMedicineOption(R.string.calendar)
         pressBack()
 
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 4)
@@ -267,7 +263,7 @@ class ReminderTest : MedTimerTestBase() {
 
         // If possible, take reminder 1 now and see if reminder 2 appears
         overview.clickEventState(1)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         overview.assertEventContains("Test (2)")
     }
@@ -279,7 +275,7 @@ class ReminderTest : MedTimerTestBase() {
 
         navigation.toOverview()
 
-        clickTag(OverviewTestTags.LOG_MANUAL_DOSE)
+        overview.logManualDose()
 
         clickDialogItem("Test")
 
@@ -356,10 +352,10 @@ class ReminderTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.delete)
+        overview.clickAction(R.string.delete)
         clickDialogPositiveButton()
 
         overview.assertEventCount(0)
@@ -377,12 +373,12 @@ class ReminderTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         overview.assertNoEventContains(context.getString(R.string.interval_time, "0 min"))
 
         overview.clickEventState(1)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         overview.assertEventContains(context.getString(R.string.interval_time, "0 min"))
     }
@@ -424,7 +420,7 @@ class ReminderTest : MedTimerTestBase() {
             // Mark event as taken
             navigation.toOverview()
             overview.clickEventState(0)
-            clickMenuItem(R.string.taken)
+            overview.clickAction(R.string.taken)
 
             // Check if cyclic information is present
             overview.clickEvent(0)
@@ -441,14 +437,14 @@ class ReminderTest : MedTimerTestBase() {
 
             // Remove event
             overview.clickEventState(0)
-            clickMenuItem(R.string.delete)
+            overview.clickAction(R.string.delete)
             clickDialogPositiveButton()
 
             // Remove reminder
             navigation.toMedicines()
             medicines.clickItem(0)
             medicineEditor.openAdvancedSettings()
-            clickTag(AdvancedReminderTestTags.DELETE)
+            medicineEditor.deleteReminder()
             clickDialogPositiveButton()
         }
     }

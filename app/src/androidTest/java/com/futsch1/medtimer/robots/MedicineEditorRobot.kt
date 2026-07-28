@@ -1,11 +1,13 @@
 package com.futsch1.medtimer.robots
 
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.hasContentDescription
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import java.time.LocalTime
 
 /**
@@ -15,6 +17,7 @@ import java.time.LocalTime
  */
 class MedicineEditorRobot(
     private val ui: ComposeUi,
+    private val menus: MenuRobot,
     private val preferences: PreferenceScreenRobot,
     private val pickers: MaterialPickers,
 ) {
@@ -26,6 +29,13 @@ class MedicineEditorRobot(
     fun openAdvancedSettings() {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
     }
+
+    fun duplicateReminder() = topBarAction(R.string.duplicate)
+
+    fun deleteReminder() = topBarAction(R.string.delete)
+
+    private fun topBarAction(@StringRes descriptionRes: Int) =
+        ui.scope(ScreenTestTags.TOP_APP_BAR).click(hasContentDescription(ui.getString(descriptionRes)))
 
     fun addReminder(amount: String, time: LocalTime? = null) {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
@@ -83,8 +93,7 @@ class MedicineEditorRobot(
 
     /** Opens the stock settings, runs [block] there and returns to the editor. */
     fun inStockSettings(block: () -> Unit) {
-        ui.clickTag(EditMedicineTestTags.OVERFLOW)
-        ui.clickMenuItem(R.string.medicine_stock_settings)
+        menus.clickEditMedicineOption(R.string.medicine_stock_settings)
         block()
         pressBack()
     }

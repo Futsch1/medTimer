@@ -13,19 +13,16 @@ import androidx.test.uiautomator.Until
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.di.TimeFormatterEntryPoint
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
-import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
-import com.futsch1.medtimer.feature.ui.medicine.MedicinesMenuTestTags
 import com.futsch1.medtimer.harness.MedTimerTestHarness
 import com.futsch1.medtimer.robots.ComposeUi
 import com.futsch1.medtimer.robots.MaterialPickers
 import com.futsch1.medtimer.robots.MedicineEditorRobot
 import com.futsch1.medtimer.robots.MedicinesRobot
+import com.futsch1.medtimer.robots.MenuRobot
 import com.futsch1.medtimer.robots.NavigationRobot
 import com.futsch1.medtimer.robots.NotificationShadeRobot
 import com.futsch1.medtimer.robots.OverviewRobot
 import com.futsch1.medtimer.robots.PreferenceScreenRobot
-import com.futsch1.medtimer.robots.SemanticsQueries
 import com.futsch1.medtimer.robots.SettingsRobot
 import com.futsch1.medtimer.robots.StatisticsRobot
 import dagger.hilt.android.EntryPointAccessors
@@ -46,20 +43,19 @@ abstract class MedTimerTestBase {
     val harness = MedTimerTestHarness(this.javaClass.name)
 
     protected val baristaRule get() = harness.baristaRule
-    protected val composeTestRule get() = harness.composeTestRule
 
-    private val ui by lazy { ComposeUi(composeTestRule) }
-    private val queries: SemanticsQueries get() = ui.queries
+    private val ui by lazy { ComposeUi(harness.composeTestRule) }
 
     protected val preferences by lazy { PreferenceScreenRobot(ui) }
     protected val pickers by lazy { MaterialPickers() }
     protected val navigation by lazy { NavigationRobot(ui) }
+    protected val menus by lazy { MenuRobot(ui) }
 
-    protected val overview by lazy { OverviewRobot(ui, queries) }
-    protected val medicines by lazy { MedicinesRobot(ui, queries) }
-    protected val statistics by lazy { StatisticsRobot(ui, queries) }
-    protected val medicineEditor by lazy { MedicineEditorRobot(ui, preferences, pickers) }
-    protected val settings by lazy { SettingsRobot(ui, preferences) }
+    protected val overview by lazy { OverviewRobot(ui) }
+    protected val medicines by lazy { MedicinesRobot(ui, navigation) }
+    protected val statistics by lazy { StatisticsRobot(ui) }
+    protected val medicineEditor by lazy { MedicineEditorRobot(ui, menus, preferences, pickers) }
+    protected val settings by lazy { SettingsRobot(menus, preferences) }
     protected val notifications by lazy { NotificationShadeRobot() }
 
     protected fun amount(value: Double): String = MedicineHelper.formatAmount(value, "")
@@ -80,23 +76,7 @@ abstract class MedTimerTestBase {
         return if (later > now) later else LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES)
     }
 
-    protected fun clickTag(tag: String) = ui.clickTag(tag)
-
-    protected fun clickMenuItem(@StringRes textRes: Int) = ui.clickMenuItem(textRes)
-
-    protected fun clickContentDescription(@StringRes textRes: Int) = ui.clickContentDescription(textRes)
-
-    protected fun assertMenuItemDisplayed(@StringRes textRes: Int) = ui.assertMenuItemDisplayed(textRes)
-
-    protected fun assertMenuItemNotDisplayed(@StringRes textRes: Int) = ui.assertMenuItemNotDisplayed(textRes)
-
     protected fun getString(@StringRes textRes: Int): String = ui.getString(textRes)
-
-    protected fun openAppOptionsMenu() = clickTag(AppOptionsTestTags.OVERFLOW)
-
-    protected fun openMedicinesMenu() = clickTag(MedicinesMenuTestTags.OVERFLOW)
-
-    protected fun openEditMedicineMenu() = clickTag(EditMedicineTestTags.OVERFLOW)
 
     /** Tags live in a View dialog with its own list, so these scope to it rather than matching loose text. */
     private fun tagChip(name: String) = onView(
@@ -134,9 +114,9 @@ abstract class MedTimerTestBase {
         device.waitForIdle()
     }
 
-    protected fun exportViaAppOptions(tag: String) {
-        openAppOptionsMenu()
-        clickTag(tag)
+    /** [descriptionRes] is the export entry's spoken name, which says both what and in which format. */
+    protected fun exportViaAppOptions(@StringRes descriptionRes: Int) {
+        menus.clickAppOptionNamed(descriptionRes)
         assertShareSheetShown()
     }
 

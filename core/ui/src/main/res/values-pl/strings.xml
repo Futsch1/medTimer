@@ -125,6 +125,10 @@
     <string name="time_after">x godzin po leku y</string>
     <string name="export_csv">Zapisz jako CSV</string>
     <string name="export_pdf">Zapisz jako PDF</string>
+    <string name="export_events_pdf">Zapisz zdarzenia jako PDF</string>
+    <string name="export_events_csv">Zapisz zdarzenia jako CSV</string>
+    <string name="export_medicines_pdf">Zapisz lekarstwa jako PDF</string>
+    <string name="export_medicines_csv">Zapisz lekarstwa jako CSV</string>
     <string name="restore">Przywróć kopię</string>
     <string name="restore_failed">Nie udało się przywrócić</string>
     <string name="backup_failed">Nie udało się utworzyć kopii</string>

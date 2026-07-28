@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
@@ -54,7 +54,7 @@ class StatisticsFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             MedTimerTheme {
-                Column(Modifier.semantics { testTagsAsResourceId = true }) {
+                Column(Modifier.testTag(ScreenTestTags.STATISTICS)) {
                     MedTimerTopAppBar(
                         title = stringResource(CoreUiR.string.analysis),
                         actions = {

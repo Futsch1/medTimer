@@ -20,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -32,7 +30,10 @@ import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R as FeatureUiR
 
-/** Stable testTags for the top-level nav items; exposed to instrumented tests as resource-ids. */
+/**
+ * The nav items are the only selectors with no container to scope them to: NavigationSuiteScaffold
+ * exposes no modifier for the bar or rail itself, so each item stays addressable by its own tag.
+ */
 object NavTestTags {
     const val OVERVIEW = "nav_overview"
     const val MEDICINES = "nav_medicines"
@@ -101,7 +102,6 @@ fun AppNavigationScaffold(
             }
         },
         layoutType = navigationSuiteType,
-        modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
         // NavigationSuiteScaffold already consumes the space its bar or rail occupies, so padding the
         // full system bars here resolves to exactly the sides the content still has to avoid.

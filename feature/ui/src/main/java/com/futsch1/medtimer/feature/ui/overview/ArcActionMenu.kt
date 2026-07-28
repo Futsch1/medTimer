@@ -35,6 +35,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionOnScreen
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -199,6 +200,7 @@ private fun ArcActionButtons(
     Layout(
         modifier = Modifier
             .fillMaxSize()
+            .testTag(OverviewTestTags.ACTION_MENU)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,

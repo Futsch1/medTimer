@@ -12,9 +12,11 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.ScreenTestTags
 
 /**
  * The app's single top bar shape. Every screen renders its own instance.
@@ -33,7 +35,7 @@ fun MedTimerTopAppBar(
 ) {
     TopAppBar(
         title = { Text(title, style = MaterialTheme.typography.titleLarge) },
-        modifier = modifier,
+        modifier = modifier.testTag(ScreenTestTags.TOP_APP_BAR),
         navigationIcon = {
             if (onNavigateUp != null) {
                 IconButton(onClick = onNavigateUp) {

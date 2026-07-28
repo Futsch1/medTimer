@@ -106,6 +106,10 @@
     <string name="medicine_data">药品数据</string>
     <string name="export_csv">导出为 CSV</string>
     <string name="export_pdf">导出为 PDF</string>
+    <string name="export_events_pdf">导出记录为 PDF</string>
+    <string name="export_events_csv">导出记录为 CSV</string>
+    <string name="export_medicines_pdf">导出药品为 PDF</string>
+    <string name="export_medicines_csv">导出药品为 CSV</string>
     <string name="restore">从备份文件恢复</string>
     <string name="restore_failed">恢复失败</string>
     <string name="backup_failed">备份失败</string>

@@ -116,6 +116,10 @@
     <string name="medicine_data">Datos de medicamentos</string>
     <string name="export_csv">Exportar como CSV</string>
     <string name="export_pdf">Exportar como PDF</string>
+    <string name="export_events_pdf">Exportar eventos como PDF</string>
+    <string name="export_events_csv">Exportar eventos como CSV</string>
+    <string name="export_medicines_pdf">Exportar medicamentos como PDF</string>
+    <string name="export_medicines_csv">Exportar medicamentos como CSV</string>
     <string name="restore">Restaurar</string>
     <string name="restore_failed">Error al restaurar</string>
     <string name="backup_failed">Error al hacer una copia de seguridad</string>

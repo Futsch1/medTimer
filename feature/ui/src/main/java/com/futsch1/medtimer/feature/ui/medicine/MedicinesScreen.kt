@@ -47,8 +47,6 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -91,8 +89,6 @@ fun MedicinesScreen(
     val reorderableMedicines = rememberReorderableMedicines(listState, state.medicines, onMedicineMove)
 
     Scaffold(
-        modifier = Modifier
-            .semantics { testTagsAsResourceId = true },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.testTag(MedicineTestTags.ADD_MEDICINE),

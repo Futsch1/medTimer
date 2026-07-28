@@ -24,7 +24,6 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
 import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.`is`
@@ -51,8 +50,7 @@ class NotificationTest : MedTimerTestBase() {
         medicines.create(TEST_MED)
 
         // Set color and icon
-        openEditMedicineMenu()
-        clickMenuItem(R.string.medicine_settings)
+        menus.clickEditMedicineOption(R.string.medicine_settings)
         clickPreference(R.string.color)
         clickPreference(R.string.select_color)
         onView(withResourceName("hexEdit")).perform(
@@ -122,8 +120,7 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         // Clear event data (causes reminder to be re-raised)
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.CLEAR_EVENTS)
+        menus.clickAppOption(R.string.clear_events)
         clickDialogPositiveButton()
 
         navigation.toAnalysis()
@@ -173,7 +170,7 @@ class NotificationTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
         navigation.toAnalysis()
 
         notifications.inShade {
@@ -197,8 +194,7 @@ class NotificationTest : MedTimerTestBase() {
         medicineEditor.openAdvancedSettings()
         clickPreference(R.string.variable_amount)
         pressBack()
-        openEditMedicineMenu()
-        clickMenuItem(R.string.duplicate_including_reminders)
+        menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
 
         medicines.clickItem(1)
         medicineEditor.rename(SECOND_ONE)
@@ -241,8 +237,7 @@ class NotificationTest : MedTimerTestBase() {
         medicineEditor.openAdvancedSettings()
         clickPreference(R.string.variable_amount)
         pressBack()
-        openEditMedicineMenu()
-        clickMenuItem(R.string.duplicate_including_reminders)
+        menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
         medicines.clickItem(0)
         medicineEditor.addReminder("Not variable", LocalTime.of(20, 0))
         pressBack()
@@ -279,7 +274,7 @@ class NotificationTest : MedTimerTestBase() {
 
         overview.clickDay(LocalDate.now().plusDays(1))
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
 
@@ -438,15 +433,14 @@ class NotificationTest : MedTimerTestBase() {
 
         medicines.create(TEST_MED)
         medicineEditor.addIntervalReminder("1", 2)
-        openEditMedicineMenu()
-        clickMenuItem(R.string.medicine_settings)
+        menus.clickEditMedicineOption(R.string.medicine_settings)
         clickOn(R.string.notification_importance)
         clickOn(R.string.high_and_alarm)
         pressBack()
 
         navigation.toOverview()
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         device.sleep()
 
@@ -476,7 +470,7 @@ class NotificationTest : MedTimerTestBase() {
         navigation.toOverview()
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.reschedule_reminder)
+        overview.clickAction(R.string.reschedule_reminder)
 
         pickers.pickTime(LocalTime.of(4, 0))
 
@@ -487,8 +481,7 @@ class NotificationTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun noSkippedButton() {
         medicines.create(TEST_MED)
-        openEditMedicineMenu()
-        clickMenuItem(R.string.medicine_settings)
+        menus.clickEditMedicineOption(R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
         medicineEditor.addIntervalReminder("1", 120)
@@ -510,8 +503,7 @@ class NotificationTest : MedTimerTestBase() {
         navigation.toMedicines()
 
         medicines.create(TEST_MED_2)
-        openEditMedicineMenu()
-        clickMenuItem(R.string.medicine_settings)
+        menus.clickEditMedicineOption(R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
         medicineEditor.addIntervalReminder("1", 120)

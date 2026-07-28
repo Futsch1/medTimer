@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
@@ -22,11 +20,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
-
-object AdvancedReminderTestTags {
-    const val DUPLICATE = "advanced_reminder_duplicate"
-    const val DELETE = "advanced_reminder_delete"
-}
 
 /**
  * Duplicate/delete actions for a reminder's advanced settings screen.
@@ -68,13 +61,13 @@ class AdvancedReminderSettingsActions @AssistedInject constructor(
 
 @Composable
 fun RowScope.AdvancedReminderSettingsMenu(actions: AdvancedReminderSettingsActions) {
-    IconButton(onClick = actions::duplicate, modifier = Modifier.testTag(AdvancedReminderTestTags.DUPLICATE)) {
+    IconButton(onClick = actions::duplicate) {
         Icon(
             painter = painterResource(CoreUiR.drawable.copy),
             contentDescription = stringResource(CoreUiR.string.duplicate),
         )
     }
-    IconButton(onClick = actions::delete, modifier = Modifier.testTag(AdvancedReminderTestTags.DELETE)) {
+    IconButton(onClick = actions::delete) {
         Icon(
             painter = painterResource(CoreUiR.drawable.trash),
             contentDescription = stringResource(CoreUiR.string.delete),

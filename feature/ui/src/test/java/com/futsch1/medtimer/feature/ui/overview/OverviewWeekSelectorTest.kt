@@ -1,14 +1,16 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +20,7 @@ import org.robolectric.annotation.Config
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -43,7 +46,7 @@ class OverviewWeekSelectorTest {
             }
         }
 
-        composeTestRule.onNodeWithTag(OverviewTestTags.PREV_WEEK).assertExists()
+        composeTestRule.onNodeWithContentDescription(getString(CoreUiR.string.previous_week)).assertExists()
     }
 
     @Test
@@ -58,7 +61,7 @@ class OverviewWeekSelectorTest {
             }
         }
 
-        composeTestRule.onNodeWithTag(OverviewTestTags.PREV_WEEK).assertExists()
+        composeTestRule.onNodeWithContentDescription(getString(CoreUiR.string.previous_week)).assertExists()
     }
 
     /**
@@ -107,7 +110,7 @@ class OverviewWeekSelectorTest {
     @Test
     @Config(qualifiers = "en-rUS")
     fun `previous arrow selects the last day of the previous week when today is not in it`() {
-        val captured = renderAndClick(LocalDate.of(2024, 1, 10), OverviewTestTags.PREV_WEEK)
+        val captured = renderAndClick(LocalDate.of(2024, 1, 10), CoreUiR.string.previous_week)
 
         assertEquals(LocalDate.of(2024, 1, 6), captured)
     }
@@ -115,7 +118,7 @@ class OverviewWeekSelectorTest {
     @Test
     @Config(qualifiers = "en-rUS")
     fun `next arrow selects the first day of the next week when today is not in it`() {
-        val captured = renderAndClick(LocalDate.of(2024, 1, 10), OverviewTestTags.NEXT_WEEK)
+        val captured = renderAndClick(LocalDate.of(2024, 1, 10), CoreUiR.string.next_week)
 
         assertEquals(LocalDate.of(2024, 1, 14), captured)
     }
@@ -123,7 +126,7 @@ class OverviewWeekSelectorTest {
     @Test
     fun `previous arrow selects today when today is in the previous week`() {
         val today = LocalDate.now()
-        val captured = renderAndClick(today.plusWeeks(1), OverviewTestTags.PREV_WEEK)
+        val captured = renderAndClick(today.plusWeeks(1), CoreUiR.string.previous_week)
 
         assertEquals(today, captured)
     }
@@ -131,12 +134,15 @@ class OverviewWeekSelectorTest {
     @Test
     fun `next arrow selects today when today is in the next week`() {
         val today = LocalDate.now()
-        val captured = renderAndClick(today.minusWeeks(1), OverviewTestTags.NEXT_WEEK)
+        val captured = renderAndClick(today.minusWeeks(1), CoreUiR.string.next_week)
 
         assertEquals(today, captured)
     }
 
-    private fun renderAndClick(initialSelectedDay: LocalDate, arrowTag: String): LocalDate? {
+    private fun getString(@StringRes textRes: Int): String =
+        ApplicationProvider.getApplicationContext<android.content.Context>().getString(textRes)
+
+    private fun renderAndClick(initialSelectedDay: LocalDate, @StringRes arrowDescription: Int): LocalDate? {
         var captured: LocalDate? = null
         composeTestRule.setContent {
             MedTimerTheme {
@@ -152,7 +158,7 @@ class OverviewWeekSelectorTest {
             }
         }
 
-        composeTestRule.onNodeWithTag(arrowTag).performClick()
+        composeTestRule.onNodeWithContentDescription(getString(arrowDescription)).performClick()
         composeTestRule.waitForIdle()
         return captured
     }

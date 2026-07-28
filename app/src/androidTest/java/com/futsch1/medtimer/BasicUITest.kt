@@ -10,9 +10,6 @@ import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.clos
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
-import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderTestTags
-import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
 import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.text.DateFormat
@@ -48,7 +45,7 @@ class BasicUITest : MedTimerTestBase() {
         medicines.clickItem(0)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
         medicineEditor.openAdvancedSettings()
-        clickTag(AdvancedReminderTestTags.DUPLICATE)
+        medicineEditor.duplicateReminder()
 
         assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
 
@@ -125,8 +122,7 @@ class BasicUITest : MedTimerTestBase() {
 
         val notes = "Contains catnip\n\nmeow :3"
 
-        openEditMedicineMenu()
-        clickMenuItem(R.string.notes)
+        menus.clickEditMedicineOption(R.string.notes)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
         closeKeyboard()
         clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
@@ -134,25 +130,21 @@ class BasicUITest : MedTimerTestBase() {
         pressBack()
         medicines.clickItem(0)
 
-        openEditMedicineMenu()
-        clickMenuItem(R.string.notes)
+        menus.clickEditMedicineOption(R.string.notes)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
 
         clearText(com.futsch1.medtimer.feature.ui.R.id.notes)
         closeKeyboard()
         clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
 
-        openEditMedicineMenu()
-        clickMenuItem(R.string.notes)
+        menus.clickEditMedicineOption(R.string.notes)
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun appIntro() {
-        openAppOptionsMenu()
-
-        clickTag(AppOptionsTestTags.SHOW_INTRO)
+        menus.clickAppOption(R.string.show_intro)
 
         assertDisplayed(com.github.appintro.R.id.title, getString(R.string.intro_welcome))
         assertDisplayed(com.github.appintro.R.id.description, getString(R.string.intro_welcome_description))
@@ -186,7 +178,7 @@ class BasicUITest : MedTimerTestBase() {
         overview.assertEventContains(TEST_2)
 
         overview.clickEventState(0)
-        clickMenuItem(R.string.taken)
+        overview.clickAction(R.string.taken)
 
         overview.toggleFilter(OverviewFilter.TAKEN)
         overview.assertEventContains(TEST_2)
@@ -221,8 +213,7 @@ class BasicUITest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun overviewDaySelection() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.GENERATE_TEST_DATA_AND_EVENTS)
+        menus.clickAppOption(R.string.generate_test_data_and_events)
 
         val today = LocalDate.now()
         val secondDay = today.plusDays(1)
@@ -238,14 +229,14 @@ class BasicUITest : MedTimerTestBase() {
         overview.assertDaySelected(today)
         assertTrue(overview.eventCount() > 0)
 
-        clickTag(OverviewTestTags.NEXT_WEEK)
+        overview.nextWeek()
         assertTrue(overview.eventCount() > 0)
 
-        clickTag(OverviewTestTags.PREV_WEEK)
+        overview.previousWeek()
         overview.assertDaySelected(today)
         assertTrue(overview.eventCount() > 0)
 
-        clickTag(OverviewTestTags.PREV_WEEK)
+        overview.previousWeek()
         assertTrue(overview.eventCount() > 0)
     }
 
