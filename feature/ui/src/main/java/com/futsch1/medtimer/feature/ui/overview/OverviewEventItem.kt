@@ -2,31 +2,29 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
@@ -34,12 +32,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.component.SelectableCard
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.core.ui.theme.containerMask
+import com.futsch1.medtimer.core.ui.theme.readableContentColorFor
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
@@ -114,7 +113,7 @@ fun OverviewEventItem(
             onEnterSelectionMode = onEnterSelectionMode,
             colors = CardDefaults.cardColors(
                 containerColor = containerColor,
-                contentColor = contentColorFor(containerColor),
+                contentColor = readableContentColorFor(containerColor),
             ),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
@@ -140,19 +139,10 @@ fun OverviewEventItem(
                     label = "medicine_icon",
                 ) { animatedIcon ->
                     if (animatedIcon != null) {
-                        val iconContainerColor by animateColorAsState(
-                            targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.onSecondaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.surfaceContainerHighest
-                            },
-                            animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
-                            label = "medicine_icon_container_color",
-                        )
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = iconContainerColor,
-                            )
+                        Box(
+                            modifier = Modifier
+                                .clip(CardDefaults.shape)
+                                .background(containerMask())
                         ) {
                             Icon(
                                 bitmap = animatedIcon,
@@ -183,6 +173,29 @@ private fun previewMedicineIcon(): ImageBitmap? {
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemPreview() {
+    OverviewEventItemPreview(color = null, isSelected = false)
+}
+
+@MedTimerPreview
+@Composable
+private fun OverviewEventItemLightColorPreview() {
+    OverviewEventItemPreview(color = 0xFFFFE082.toInt(), isSelected = false)
+}
+
+@MedTimerPreview
+@Composable
+private fun OverviewEventItemDarkColorPreview() {
+    OverviewEventItemPreview(color = 0xFF1A237E.toInt(), isSelected = false)
+}
+
+@MedTimerPreview
+@Composable
+private fun OverviewEventItemSelectedPreview() {
+    OverviewEventItemPreview(color = null, isSelected = true)
+}
+
+@Composable
+private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean) {
     MedTimerTheme {
         Surface {
             OverviewEventItem(
@@ -196,10 +209,10 @@ private fun OverviewEventItemPreview() {
                     stock = StockChange(before = 12.0, after = 11.0, unit = "pcs"),
                 ),
                 state = OverviewState.TAKEN,
-                color = null,
+                color = color,
                 icon = previewMedicineIcon(),
-                isSelected = false,
-                isInSelectionMode = false,
+                isSelected = isSelected,
+                isInSelectionMode = isSelected,
                 actions = null,
                 onClick = {},
                 onToggleSelection = {},
@@ -217,18 +230,3 @@ private fun eventContainerColor(color: Int?, isSelected: Boolean) = when {
     else -> MaterialTheme.colorScheme.surfaceContainer
 }
 
-/**
- * Picks whichever of onSurface/onPrimary reads better on [background] — medicine colours are
- * user-chosen and can land anywhere on the light/dark range.
- */
-@Composable
-private fun contentColorFor(background: Color): Color {
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val onPrimary = MaterialTheme.colorScheme.onPrimary
-    return remember(background, onSurface, onPrimary) {
-        val bg = background.toArgb() or -0x1000000
-        if (ColorUtils.calculateContrast(onSurface.toArgb(), bg) >
-            ColorUtils.calculateContrast(onPrimary.toArgb(), bg)
-        ) onSurface else onPrimary
-    }
-}

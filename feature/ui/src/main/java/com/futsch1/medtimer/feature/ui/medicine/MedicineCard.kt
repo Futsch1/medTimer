@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -35,13 +36,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.core.ui.theme.readableContentColorFor
 import kotlinx.collections.immutable.persistentListOf
-import androidx.compose.ui.platform.LocalResources
 
 @Composable
 fun MedicineCard(
@@ -53,7 +53,7 @@ fun MedicineCard(
 ) {
     val cardColors = if (medicine.color != null) {
         val bg = Color(medicine.color)
-        CardDefaults.cardColors(containerColor = bg, contentColor = contentColorFor(bg))
+        CardDefaults.cardColors(containerColor = bg, contentColor = readableContentColorFor(bg))
     } else {
         CardDefaults.cardColors()
     }
@@ -182,16 +182,6 @@ private fun MedicineTags(tags: List<String>) {
 
 
 private const val MAX_VISIBLE_TAGS = 5
-
-@Composable
-private fun contentColorFor(backgroundColor: Color): Color {
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val onPrimary = MaterialTheme.colorScheme.onPrimary
-    val bg = backgroundColor.toArgb() or -0x1000000
-    return if (ColorUtils.calculateContrast(onSurface.toArgb(), bg) >=
-        ColorUtils.calculateContrast(onPrimary.toArgb(), bg)
-    ) onSurface else onPrimary
-}
 
 
 @MedTimerPreview
