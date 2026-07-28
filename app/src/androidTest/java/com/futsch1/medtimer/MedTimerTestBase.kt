@@ -69,6 +69,12 @@ abstract class MedTimerTestBase {
         return if (later > now) later else LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES)
     }
 
+    /**
+     * A time already behind now, so a reminder created with it counts as today's dose having passed.
+     * The harness keeps the clock past 03:00, which leaves room for this to stay inside today.
+     */
+    protected fun earlierToday(): LocalTime = LocalTime.of(1, 0)
+
     protected fun getString(@StringRes textRes: Int): String = robots.getString(textRes)
 
     companion object {

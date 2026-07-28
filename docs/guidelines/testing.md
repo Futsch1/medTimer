@@ -107,6 +107,10 @@ Conventions:
 - **UIAutomator** for cross-app interactions (notifications, settings screens) where Espresso can't reach.
 - Name tests for the user-visible behavior, not the Fragment class name.
 - Keep instrumented tests **independent** — each test sets up its own state via repository or intent, doesn't rely on test order.
+- **Never make a test depend on what today is.** Derive times from now — `laterToday()`, `aboutToFire()`, `earlierToday()` on `MedTimerTestBase` — and
+  dates from `LocalDate.now()`. A literal like `LocalTime.of(20, 0)` only means "in the future" on a device whose clock happens to cooperate, and the
+  suite no longer pins one. `MedTimerTestHarness` fails any test started outside 03:00–21:00, which is what gives those helpers room to reach forwards and
+  backwards inside the same day. Reaching a day outside the week on screen goes through `OverviewRobot.selectDay`, not `clickDay`.
 - **Run a new or changed instrumented test locally before pushing** (e.g.
   `./gradlew :app:connectedFullDebugAndroidTest --tests com.futsch1.medtimer.DeleteTest.shouldDeleteMedicineAndReminder`) — this catches obvious failures
   without burning a CI cycle. **Do not run the full suite locally**; CI covers the broader matrix (`compatibilityTest.yml`, `test.yml`).

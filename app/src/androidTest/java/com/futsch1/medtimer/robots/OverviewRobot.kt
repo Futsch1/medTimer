@@ -111,6 +111,22 @@ class OverviewRobot(private val ui: ComposeUi) {
     /** [date] must be in the week currently shown; this does not page the strip. */
     fun clickDay(date: LocalDate) = screen.click(hasTestTag(OverviewTestTags.day(date)))
 
+    /**
+     * Selects [date] wherever it sits relative to the week on screen:
+     * which days the strip shows depend on the first day of the week and on what today happens to be,
+     * so a neighboring day is not reliably in view.
+     */
+    fun selectDay(date: LocalDate) {
+        val day = hasTestTag(OverviewTestTags.day(date))
+        val page = if (date > LocalDate.now()) ::nextWeek else ::previousWeek
+        var pagesLeft = PAGES_SEARCHED
+        // Paging settles the strip, so a plain existence check after it is enough.
+        while (!screen.exists(day) && pagesLeft-- > 0) {
+            page()
+        }
+        screen.click(day)
+    }
+
     /** Scrolls the event list so the item at [index] is composed (the LazyColumn virtualizes it otherwise). */
     private fun scrollToEvent(index: Int) {
         list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
@@ -144,5 +160,8 @@ class OverviewRobot(private val ui: ComposeUi) {
         val EVENT_TEXT = hasTestTag(OverviewTestTags.EVENT_TEXT)
         val SELECTION_BAR = hasTestTag(OverviewTestTags.SELECTION_BAR)
         const val LONG_TIMEOUT = 10_000L
+
+        /** A day the tests reach for is at most one week away, so one page in either direction covers it. */
+        const val PAGES_SEARCHED = 1
     }
 }

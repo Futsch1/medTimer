@@ -7,7 +7,6 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import org.junit.Test
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Calendar
 
 class MedicineStockTest : MedTimerTestBase() {
@@ -135,7 +134,7 @@ class MedicineStockTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun runOutDate() {
         medicines.create("Test")
-        medicineEditor.addReminder("3", LocalTime.of(1, 0))
+        medicineEditor.addReminder("3", earlierToday())
 
         medicineEditor.inStockSettings {
             preferences.setValue(R.string.amount, "10")
@@ -160,7 +159,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicines.create(TEST_MED)
         medicineEditor.addReminder("3", laterToday())
         medicineEditor.addReminder("2", laterToday())
-        medicineEditor.addDailyStockReminder(threshold = "12", time = LocalTime.of(22, 0))
+        medicineEditor.addDailyStockReminder(threshold = "12", time = laterToday())
 
         medicineEditor.setStock(amount = "10")
 
@@ -287,7 +286,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicines.create("Test")
 
         medicineEditor.setStock(amount = amount(10.5))
-        medicineEditor.addDailyStockReminder(threshold = "14", time = LocalTime.of(22, 0))
+        medicineEditor.addDailyStockReminder(threshold = "14", time = laterToday())
 
         notifications.inShade { assertHidden(notificationTitle) }
         scheduleRemindersNow()

@@ -6,7 +6,6 @@ import com.futsch1.medtimer.core.ui.R
 import org.junit.Test
 import java.text.DateFormat
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Calendar
 import kotlin.test.assertTrue
 
@@ -49,7 +48,7 @@ class BasicUITest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun menuHandlingTest() {
         medicines.create("Test")
-        medicineEditor.addReminder("1", LocalTime.of(12, 0))
+        medicineEditor.addReminder("1", laterToday())
 
         val cycleStart = Calendar.getInstance()
         cycleStart.set(2025, 1, 1)
@@ -183,7 +182,7 @@ class BasicUITest : MedTimerTestBase() {
         val today = LocalDate.now()
         val secondDay = today.plusDays(1)
 
-        overview.clickDay(secondDay)
+        overview.selectDay(secondDay)
         assertTrue(overview.eventCount() > 0)
 
         navigation.toOverview()

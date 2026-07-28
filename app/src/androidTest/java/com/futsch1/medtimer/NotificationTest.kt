@@ -6,7 +6,6 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import org.junit.Test
 import java.time.LocalDate
-import java.time.LocalTime
 
 
 const val TEST_MED = "Test med"
@@ -98,8 +97,8 @@ class NotificationTest : MedTimerTestBase() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
         medicines.create(TEST_MED)
-        medicineEditor.addReminder(FIRST_REMINDER, LocalTime.of(22, 0))
-        medicineEditor.addReminder(SECOND_REMINDER, LocalTime.of(22, 0))
+        medicineEditor.addReminder(FIRST_REMINDER, laterToday())
+        medicineEditor.addReminder(SECOND_REMINDER, laterToday())
 
         scheduleRemindersNow()
 
@@ -131,7 +130,7 @@ class NotificationTest : MedTimerTestBase() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
         medicines.create(TEST_MED)
-        medicineEditor.addReminder("1", LocalTime.of(20, 0))
+        medicineEditor.addReminder("1", laterToday())
         reminders.inSettingsOf(0) { toggleVariableAmount() }
         menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
 
@@ -161,11 +160,11 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         medicines.create(TEST_MED)
-        medicineEditor.addReminder("1", LocalTime.of(20, 0))
+        medicineEditor.addReminder("1", laterToday())
         reminders.inSettingsOf(0) { toggleVariableAmount() }
         menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
         medicines.clickItem(0)
-        medicineEditor.addReminder("Not variable", LocalTime.of(20, 0))
+        medicineEditor.addReminder("Not variable", laterToday())
 
         medicines.clickItem(1)
         medicineEditor.rename(SECOND_ONE)
@@ -186,7 +185,7 @@ class NotificationTest : MedTimerTestBase() {
         overview.assertEventContains(TEST_ANOTHER_VARIABLE_AMOUNT)
         overview.assertEventContains("Not variable")
 
-        overview.clickDay(LocalDate.now().plusDays(1))
+        overview.selectDay(LocalDate.now().plusDays(1))
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
         dialogs.enterTextAndConfirm("Test variable amount again")
@@ -364,7 +363,7 @@ class NotificationTest : MedTimerTestBase() {
         overview.clickEventState(0)
         overview.clickAction(R.string.reschedule_reminder)
 
-        pickers.pickTime(LocalTime.of(4, 0))
+        pickers.pickTime(earlierToday())
 
         notifications.inShade { assertShows(TEST_MED) }
     }

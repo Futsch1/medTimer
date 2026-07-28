@@ -110,7 +110,7 @@ class ReminderTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun deleteLinkedReminderTest() {
         medicines.create("Test med")
-        medicineEditor.addReminder("1", LocalTime.of(0, 0))
+        medicineEditor.addReminder("1", earlierToday())
 
         reminders.addLinkedReminder(0, minutes = 1)
         reminders.addLinkedReminder(1, minutes = 2)
@@ -279,9 +279,7 @@ class ReminderTest : MedTimerTestBase() {
             // Create reminder
             medicineEditor.addReminder("1", laterToday())
 
-            // The month here is 7, not 8, since it is zero-indexed (so January is 0)
             val cycleStart = Calendar.getInstance()
-            cycleStart.set(2025, 7, 1)
 
             reminders.inSettingsOf(0) {
                 inCycle {
