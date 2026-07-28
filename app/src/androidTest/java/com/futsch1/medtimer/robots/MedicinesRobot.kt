@@ -15,12 +15,15 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.feature.ui.medicine.MedicineTestTags
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import kotlin.test.assertTrue
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /** The medicine list: creating, opening, reordering, and asserting on its cards. */
-class MedicinesRobot(private val ui: ComposeUi, private val navigation: NavigationRobot) {
+class MedicinesRobot(
+    private val ui: ComposeUi,
+    private val navigation: NavigationRobot,
+    private val dialogs: DialogRobot,
+) {
 
     private val screen get() = ui.scope(ScreenTestTags.MEDICINES)
     private val list get() = screen.scope(MedicineTestTags.MEDICINE_LIST)
@@ -33,7 +36,7 @@ class MedicinesRobot(private val ui: ComposeUi, private val navigation: Navigati
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         writeTo(com.futsch1.medtimer.feature.ui.R.id.medicineName, name)
 
-        clickDialogPositiveButton()
+        dialogs.confirm()
     }
 
     /** A medicine detail screen may sit on the tab's back stack, and a tab tap no longer pops it. */
@@ -87,10 +90,12 @@ class MedicinesRobot(private val ui: ComposeUi, private val navigation: Navigati
     }
 
     fun assertCount(expected: Int) {
+        showList()
         list.await { count() == expected }
     }
 
     fun assertAtPosition(position: Int, expectedName: String) {
+        showList()
         // A reorder reaches the list through the database, so the new order can lag the gesture.
         list.await { matchesAtPosition(position, expectedName) }
     }
@@ -102,10 +107,12 @@ class MedicinesRobot(private val ui: ComposeUi, private val navigation: Navigati
     }
 
     fun assertNameContains(text: String) {
+        showList()
         list.await { names().any { it.contains(text) } }
     }
 
     fun assertNameNotContains(text: String) {
+        showList()
         list.self().assertExists()
         list.waitForIdle()
         val names = names()
@@ -113,12 +120,14 @@ class MedicinesRobot(private val ui: ComposeUi, private val navigation: Navigati
     }
 
     fun assertListContains(text: String) {
+        showList()
         list.await { list.textsUnder(MEDICINE_ITEM).any { it.contains(text) } }
     }
 
     fun assertListContains(@StringRes textRes: Int) = assertListContains(ui.getString(textRes))
 
     fun assertListDoesNotContain(text: String) {
+        showList()
         list.self().assertExists()
         list.waitForIdle()
         val texts = list.textsUnder(MEDICINE_ITEM)

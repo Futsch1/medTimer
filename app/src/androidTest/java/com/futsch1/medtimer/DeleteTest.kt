@@ -1,10 +1,7 @@
 package com.futsch1.medtimer
 
-import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
 
@@ -19,23 +16,17 @@ class DeleteTest : MedTimerTestBase() {
 
         medicines.clickNamed(OMEGA_3)
         menus.clickEditMedicineOption(R.string.delete)
-        clickDialogPositiveButton()
+        dialogs.confirm()
 
         medicines.assertCount(3)
         medicines.assertNameNotContains(OMEGA_3)
 
         medicines.clickNamed(SELEN)
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
+        reminders.assertCount(2)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminderList,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings
-        )
-        medicineEditor.deleteReminder()
-        clickDialogPositiveButton()
+        reminders.delete(1)
 
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 1)
+        reminders.assertCount(1)
     }
 
     companion object {

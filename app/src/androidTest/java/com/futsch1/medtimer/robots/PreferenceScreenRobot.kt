@@ -5,13 +5,13 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -21,7 +21,7 @@ import org.hamcrest.Matchers
  * settings. Barista's text assertions match any displayed view in any window, so a bare value like
  * "5" hits whatever else happens to show a 5; these scope to one row's title or summary.
  */
-class PreferenceScreenRobot(private val ui: ComposeUi) {
+class PreferenceScreenRobot(private val ui: ComposeUi, private val dialogs: DialogRobot) {
 
     fun click(@StringRes titleRes: Int) {
         val title = ui.getString(titleRes)
@@ -29,12 +29,15 @@ class PreferenceScreenRobot(private val ui: ComposeUi) {
         onView(titleMatcher(title)).perform(ViewActions.click())
     }
 
+    /** Leaves a nested preference screen opened by [click]. */
+    fun back() = pressBack()
+
     /** Opens the row's edit dialog and replaces its value. */
     fun setValue(@StringRes titleRes: Int, value: String) {
         click(titleRes)
         writeTo(android.R.id.edit, value)
         closeKeyboard()
-        clickDialogPositiveButton()
+        dialogs.confirm()
     }
 
     fun assertSummary(@StringRes titleRes: Int, expected: String) {

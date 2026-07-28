@@ -1,8 +1,5 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
@@ -32,9 +29,7 @@ class ScreenshotsTest : MedTimerTestBase() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         menus.clickAppOption(R.string.generate_test_data)
 
-        overview.clickEvent(0)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.medicineNotes, "Some note")
-        Espresso.pressBack()
+        eventEditor.forEvent(0) { assertMedicineNotes("Some note") }
 
         overview.take(GINSENG)
         overview.skip(B12)
@@ -54,8 +49,7 @@ class ScreenshotsTest : MedTimerTestBase() {
         medicines.clickItem(0)
         Screengrab.screenshot("3")
 
-        clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminderList, 0, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        Screengrab.screenshot("4")
+        reminders.inSettingsOf(0) { Screengrab.screenshot("4") }
 
         navigation.toAnalysis()
         // Default view is Charts; no chip click needed

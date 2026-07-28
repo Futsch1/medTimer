@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.test.espresso.Espresso.pressBack
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.ScreenTestTags
 import com.futsch1.medtimer.feature.ui.overview.OverviewTestTags
@@ -78,6 +79,9 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     /** Acts on the arc menu opened by an event's state button. */
     fun clickAction(@StringRes labelRes: Int) = actionMenu.click(hasText(ui.getString(labelRes)))
+
+    /** Dismisses the arc action menu without choosing anything. */
+    fun closeActionMenu() = pressBack()
 
     fun assertActionDisplayed(@StringRes labelRes: Int) =
         actionMenu.assertDisplayed(hasText(ui.getString(labelRes)))

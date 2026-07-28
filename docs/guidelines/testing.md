@@ -101,8 +101,9 @@ They exist for flows that genuinely exercise the Android UI runtime — navigati
 
 Conventions:
 
-- **Use [Barista](https://github.com/AdevintaSpain/Barista)** wrappers (`clickOn`, `assertDisplayed`, `writeTo`) over raw Espresso `onView(...).perform(...)` —
-  Barista calls are shorter and survive Espresso's flakier corners.
+- **Robot authors use [Barista](https://github.com/AdevintaSpain/Barista)** wrappers (`clickOn`, `assertDisplayed`, `writeTo`) over raw Espresso
+  `onView(...).perform(...)` — Barista calls are shorter and survive Espresso's flakier corners. Test authors use neither; see
+  [Robot pattern](#robot-pattern).
 - **UIAutomator** for cross-app interactions (notifications, settings screens) where Espresso can't reach.
 - Name tests for the user-visible behavior, not the Fragment class name.
 - Keep instrumented tests **independent** — each test sets up its own state via repository or intent, doesn't rely on test order.
@@ -115,7 +116,8 @@ Conventions:
 ## Compose tests
 
 When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests live alongside JVM unit tests and use **`createComposeRule()`** with *
-*Robolectric** so they run on the JVM without an emulator.
+*Robolectric** so they run on the JVM without an emulator. These are JVM tests, so the [Robot pattern](#robot-pattern) does not apply — robots exist only for
+`androidTest`.
 
 - **Target the stateless `Screen` overload** (see [jetpack-compose.md](jetpack-compose.md#screen-pattern)), not the stateful overload that references a ViewModel.
   Feed it fabricated state (construct a `MutableXxxScreenState`) and lambdas; assert on what's visible.
@@ -124,6 +126,17 @@ When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests
 - **Don't assert on recomposition counts, memoization, or the number of times a lambda fires.**
   Those are Compose Compiler details that change between versions.
 - **Use `runComposeUiTest { … }`** (from the same artifact) for tests that drive Compose state without a backing Fragment.
+
+## Robot pattern
+
+Instrumented tests read as user intent; how the UI is driven lives in a robot under `app/src/androidTest/.../robots/`.
+
+- **No test file imports Espresso, Barista, UIAutomator, or any `R.id`.** `@AllowFlaky` is the one exception — it is a JUnit rule, not an interaction.
+- **Robot methods name outcomes, not taps.** A dialog raised on the way to an outcome belongs to the robot that opened it; `DialogRobot` is for the tests where
+  the dialog itself is the subject.
+- **A robot method leaves you where it found you.** Navigation depth is never a test's concern, so `pressBack()` does not appear in a test file.
+- **`inX { }` when the caller has to stay on an inner screen** — the block runs with the screen up and the robot still owns entry and exit.
+- `Robots` builds the graph; `MedTimerTestBase` exposes it and holds nothing that touches the UI.
 
 ## Selectors in instrumented tests
 

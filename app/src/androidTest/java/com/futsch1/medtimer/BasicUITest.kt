@@ -1,16 +1,8 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.pressBack
-import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 import java.text.DateFormat
 import java.time.LocalDate
@@ -26,30 +18,21 @@ class BasicUITest : MedTimerTestBase() {
         medicines.create(" Test ")
         medicineEditor.addReminder("1", laterToday())
 
-        medicineEditor.openAdvancedSettings()
+        reminders.inSettingsOf(0) {
+            inDosingInstructions { useSampleInstruction(R.string.before_meal) }
+        }
 
-        clickPreference(R.string.dosing_instructions)
-        clickPreference(R.string.sample_instructions)
-        clickDialogItem(R.string.before_meal)
+        reminders.inSettingsOf(0) {
+            assertDosingInstructions(getString(R.string.before_meal))
+        }
 
-        pressBack()
-        pressBack()
-
-        medicineEditor.openAdvancedSettings()
-        assertPreferenceSummary(R.string.dosing_instructions, getString(R.string.before_meal))
-        pressBack()
-
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, " 2 ")
-        pressBack()
+        medicineEditor.setAmount(" 2 ")
 
         medicines.clickItem(0)
-        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.editAmount, "2")
-        medicineEditor.openAdvancedSettings()
-        medicineEditor.duplicateReminder()
+        medicineEditor.assertAmount("2")
+        reminders.duplicate(0)
 
-        assertListItemCount(com.futsch1.medtimer.feature.ui.R.id.reminderList, 2)
-
-        pressBack()
+        reminders.assertCount(2)
 
         navigation.toOverview()
         overview.assertEventContains(TEST_2)
@@ -57,7 +40,6 @@ class BasicUITest : MedTimerTestBase() {
         navigation.toMedicines()
         medicines.clickItem(0)
         medicineEditor.rename(" Test2 ")
-        pressBack()
 
         navigation.toOverview()
         overview.assertEventContains("Test2 (2)")
@@ -69,50 +51,48 @@ class BasicUITest : MedTimerTestBase() {
         medicines.create("Test")
         medicineEditor.addReminder("1", LocalTime.of(12, 0))
 
-        medicineEditor.openAdvancedSettings()
-
         val cycleStart = Calendar.getInstance()
         cycleStart.set(2025, 1, 1)
         val cycleStartString =
             DateFormat.getDateInstance(DateFormat.SHORT).format(cycleStart.getTime())
-        clickPreference(R.string.cycle_reminder)
-        clickPreference(R.string.cycle_start_date)
-        pickers.pickDate(cycleStart.getTime())
-        preferences.setValue(R.string.cycle_consecutive_days, "5")
-        preferences.setValue(R.string.cycle_pause_days, "6")
-        pressBack()
 
-        clickPreference(R.string.remind_on_weekdays)
-        clickDialogItem(R.string.monday)
-        clickDialogItem(R.string.tuesday)
-        clickDialogPositiveButton()
+        reminders.inSettingsOf(0) {
+            inCycle {
+                setCycleStartDate(cycleStart.time)
+                setConsecutiveDays(5)
+                setPauseDays(6)
+            }
 
-        clickPreference(R.string.remind_on_days_of_month)
-        clickDialogItem("1")
-        clickDialogItem("3")
-        clickDialogPositiveButton()
+            inWeekdays {
+                clickItem(R.string.monday)
+                clickItem(R.string.tuesday)
+            }
 
-        pressBack()
+            inDaysOfMonth {
+                clickItem("1")
+                clickItem("3")
+            }
+        }
 
-        medicineEditor.openAdvancedSettings()
+        reminders.inSettingsOf(0) {
+            inCycle {
+                assertCycleStartDate(cycleStartString)
+                assertConsecutiveDays("5")
+                assertPauseDays("6")
+            }
 
-        clickPreference(R.string.cycle_reminder)
-        assertPreferenceSummary(R.string.cycle_start_date, cycleStartString)
-        assertPreferenceSummary(R.string.cycle_consecutive_days, "5")
-        assertPreferenceSummary(R.string.cycle_pause_days, "6")
-        pressBack()
+            inWeekdays {
+                assertItemNotChecked(R.string.monday)
+                assertItemNotChecked(R.string.tuesday)
+                assertItemChecked(R.string.wednesday)
+            }
 
-        clickPreference(R.string.remind_on_weekdays)
-        assertDialogItemNotChecked(R.string.monday)
-        assertDialogItemNotChecked(R.string.tuesday)
-        assertDialogItemChecked(R.string.wednesday)
-        clickDialogPositiveButton()
-
-        clickPreference(R.string.remind_on_days_of_month)
-        assertDialogItemChecked("1")
-        assertDialogItemNotChecked("2")
-        assertDialogItemChecked("3")
-        clickDialogPositiveButton()
+            inDaysOfMonth {
+                assertItemChecked("1")
+                assertItemNotChecked("2")
+                assertItemChecked("3")
+            }
+        }
     }
 
     @Test
@@ -120,36 +100,23 @@ class BasicUITest : MedTimerTestBase() {
     fun notesTest() {
         medicines.create("Test")
 
-        val notes = "Contains catnip\n\nmeow :3"
+        val notesText = "Contains catnip\n\nmeow :3"
 
-        menus.clickEditMedicineOption(R.string.notes)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
-        closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
+        notes.save(notesText)
 
-        pressBack()
         medicines.clickItem(0)
+        notes.assertContains(notesText)
 
-        menus.clickEditMedicineOption(R.string.notes)
-        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
-
-        clearText(com.futsch1.medtimer.feature.ui.R.id.notes)
-        closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
-
-        menus.clickEditMedicineOption(R.string.notes)
-        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.notes, notes)
+        notes.clearAndDiscard()
+        notes.assertContains(notesText)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun appIntro() {
-        menus.clickAppOption(R.string.show_intro)
-
-        assertDisplayed(com.github.appintro.R.id.title, getString(R.string.intro_welcome))
-        assertDisplayed(com.github.appintro.R.id.description, getString(R.string.intro_welcome_description))
-
-        clickOn(com.github.appintro.R.id.skip)
+        appIntro.show()
+        appIntro.assertPage(R.string.intro_welcome, R.string.intro_welcome_description)
+        appIntro.skip()
 
         navigation.assertOverviewShown()
     }
@@ -159,8 +126,6 @@ class BasicUITest : MedTimerTestBase() {
     fun overviewFilters() {
         medicines.create("Test")
         medicineEditor.addIntervalReminder("2", 1000)
-
-        pressBack()
 
         navigation.toOverview()
         overview.assertEventContains(TEST_2)

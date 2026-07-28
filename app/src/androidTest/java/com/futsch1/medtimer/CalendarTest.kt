@@ -1,13 +1,8 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
 
@@ -22,9 +17,7 @@ class CalendarTest : MedTimerTestBase() {
         navigation.toMedicines()
 
         medicines.clickItem(0)
-        menus.clickEditMedicineOption(R.string.calendar)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.currentDayEvents, OMEGA_3)
-        Espresso.pressBack()
+        calendar.assertDayEventsContain(OMEGA_3)
 
         navigation.toAnalysis()
         statistics.selectView(StatisticFragment.CALENDAR)
@@ -35,18 +28,13 @@ class CalendarTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testDeletedEventNotInCalendarView() {
-        overview.logManualDose()
-        clickDialogItem(R.string.custom)
-        writeTo(android.R.id.input, "Test")
-        clickDialogPositiveButton(false)
-        clickDialogPositiveButton()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        manualDose.logCustom("Test")
 
         overview.assertEventContains("Test")
 
         overview.clickEventState(0)
         overview.clickAction(R.string.delete)
-        clickDialogPositiveButton()
+        dialogs.confirm()
         overview.assertEventCount(0)
 
         navigation.toAnalysis()

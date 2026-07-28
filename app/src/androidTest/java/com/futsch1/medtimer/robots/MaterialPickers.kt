@@ -24,6 +24,9 @@ class MaterialPickers {
 
     fun pickDuration(hours: Int, minutes: Int) = enterTime(hours, minutes, isDuration = true)
 
+    /** Accepts the time already shown, for the dialogs that open pre-filled with now. */
+    fun confirmTime() = clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+
     fun pickDate(date: Date) {
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, inputFormat.format(date))

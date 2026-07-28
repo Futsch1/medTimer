@@ -1,15 +1,10 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.platform.app.InstrumentationRegistry
-import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalTime
@@ -30,8 +25,6 @@ class MedicineStockTest : MedTimerTestBase() {
         // Interval reminder (amount 3.5) 10 minutes from now
         medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", 10)
         medicineEditor.addStockReminder(threshold = "4")
-
-        pressBack()
 
         navigation.toOverview()
 
@@ -67,11 +60,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.assertStockAmount(MedicineHelper.formatAmount(3.5, "pills"))
 
         navigation.toOverview()
-        overview.logManualDose()
-        clickDialogItem("Test")
-        writeTo(android.R.id.input, "12")
-        clickDialogPositiveButton()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        manualDose.log("Test", amount = "12")
 
         navigation.toMedicines()
 
@@ -79,7 +68,6 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.refillNow()
         medicineEditor.assertStockAmount(MedicineHelper.formatAmount(10.8, "pills"))
 
-        medicines.showList()
         medicines.assertNameContains(MedicineHelper.formatAmount(10.8, "pills"))
         medicines.assertNameNotContains("⚠")
         medicines.assertNameContains("pills")
@@ -98,7 +86,6 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicineEditor.addIntervalReminder("So many pills - 130", 10)
         medicineEditor.addStockReminder(threshold = "0")
-        pressBack()
 
         navigation.toOverview()
         overview.clickEventState(0)
@@ -125,14 +112,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = amount(10.5), unit = "pills")
         medicineEditor.addStockReminder(threshold = "4")
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editAmount, "something")
-
-        assertErrorDisplayed(
-            com.futsch1.medtimer.feature.ui.R.id.editAmount,
-            R.string.invalid_amount
-        )
+        medicineEditor.assertAmountRejected("something", R.string.invalid_amount)
     }
 
     @Test
@@ -143,8 +123,8 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = "10005", unit = "pills")
 
         medicineEditor.inStockSettings {
-            assertPreferenceSummary(R.string.amount, MedicineHelper.formatAmount(10005.0, "pills"))
-            assertPreferenceSummary(
+            preferences.assertSummary(R.string.amount, MedicineHelper.formatAmount(10005.0, "pills"))
+            preferences.assertSummary(
                 R.string.estimated_run_out_date,
                 timeFormatter().localDateToString(LocalDate.now().plusDays(365))
             )
@@ -159,10 +139,16 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicineEditor.inStockSettings {
             preferences.setValue(R.string.amount, "10")
-            assertPreferenceSummary(R.string.estimated_run_out_date, timeFormatter().localDateToString(LocalDate.now().plusDays(4)))
+            preferences.assertSummary(
+                R.string.estimated_run_out_date,
+                timeFormatter().localDateToString(LocalDate.now().plusDays(4))
+            )
 
             preferences.setValue(R.string.amount, "13")
-            assertPreferenceSummary(R.string.estimated_run_out_date, timeFormatter().localDateToString(LocalDate.now().plusDays(5)))
+            preferences.assertSummary(
+                R.string.estimated_run_out_date,
+                timeFormatter().localDateToString(LocalDate.now().plusDays(5))
+            )
         }
     }
 
@@ -178,7 +164,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicineEditor.setStock(amount = "10")
 
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
+        scheduleRemindersNow()
         notifications.inShade {
             assertShows(TEST_MED, timeoutMillis = 5_000)
             clickAction(R.string.taken)
@@ -199,13 +185,12 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicines.create("Test")
         medicineEditor.inStockSettings {
-            clickPreference(R.string.expiration_date)
+            preferences.click(R.string.expiration_date)
             pickers.pickDate(expirationTime.time)
-            clickPreference(R.string.clear_dates)
+            preferences.click(R.string.clear_dates)
         }
 
         medicineEditor.addExpirationReminder(daysBefore = "10")
-        pressBack()
 
         navigation.toOverview()
 
@@ -214,7 +199,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toMedicines()
         medicines.clickItem(0)
         medicineEditor.inStockSettings {
-            clickPreference(R.string.expiration_date)
+            preferences.click(R.string.expiration_date)
             pickers.pickDate(expirationTime.time)
         }
 
@@ -223,7 +208,7 @@ class MedicineStockTest : MedTimerTestBase() {
         overview.assertEventState(0, R.string.reminded)
         overview.clickEventState(0)
         overview.assertActionDisplayed(R.string.acknowledged)
-        pressBack()
+        overview.closeActionMenu()
 
         notifications.inShade {
             assertShows(notificationTitle)
@@ -233,7 +218,7 @@ class MedicineStockTest : MedTimerTestBase() {
         overview.assertEventState(0, R.string.taken)
         overview.clickEventState(0)
         overview.clickAction(R.string.delete)
-        clickDialogPositiveButton()
+        dialogs.confirm()
 
         notifications.inShade { assertHidden(notificationTitle) }
         overview.assertEventCount(0)
@@ -259,7 +244,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toOverview()
         overview.clickEventState(0)
         overview.clickAction(R.string.delete)
-        clickDialogPositiveButton()
+        dialogs.confirm()
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -286,7 +271,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toOverview()
         overview.clickEventState(0)
         overview.clickAction(R.string.re_raise_event)
-        clickDialogPositiveButton()
+        dialogs.confirm()
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -296,8 +281,8 @@ class MedicineStockTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun dailyStockReminderTest() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
+        val notificationTitle =
+            InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
 
         medicines.create("Test")
 
@@ -305,7 +290,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.addDailyStockReminder(threshold = "14", time = LocalTime.of(22, 0))
 
         notifications.inShade { assertHidden(notificationTitle) }
-        ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
+        scheduleRemindersNow()
         notifications.inShade { assertShows(notificationTitle) }
     }
 }

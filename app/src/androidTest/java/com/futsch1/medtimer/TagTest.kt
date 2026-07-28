@@ -1,15 +1,7 @@
 package com.futsch1.medtimer
 
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import com.futsch1.medtimer.core.ui.R
 import org.junit.Test
 
 private const val NEW_TAG = "New tag"
@@ -22,89 +14,72 @@ class TagTest : MedTimerTestBase() {
     fun tagHandling() {
         medicines.create("Test")
 
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
+        tags.inMedicineTags {
+            add(NEW_TAG)
+            assertDisplayed(NEW_TAG)
+            assertChecked(NEW_TAG)
+        }
 
-        addTag(NEW_TAG)
-        assertTagChipDisplayed(NEW_TAG)
-        assertTagChipChecked(NEW_TAG)
+        tags.inMedicineTags {
+            assertDisplayed(NEW_TAG)
+            assertChecked(NEW_TAG)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+            add(ANOTHER_TAG)
+            assertDisplayed(ANOTHER_TAG)
+            assertChecked(ANOTHER_TAG)
 
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        assertTagChipDisplayed(NEW_TAG)
-        assertTagChipChecked(NEW_TAG)
-
-        addTag(ANOTHER_TAG)
-        assertTagChipDisplayed(ANOTHER_TAG)
-        assertTagChipChecked(ANOTHER_TAG)
-
-        clickTagChip(ANOTHER_TAG)
-        assertTagChipNotChecked(ANOTHER_TAG)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-
-        pressBack()
+            toggle(ANOTHER_TAG)
+            assertNotChecked(ANOTHER_TAG)
+        }
 
         medicines.assertListContains(NEW_TAG)
         medicines.assertListDoesNotContain(ANOTHER_TAG)
 
         medicines.create("Test 2")
 
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        assertTagChipNotChecked(NEW_TAG)
-        assertTagChipNotChecked(ANOTHER_TAG)
-        onView(withId(com.futsch1.medtimer.feature.ui.R.id.tags)).perform(
-            actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                1,
-                removeChip()
-            )
-        )
-        clickDialogPositiveButton()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inMedicineTags {
+            assertNotChecked(NEW_TAG)
+            assertNotChecked(ANOTHER_TAG)
+            remove(1)
+        }
 
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        assertTagChipDoesNotExist(ANOTHER_TAG)
-        clickTagChip(NEW_TAG)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inMedicineTags {
+            assertDoesNotExist(ANOTHER_TAG)
+            toggle(NEW_TAG)
+        }
 
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.duplicate)
+        menus.clickEditMedicineOption(R.string.duplicate)
         medicines.clickItem(2)
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        assertTagChipChecked(NEW_TAG)
+        tags.inMedicineTags { assertChecked(NEW_TAG) }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineVisibility() {
         medicines.create("Test")
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        addTag("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        pressBack()
+        tags.inMedicineTags { add("Tag1") }
 
         medicines.create("Else")
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        addTag("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        pressBack()
+        tags.inMedicineTags { add("Tag2") }
 
         medicines.assertNameContains("Test")
         medicines.assertNameContains("Else")
 
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        assertTagChipChecked("Tag1")
-        assertTagChipNotChecked("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            assertChecked("Tag1")
+            assertNotChecked("Tag2")
+        }
 
         medicines.assertNameContains("Test")
         medicines.assertNameNotContains("Else")
 
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        clickTagChip("Tag2")
-        assertTagChipNotChecked("Tag1")
-        assertTagChipChecked("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+            assertNotChecked("Tag1")
+            assertChecked("Tag2")
+        }
 
         medicines.assertNameNotContains("Test")
         medicines.assertNameContains("Else")
@@ -114,69 +89,50 @@ class TagTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
         medicines.create("Test")
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        addTag("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inMedicineTags { add("Tag1") }
         medicineEditor.addIntervalReminder("Amount1", 60)
-        pressBack()
-        pressBack()
 
         medicines.create("Else")
-        menus.clickEditMedicineOption(com.futsch1.medtimer.core.ui.R.string.tags)
-        addTag("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inMedicineTags { add("Tag2") }
         medicineEditor.addIntervalReminder("Amount2", 60)
-        pressBack()
 
         // First, deactivate all of Test
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter { toggle("Tag1") }
 
-        menus.clickMedicinesOption(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
-        medicines.assertListContains(com.futsch1.medtimer.core.ui.R.string.inactive)
+        menus.clickMedicinesOption(R.string.deactivate_all)
+        medicines.assertListContains(R.string.inactive)
 
         // Now, check that Else is not deactivated
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        clickTagChip("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+        }
 
-        medicines.assertListDoesNotContain(com.futsch1.medtimer.core.ui.R.string.inactive)
+        medicines.assertListDoesNotContain(R.string.inactive)
 
-        menus.openTagFilter()
-        clickTagChip("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter { toggle("Tag2") }
 
         // And activate Test again
-        menus.clickMedicinesOption(com.futsch1.medtimer.core.ui.R.string.activate_all)
+        menus.clickMedicinesOption(R.string.activate_all)
 
         navigation.toOverview()
 
         overview.clickEventState(0)
-        overview.clickAction(com.futsch1.medtimer.core.ui.R.string.taken)
+        overview.clickAction(R.string.taken)
         overview.clickEventState(1)
-        overview.clickAction(com.futsch1.medtimer.core.ui.R.string.taken)
+        overview.clickAction(R.string.taken)
 
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter { toggle("Tag1") }
 
         overview.assertEventContains("Amount1")
         overview.assertNoEventContains("Amount2")
 
-        menus.openTagFilter()
-        clickTagChip("Tag1")
-        clickTagChip("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+        }
 
         overview.assertNoEventContains("Amount1")
         overview.assertEventContains("Amount2")
-    }
-
-    private fun addTag(tagName: String) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addTag)
-        writeTo(android.R.id.input, tagName)
-        clickDialogPositiveButton()
     }
 }

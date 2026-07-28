@@ -9,7 +9,7 @@ import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
-import com.futsch1.medtimer.utilities.openNotification
+import com.futsch1.medtimer.utilities.closeNotification
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -25,7 +25,15 @@ class NotificationShadeRobot {
     private val appPackage: String get() = InstrumentationRegistry.getInstrumentation().targetContext.packageName
 
     /** Opens the shade, runs [block] against it and closes it again. */
-    fun <T> inShade(block: NotificationShadeRobot.() -> T): T = openNotification().use { block() }
+    fun <T> inShade(block: NotificationShadeRobot.() -> T): T = open().use { block() }
+
+    private fun open(): AutoCloseable {
+        device.openNotification()
+        return AutoCloseable {
+            device.closeNotification()
+            device.waitForIdle(500)
+        }
+    }
 
     /** Notification action labels are upper-cased by the platform up to API 28. */
     fun actionLabel(@StringRes textRes: Int, vararg args: Any): String {

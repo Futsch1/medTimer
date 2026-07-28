@@ -1,9 +1,7 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
 import org.junit.Test
 
 class ExportBackupTest : MedTimerTestBase() {
@@ -13,14 +11,12 @@ class ExportBackupTest : MedTimerTestBase() {
         menus.clickAppOption(R.string.generate_test_data)
 
         navigation.toMedicines()
-        menus.openTagFilter()
-        clickTagChip("Supplements")
-        pressBack()
+        tags.inFilter(confirming = false) { toggle("Supplements") }
 
-        exportViaAppOptions(R.string.export_events_csv)
-        exportViaAppOptions(R.string.export_events_pdf)
-        exportViaAppOptions(R.string.export_medicines_csv)
-        exportViaAppOptions(R.string.export_medicines_pdf)
+        export.export(R.string.export_events_csv)
+        export.export(R.string.export_events_pdf)
+        export.export(R.string.export_medicines_csv)
+        export.export(R.string.export_medicines_pdf)
     }
 
     @Test
@@ -30,10 +26,10 @@ class ExportBackupTest : MedTimerTestBase() {
 
         menus.clickAppOption(R.string.backup)
 
-        assertDialogItemChecked(R.string.medicine_data)
-        assertDialogItemChecked(R.string.event_data)
-        clickDialogPositiveButton()
+        dialogs.assertItemChecked(R.string.medicine_data)
+        dialogs.assertItemChecked(R.string.event_data)
+        dialogs.confirm()
 
-        assertShareSheetShown()
+        shareSheet.assertShownAndDismiss()
     }
 }
