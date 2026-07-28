@@ -94,10 +94,6 @@ class OverviewRobot(private val ui: ComposeUi) {
     /** The Overview filter chips carry descriptions too, so the selection actions scope to the bar. */
     fun clickSelectionAction(@StringRes textRes: Int) = selectionBar.click(description(textRes))
 
-    fun selectAll() = selectionBar.click(description(CoreUiR.string.select_all))
-
-    fun exitSelectionMode() = selectionBar.click(description(CoreUiR.string.close))
-
     fun assertSelectionCount(count: Int) {
         screen.await { screen.textsUnder(SELECTION_BAR).any { it.contains(count.toString()) } }
     }
