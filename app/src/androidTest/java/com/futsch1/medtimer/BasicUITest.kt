@@ -18,7 +18,10 @@ class BasicUITest : MedTimerTestBase() {
         medicineEditor.addReminder("1", laterToday())
 
         reminders.inSettingsOf(0) {
-            inDosingInstructions { useSampleInstruction(R.string.before_meal) }
+            inDosingInstructions {
+                useSampleInstruction(R.string.before_meal)
+                assertDosingInstructions(getString(R.string.before_meal))
+            }
         }
 
         reminders.inSettingsOf(0) {
