@@ -34,6 +34,8 @@ class ReminderCommandBusImpl @Inject constructor(
 
     override suspend fun showReminderNotification(data: ReminderNotificationData) {
         showReminderNotificationProcessor.showReminder(data)
+        // Show reminder might have rescheduled the next due reminder, so schedule again
+        scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
     override suspend fun showReminders(data: ReminderNotificationData) {
