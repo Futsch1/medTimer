@@ -35,8 +35,6 @@ fun MedicineSwatch(
 ) {
     if (icon == null && color == null) return
 
-    // Without a colour the swatch is only seating the icon, so it veils whatever is behind it and
-    // lets the icon keep the surrounding content colour.
     val background = if (color != null) Color(color) else containerMask()
     val contentColor =
         if (color != null) readableContentColorFor(background) else LocalContentColor.current

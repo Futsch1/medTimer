@@ -71,7 +71,7 @@ fun MedicineCard(
                     MedicineSwatch(
                         icon = medicine.icon?.asImageBitmap(),
                         color = medicine.color,
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = 16.dp),
                     )
                     Column {
                         MedicineHeader(medicine)
