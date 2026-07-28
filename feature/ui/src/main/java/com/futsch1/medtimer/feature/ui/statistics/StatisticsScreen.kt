@@ -26,6 +26,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,15 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarContent
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsContent
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTable
+
+object StatisticsTestTags {
+    const val RANGE_DROPDOWN = "statistics_range_dropdown"
+    const val TABLE_FILTER = "statistics_table_filter"
+
+    fun rangeOption(days: Int) = "statistics_range_$days"
+
+    fun viewChip(view: StatisticFragment) = "statistics_view_${view.name}"
+}
 
 /** Stateful entry point: binds the ViewModel to the stateless [StatisticsScreen]. */
 @Composable
@@ -78,13 +88,13 @@ fun StatisticsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    ViewChip(R.drawable.bar_chart, R.string.analysis, state.activeView == StatisticFragment.CHARTS) {
+                    ViewChip(R.drawable.bar_chart, R.string.analysis, StatisticFragment.CHARTS, state.activeView) {
                         onSelectView(StatisticFragment.CHARTS)
                     }
-                    ViewChip(R.drawable.table, R.string.tabular_view, state.activeView == StatisticFragment.TABLE) {
+                    ViewChip(R.drawable.table, R.string.tabular_view, StatisticFragment.TABLE, state.activeView) {
                         onSelectView(StatisticFragment.TABLE)
                     }
-                    ViewChip(R.drawable.calendar3, R.string.calendar, state.activeView == StatisticFragment.CALENDAR) {
+                    ViewChip(R.drawable.calendar3, R.string.calendar, StatisticFragment.CALENDAR, state.activeView) {
                         onSelectView(StatisticFragment.CALENDAR)
                     }
                 }
@@ -127,7 +137,8 @@ fun StatisticsScreen(
 }
 
 @Composable
-private fun ViewChip(iconRes: Int, labelRes: Int, selected: Boolean, onClick: () -> Unit) {
+private fun ViewChip(iconRes: Int, labelRes: Int, view: StatisticFragment, activeView: StatisticFragment, onClick: () -> Unit) {
+    val selected = view == activeView
     // FilterChip switches its container/content colors instantly; animate them for a smooth selection.
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface,
@@ -140,6 +151,7 @@ private fun ViewChip(iconRes: Int, labelRes: Int, selected: Boolean, onClick: ()
     FilterChip(
         selected = selected,
         onClick = onClick,
+        modifier = Modifier.testTag(StatisticsTestTags.viewChip(view)),
         label = { Icon(painterResource(iconRes), contentDescription = stringResource(labelRes), tint = contentColor) },
         colors = FilterChipDefaults.filterChipColors(
             containerColor = containerColor,

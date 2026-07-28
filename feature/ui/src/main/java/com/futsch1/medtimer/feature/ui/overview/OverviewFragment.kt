@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
@@ -32,7 +31,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OverviewFragment : Fragment(), OnFragmentReselectedListener {
+class OverviewFragment : Fragment() {
     @Inject
     lateinit var manualDoseFactory: ManualDose.Factory
 
@@ -67,6 +66,7 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
+        overviewViewModel.selectDay(LocalDate.now())
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             MedTimerTheme {
@@ -98,10 +98,6 @@ class OverviewFragment : Fragment(), OnFragmentReselectedListener {
     override fun onDestroy() {
         super.onDestroy()
         appOptionsActions.onDestroy()
-    }
-
-    override fun onFragmentReselected() {
-        overviewViewModel.selectDay(LocalDate.now())
     }
 
     private fun onEventClick(event: OverviewEvent) {

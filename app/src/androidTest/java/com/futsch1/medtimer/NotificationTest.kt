@@ -1,51 +1,41 @@
 package com.futsch1.medtimer
 
-import android.content.Context
+import android.app.Activity
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withResourceName
-import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
-import androidx.test.uiautomator.StaleObjectException
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.Until
-import com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.futsch1.medtimer.AndroidTestHelper.MainMenu
-import com.futsch1.medtimer.AndroidTestHelper.navigateTo
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
-import com.futsch1.medtimer.utilities.openNotification
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.equalTo
-import org.junit.Test
-import java.time.DayOfWeek
-import java.time.LocalTime
-import java.time.format.TextStyle
-import java.util.Locale
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
 import com.futsch1.medtimer.feature.ui.AppOptionsTestTags
+import com.futsch1.medtimer.utilities.pollUntil
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.`is`
+import org.junit.Test
+import java.time.LocalDate
+import java.time.LocalTime
+import kotlin.test.assertTrue
 
 
 const val TEST_MED = "Test med"
+private const val ALARM_CLOSE_TIMEOUT = 10_000L
 
 private const val SECOND_ONE = "second one"
 private const val FIRST_REMINDER = "First reminder"
@@ -54,57 +44,17 @@ private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
 private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
 
 
-fun clickNotificationButton(device: UiDevice, buttonText: String): Boolean {
-    val button = makeNotificationExpanded(device, buttonText)
-    button?.click()
-    return button != null
-}
-
-fun makeNotificationExpanded(device: UiDevice, buttonText: String): UiObject2? {
-    var buttonIndex = 0
-    var tries = 10
-    var button: UiObject2? = null
-    while (tries-- > 0 && button == null) {
-        val expandButtons =
-            device.findObjects(By.res("android:id/expand_button")) + device.findObjects(
-                By.descContains("Expand")
-            )
-        if (expandButtons.size > buttonIndex) {
-            try {
-                expandButtons[buttonIndex].click()
-                buttonIndex++
-                device.waitForIdle(1_000)
-            } catch (_: StaleObjectException) {
-                // Ignore
-            }
-        } else {
-            Thread.sleep(200)
-        }
-        button = device.findObject(By.text(buttonText))
-    }
-    return button
-}
-
-fun getNotificationText(@StringRes stringId: Int, vararg args: Any): String {
-    val s = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringId, args)
-    return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-        s.uppercase()
-    } else {
-        s
-    }
-}
-
-
-class NotificationTest : BaseTestHelper() {
+class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun notificationTest() {
-        AndroidTestHelper.createMedicine(TEST_MED)
+        medicines.create(TEST_MED)
 
         // Set color and icon
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
-        clickOn(R.string.color)
-        clickOn(R.string.select_color)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.medicine_settings)
+        clickPreference(R.string.color)
+        clickPreference(R.string.select_color)
         onView(withResourceName("hexEdit")).perform(
             ViewActions.clearText(),
             ViewActions.typeText("deadbe")
@@ -121,113 +71,93 @@ class NotificationTest : BaseTestHelper() {
             )
         )
 
-        AndroidTestHelper.createReminder(
+        medicineEditor.addReminder(
             "1",
-            AndroidTestHelper.nextNotificationTime.toLocalTime()
+            aboutToFire()
         )
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        medicineEditor.openAdvancedSettings()
 
-        clickOn(R.string.add_linked_reminder)
+        clickPreference(R.string.add_linked_reminder)
         clickDialogPositiveButton()
-        AndroidTestHelper.setTime(0, 1, true)
+        pickers.pickDuration(0, 1)
 
-        navigateTo(MainMenu.OVERVIEW)
+        navigation.toOverview()
 
         baristaRule.activityTestRule.finishActivity()
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        waitAndDismissNotification(device, 2_000)
+        awaitAndDismissNotification()
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        waitAndDismissNotification(device, 2_000)
+        awaitAndDismissNotification()
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun actionOnDismissedNotification() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        openAppOptionsMenu()
-
         // Skip reminder on dismiss
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.skip_reminder)
-        pressBack()
-        pressBack()
+        settings.inSection(R.string.notification_reminder_settings) {
+            clickPreference(R.string.dismiss_notification_action)
+            clickDialogItem(R.string.skip_reminder)
+        }
 
-        navigateTo(MainMenu.MEDICINES)
+        navigation.toMedicines()
 
-        AndroidTestHelper.createMedicine(TEST_MED)
+        medicines.create(TEST_MED)
         // Interval reminder (amount 1) 2 hours from now
-        AndroidTestHelper.createIntervalReminder("1", 120)
+        medicineEditor.addIntervalReminder("1", 120)
         pressBack()
 
-        navigateTo(MainMenu.ANALYSIS)
-        waitAndDismissNotification(device)
+        navigation.toAnalysis()
+        awaitAndDismissNotification()
 
         // Check overview and next reminders
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.skipped)
+        navigation.toOverview()
+        overview.assertEventState(0, R.string.skipped)
 
         // Now change to action taken on dismiss
-        openAppOptionsMenu()
-
-        // Skip reminder on dismiss
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.taken)
-        pressBack()
-        pressBack()
+        settings.inSection(R.string.notification_reminder_settings) {
+            clickPreference(R.string.dismiss_notification_action)
+            clickDialogItem(R.string.taken)
+        }
 
         // Clear event data (causes reminder to be re-raised)
         openAppOptionsMenu()
-        clickOn(R.string.event_data)
         clickTag(AppOptionsTestTags.CLEAR_EVENTS)
         clickDialogPositiveButton()
 
-        navigateTo(MainMenu.ANALYSIS)
-        waitAndDismissNotification(device)
+        navigation.toAnalysis()
+        awaitAndDismissNotification()
 
         // Check overview and next reminders
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.taken)
+        navigation.toOverview()
+        overview.assertEventState(0, R.string.taken)
     }
 
     @Test
     fun repeatingReminders() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        openAppOptionsMenu()
-
         // Repeat reminder every minute and enable exact reminders
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.notification_reminder_settings)
-        AndroidTestHelper.scrollDown()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            clickOn(R.string.exact_reminders)
+        settings.inSection(R.string.notification_reminder_settings) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                clickPreference(R.string.exact_reminders)
+            }
+            clickPreference(R.string.repeat_reminders)
+            onView(
+                allOf(
+                    withText(R.string.repeat_reminders),
+                    withResourceName("title")
+                )
+            ).perform(click())
+            clickPreference(R.string.time_between_repetitions)
+            clickDialogItem(R.string.minutes_1)
+            pressBack()
         }
-        clickOn(R.string.repeat_reminders)
-        onView(
-            allOf(
-                withText(R.string.repeat_reminders),
-                withResourceName("title")
-            )
-        ).perform(click())
-        clickOn(R.string.time_between_repetitions)
-        clickOn(R.string.minutes_1)
-        pressBack()
-        pressBack()
 
-        clickOn(R.string.display_settings)
-        clickOn(R.string.combine_notifications)
-        pressBack()
-        pressBack()
+        settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createReminder(FIRST_REMINDER, LocalTime.of(22, 0))
-        AndroidTestHelper.createReminder(SECOND_REMINDER, LocalTime.of(22, 0))
+        medicines.create(TEST_MED)
+        medicineEditor.addReminder(FIRST_REMINDER, LocalTime.of(22, 0))
+        medicineEditor.addReminder(SECOND_REMINDER, LocalTime.of(22, 0))
         pressBack()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(
@@ -235,368 +165,267 @@ class NotificationTest : BaseTestHelper() {
             0
         )
 
-        openNotification().use {
-            val notification1 = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            assertNotNull(notification1)
-            val notification2 =
-                device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
-            assertNotNull(notification2)
-            val notification3 =
-                device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
-            assertNotNull(notification3)
+        notifications.inShade {
+            assertShows(TEST_MED)
+            assertShows(FIRST_REMINDER)
+            assertShows(SECOND_REMINDER)
         }
-        navigateTo(MainMenu.OVERVIEW)
+        navigation.toOverview()
 
-        clickOverviewEventState(0)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
-        navigateTo(MainMenu.ANALYSIS)
+        overview.clickEventState(0)
+        clickMenuItem(R.string.taken)
+        navigation.toAnalysis()
 
-        openNotification().use {
-            val notification1 =
-                device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
-            assertNull(notification1)
-            val notification2 =
-                device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
-            assertNotNull(notification2)
-            val text = notification2.text
+        notifications.inShade {
+            assertHidden(FIRST_REMINDER)
+            val text = assertShows(SECOND_REMINDER).text
 
-            assert(device.wait(Until.gone(By.text(text)), 120_000))
-            val nextNotification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            assertNotNull(nextNotification)
-            val notification3 =
-                device.wait(Until.findObject(By.textContains(FIRST_REMINDER)), 1_000)
-            assertNull(notification3)
-            val notification4 =
-                device.wait(Until.findObject(By.textContains(SECOND_REMINDER)), 1_000)
-            assertNotNull(notification4)
+            awaitGone(text, timeoutMillis = 120_000)
+            assertShows(TEST_MED)
+            assertHidden(FIRST_REMINDER)
+            assertShows(SECOND_REMINDER)
         }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun variableAmount() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.combine_notifications)
-        pressBack()
-        pressBack()
+        settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        AndroidTestHelper.scrollDown()
-        clickOn(R.string.variable_amount)
+        medicines.create(TEST_MED)
+        medicineEditor.addReminder("1", LocalTime.of(20, 0))
+        medicineEditor.openAdvancedSettings()
+        clickPreference(R.string.variable_amount)
         pressBack()
         openEditMedicineMenu()
         clickMenuItem(R.string.duplicate_including_reminders)
 
-        AndroidTestHelper.clickMedicineItem(1)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, SECOND_ONE)
+        medicines.clickItem(1)
+        medicineEditor.rename(SECOND_ONE)
         pressBack()
 
-        openNotification().use {
+        notifications.inShade {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(
                 InstrumentationRegistry.getInstrumentation().targetContext,
                 0
             )
-            device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            clickNotificationButton(device, getNotificationText(R.string.taken))
+            assertShows(TEST_MED)
+            clickAction(R.string.taken)
         }
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
-        assertContains(TEST_MED)
+        awaitInputDialog()
+        assertDialogContains(TEST_MED)
         writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
-        assertContains(SECOND_ONE)
+        awaitInputDialog()
+        assertDialogContains(SECOND_ONE)
         writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertContains(TEST_VARIABLE_AMOUNT)
-        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
+        navigation.toOverview()
+        overview.assertEventContains(TEST_VARIABLE_AMOUNT)
+        overview.assertEventContains(TEST_ANOTHER_VARIABLE_AMOUNT)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun variableAmountBigButton() {
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.big_notifications)
-        clickOn(R.string.combine_notifications)
-        pressBack()
-        pressBack()
+        settings.inSection(R.string.display_settings) {
+            clickPreference(R.string.big_notifications)
+            clickPreference(R.string.combine_notifications)
+        }
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createReminder("1", LocalTime.of(20, 0))
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        AndroidTestHelper.scrollDown()
-        clickOn(R.string.variable_amount)
+        medicines.create(TEST_MED)
+        medicineEditor.addReminder("1", LocalTime.of(20, 0))
+        medicineEditor.openAdvancedSettings()
+        clickPreference(R.string.variable_amount)
         pressBack()
         openEditMedicineMenu()
         clickMenuItem(R.string.duplicate_including_reminders)
-        AndroidTestHelper.clickMedicineItem(0)
-        AndroidTestHelper.createReminder("Not variable", LocalTime.of(20, 0))
+        medicines.clickItem(0)
+        medicineEditor.addReminder("Not variable", LocalTime.of(20, 0))
         pressBack()
 
-        AndroidTestHelper.clickMedicineItem(1)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, SECOND_ONE)
+        medicines.clickItem(1)
+        medicineEditor.rename(SECOND_ONE)
         pressBack()
 
-        navigateTo(MainMenu.ANALYSIS)
+        navigation.toAnalysis()
 
-        openNotification().use {
+        notifications.inShade {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(
                 InstrumentationRegistry.getInstrumentation().targetContext,
                 0
             )
-            assertNotNull(device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000))
-            clickNotificationButton(
-                device,
-                InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.taken)
-            )
+            assertShows(TEST_MED)
+            clickAction(R.string.taken)
         }
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
-        assertContains(TEST_MED)
+        awaitInputDialog()
+        assertDialogContains(TEST_MED)
         writeTo(android.R.id.input, TEST_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
-        assertContains(SECOND_ONE)
+        awaitInputDialog()
+        assertDialogContains(SECOND_ONE)
         writeTo(android.R.id.input, TEST_ANOTHER_VARIABLE_AMOUNT)
         clickDialogPositiveButton()
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertContains(TEST_VARIABLE_AMOUNT)
-        assertContains(TEST_ANOTHER_VARIABLE_AMOUNT)
-        assertContains("Not variable")
+        navigation.toOverview()
+        overview.assertEventContains(TEST_VARIABLE_AMOUNT)
+        overview.assertEventContains(TEST_ANOTHER_VARIABLE_AMOUNT)
+        overview.assertEventContains("Not variable")
 
-        val nextDay =
-            DayOfWeek.SATURDAY.getDisplayName(TextStyle.SHORT, Locale.getDefault()) + "\n2"
-        clickOn(nextDay)
-        clickOverviewEventState(0)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
+        overview.clickDay(LocalDate.now().plusDays(1))
+        overview.clickEventState(0)
+        clickMenuItem(R.string.taken)
         writeTo(android.R.id.input, "Test variable amount again")
         clickDialogPositiveButton()
 
-        assertContains("Test variable amount again")
+        overview.assertEventContains("Test variable amount again")
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun customSnooze() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.snooze_settings)
-        clickOn(R.string.snooze_duration)
-        clickOn(R.string.custom)
-        pressBack()
-        clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.snooze)
-        pressBack()
-        pressBack()
-
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 120)
-
-        navigateTo(MainMenu.ANALYSIS)
-        openNotification().use {
-            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            assertNotNull(notification)
-            dismissNotification(notification)
+        settings.inSection(R.string.snooze_settings) {
+            clickPreference(R.string.snooze_duration)
+            clickDialogItem(R.string.custom)
+        }
+        settings.inSection(R.string.notification_reminder_settings) {
+            clickPreference(R.string.dismiss_notification_action)
+            clickDialogItem(R.string.snooze)
         }
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        medicines.create(TEST_MED)
+        medicineEditor.addIntervalReminder("1", 120)
+
+        navigation.toAnalysis()
+        notifications.inShade {
+            assertShows(TEST_MED)
+            dismiss(TEST_MED)
+        }
+
+        awaitInputDialog()
         writeTo(android.R.id.input, "5")
         clickDialogPositiveButton()
 
-        navigateTo(MainMenu.OVERVIEW)
+        navigation.toOverview()
 
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.reminded)
+        overview.assertEventState(0, R.string.reminded)
 
-        navigateTo(MainMenu.ANALYSIS)
+        navigation.toAnalysis()
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.taken)
-        pressBack()
-        pressBack()
+        settings.inSection(R.string.notification_reminder_settings) {
+            clickPreference(R.string.dismiss_notification_action)
+            clickDialogItem(R.string.taken)
+        }
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        openNotification().use {
-            device.wait(Until.hasObject(By.pkg("com.android.systemui")), 2_000)
-            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            internalAssert(notification != null)
-            makeNotificationExpanded(device, getNotificationText(R.string.skipped))
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) == null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) != null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-            clickNotificationButton(device, getNotificationText(R.string.snooze))
+        notifications.inShade {
+            awaitShade()
+            assertShows(TEST_MED)
+            assertShowsAction(R.string.skipped)
+            assertNoAction(R.string.taken)
+            assertShowsAction(R.string.snooze)
+            clickAction(R.string.snooze)
         }
 
-        assertNotNull(device.wait(Until.findObject(By.res("android", "input")), 2_000))
+        awaitInputDialog()
         writeTo(android.R.id.input, "13")
         clickDialogPositiveButton()
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.reminded)
+        navigation.toOverview()
+        overview.assertEventState(1, R.string.reminded)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun hiddenMedicineName() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        settings.click(R.string.privacy_settings, R.string.hide_med_name)
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.privacy_settings)
-        clickOn(R.string.hide_med_name)
-
+        medicines.create(TEST_MED)
+        medicineEditor.addIntervalReminder("1", 120)
         pressBack()
+        medicines.assertNameContains(TEST_MED)
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 120)
-        pressBack()
-        AndroidTestHelper.assertMedicineNameContains(TEST_MED)
-
-        openNotification().use {
-            val notification = device.wait(Until.findObject(By.textContains("T*******")), 2000)
-            assertNotNull(notification)
-        }
+        notifications.inShade { assertShows("T*******") }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun bigButtons() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val packageName = device.currentPackageName
+        settings.click(R.string.display_settings, R.string.big_notifications)
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.big_notifications)
-
+        medicines.create(TEST_MED)
+        medicineEditor.addIntervalReminder("1", 120)
         pressBack()
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 120)
-        pressBack()
-
-        openNotification().use {
-            device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            makeNotificationExpanded(device, getNotificationText(R.string.taken))
-            internalAssert(
-                device.wait(
-                    Until.hasObject(By.res(packageName, "takenButton")),
-                    2000
-                )
-            )
-            internalAssert(
-                device.wait(
-                    Until.hasObject(By.res(packageName, "skippedButton")),
-                    2000
-                )
-            )
-            internalAssert(
-                device.wait(
-                    Until.hasObject(By.res(packageName, "snoozeButton")),
-                    2000
-                )
-            )
+        notifications.inShade {
+            assertShows(TEST_MED)
+            expandFor(actionLabel(R.string.taken))
+            assertShowsButton("takenButton")
+            assertShowsButton("skippedButton")
+            assertShowsButton("snoozeButton")
         }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun sameTimeReminders() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.combine_notifications)
-        pressBack()
-        pressBack()
+        medicines.create(TEST_MED)
+        val notificationTime = aboutToFire()
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        val notificationTime = AndroidTestHelper.nextNotificationTime.toLocalTime()
-
-        AndroidTestHelper.createReminder(
+        medicineEditor.addReminder(
             "1",
             notificationTime
         )
-        AndroidTestHelper.createReminder(
+        medicineEditor.addReminder(
             SECOND_ONE,
             notificationTime
         )
 
-        openNotification().use {
+        notifications.inShade {
             ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(
                 InstrumentationRegistry.getInstrumentation().targetContext,
                 0
             )
-            device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            val notification = device.wait(Until.findObject(By.textContains(SECOND_ONE)), 2_000)
-            assertNotNull(notification)
-
-            internalAssert(clickNotificationButton(device, getNotificationText(R.string.taken)))
+            assertShows(TEST_MED)
+            assertShows(SECOND_ONE)
+            clickAction(R.string.taken)
         }
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.taken)
-        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.taken)
+        navigation.toOverview()
+        overview.assertEventState(0, R.string.taken)
+        overview.assertEventState(1, R.string.taken)
 
-        longClickOverviewEvent(0)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.skipped)
+        overview.longClickEvent(0)
+        overview.clickSelectionAction(R.string.skipped)
 
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.skipped)
-        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.skipped)
+        overview.assertEventState(0, R.string.skipped)
+        overview.assertEventState(1, R.string.skipped)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun automaticallyTakenTest() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        medicines.create(TEST_MED)
+        val notificationTime = aboutToFire()
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        val notificationTime = AndroidTestHelper.nextNotificationTime.toLocalTime()
-
-        AndroidTestHelper.createReminder("1", notificationTime)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        AndroidTestHelper.scrollDown()
-        clickOn(R.string.automatically_taken)
+        medicineEditor.addReminder("1", notificationTime)
+        medicineEditor.openAdvancedSettings()
+        clickPreference(R.string.automatically_taken)
         pressBack()
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.please_wait)
+        navigation.toOverview()
+        overview.assertEventState(0, R.string.please_wait)
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(InstrumentationRegistry.getInstrumentation().targetContext)
-        device.wait(
-            Until.findObject(
-                By.desc(
-                    InstrumentationRegistry.getInstrumentation().targetContext.getString(
-                        R.string.taken
-                    )
-                )
-            ),
-            2_000
-        )
+        overview.assertEventState(0, R.string.taken)
 
-        openNotification().use {
-            internalAssert(device.findObject(By.textContains(getNotificationText(R.string.taken))) == null)
-        }
+        notifications.inShade { assertHidden(actionLabel(R.string.taken)) }
     }
 
     @Test
@@ -607,157 +436,133 @@ class NotificationTest : BaseTestHelper() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         device.wakeUp()
 
-        AndroidTestHelper.createMedicine(TEST_MED)
-        AndroidTestHelper.createIntervalReminder("1", 2)
+        medicines.create(TEST_MED)
+        medicineEditor.addIntervalReminder("1", 2)
         openEditMedicineMenu()
         clickMenuItem(R.string.medicine_settings)
         clickOn(R.string.notification_importance)
         clickOn(R.string.high_and_alarm)
         pressBack()
 
-        navigateTo(MainMenu.OVERVIEW)
-        clickOverviewEventState(0)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.taken)
-
-        device.waitForIdle(2_000)
+        navigation.toOverview()
+        overview.clickEventState(0)
+        clickMenuItem(R.string.taken)
 
         device.sleep()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
+        takeOnAlarmScreen(timeToNotify * 4, "Alarm screen did not appear")
 
-        var o = device.wait(
-            Until.findObject(By.text(context.getString(R.string.snooze))),
-            timeToNotify * 4
-        )
-        internalAssert(o != null)
-        clickTakenOnAlarmScreen(device, context)
-
-        assertOverviewEventState(1, com.futsch1.medtimer.core.ui.R.string.taken)
-
-        device.waitForIdle(2_000)
+        overview.assertEventState(1, R.string.taken)
 
         device.sleep()
 
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context, timeToNotify, 0)
-        o = device.wait(
-            Until.findObject(By.text(context.getString(R.string.snooze))),
-            timeToNotify * 4
-        )
-        internalAssert(o != null)
+        awaitAlarmScreen(timeToNotify * 4, "Alarm screen did not appear a second time")
         ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(context)
-        clickTakenOnAlarmScreen(device, context)
+        takeOnAlarmScreen(timeToNotify * 4, "Alarm screen did not appear a second time")
 
-        assertOverviewEventState(2, com.futsch1.medtimer.core.ui.R.string.taken)
-        assertOverviewEventState(3, com.futsch1.medtimer.core.ui.R.string.reminded)
+        overview.assertEventState(2, R.string.taken)
+        overview.assertEventState(3, R.string.reminded)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun scheduleReminderTest() {
-        AndroidTestHelper.createMedicine(TEST_MED)
+        medicines.create(TEST_MED)
 
-        AndroidTestHelper.createReminder("1", LocalTime.of(22, 0))
+        medicineEditor.addReminder("1", laterToday())
 
-        navigateTo(MainMenu.OVERVIEW)
+        navigation.toOverview()
 
-        clickOverviewEventState(0)
-        clickOn(R.string.reschedule_reminder)
+        overview.clickEventState(0)
+        clickMenuItem(R.string.reschedule_reminder)
 
-        AndroidTestHelper.setTime(4, 0, false)
+        pickers.pickTime(LocalTime.of(4, 0))
 
-        openNotification().use {
-            assertContains(TEST_MED)
-        }
+        notifications.inShade { assertShows(TEST_MED) }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun noSkippedButton() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val packageName = device.currentPackageName
-
-        AndroidTestHelper.createMedicine(TEST_MED)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
+        medicines.create(TEST_MED)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
-        AndroidTestHelper.createIntervalReminder("1", 120)
+        medicineEditor.addIntervalReminder("1", 120)
         pressBack()
 
-        openNotification().use {
-            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), 2_000)
-            makeNotificationExpanded(device, getNotificationText(R.string.taken))
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.taken))) != null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.snooze))) != null)
-            internalAssert(device.findObject(By.text(getNotificationText(R.string.skipped))) == null)
-            dismissNotification(notification)
+        notifications.inShade {
+            assertShows(TEST_MED)
+            assertShowsAction(R.string.taken)
+            assertShowsAction(R.string.snooze)
+            assertNoAction(R.string.skipped)
+            dismiss(TEST_MED)
         }
 
-        navigateTo(MainMenu.OVERVIEW)
-        assertOverviewEventState(0, com.futsch1.medtimer.core.ui.R.string.reminded)
+        navigation.toOverview()
+        overview.assertEventState(0, R.string.reminded)
 
-        openAppOptionsMenu()
-        clickTag(AppOptionsTestTags.SETTINGS)
-        clickOn(R.string.display_settings)
-        clickOn(R.string.big_notifications)
-        pressBack()
+        settings.click(R.string.display_settings, R.string.big_notifications)
 
-        navigateTo(MainMenu.MEDICINES)
+        navigation.toMedicines()
 
-        AndroidTestHelper.createMedicine(TEST_MED_2)
-        clickMenuItem(com.futsch1.medtimer.core.ui.R.string.medicine_settings)
+        medicines.create(TEST_MED_2)
+        openEditMedicineMenu()
+        clickMenuItem(R.string.medicine_settings)
         clickOn(R.string.medicine_cannot_be_skipped)
         pressBack()
-        AndroidTestHelper.createIntervalReminder("1", 120)
+        medicineEditor.addIntervalReminder("1", 120)
 
-        openNotification().use {
-            device.wait(Until.findObject(By.textContains(TEST_MED_2)), 2_000)
-            makeNotificationExpanded(device, getNotificationText(R.string.taken))
-            internalAssert(
-                device.wait(
-                    Until.hasObject(By.res(packageName, "takenButton")),
-                    2000
-                )
-            )
-            internalAssert(
-                device.findObject(By.res(packageName, "skippedButton")) == null
-            )
-            internalAssert(
-                device.findObject(By.res(packageName, "snoozeButton")) != null
-            )
+        notifications.inShade {
+            assertShows(TEST_MED_2)
+            expandFor(actionLabel(R.string.taken))
+            assertShowsButton("takenButton")
+            assertNoButton("skippedButton")
+            assertShowsButton("snoozeButton")
         }
     }
 
-    private fun clickTakenOnAlarmScreen(
-        device: UiDevice,
-        context: Context
-    ) {
-        val o1 = device.findObject(By.desc(context.getString(R.string.taken)))
-        while (device.findObject(By.text(context.getString(R.string.snooze))) != null) {
-            try {
-                o1.click()
-            } catch (_: StaleObjectException) {
-                // Ignore
-            }
-        }
+    /** The alarm screen is MedTimer's own activity, so Espresso drives it once it has resumed. */
+    private fun awaitAlarmScreen(timeoutMillis: Long, message: String) {
+        assertTrue(pollUntil(timeoutMillis) { alarmActivity() != null }, message)
     }
 
-    private fun waitAndDismissNotification(device: UiDevice, timeout: Long = 2000) {
-        openNotification().use {
-            val notification = device.wait(Until.findObject(By.textContains(TEST_MED)), timeout)
-            assertNotNull(notification)
-            dismissNotification(notification)
-        }
+    private fun takeOnAlarmScreen(timeoutMillis: Long, message: String) {
+        awaitAlarmScreen(timeoutMillis, message)
+        assertTrue(
+            pollUntil(ALARM_CLOSE_TIMEOUT) {
+                clickTakenOnAlarmScreen()
+                alarmActivity() == null
+            },
+            "Alarm screen did not close"
+        )
     }
 
-    private fun dismissNotification(notification: UiObject2) {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    private fun clickTakenOnAlarmScreen() {
+        val activity = alarmActivity() ?: return
+        onView(withId(com.futsch1.medtimer.feature.reminders.R.id.takenButton))
+            .inRoot(RootMatchers.withDecorView(`is`(activity.window.decorView)))
+            .withFailureHandler { _, _ -> }
+            .perform(click())
+    }
 
-        try {
-            notification.fling(Direction.RIGHT)
-        } catch (_: StaleObjectException) {
-            // Notification view was re-rendered (e.g. after expansion); re-find and fling
+    private fun alarmActivity(): Activity? {
+        var activity: Activity? = null
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            activity = ActivityLifecycleMonitorRegistry.getInstance()
+                .getActivitiesInStage(Stage.RESUMED)
+                .firstOrNull { it is ReminderAlarmActivity }
         }
-        val current = device.wait(Until.findObject(By.textContains(TEST_MED)), 500)
-        current?.fling(Direction.RIGHT)
+        return activity
+    }
+
+    private fun awaitAndDismissNotification() {
+        notifications.inShade {
+            assertShows(TEST_MED)
+            dismiss(TEST_MED)
+        }
     }
 }

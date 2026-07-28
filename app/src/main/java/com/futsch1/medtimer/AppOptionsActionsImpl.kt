@@ -42,7 +42,7 @@ class AppOptionsActionsImpl @AssistedInject constructor(
     }
 
     private val context: Context get() = fragment.requireContext()
-    private val idlingResource = SimpleIdlingResource("AppOptionsActions_${fragment.javaClass.name}")
+    private val idlingResource = SimpleIdlingResource("AppOptionsActions_${fragment.javaClass.name}").apply { setIdle() }
 
     private val openFileLauncher =
         fragment.registerForActivityResult(StartActivityForResult()) { result ->

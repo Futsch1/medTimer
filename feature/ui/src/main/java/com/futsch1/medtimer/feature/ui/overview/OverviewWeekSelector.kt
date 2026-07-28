@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -153,7 +153,8 @@ private fun WeekDayCell(day: WeekDay, isSelected: Boolean, onClick: () -> Unit) 
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(vertical = 4.dp)
-            .clickable(onClick = onClick),
+            .testTag(OverviewTestTags.day(day.date))
+            .selectable(selected = isSelected, onClick = onClick),
     ) {
         Text(
             text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, currentLocale),
@@ -169,7 +170,6 @@ private fun WeekDayCell(day: WeekDay, isSelected: Boolean, onClick: () -> Unit) 
         ) {
             Text(
                 text = day.date.dayOfMonth.toString(),
-                modifier = if (isSelected) Modifier.testTag(OverviewTestTags.SELECTED_DAY) else Modifier,
                 color = when {
                     isSelected -> MaterialTheme.colorScheme.onPrimary
                     else -> MaterialTheme.colorScheme.onSurface

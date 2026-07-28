@@ -31,9 +31,10 @@ object OverviewTestTags {
     const val EVENT_CARD = "overview_event_card"
     const val EVENT_STATE_BUTTON = "overview_event_state"
     const val EVENT_TEXT = "overview_event_text"
-    const val SELECTED_DAY = "overview_selected_day"
     const val PREV_WEEK = "overview_prev_week"
     const val NEXT_WEEK = "overview_next_week"
+
+    fun day(date: java.time.LocalDate) = "overview_day_$date"
 
     fun filter(filter: com.futsch1.medtimer.core.domain.model.OverviewFilter) = "overview_filter_${filter.name}"
     const val LOG_MANUAL_DOSE = "overview_log_manual_dose"

@@ -32,7 +32,21 @@ class MyFailureHandler(
     private val device: UiDevice =
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
+    private var capturedThisAttempt = false
+
     override fun handle(error: Throwable, viewMatcher: Matcher<View?>?) {
+        capture(error)
+        defaultFailureHandler.handle(error, viewMatcher)
+    }
+
+    /**
+     * Writes a screenshot and window hierarchy for [error]. Callers that only observe a failure (the
+     * screenshot-on-failure rule) use this instead of [handle], which also rethrows.
+     */
+    fun capture(error: Throwable) {
+        if (capturedThisAttempt) return
+        capturedThisAttempt = true
+
         val count = failureCount.incrementAndGet()
         val fileNameBase = "${this.testName}.${this.testFunctionName.methodName}_$count"
         try {
@@ -49,8 +63,11 @@ class MyFailureHandler(
         } catch (e: IOException) {
             error.addSuppressed(e)
         }
+    }
 
-        defaultFailureHandler.handle(error, viewMatcher)
+    /** Re-arms capture for the next attempt of a retried (@AllowFlaky) test. */
+    fun resetCapture() {
+        capturedThisAttempt = false
     }
 
     private fun takeScreenshot(outputName: String) {

@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -62,6 +63,10 @@ data class SortableTableRow(
 
 /** Sort cycles through these in header-tap order: [DESCENDING] → [ASCENDING] → [UNSORTED]. */
 enum class SortDirection { DESCENDING, ASCENDING, UNSORTED }
+
+object SortableTableTestTags {
+    fun header(title: String) = "table_header_$title"
+}
 
 @Composable
 fun SortableTable(
@@ -166,6 +171,7 @@ private fun HeaderRow(
             Row(
                 modifier = Modifier
                     .width(columnWidths[index])
+                    .testTag(SortableTableTestTags.header(column.title))
                     .then(if (column.sortable) Modifier.clickable { onHeaderClick(index) } else Modifier)
                     .padding(horizontal = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -201,7 +207,9 @@ fun DefaultDataCell(text: String, width: Dp) {
         color = MaterialTheme.colorScheme.onSurface,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.width(width).padding(horizontal = 4.dp),
+        modifier = Modifier
+            .width(width)
+            .padding(horizontal = 4.dp),
     )
 }
 
