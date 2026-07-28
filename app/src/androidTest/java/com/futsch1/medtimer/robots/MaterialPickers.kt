@@ -10,9 +10,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalTime
-import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -32,8 +30,6 @@ class MaterialPickers {
         closeKeyboard()
         clickOn(com.google.android.material.R.id.confirm_button)
     }
-
-    fun pickDate(date: LocalDate) = pickDate(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
     private fun enterTime(hour: Int, minute: Int, isDuration: Boolean) {
         var hour = hour

@@ -107,7 +107,7 @@ class OverviewFragment : Fragment() {
                 event.state != OverviewState.LOCATION
         if (editable) {
             EditEventSheetDialogFragment
-                .newInstance((event as PastReminderEvent).reminderEvent.reminderEventId)
+                .newInstance(event.reminderEvent.reminderEventId)
                 .show(parentFragmentManager, "EditEventDialog")
         } else {
             ShowMedicineSheetDialogFragment.newInstance(event.reminderId)

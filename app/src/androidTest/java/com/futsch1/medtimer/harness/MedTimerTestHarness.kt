@@ -30,7 +30,7 @@ import java.time.LocalDate
  * Everything a MedTimer instrumented test needs before its first interaction, as one rule with an
  * explicit order: name and failure capture, permissions, device state, the activity, Compose.
  */
-class MedTimerTestHarness(private val testClassName: String) : TestRule {
+class MedTimerTestHarness(testClassName: String) : TestRule {
 
     val baristaRule: BaristaRule<MainActivity> = BaristaRule.create(MainActivity::class.java)
     val composeTestRule: ComposeTestRule = createEmptyComposeRule()

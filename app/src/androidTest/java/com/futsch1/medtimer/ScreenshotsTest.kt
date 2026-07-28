@@ -1,7 +1,6 @@
 package com.futsch1.medtimer
 
 import androidx.test.espresso.Espresso
-import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
@@ -32,8 +31,6 @@ class ScreenshotsTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun screenshotsTest() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         openAppOptionsMenu()
         clickTag(AppOptionsTestTags.GENERATE_TEST_DATA)
 

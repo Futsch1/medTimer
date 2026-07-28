@@ -109,8 +109,4 @@ class MedicineEditorRobot(
     fun assertRefillSize(expected: String) {
         inStockSettings { preferences.assertSummary(R.string.refill_size, expected) }
     }
-
-    fun assertRunOutDate(expected: String) {
-        inStockSettings { preferences.assertSummary(R.string.estimated_run_out_date, expected) }
-    }
 }
