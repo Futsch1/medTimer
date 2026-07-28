@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.core.ui.theme.readableContentColorFor
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -51,18 +51,11 @@ fun MedicineCard(
     @SuppressLint("ModifierParameter")
     dragHandleModifier: Modifier = Modifier.Companion
 ) {
-    val cardColors = if (medicine.color != null) {
-        val bg = Color(medicine.color)
-        CardDefaults.cardColors(containerColor = bg, contentColor = readableContentColorFor(bg))
-    } else {
-        CardDefaults.cardColors()
-    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .testTag(MedicineTestTags.MEDICINE_ITEM),
-        colors = cardColors,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
             draggedElevation = if (isDragging) 8.dp else 2.dp
@@ -75,15 +68,11 @@ fun MedicineCard(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (medicine.icon != null) {
-                        Icon(
-                            bitmap = medicine.icon.asImageBitmap(),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .padding(end = 8.dp)
-                        )
-                    }
+                    MedicineSwatch(
+                        icon = medicine.icon?.asImageBitmap(),
+                        color = medicine.color,
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
                     Column {
                         MedicineHeader(medicine)
                         Text(

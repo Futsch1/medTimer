@@ -5,24 +5,19 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -34,11 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.component.SelectableCard
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.core.ui.theme.containerMask
-import com.futsch1.medtimer.core.ui.theme.readableContentColorFor
 import com.futsch1.medtimer.feature.ui.overview.actions.Actions
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
@@ -84,7 +78,7 @@ fun OverviewEventItem(
     modifier: Modifier = Modifier,
     onRailAnchor: (Float) -> Unit = {},
 ) {
-    val containerColor = eventContainerColor(color, isSelected)
+    val containerColor = eventContainerColor(isSelected)
 
     Row(
         modifier = modifier
@@ -111,10 +105,7 @@ fun OverviewEventItem(
             onClick = onClick,
             onToggleSelection = onToggleSelection,
             onEnterSelectionMode = onEnterSelectionMode,
-            colors = CardDefaults.cardColors(
-                containerColor = containerColor,
-                contentColor = readableContentColorFor(containerColor),
-            ),
+            colors = CardDefaults.cardColors(containerColor = containerColor),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
         ) {
@@ -131,28 +122,14 @@ fun OverviewEventItem(
                 val iconFadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
                 val iconSizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
                 AnimatedContent(
-                    targetState = icon,
+                    targetState = icon to color,
                     transitionSpec = {
                         fadeIn(iconFadeSpec) togetherWith fadeOut(iconFadeSpec) using
                                 SizeTransform(clip = false) { _, _ -> iconSizeSpec }
                     },
-                    label = "medicine_icon",
-                ) { animatedIcon ->
-                    if (animatedIcon != null) {
-                        Box(
-                            modifier = Modifier
-                                .clip(CardDefaults.shape)
-                                .background(containerMask())
-                        ) {
-                            Icon(
-                                bitmap = animatedIcon,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(EVENT_STATE_BUTTON_MARGIN)
-                                    .size(32.dp),
-                            )
-                        }
-                    }
+                    label = "medicine_swatch",
+                ) { (animatedIcon, animatedColor) ->
+                    MedicineSwatch(icon = animatedIcon, color = animatedColor)
                 }
             }
         }
@@ -178,24 +155,30 @@ private fun OverviewEventItemPreview() {
 
 @MedTimerPreview
 @Composable
-private fun OverviewEventItemLightColorPreview() {
-    OverviewEventItemPreview(color = 0xFFFFE082.toInt(), isSelected = false)
+private fun OverviewEventItemVividColorPreview() {
+    OverviewEventItemPreview(color = 0xFF00FF00.toInt(), isSelected = false)
 }
 
 @MedTimerPreview
 @Composable
-private fun OverviewEventItemDarkColorPreview() {
-    OverviewEventItemPreview(color = 0xFF1A237E.toInt(), isSelected = false)
+private fun OverviewEventItemVividBlueColorPreview() {
+    OverviewEventItemPreview(color = 0xFF0000FF.toInt(), isSelected = false)
+}
+
+@MedTimerPreview
+@Composable
+private fun OverviewEventItemColorWithoutIconPreview() {
+    OverviewEventItemPreview(color = 0xFFFF0000.toInt(), isSelected = false, withIcon = false)
 }
 
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemSelectedPreview() {
-    OverviewEventItemPreview(color = null, isSelected = true)
+    OverviewEventItemPreview(color = 0xFFFF00FF.toInt(), isSelected = true)
 }
 
 @Composable
-private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean) {
+private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean, withIcon: Boolean = true) {
     MedTimerTheme {
         Surface {
             OverviewEventItem(
@@ -210,7 +193,7 @@ private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean) {
                 ),
                 state = OverviewState.TAKEN,
                 color = color,
-                icon = previewMedicineIcon(),
+                icon = previewMedicineIcon().takeIf { withIcon },
                 isSelected = isSelected,
                 isInSelectionMode = isSelected,
                 actions = null,
@@ -224,9 +207,7 @@ private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean) {
 }
 
 @Composable
-private fun eventContainerColor(color: Int?, isSelected: Boolean) = when {
-    isSelected -> MaterialTheme.colorScheme.secondaryContainer
-    color != null -> Color(color).copy(alpha = 1f)
-    else -> MaterialTheme.colorScheme.surfaceContainer
-}
+private fun eventContainerColor(isSelected: Boolean) =
+    if (isSelected) MaterialTheme.colorScheme.secondaryContainer
+    else MaterialTheme.colorScheme.surfaceContainer
 
