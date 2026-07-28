@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -60,7 +59,7 @@ class AdvancedReminderSettingsActions @AssistedInject constructor(
 }
 
 @Composable
-fun RowScope.AdvancedReminderSettingsMenu(actions: AdvancedReminderSettingsActions) {
+fun AdvancedReminderSettingsMenu(actions: AdvancedReminderSettingsActions) {
     IconButton(onClick = actions::duplicate) {
         Icon(
             painter = painterResource(CoreUiR.drawable.copy),

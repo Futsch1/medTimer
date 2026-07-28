@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.ui.medicine
 import androidx.compose.material3.Surface
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider

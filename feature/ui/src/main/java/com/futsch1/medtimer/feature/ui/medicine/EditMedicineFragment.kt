@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.size
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
-import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +26,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTypeDialog
 import com.google.android.material.button.MaterialButton

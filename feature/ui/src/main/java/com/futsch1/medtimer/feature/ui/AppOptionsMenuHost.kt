@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui
 
+import android.content.Intent
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,11 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.core.common.helpers.safeStartActivity
-import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.content.Intent
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 private const val APP_URL = "https://github.com/Futsch1/medTimer"
 
@@ -64,8 +64,7 @@ fun RowScope.AppOptionsMenuHost(
         onExportMedicines = { isCSV ->
             optionsViewModel.exportMedicines(isCSV, tagFilterViewModel, fragment.parentFragmentManager)
         },
-        onOpenAppUrl = {
-            safeStartActivity(context, Intent(Intent.ACTION_VIEW, APP_URL.toUri()))
-        },
-    )
+    ) {
+        safeStartActivity(context, Intent(Intent.ACTION_VIEW, APP_URL.toUri()))
+    }
 }

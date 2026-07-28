@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.feature.ui
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -38,7 +37,7 @@ object AppOptionsTestTags {
  * three groups of two or three items.
  */
 @Composable
-fun RowScope.AppOptionsMenu(
+fun AppOptionsMenu(
     actions: AppOptionsActions,
     hasTags: Boolean,
     tagsSelected: Boolean,

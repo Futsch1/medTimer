@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -68,7 +67,7 @@ class MedicinesMenu @Inject constructor(
 }
 
 @Composable
-fun RowScope.MedicinesMenuActions(menu: MedicinesMenu) {
+fun MedicinesMenuActions(menu: MedicinesMenu) {
     var expanded by remember { mutableStateOf(false) }
 
     Box {
