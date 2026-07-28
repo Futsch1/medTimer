@@ -9,8 +9,8 @@ import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotificationFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -24,10 +24,10 @@ class ReminderNotificationProcessor @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val preferencesDataSource: PreferencesDataSource
 ) {
-    suspend fun processReminders(reminderNotificationData: ReminderNotificationData): Boolean {
+    suspend fun processReminders(reminderNotificationData: ReminderNotificationData) {
         // Create reminder events and filter those that are already processed
         val reminderNotification =
-            reminderNotificationFactory.create(reminderNotificationData)?.filterAlreadyProcessed() ?: return false
+            reminderNotificationFactory.create(reminderNotificationData)?.filterAlreadyProcessed() ?: return
 
         val nonTakenReminderNotification = handleAutomaticallyTaken(reminderNotification)
         if (nonTakenReminderNotification.reminderNotificationParts.isEmpty()) {
@@ -36,8 +36,6 @@ class ReminderNotificationProcessor @Inject constructor(
             Log.d(LogTags.REMINDER, "Processing reminder notification $nonTakenReminderNotification")
             notificationAction(nonTakenReminderNotification)
         }
-
-        return true
     }
 
     private suspend fun handleAutomaticallyTaken(reminderNotification: ReminderNotification): ReminderNotification {
