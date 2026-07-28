@@ -49,7 +49,7 @@ class BasicUITest : BaseTestHelper() {
         clickOn(R.string.dosing_instructions)
         clickOn(R.string.sample_instructions)
         clickListItem(position = 0)
-
+        assertDisplayed(R.string.before_meal)
         Espresso.pressBack()
         Espresso.pressBack()
 
