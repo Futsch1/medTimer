@@ -151,8 +151,7 @@ private fun WeekDayCell(day: WeekDay, isSelected: Boolean, onClick: () -> Unit) 
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(vertical = 4.dp)
-            .testTag(OverviewTestTags.day(day.date))
-            .selectable(selected = isSelected, onClick = onClick),
+            .testTag(OverviewTestTags.day(day.date)),
     ) {
         Text(
             text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, currentLocale),
@@ -164,6 +163,7 @@ private fun WeekDayCell(day: WeekDay, isSelected: Boolean, onClick: () -> Unit) 
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
+                .selectable(selected = isSelected, onClick = onClick)
                 .background(if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent),
         ) {
             Text(
