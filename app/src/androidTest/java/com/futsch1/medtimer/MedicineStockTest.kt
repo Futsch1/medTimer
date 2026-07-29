@@ -5,10 +5,12 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.time.LocalDate
 import java.util.Calendar
 
+@HiltAndroidTest
 class MedicineStockTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

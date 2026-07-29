@@ -3,9 +3,11 @@ package com.futsch1.medtimer
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 
+@HiltAndroidTest
 class CalendarTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

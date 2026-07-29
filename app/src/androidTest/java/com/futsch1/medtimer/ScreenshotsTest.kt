@@ -4,6 +4,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.statistics.ANALYSIS_RANGES
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.ClassRule
 import org.junit.Test
 import tools.fastlane.screengrab.Screengrab
@@ -15,6 +16,7 @@ private const val GINSENG = "Ginseng (200mg)"
 private const val B12 = "B12 (500µg)"
 private const val SELEN = "Selen (200 µg)"
 
+@HiltAndroidTest
 class ScreenshotsTest : MedTimerTestBase() {
     companion object {
         // JvmField is needed for the @ClassRule to work

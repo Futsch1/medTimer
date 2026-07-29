@@ -4,6 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.text.DateFormat
 import java.time.Instant
@@ -15,6 +16,7 @@ import java.util.Calendar
 import java.util.Locale
 
 
+@HiltAndroidTest
 class ReminderTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

@@ -2,9 +2,11 @@ package com.futsch1.medtimer
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 
+@HiltAndroidTest
 class DeleteTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

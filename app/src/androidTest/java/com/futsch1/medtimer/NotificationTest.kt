@@ -4,6 +4,7 @@ import android.os.Build
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.time.LocalDate
 
@@ -17,6 +18,7 @@ private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
 private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
 
 
+@HiltAndroidTest
 class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

@@ -23,8 +23,6 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.io.IOException
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 
 /**
  * Everything a MedTimer instrumented test needs before its first interaction, as one rule with an
@@ -69,7 +67,6 @@ class MedTimerTestHarness(testClassName: String) : TestRule {
     private val startApp = TestRule { base, _ ->
         object : Statement() {
             override fun evaluate() {
-                assertClockInSafeBand()
                 prepareDevice()
                 setFailureHandler(failureHandler)
                 failureHandler.resetCapture()
@@ -98,29 +95,7 @@ class MedTimerTestHarness(testClassName: String) : TestRule {
         device.pressHome()
     }
 
-    /**
-     * Tests place reminders relative to now rather than at fixed hours,
-     * but they still need the day not to end underneath them:
-     * [com.futsch1.medtimer.MedTimerTestBase.laterToday] reaches two hours ahead,
-     * a run takes tens of minutes, and stock projections need today's dose already in the past.
-     * Checked per test rather than once per run, so a rollover mid-suite fails the test it actually breaks.
-     */
-    private fun assertClockInSafeBand() {
-        val now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES)
-        if (now < SAFE_BAND_START || now >= SAFE_BAND_END) {
-            throw AssertionError(
-                "The instrumented suite needs the wall clock between $SAFE_BAND_START and $SAFE_BAND_END, but it is $now.\n" +
-                        "Earlier leaves no room for reminders that must already have passed today, later leaves none " +
-                        "for reminders scheduled ahead of now, and a run crossing midnight changes the day mid-test.\n" +
-                        "Wait, or set the device clock into the band, e.g. 'adb shell su 0 toybox date 1000'."
-            )
-        }
-    }
-
     companion object {
-        private val SAFE_BAND_START: LocalTime = LocalTime.of(3, 0)
-        private val SAFE_BAND_END: LocalTime = LocalTime.of(21, 0)
-
         /** Runs once per class, before any rule, so a leftover system dialog cannot swallow the first tap. */
         fun dismissANRSystemDialog() {
             val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())

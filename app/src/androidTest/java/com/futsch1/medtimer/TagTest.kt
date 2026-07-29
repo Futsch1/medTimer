@@ -2,12 +2,14 @@ package com.futsch1.medtimer
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 private const val NEW_TAG = "New tag"
 
 private const val ANOTHER_TAG = "Another tag"
 
+@HiltAndroidTest
 class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

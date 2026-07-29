@@ -2,12 +2,14 @@ package com.futsch1.medtimer
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 const val TEST_MED_1 = "Test"
 const val TEST_MED_2 = "Test2"
 const val TEST_MED_3 = "A test"
 
+@HiltAndroidTest
 class MedicineHandlingTest : MedTimerTestBase() {
 
     @Test

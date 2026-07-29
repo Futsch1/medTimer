@@ -2,6 +2,7 @@ package com.futsch1.medtimer
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
@@ -9,6 +10,7 @@ private const val GINSENG = "Ginseng (200mg)"
 private const val SELEN_1 = "Selen (200 µg) (1)"
 private const val TEST_1_PILL = "Test (1 pill)"
 
+@HiltAndroidTest
 class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)

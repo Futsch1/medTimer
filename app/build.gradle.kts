@@ -24,7 +24,7 @@ android {
         @Suppress("DEPRECATION")
         resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.futsch1.medtimer.harness.MedTimerHiltTestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
@@ -183,11 +183,13 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil(libs.androidx.test.orchestrator)
 
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     kspTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
