@@ -99,6 +99,7 @@ class TagTest : MedTimerTestBase() {
         medicineEditor.addIntervalReminder("Amount2", 60)
 
         // First, deactivate all of Test
+        medicines.showList()
         tags.inFilter { toggle("Tag1") }
 
         menus.clickMedicinesOption(R.string.deactivate_all)

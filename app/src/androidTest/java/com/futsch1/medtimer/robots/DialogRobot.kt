@@ -4,12 +4,15 @@ import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.NoActivityResumedException
+import androidx.test.espresso.NoMatchingRootException
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.futsch1.medtimer.robots.DialogRobot.Companion.DIALOG_TIMEOUT
 import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matchers
 
@@ -42,9 +45,21 @@ class DialogRobot(private val ui: ComposeUi) {
      * back to the foreground; matching in the dialog root is what waits for that window.
      */
     fun awaitInput() {
+        pollUntil(DIALOG_FROM_NOTIFICATION_TIMEOUT) { inputShown() }
         onView(ViewMatchers.withId(android.R.id.input))
             .inRoot(RootMatchers.isDialog())
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    private fun inputShown(): Boolean = try {
+        onView(ViewMatchers.withId(android.R.id.input))
+            .inRoot(RootMatchers.isDialog())
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        true
+    } catch (_: NoMatchingRootException) {
+        false
+    } catch (_: NoMatchingViewException) {
+        false
     }
 
     fun assertInputContains(text: String) =
@@ -104,5 +119,8 @@ class DialogRobot(private val ui: ComposeUi) {
 
     private companion object {
         const val DIALOG_TIMEOUT = 1_000L
+
+        /** Longer: this dialog is built on a coroutine Espresso's sync does not track, unlike [DIALOG_TIMEOUT]. */
+        const val DIALOG_FROM_NOTIFICATION_TIMEOUT = 5_000L
     }
 }

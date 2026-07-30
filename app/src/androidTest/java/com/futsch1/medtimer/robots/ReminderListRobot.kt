@@ -50,7 +50,6 @@ class ReminderListRobot(private val settings: ReminderSettingsRobot) {
     fun duplicate(position: Int) {
         openSettings(position)
         settings.duplicate()
-        pressBack()
     }
 
     private fun openSettings(position: Int) =
