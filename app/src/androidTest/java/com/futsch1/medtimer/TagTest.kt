@@ -4,6 +4,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 private const val NEW_TAG = "New tag"
 
@@ -92,11 +93,11 @@ class TagTest : MedTimerTestBase() {
     fun activateAndOverviewVisibility() {
         medicines.create("Test")
         tags.inMedicineTags { add("Tag1") }
-        medicineEditor.addIntervalReminder("Amount1", 60)
+        medicineEditor.addIntervalReminder("Amount1", 1.hours)
 
         medicines.create("Else")
         tags.inMedicineTags { add("Tag2") }
-        medicineEditor.addIntervalReminder("Amount2", 60)
+        medicineEditor.addIntervalReminder("Amount2", 1.hours)
 
         // First, deactivate all of Test
         medicines.showList()

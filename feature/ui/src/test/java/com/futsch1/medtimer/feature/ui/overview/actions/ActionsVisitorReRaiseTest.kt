@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -57,6 +58,7 @@ class ActionsVisitorReRaiseTest {
     private val reminderEventCreator: ReminderEventCreator = mock()
     private val preferencesDataSource: PreferencesDataSource = mock()
     private val persistentDataDataSource: PersistentDataDataSource = mock()
+    private val timeAccess: TimeAccess = mock()
     private val commandBus: ReminderCommandBus = mock()
 
     private lateinit var activity: FragmentActivity
@@ -98,7 +100,7 @@ class ActionsVisitorReRaiseTest {
             processedTimestamp = Instant.ofEpochSecond(730 * 60),
             stockHandled = true,
         )
-        val pastReminderEvent = PastReminderEvent(preferencesDataSource, persistentDataDataSource, reminderEvent)
+        val pastReminderEvent = PastReminderEvent(preferencesDataSource, persistentDataDataSource, timeAccess, reminderEvent)
 
         actionsVisitor.startVisit(Button.RERAISE).use {
             actionsVisitor.visit(pastReminderEvent)

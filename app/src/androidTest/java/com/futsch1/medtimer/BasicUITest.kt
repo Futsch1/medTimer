@@ -9,6 +9,7 @@ import java.text.DateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.hours
 
 
 @HiltAndroidTest
@@ -129,7 +130,7 @@ class BasicUITest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun overviewFilters() {
         medicines.create("Test")
-        medicineEditor.addIntervalReminder("2", 1000)
+        medicineEditor.addIntervalReminder("2", 24.hours)
 
         navigation.toOverview()
         overview.assertEventContains(TEST_2)

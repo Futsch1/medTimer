@@ -8,12 +8,12 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.text.DateFormat
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
-import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 
 @HiltAndroidTest
@@ -90,7 +90,7 @@ class ReminderTest : MedTimerTestBase() {
         val nowTime = Calendar.getInstance()
 
         medicines.create("Test")
-        medicineEditor.addIntervalReminder("1", 180)
+        medicineEditor.addIntervalReminder("1", 180.minutes)
 
         reminders.inSettingsOf(0) {
             setIntervalStart(
@@ -130,22 +130,22 @@ class ReminderTest : MedTimerTestBase() {
 
         medicines.create("Test")
 
-        // Standard time based reminder (amount 1)
-        val reminder1Time = LocalTime.now().plusMinutes(40)
+        // Standard time based reminder (amount 1); leaves room for the linked reminder 30 minutes later
+        val reminder1Time = laterToday(40.minutes, headroom = 30.minutes)
         medicineEditor.addReminder("1", reminder1Time)
 
         // Linked reminder (amount 2) 30 minutes later
         reminders.addLinkedReminder(0, amount = "2", minutes = 30)
 
         // Interval reminder (amount 3) 2 hours from now
-        medicineEditor.addHourlyIntervalReminder("3", intervalHours = 2)
+        medicineEditor.addHourlyIntervalReminder("3", interval = 2.hours)
 
         // Windowed interval reminder (amount 4)
         medicineEditor.addWindowedIntervalReminder(
             "4",
-            windowStart = LocalTime.now().plusMinutes(5),
+            windowStart = laterToday(5.minutes),
             windowEnd = LocalTime.of(23, 59),
-            intervalHours = 3
+            interval = 3.hours
         )
 
         // Check calendar view not crashing
@@ -248,7 +248,7 @@ class ReminderTest : MedTimerTestBase() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         medicines.create("Test")
-        medicineEditor.addIntervalReminder("1", 10)
+        medicineEditor.addIntervalReminder("1", 10.minutes)
 
         navigation.toOverview()
 
@@ -321,14 +321,14 @@ class ReminderTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun weekendMode() {
-        val windowStart = LocalTime.now().truncatedTo(ChronoUnit.MINUTES)
+        val windowStart = frozenNowCapped(headroom = 30.minutes)
         val reminderTime = windowStart.plusMinutes(15)
         val windowEnd = windowStart.plusMinutes(30)
 
         settings.inSection(R.string.weekend_mode) {
             preferences.click(R.string.active)
             preferences.click(R.string.days_string)
-            dialogs.clickItem(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()))
+            dialogs.clickItem(frozenToday().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()))
             dialogs.confirm()
             preferences.click(R.string.weekend_start_time)
             pickers.pickTime(windowStart)
@@ -349,7 +349,7 @@ class ReminderTest : MedTimerTestBase() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
         medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 60)
+        medicineEditor.addIntervalReminder("1", 60.minutes)
 
         navigation.toOverview()
         overview.assertEventCountAtLeast(2)

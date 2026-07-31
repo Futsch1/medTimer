@@ -9,6 +9,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.core.ui.R
 import java.time.LocalTime
+import kotlin.time.Duration
 
 /**
  * The medicine editor: its name, its reminders and its stock settings.
@@ -41,21 +42,21 @@ class MedicineEditorRobot(
         create()
     }
 
-    fun addIntervalReminder(amount: String, intervalMinutes: Int) {
+    fun addIntervalReminder(amount: String, interval: Duration) {
         openCard(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
         writeTo(AMOUNT, amount)
 
         clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalMinutes)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, intervalMinutes.toString())
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, interval.inWholeMinutes.toString())
 
         closeKeyboard()
         create()
     }
 
-    fun addHourlyIntervalReminder(amount: String, intervalHours: Int) {
+    fun addHourlyIntervalReminder(amount: String, interval: Duration) {
         openCard(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
         writeTo(AMOUNT, amount)
-        setIntervalHours(intervalHours)
+        setIntervalHours(interval)
         create()
     }
 
@@ -64,7 +65,7 @@ class MedicineEditorRobot(
         amount: String,
         windowStart: LocalTime,
         windowEnd: LocalTime,
-        intervalHours: Int,
+        interval: Duration,
     ) {
         openCard(com.futsch1.medtimer.feature.ui.R.id.windowedIntervalCard)
         writeTo(AMOUNT, amount)
@@ -75,7 +76,7 @@ class MedicineEditorRobot(
         clickOn(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyEndTime)
         pickers.pickTime(windowEnd)
 
-        setIntervalHours(intervalHours)
+        setIntervalHours(interval)
         create()
     }
 
@@ -93,9 +94,14 @@ class MedicineEditorRobot(
         create()
     }
 
-    fun addExpirationReminder(daysBefore: String) {
+    /** An expiration reminder that fires at [time] each day; defaults to the dialog's own default time. */
+    fun addExpirationReminder(daysBefore: String, time: LocalTime? = null) {
         openCard(com.futsch1.medtimer.feature.ui.R.id.expirationDateReminderCard)
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editExpirationDaysBefore, daysBefore)
+        if (time != null) {
+            clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
+            pickers.pickTime(time)
+        }
         create()
     }
 
@@ -140,9 +146,9 @@ class MedicineEditorRobot(
         clickOn(cardId)
     }
 
-    private fun setIntervalHours(hours: Int) {
+    private fun setIntervalHours(interval: Duration) {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalHours)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, hours.toString())
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, interval.inWholeHours.toString())
         closeKeyboard()
     }
 

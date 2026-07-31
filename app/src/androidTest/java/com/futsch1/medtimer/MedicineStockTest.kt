@@ -9,6 +9,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.time.LocalDate
 import java.util.Calendar
+import kotlin.time.Duration.Companion.minutes
 
 @HiltAndroidTest
 class MedicineStockTest : MedTimerTestBase() {
@@ -24,7 +25,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = amount(10.5), unit = "pills", refillSize = amount(10.8))
 
         // Interval reminder (amount 3.5) 10 minutes from now
-        medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", 10)
+        medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", 10.minutes)
         medicineEditor.addStockReminder(threshold = "4")
 
         navigation.toOverview()
@@ -85,7 +86,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicineEditor.setStock(amount = "120", unit = "pills", refillSize = "100")
 
-        medicineEditor.addIntervalReminder("So many pills - 130", 10)
+        medicineEditor.addIntervalReminder("So many pills - 130", 10.minutes)
         medicineEditor.addStockReminder(threshold = "0")
 
         navigation.toOverview()
@@ -191,7 +192,7 @@ class MedicineStockTest : MedTimerTestBase() {
             preferences.click(R.string.clear_dates)
         }
 
-        medicineEditor.addExpirationReminder(daysBefore = "10")
+        medicineEditor.addExpirationReminder(daysBefore = "10", time = earlierToday())
 
         navigation.toOverview()
 

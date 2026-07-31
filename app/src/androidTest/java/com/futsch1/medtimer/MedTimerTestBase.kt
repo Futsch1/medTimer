@@ -19,8 +19,12 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.junit.runners.model.Statement
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.toJavaDuration
 
 /**
  * The harness, the robots and the values a test needs to build its expectations.
@@ -65,7 +69,6 @@ abstract class MedTimerTestBase {
     protected val notifications get() = robots.notifications
 
     protected val reminders get() = robots.reminders
-    protected val reminderSettings get() = robots.reminderSettings
     protected val medicineEditor get() = robots.medicineEditor
     protected val medicineSettings get() = robots.medicineSettings
     protected val eventEditor get() = robots.eventEditor
@@ -88,15 +91,37 @@ abstract class MedTimerTestBase {
     /** The frozen instant the app itself sees for the duration of this test, as a time of day. */
     private fun frozenNow(): LocalTime = timeAccess.now().atZone(timeAccess.systemZone()).toLocalTime()
 
+    /** The frozen date the app itself sees for the duration of this test. */
+    protected fun frozenToday(): LocalDate = timeAccess.localDate()
+
     /** Close enough that the scheduler raises it while the test waits, far enough not to have fired yet. */
     protected fun aboutToFire(): LocalTime = frozenNow().plusMinutes(10)
 
-    /** A time still ahead of now, so a reminder created with it stays scheduled for today. */
-    protected fun laterToday(): LocalTime {
+    /**
+     * The frozen "now", truncated to minutes and capped so that [headroom] worth of minutes
+     * after it still stays within today. For tests that need a start-of-window time (e.g. a
+     * weekend-mode window) rather than an offset further into the future - built on the harness's
+     * frozen clock so a run close to real midnight can't wrap the window past midnight.
+     */
+    protected fun frozenNowCapped(headroom: Duration = Duration.ZERO): LocalTime {
+        val now = frozenNow().truncatedTo(ChronoUnit.MINUTES)
+        val cap = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).minus(headroom.toJavaDuration())
+        return if (now <= cap) now else cap
+    }
+
+    /**
+     * A time still ahead of now, so a reminder created with it stays scheduled for today.
+     * Built on the harness's frozen clock, not the real wall clock, so a run close to real
+     * midnight can't wrap [offset] past midnight into a time that reads as earlier than now.
+     *
+     * [headroom] reserves extra room before midnight for anything chained after this time
+     * (e.g. a linked reminder some further offset later), so that chained time doesn't wrap either.
+     */
+    protected fun laterToday(offset: Duration = 2.hours, headroom: Duration = Duration.ZERO): LocalTime {
         val now = frozenNow()
-        val later = now.plusHours(2)
-        // plusHours wraps at midnight, which would put the reminder before now instead of after it.
-        return if (later > now) later else LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES)
+        val later = now.plus(offset.toJavaDuration())
+        val cap = LocalTime.MAX.truncatedTo(ChronoUnit.MINUTES).minus(headroom.toJavaDuration())
+        return if (later > now && later <= cap) later else cap
     }
 
     /** A time already behind now, so a reminder created with it counts as today's dose having passed. */

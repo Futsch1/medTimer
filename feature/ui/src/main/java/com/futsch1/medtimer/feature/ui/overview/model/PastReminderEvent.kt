@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -7,11 +8,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import java.time.Duration
-import java.time.Instant
 
 class PastReminderEvent @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
     val persistentDataDataSource: PersistentDataDataSource,
+    private val timeAccess: TimeAccess,
     @Assisted val reminderEvent: ReminderEvent
 ) :
     OverviewEvent(preferencesDataSource) {
@@ -69,7 +70,7 @@ class PastReminderEvent @AssistedInject constructor(
     private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
         return when (reminderEvent.status) {
             ReminderEvent.ReminderStatus.RAISED -> {
-                if (reminderEvent.remindedTimestamp <= Instant.now()) {
+                if (reminderEvent.remindedTimestamp <= timeAccess.now()) {
                     if (isLocationSnooze(reminderEvent)) {
                         OverviewState.LOCATION
                     } else {

@@ -116,6 +116,7 @@ class UiScope internal constructor(
     fun allTexts(itemMatcher: SemanticsMatcher, textMatcher: SemanticsMatcher): List<String> {
         val texts = linkedSetOf<String>()
         var index = 0
+        scrollToIndex(0)
         repeat(MAX_SCROLLS) {
             texts += textsUnder(textMatcher)
             val next = index + count(itemMatcher) - 1

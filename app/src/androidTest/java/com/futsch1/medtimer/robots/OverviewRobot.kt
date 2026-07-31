@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasContentDescription
@@ -55,7 +57,10 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     fun assertEventState(index: Int, @StringRes stateRes: Int) {
         list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
-        stateButton(index).assertContentDescriptionEquals(ui.getString(stateRes))
+
+        val expected = ui.getString(stateRes)
+        list.await { stateDescription(index) == expected }
+        stateButton(index).assertContentDescriptionEquals(expected)
     }
 
     fun assertEventTextContains(index: Int, substring: String) {
@@ -108,9 +113,6 @@ class OverviewRobot(private val ui: ComposeUi) {
         screen.node(hasTestTag(OverviewTestTags.day(date))).assertIsSelected()
     }
 
-    /** [date] must be in the week currently shown; this does not page the strip. */
-    fun clickDay(date: LocalDate) = screen.click(hasTestTag(OverviewTestTags.day(date)))
-
     /**
      * Selects [date] wherever it sits relative to the week on screen:
      * which days the strip shows depend on the first day of the week and on what today happens to be,
@@ -140,11 +142,25 @@ class OverviewRobot(private val ui: ComposeUi) {
         assertTrue(index >= 0, "No Overview event contains '$substring': ${eventTexts()}")
         stateButton(index).performClick()
         clickAction(actionRes)
-        stateButton(index).assertContentDescriptionEquals(ui.getString(actionRes))
+
+        val expected = ui.getString(actionRes)
+        list.await { currentIndexOf(substring)?.let { stateDescription(it) } == expected }
+        val settledIndex = currentIndexOf(substring)
+        assertTrue(settledIndex != null, "No Overview event contains '$substring' after acting on it: ${eventTexts()}")
+        stateButton(settledIndex).assertContentDescriptionEquals(expected)
     }
+
+    private fun currentIndexOf(substring: String): Int? =
+        eventTexts().indexOfFirst { it.contains(substring) }.takeIf { it >= 0 }
 
     /** Indices are visual, matching the event texts; the semantics tree is not necessarily in that order. */
     private fun stateButton(index: Int) = list.nodeAt(EVENT_STATE_BUTTON, index)
+
+    private fun stateDescription(index: Int): String? =
+        runCatching {
+            stateButton(index).fetchSemanticsNode().config.getOrNull(SemanticsProperties.ContentDescription)
+                ?.firstOrNull()
+        }.getOrNull()
 
     private fun eventCard(index: Int) = list.nodeAt(EVENT_CARD, index)
 

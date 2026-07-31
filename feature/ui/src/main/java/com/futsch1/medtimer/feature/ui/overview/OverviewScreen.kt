@@ -49,7 +49,6 @@ import kotlinx.coroutines.Dispatchers
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
@@ -111,10 +110,7 @@ fun OverviewScreen(
     LaunchedEffect(events) {
         if (scrolledToNow || events.isEmpty()) return@LaunchedEffect
         scrolledToNow = true
-        val now = LocalTime.now()
-        val index = events.indexOfFirst {
-            Instant.ofEpochSecond(it.timestamp).atZone(ZoneId.systemDefault()).toLocalTime() >= now
-        }
+        val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
         if (index >= 0) listState.scrollToItem(index)
     }
 

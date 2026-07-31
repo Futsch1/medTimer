@@ -92,6 +92,13 @@ class MedTimerTestHarness(testClassName: String) : TestRule {
             device.grantAppPermission("SCHEDULE_EXACT_ALARM")
         }
 
+        // Pre-confirms the immersive-mode panel so it can't steal window focus from the alarm screen.
+        try {
+            device.executeShellCommand("settings put secure immersive_mode_confirmations confirmed")
+        } catch (_: IOException) {
+            // Intentionally empty
+        }
+
         device.pressHome()
     }
 

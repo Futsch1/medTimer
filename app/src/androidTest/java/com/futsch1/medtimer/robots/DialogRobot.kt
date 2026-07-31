@@ -22,10 +22,10 @@ import org.hamcrest.Matchers
  */
 class DialogRobot(private val ui: ComposeUi) {
 
-    fun confirm(retryIfStillVisible: Boolean = true) {
+    fun confirm(retryIfStillVisible: Boolean = true, expectedInput: String? = null) {
         pollUntil(DIALOG_TIMEOUT) { positiveButtonShown() }
         confirmIfVisible()
-        if (retryIfStillVisible) {
+        if (retryIfStillVisible && (expectedInput == null || inputShows(expectedInput))) {
             confirmIfVisible()
         }
     }
@@ -37,7 +37,7 @@ class DialogRobot(private val ui: ComposeUi) {
 
     fun enterTextAndConfirm(text: String) {
         enterText(text)
-        confirm()
+        confirm(expectedInput = text)
     }
 
     /**
@@ -77,9 +77,6 @@ class DialogRobot(private val ui: ComposeUi) {
 
     fun clickItem(@StringRes textRes: Int) = clickItem(ui.getString(textRes))
 
-    fun assertItemDisplayed(text: String) =
-        item(text).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-
     fun assertItemChecked(text: String) =
         item(text).check(ViewAssertions.matches(ViewMatchers.isChecked()))
 
@@ -115,6 +112,16 @@ class DialogRobot(private val ui: ComposeUi) {
         if (positiveButtonShown()) {
             BaristaDialogInteractions.clickDialogPositiveButton()
         }
+    }
+
+    private fun inputShows(text: String): Boolean = try {
+        onView(ViewMatchers.withId(android.R.id.input))
+            .check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString(text))))
+        true
+    } catch (_: NoMatchingViewException) {
+        false
+    } catch (_: AssertionError) {
+        false
     }
 
     private companion object {
