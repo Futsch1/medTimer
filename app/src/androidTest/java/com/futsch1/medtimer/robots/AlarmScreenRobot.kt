@@ -19,6 +19,8 @@ class AlarmScreenRobot {
 
     private val device: UiDevice get() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
+    private var lastClickError: Throwable? = null
+
     /** The alarm only proves itself by waking a sleeping device, so the test drives the screen too. */
     fun wakeDevice() = device.wakeUp()
 
@@ -31,21 +33,23 @@ class AlarmScreenRobot {
     /** Taps Taken until the alarm closes: it can resume after the first tap lands. */
     fun take(timeoutMillis: Long, message: String) {
         awaitShown(timeoutMillis, message)
-        assertTrue(
-            pollUntil(CLOSE_TIMEOUT) {
-                clickTaken()
-                alarmActivity() == null
-            },
-            "Alarm screen did not close"
-        )
+        lastClickError = null
+        val closed = pollUntil(CLOSE_TIMEOUT) {
+            clickTaken()
+            alarmActivity() == null
+        }
+        assertTrue(closed, "Alarm screen did not close" + (lastClickError?.let { ": $it" } ?: ""))
     }
 
     private fun clickTaken() {
         val activity = alarmActivity() ?: return
-        onView(withId(com.futsch1.medtimer.feature.reminders.R.id.takenButton))
-            .inRoot(RootMatchers.withDecorView(`is`(activity.window.decorView)))
-            .withFailureHandler { _, _ -> }
-            .perform(click())
+        try {
+            onView(withId(com.futsch1.medtimer.feature.reminders.R.id.takenButton))
+                .inRoot(RootMatchers.withDecorView(`is`(activity.window.decorView)))
+                .perform(click())
+        } catch (e: Throwable) {
+            lastClickError = e
+        }
     }
 
     private fun alarmActivity(): Activity? {

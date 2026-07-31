@@ -25,6 +25,16 @@ class ReminderListRobot(private val settings: ReminderSettingsRobot) {
         ).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
+    fun assertContainsTime(text: String) {
+        onView(
+            Matchers.allOf(
+                ViewMatchers.withId(REMINDER_TIME),
+                ViewMatchers.withSubstring(text),
+                ViewMatchers.isDescendantOfA(ViewMatchers.withId(REMINDER_LIST)),
+            )
+        ).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
     /** Opens the advanced settings of the reminder at [position], runs [block] and comes back out. */
     fun inSettingsOf(position: Int, block: ReminderSettingsRobot.() -> Unit) {
         openSettings(position)
@@ -57,5 +67,6 @@ class ReminderListRobot(private val settings: ReminderSettingsRobot) {
 
     private companion object {
         const val REMINDER_LIST = com.futsch1.medtimer.feature.ui.R.id.reminderList
+        const val REMINDER_TIME = com.futsch1.medtimer.feature.ui.R.id.editReminderTime
     }
 }

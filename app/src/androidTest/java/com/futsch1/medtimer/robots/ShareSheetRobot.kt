@@ -11,9 +11,10 @@ class ShareSheetRobot {
 
     fun assertShownAndDismiss() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        assertTrue(device.wait(Until.hasObject(By.textContains("Sharing")), TIMEOUT), "Share sheet did not open")
+        val appPackage = InstrumentationRegistry.getInstrumentation().targetContext.packageName
+        assertTrue(device.wait(Until.gone(By.pkg(appPackage).depth(0)), TIMEOUT), "Share sheet did not open")
         device.pressBack()
-        device.waitForIdle()
+        device.wait(Until.hasObject(By.pkg(appPackage).depth(0)), TIMEOUT)
     }
 
     private companion object {
