@@ -36,6 +36,6 @@ class MedicineNotesRobot(private val menus: MenuRobot) {
     private fun cancel() = clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
 
     private companion object {
-        const val NOTES = com.futsch1.medtimer.feature.ui.R.id.notes
+        val NOTES = com.futsch1.medtimer.feature.ui.R.id.notes
     }
 }

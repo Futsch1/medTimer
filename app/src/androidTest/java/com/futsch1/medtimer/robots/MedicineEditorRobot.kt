@@ -155,6 +155,6 @@ class MedicineEditorRobot(
     private fun create() = clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
 
     private companion object {
-        const val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editAmount
+        val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editAmount
     }
 }

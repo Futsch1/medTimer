@@ -66,7 +66,7 @@ class ReminderListRobot(private val settings: ReminderSettingsRobot) {
         clickListItemChild(REMINDER_LIST, position, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
 
     private companion object {
-        const val REMINDER_LIST = com.futsch1.medtimer.feature.ui.R.id.reminderList
-        const val REMINDER_TIME = com.futsch1.medtimer.feature.ui.R.id.editReminderTime
+        val REMINDER_LIST = com.futsch1.medtimer.feature.ui.R.id.reminderList
+        val REMINDER_TIME = com.futsch1.medtimer.feature.ui.R.id.editReminderTime
     }
 }

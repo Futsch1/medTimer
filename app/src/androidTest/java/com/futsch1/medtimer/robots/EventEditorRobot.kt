@@ -54,12 +54,12 @@ class EventEditorRobot(private val overview: OverviewRobot) {
     }
 
     private companion object {
-        const val NAME = com.futsch1.medtimer.feature.ui.R.id.editEventName
-        const val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editEventAmount
-        const val NOTES = com.futsch1.medtimer.feature.ui.R.id.editEventNotes
-        const val REMINDED_TIME = com.futsch1.medtimer.feature.ui.R.id.editEventRemindedTimestamp
-        const val REMINDED_DATE = com.futsch1.medtimer.feature.ui.R.id.editEventRemindedDate
-        const val TAKEN_TIME = com.futsch1.medtimer.feature.ui.R.id.editEventTakenTimestamp
-        const val TAKEN_DATE = com.futsch1.medtimer.feature.ui.R.id.editEventTakenDate
+        val NAME = com.futsch1.medtimer.feature.ui.R.id.editEventName
+        val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editEventAmount
+        val NOTES = com.futsch1.medtimer.feature.ui.R.id.editEventNotes
+        val REMINDED_TIME = com.futsch1.medtimer.feature.ui.R.id.editEventRemindedTimestamp
+        val REMINDED_DATE = com.futsch1.medtimer.feature.ui.R.id.editEventRemindedDate
+        val TAKEN_TIME = com.futsch1.medtimer.feature.ui.R.id.editEventTakenTimestamp
+        val TAKEN_DATE = com.futsch1.medtimer.feature.ui.R.id.editEventTakenDate
     }
 }
