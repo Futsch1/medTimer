@@ -150,35 +150,35 @@ private fun previewMedicineIcon(): ImageBitmap? {
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemPreview() {
-    OverviewEventItemPreview(color = null, isSelected = false)
+    OverviewEventItemPreviewBase(color = null, isSelected = false)
 }
 
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemVividColorPreview() {
-    OverviewEventItemPreview(color = 0xFF00FF00.toInt(), isSelected = false)
+    OverviewEventItemPreviewBase(color = 0xFF00FF00.toInt(), isSelected = false)
 }
 
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemVividBlueColorPreview() {
-    OverviewEventItemPreview(color = 0xFF0000FF.toInt(), isSelected = false)
+    OverviewEventItemPreviewBase(color = 0xFF0000FF.toInt(), isSelected = false)
 }
 
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemColorWithoutIconPreview() {
-    OverviewEventItemPreview(color = 0xFFFF0000.toInt(), isSelected = false, withIcon = false)
+    OverviewEventItemPreviewBase(color = 0xFFFF0000.toInt(), isSelected = false, withIcon = false)
 }
 
 @MedTimerPreview
 @Composable
 private fun OverviewEventItemSelectedPreview() {
-    OverviewEventItemPreview(color = 0xFFFF00FF.toInt(), isSelected = true)
+    OverviewEventItemPreviewBase(color = 0xFFFF00FF.toInt(), isSelected = true)
 }
 
 @Composable
-private fun OverviewEventItemPreview(color: Int?, isSelected: Boolean, withIcon: Boolean = true) {
+private fun OverviewEventItemPreviewBase(color: Int?, isSelected: Boolean, withIcon: Boolean = true) {
     MedTimerTheme {
         Surface {
             OverviewEventItem(

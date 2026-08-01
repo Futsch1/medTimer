@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,8 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberOverscrollEffect
@@ -20,13 +21,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -65,11 +69,11 @@ private val EVENT_LIST_MAX_WIDTH = 540.dp
 /** Trailing blank item so the FAB, which floats over the list's bottom-end corner, doesn't cover the last event. */
 private val FAB_CLEARANCE_HEIGHT = 64.dp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OverviewEventList(
     events: ImmutableList<OverviewEvent>,
     selection: SelectionListController<OverviewEvent>,
-    listState: LazyListState,
     onEventClick: (OverviewEvent) -> Unit,
     onEnterSelectionMode: (OverviewEvent) -> Unit,
     onAction: (Button, OverviewEvent) -> Unit,
@@ -79,6 +83,16 @@ fun OverviewEventList(
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
     var listTop by remember { mutableFloatStateOf(0f) }
     val overscrollEffect = rememberOverscrollEffect()
+    // Keeps rows just off-screen composed so their rail anchors survive scroll-driven disposal.
+    val listState = rememberLazyListState(cacheWindow = LazyLayoutCacheWindow(ahead = 200.dp, behind = 200.dp))
+    var scrolledToNow by remember { mutableStateOf(false) }
+
+    LaunchedEffect(events) {
+        if (scrolledToNow || events.isEmpty()) return@LaunchedEffect
+        scrolledToNow = true
+        val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
+        if (index >= 0) listState.scrollToItem(index)
+    }
 
     LazyColumn(
         state = listState,
@@ -92,6 +106,7 @@ fun OverviewEventList(
             .padding(horizontal = 4.dp)
             .onGloballyPositioned { listTop = it.positionInRoot().y }
             .overscroll(overscrollEffect)
+            .clipToBounds()
             .drawBehind { drawRailPills(railAnchors.values, listTop, railColor) }
             .testTag(OverviewTestTags.EVENT_LIST),
     ) {
@@ -221,7 +236,6 @@ private fun OverviewEventListPreview() {
             OverviewEventList(
                 events = rememberEventListPreviewEvents(),
                 selection = selection,
-                listState = rememberLazyListState(),
                 onEventClick = {},
                 onEnterSelectionMode = {},
                 onAction = { _, _ -> },

@@ -11,17 +11,12 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -104,15 +99,6 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val events = state.events
-    val listState = rememberLazyListState()
-    var scrolledToNow by remember { mutableStateOf(false) }
-
-    LaunchedEffect(events) {
-        if (scrolledToNow || events.isEmpty()) return@LaunchedEffect
-        scrolledToNow = true
-        val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
-        if (index >= 0) listState.scrollToItem(index)
-    }
 
     BackHandler(enabled = selection.isInSelectionMode) { selection.exitSelectionMode() }
 
@@ -185,7 +171,6 @@ fun OverviewScreen(
             OverviewEventList(
                 events = events,
                 selection = selection,
-                listState = listState,
                 onEventClick = onEventClick,
                 onEnterSelectionMode = onEnterSelectionMode,
                 onAction = { button, event -> onAction(button, listOf(event)) },
