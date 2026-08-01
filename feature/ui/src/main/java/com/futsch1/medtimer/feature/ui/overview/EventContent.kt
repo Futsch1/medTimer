@@ -108,7 +108,7 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                 }
             }
         }
-        Row {
+        FlowRow {
             Crossfade(content.medicineName, animationSpec = fadeSpec) { Text(it, fontWeight = FontWeight.Bold) }
             OptionalDetail(content.dose.takeIf { it.isNotEmpty() }) { Text(" ($it)") }
         }
