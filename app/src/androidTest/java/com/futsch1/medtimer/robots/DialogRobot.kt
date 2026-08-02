@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.futsch1.medtimer.robots.DialogRobot.Companion.DIALOG_TIMEOUT
+import com.futsch1.medtimer.utilities.awaitView
 import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matchers
 
@@ -43,20 +44,11 @@ class DialogRobot(private val ui: ComposeUi) {
      * back to the foreground; matching in the dialog root is what waits for that window.
      */
     fun awaitInput() {
-        pollUntil(DIALOG_FROM_NOTIFICATION_TIMEOUT) { inputShown() }
-        onView(ViewMatchers.withId(android.R.id.input))
-            .inRoot(RootMatchers.isDialog())
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-    }
-
-    private fun inputShown(): Boolean = try {
-        onView(ViewMatchers.withId(android.R.id.input))
-            .inRoot(RootMatchers.isDialog())
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        true
-    } catch (e: RuntimeException) {
-        if (e !is EspressoException) throw e
-        false
+        awaitView(
+            Matchers.allOf(ViewMatchers.withId(android.R.id.input), ViewMatchers.isDisplayed()),
+            DIALOG_FROM_NOTIFICATION_TIMEOUT,
+            inRoot = RootMatchers.isDialog()
+        )
     }
 
     fun assertInputContains(text: String) =
