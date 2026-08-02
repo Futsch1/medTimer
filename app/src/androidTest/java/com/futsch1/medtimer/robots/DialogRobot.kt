@@ -77,6 +77,12 @@ class DialogRobot(private val ui: ComposeUi) {
 
     fun clickItem(@StringRes textRes: Int) = clickItem(ui.getString(textRes))
 
+    fun selectItem(text: String) {
+        if (!isItemChecked(text)) {
+            clickItem(text)
+        }
+    }
+
     fun assertItemChecked(text: String) =
         item(text).check(ViewAssertions.matches(ViewMatchers.isChecked()))
 
@@ -86,6 +92,12 @@ class DialogRobot(private val ui: ComposeUi) {
         item(text).check(ViewAssertions.matches(ViewMatchers.isNotChecked()))
 
     fun assertItemNotChecked(@StringRes textRes: Int) = assertItemNotChecked(ui.getString(textRes))
+
+    private fun isItemChecked(text: String): Boolean {
+        var checked = false
+        item(text).check { view, _ -> checked = ViewMatchers.isChecked().matches(view) }
+        return checked
+    }
 
     private fun item(text: String) = onView(
         Matchers.allOf(

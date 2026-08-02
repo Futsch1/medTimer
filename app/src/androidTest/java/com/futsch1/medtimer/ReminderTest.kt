@@ -328,7 +328,7 @@ class ReminderTest : MedTimerTestBase() {
         settings.inSection(R.string.weekend_mode) {
             preferences.click(R.string.active)
             preferences.click(R.string.days_string)
-            dialogs.clickItem(frozenToday().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()))
+            dialogs.selectItem(frozenToday().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()))
             dialogs.confirm()
             preferences.click(R.string.weekend_start_time)
             pickers.pickTime(windowStart)
