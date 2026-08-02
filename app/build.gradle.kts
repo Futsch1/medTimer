@@ -57,6 +57,9 @@ android {
             enableAndroidTestCoverage = true
         }
     }
+    testCoverage {
+        jacocoVersion = "0.8.15"
+    }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_21
