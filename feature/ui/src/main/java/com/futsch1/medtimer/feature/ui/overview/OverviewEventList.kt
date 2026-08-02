@@ -69,6 +69,9 @@ private val EVENT_LIST_MAX_WIDTH = 540.dp
 /** Trailing blank item so the FAB, which floats over the list's bottom-end corner, doesn't cover the last event. */
 private val FAB_CLEARANCE_HEIGHT = 64.dp
 
+/** Test seam: disable cache window to fix stale semantics position in row-order tests */
+var overviewEventListCacheWindowEnabled = true
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OverviewEventList(
@@ -83,8 +86,11 @@ fun OverviewEventList(
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
     var listTop by remember { mutableFloatStateOf(0f) }
     val overscrollEffect = rememberOverscrollEffect()
-    // Keeps rows just off-screen composed so their rail anchors survive scroll-driven disposal.
-    val listState = rememberLazyListState(cacheWindow = LazyLayoutCacheWindow(ahead = 200.dp, behind = 200.dp))
+    val listState = if (overviewEventListCacheWindowEnabled) {
+        rememberLazyListState(cacheWindow = LazyLayoutCacheWindow(ahead = 200.dp, behind = 200.dp))
+    } else {
+        rememberLazyListState()
+    }
     var scrolledToNow by remember { mutableStateOf(false) }
 
     LaunchedEffect(events) {
