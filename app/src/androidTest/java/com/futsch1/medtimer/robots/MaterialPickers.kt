@@ -2,12 +2,15 @@ package com.futsch1.medtimer.robots
 
 import android.text.format.DateFormat
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.EspressoException
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
+import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
 import java.time.LocalTime
@@ -29,9 +32,19 @@ class MaterialPickers {
 
     fun pickDate(date: Date) {
         clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
+        pollUntil { textInputDateShown() }
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, inputFormat.format(date))
         closeKeyboard()
         clickOn(com.google.android.material.R.id.confirm_button)
+    }
+
+    private fun textInputDateShown(): Boolean = try {
+        onView(ViewMatchers.withId(com.google.android.material.R.id.mtrl_picker_text_input_date))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        true
+    } catch (e: RuntimeException) {
+        if (e !is EspressoException) throw e
+        false
     }
 
     private fun enterTime(hour: Int, minute: Int, isDuration: Boolean) {
