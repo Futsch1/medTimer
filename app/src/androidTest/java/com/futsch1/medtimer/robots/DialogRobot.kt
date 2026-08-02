@@ -3,9 +3,7 @@ package com.futsch1.medtimer.robots
 import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.NoActivityResumedException
-import androidx.test.espresso.NoMatchingRootException
-import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.EspressoException
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
@@ -56,9 +54,8 @@ class DialogRobot(private val ui: ComposeUi) {
             .inRoot(RootMatchers.isDialog())
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         true
-    } catch (_: NoMatchingRootException) {
-        false
-    } catch (_: NoMatchingViewException) {
+    } catch (e: RuntimeException) {
+        if (e !is EspressoException) throw e
         false
     }
 
@@ -114,8 +111,8 @@ class DialogRobot(private val ui: ComposeUi) {
         var shown = false
         try {
             onView(ViewMatchers.withId(android.R.id.button1)).check { view, _ -> shown = view?.isShown == true }
-        } catch (_: NoActivityResumedException) {
-            // ignore
+        } catch (e: RuntimeException) {
+            if (e !is EspressoException) throw e
         }
         return shown
     }
@@ -130,7 +127,8 @@ class DialogRobot(private val ui: ComposeUi) {
         onView(ViewMatchers.withId(android.R.id.input))
             .check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString(text))))
         true
-    } catch (_: NoMatchingViewException) {
+    } catch (e: RuntimeException) {
+        if (e !is EspressoException) throw e
         false
     } catch (_: AssertionError) {
         false
