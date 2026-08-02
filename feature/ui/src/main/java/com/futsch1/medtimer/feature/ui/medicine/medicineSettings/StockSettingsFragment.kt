@@ -149,15 +149,9 @@ class StockSettingsFragment : MedicinePreferences(
                     withContext(mainDispatcher) {
                         findPreference<EditTextPreference>("stock_run_out_date")?.summary = summary
 
-                        if (runOutDate == null) {
-                            findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = false
-                            findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = false
-                        } else {
-                            if (runOutDate != LocalDate.MAX) {
-                                findPreference<Preference>("stock_run_out_to_calendar")?.isVisible = true
-                            }
-                            findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = true
-                        }
+                        findPreference<Preference>("stock_run_out_to_calendar")?.isVisible =
+                            runOutDate != null && runOutDate != LocalDate.MAX
+                        findPreference<Preference>("create_out_of_stock_reminder")?.isVisible = runOutDate != null
                     }
                 }
         }
@@ -165,7 +159,7 @@ class StockSettingsFragment : MedicinePreferences(
 
     private fun addToCalendar() {
         val date = simulatedRemindersRepository.stockRunOutDates.value[dataStore.modelData.id]
-        if (date != null) {
+        if (date != null && date != LocalDate.MAX) {
             val intent =
                 createCalendarEventIntent(
                     "💊 " + context?.getString(com.futsch1.medtimer.core.ui.R.string.out_of_stock_notification_title) + " - " + dataStore.modelData.name,
