@@ -14,7 +14,7 @@ import androidx.test.espresso.util.TreeIterables
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeoutException
 
-const val POLL_INTERVAL = 100L
+private const val POLL_INTERVAL = 100L
 
 /**
  * Waits for a view matching [matcher] to appear, then returns a [ViewInteraction] for it.
