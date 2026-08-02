@@ -63,7 +63,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ inputs.api-level }}-${{ env.EMULATOR_TARGET }}-${{ env.EMULATOR_ARCH }}-${{ inputs.profile }}
+          key: avd-${{ inputs.api-level }}-${{ env.EMULATOR_TARGET }}-${{ env.EMULATOR_ARCH }}-${{ inputs.profile }}-bust
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -77,6 +77,8 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           emulator-boot-timeout: 900
+          ram-size: 4096M
+          cores: 4
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run device tests
@@ -90,6 +92,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           emulator-boot-timeout: 900
+          ram-size: 4096M
+          cores: 4
           script: |
             ./gradlew packageFullDebug packageFullDebugUnitTest
             adb shell input keyevent 3
