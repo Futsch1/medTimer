@@ -6,6 +6,8 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.window.core.layout.WindowSizeClass.Companion.BREAKPOINTS_V1
 import androidx.window.core.layout.computeWindowSizeClass
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NavSuiteTypeTest {
@@ -37,5 +39,15 @@ class NavSuiteTypeTest {
     @Test
     fun `600dp width crosses into medium`() {
         assertEquals(NavigationSuiteType.NavigationRail, navSuiteType(infoFor(600f, 900f)))
+    }
+
+    @Test
+    fun `the navigation bar consumes the bottom inset for the content`() {
+        assertFalse(consumesBottomInset(NavigationSuiteType.NavigationBar))
+    }
+
+    @Test
+    fun `the navigation rail leaves the bottom inset to the content`() {
+        assertTrue(consumesBottomInset(NavigationSuiteType.NavigationRail))
     }
 }

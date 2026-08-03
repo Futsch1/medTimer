@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Inflated rather than constructed in the AndroidView factory so the ThemeOverlay below is applied
+  via the inflater's ContextThemeWrapper; constructing a Toolbar in code silently drops it.
+-->
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
