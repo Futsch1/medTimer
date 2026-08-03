@@ -67,11 +67,9 @@ class PreferencesDataSource @Inject constructor(
 
     private fun getHomeLocation(): HomeLocation? {
         val json = sharedPreferences.getString(HOME_LOCATION, null) ?: return null
-        return try {
+        return runCatching {
             gson.fromJson(json, HomeLocation::class.java)
-        } catch (_: Exception) {
-            null
-        }
+        }.getOrNull()
     }
 
     fun clearHomeLocation() {
