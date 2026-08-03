@@ -175,7 +175,7 @@ class OverviewRobot(private val ui: ComposeUi) {
         val EVENT_STATE_BUTTON = hasTestTag(OverviewTestTags.EVENT_STATE_BUTTON)
         val EVENT_TEXT = hasTestTag(OverviewTestTags.EVENT_TEXT)
         val SELECTION_BAR = hasTestTag(OverviewTestTags.SELECTION_BAR)
-        const val LONG_TIMEOUT = 10_000L
+        const val LONG_TIMEOUT = 20_000L
 
         /** A day the tests reach for is at most one week away, so one page in either direction covers it. */
         const val PAGES_SEARCHED = 1

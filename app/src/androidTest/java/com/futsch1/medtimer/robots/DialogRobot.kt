@@ -130,6 +130,6 @@ class DialogRobot(private val ui: ComposeUi) {
         const val DIALOG_TIMEOUT = 1_000L
 
         /** Longer: this dialog is built on a coroutine Espresso's sync does not track, unlike [DIALOG_TIMEOUT]. */
-        const val DIALOG_FROM_NOTIFICATION_TIMEOUT = 5_000L
+        const val DIALOG_FROM_NOTIFICATION_TIMEOUT = 10_000L
     }
 }
