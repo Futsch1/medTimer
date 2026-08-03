@@ -67,8 +67,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideReminderEventRepository(
-        reminderEventDao: ReminderEventDao
-    ): ReminderEventRepository = ReminderEventRepositoryImpl(reminderEventDao)
+        reminderEventDao: ReminderEventDao,
+        database: MedicineRoomDatabase
+    ): ReminderEventRepository = ReminderEventRepositoryImpl(reminderEventDao, database)
 
     @Provides
     @Singleton

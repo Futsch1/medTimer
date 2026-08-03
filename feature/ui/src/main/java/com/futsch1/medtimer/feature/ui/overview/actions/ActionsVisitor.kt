@@ -88,19 +88,6 @@ class ActionsVisitor @Inject constructor(
         }
     }
 
-    private suspend fun createReminderEvents(
-        scheduledReminders: List<ScheduledReminder>,
-        remindedInstant: Instant
-    ): List<ReminderEvent> {
-        return scheduledReminders.map { scheduledReminder ->
-            reminderEventCreator.getOrCreateReminderEvent(
-                scheduledReminder,
-                remindedInstant.epochSecond
-            )
-        }
-    }
-
-
     private fun rescheduleReminders() {
         if (visitedPastReminderEvents.isEmpty() && visitScheduledReminder.isEmpty()) {
             return
@@ -117,17 +104,12 @@ class ActionsVisitor @Inject constructor(
                 val newReminderTime = TimeHelper.changeTimeMinutes(remindedInstant, minutes)
 
                 fragmentActivity.lifecycleScope.launch {
-                    val newReminderEvents =
-                        createReminderEvents(
-                            visitScheduledReminder,
-                            newReminderTime
-                        ).toMutableList()
-                    for (pastReminderEvent in visitedPastReminderEvents) {
-                        val newReminderEvent =
-                            pastReminderEvent.reminderEvent.copy(remindedTimestamp = newReminderTime)
-                        reminderEventRepository.update(newReminderEvent)
-                        newReminderEvents.add(newReminderEvent)
+                    val pendingReminderEvents = visitScheduledReminder.map { scheduledReminder ->
+                        reminderEventCreator.resolvePending(scheduledReminder, newReminderTime.epochSecond)
+                    } + visitedPastReminderEvents.map { pastReminderEvent ->
+                        pastReminderEvent.reminderEvent.copy(remindedTimestamp = newReminderTime)
                     }
+                    val newReminderEvents = reminderEventRepository.upsertMany(pendingReminderEvents)
 
                     applicationScope.launch { commandBus.scheduleNextNotification() }
 
