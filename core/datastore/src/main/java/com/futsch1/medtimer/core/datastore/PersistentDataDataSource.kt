@@ -99,7 +99,7 @@ class PersistentDataDataSource @Inject constructor(
     }
 
     fun setShowNotifications(showNotifications: Boolean) {
-        medTimerSharedPreferences.edit { putBoolean(SHOW_NOTIFICATION, showNotifications) }
+        defaultSharedPreferences.edit { putBoolean(SHOW_NOTIFICATION, showNotifications) }
     }
 
     fun addPendingLocationSnooze(snooze: PendingSnooze) {
@@ -140,7 +140,11 @@ class PersistentDataDataSource @Inject constructor(
     private fun getPendingSnoozeList(): List<SerializablePendingSnooze> {
         val json = medTimerSharedPreferences.getString(PENDING_SNOOZES, null) ?: return emptyList()
         val type = object : TypeToken<List<SerializablePendingSnooze>>() {}.type
-        return gson.fromJson(json, type) ?: emptyList()
+        return try {
+            gson.fromJson(json, type) ?: emptyList()
+        } catch (_: Exception) {
+            emptyList()
+        }
     }
 
     private fun PendingSnooze.toSerializable() = SerializablePendingSnooze(
@@ -171,12 +175,17 @@ class PersistentDataDataSource @Inject constructor(
             batteryWarningShown = defaultSharedPreferences.getBoolean(BATTERY_WARNING_SHOWN, default.batteryWarningShown),
             exactRemindersWarningShown = defaultSharedPreferences.getBoolean(EXACT_REMINDERS_WARNING_SHOWN, default.exactRemindersWarningShown),
             introShown = defaultSharedPreferences.getBoolean(INTRO_SHOWN, default.introShown),
-            lastAutomaticBackup = LocalDate.parse(defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null) ?: default.lastAutomaticBackup.toString()),
+            lastAutomaticBackup = defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null)
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { LocalDate.parse(it) }
+                ?: default.lastAutomaticBackup,
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),
             lastCustomDose = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE, null) ?: default.lastCustomDose,
             lastCustomDoseAmount = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE_AMOUNT, null) ?: default.lastCustomDoseAmount,
             filterTags = medTimerSharedPreferences.getStringSet(FILTER_TAGS, emptySet()) ?: emptySet(),
-            checkedFilters = medTimerSharedPreferences.getStringSet(CHECKED_FILTERS, emptySet())?.map { OverviewFilter.valueOf(it) }?.toSet() ?: emptySet()
+            checkedFilters = medTimerSharedPreferences.getStringSet(CHECKED_FILTERS, emptySet())
+                ?.mapNotNull { kotlin.runCatching { OverviewFilter.valueOf(it) }.getOrNull() }
+                ?.toSet() ?: emptySet()
         )
     }
 
