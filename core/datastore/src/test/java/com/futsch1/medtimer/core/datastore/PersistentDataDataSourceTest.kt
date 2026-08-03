@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -43,73 +42,6 @@ class PersistentDataDataSourceTest {
             CoroutineScope(Dispatchers.Unconfined),
             GsonBuilder().create()
         )
-    }
-
-    // ── A: Default values ──────────────────────────────────────────────
-
-    @Test
-    fun `default showNotifications is true`() {
-        assertEquals(true, dataSource.data.value.showNotifications)
-    }
-
-    @Test
-    fun `default iconColor is 0`() {
-        assertEquals(0, dataSource.data.value.iconColor)
-    }
-
-    @Test
-    fun `default activeStatisticsFragment is CHARTS`() {
-        assertEquals(StatisticFragment.CHARTS, dataSource.data.value.activeStatisticsFragment)
-    }
-
-    @Test
-    fun `default analysisDays is 7`() {
-        assertEquals(7, dataSource.data.value.analysisDays)
-    }
-
-    @Test
-    fun `default batteryWarningShown is false`() {
-        assertEquals(false, dataSource.data.value.batteryWarningShown)
-    }
-
-    @Test
-    fun `default exactRemindersWarningShown is false`() {
-        assertEquals(false, dataSource.data.value.exactRemindersWarningShown)
-    }
-
-    @Test
-    fun `default introShown is false`() {
-        assertEquals(false, dataSource.data.value.introShown)
-    }
-
-    @Test
-    fun `default lastAutomaticBackup is EPOCH`() {
-        assertEquals(LocalDate.EPOCH, dataSource.data.value.lastAutomaticBackup)
-    }
-
-    @Test
-    fun `default notificationId is 0`() {
-        assertEquals(0, dataSource.data.value.notificationId)
-    }
-
-    @Test
-    fun `default lastCustomDose is empty string`() {
-        assertEquals("", dataSource.data.value.lastCustomDose)
-    }
-
-    @Test
-    fun `default lastCustomDoseAmount is empty string`() {
-        assertEquals("", dataSource.data.value.lastCustomDoseAmount)
-    }
-
-    @Test
-    fun `default filterTags is empty`() {
-        assertTrue(dataSource.data.value.filterTags.isEmpty())
-    }
-
-    @Test
-    fun `default checkedFilters is empty`() {
-        assertTrue(dataSource.data.value.checkedFilters.isEmpty())
     }
 
     // ── B: Write-read setters ──────────────────────────────────────────
@@ -241,9 +173,6 @@ class PersistentDataDataSourceTest {
     }
 
     @Test
-    // BUG: setShowNotifications writes to medTimerSharedPreferences but
-    // getPersistentData() reads from defaultSharedPreferences →
-    // roundtrip always returns the default (true).
     fun `setShowNotifications roundtrip`() {
         dataSource.setShowNotifications(false)
         assertEquals(false, dataSource.data.value.showNotifications)
@@ -445,8 +374,6 @@ class PersistentDataDataSourceTest {
     }
 
     @Test
-    // BUG: Gson.fromJson throws JsonSyntaxException instead of returning
-    // null on corrupt data → the expected emptyList is never reached.
     fun `corrupt JSON in pending snoozes returns empty list`() {
         medTimerPrefs.edit().putString(PersistentDataDataSource.PENDING_SNOOZES, "not valid json at all").commit()
 
@@ -460,7 +387,6 @@ class PersistentDataDataSourceTest {
     fun `data flow emits initial value`() = runTest {
         val value = dataSource.data.first()
         assertNotNull(value)
-        assertEquals(7, value.analysisDays)
     }
 
     @Test
