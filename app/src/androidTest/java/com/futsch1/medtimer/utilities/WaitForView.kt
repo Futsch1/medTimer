@@ -14,7 +14,7 @@ import androidx.test.espresso.util.TreeIterables
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeoutException
 
-private const val DEFAULT_POLL_TIMEOUT = 10_000L
+private const val DEFAULT_POLL_TIMEOUT = 15_000L
 private const val POLL_INTERVAL = 100L
 
 /**

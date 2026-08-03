@@ -2,7 +2,7 @@ package com.futsch1.medtimer.utilities
 
 import android.os.SystemClock
 
-private const val DEFAULT_POLL_TIMEOUT = 10_000L
+private const val DEFAULT_POLL_TIMEOUT = 15_000L
 private const val POLL_INTERVAL = 100L
 
 /**

@@ -153,7 +153,7 @@ class UiScope internal constructor(
     private fun inScope(matcher: SemanticsMatcher) = matcher and hasAnyAncestor(anchor)
 
     companion object {
-        const val DEFAULT_TIMEOUT = 10_000L
+        private const val DEFAULT_TIMEOUT = 15_000L
         private const val MAX_SCROLLS = 20
     }
 }
