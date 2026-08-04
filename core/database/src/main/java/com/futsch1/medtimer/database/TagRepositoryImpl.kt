@@ -31,8 +31,7 @@ class TagRepositoryImpl(
     }
 
     override suspend fun delete(tag: Tag) {
-        tagDao.deleteMedicineToTagForTag(tag.id)
-        tagDao.delete(tag.toEntity())
+        tagDao.deleteWithMedicineLinks(tag.toEntity())
     }
 
     override suspend fun addMedicineTag(medicineId: Int, tagId: Int) {

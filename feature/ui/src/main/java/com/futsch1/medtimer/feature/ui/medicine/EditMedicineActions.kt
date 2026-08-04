@@ -85,9 +85,7 @@ class EditMedicineActions @AssistedInject constructor(
         fragment.lifecycleScope.launch {
             val fullMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
             val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
-            for (reminder in fullMedicine.reminders) {
-                reminderRepository.create(reminder.copy(id = 0, medicineRelId = newMedicineId))
-            }
+            reminderRepository.createMany(fullMedicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
             assignTags(medicine.id, newMedicineId)
             navController.navigateUp()
         }

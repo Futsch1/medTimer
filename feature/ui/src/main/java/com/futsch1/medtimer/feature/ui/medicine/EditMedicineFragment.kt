@@ -159,7 +159,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 val (newMedicine, updatedReminders) = withContext(mainDispatcher) {
                     Pair(buildMedicine(), collectUpdatedReminders())
                 }
-                updatedReminders.forEach { reminderRepository.update(it) }
+                reminderRepository.updateMany(updatedReminders)
                 if (medicine != newMedicine && newMedicine != null) {
                     medicineRepository.update(newMedicine)
                 }
