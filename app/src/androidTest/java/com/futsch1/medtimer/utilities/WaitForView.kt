@@ -33,6 +33,30 @@ fun awaitView(
     return onView(matcher).let { if (inRoot != null) it.inRoot(inRoot) else it }
 }
 
+/**
+ * Whether a view matching [matcher] shows up within [timeoutMillis], as a plain answer.
+ * Unlike [awaitView] a miss is not a failure, so it does not trip the screenshot-on-failure handler -
+ * for callers that have something else to try when the view is not there.
+ */
+fun viewAppears(matcher: Matcher<View>, timeoutMillis: Long = 0): Boolean {
+    var appeared = false
+    onView(isRoot()).perform(object : ViewAction {
+        override fun getConstraints() = isRoot()
+
+        override fun getDescription() = "check up to $timeoutMillis ms for: $matcher"
+
+        override fun perform(uiController: UiController, view: View) {
+            val deadline = SystemClock.uptimeMillis() + timeoutMillis
+            do {
+                appeared = TreeIterables.breadthFirstViewTraversal(view).any { matcher.matches(it) }
+                if (appeared) return
+                uiController.loopMainThreadForAtLeast(POLL_INTERVAL)
+            } while (SystemClock.uptimeMillis() < deadline)
+        }
+    })
+    return appeared
+}
+
 private fun waitForView(matcher: Matcher<View>, timeoutMillis: Long): ViewAction =
     object : ViewAction {
         override fun getConstraints() = isRoot()

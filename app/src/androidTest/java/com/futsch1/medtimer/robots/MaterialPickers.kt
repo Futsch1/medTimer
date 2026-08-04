@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.robots
 
 import android.text.format.DateFormat
+import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -9,6 +10,8 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.utilities.awaitView
+import com.futsch1.medtimer.utilities.viewAppears
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
 import java.time.LocalTime
@@ -29,16 +32,20 @@ class MaterialPickers {
     fun confirmTime() = clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
 
     fun pickDate(date: Date) {
-        clickOn(com.google.android.material.R.id.mtrl_picker_header_toggle)
-        awaitView(
-            Matchers.allOf(
-                ViewMatchers.withId(com.google.android.material.R.id.mtrl_picker_text_input_date),
-                ViewMatchers.isDisplayed()
-            )
-        )
+        awaitView(ViewMatchers.withId(com.google.android.material.R.id.mtrl_picker_header_toggle))
+        switchToTextInput(com.google.android.material.R.id.mtrl_picker_header_toggle, dateTextInput)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, inputFormat.format(date))
         closeKeyboard()
         clickOn(com.google.android.material.R.id.confirm_button)
+    }
+
+    private fun switchToTextInput(toggleId: Int, field: Matcher<View>) {
+        repeat(MODE_TOGGLE_ATTEMPTS) {
+            if (viewAppears(field)) return
+            clickOn(toggleId)
+            viewAppears(field, MODE_SETTLE_TIMEOUT)
+        }
+        awaitView(field)
     }
 
     private fun enterTime(hour: Int, minute: Int, isDuration: Boolean) {
@@ -57,12 +64,8 @@ class MaterialPickers {
             }
         }
 
-        clickOn(com.google.android.material.R.id.material_timepicker_mode_button)
+        switchToTextInput(com.google.android.material.R.id.material_timepicker_mode_button, hourTextInput)
         writeTo(com.google.android.material.R.id.material_hour_text_input, hour.toString())
-        // Close the keyboard before clicking the minute field – on tablets the soft keyboard
-        // causes the time-picker dialog to be shifted (adjustPan) and the minute field leaves
-        // the global visible rect, making Espresso unable to click it and eventually
-        // dismissing the dialog entirely.
         closeKeyboard()
         clickOn(com.google.android.material.R.id.material_minute_text_input)
         onView(
@@ -74,6 +77,13 @@ class MaterialPickers {
         closeKeyboard()
         clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
     }
+
+    private val hourTextInput = displayedView(com.google.android.material.R.id.material_hour_text_input)
+
+    private val dateTextInput = displayedView(com.google.android.material.R.id.mtrl_picker_text_input_date)
+
+    private fun displayedView(viewId: Int): Matcher<View> =
+        Matchers.allOf(ViewMatchers.withId(viewId), ViewMatchers.isDisplayed())
 
     private val inputFormat: SimpleDateFormat
         // Taken from UtcDates in Material DatePicker
@@ -95,5 +105,10 @@ class MaterialPickers {
             .replace("y{1,4}".toRegex(), "yyyy")
             .replace("\\.$".toRegex(), "") // Removes a dot suffix that appears in some formats
             .replace("My".toRegex(), "M/y") // Edge case for the Kako locale
+    }
+
+    private companion object {
+        const val MODE_TOGGLE_ATTEMPTS = 3
+        const val MODE_SETTLE_TIMEOUT = 2_000L
     }
 }

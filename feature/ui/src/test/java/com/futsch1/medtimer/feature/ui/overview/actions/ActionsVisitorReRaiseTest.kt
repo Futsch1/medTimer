@@ -25,7 +25,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verifyBlocking
@@ -38,11 +37,8 @@ import org.robolectric.shadows.ShadowDialog
 import java.time.Instant
 
 /**
- * Regression coverage for re-raising an event: it must update the existing [ReminderEvent] row back
- * to RAISED in place — at its original timestamp — rather than deleting the row. Deleting relied on
- * scheduling to recreate it, but scheduling (interval reminders in particular) only ever looks forward
- * from whatever event remains with the highest `remindedTimestamp`; if the re-raised occurrence wasn't
- * the last one of the day, the deleted slot was never recomputed and the event vanished for good.
+ * Coverage for re-raising an event: it drops the existing [ReminderEvent] row and leaves it to
+ * scheduling to raise the occurrence again, and it hands back the stock the event had taken.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -91,7 +87,7 @@ class ActionsVisitorReRaiseTest {
     }
 
     @Test
-    fun reRaiseUpdatesTheEventInPlaceInsteadOfDeletingIt() {
+    fun reRaiseDeletesTheEventAndSchedulesTheNextNotification() {
         val reminderEvent = ReminderEvent.default().copy(
             reminderEventId = 42,
             reminderId = 1,
@@ -111,21 +107,8 @@ class ActionsVisitorReRaiseTest {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
         shadowOf(activity.mainLooper).idle()
 
-        verifyBlocking(reminderEventRepository, never()) { delete(any()) }
-        verifyBlocking(reminderEventRepository) {
-            update(
-                reminderEvent.copy(
-                    status = ReminderEvent.ReminderStatus.RAISED,
-                    processedTimestamp = Instant.EPOCH,
-                    stockHandled = false
-                )
-            )
-        }
-        verifyBlocking(commandBus) {
-            showReminderNotification(argThat {
-                reminderEventIds == listOf(reminderEvent.reminderEventId) &&
-                        reminderIds == listOf(reminderEvent.reminderId)
-            })
-        }
+        verifyBlocking(reminderEventRepository) { delete(reminderEvent) }
+        verifyBlocking(reminderEventRepository, never()) { update(any()) }
+        verifyBlocking(commandBus) { scheduleNextNotification() }
     }
 }
