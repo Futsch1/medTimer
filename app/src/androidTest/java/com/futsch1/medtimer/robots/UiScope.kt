@@ -53,6 +53,9 @@ class UiScope internal constructor(
     fun awaitExists(matcher: SemanticsMatcher, timeoutMillis: Long = DEFAULT_TIMEOUT) =
         awaitAtLeast(matcher, 1, timeoutMillis)
 
+    fun awaitGone(timeoutMillis: Long = DEFAULT_TIMEOUT) =
+        await(timeoutMillis) { rule.onAllNodes(anchor).fetchSemanticsNodes().isEmpty() }
+
     /**
      * Waits for the target before tapping it: menu entries and list items animate in, and the arc
      * action menu staggers its reveal on a real-time delay that no idling resource tracks.

@@ -83,10 +83,18 @@ class OverviewRobot(private val ui: ComposeUi) {
     fun skip(substring: String) = actOnEventContaining(substring, CoreUiR.string.skipped)
 
     /** Acts on the arc menu opened by an event's state button. */
-    fun clickAction(@StringRes labelRes: Int) = actionMenu.click(hasText(ui.getString(labelRes)))
+    fun clickAction(@StringRes labelRes: Int) {
+        actionMenu.click(hasText(ui.getString(labelRes)))
+        awaitActionMenuGone()
+    }
 
     /** Dismisses the arc action menu without choosing anything. */
-    fun closeActionMenu() = pressBack()
+    fun closeActionMenu() {
+        pressBack()
+        awaitActionMenuGone()
+    }
+
+    private fun awaitActionMenuGone() = actionMenu.awaitGone()
 
     fun assertActionDisplayed(@StringRes labelRes: Int) =
         actionMenu.assertDisplayed(hasText(ui.getString(labelRes)))
