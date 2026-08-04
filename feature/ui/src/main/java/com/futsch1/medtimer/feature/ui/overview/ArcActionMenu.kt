@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.Layout
@@ -62,6 +63,7 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.hypot
 import kotlin.math.roundToInt
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 /** Horizontal reach of the arc at its widest (the middle button(s), where the bulge peaks). */
@@ -116,19 +118,22 @@ internal fun ArcActionMenu(
     var revealedCount by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(expanded) {
+        val motionScale = coroutineContext[MotionDurationScale]?.scaleFactor ?: 1f
+        suspend fun pause(duration: Duration) = delay(duration * motionScale.toDouble())
+
         if (expanded) {
             popupVisible = true
             withFrameNanos {}
             for (index in buttons.indices) {
                 revealedCount = index + 1
-                delay(ARC_ENTER_STAGGER_DELAY)
+                pause(ARC_ENTER_STAGGER_DELAY)
             }
         } else if (popupVisible) {
             for (index in buttons.indices.reversed()) {
                 revealedCount = index
-                delay(ARC_EXIT_STAGGER_DELAY)
+                pause(ARC_EXIT_STAGGER_DELAY)
             }
-            delay(ARC_EXIT_DURATION)
+            pause(ARC_EXIT_DURATION)
             popupVisible = false
         }
     }
