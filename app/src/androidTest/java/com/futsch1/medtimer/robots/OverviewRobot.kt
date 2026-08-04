@@ -64,6 +64,7 @@ class OverviewRobot(private val ui: ComposeUi) {
     }
 
     fun assertEventTextContains(index: Int, substring: String) {
+        list.settle()
         list.await { eventTexts().getOrNull(index)?.contains(substring) == true }
     }
 
