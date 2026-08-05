@@ -3,6 +3,7 @@ package com.futsch1.medtimer
 import android.os.Build
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.utilities.awaitNextSecond
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
@@ -350,6 +351,7 @@ class NotificationTest : MedTimerTestBase() {
 
         scheduleRemindersNow(timeToNotify)
         alarm.awaitShown(timeToNotify * 4, "Alarm screen did not appear a second time")
+        awaitNextSecond()
         scheduleRemindersNow()
         alarm.take(timeToNotify * 4, "Alarm screen did not appear a second time")
 
