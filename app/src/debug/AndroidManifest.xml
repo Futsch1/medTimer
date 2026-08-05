@@ -11,10 +11,4 @@
         android:name="android.permission.DUMP"
         tools:ignore="ProtectedPermissions" />
 
-    <application tools:ignore="MissingApplicationIcon">
-        <receiver
-            android:name=".Autostart"
-            tools:node="remove" />
-    </application>
-
 </manifest>

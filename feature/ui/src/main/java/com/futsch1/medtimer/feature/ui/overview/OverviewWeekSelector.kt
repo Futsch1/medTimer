@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.time.currentLocale
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
-import com.futsch1.medtimer.feature.ui.rememberFirstDayOfWeek
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.WeekDay
@@ -54,10 +53,8 @@ fun OverviewWeekSelector(
     modifier: Modifier = Modifier,
 ) {
     val rangeStart = remember { LocalDate.now().minusYears(3) }
-    // simulatedThrough is LocalDate.MIN until the simulation repository first emits, which would
-    // otherwise hand the calendar an end date before its start date.
     val effectiveRangeEnd = maxOf(rangeEnd, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
-    val firstDayOfWeek = rememberFirstDayOfWeek()
+    val firstDayOfWeek = remember { LocalDate.now().minusDays(3).dayOfWeek }
     val state = rememberWeekCalendarState(
         startDate = rangeStart,
         endDate = effectiveRangeEnd,

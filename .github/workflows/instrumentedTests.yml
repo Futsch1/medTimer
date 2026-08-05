@@ -78,6 +78,8 @@ jobs:
           cores: 4
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
+            adb shell settings put global auto_time 0
+            adb shell su 0 toybox date 0801160025
             EXIT_CODE=0 && ./gradlew ${{ inputs.gradle-task }} --daemon || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
 
       - name: Upload coverage to Qlty

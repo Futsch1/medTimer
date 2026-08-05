@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -65,62 +65,49 @@ class OverviewWeekSelectorTest {
     }
 
     /**
-     * Jan 10 2024 is a Wednesday. A Sunday-first week (US) shows Jan 7-13; a Monday-first week
-     * (Germany) shows Jan 8-14. Each locale's week must not contain the other's edge day.
+     * Weeks are anchored to today rather than to the locale's first day, so yesterday and tomorrow
+     * are always adjacent to today without scrolling.
      */
     @Test
-    @Config(qualifiers = "en-rUS")
-    fun `week starts on Sunday for a Sunday-first locale`() {
-        composeTestRule.setContent {
-            MedTimerTheme {
-                OverviewWeekSelector(
-                    selectedDay = LocalDate.of(2024, 1, 10),
-                    rangeEnd = LocalDate.now().plusDays(28),
-                    onDaySelected = {},
-                )
-            }
-        }
-
-        val sunday = composeTestRule.onNodeWithText("7").getBoundsInRoot()
-        val saturday = composeTestRule.onNodeWithText("13").getBoundsInRoot()
-        assertTrue(sunday.left < saturday.left, "Expected Jan 7 (Sun) left of Jan 13 (Sat)")
-        composeTestRule.onNodeWithText("14").assertDoesNotExist()
-    }
-
-    @Test
     @Config(qualifiers = "de-rDE")
-    fun `week starts on Monday for a Monday-first locale`() {
+    fun `today is the fourth of the seven days shown, whatever the locale`() {
+        val today = LocalDate.now()
         composeTestRule.setContent {
             MedTimerTheme {
                 OverviewWeekSelector(
-                    selectedDay = LocalDate.of(2024, 1, 10),
-                    rangeEnd = LocalDate.now().plusDays(28),
+                    selectedDay = today,
+                    rangeEnd = today.plusDays(28),
                     onDaySelected = {},
                 )
             }
         }
 
-        val monday = composeTestRule.onNodeWithText("8").getBoundsInRoot()
-        val sunday = composeTestRule.onNodeWithText("14").getBoundsInRoot()
-        assertTrue(monday.left < sunday.left, "Expected Jan 8 (Mon) left of Jan 14 (Sun)")
-        composeTestRule.onNodeWithText("7").assertDoesNotExist()
+        for (offset in -3L..3L) {
+            composeTestRule.onNodeWithTag(OverviewTestTags.day(today.plusDays(offset))).assertExists()
+        }
+        composeTestRule.onNodeWithTag(OverviewTestTags.day(today.minusDays(4))).assertDoesNotExist()
+        composeTestRule.onNodeWithTag(OverviewTestTags.day(today.plusDays(4))).assertDoesNotExist()
+
+        val first = composeTestRule.onNodeWithTag(OverviewTestTags.day(today.minusDays(3))).getBoundsInRoot()
+        val last = composeTestRule.onNodeWithTag(OverviewTestTags.day(today.plusDays(3))).getBoundsInRoot()
+        assertTrue(first.left < last.left, "Expected today - 3 left of today + 3")
     }
 
-    /** Jan 10 2024 is a Wednesday; with a Sunday-first week its week runs Jan 7-13. */
+    /** Weeks run today-3..today+3, so the week four weeks out ends at today + 31. */
     @Test
-    @Config(qualifiers = "en-rUS")
     fun `previous arrow selects the last day of the previous week when today is not in it`() {
-        val captured = renderAndClick(LocalDate.of(2024, 1, 10), CoreUiR.string.previous_week)
+        val today = LocalDate.now()
+        val captured = renderAndClick(today.plusWeeks(4), CoreUiR.string.previous_week)
 
-        assertEquals(LocalDate.of(2024, 1, 6), captured)
+        assertEquals(today.plusDays(24), captured)
     }
 
     @Test
-    @Config(qualifiers = "en-rUS")
     fun `next arrow selects the first day of the next week when today is not in it`() {
-        val captured = renderAndClick(LocalDate.of(2024, 1, 10), CoreUiR.string.next_week)
+        val today = LocalDate.now()
+        val captured = renderAndClick(today.minusWeeks(4), CoreUiR.string.next_week)
 
-        assertEquals(LocalDate.of(2024, 1, 14), captured)
+        assertEquals(today.minusDays(24), captured)
     }
 
     @Test

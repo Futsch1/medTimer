@@ -2,8 +2,10 @@ package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.test.espresso.Espresso.pressBack
 import com.futsch1.medtimer.core.ui.ScreenTestTags
+import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.AdvancedReminderSettingsTestTags
 import java.time.LocalTime
 import java.util.Date
 import com.futsch1.medtimer.core.ui.R as CoreUiR
@@ -112,6 +114,8 @@ class ReminderSettingsRobot(
         pickers.pickDate(date)
     }
 
-    private fun topBarAction(@StringRes descriptionRes: Int) =
-        ui.scope(ScreenTestTags.TOP_APP_BAR).click(hasContentDescription(ui.getString(descriptionRes)))
+    private fun topBarAction(@StringRes labelRes: Int) {
+        ui.scope(ScreenTestTags.TOP_APP_BAR).click(hasContentDescription(ui.getString(CoreUiR.string.more_options)))
+        ui.scope(AdvancedReminderSettingsTestTags.MENU).click(hasText(ui.getString(labelRes)))
+    }
 }

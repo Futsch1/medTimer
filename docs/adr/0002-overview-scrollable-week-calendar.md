@@ -16,12 +16,16 @@ Future reminders require simulation (see ADR-0001). We maintain a prefetch buffe
 
 ## Week start
 
-Each visible week starts on the locale's culturally-correct first day of week (`WeekFields.of(locale).firstDayOfWeek`, via `rememberFirstDayOfWeek()`), matching
-the Statistics month calendar. Today lands wherever it falls in that week — it is not visually centered.
+`firstDayOfWeek` is pinned to `today - 3 days`, so today always renders in column 4 of 7 and yesterday and tomorrow are always adjacent to it, independent of
+locale. Glimpsing at the neighbouring days is the dominant use of the selector, and it must not require a scroll.
 
-An earlier version pinned `firstDayOfWeek` to `today - 3 days` so today always rendered in column 4 of 7, independent of locale. That produced a week grid with
-no real-world meaning (its boundaries didn't correspond to a calendar week in any locale), and it drifted daily since it was recomputed from `LocalDate.now()`
-on every composition. Locale-based weeks are stable and match user expectation.
+The value is `remember`ed rather than recomputed. Reading `LocalDate.now()` on every composition — as the original View implementation did — shifted the whole
+grid by a day when the date rolled over while the screen was open. Anchoring it once per composition lifetime keeps the grid still and lets today advance
+through it instead.
+
+The cost is that the seven visible days are not a calendar week in any locale, and the Statistics month calendar (which does use
+`WeekFields.of(locale).firstDayOfWeek` via `rememberFirstDayOfWeek()`) starts its weeks on a different day. That inconsistency is accepted deliberately: the
+month calendar is for reading a real calendar, the overview strip is for reaching nearby days.
 
 ## Considered options
 
