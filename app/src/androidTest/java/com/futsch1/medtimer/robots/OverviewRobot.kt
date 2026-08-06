@@ -56,7 +56,7 @@ class OverviewRobot(private val ui: ComposeUi) {
     }
 
     fun assertEventState(index: Int, @StringRes stateRes: Int) {
-        list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
+        scrollToEvent(index)
 
         val expected = ui.getString(stateRes)
         list.await { stateDescription(index) == expected }
@@ -65,6 +65,7 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     fun assertEventTextContains(index: Int, substring: String) {
         list.settle()
+        scrollToEvent(index)
         list.await { eventTexts().getOrNull(index)?.contains(substring) == true }
     }
 
@@ -138,10 +139,10 @@ class OverviewRobot(private val ui: ComposeUi) {
         screen.click(day)
     }
 
-    /** Scrolls the event list so the item at [index] is composed (the LazyColumn virtualizes it otherwise). */
+    /** Indices count composed rows, so the list has to stay anchored at its first item to keep them absolute. */
     private fun scrollToEvent(index: Int) {
+        list.scrollToIndex(0)
         list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
-        list.scrollToIndex(index)
     }
 
     private fun actOnEventContaining(substring: String, @StringRes actionRes: Int) {
