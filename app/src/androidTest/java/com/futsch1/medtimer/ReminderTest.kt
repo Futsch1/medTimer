@@ -248,7 +248,7 @@ class ReminderTest : MedTimerTestBase() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         medicines.create("Test")
-        medicineEditor.addIntervalReminder("1", 10.minutes)
+        medicineEditor.addIntervalReminder("1", intervalWithinToday(10.minutes))
 
         navigation.toOverview()
 
@@ -349,7 +349,7 @@ class ReminderTest : MedTimerTestBase() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
         medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 60.minutes)
+        medicineEditor.addIntervalReminder("1", intervalWithinToday())
 
         navigation.toOverview()
         overview.assertEventCountAtLeast(2)

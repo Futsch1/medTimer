@@ -11,6 +11,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.utilities.awaitView
 import com.futsch1.medtimer.utilities.viewAppears
+import com.futsch1.medtimer.utilities.viewDisappears
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
@@ -29,14 +30,20 @@ class MaterialPickers {
     fun pickDuration(hours: Int, minutes: Int) = enterTime(hours, minutes, isDuration = true)
 
     /** Accepts the time already shown, for the dialogs that open pre-filled with now. */
-    fun confirmTime() = clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+    fun confirmTime() = confirmAndAwaitDismissal(com.google.android.material.R.id.material_timepicker_ok_button)
 
     fun pickDate(date: Date) {
         awaitView(ViewMatchers.withId(com.google.android.material.R.id.mtrl_picker_header_toggle))
         switchToTextInput(com.google.android.material.R.id.mtrl_picker_header_toggle, dateTextInput)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, inputFormat.format(date))
         closeKeyboard()
-        clickOn(com.google.android.material.R.id.confirm_button)
+        confirmAndAwaitDismissal(com.google.android.material.R.id.confirm_button)
+    }
+
+    /** The picker goes down with a fragment transaction Espresso does not idle on, so the next tap can hit it. */
+    private fun confirmAndAwaitDismissal(buttonId: Int) {
+        clickOn(buttonId)
+        viewDisappears(ViewMatchers.withId(buttonId))
     }
 
     private fun switchToTextInput(toggleId: Int, field: Matcher<View>) {
@@ -75,7 +82,7 @@ class MaterialPickers {
             )
         ).perform(ViewActions.replaceText(minute.toString()))
         closeKeyboard()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        confirmAndAwaitDismissal(com.google.android.material.R.id.material_timepicker_ok_button)
     }
 
     private val hourTextInput = displayedView(com.google.android.material.R.id.material_hour_text_input)

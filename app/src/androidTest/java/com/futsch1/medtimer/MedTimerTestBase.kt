@@ -24,7 +24,9 @@ import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
+import kotlin.time.toKotlinDuration
 
 /**
  * The harness, the robots and the values a test needs to build its expectations.
@@ -124,6 +126,13 @@ abstract class MedTimerTestBase {
         return if (later > now && later <= cap) later else cap
     }
 
+    /** An interval short enough that the occurrence after the one raised right away still lands today. */
+    protected fun intervalWithinToday(preferred: Duration = 1.hours): Duration {
+        val remaining = java.time.Duration.between(frozenNow(), LocalTime.MAX)
+            .minus(INTERVAL_MIDNIGHT_MARGIN.toJavaDuration())
+        return maxOf(1.minutes, minOf(preferred, remaining.toKotlinDuration()))
+    }
+
     /** A time already behind now, so a reminder created with it counts as today's dose having passed. */
     protected fun earlierToday(): LocalTime {
         val now = frozenNow()
@@ -134,6 +143,9 @@ abstract class MedTimerTestBase {
     protected fun getString(@StringRes textRes: Int): String = robots.getString(textRes)
 
     companion object {
+        /** The reminder is created some way into the test, so the interval must clear midnight by more than 0. */
+        private val INTERVAL_MIDNIGHT_MARGIN = 1.minutes
+
         @BeforeClass
         @JvmStatic
         fun dismissANRSystemDialog() = MedTimerTestHarness.dismissANRSystemDialog()

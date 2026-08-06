@@ -25,7 +25,7 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = amount(10.5), unit = "pills", refillSize = amount(10.8))
 
         // Interval reminder (amount 3.5) 10 minutes from now
-        medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", 10.minutes)
+        medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", intervalWithinToday(10.minutes))
         medicineEditor.addStockReminder(threshold = "4")
 
         navigation.toOverview()
