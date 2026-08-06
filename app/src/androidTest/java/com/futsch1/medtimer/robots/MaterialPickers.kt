@@ -6,12 +6,14 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.utilities.awaitView
 import com.futsch1.medtimer.utilities.viewAppears
-import com.futsch1.medtimer.utilities.viewDisappears
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import java.text.SimpleDateFormat
@@ -43,7 +45,9 @@ class MaterialPickers {
     /** The picker goes down with a fragment transaction Espresso does not idle on, so the next tap can hit it. */
     private fun confirmAndAwaitDismissal(buttonId: Int) {
         clickOn(buttonId)
-        viewDisappears(ViewMatchers.withId(buttonId))
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val resourceName = instrumentation.targetContext.resources.getResourceName(buttonId)
+        UiDevice.getInstance(instrumentation).wait(Until.gone(By.res(resourceName)), DISMISSAL_TIMEOUT)
     }
 
     private fun switchToTextInput(toggleId: Int, field: Matcher<View>) {
@@ -117,5 +121,6 @@ class MaterialPickers {
     private companion object {
         const val MODE_TOGGLE_ATTEMPTS = 3
         const val MODE_SETTLE_TIMEOUT = 2_000L
+        const val DISMISSAL_TIMEOUT = 5_000L
     }
 }

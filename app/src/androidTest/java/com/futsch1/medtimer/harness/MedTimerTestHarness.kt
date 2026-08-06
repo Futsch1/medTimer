@@ -16,6 +16,7 @@ import com.adevinta.android.barista.rule.BaristaRule
 import com.futsch1.medtimer.MainActivity
 import com.futsch1.medtimer.MyFailureHandler
 import com.futsch1.medtimer.feature.ui.overview.overviewEventListCacheWindowEnabled
+import com.futsch1.medtimer.feature.ui.overview.overviewEventListScrollToNowEnabled
 import com.futsch1.medtimer.utilities.grantAppPermission
 import org.junit.rules.RuleChain
 import org.junit.rules.TestName
@@ -81,6 +82,9 @@ class MedTimerTestHarness(testClassName: String) : TestRule {
         // The cache window's off-screen rows are composed-but-unplaced,
         // which reports a stale semantics position that confuses UI tests asserting on row order.
         overviewEventListCacheWindowEnabled = false
+
+        // The list otherwise jumps to the next upcoming event, scrolling already-acted-on events out of composition.
+        overviewEventListScrollToNowEnabled = false
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         try {

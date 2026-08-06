@@ -72,6 +72,9 @@ private val FAB_CLEARANCE_HEIGHT = 64.dp
 /** Test seam: disable cache window to fix stale semantics position in row-order tests */
 var overviewEventListCacheWindowEnabled = true
 
+/** Test seam: the jump to the next upcoming event leaves the rows above it uncomposed, so index-based tests miss them. */
+var overviewEventListScrollToNowEnabled = true
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OverviewEventList(
@@ -94,10 +97,15 @@ fun OverviewEventList(
     var scrolledToNow by remember { mutableStateOf(false) }
 
     LaunchedEffect(events) {
-        if (scrolledToNow || events.isEmpty()) return@LaunchedEffect
+        if (!overviewEventListScrollToNowEnabled || scrolledToNow || events.isEmpty()) {
+            return@LaunchedEffect
+        }
+
         scrolledToNow = true
         val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
-        if (index >= 0) listState.scrollToItem(index)
+        if (index >= 0) {
+            listState.scrollToItem(index)
+        }
     }
 
     LazyColumn(

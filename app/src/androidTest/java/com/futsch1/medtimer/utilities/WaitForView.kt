@@ -57,31 +57,6 @@ fun viewAppears(matcher: Matcher<View>, timeoutMillis: Long = 0): Boolean {
     return appeared
 }
 
-/**
- * Whether every view matching [matcher] is gone within [timeoutMillis], as a plain answer.
- * For a confirmed dialog whose window is still up, so the next interaction lands behind it, not on it.
- */
-fun viewDisappears(matcher: Matcher<View>, timeoutMillis: Long = DEFAULT_POLL_TIMEOUT): Boolean {
-    var gone = false
-    onView(isRoot()).perform(object : ViewAction {
-        override fun getConstraints() = isRoot()
-
-        override fun getDescription() = "wait up to $timeoutMillis ms for: $matcher to disappear"
-
-        override fun perform(uiController: UiController, view: View) {
-            val deadline = SystemClock.uptimeMillis() + timeoutMillis
-            do {
-                // A detached root is a window that has already gone, children and all.
-                gone = !view.isAttachedToWindow ||
-                        TreeIterables.breadthFirstViewTraversal(view).none { matcher.matches(it) }
-                if (gone) return
-                uiController.loopMainThreadForAtLeast(POLL_INTERVAL)
-            } while (SystemClock.uptimeMillis() < deadline)
-        }
-    })
-    return gone
-}
-
 private fun waitForView(matcher: Matcher<View>, timeoutMillis: Long): ViewAction =
     object : ViewAction {
         override fun getConstraints() = isRoot()
