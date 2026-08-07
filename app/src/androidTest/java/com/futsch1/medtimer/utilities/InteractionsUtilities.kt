@@ -1,30 +1,17 @@
 package com.futsch1.medtimer.utilities
 
+import android.os.SystemClock
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver
 
-
-fun clickDialogPositiveButton(retryIfStillVisible: Boolean = true) {
-    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    device.waitForView(By.res("android:id/button1"), 1_000)
-    clickDialogPositiveButtonIfVisible(device)
-    device.waitForIdle()
-    if (retryIfStillVisible) {
-        clickDialogPositiveButtonIfVisible(device)
-    }
+/** Asks the app to schedule its reminders now, so a test does not have to wait for the real clock. */
+fun scheduleRemindersNow(delayMillis: Long = 0, repeats: Int = 0) {
+    ReminderProcessorBroadcastReceiver.requestScheduleNowForTests(
+        InstrumentationRegistry.getInstrumentation().targetContext, delayMillis, repeats
+    )
 }
 
-private fun clickDialogPositiveButtonIfVisible(device: UiDevice) {
-    device.waitForIdle()
-    if (null != device.findObject(By.res("android:id/button1"))) {
-        BaristaDialogInteractions.clickDialogPositiveButton()
-    }
-}
-
-fun openNotification(): AutoCloseable {
-    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    device.openNotification()
-    return AutoCloseable { device.closeNotification() }
+/** Reminder events are keyed by their remind second, so one raised in the same second reuses the previous event. */
+fun awaitNextSecond() {
+    SystemClock.sleep(1000 - System.currentTimeMillis() % 1000)
 }

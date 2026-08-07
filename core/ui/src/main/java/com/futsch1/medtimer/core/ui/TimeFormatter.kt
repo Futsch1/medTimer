@@ -2,14 +2,11 @@ package com.futsch1.medtimer.core.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.format.DateFormat
-import android.text.format.DateUtils
-import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderTime
+import com.futsch1.medtimer.core.ui.time.SystemDateTimeFormat
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.text.ParseException
 import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDate
@@ -21,7 +18,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.format.FormatStyle
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +26,6 @@ import javax.inject.Singleton
 class TimeFormatter @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val preferencesDataSource: PreferencesDataSource,
-    private val localeContextAccessor: LocaleContextAccessor
 ) {
     private val epochOffset: ZoneOffset = ZoneId.systemDefault().rules.getOffset(Instant.ofEpochSecond(0))
 
@@ -43,7 +38,7 @@ class TimeFormatter @Inject constructor(
             val calendar = Calendar.getInstance()
             calendar.clear()
             calendar.add(Calendar.MINUTE, minutes)
-            return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(calendar.time)
+            return SystemDateTimeFormat.time(context, calendar.time)
         } catch (_: DateTimeException) {
             return minutesToDurationString(minutes)
         }
@@ -90,27 +85,15 @@ class TimeFormatter @Inject constructor(
         return localDateToString(LocalDate.ofEpochDay(days))
     }
 
-    fun toTimeString(instant: Instant): String {
-        return DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(instant))
-    }
+    fun toTimeString(instant: Instant): String = SystemDateTimeFormat.time(context, instant)
 
-    fun toDateString(instant: Instant): String {
-        return DateFormat.getDateFormat(localeContextAccessor.getLocaleAwareContext()).format(Date.from(instant))
-    }
+    fun toDateString(instant: Instant): String = SystemDateTimeFormat.date(context, instant)
 
-    fun toDateTimeString(instant: Instant): String {
-        return "${toDateString(instant)} ${toTimeString(instant)}"
-    }
+    fun toDateTimeString(instant: Instant): String = SystemDateTimeFormat.dateTime(context, instant)
 
     fun toConfigurableDateTimeString(instant: Instant): String {
         return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
-            DateUtils.getRelativeDateTimeString(
-                localeContextAccessor.getLocaleAwareContext(),
-                instant.toEpochMilli(),
-                DateUtils.MINUTE_IN_MILLIS,
-                DateUtils.DAY_IN_MILLIS * 2,
-                DateUtils.FORMAT_SHOW_TIME
-            ).toString()
+            SystemDateTimeFormat.relativeDateTime(context, instant)
         } else {
             toDateTimeString(instant)
         }
@@ -119,15 +102,9 @@ class TimeFormatter @Inject constructor(
     fun toConfigurableTimeString(instant: Instant, isShort: Boolean): String {
         return if (preferencesDataSource.preferences.value.useRelativeDateTime) {
             if (isShort) {
-                DateUtils.getRelativeTimeSpanString(instant.toEpochMilli(), Instant.now().toEpochMilli(), DateUtils.MINUTE_IN_MILLIS).toString()
+                SystemDateTimeFormat.relativeTimeSpan(instant)
             } else {
-                DateUtils.getRelativeDateTimeString(
-                    localeContextAccessor.getLocaleAwareContext(),
-                    instant.toEpochMilli(),
-                    DateUtils.MINUTE_IN_MILLIS,
-                    DateUtils.DAY_IN_MILLIS * 2,
-                    DateUtils.FORMAT_SHOW_TIME
-                ).toString()
+                SystemDateTimeFormat.relativeDateTime(context, instant)
             }
         } else {
             toTimeString(instant)
@@ -153,13 +130,9 @@ class TimeFormatter @Inject constructor(
         try {
             return LocalDate.parse(dateString, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(getLocale()))
         } catch (_: DateTimeParseException) {
-            try {
-                val date = DateFormat.getDateFormat(localeContextAccessor.getLocaleAwareContext()).parse(dateString)
-                if (date != null) {
-                    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                }
-            } catch (_: ParseException) {
-                // Intentionally empty
+            val date = SystemDateTimeFormat.parseDate(context, dateString)
+            if (date != null) {
+                return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
             }
         }
         return null
@@ -170,12 +143,8 @@ class TimeFormatter @Inject constructor(
      * @return Minutes since midnight
      */
     fun timeStringToMinutes(timeString: String): Int {
-        try {
-            val date = DateFormat.getTimeFormat(localeContextAccessor.getLocaleAwareContext()).parse(timeString)
-            return if (date != null) date.toInstant().atOffset(epochOffset).toLocalTime().toSecondOfDay() / 60 else -1
-        } catch (_: ParseException) {
-            return -1
-        }
+        val date = SystemDateTimeFormat.parseTime(context, timeString) ?: return -1
+        return date.toInstant().atOffset(epochOffset).toLocalTime().toSecondOfDay() / 60
     }
 
     /**

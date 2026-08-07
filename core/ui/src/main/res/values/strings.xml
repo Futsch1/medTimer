@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="continuous_interval_reminder">Continuous interval reminder</string>
     <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
@@ -120,6 +120,10 @@
     <string name="medicine_data">Medicine data</string>
     <string name="export_csv">Export as CSV</string>
     <string name="export_pdf">Export as PDF</string>
+    <string name="export_events_pdf">Export events as PDF</string>
+    <string name="export_events_csv">Export events as CSV</string>
+    <string name="export_medicines_pdf">Export medicines as PDF</string>
+    <string name="export_medicines_csv">Export medicines as CSV</string>
     <string name="restore">Restore</string>
     <string name="restore_failed">Restore failed</string>
     <string name="backup_failed">Backup failed</string>
@@ -336,4 +340,8 @@
     <string name="reminders_cannot_be_skipped">Reminders cannot be skipped</string>
     <string name="reminders_cannot_be_skipped_summary">If enabled, reminders can only be dismissed by marking them as taken. This can also be individually enabled per medicine.</string>
     <string name="stock_after_simulation_end">After %s</string>
+    <!-- Awaiting Weblate translation; the build would otherwise fail on MissingTranslation. -->
+    <string name="navigate_up" tools:ignore="MissingTranslation">Navigate up</string>
+    <string name="close" tools:ignore="MissingTranslation">Close</string>
+    <string name="more_options" tools:ignore="MissingTranslation">More options</string>
 </resources>

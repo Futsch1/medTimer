@@ -107,6 +107,10 @@
     <string name="medicine_data">Medicindata</string>
     <string name="export_csv">Eksportér som CSV</string>
     <string name="export_pdf">Eksportér som PDF</string>
+    <string name="export_events_pdf">Eksportér hændelser som PDF</string>
+    <string name="export_events_csv">Eksportér hændelser som CSV</string>
+    <string name="export_medicines_pdf">Eksportér medicin som PDF</string>
+    <string name="export_medicines_csv">Eksportér medicin som CSV</string>
     <string name="restore">Gendannelse</string>
     <string name="restore_failed">Gendannelse fejlet</string>
     <string name="backup_failed">Backup fejlet</string>

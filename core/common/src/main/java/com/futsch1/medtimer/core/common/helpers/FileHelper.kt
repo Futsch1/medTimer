@@ -66,13 +66,16 @@ object FileHelper {
         val intentShareFile = Intent(Intent.ACTION_SEND)
 
         intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()))
-        //Allow sharing apps to read the file Uri
+        // Allow sharing apps to read the file Uri
         intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        //Pass the file Uri instead of the path
+        // Pass the file Uri instead of the path
         intentShareFile.putExtra(
             Intent.EXTRA_STREAM,
             uri
         )
-        context.startActivity(Intent.createChooser(intentShareFile, "Share File"))
+
+        val chooser = Intent.createChooser(intentShareFile, "Share File")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(chooser)
     }
 }

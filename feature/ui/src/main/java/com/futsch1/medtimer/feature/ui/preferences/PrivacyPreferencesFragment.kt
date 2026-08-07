@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.ui.preferences
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
+import com.futsch1.medtimer.core.ui.preferences.MedTimerPreferenceFragment
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.core.common.helpers.hasBiometrics
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PrivacyPreferencesFragment : PreferenceFragmentCompat() {
+class PrivacyPreferencesFragment : MedTimerPreferenceFragment() {
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
 

@@ -58,7 +58,7 @@ class ReminderSummaryFormatterTest {
         val app = RuntimeEnvironment.getApplication()
         val preferences = MutableStateFlow(UserPreferences.default())
         `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        timeFormatter = TimeFormatter(app, mockPreferenceDataSource, com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor(app))
+        timeFormatter = TimeFormatter(app, mockPreferenceDataSource)
         formatter = ReminderSummaryFormatter(app, mockReminderRepository, timeFormatter)
     }
 

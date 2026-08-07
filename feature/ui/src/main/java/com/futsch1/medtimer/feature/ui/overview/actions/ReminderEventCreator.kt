@@ -18,21 +18,18 @@ class ReminderEventCreator @Inject constructor(
     private val timeFormatter: TimeFormatter,
     private val preferencesDataSource: PreferencesDataSource
 ) {
-    suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
+    suspend fun getOrCreateReminderEvent(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent =
+        reminderEventRepository.upsert(resolvePending(scheduledReminder, reminderTimeStamp))
+
+    suspend fun resolvePending(scheduledReminder: ScheduledReminder, reminderTimeStamp: Long): ReminderEvent {
         val existingReminderEvent = reminderEventRepository.fetch(scheduledReminder.reminder.id, scheduledReminder.timestamp.epochSecond)
         if (existingReminderEvent != null) {
-            if (existingReminderEvent.remindedTimestamp.epochSecond != reminderTimeStamp) {
-                val rescheduledEvent = existingReminderEvent.copy(remindedTimestamp = Instant.ofEpochSecond(reminderTimeStamp))
-                reminderEventRepository.update(rescheduledEvent)
-                return rescheduledEvent
-            }
-            return existingReminderEvent
+            return existingReminderEvent.copy(remindedTimestamp = Instant.ofEpochSecond(reminderTimeStamp))
         }
 
         val reminder = reminderRepository.fetch(scheduledReminder.reminder.id) ?: scheduledReminder.reminder
-        val newReminderEvent = buildReminderEvent(
+        return buildReminderEvent(
             reminderTimeStamp, scheduledReminder.medicine, reminder, reminderEventRepository, preferencesDataSource.preferences.value.numberOfRepetitions
         ) { timeFormatter.localDateToString(it) }
-        return reminderEventRepository.create(newReminderEvent)
     }
 }

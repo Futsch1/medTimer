@@ -111,6 +111,10 @@
     <string name="medicine_data">Gyógyszeradatok</string>
     <string name="export_csv">Exportálás CSV formátumban</string>
     <string name="export_pdf">Exportálás PDF formátumban</string>
+    <string name="export_events_pdf">Események exportálása PDF formátumban</string>
+    <string name="export_events_csv">Események exportálása CSV formátumban</string>
+    <string name="export_medicines_pdf">Gyógyszerek exportálása PDF formátumban</string>
+    <string name="export_medicines_csv">Gyógyszerek exportálása CSV formátumban</string>
     <string name="restore">Visszaállítás</string>
     <string name="restore_failed">Visszaállítás sikertelen</string>
     <string name="backup_failed">Biztonsági mentés sikertelen</string>

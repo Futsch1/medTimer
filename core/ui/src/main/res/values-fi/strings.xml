@@ -111,6 +111,10 @@
     <string name="medicine_data">Lääkedata</string>
     <string name="export_csv">Vie CSV-tiedostona</string>
     <string name="export_pdf">Vie PDF-tiedostona</string>
+    <string name="export_events_pdf">Vie tapahtumat PDF-tiedostona</string>
+    <string name="export_events_csv">Vie tapahtumat CSV-tiedostona</string>
+    <string name="export_medicines_pdf">Vie lääkkeet PDF-tiedostona</string>
+    <string name="export_medicines_csv">Vie lääkkeet CSV-tiedostona</string>
     <string name="restore">Palauta</string>
     <string name="restore_failed">Palautus epäonnistui</string>
     <string name="backup_failed">Varmuuskopiointi epäonnistui</string>

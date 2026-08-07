@@ -121,6 +121,10 @@
     <string name="medicine_data">Data léků</string>
     <string name="export_csv">Exportovat jako CSV</string>
     <string name="export_pdf">Exportovat jako PDF</string>
+    <string name="export_events_pdf">Exportovat události jako PDF</string>
+    <string name="export_events_csv">Exportovat události jako CSV</string>
+    <string name="export_medicines_pdf">Exportovat léky jako PDF</string>
+    <string name="export_medicines_csv">Exportovat léky jako CSV</string>
     <string name="restore">Obnovit</string>
     <string name="restore_failed">Obnova selhala</string>
     <string name="backup_failed">Záloha selhala</string>

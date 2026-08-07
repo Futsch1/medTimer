@@ -1,109 +1,84 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
-import org.hamcrest.Matchers.hasToString
-import org.junit.Test
 import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
+private const val GINSENG = "Ginseng (200mg)"
+private const val SELEN_1 = "Selen (200 µg) (1)"
+private const val TEST_1_PILL = "Test (1 pill)"
 
-class ManualDoseTest : BaseTestHelper() {
+@HiltAndroidTest
+class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testManualDose() {
-        openMenu()
-        clickOn(R.string.generate_test_data)
+        menus.clickAppOption(R.string.generate_test_data)
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        navigation.toOverview()
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
+        manualDose.log(GINSENG, amount = "12")
 
-        clickListItem(position = 3)
-        writeTo(android.R.id.input, "12")
-        clickDialogPositiveButton()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        overview.assertEventContains("Ginseng (200mg) (12)")
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Ginseng (200mg) (12)")
+        manualDose.logCustom("Test")
+        overview.assertEventContains("Test")
+        overview.assertNoEventContains("Test (")
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        clickOn(R.string.custom)
-        writeTo(android.R.id.input, "Test")
-        clickDialogPositiveButton(false)
-        clickDialogPositiveButton()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test")
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test (")
+        manualDose.inPicker {
+            assertSuggests("Test")
+            overview.assertNoEventContains("Test (")
+            choose("Test")
+            enterAmount("13")
+            confirmTime()
+        }
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.entry_text, "Test")
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Test (")
-        clickOn("Test")
-        writeTo(android.R.id.input, "13")
-        clickDialogPositiveButton()
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        overview.assertEventContains(TEST_13_)
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, TEST_13_)
+        manualDose.inPicker {
+            assertSuggests(TEST_13_)
+            choose(TEST_13_)
+            assertAmountPrefilled("13")
+            cancel()
+        }
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.entry_text, TEST_13_)
-        clickOn(TEST_13_)
-        assertContains("13")
-        pressBack()
+        navigation.toMedicines()
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
+        menus.clickMedicinesOption(R.string.deactivate_all)
 
-        openMenu()
-        clickOn(R.string.deactivate_all)
-
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        onData(hasToString("Selen (200 µg) (1)")).check(matches(isDisplayed()))
-        onData(hasToString("Selen (200 µg) (1)")).perform(click())
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        navigation.toOverview()
+        manualDose.inPicker {
+            assertOffers(SELEN_1)
+            choose(SELEN_1)
+            confirmTime()
+        }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun testManualDoseOfDisabledReminder() {
         // Create medication + reminder
-        AndroidTestHelper.createMedicine("Test")
-        AndroidTestHelper.createReminder("1 pill", null)
+        medicines.create("Test")
+        medicineEditor.addReminder("1 pill", null)
 
         // Disable reminder
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
-        clickOn(R.string.reminder_enabled)
+        reminders.inSettingsOf(0) { toggleEnabled() }
 
         // Create manual dose of the disabled reminder
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.logManualDose)
-        clickListItem(position = 2)
-        clickOn(com.google.android.material.R.id.material_timepicker_ok_button)
+        navigation.toOverview()
+        manualDose.log(TEST_1_PILL)
 
         // Check if the event is created properly
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.overviewContentContainer)
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.editEventName, "Test (1 pill)")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventName, "Test")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.editEventAmount, "1 pill")
-
-        pressBack()
+        eventEditor.forEvent(0) {
+            assertNameDoesNotContain("Test (1 pill)")
+            assertName("Test")
+            assertAmount("1 pill")
+        }
 
         // Check that re-raise is not shown
-        BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        assertNotDisplayed(R.string.re_raise_event)
+        overview.clickEventState(0)
+        overview.assertActionAbsent(R.string.re_raise_event)
     }
-
 }

@@ -31,6 +31,12 @@ interface TagDao {
     @Delete
     suspend fun delete(tag: TagEntity)
 
+    @Transaction
+    suspend fun deleteWithMedicineLinks(tag: TagEntity) {
+        deleteMedicineToTagForTag(tag.tagId)
+        delete(tag)
+    }
+
     @Query("DELETE FROM Tag")
     suspend fun deleteOnlyTags()
 

@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.statistics.calendar
 
+import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.adaptive.Posture
@@ -9,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.TextStyle
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.test.assertTrue
 
@@ -44,10 +45,10 @@ class CalendarContentLayoutTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // Matches CalendarNavigationRow's "<FullMonth> <year>" title for the initially-visible month (now).
     private val calendarTitle: String = run {
-        val visibleMonth = YearMonth.now()
-        "${visibleMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${visibleMonth.year}"
+        val locale = Locale.getDefault()
+        val pattern = DateFormat.getBestDateTimePattern(locale, "MMMMy")
+        DateTimeFormatter.ofPattern(pattern, locale).format(YearMonth.now())
     }
 
     @Test

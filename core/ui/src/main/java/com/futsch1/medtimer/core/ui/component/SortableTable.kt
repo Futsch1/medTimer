@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -63,6 +64,13 @@ data class SortableTableRow(
 /** Sort cycles through these in header-tap order: [DESCENDING] → [ASCENDING] → [UNSORTED]. */
 enum class SortDirection { DESCENDING, ASCENDING, UNSORTED }
 
+object SortableTableTestTags {
+    const val TABLE = "sortable_table"
+
+    /** Scopes the column headers; each is then selected by its own title. */
+    const val HEADER_ROW = "sortable_table_header_row"
+}
+
 @Composable
 fun SortableTable(
     columns: ImmutableList<SortableTableColumn>,
@@ -79,7 +87,11 @@ fun SortableTable(
         sortRows(rows, sortColumn, sortDirection)
     }
 
-    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+    BoxWithConstraints(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(SortableTableTestTags.TABLE)
+    ) {
         val availableWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
         val totalMinWidth = columns.sumOf { it.minWidth.value.toDouble() }.dp
         val columnWidths = remember(columns, availableWidth) {
@@ -161,7 +173,12 @@ private fun HeaderRow(
     sortDirection: SortDirection,
     onHeaderClick: (Int) -> Unit,
 ) {
-    Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .testTag(SortableTableTestTags.HEADER_ROW),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         columns.forEachIndexed { index, column ->
             Row(
                 modifier = Modifier
@@ -201,7 +218,9 @@ fun DefaultDataCell(text: String, width: Dp) {
         color = MaterialTheme.colorScheme.onSurface,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.width(width).padding(horizontal = 4.dp),
+        modifier = Modifier
+            .width(width)
+            .padding(horizontal = 4.dp),
     )
 }
 

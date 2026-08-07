@@ -1,9 +1,21 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.core.view.MenuProvider
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
@@ -11,39 +23,39 @@ import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.ui.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
+object MedicinesMenuTestTags {
+    /** Scopes the entries to this menu; each one is then selected by its own label. */
+    const val MENU = "medicines_menu"
+}
+
+/** The medicine-list specific actions: bulk activation and sorting. */
 class MedicinesMenu @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val reminderRepository: ReminderRepository,
     @param:ApplicationScope private val applicationScope: CoroutineScope,
     @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
-) : MenuProvider {
+) {
     var medicinesProvider: () -> List<Medicine> = { emptyList() }
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.medicines_settings, menu)
-        menu.setGroupDividerEnabled(true)
 
-        setupMenu(menu, R.id.activate_all) {
-            setRemindersActive(true)
-        }
-        setupMenu(menu, R.id.deactivate_all) {
-            setRemindersActive(false)
-        }
-        setupMenu(menu, R.id.sortByName) {
-            sortBy { m -> m.sortedBy { it.name } }
-        }
-        setupMenu(menu, R.id.sortByCreationDateAsc) {
-            sortBy { m -> m.sortedBy { it.id } }
-        }
-        setupMenu(menu, R.id.sortByCreationDateDesc) {
-            sortBy { m -> m.sortedByDescending { it.id } }
+    fun setRemindersActive(active: Boolean) {
+        applicationScope.launch {
+            for (medicine in medicinesProvider()) {
+                setRemindersActive(medicine.reminders, reminderRepository, active)
+            }
         }
     }
+
+    fun sortByName() = sortBy { m -> m.sortedBy { it.name } }
+
+    fun sortByCreationDateAscending() = sortBy { m -> m.sortedBy { it.id } }
+
+    fun sortByCreationDateDescending() = sortBy { m -> m.sortedByDescending { it.id } }
 
     private fun sortBy(sortFunction: (List<Medicine>) -> List<Medicine>) {
         applicationScope.launch(dispatcher) {
@@ -52,25 +64,46 @@ class MedicinesMenu @Inject constructor(
             medicineRepository.updateAll(medicines)
         }
     }
+}
 
-    private fun setRemindersActive(active: Boolean) {
-        applicationScope.launch {
-            for (medicine in medicinesProvider()) {
-                setRemindersActive(medicine.reminders, reminderRepository, active)
-            }
+@Composable
+fun MedicinesMenuActions(menu: MedicinesMenu) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box {
+        IconButton(onClick = { expanded = true }) {
+            Icon(
+                painter = painterResource(CoreUiR.drawable.capsule),
+                contentDescription = stringResource(CoreUiR.string.tab_medicine),
+            )
         }
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
-
-    companion object {
-        fun setupMenu(
-            menu: Menu, menuId: Int, activateCallback: () -> Unit
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(MedicinesMenuTestTags.MENU),
         ) {
-            menu.findItem(menuId).setOnMenuItemClickListener { _: MenuItem? ->
-                activateCallback()
-                true
+            @Composable
+            fun item(labelRes: Int, onClick: () -> Unit) {
+                MenuItem(labelRes) {
+                    expanded = false
+                    onClick()
+                }
             }
+
+            item(CoreUiR.string.activate_all) { menu.setRemindersActive(true) }
+            item(CoreUiR.string.deactivate_all) { menu.setRemindersActive(false) }
+            HorizontalDivider()
+            item(CoreUiR.string.by_name, menu::sortByName)
+            item(CoreUiR.string.by_creation_date_ascending, menu::sortByCreationDateAscending)
+            item(CoreUiR.string.by_creation_date_descending, menu::sortByCreationDateDescending)
         }
     }
+}
+
+@Composable
+private fun MenuItem(labelRes: Int, onClick: () -> Unit) {
+    DropdownMenuItem(
+        text = { Text(stringResource(labelRes)) },
+        onClick = onClick,
+    )
 }

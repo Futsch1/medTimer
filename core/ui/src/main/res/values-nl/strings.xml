@@ -111,6 +111,10 @@
     <string name="medicine_data">Behandeling gegevens</string>
     <string name="export_csv">Exporteren als CSV</string>
     <string name="export_pdf">Exporteren als PDF</string>
+    <string name="export_events_pdf">Herinneringen exporteren als PDF</string>
+    <string name="export_events_csv">Herinneringen exporteren als CSV</string>
+    <string name="export_medicines_pdf">Behandelingen exporteren als PDF</string>
+    <string name="export_medicines_csv">Behandelingen exporteren als CSV</string>
     <string name="restore">Herstellen</string>
     <string name="restore_failed">Herstel mislukt</string>
     <string name="backup_failed">Back-up mislukt</string>

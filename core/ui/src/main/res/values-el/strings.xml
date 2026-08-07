@@ -111,6 +111,10 @@
     <string name="medicine_data">Δεδομένα φαρμ. αγωγών</string>
     <string name="export_csv">Εξαγωγή ως CSV</string>
     <string name="export_pdf">Εξαγωγή ως PDF</string>
+    <string name="export_events_pdf">Εξαγωγή συμβάντων ως PDF</string>
+    <string name="export_events_csv">Εξαγωγή συμβάντων ως CSV</string>
+    <string name="export_medicines_pdf">Εξαγωγή φαρμάκων ως PDF</string>
+    <string name="export_medicines_csv">Εξαγωγή φαρμάκων ως CSV</string>
     <string name="restore">Αποκατάσταση</string>
     <string name="restore_failed">Η αποκατάσταση του αντιγράφου ασφαλείας απέτυχε</string>
     <string name="backup_failed">Η δημιουργία αντιγράφου ασφαλείας απέτυχε</string>

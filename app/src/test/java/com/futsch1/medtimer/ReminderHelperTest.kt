@@ -6,8 +6,8 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.ReminderStringFormatter
@@ -58,11 +58,7 @@ class ReminderHelperTest {
         val app = RuntimeEnvironment.getApplication()
         val preferences = MutableStateFlow(UserPreferences.default())
         `when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
-        timeFormatter = TimeFormatter(
-            app,
-            mockPreferenceDataSource,
-            com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor(app)
-        )
+        timeFormatter = TimeFormatter(app, mockPreferenceDataSource)
         formatter = ReminderStringFormatter(app, mockPreferenceDataSource, timeFormatter)
     }
 

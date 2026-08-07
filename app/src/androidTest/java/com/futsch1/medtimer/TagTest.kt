@@ -1,194 +1,142 @@
 package com.futsch1.medtimer
 
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertChecked
-import com.adevinta.android.barista.assertion.BaristaCheckedAssertions.assertUnchecked
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotContains
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import com.adevinta.android.barista.internal.viewaction.ChipViewActions.removeChip
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
-import com.futsch1.medtimer.AndroidTestHelper.createIntervalReminder
-import com.futsch1.medtimer.AndroidTestHelper.createMedicine
-import com.futsch1.medtimer.AndroidTestHelper.navigateTo
-import com.futsch1.medtimer.utilities.clickDialogPositiveButton
+import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 private const val NEW_TAG = "New tag"
 
 private const val ANOTHER_TAG = "Another tag"
 
-class TagTest : BaseTestHelper() {
+@HiltAndroidTest
+class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun tagHandling() {
-        createMedicine("Test")
+        medicines.create("Test")
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
+        tags.inMedicineTags {
+            add(NEW_TAG)
+            assertDisplayed(NEW_TAG)
+            assertChecked(NEW_TAG)
+        }
 
-        addTag(NEW_TAG)
-        assertContains(NEW_TAG)
-        assertChecked(NEW_TAG)
+        tags.inMedicineTags {
+            assertDisplayed(NEW_TAG)
+            assertChecked(NEW_TAG)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+            add(ANOTHER_TAG)
+            assertDisplayed(ANOTHER_TAG)
+            assertChecked(ANOTHER_TAG)
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        assertContains(NEW_TAG)
-        assertChecked(NEW_TAG)
+            toggle(ANOTHER_TAG)
+            assertNotChecked(ANOTHER_TAG)
+        }
 
-        addTag(ANOTHER_TAG)
-        assertContains(ANOTHER_TAG)
-        assertChecked(ANOTHER_TAG)
+        medicines.assertListContains(NEW_TAG)
+        medicines.assertListDoesNotContain(ANOTHER_TAG)
 
-        clickOn(ANOTHER_TAG)
-        assertUnchecked(ANOTHER_TAG)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        medicines.create("Test 2")
 
-        pressBack()
+        tags.inMedicineTags {
+            assertNotChecked(NEW_TAG)
+            assertNotChecked(ANOTHER_TAG)
+            remove(1)
+        }
 
-        AndroidTestHelper.assertTextDisplayed(NEW_TAG)
-        AndroidTestHelper.assertTextNotDisplayed(ANOTHER_TAG)
+        tags.inMedicineTags {
+            assertDoesNotExist(ANOTHER_TAG)
+            toggle(NEW_TAG)
+        }
 
-        createMedicine("Test 2")
-
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        assertUnchecked(NEW_TAG)
-        assertUnchecked(ANOTHER_TAG)
-        onView(withId(com.futsch1.medtimer.feature.ui.R.id.tags)).perform(
-            actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                1,
-                removeChip()
-            )
-        )
-        clickDialogPositiveButton()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        assertNotContains(ANOTHER_TAG)
-        clickOn(NEW_TAG)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.duplicate)
-        AndroidTestHelper.clickMedicineItem(2)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        assertChecked(NEW_TAG)
+        menus.clickEditMedicineOption(R.string.duplicate)
+        medicines.clickItem(2)
+        tags.inMedicineTags { assertChecked(NEW_TAG) }
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineVisibility() {
-        createMedicine("Test")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        addTag("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        pressBack()
+        medicines.create("Test")
+        tags.inMedicineTags { add("Tag1") }
 
-        createMedicine("Else")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        addTag("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        pressBack()
+        medicines.create("Else")
+        tags.inMedicineTags { add("Tag2") }
 
-        AndroidTestHelper.assertMedicineNameContains("Test")
-        AndroidTestHelper.assertMedicineNameContains("Else")
+        medicines.assertNameContains("Test")
+        medicines.assertNameContains("Else")
 
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        assertChecked("Tag1")
-        assertUnchecked("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            assertChecked("Tag1")
+            assertNotChecked("Tag2")
+        }
 
-        AndroidTestHelper.assertMedicineNameContains("Test")
-        AndroidTestHelper.assertMedicineNameNotContains("Else")
+        medicines.assertNameContains("Test")
+        medicines.assertNameNotContains("Else")
 
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        clickOn("Tag2")
-        assertUnchecked("Tag1")
-        assertChecked("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+            assertNotChecked("Tag1")
+            assertChecked("Tag2")
+        }
 
-        AndroidTestHelper.assertMedicineNameNotContains("Test")
-        AndroidTestHelper.assertMedicineNameContains("Else")
+        medicines.assertNameNotContains("Test")
+        medicines.assertNameContains("Else")
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
-        createMedicine("Test")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        addTag("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        createIntervalReminder("Amount1", 60)
-        pressBack()
-        pressBack()
+        medicines.create("Test")
+        tags.inMedicineTags { add("Tag1") }
+        medicineEditor.addIntervalReminder("Amount1", 1.hours)
 
-        createMedicine("Else")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openTags)
-        addTag("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
-        createIntervalReminder("Amount2", 60)
-        pressBack()
+        medicines.create("Else")
+        tags.inMedicineTags { add("Tag2") }
+        medicineEditor.addIntervalReminder("Amount2", 1.hours)
 
         // First, deactivate all of Test
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        medicines.showList()
+        tags.inFilter { toggle("Tag1") }
 
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.deactivate_all)
-        AndroidTestHelper.assertTextDisplayed(com.futsch1.medtimer.core.ui.R.string.inactive)
+        menus.clickMedicinesOption(R.string.deactivate_all)
+        medicines.assertListContains(R.string.inactive)
 
         // Now, check that Else is not deactivated
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        clickOn("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+        }
 
-        AndroidTestHelper.assertTextNotDisplayed(com.futsch1.medtimer.core.ui.R.string.inactive)
+        medicines.assertListDoesNotContain(R.string.inactive)
 
-        clickOn(R.id.tag_filter)
-        clickOn("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter { toggle("Tag2") }
 
         // And activate Test again
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.activate_all)
+        menus.clickMedicinesOption(R.string.activate_all)
 
-        navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        navigation.toOverview()
 
-        BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 0, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
-        BaristaListInteractions.clickListItemChild(com.futsch1.medtimer.feature.ui.R.id.reminders, 1, com.futsch1.medtimer.feature.ui.R.id.stateButton)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.takenButton)
+        overview.clickEventState(0)
+        overview.clickAction(R.string.taken)
+        overview.clickEventState(1)
+        overview.clickAction(R.string.taken)
 
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter { toggle("Tag1") }
 
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount1")
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount2")
+        overview.assertEventContains("Amount1")
+        overview.assertNoEventContains("Amount2")
 
-        clickOn(R.id.tag_filter)
-        clickOn("Tag1")
-        clickOn("Tag2")
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.ok)
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+        }
 
-        assertNotContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount1")
-        assertContains(com.futsch1.medtimer.feature.ui.R.id.reminderText, "Amount2")
-    }
-
-    private fun addTag(tagName: String) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.addTag)
-        writeTo(android.R.id.input, tagName)
-        clickDialogPositiveButton()
+        overview.assertNoEventContains("Amount1")
+        overview.assertEventContains("Amount2")
     }
 }

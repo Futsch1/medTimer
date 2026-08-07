@@ -85,6 +85,10 @@
     <string name="medicine_data">Lyfjagögn</string>
     <string name="export_csv">Flytja út sem CSV</string>
     <string name="export_pdf">Flytja út sem PDF</string>
+    <string name="export_events_pdf">Flytja út atburði sem PDF</string>
+    <string name="export_events_csv">Flytja út atburði sem CSV</string>
+    <string name="export_medicines_pdf">Flytja út lyf sem PDF</string>
+    <string name="export_medicines_csv">Flytja út lyf sem CSV</string>
     <string name="restore">Endursetja</string>
     <string name="restore_failed">Gat ekki endursett</string>
     <string name="backup_failed">Afritun mistókst</string>

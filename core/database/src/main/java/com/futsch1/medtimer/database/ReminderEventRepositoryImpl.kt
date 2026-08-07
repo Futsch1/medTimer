@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.database
 
+import androidx.room.withTransaction
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -13,7 +14,8 @@ import java.time.Instant
 private fun nowInSeconds() = Instant.now().toEpochMilli() / 1000
 
 class ReminderEventRepositoryImpl(
-    private val reminderEventDao: ReminderEventDao
+    private val reminderEventDao: ReminderEventDao,
+    private val database: MedicineRoomDatabase
 ) : ReminderEventRepository {
     override fun getAllFlow(
         startInstant: Instant,
@@ -101,4 +103,10 @@ class ReminderEventRepositoryImpl(
     override suspend fun decreaseRepeats(reminderEventId: Int) {
         reminderEventDao.decreaseRepeats(reminderEventId)
     }
+
+    override suspend fun upsert(reminderEvent: ReminderEvent): ReminderEvent =
+        if (reminderEvent.reminderEventId == 0) create(reminderEvent) else reminderEvent.also { update(it) }
+
+    override suspend fun upsertMany(reminderEvents: List<ReminderEvent>): List<ReminderEvent> =
+        database.withTransaction { reminderEvents.map { upsert(it) } }
 }

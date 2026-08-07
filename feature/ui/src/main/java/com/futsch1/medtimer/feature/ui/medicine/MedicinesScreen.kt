@@ -45,8 +45,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -91,9 +89,6 @@ fun MedicinesScreen(
     val reorderableMedicines = rememberReorderableMedicines(listState, state.medicines, onMedicineMove)
 
     Scaffold(
-        modifier = Modifier
-            .padding(8.dp)
-            .semantics { testTagsAsResourceId = true },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.testTag(MedicineTestTags.ADD_MEDICINE),
@@ -127,7 +122,9 @@ fun MedicinesScreen(
                             medicine = medicine,
                             onMedicineEdit = onMedicineEdit,
                             isDragging = isDragging,
-                            dragHandleModifier = Modifier.draggableHandle()
+                            dragHandleModifier = Modifier.draggableHandle(
+                                onDragStopped = { reorderableMedicines.commitMove() }
+                            )
                         )
                     }
                 }
@@ -137,6 +134,7 @@ fun MedicinesScreen(
 }
 
 private class ReorderableMedicines(
+    val commitMove: () -> Unit,
     val medicines: SnapshotStateList<MedicineScreenItem>,
     val reorderState: ReorderableLazyListState
 )
@@ -168,18 +166,16 @@ private fun rememberReorderableMedicines(
         }
     }
 
-    LaunchedEffect(reorderState.isAnyItemDragging) {
-        if (reorderState.isAnyItemDragging || lastDraggedId == null) {
-            return@LaunchedEffect
-        }
-        val newIndex = localMedicines.indexOfFirst { it.id == lastDraggedId }
-        if (newIndex >= 0) {
-            onMedicineMove(lastDraggedId!!, newIndex)
+    val commitMove = {
+        val draggedId = lastDraggedId
+        val newIndex = draggedId?.let { id -> localMedicines.indexOfFirst { it.id == id } } ?: -1
+        if (draggedId != null && newIndex >= 0) {
+            onMedicineMove(draggedId, newIndex)
         }
         lastDraggedId = null
     }
 
-    return remember(localMedicines, reorderState) { ReorderableMedicines(localMedicines, reorderState) }
+    return remember(localMedicines, reorderState) { ReorderableMedicines(commitMove, localMedicines, reorderState) }
 }
 
 @Composable

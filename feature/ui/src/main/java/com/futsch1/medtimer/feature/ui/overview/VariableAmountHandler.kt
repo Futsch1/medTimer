@@ -15,8 +15,10 @@ import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNot
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.time.Instant
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 class VariableAmountHandler @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
@@ -29,33 +31,37 @@ class VariableAmountHandler @Inject constructor(
         val reminderNotificationData = intent.extras!!.toReminderNotificationData()
         if (!reminderNotificationData.valid) return
 
-        for (eventId in reminderNotificationData.reminderEventIds.reversed()) {
+        for (eventId in reminderNotificationData.reminderEventIds) {
             val event = reminderEventRepository.fetch(eventId) ?: continue
             val reminder = reminderRepository.fetch(event.reminderId) ?: continue
             if (!reminder.variableAmount) continue
             val medicine = medicineRepository.fetch(reminder.medicineRelId) ?: continue
 
-            TextInputDialogBuilder(activity)
-                .title(medicine.name)
-                .hint(R.string.dosage)
-                .initialText(reminder.amount)
-                .textSink { amountLocal: String? ->
-                    amountLocal?.let {
-                        activity.lifecycleScope.launch(ioDispatcher) {
-                            reminderEventRepository.update(event.copy(amount = it))
-                            commandBus.markReminderEvents(
-                                listOf(event.reminderEventId),
-                                ReminderEvent.ReminderStatus.TAKEN
-                            )
+            suspendCancellableCoroutine { continuation ->
+                TextInputDialogBuilder(activity)
+                    .title(medicine.name)
+                    .hint(R.string.dosage)
+                    .initialText(reminder.amount)
+                    .textSink { amountLocal: String? ->
+                        amountLocal?.let {
+                            activity.lifecycleScope.launch(ioDispatcher) {
+                                reminderEventRepository.update(event.copy(amount = it))
+                                commandBus.markReminderEvents(
+                                    listOf(event.reminderEventId),
+                                    ReminderEvent.ReminderStatus.TAKEN
+                                )
+                            }
                         }
+                        continuation.resume(Unit)
                     }
-                }
-                .cancelCallback {
-                    activity.lifecycleScope.launch {
-                        touchReminderEvent(event)
+                    .cancelCallback {
+                        activity.lifecycleScope.launch {
+                            touchReminderEvent(event)
+                        }
+                        continuation.resume(Unit)
                     }
-                }
-                .show()
+                    .show()
+            }
         }
     }
 
