@@ -134,12 +134,11 @@ class AlarmFragment(
 
     private fun closeWithIntent(pendingIntent: PendingIntent) {
         pendingIntent.send()
-        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        requireActivity().finishAndRemoveTask()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(ALARM, "Closing activity")
-        requireActivity().finishAndRemoveTask()
     }
 }

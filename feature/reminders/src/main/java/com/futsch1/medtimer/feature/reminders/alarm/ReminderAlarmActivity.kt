@@ -170,11 +170,17 @@ class ReminderAlarmActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        addAlarmFragment(intent)
+    }
+
     private fun addAlarmFragment(intent: Intent?) {
         if (intent != null) {
             Log.d(LogTags.ALARM, "Adding alarm fragment")
             supportFragmentManager.beginTransaction()
-                .add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
+                .replace(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
     }
 
