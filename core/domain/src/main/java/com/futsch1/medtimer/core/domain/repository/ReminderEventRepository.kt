@@ -26,4 +26,6 @@ interface ReminderEventRepository {
     suspend fun delete(reminderEvent: ReminderEvent)
     suspend fun deleteAll()
     suspend fun decreaseRepeats(reminderEventId: Int)
+    suspend fun upsert(reminderEvent: ReminderEvent): ReminderEvent
+    suspend fun upsertMany(reminderEvents: List<ReminderEvent>): List<ReminderEvent>
 }

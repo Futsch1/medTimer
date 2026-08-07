@@ -105,6 +105,10 @@
     <string name="medicine_data">藥物資料</string>
     <string name="export_csv">匯出 CSV</string>
     <string name="export_pdf">匯出 PDF</string>
+    <string name="export_events_pdf">匯出事件為 PDF</string>
+    <string name="export_events_csv">匯出事件為 CSV</string>
+    <string name="export_medicines_pdf">匯出藥物為 PDF</string>
+    <string name="export_medicines_csv">匯出藥物為 CSV</string>
     <string name="restore">還原</string>
     <string name="restore_failed">還原失敗</string>
     <string name="backup_failed">備份失敗</string>

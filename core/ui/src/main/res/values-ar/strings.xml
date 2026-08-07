@@ -115,6 +115,10 @@
     <string name="medicine_data">بيانات الدواء</string>
     <string name="export_csv">تصدير كملف CSV</string>
     <string name="export_pdf">تصدير كملف PDF</string>
+    <string name="export_events_pdf">تصدير الأحداث كملف PDF</string>
+    <string name="export_events_csv">تصدير الأحداث كملف CSV</string>
+    <string name="export_medicines_pdf">تصدير الأدوية كملف PDF</string>
+    <string name="export_medicines_csv">تصدير الأدوية كملف CSV</string>
     <string name="restore">استعادة</string>
     <string name="total">الإجمالي</string>
     <plurals name="last_n_days">

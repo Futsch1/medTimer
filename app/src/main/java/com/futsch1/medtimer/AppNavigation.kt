@@ -1,5 +1,9 @@
 package com.futsch1.medtimer
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
@@ -16,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -28,7 +30,10 @@ import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R as FeatureUiR
 
-/** Stable testTags for the top-level nav items; exposed to instrumented tests as resource-ids. */
+/**
+ * The nav items are the only selectors with no container to scope them to: NavigationSuiteScaffold
+ * exposes no modifier for the bar or rail itself, so each item stays addressable by its own tag.
+ */
 object NavTestTags {
     const val OVERVIEW = "nav_overview"
     const val MEDICINES = "nav_medicines"
@@ -70,17 +75,19 @@ private fun topLevelDestinationId(destination: NavDestination): Int =
     destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id ?: 0
 
 /**
- * Top-level navigation as an adaptive bar/rail. The Toolbar, warnings and the Fragment NavHost stay as
- * Views, embedded via AndroidViewBinding; [onContentBound] hands them back to the activity for wiring
- * (support action bar, warning buttons). Selection follows the NavController's current destination.
+ * Top-level navigation as an adaptive bar/rail. Each destination renders its own top app bar, so the
+ * shell holds nothing but the Fragment NavHost; [onContentBound] hands it back to the activity for
+ * wiring. Selection follows the NavController's current destination.
  */
 @Composable
 fun AppNavigationScaffold(
-    onContentBound: (ContentMainBinding, NavHostFragment) -> Unit,
+    onContentBound: (NavHostFragment) -> Unit,
     onNavItemClick: (NavController, Int) -> Unit,
 ) {
     var navController by remember { mutableStateOf<NavController?>(null) }
     var currentDestinationId by remember { mutableIntStateOf(0) }
+
+    val navigationSuiteType = navSuiteType(currentWindowAdaptiveInfo())
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -94,19 +101,22 @@ fun AppNavigationScaffold(
                 )
             }
         },
-        layoutType = navSuiteType(currentWindowAdaptiveInfo()),
-        modifier = Modifier.semantics { testTagsAsResourceId = true },
+        layoutType = navigationSuiteType,
     ) {
-        AndroidViewBinding(ContentMainBinding::inflate) {
-            // The update block runs on every recomposition; set up exactly once.
-            if (navController == null) {
-                val navHostFragment = navHost.getFragment<NavHostFragment>()
-                val controller = navHostFragment.navController
-                controller.addOnDestinationChangedListener { _, destination, _ ->
-                    currentDestinationId = topLevelDestinationId(destination)
+        // NavigationSuiteScaffold already consumes the space its bar or rail occupies, so padding the
+        // full system bars here resolves to exactly the sides the content still has to avoid.
+        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
+            AndroidViewBinding(ContentMainBinding::inflate, Modifier.weight(1f)) {
+                // The update block runs on every recomposition; set up exactly once.
+                if (navController == null) {
+                    val fragment = root.getFragment<NavHostFragment>()
+                    val controller = fragment.navController
+                    controller.addOnDestinationChangedListener { _, destination, _ ->
+                        currentDestinationId = topLevelDestinationId(destination)
+                    }
+                    navController = controller
+                    onContentBound(fragment)
                 }
-                navController = controller
-                onContentBound(this, navHostFragment)
             }
         }
     }

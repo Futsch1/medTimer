@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.futsch1.medtimer.core.ui.R
@@ -48,9 +49,15 @@ internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mo
             trailingIcon = {
                 Icon(painterResource(R.drawable.caret_down_fill), contentDescription = null, modifier = Modifier.rotate(rotation))
             },
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                .testTag(StatisticsTestTags.RANGE_DROPDOWN),
         )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.testTag(StatisticsTestTags.RANGE_MENU),
+        ) {
             ANALYSIS_RANGES.forEach { (labelRes, value) ->
                 DropdownMenuItem(
                     text = { Text(stringResource(labelRes)) },

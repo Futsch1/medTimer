@@ -55,7 +55,7 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
         val windowInsetsController =
             WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
 
         setContentView(R.layout.activity_alarm)
 

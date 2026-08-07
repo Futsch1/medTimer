@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences
 import android.content.Context
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
-import com.futsch1.medtimer.core.common.helpers.ModelDataStore
+import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository

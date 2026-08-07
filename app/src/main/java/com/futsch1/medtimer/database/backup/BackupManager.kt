@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.documentfile.provider.DocumentFile
@@ -22,7 +21,7 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.BackupInterval
 import com.futsch1.medtimer.core.domain.repository.BackupRepository
 import com.futsch1.medtimer.core.ui.ProgressDialogFragment
-import com.futsch1.medtimer.helpers.ExportBackupPath
+import com.futsch1.medtimer.feature.ui.exporters.ExportBackupPath
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -41,7 +40,6 @@ import java.time.LocalDate
 class BackupManager @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val lifecycleOwner: LifecycleOwner,
-    @Assisted private val menu: Menu?,
     @Assisted("openFile") private val openFileLauncher: ActivityResultLauncher<Intent>?,
     @Assisted("openDirectory") private val openDirectoryLauncher: ActivityResultLauncher<Intent>?,
     @Assisted private val fragmentManager: FragmentManager? = null,
@@ -57,42 +55,23 @@ class BackupManager @AssistedInject constructor(
         fun create(
             context: Context,
             lifecycleOwner: LifecycleOwner,
-            menu: Menu?,
             @Assisted("openFile") openFileLauncher: ActivityResultLauncher<Intent>?,
             @Assisted("openDirectory") openDirectoryLauncher: ActivityResultLauncher<Intent>?,
             fragmentManager: FragmentManager?
         ): BackupManager
     }
 
-    init {
-        setupBackup()
-    }
+    fun createBackup() = selectBackupType()
 
-    private fun setupBackup() {
-        if (menu != null) {
-            var item = menu.findItem(R.id.create_backup)
-            item.setOnMenuItemClickListener { _ ->
-                selectBackupType()
-                true
-            }
+    fun configureAutomaticBackup() = selectAutomaticBackupInterval()
 
-            item = menu.findItem(R.id.restore_backup)
-            item.setOnMenuItemClickListener { _ ->
-                MaterialAlertDialogBuilder(context)
-                    .setTitle(com.futsch1.medtimer.core.ui.R.string.restore)
-                    .setMessage(com.futsch1.medtimer.core.ui.R.string.restore_start)
-                    .setCancelable(true)
-                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> openBackup() }
-                    .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }.show()
-                true
-            }
-
-            item = menu.findItem(R.id.automatic_backup)
-            item.setOnMenuItemClickListener { _ ->
-                selectAutomaticBackupInterval()
-                true
-            }
-        }
+    fun restoreBackup() {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(com.futsch1.medtimer.core.ui.R.string.restore)
+            .setMessage(com.futsch1.medtimer.core.ui.R.string.restore_start)
+            .setCancelable(true)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> openBackup() }
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel) { _, _ -> }.show()
     }
 
     private fun selectBackupType() {

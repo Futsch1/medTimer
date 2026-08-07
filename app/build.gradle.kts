@@ -24,7 +24,7 @@ android {
         @Suppress("DEPRECATION")
         resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.futsch1.medtimer.harness.MedTimerHiltTestRunner"
         testInstrumentationRunnerArguments.putAll(
             mapOf(
                 "clearPackageData" to "true",
@@ -56,6 +56,9 @@ android {
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
         }
+    }
+    testCoverage {
+        jacocoVersion = "0.8.15"
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -135,6 +138,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.compose.ui.viewbinding)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
@@ -179,11 +183,16 @@ dependencies {
     androidTestImplementation(libs.uiautomator)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.barista)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil(libs.androidx.test.orchestrator)
 
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     kspTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

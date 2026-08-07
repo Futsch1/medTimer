@@ -1,35 +1,36 @@
-Medizinische Erinnerungen und Verlauf mit vollständiger Offline-Privatsphäre
+Medikamenten-Erinnerung und Verlauf mit vollem Offline-Datenschutz
 
 Behalte den Überblick über deine Medikamente mit MedTimer
 
-MedTimer ist eine Open-Source App zur Erinnerung an die Einnahme von Medikamenten, mit der du deine Medikamente effektiv und mit voller Kontrolle über deine sensiblen Daten verwalten kannst.
+MedTimer ist eine Open-Source-App für Medikamenten-Erinnerungen. Sie hilft dir, Medikamente und Pillen effektiv zu verwalten. Du behältst die volle Kontrolle über Ihre sensiblen Daten.
 
 Flexible und personalisierte Erinnerungen:
 
-- Verwalte eine unbegrenzte Anzahl Medikamente mit individuellen Erinnerungen pro Medikament (mit einfacher Standardeinstellung für tägliche Erinnerungen).
-- Erstelle flexible Erinnerungen mit Pausen und nur für bestimmten Tage (z.B. für die Antibabypille).
-- Wochenendmodus: Verschiebe Erinnerungen an wählbaren Tagen auf eine festgelegte Uhrzeit.
-- Verschiebe ("schlummern") Benachrichtigungen, um später erneut erinnert zu werden oder lasse dich wiederholt erinner.
-- Standortbasiertes Schlummern: Erneute Benachrichtigung bei Heimkehr nach einem Snooze.
-- Protokolliere zusätzliche, ungeplante Einnahmen.
-- Erstelle intervallbasierte Erinnerungen und solche, die auf vorherige Einnahmen nach einer gewissen Zeit folgen.
+- Verwalte unbegrenzt viele Medikamente mit anpassbaren Erinnerungen pro Medikament (inklusive einfacher Voreinstellungen für tägliche Erinnerungen).
+- Erstelle flexible Erinnerungen mit Pausen und für bestimmte Tage (z. B. für die Antibabypille).
+- Wochenendmodus: Verzögere Erinnerungen an bestimmten Tagen auf eine festgelegte Uhrzeit.
+- Schlummerfunktion für Benachrichtigungen oder wiederholte Erinnerungen.
+- Standortbasierter Schlummer: Lass dich bei der Ankunft zu Hause erneut erinnern.
+- Füge spontan zusätzliche Dosen hinzu.
+- Erstelle intervallbasierte Erinnerungen, aufeinanderfolgende Erinnerungen oder Intervall-Erinnerungen mit Start- und Endzeit pro Tag.
+- Nutze Alarm-Erinnerungen für Benachrichtigungen auch im Stummodus.
 
 Einfache und sichere Datenverwaltung:
 
-- Bestätige oder verwerfe Erinnerungen, um die Medikamenteneinnahme genau zu erfassen.
-- Zeige eine Übersicht deiner Einnahmen als Grafik oder Tabelle an.
-- Exportiere deine Medikamentenhistorie als CSV-Datei für eine einfache Aufzeichnung oder Weitergabe an medizinisches Fachpersonal.
-- Sichern und Wiederherstellen deiner Medikamentenliste als JSON-Datei.
-- Verwaltung des Medikamentenvorrats und Nachfüll-Erinnerungen.
+- Bestätige oder verwerfe Erinnerungen für eine genaue Verlaufskontrolle.
+- Erhalte eine Übersicht vergangener Dosen als Diagramm und Tabelle.
+- Exportiere deinen Verlauf als CSV-Datei für Ihre Unterlagen oder für den Arzt.
+- Sichern und wiederherstellen der Medikamentenliste als JSON-Datei.
+- Verfolgung des Medikamentenvorrats und Erinnerung zum Nachfüllen.
 - Tagge und filtere deine Medikamente.
 
-Datenschutz und Offline-Zugriff:
+Datenschutz und Offline-Verfügbarkeit:
 
-- Alle Daten werden sicher auf Ihrem Gerät gespeichert, so dass ein vollständiger Datenschutz und Offline-Zugriff gewährleistet ist.
-- Keine Internetverbindung erforderlich - deine Medikamentenerinnerungen sind immer verfügbar.
+- Alle Daten werden sicher auf deinem Gerät gespeichert. Das garantiert vollen Datenschutz und Offline-Zugriff.
+- Keine Internetverbindung erforderlich – deine Erinnerungen sind immer verfügbar.
 
-MedTimer ist eine kostenlose, werbefreie App.
+MedTimer ist eine kostenlose App ohne Werbung.
 
-Weitere Informationen auf GitHub: https://github.com/Futsch1/medTimer
+Projektseite auf GitHub: https://github.com/Futsch1/medTimer
 
-Feature-Grafik wurde mit https://hotpot.ai erstellt
+Das Feature-Grafik-Design wurde mit https://hotpot.ai erstellt

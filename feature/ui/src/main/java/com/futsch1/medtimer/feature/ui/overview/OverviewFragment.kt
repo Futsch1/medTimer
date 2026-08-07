@@ -1,340 +1,141 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import android.os.Bundle
-import android.view.ActionMode
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.futsch1.medtimer.core.common.OnFragmentReselectedListener
-import com.futsch1.medtimer.core.common.di.Dispatcher
-import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
-import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
-import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
-import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.core.ui.TimeFormatter
-import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
-import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.feature.ui.AppOptionsActions
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
+import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
+import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.overview.actions.ActionsMenu
+import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
+import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
+import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
+import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OverviewFragment : Fragment(), OnFragmentReselectedListener,
-    RemindersViewAdapter.ClickListener {
-    @Inject
-    @Dispatcher(MedTimerDispatchers.Default)
-    lateinit var backgroundDispatcher: CoroutineDispatcher
-
-    @Inject
-    @Dispatcher(MedTimerDispatchers.Main)
-    lateinit var mainDispatcher: CoroutineDispatcher
-
-    // TODO: Remove these data sources again (as they should be part of view models) when the dependent classes are DId
-    @Inject
-    lateinit var preferencesDataSource: PreferencesDataSource
-
-    @Inject
-    lateinit var persistentDataDataSource: PersistentDataDataSource
-
+class OverviewFragment : Fragment() {
     @Inject
     lateinit var manualDoseFactory: ManualDose.Factory
 
     @Inject
-    lateinit var timeFormatter: TimeFormatter
-
-    @Inject
-    lateinit var remindersViewAdapterFactory: RemindersViewAdapter.Factory
-
-    @Inject
     lateinit var actionsVisitor: ActionsVisitor
 
-    private lateinit var adapter: RemindersViewAdapter
-    private lateinit var reminders: RecyclerView
+    @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
+    @Inject
+    lateinit var tagsFragmentFactory: TagsFragment.Factory
+
+    private lateinit var appOptionsActions: AppOptionsActions
+    private val appOptionsViewModel: AppOptionsViewModel by viewModels()
+
     private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val overviewViewModel: OverviewViewModel by viewModels(
         extrasProducer = {
             defaultViewModelCreationExtras.withCreationCallback<OverviewViewModel.Factory> { factory ->
-                factory.create(
-                    tagFilterViewModel
-                )
+                factory.create(tagFilterViewModel)
             }
         }
     )
 
-    @Inject
-    lateinit var optionsMenuFactory: OptionsMenuFactory
-    private lateinit var optionsMenu: EntityEditOptionsMenu
-    private lateinit var daySelector: DaySelector
-    private var fragmentOverview: FragmentSwipeLayout? = null
-    private var onceStable = false
-    private var actionMode: ActionMode? = null
-    private var actionsMenu: ActionsMenu? = null
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overviewViewModel.day = LocalDate.now()
-
-        optionsMenu = optionsMenuFactory.create(
-            this,
-            this.findNavController(),
-            false,
-            tagFilterViewModel
-        )
-
-        onBackPressedCallback = object : OnBackPressedCallback(false) {
-            override fun handleOnBackPressed() {
-                actionMode?.finish()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        appOptionsActions = appOptionsActionsFactory.create(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val overview =
-            inflater.inflate(R.layout.fragment_overview, container, false) as FragmentSwipeLayout
-        fragmentOverview = overview
-
-        daySelector = DaySelector(
-            requireContext(),
-            overview.findViewById(R.id.overviewWeek),
-            overviewViewModel.day
-        ) { day -> daySelected(day) }
-
-        overview.findViewById<View>(R.id.overviewPrevWeek)
-            .setOnClickListener { daySelector.scrollToPreviousWeek() }
-        overview.findViewById<View>(R.id.overviewNextWeek)
-            .setOnClickListener { daySelector.scrollToNextWeek() }
-
-        viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
-            overviewViewModel.simulatedThrough.collect { endDay ->
-                withContext(mainDispatcher) {
-                    daySelector.updateRangeEnd(endDay)
-                }
+    ): View = ComposeView(requireContext()).apply {
+        overviewViewModel.selectDay(LocalDate.now())
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            MedTimerTheme {
+                OverviewScreen(
+                    viewModel = overviewViewModel,
+                    onEventClick = ::onEventClick,
+                    onAction = ::onAction,
+                    onLogManualDose = ::onLogManualDose,
+                    topBarActions = {
+                        AppOptionsMenuHost(
+                            fragment = this@OverviewFragment,
+                            actions = appOptionsActions,
+                            optionsViewModel = appOptionsViewModel,
+                            tagFilterViewModel = tagFilterViewModel,
+                            tagsFragmentFactory = tagsFragmentFactory,
+                        )
+                    },
+                )
             }
         }
-
-        requireActivity().addMenuProvider(optionsMenu, getViewLifecycleOwner())
-
-        setupReminders(overview)
-
-        setupLogManualDose(overview)
-        FilterToggleGroup(
-            overview.findViewById(R.id.filterButtons),
-            overviewViewModel,
-            persistentDataDataSource
-        )
-
-        overview.onSwipeListener = OverviewOnSwipeListener()
-
-        return overview
     }
 
     override fun onResume() {
         super.onResume()
-        daySelector.updateWeekRange()
-        updateTitle(overviewViewModel.day)
-    }
-
-    inner class OverviewOnSwipeListener : OnSwipeListener {
-        override fun onSwipeLeft() {
-            daySelector.selectNextDay()
-        }
-
-        override fun onSwipeRight() {
-            daySelector.selectPreviousDay()
-        }
-
-        override fun onSwipeUp() {
-            // Not required
-        }
-
-        override fun onSwipeDown() {
-            // Not required
-        }
-    }
-
-    private fun setupReminders(overview: FragmentSwipeLayout) {
-        reminders = overview.findViewById(R.id.reminders)
-        adapter = remindersViewAdapterFactory.create(
-            RemindersViewAdapter.OverviewEventDiff(),
-            requireActivity()
-        )
-        reminders.setAdapter(adapter)
-        reminders.setLayoutManager(LinearLayoutManager(overview.context))
-        adapter.clickListener = this
-
-        viewLifecycleOwner.lifecycleScope.launch(backgroundDispatcher) {
-            overviewViewModel.overviewEvents.collect { list ->
-                withContext(mainDispatcher) {
-                    adapter.submitList(list) {
-                        reminders.post {
-                            if (onceStable || !overviewViewModel.initialized) {
-                                return@post
-                            }
-
-                            onceStable = true
-                            scrollToCurrentTimeItem()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun scrollToCurrentTimeItem() {
-        adapter.currentList.forEachIndexed { index, listItem ->
-            if (Instant.ofEpochSecond(listItem.timestamp).atZone(ZoneId.systemDefault())
-                    .toLocalTime() >= LocalTime.now()
-            ) {
-                reminders.scrollToPosition(index)
-                return
-            }
-        }
-    }
-
-    private fun setupLogManualDose(overview: FragmentSwipeLayout) {
-        val logManualDose = overview.findViewById<Button>(R.id.logManualDose)
-        logManualDose.setOnClickListener { _: View? ->
-            lifecycleScope.launch {
-                manualDoseFactory.create(
-                    requireContext(),
-                    overviewViewModel.medicines.value,
-                    requireActivity(),
-                    overviewViewModel.day
-                ).logManualDose()
-            }
-        }
-    }
-
-    fun daySelected(date: LocalDate) {
-        overviewViewModel.day = date
-        updateTitle(date)
-    }
-
-    private fun updateTitle(date: LocalDate) {
-        (requireActivity() as AppCompatActivity).supportActionBar?.title =
-            getString(com.futsch1.medtimer.core.ui.R.string.tab_overview) + " - " +
-                    date.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()))
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        fragmentOverview = null
+        // The battery exemption may have been granted in system settings while we were away.
+        overviewViewModel.refreshWarnings()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (this::optionsMenu.isInitialized) {
-            optionsMenu.onDestroy()
-        }
+        appOptionsActions.onDestroy()
     }
 
-    override fun onFragmentReselected() {
-        daySelector.setDay(LocalDate.now())
-    }
-
-    override fun onItemClick(position: Int) {
-        if (actionMode != null) {
-            adapter.toggleSelection(position)
-            updateActionMode()
-        }
-    }
-
-    override fun onItemLongClick(position: Int) {
-        if (actionMode == null) {
-            actionMode = requireActivity().startActionMode(ActionModeCallback())
-            adapter.selectionMode = true
-            onBackPressedCallback.isEnabled = true
-        }
-
-        if (preferencesDataSource.preferences.value.combineNotifications) {
-            adapter.selectSameTimeEvents(position)
+    private fun onEventClick(event: OverviewEvent) {
+        val editable = event is PastReminderEvent &&
+                event.state != OverviewState.RAISED &&
+                event.state != OverviewState.PENDING &&
+                event.state != OverviewState.LOCATION
+        if (editable) {
+            EditEventSheetDialogFragment
+                .newInstance(event.reminderEvent.reminderEventId)
+                .show(parentFragmentManager, "EditEventDialog")
         } else {
-            adapter.toggleSelection(position)
+            ShowMedicineSheetDialogFragment.newInstance(event.reminderId)
+                .show(parentFragmentManager, "ShowMedicineDialog")
         }
-        updateActionMode()
     }
 
-    fun updateActionMode() {
-        val selectedCount = adapter.getSelectedCount()
-        if (selectedCount == 0) {
-            actionMode?.finish()
-            actionsMenu = null
+    private fun onAction(button: Button, events: List<OverviewEvent>) {
+        val actions = if (events.size == 1) {
+            ActionsFactory().createActions(events.first())
         } else {
-            actionMode?.title = selectedCount.toString()
-            actionsMenu =
-                ActionsMenu(actionMode!!.menu, MultipleActions(adapter.getSelectedItems()))
-        }
-
-    }
-
-    inner class ActionModeCallback : ActionMode.Callback {
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            mode?.menuInflater?.inflate(R.menu.overview_multi_selection, menu)
-            mode?.title = "1"
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            if (actionsMenu != null) {
-                if (item?.itemId == R.id.selectAll) {
-                    adapter.selectAll()
-                    updateActionMode()
-                } else {
-                    val button = com.futsch1.medtimer.feature.ui.overview.actions.Button.fromId(
-                        item?.itemId ?: return false
-                    )
-                    lifecycleScope.launch {
-                        actionsVisitor.startVisit(button).use {
-                            actionsMenu?.actions?.buttonClicked(actionsVisitor)
-                        }
-                        mode?.finish()
-                    }
-                }
+            MultipleActions(events)
+        } ?: return
+        lifecycleScope.launch {
+            actionsVisitor.startVisit(button).use {
+                actions.buttonClicked(actionsVisitor)
             }
-            return true
         }
+    }
 
-        override fun onDestroyActionMode(mode: ActionMode?) {
-            adapter.selectionMode = false
-            actionMode = null
-            onBackPressedCallback.isEnabled = false
+    private fun onLogManualDose() {
+        lifecycleScope.launch {
+            manualDoseFactory.create(
+                requireContext(),
+                overviewViewModel.medicines.value,
+                requireActivity(),
+                overviewViewModel.state.day
+            ).logManualDose()
         }
     }
 }
