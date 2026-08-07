@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.helpers.SimpleIdlingResource
+import com.futsch1.medtimer.core.ui.component.withTopAppBar
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.button.MaterialButton
@@ -68,8 +69,9 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         idlingResource.setBusy()
-        val fragmentView: View =
-            inflater.inflate(R.layout.fragment_calendar, container, false)
+        val fragmentView: View = withTopAppBar(
+            inflater.inflate(R.layout.fragment_calendar, container, false),
+        )
 
         val medicineCalenderArgs = calendarFragmentArgs()
 
