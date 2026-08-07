@@ -31,5 +31,5 @@ suspend fun setRemindersActive(reminders: List<Reminder>, reminderRepository: Re
         }
         r.copy(active = active)
     }
-    reminderRepository.updateAll(updated)
+    reminderRepository.updateMany(updated)
 }

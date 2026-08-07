@@ -6,26 +6,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.view.MenuProvider
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
-import com.futsch1.medtimer.core.common.helpers.EntityEditOptionsMenu
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.ui.ScreenTestTags
+import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.feature.ui.AppOptionsActions
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
+import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
+import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.BuildConfig
-import com.futsch1.medtimer.feature.ui.OptionsMenuFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -53,6 +59,15 @@ class MedicinesFragment : Fragment() {
 
     @Inject
     lateinit var medicinesMenu: MedicinesMenu
+
+    @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
+    @Inject
+    lateinit var tagsFragmentFactory: com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment.Factory
+
+    private lateinit var appOptionsActions: AppOptionsActions
+    private val appOptionsViewModel: AppOptionsViewModel by viewModels()
     private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val medicinesScreenViewModel: MedicinesScreenViewModel by viewModels(
         extrasProducer = {
@@ -64,33 +79,35 @@ class MedicinesFragment : Fragment() {
         }
     )
 
-    @Inject
-    lateinit var optionsMenuFactory: OptionsMenuFactory
-
-    private lateinit var optionsMenu: EntityEditOptionsMenu
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        optionsMenu = optionsMenuFactory.create(
-            this,
-            NavHostFragment.findNavController(this),
-            false,
-            medicinesScreenViewModel.tagFilterViewModel
-        )
+        appOptionsActions = appOptionsActionsFactory.create(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().addMenuProvider(medicinesMenu, getViewLifecycleOwner())
-        requireActivity().addMenuProvider(optionsMenu as MenuProvider, getViewLifecycleOwner())
         medicinesMenu.medicinesProvider = { medicinesScreenViewModel.medicines.value }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MedTimerTheme {
+                    Column(Modifier.testTag(ScreenTestTags.MEDICINES)) {
+                    MedTimerTopAppBar(
+                        title = stringResource(com.futsch1.medtimer.core.ui.R.string.tab_medicine),
+                        actions = {
+                            MedicinesMenuActions(medicinesMenu)
+                            AppOptionsMenuHost(
+                                fragment = this@MedicinesFragment,
+                                actions = appOptionsActions,
+                                optionsViewModel = appOptionsViewModel,
+                                tagFilterViewModel = tagFilterViewModel,
+                                tagsFragmentFactory = tagsFragmentFactory,
+                            )
+                        },
+                    )
                     MedicinesScreen(
                         medicinesScreenViewModel,
                         onMedicineAdd = { addMedicine() },
@@ -102,6 +119,7 @@ class MedicinesFragment : Fragment() {
                             }
                         }
                     )
+                  }
                 }
             }
         }
@@ -109,7 +127,7 @@ class MedicinesFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        optionsMenu.onDestroy()
+        appOptionsActions.onDestroy()
     }
 
     private fun deleteItem(medicineId: Int) {

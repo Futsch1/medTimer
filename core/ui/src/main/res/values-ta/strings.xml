@@ -117,6 +117,10 @@
     <string name="medicine_data">மருந்து தரவு</string>
     <string name="export_csv">காபிம ஆக ஏற்றுமதி</string>
     <string name="export_pdf">PDF ஆக ஏற்றுமதி</string>
+    <string name="export_events_pdf">நிகழ்வுகளை PDF ஆக ஏற்றுமதி</string>
+    <string name="export_events_csv">நிகழ்வுகளை CSV ஆக ஏற்றுமதி</string>
+    <string name="export_medicines_pdf">மருந்துகளை PDF ஆக ஏற்றுமதி</string>
+    <string name="export_medicines_csv">மருந்துகளை CSV ஆக ஏற்றுமதி</string>
     <string name="restore">மீட்டமை</string>
     <string name="restore_failed">மீட்டமை தோல்வியடைந்தது</string>
     <string name="backup_failed">காப்புப்பிரதி தோல்வியடைந்தது</string>

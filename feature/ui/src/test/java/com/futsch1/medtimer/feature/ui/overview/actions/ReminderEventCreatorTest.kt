@@ -26,7 +26,7 @@ class ReminderEventCreatorTest {
     private val creator = ReminderEventCreator(reminderEventRepository, reminderRepository, timeFormatter, preferencesDataSource)
 
     @Test
-    fun `getOrCreateReminderEvent moves an already-materialized event to the requested time`() = runTest {
+    fun `resolvePending moves an already-materialized event to the requested time`() = runTest {
         val originalTimestamp = Instant.ofEpochSecond(1_000)
         val newTimestamp = Instant.ofEpochSecond(2_000)
         val reminder = Reminder.default().copy(id = 7)
@@ -42,9 +42,33 @@ class ReminderEventCreatorTest {
         )
         whenever(reminderEventRepository.fetch(7, originalTimestamp.epochSecond)).thenReturn(existingEvent)
 
+        val result = creator.resolvePending(scheduledReminder, newTimestamp.epochSecond)
+
+        assertEquals(existingEvent.copy(remindedTimestamp = newTimestamp), result)
+    }
+
+    @Test
+    fun `getOrCreateReminderEvent upserts the resolved pending event`() = runTest {
+        val originalTimestamp = Instant.ofEpochSecond(1_000)
+        val newTimestamp = Instant.ofEpochSecond(2_000)
+        val reminder = Reminder.default().copy(id = 7)
+        val scheduledReminder = ScheduledReminder(
+            medicine = Medicine.default().copy(id = 3),
+            reminder = reminder,
+            timestamp = originalTimestamp
+        )
+        val existingEvent = ReminderEvent.default().copy(
+            reminderEventId = 42,
+            reminderId = 7,
+            remindedTimestamp = originalTimestamp
+        )
+        val pendingEvent = existingEvent.copy(remindedTimestamp = newTimestamp)
+        whenever(reminderEventRepository.fetch(7, originalTimestamp.epochSecond)).thenReturn(existingEvent)
+        whenever(reminderEventRepository.upsert(pendingEvent)).thenReturn(pendingEvent)
+
         val result = creator.getOrCreateReminderEvent(scheduledReminder, newTimestamp.epochSecond)
 
         assertEquals(newTimestamp, result.remindedTimestamp)
-        verify(reminderEventRepository).update(existingEvent.copy(remindedTimestamp = newTimestamp))
+        verify(reminderEventRepository).upsert(pendingEvent)
     }
 }

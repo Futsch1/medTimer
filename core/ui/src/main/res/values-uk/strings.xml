@@ -127,6 +127,10 @@
     <string name="theme">Тема</string>
     <string name="export_pdf">Експортувати як PDF</string>
     <string name="export_csv">Експортувати як CSV</string>
+    <string name="export_events_pdf">Експортувати події як PDF</string>
+    <string name="export_events_csv">Експортувати події як CSV</string>
+    <string name="export_medicines_pdf">Експортувати ліки як PDF</string>
+    <string name="export_medicines_csv">Експортувати ліки як CSV</string>
     <string name="restore_successful">Успішно відновлено</string>
     <string name="dismiss_notification_action">Дія при закритті сповіщення</string>
     <string name="export_failed">Помилка експорту</string>

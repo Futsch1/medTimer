@@ -1,69 +1,37 @@
 package com.futsch1.medtimer
 
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.Until
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.ui.R
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 
-class ExportBackupTest : BaseTestHelper() {
+@HiltAndroidTest
+class ExportBackupTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testTriggerExport() {
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
+        menus.clickAppOption(R.string.generate_test_data)
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.MEDICINES)
-        clickOn(R.id.tag_filter)
-        clickOn("Supplements")
-        pressBack()
+        navigation.toMedicines()
+        tags.inFilter(confirming = false) { toggle("Supplements") }
 
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.event_data)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.export_csv)
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
-        device.pressBack()
-
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.event_data)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.export_pdf)
-        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
-        device.pressBack()
-
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.medicine_data)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.export_csv)
-        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
-        device.pressBack()
-
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.medicine_data)
-        clickOn(com.futsch1.medtimer.core.ui.R.string.export_pdf)
-        device.wait(Until.findObject(By.textContains("Sharing")), 15_000)
-        device.pressBack()
+        export.export(R.string.export_events_csv)
+        export.export(R.string.export_events_pdf)
+        export.export(R.string.export_medicines_csv)
+        export.export(R.string.export_medicines_pdf)
     }
 
     @Test
     @AllowFlaky(attempts = 3)
     fun testTriggerBackup() {
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.generate_test_data)
+        menus.clickAppOption(R.string.generate_test_data)
 
-        openMenu()
-        clickOn(com.futsch1.medtimer.core.ui.R.string.backup)
+        menus.clickAppOption(R.string.backup)
 
-        clickListItem(-1, 2)
-        clickDialogPositiveButton()
+        dialogs.assertItemChecked(R.string.medicine_data)
+        dialogs.assertItemChecked(R.string.event_data)
+        dialogs.confirm()
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.findObject(By.textContains("Sharing")), 5_000)
-        device.pressBack()
+        shareSheet.assertShownAndDismiss()
     }
 }

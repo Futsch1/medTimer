@@ -124,6 +124,10 @@
     <string name="medicine_data">Läkemedelsdata</string>
     <string name="export_csv">Exportera som CSV</string>
     <string name="export_pdf">Exportera som PDF</string>
+    <string name="export_events_pdf">Exportera händelser som PDF</string>
+    <string name="export_events_csv">Exportera händelser som CSV</string>
+    <string name="export_medicines_pdf">Exportera läkemedel som PDF</string>
+    <string name="export_medicines_csv">Exportera läkemedel som CSV</string>
     <string name="restore">Återställ</string>
     <string name="restore_failed">Återställning misslyckades</string>
     <string name="backup_failed">Backup misslyckades</string>

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.navigation.Navigation.findNavController
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
+import com.futsch1.medtimer.core.ui.preferences.MedTimerPreferenceFragment
 import com.futsch1.medtimer.feature.ui.R
 
 fun setupPreferencesLink(
@@ -25,7 +25,7 @@ fun setupPreferencesLink(
     }
 }
 
-open class PreferencesFragment : PreferenceFragmentCompat() {
+open class PreferencesFragment : MedTimerPreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.di
 
 import com.futsch1.medtimer.BuildConfig
+import com.futsch1.medtimer.core.common.di.IsDebugBuild
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

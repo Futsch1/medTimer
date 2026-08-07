@@ -10,8 +10,8 @@ import com.futsch1.medtimer.core.common.helpers.addDividerToSpan
 import com.futsch1.medtimer.core.common.helpers.addImageToSpan
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
+import com.futsch1.medtimer.core.ui.ReminderStringFormatter
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
-import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.getImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -32,7 +32,7 @@ class CalendarEventsViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val calendarEventsProvider: CalendarEventsProvider,
     private val reminderEventFactory: PastReminderEvent.Factory,
-    private val simulatedReminderEventFactory: SimulatedReminderEvent.Factory,
+    private val reminderStringFormatter: ReminderStringFormatter,
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     fun getEventForMonths(
@@ -67,7 +67,7 @@ class CalendarEventsViewModel @Inject constructor(
     private fun simulatedReminderToString(simulatedReminder: SimulatedReminder): Spanned {
         val builder = SpannableStringBuilder()
         addDividerToSpan(builder)
-        return builder.append(simulatedReminderEventFactory.create(simulatedReminder).text)
+        return builder.append(reminderStringFormatter.formatSimulatedReminder(simulatedReminder))
     }
 
     private fun reminderEventToString(reminderEvent: ReminderEvent): Spanned {
@@ -76,6 +76,6 @@ class CalendarEventsViewModel @Inject constructor(
         addDividerToSpan(builder)
         addImageToSpan(overviewReminderEvent.state.getImage(), builder, context)
 
-        return builder.append(" ").append(overviewReminderEvent.text)
+        return builder.append(" ").append(reminderStringFormatter.formatReminderEvent(reminderEvent))
     }
 }

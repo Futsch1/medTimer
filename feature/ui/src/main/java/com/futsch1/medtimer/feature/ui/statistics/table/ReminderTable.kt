@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -35,6 +36,7 @@ import com.futsch1.medtimer.core.ui.component.SortableTableColumn
 import com.futsch1.medtimer.core.ui.component.SortableTableRow
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.feature.ui.statistics.StatisticsTestTags
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -86,7 +88,9 @@ fun ReminderTable(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(StatisticsTestTags.TABLE_FILTER),
             )
 
             Card(

@@ -3,6 +3,7 @@
 android-gradle-plugin = "9.3.1"
 hilt = "2.60.1"
 navigation-safe-args = "2.9.8"
+hilt-navigation-compose = "1.2.0"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.3.0.8198"
@@ -131,6 +132,7 @@ androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3-expressive" }
 androidx-compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 androidx-compose-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3-expressive" }
@@ -146,6 +148,7 @@ androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-mani
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

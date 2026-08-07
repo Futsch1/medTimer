@@ -1,15 +1,14 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
-import android.text.Spanned
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
-import com.futsch1.medtimer.core.ui.ReminderStringFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 class SimulatedReminderEvent @AssistedInject constructor(
-    reminderStringFormatter: ReminderStringFormatter,
     preferencesDataSource: PreferencesDataSource,
     @Assisted val simulatedReminder: SimulatedReminder
 ) :
@@ -21,7 +20,18 @@ class SimulatedReminderEvent @AssistedInject constructor(
     }
 
     val scheduledReminder = simulatedReminder.scheduledReminder
-    override val text: Spanned = reminderStringFormatter.formatSimulatedReminder(simulatedReminder)
+
+    override val content: OverviewEventContent = OverviewEventContent(
+        reminderType = scheduledReminder.reminder.reminderType,
+        time = scheduledReminder.timestamp,
+        medicineName = scheduledReminder.medicine.name,
+        dose = dose(scheduledReminder),
+        stock = projectedStock(simulatedReminder),
+        expirationDate = scheduledReminder.medicine.expirationDate
+            .takeIf { scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE },
+        useRelativeTime = preferencesDataSource.preferences.value.useRelativeDateTime,
+    )
+
     override val id: Int = java.util.Objects.hash(
         scheduledReminder.reminder.id,
         scheduledReminder.timestamp.epochSecond
@@ -37,4 +47,20 @@ class SimulatedReminderEvent @AssistedInject constructor(
         get() = OverviewState.PENDING
     override val reminderId: Int
         get() = scheduledReminder.reminder.id
+
+    private fun dose(scheduledReminder: ScheduledReminder) =
+        if (scheduledReminder.reminder.isOutOfStockOrExpirationReminder) "" else scheduledReminder.reminder.amount
+
+    /** The stock this dose is projected to consume; absent when the amount or the stock is unknown. */
+    private fun projectedStock(simulatedReminder: SimulatedReminder): StockChange? {
+        val reminder = simulatedReminder.scheduledReminder.reminder
+        val medicine = simulatedReminder.scheduledReminder.medicine
+        if (reminder.reminderType == ReminderType.EXPIRATION_DATE ||
+            reminder.variableAmount ||
+            !medicine.isStockManagementActive()
+        ) {
+            return null
+        }
+        return StockChange(simulatedReminder.stockBefore, simulatedReminder.stockAfter, medicine.unit)
+    }
 }

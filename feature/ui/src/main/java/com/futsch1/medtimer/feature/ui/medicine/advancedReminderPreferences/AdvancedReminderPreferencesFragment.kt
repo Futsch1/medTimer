@@ -5,9 +5,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.preference.Preference
-import com.futsch1.medtimer.core.common.helpers.ModelDataPreferencesFragment
-import com.futsch1.medtimer.core.common.helpers.ModelDataStore
-import com.futsch1.medtimer.core.common.helpers.ModelDataViewModel
+import com.futsch1.medtimer.core.ui.preferences.ModelDataPreferencesFragment
+import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
+import com.futsch1.medtimer.core.ui.preferences.ModelDataViewModel
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import javax.inject.Inject

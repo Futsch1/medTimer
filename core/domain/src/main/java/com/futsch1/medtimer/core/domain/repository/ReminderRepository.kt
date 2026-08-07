@@ -10,8 +10,9 @@ interface ReminderRepository {
     fun getFlow(reminderId: Int): Flow<Reminder?>
     suspend fun getLinked(reminderId: Int): List<Reminder>
     suspend fun create(reminder: Reminder): Int
+    suspend fun createMany(reminders: List<Reminder>)
     suspend fun update(reminder: Reminder)
-    suspend fun updateAll(reminders: List<Reminder>)
+    suspend fun updateMany(reminders: List<Reminder>)
     suspend fun delete(reminderId: Int)
     suspend fun deleteAll()
 }

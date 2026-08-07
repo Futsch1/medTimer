@@ -111,6 +111,10 @@
     <string name="medicine_data">İlaç verisi</string>
     <string name="export_csv">CSV olarak dışa aktar</string>
     <string name="export_pdf">PDF olarak dışa aktar</string>
+    <string name="export_events_pdf">Etkinlikleri PDF olarak dışa aktar</string>
+    <string name="export_events_csv">Etkinlikleri CSV olarak dışa aktar</string>
+    <string name="export_medicines_pdf">İlaçları PDF olarak dışa aktar</string>
+    <string name="export_medicines_csv">İlaçları CSV olarak dışa aktar</string>
     <string name="restore">Geri yükle</string>
     <string name="restore_failed">Geri yükleme başarısız</string>
     <string name="backup_failed">Yedekleme başarısız</string>

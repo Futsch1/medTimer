@@ -116,6 +116,10 @@
     <string name="medicine_data">נתוני תרופה</string>
     <string name="export_csv">ייצא כcsv</string>
     <string name="export_pdf">ייצא כpdf</string>
+    <string name="export_events_pdf">ייצא אירועים כpdf</string>
+    <string name="export_events_csv">ייצא אירועים כcsv</string>
+    <string name="export_medicines_pdf">ייצא תרופות כpdf</string>
+    <string name="export_medicines_csv">ייצא תרופות כcsv</string>
     <string name="restore">שחזור</string>
     <string name="restore_failed">השחזור נכשל</string>
     <string name="backup_failed">הגיבוי נכשל</string>
