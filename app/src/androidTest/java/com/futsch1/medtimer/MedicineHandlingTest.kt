@@ -4,6 +4,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 const val TEST_MED_1 = "Test"
 const val TEST_MED_2 = "Test2"
@@ -46,103 +47,59 @@ class MedicineHandlingTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineCannotBeSkippedTest() {
-        openMenu()
-        clickOn(R.string.tab_settings)
-        clickOn(R.string.notification_reminder_settings)
-        clickOn(R.string.dismiss_notification_action)
-        clickOn(R.string.snooze)
-        pressBack()
-        pressBack()
-
-        AndroidTestHelper.createMedicine(TEST_MED_1)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.openMedicineSettings)
-        clickOn(R.string.medicine_cannot_be_skipped)
-        pressBack()
-
-        AndroidTestHelper.createIntervalReminder("1", 60)
-
-        pressBack()
-
-        openNotification().use {
-            assert(
-                !clickNotificationButton(
-                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()),
-                    getNotificationText(R.string.skipped)
-                )
-            )
-            assert(
-                !clickNotificationButton(
-                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()),
-                    getNotificationText(R.string.snooze)
-                )
-            )
+        settings.inSection(R.string.notification_reminder_settings) {
+            preferences.click(R.string.dismiss_notification_action)
+            dialogs.clickItem(R.string.snooze)
         }
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        navigation.toMedicines()
+        medicines.create(TEST_MED_1)
+        medicineSettings.inSettings { toggleCannotBeSkipped() }
+        medicineEditor.addIntervalReminder("1", 2.hours)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        assertNotDisplayed(R.string.skipped)
-        pressBack()
+        notifications.inShade {
+            assertShows(TEST_MED_1)
+            assertShowsAction(R.string.taken)
+            assertNoAction(R.string.snooze)
+            assertNoAction(R.string.skipped)
+            dismiss(TEST_MED_1)
+        }
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        assertNotDisplayed(R.string.skipped)
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
+        overview.clickEventState(1)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
     }
 
 
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineCannotBeSkippedPreferenceTest() {
-        openMenu()
-        clickOn(R.string.tab_settings)
-        clickOn(R.string.notification_reminder_settings)
-        scrollDown()
-        clickOn(R.string.reminders_cannot_be_skipped)
-        pressBack()
-        pressBack()
-
-        AndroidTestHelper.createMedicine(TEST_MED_1)
-        AndroidTestHelper.createIntervalReminder("1", 60)
-
-        pressBack()
-
-        openNotification().use {
-            assert(
-                !clickNotificationButton(
-                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()),
-                    getNotificationText(R.string.skipped)
-                )
-            )
-            assert(
-                !clickNotificationButton(
-                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()),
-                    getNotificationText(R.string.snooze)
-                )
-            )
+        settings.inSection(R.string.notification_reminder_settings) {
+            preferences.click(R.string.reminders_cannot_be_skipped)
         }
 
-        AndroidTestHelper.navigateTo(AndroidTestHelper.MainMenu.OVERVIEW)
+        navigation.toMedicines()
+        medicines.create(TEST_MED_1)
+        medicineEditor.addIntervalReminder("1", 2.hours)
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            0,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        assertNotDisplayed(R.string.skipped)
-        pressBack()
+        notifications.inShade {
+            assertShows(TEST_MED_1)
+            assertShowsAction(R.string.taken)
+            assertNoAction(R.string.snooze)
+            assertNoAction(R.string.skipped)
+            dismiss(TEST_MED_1)
+        }
 
-        clickListItemChild(
-            com.futsch1.medtimer.feature.ui.R.id.reminders,
-            1,
-            com.futsch1.medtimer.feature.ui.R.id.stateButton
-        )
-        assertNotDisplayed(R.string.skipped)
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
+        overview.clickEventState(1)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
     }
 }
