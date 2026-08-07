@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.navigation.NavController
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.fragment.NavHostFragment
@@ -64,25 +63,34 @@ private data class TopLevelNavItem(
 
 // Tab order for the bar and rail. Destination ids come from the nav graph in :feature:ui.
 private val NAV_ITEMS = listOf(
-    TopLevelNavItem(FeatureUiR.id.overviewFragment, CoreUiR.drawable.calendar_event, CoreUiR.string.tab_overview, CoreUiR.string.overview_tab_description, NavTestTags.OVERVIEW),
-    TopLevelNavItem(FeatureUiR.id.medicinesFragment, CoreUiR.drawable.capsule, CoreUiR.string.tab_medicine, CoreUiR.string.medicines_tab_description, NavTestTags.MEDICINES),
-    TopLevelNavItem(FeatureUiR.id.statisticsFragment, CoreUiR.drawable.bar_chart, CoreUiR.string.analysis, CoreUiR.string.statistics_tab_description, NavTestTags.STATISTICS),
+    TopLevelNavItem(
+        FeatureUiR.id.overviewFragment,
+        CoreUiR.drawable.calendar_event,
+        CoreUiR.string.tab_overview,
+        CoreUiR.string.overview_tab_description,
+        NavTestTags.OVERVIEW
+    ),
+    TopLevelNavItem(
+        FeatureUiR.id.medicinesFragment,
+        CoreUiR.drawable.capsule,
+        CoreUiR.string.tab_medicine,
+        CoreUiR.string.medicines_tab_description,
+        NavTestTags.MEDICINES
+    ),
+    TopLevelNavItem(
+        FeatureUiR.id.statisticsFragment,
+        CoreUiR.drawable.bar_chart,
+        CoreUiR.string.analysis,
+        CoreUiR.string.statistics_tab_description,
+        NavTestTags.STATISTICS
+    ),
 )
 
 private val TOP_LEVEL_IDS = NAV_ITEMS.map { it.destinationId }.toSet()
 
-/** Resolves any destination up its hierarchy to one of the three top-level ids (0 if none). */
-internal fun topLevelDestinationId(
-    destination: NavDestination,
-    backStack: List<NavBackStackEntry> = emptyList(),
-): Int =
-    destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id
-        ?: nearestTopLevelDestinationId(backStack.map { it.destination.id }, TOP_LEVEL_IDS)
-
-internal fun nearestTopLevelDestinationId(
-    destinationIds: List<Int>,
-    topLevelIds: Set<Int>,
-): Int = destinationIds.asReversed().firstOrNull { it in topLevelIds } ?: 0
+/** Resolves a destination to a top-level id; child destinations return 0. */
+internal fun topLevelDestinationId(destination: NavDestination): Int =
+    destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id ?: 0
 
 /**
  * Top-level navigation as an adaptive bar/rail. Each destination renders its own top app bar, so the
@@ -105,7 +113,12 @@ fun AppNavigationScaffold(
                 item(
                     selected = currentDestinationId == navItem.destinationId,
                     onClick = { navController?.let { onNavItemClick(it, navItem.destinationId) } },
-                    icon = { Icon(painterResource(navItem.iconRes), contentDescription = stringResource(navItem.descriptionRes)) },
+                    icon = {
+                        Icon(
+                            painterResource(navItem.iconRes),
+                            contentDescription = stringResource(navItem.descriptionRes)
+                        )
+                    },
                     label = { Text(stringResource(navItem.labelRes)) },
                     modifier = Modifier.testTag(navItem.testTag),
                 )
@@ -122,7 +135,7 @@ fun AppNavigationScaffold(
                     val fragment = root.getFragment<NavHostFragment>()
                     val controller = fragment.navController
                     controller.addOnDestinationChangedListener { _, destination, _ ->
-                    currentDestinationId = topLevelDestinationId(destination, controller.currentBackStack.value)
+                        topLevelDestinationId(destination).takeIf { it != 0 }?.let { currentDestinationId = it }
                     }
                     navController = controller
                     onContentBound(fragment)

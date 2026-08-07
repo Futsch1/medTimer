@@ -51,7 +51,8 @@ import kotlin.time.toDuration
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var autostartService: AutostartService
-    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
+    private val requestNotificationPermission =
+        RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -181,12 +182,22 @@ class MainActivity : AppCompatActivity() {
         this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    private fun onContentBound(@Suppress("UNUSED_PARAMETER") navHostFragment: NavHostFragment) = Unit
+    private fun onContentBound(navHostFragment: NavHostFragment) {
+        updateCurrentTab(navHostFragment)
+    }
+
+    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
+
+    private fun updateCurrentTab(navHostFragment: NavHostFragment) {
+        navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
+            topLevelDestinationId(destination).takeIf { it != 0 }?.let { currentTabId = it }
+        }
+    }
 
     private fun onNavItemClick(navController: NavController, destinationId: Int) {
         val currentDestination = navController.currentDestination
-        if (currentDestination?.let { topLevelDestinationId(it, navController.currentBackStack.value) } == destinationId) {
-            if (currentDestination.id != destinationId) {
+        if (currentTabId == destinationId) {
+            if (currentDestination?.id != destinationId) {
                 navController.popBackStack(destinationId, false)
             }
             return
