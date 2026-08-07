@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="expiration_date">Aegumise kuupäev</string>
+    <string name="skipped">Vahelejäetud</string>
+    <string name="taken">Võetud</string>
+    <string name="time_based_reminder">Ajapõhine meeldetuletus</string>
+</resources>
