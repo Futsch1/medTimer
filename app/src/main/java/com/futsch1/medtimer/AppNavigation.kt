@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.fragment.NavHostFragment
@@ -71,8 +72,17 @@ private val NAV_ITEMS = listOf(
 private val TOP_LEVEL_IDS = NAV_ITEMS.map { it.destinationId }.toSet()
 
 /** Resolves any destination up its hierarchy to one of the three top-level ids (0 if none). */
-private fun topLevelDestinationId(destination: NavDestination): Int =
-    destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id ?: 0
+internal fun topLevelDestinationId(
+    destination: NavDestination,
+    backStack: List<NavBackStackEntry> = emptyList(),
+): Int =
+    destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id
+        ?: nearestTopLevelDestinationId(backStack.map { it.destination.id }, TOP_LEVEL_IDS)
+
+internal fun nearestTopLevelDestinationId(
+    destinationIds: List<Int>,
+    topLevelIds: Set<Int>,
+): Int = destinationIds.asReversed().firstOrNull { it in topLevelIds } ?: 0
 
 /**
  * Top-level navigation as an adaptive bar/rail. Each destination renders its own top app bar, so the
@@ -112,7 +122,7 @@ fun AppNavigationScaffold(
                     val fragment = root.getFragment<NavHostFragment>()
                     val controller = fragment.navController
                     controller.addOnDestinationChangedListener { _, destination, _ ->
-                        currentDestinationId = topLevelDestinationId(destination)
+                    currentDestinationId = topLevelDestinationId(destination, controller.currentBackStack.value)
                     }
                     navController = controller
                     onContentBound(fragment)
