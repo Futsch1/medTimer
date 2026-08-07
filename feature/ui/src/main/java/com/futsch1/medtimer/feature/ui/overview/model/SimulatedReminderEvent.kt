@@ -10,7 +10,7 @@ import dagger.assisted.AssistedInject
 
 class SimulatedReminderEvent @AssistedInject constructor(
     preferencesDataSource: PreferencesDataSource,
-    @Assisted val simulatedReminder: SimulatedReminder
+    @Assisted private val simulatedReminder: SimulatedReminder
 ) :
     OverviewEvent(preferencesDataSource) {
 
@@ -47,6 +47,8 @@ class SimulatedReminderEvent @AssistedInject constructor(
         get() = OverviewState.PENDING
     override val reminderId: Int
         get() = scheduledReminder.reminder.id
+    override val cannotSkipMedicine: Boolean
+        get() = scheduledReminder.medicine.cannotBeSkipped
 
     private fun dose(scheduledReminder: ScheduledReminder) =
         if (scheduledReminder.reminder.isOutOfStockOrExpirationReminder) "" else scheduledReminder.reminder.amount

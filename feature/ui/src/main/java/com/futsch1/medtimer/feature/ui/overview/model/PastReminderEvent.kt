@@ -47,6 +47,8 @@ class PastReminderEvent @AssistedInject constructor(
         get() = mapReminderEventState(reminderEvent)
     override val reminderId: Int
         get() = reminderEvent.reminderId
+    override val cannotSkipMedicine: Boolean
+        get() = reminderEvent.cannotBeSkipped
 
     private fun takenTime(reminderEvent: ReminderEvent) =
         reminderEvent.processedTimestamp.takeIf {
@@ -87,7 +89,8 @@ class PastReminderEvent @AssistedInject constructor(
     }
 
     private fun isLocationSnooze(reminderEvent: ReminderEvent): Boolean {
-        return persistentDataDataSource.getPendingLocationSnoozes().any { it.reminderEventIds.contains(reminderEvent.reminderEventId) }
+        return persistentDataDataSource.getPendingLocationSnoozes()
+            .any { it.reminderEventIds.contains(reminderEvent.reminderEventId) }
     }
 }
 

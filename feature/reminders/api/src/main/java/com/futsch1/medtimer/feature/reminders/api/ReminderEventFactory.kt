@@ -66,7 +66,8 @@ suspend fun buildReminderEvent(
         lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
         stockBefore = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
         stockAfter = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
-        stockUnit = medicine.unit
+        stockUnit = medicine.unit,
+        cannotBeSkipped = medicine.cannotBeSkipped
     )
 }
 

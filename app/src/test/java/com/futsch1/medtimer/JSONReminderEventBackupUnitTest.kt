@@ -29,6 +29,7 @@ internal class JSONReminderEventBackupUnitTest {
             lastIntervalReminderTimeInMinutes = 12
             notes = "Notes"
             reminderType = ReminderType.LINKED
+            cannotBeSkipped = true
         })
 
         val jsonReminderEventBackup = JSONReminderEventBackup(mock())
@@ -57,7 +58,8 @@ internal class JSONReminderEventBackupUnitTest {
       "reminderType": "LINKED",
       "stockBefore": -1.0,
       "stockAfter": -1.0,
-      "stockUnit": ""
+      "stockUnit": "",
+      "cannotBeSkipped": true
     }
   ]
 }
@@ -101,5 +103,6 @@ internal class JSONReminderEventBackupUnitTest {
         assertEquals(reminderEvent1.stockBefore, reminderEvent2.stockBefore)
         assertEquals(reminderEvent1.stockAfter, reminderEvent2.stockAfter)
         assertEquals(reminderEvent1.stockUnit, reminderEvent2.stockUnit)
+        assertEquals(reminderEvent1.cannotBeSkipped, reminderEvent2.cannotBeSkipped)
     }
 }

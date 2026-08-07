@@ -4,6 +4,7 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 const val TEST_MED_1 = "Test"
 const val TEST_MED_2 = "Test2"
@@ -41,5 +42,64 @@ class MedicineHandlingTest : MedTimerTestBase() {
         medicines.assertAtPosition(0, TEST_MED_3)
         medicines.assertAtPosition(1, TEST_MED_1)
         medicines.assertAtPosition(2, TEST_MED_2 + '_')
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun medicineCannotBeSkippedTest() {
+        settings.inSection(R.string.notification_reminder_settings) {
+            preferences.click(R.string.dismiss_notification_action)
+            dialogs.clickItem(R.string.snooze)
+        }
+
+        navigation.toMedicines()
+        medicines.create(TEST_MED_1)
+        medicineSettings.inSettings { toggleCannotBeSkipped() }
+        medicineEditor.addIntervalReminder("1", 2.hours)
+
+        notifications.inShade {
+            assertShows(TEST_MED_1)
+            assertShowsAction(R.string.taken)
+            assertNoAction(R.string.snooze)
+            assertNoAction(R.string.skipped)
+            dismiss(TEST_MED_1)
+        }
+
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
+        overview.clickEventState(1)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
+    }
+
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun medicineCannotBeSkippedPreferenceTest() {
+        settings.inSection(R.string.notification_reminder_settings) {
+            preferences.click(R.string.reminders_cannot_be_skipped)
+        }
+
+        navigation.toMedicines()
+        medicines.create(TEST_MED_1)
+        medicineEditor.addIntervalReminder("1", 2.hours)
+
+        notifications.inShade {
+            assertShows(TEST_MED_1)
+            assertShowsAction(R.string.taken)
+            assertNoAction(R.string.snooze)
+            assertNoAction(R.string.skipped)
+            dismiss(TEST_MED_1)
+        }
+
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
+        overview.clickEventState(1)
+        overview.assertActionAbsent(R.string.skipped)
+        overview.closeActionMenu()
     }
 }

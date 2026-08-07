@@ -189,6 +189,7 @@ private class EventListPreviewEvent(
     override val icon = 0
     override val color: Int? = null
     override val reminderId = id
+    override val cannotSkipMedicine = false
 }
 
 @Composable

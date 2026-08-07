@@ -3,8 +3,6 @@ package com.futsch1.medtimer.feature.ui.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.core.common.di.Dispatcher
-import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -48,14 +46,22 @@ class EditEventViewModel @Inject constructor(
     private val _notes = MutableStateFlow("")
     val notes: StateFlow<String> = _notes.asStateFlow()
 
-    fun setMedicineName(value: String) { _medicineName.value = value }
-    fun setAmount(value: String) { _amount.value = value }
-    fun setNotes(value: String) { _notes.value = value }
+    fun setMedicineName(value: String) {
+        _medicineName.value = value
+    }
+
+    fun setAmount(value: String) {
+        _amount.value = value
+    }
+
+    fun setNotes(value: String) {
+        _notes.value = value
+    }
 
     var status: ReminderEvent.ReminderStatus? = null
 
-    private val _reminderStatus = MutableStateFlow<ReminderEvent.ReminderStatus?>(null)
-    val reminderStatus: StateFlow<ReminderEvent.ReminderStatus?> = _reminderStatus.asStateFlow()
+    private val _reminderStatus = MutableStateFlow<Pair<ReminderEvent.ReminderStatus?, Boolean>>(null to false)
+    val reminderStatus: StateFlow<Pair<ReminderEvent.ReminderStatus?, Boolean>> = _reminderStatus.asStateFlow()
 
     private val _remindedMinutes = MutableStateFlow(0)
     var remindedMinutes: Int
@@ -113,10 +119,12 @@ class EditEventViewModel @Inject constructor(
                         else -> null
                     }
                     _remindedMinutes.value = timestampToMinutes(event.remindedTimestamp)
-                    _remindedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.remindedTimestamp.epochSecond, zoneId)
+                    _remindedDate.value =
+                        TimeHelper.secondsSinceEpochToLocalDate(event.remindedTimestamp.epochSecond, zoneId)
                     _processedMinutes.value = timestampToMinutes(event.processedTimestamp)
-                    _processedDate.value = TimeHelper.secondsSinceEpochToLocalDate(event.processedTimestamp.epochSecond, zoneId)
-                    _reminderStatus.value = event.status
+                    _processedDate.value =
+                        TimeHelper.secondsSinceEpochToLocalDate(event.processedTimestamp.epochSecond, zoneId)
+                    _reminderStatus.value = event.status to event.cannotBeSkipped
                 }
         }
     }
@@ -124,8 +132,10 @@ class EditEventViewModel @Inject constructor(
     fun updateEvent() {
         viewModelScope.launch {
             val event = storedEvent ?: return@launch
-            val remindedTimestamp = computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
-            val processedTimestamp = computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
+            val remindedTimestamp =
+                computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
+            val processedTimestamp =
+                computeTimestamp(event.processedTimestamp, _processedMinutes.value, _processedDate.value)
 
             val updatedEvent = event.copy(
                 medicineName = medicineName.value,

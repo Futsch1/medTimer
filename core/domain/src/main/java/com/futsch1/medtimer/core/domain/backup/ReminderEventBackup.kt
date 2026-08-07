@@ -20,4 +20,5 @@ class ReminderEventBackup(
     var stockBefore: Double = -1.0,
     var stockAfter: Double = -1.0,
     var stockUnit: String = "",
+    var cannotBeSkipped: Boolean = false,
 )

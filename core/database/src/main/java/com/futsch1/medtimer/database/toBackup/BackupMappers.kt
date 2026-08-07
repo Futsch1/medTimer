@@ -134,6 +134,7 @@ fun ReminderEventEntity.toBackup(): ReminderEventBackup = ReminderEventBackup(
     stockBefore = stockBefore,
     stockAfter = stockAfter,
     stockUnit = stockUnit,
+    cannotBeSkipped = cannotBeSkipped
 )
 
 fun ReminderEventBackup.toEntity(): ReminderEventEntity = ReminderEventEntity(
@@ -153,6 +154,7 @@ fun ReminderEventBackup.toEntity(): ReminderEventEntity = ReminderEventEntity(
     stockBefore = stockBefore,
     stockAfter = stockAfter,
     stockUnit = stockUnit,
+    cannotBeSkipped = cannotBeSkipped
 )
 
 // --- FullMedicine ---

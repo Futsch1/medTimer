@@ -23,12 +23,12 @@ data class ReminderEvent(
     val lastIntervalReminderTimeInMinutes: Int,
     val stockBefore: Double,
     val stockAfter: Double,
-    val stockUnit: String
+    val stockUnit: String,
+    val cannotBeSkipped: Boolean
 ) {
     enum class ReminderStatus { RAISED, TAKEN, SKIPPED, DELETED, ACKNOWLEDGED }
 
     companion object {
-        val allStatusValues: List<ReminderStatus> = ReminderStatus.entries
         val statusValuesWithoutDelete: List<ReminderStatus> =
             ReminderStatus.entries.filterNot { it == ReminderStatus.DELETED }
         val statusValuesTakenOrSkipped: List<ReminderStatus> =
@@ -57,7 +57,8 @@ data class ReminderEvent(
             lastIntervalReminderTimeInMinutes = 0,
             stockBefore = -1.0,
             stockAfter = -1.0,
-            stockUnit = ""
+            stockUnit = "",
+            cannotBeSkipped = false
         )
     }
 }
