@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
     <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>
@@ -358,4 +358,7 @@
     <string name="next_week">الأسبوع التالي</string>
     <string name="stock_after_simulation_end">بعد %s</string>
     <string name="move_medicine">نقل الدواء</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">تنقل فوق</string>
+    <string name="close" tools:ignore="MissingTranslation">أغلِق</string>
+    <string name="more_options" tools:ignore="MissingTranslation">خيارات أكثر</string>
 </resources>
