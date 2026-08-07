@@ -18,8 +18,8 @@ function stop_clean_status_bar {
 	adb shell am broadcast -a com.android.systemui.demo -e command exit
 }
 
-#locales=('en-US' 'ar' 'bg' 'cs-CZ' 'da-DK' 'de-DE' 'el-GR' 'es-ES' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
-locales=('de-DE')
+locales=('en-US' 'ar' 'bg' 'cs-CZ' 'da-DK' 'de-DE' 'el-GR' 'es-ES' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
+#locales=('de-DE')
 app_apk_path="app/build/outputs/apk/full/debug/MedTimer-full-debug.apk"
 tests_apk_path="app/build/outputs/apk/androidTest/full/debug/MedTimer-full-debug-androidTest.apk"
 test_instrumentation_runner="com.futsch1.medtimer.harness.MedTimerHiltTestRunner"
