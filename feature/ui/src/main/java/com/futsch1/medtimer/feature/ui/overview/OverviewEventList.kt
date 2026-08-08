@@ -3,10 +3,9 @@ package com.futsch1.medtimer.feature.ui.overview
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -66,8 +65,8 @@ import java.time.ZoneId
 /** Caps row width on wide/landscape screens so event rows stay readable instead of stretching edge to edge. */
 private val EVENT_LIST_MAX_WIDTH = 540.dp
 
-/** Trailing blank item so the FAB, which floats over the list's bottom-end corner, doesn't cover the last event. */
-private val FAB_CLEARANCE_HEIGHT = 64.dp
+/** Bottom padding so the FAB, which floats over the list's bottom-end corner, doesn't cover the last event. */
+private val FAB_CLEARANCE = 80.dp
 
 /** Test seam: disable cache window to fix stale semantics position in row-order tests */
 var overviewEventListCacheWindowEnabled = true
@@ -111,6 +110,7 @@ fun OverviewEventList(
     LazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(EVENT_SPACING),
+        contentPadding = PaddingValues(bottom = FAB_CLEARANCE),
         overscrollEffect = overscrollEffect?.withoutVisualEffect(),
         modifier = modifier
             .fillMaxHeight()
@@ -143,9 +143,6 @@ fun OverviewEventList(
                 modifier = Modifier.animateItem(),
                 onRailAnchor = { railAnchors[event.id] = it },
             )
-        }
-        item {
-            Spacer(Modifier.height(FAB_CLEARANCE_HEIGHT))
         }
     }
 }
