@@ -95,7 +95,6 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    // BUG: "".toUri() returns a non-null empty URI, not null.
     fun `setAutomaticBackupDirectory to null via empty string`() {
         dataSource.setAutomaticBackupDirectory(Uri.parse("content://test"))
         sharedPreferences.edit().putString(PreferencesDataSource.AUTOMATIC_BACKUP_DIRECTORY, "").commit()
@@ -225,8 +224,6 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    // BUG: "abc".toInt() throws NumberFormatException instead of falling
-    // back to the default value (3).
     fun `numberOfRepetitions defaults on invalid string`() {
         sharedPreferences.edit().putString(PreferencesDataSource.NUMBER_OF_REPETITIONS, "abc").commit()
         assertEquals(3, dataSource.preferences.value.numberOfRepetitions)
@@ -245,7 +242,6 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    // BUG: same NumberFormatException — "abc".toInt() throws.
     fun `repeatDelay defaults on invalid string`() {
         sharedPreferences.edit().putString(PreferencesDataSource.REPEAT_DELAY, "abc").commit()
         assertEquals(10.minutes, dataSource.preferences.value.repeatDelay)
@@ -258,7 +254,6 @@ class PreferencesDataSourceTest {
     }
 
     @Test
-    // BUG: same NumberFormatException — "abc".toInt() throws.
     fun `snoozeDuration defaults on invalid string`() {
         sharedPreferences.edit().putString(PreferencesDataSource.SNOOZE_DURATION, "abc").commit()
         assertEquals(15.minutes, dataSource.preferences.value.snoozeDuration)
