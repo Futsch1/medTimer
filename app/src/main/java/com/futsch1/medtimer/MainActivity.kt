@@ -39,6 +39,7 @@ import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
+import com.futsch1.medtimer.feature.ui.overview.OverviewFragment
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +50,8 @@ import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private var navHostFragment: NavHostFragment? = null
+
     @Inject
     lateinit var autostartService: AutostartService
     private val requestNotificationPermission =
@@ -183,6 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onContentBound(navHostFragment: NavHostFragment) {
+        this.navHostFragment = navHostFragment
         updateCurrentTab(navHostFragment)
     }
 
@@ -199,6 +203,12 @@ class MainActivity : AppCompatActivity() {
         if (currentTabId == destinationId) {
             if (currentDestination?.id != destinationId) {
                 navController.popBackStack(destinationId, false)
+            }
+            if (destinationId == com.futsch1.medtimer.feature.ui.R.id.overviewFragment) {
+                navHostFragment?.childFragmentManager?.fragments
+                    ?.filterIsInstance<OverviewFragment>()
+                    ?.lastOrNull()
+                    ?.jumpToToday()
             }
             return
         }
