@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.hasText
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -17,10 +18,14 @@ import kotlin.time.Duration
  * callers state what the medicine should end up with.
  */
 class MedicineEditorRobot(
+    private val ui: ComposeUi,
     private val menus: MenuRobot,
     private val preferences: PreferenceScreenRobot,
     private val pickers: MaterialPickers,
 ) {
+
+    fun assertTitle(expected: String) =
+        ui.scope(com.futsch1.medtimer.core.ui.ScreenTestTags.TOP_APP_BAR).assertDisplayed(hasText(expected))
 
     fun rename(name: String) = writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, name)
 

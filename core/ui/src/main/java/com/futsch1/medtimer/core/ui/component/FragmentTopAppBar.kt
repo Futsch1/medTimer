@@ -6,6 +6,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -16,11 +17,12 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
  * Stacks a Compose top bar above a fragment's own view, for the screens that are still Views.
  *
  * [title] defaults to the navigation destination's label, so the ~15 preference destinations need no
- * per-screen configuration. Both values are read once: a screen's bar never outlives its destination.
+ * per-screen configuration. [titleState] is available for screens whose title arrives asynchronously.
  */
 fun Fragment.withTopAppBar(
     contentView: View?,
     title: String? = null,
+    titleState: State<String>? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ): View {
     val navController = findNavController()
@@ -32,7 +34,7 @@ fun Fragment.withTopAppBar(
         setContent {
             MedTimerTheme {
                 MedTimerTopAppBar(
-                    title = barTitle,
+                    title = titleState?.value ?: barTitle,
                     onNavigateUp = if (canNavigateUp) ({ navController.navigateUp() }) else null,
                     actions = actions,
                 )
