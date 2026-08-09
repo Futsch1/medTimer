@@ -9,7 +9,10 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import org.hamcrest.Matchers
 
 /** The reminders listed on a medicine, addressed by their position in the list. */
-class ReminderListRobot(private val settings: ReminderSettingsRobot) {
+class ReminderListRobot(
+    private val composeUi: ComposeUi,
+    private val settings: ReminderSettingsRobot
+) {
 
     fun assertCount(expected: Int) = assertListItemCount(REMINDER_LIST, expected)
 
@@ -62,8 +65,10 @@ class ReminderListRobot(private val settings: ReminderSettingsRobot) {
         settings.duplicate()
     }
 
-    private fun openSettings(position: Int) =
+    private fun openSettings(position: Int) {
         clickListItemChild(REMINDER_LIST, position, com.futsch1.medtimer.feature.ui.R.id.openAdvancedSettings)
+        composeUi.settle()
+    }
 
     private companion object {
         val REMINDER_LIST = com.futsch1.medtimer.feature.ui.R.id.reminderList

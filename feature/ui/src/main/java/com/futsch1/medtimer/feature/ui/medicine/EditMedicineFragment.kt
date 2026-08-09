@@ -108,7 +108,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         idlingResource.setBusy()
         fragmentView = withTopAppBar(
             inflater.inflate(R.layout.fragment_edit_medicine, container, false),
-            title = medicineName,
+            title = { medicineName },
         ) {
             editMedicineActions?.let { EditMedicineMenu(it) }
         }

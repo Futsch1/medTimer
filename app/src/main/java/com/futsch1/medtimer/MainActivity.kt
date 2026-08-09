@@ -51,7 +51,8 @@ import kotlin.time.toDuration
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var autostartService: AutostartService
-    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
+    private val requestNotificationPermission =
+        RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
@@ -182,28 +183,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onContentBound(navHostFragment: NavHostFragment) {
-        val navController = navHostFragment.navController
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in topLevelTabIds) {
-                currentTabId = destination.id
-            }
-        }
+        updateCurrentTab(navHostFragment)
     }
-
-    private val topLevelTabIds = setOf(
-        com.futsch1.medtimer.feature.ui.R.id.overviewFragment,
-        com.futsch1.medtimer.feature.ui.R.id.medicinesFragment,
-        com.futsch1.medtimer.feature.ui.R.id.statisticsFragment,
-    )
 
     private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
 
+    private fun updateCurrentTab(navHostFragment: NavHostFragment) {
+        navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
+            topLevelDestinationId(destination).takeIf { it != 0 }?.let { currentTabId = it }
+        }
+    }
+
     private fun onNavItemClick(navController: NavController, destinationId: Int) {
-        if (destinationId == currentTabId) {
+        val currentDestination = navController.currentDestination
+        if (currentTabId == destinationId) {
+            if (currentDestination?.id != destinationId) {
+                navController.popBackStack(destinationId, false)
+            }
             return
         }
 
-        currentTabId = destinationId
         navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
         val options = NavOptions.Builder()
             .setLaunchSingleTop(true)

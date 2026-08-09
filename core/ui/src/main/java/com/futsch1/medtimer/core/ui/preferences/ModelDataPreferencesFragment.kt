@@ -87,7 +87,6 @@ abstract class ModelDataPreferencesFragment<T>(
                 customSetup(dataStore.modelData)
 
                 startPostponedEnterTransition()
-                idlingResource.setIdle()
             }
         }
     }
@@ -113,6 +112,7 @@ abstract class ModelDataPreferencesFragment<T>(
                 }
                 dataStore.modelData = modelData
                 onModelDataUpdated(modelData)
+                idlingResource.setIdle()
             }
         }
     }
