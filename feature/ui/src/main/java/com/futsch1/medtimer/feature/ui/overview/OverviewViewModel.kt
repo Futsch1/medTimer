@@ -19,6 +19,7 @@ import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
 import dagger.assisted.Assisted
@@ -238,8 +239,9 @@ class OverviewViewModel @AssistedInject constructor(
         val filteredOverviewEvents = mutableListOf<OverviewEvent>()
 
         for (reminderEvent in events) {
-            if (isReminderEventVisible(reminderEvent, filterState)) {
-                filteredOverviewEvents.add(reminderEventFactory.create(reminderEvent))
+            val overviewEvent = reminderEventFactory.create(reminderEvent)
+            if (isOverviewEventVisible(overviewEvent, filterState)) {
+                filteredOverviewEvents.add(overviewEvent)
             }
         }
 
@@ -248,32 +250,25 @@ class OverviewViewModel @AssistedInject constructor(
         for (simulatedReminder in reminders) {
             val scheduledReminder = simulatedReminder.scheduledReminder
             val slot = scheduledReminder.reminder.id to scheduledReminder.timestamp.epochSecond
-            if (slot !in coveredSlots && isScheduledReminderVisible(filterState)) {
-                filteredOverviewEvents.add(simulatedReminderEventFactory.create(simulatedReminder))
+            val overviewEvent = simulatedReminderEventFactory.create(simulatedReminder)
+            if (slot !in coveredSlots && isOverviewEventVisible(overviewEvent, filterState)) {
+                filteredOverviewEvents.add(overviewEvent)
             }
         }
 
         return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
     }
 
-    private fun isScheduledReminderVisible(filterState: FilterState): Boolean {
-        return filterState.activeFilters.isEmpty() || filterState.activeFilters.contains(OverviewFilter.SCHEDULED)
-    }
-
-    private fun isReminderEventVisible(
-        reminderEvent: ReminderEvent,
+    private fun isOverviewEventVisible(
+        overviewEvent: OverviewEvent,
         filterState: FilterState
     ): Boolean {
-        return filterState.activeFilters.isEmpty() ||
-                ((reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) && filterState.activeFilters.contains(
-                    OverviewFilter.TAKEN
-                )) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.SKIPPED && filterState.activeFilters.contains(
-                    OverviewFilter.SKIPPED
-                )) ||
-                (reminderEvent.status == ReminderEvent.ReminderStatus.RAISED && filterState.activeFilters.contains(
-                    OverviewFilter.RAISED
-                ))
+        return filterState.activeFilters.isEmpty() || when (overviewEvent.state) {
+            OverviewState.PENDING -> OverviewFilter.SCHEDULED
+            OverviewState.RAISED, OverviewState.LOCATION -> OverviewFilter.RAISED
+            OverviewState.TAKEN -> OverviewFilter.TAKEN
+            OverviewState.SKIPPED -> OverviewFilter.SKIPPED
+        } in filterState.activeFilters
     }
 
     private fun Instant.epochDay(): Long = atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay()
