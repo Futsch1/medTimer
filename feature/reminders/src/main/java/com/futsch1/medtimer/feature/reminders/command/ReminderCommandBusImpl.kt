@@ -60,9 +60,8 @@ class ReminderCommandBusImpl @Inject constructor(
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 
-    override suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long) {
-        stockHandlingProcessor.processStock(amount, medicineId, Instant.ofEpochSecond(processedEpochSeconds))
-    }
+    override suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long): Double? =
+        stockHandlingProcessor.processStock(amount, medicineId, Instant.ofEpochSecond(processedEpochSeconds))?.after
 
     override suspend fun processRefill(medicineId: Int) {
         refillProcessor.processRefill(medicineId)

@@ -27,7 +27,7 @@ interface ReminderCommandBus {
 
     suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus)
 
-    suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long)
+    suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long): Double?
 
     suspend fun processRefill(medicineId: Int)
 

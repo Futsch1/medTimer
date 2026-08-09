@@ -25,7 +25,10 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = amount(10.5), unit = "pills", refillSize = amount(10.8))
 
         // Interval reminder (amount 3.5) 10 minutes from now
-        medicineEditor.addIntervalReminder("Of the pills ${amount(3.5)} are to be taken", intervalWithinToday(10.minutes))
+        medicineEditor.addIntervalReminder(
+            "Of the pills ${amount(3.5)} are to be taken",
+            intervalWithinToday(10.minutes)
+        )
         medicineEditor.addStockReminder(threshold = "4")
 
         navigation.toOverview()
@@ -33,6 +36,7 @@ class MedicineStockTest : MedTimerTestBase() {
         // Mark reminder as taken, no out of stock reminder expected (7 left)
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
+        overview.assertEventContains(MedicineHelper.formatAmount(10.5, "pills"))
         overview.assertEventContains(MedicineHelper.formatAmount(7.0, "pills"))
         notifications.inShade { assertHidden(notificationTitle) }
 
@@ -63,6 +67,8 @@ class MedicineStockTest : MedTimerTestBase() {
 
         navigation.toOverview()
         manualDose.log("Test", amount = "12")
+        overview.assertEventContains(MedicineHelper.formatAmount(3.5, "pills"))
+        overview.assertEventContains(MedicineHelper.formatAmount(0.0, "pills"))
 
         navigation.toMedicines()
 
