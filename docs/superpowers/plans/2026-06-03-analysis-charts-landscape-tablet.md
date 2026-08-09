@@ -4,7 +4,7 @@
 
 **Goal:** On a tablet in landscape, lay out the Analysis **Charts** view as bar-chart-left with the two taken/skipped pie charts stacked vertically on the right; phones and portrait keep today's top-to-bottom layout.
 
-**Architecture:** A single inlined adaptive check in `ChartsContent` selects a `Row` (landscape, bar `weight 2f` : pies `weight 1f`) or the existing `Column` (otherwise). The two pie call-sites are factored into one private `TwoPies(state, stacked, modifier)` composable so neither branch duplicates them, and the bar-chart call is hoisted into a local composable lambda for the same reason. Detection is inlined (no shared helper) to keep future per-view adaptive tweaks local. The detection *logic* stays inlined, but its input `WindowAdaptiveInfo` is an injectable parameter defaulting to `currentWindowAdaptiveInfo()` — Google's Now in Android uses this same pattern so layout tests inject a computed window size instead of depending on the host's window metrics.
+**Architecture:** A single inlined adaptive check in `ChartsContent` selects a `Row` (landscape, bar `weight 2f` : pies `weight 1f`) or the existing `Column` (otherwise). The two pie call-sites are factored into one private `TwoPies(state, stacked, modifier)` composable so neither branch duplicates them, and the bar-chart call is hoisted into a local composable lambda for the same reason. Detection is inlined (no shared helper) to keep future per-view adaptive tweaks local. The detection _logic_ stays inlined, but its input `WindowAdaptiveInfo` is an injectable parameter defaulting to `currentWindowAdaptiveInfo()` — Google's Now in Android uses this same pattern so layout tests inject a computed window size instead of depending on the host's window metrics.
 
 **Tech Stack:** Jetpack Compose, Material 3, `androidx.compose.material3.adaptive:adaptive:1.2.0` (`currentWindowAdaptiveInfo`, `WindowAdaptiveInfo`), `androidx.window` `WindowSizeClass` breakpoint + `compute` API (transitive), Vico charts, Robolectric Compose tests.
 
@@ -24,6 +24,7 @@
 ## Task 1: Add the `material3-adaptive` dependency
 
 **Files:**
+
 - Modify: `gradle/libs.versions.toml`
 - Modify: `feature/ui/build.gradle.kts:90` (after the `androidx-compose-material3` line)
 
@@ -74,6 +75,7 @@ git commit -m "#1234 Add material3-adaptive dependency for adaptive Charts layou
 This task is TDD: the failing test asserts the landscape arrangement (pies stacked), which today's unconditional `Column { bar; Row { pies } }` cannot satisfy.
 
 **Files:**
+
 - Create: `feature/ui/src/test/java/com/futsch1/medtimer/feature/ui/statistics/charts/ChartsContentLayoutTest.kt`
 - Modify: `feature/ui/src/main/java/com/futsch1/medtimer/feature/ui/statistics/charts/ChartsContent.kt:73-105` (the `ChartsContent` body)
 
@@ -302,6 +304,7 @@ git commit -m "#1234 Stack Analysis pie charts beside bar chart in tablet landsc
 ## Task 3: Add a landscape preview
 
 **Files:**
+
 - Modify: `feature/ui/src/main/java/com/futsch1/medtimer/feature/ui/statistics/charts/ChartsContent.kt` (add a preview beside the existing `ChartsContentPreview`)
 
 - [ ] **Step 1: Add the preview**
@@ -337,7 +340,7 @@ private fun ChartsContentLandscapePreview() {
 }
 ```
 
-> Note: `@Preview(widthDp/heightDp)` sizes the canvas but does not by itself drive `currentWindowAdaptiveInfo()` or set landscape orientation, so this preview renders the portrait arrangement in the IDE. It exists to review the pies/bar at a wide canvas; the landscape arrangement itself is covered by the test in Task 2. Now that `ChartsContent` accepts `windowAdaptiveInfo`, you *can* force the landscape arrangement in a preview by passing `WindowAdaptiveInfo(WindowSizeClass.compute(900f, 480f), Posture())` together with a landscape `LocalConfiguration` override — optional polish, not required here. If the existing `ChartsContentPreview` already imports `Preview` via `@MedTimerPreview`'s machinery, prefer matching that pattern — check the top of the file before adding a raw `@Preview` import.
+> Note: `@Preview(widthDp/heightDp)` sizes the canvas but does not by itself drive `currentWindowAdaptiveInfo()` or set landscape orientation, so this preview renders the portrait arrangement in the IDE. It exists to review the pies/bar at a wide canvas; the landscape arrangement itself is covered by the test in Task 2. Now that `ChartsContent` accepts `windowAdaptiveInfo`, you _can_ force the landscape arrangement in a preview by passing `WindowAdaptiveInfo(WindowSizeClass.compute(900f, 480f), Posture())` together with a landscape `LocalConfiguration` override — optional polish, not required here. If the existing `ChartsContentPreview` already imports `Preview` via `@MedTimerPreview`'s machinery, prefer matching that pattern — check the top of the file before adding a raw `@Preview` import.
 
 - [ ] **Step 2: Build to verify the preview compiles**
 

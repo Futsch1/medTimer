@@ -17,7 +17,7 @@ libraries with Compose-native equivalents instead of wrapping the existing libra
 - **Reminder Table → hand-rolled `SortableTable` composable** in `:core:ui`, replacing
   `com.github.evrencoskun:TableView` (no maintained Compose-native equivalent that fits).
 - **AndroidPlot dropped** entirely (it was used only by the Statistics screen).
-- **Calendar** is *not* part of this decision — it stays on the Kizitonwose library, just switching
+- **Calendar** is _not_ part of this decision — it stays on the Kizitonwose library, just switching
   from the `:view` artifact to the `:compose` artifact (the `:view` artifact remains for Overview).
 
 ## Considered and rejected

@@ -84,6 +84,16 @@ Privacy & Offline Accessibility:
 
 MedTimer is a free app without adds.
 
+## Variants
+
+Releases contain two APK flavors: **FOSS**, without Google Play Services, and **full**, with
+Google Play Services. Use **FOSS** for devices without Google Play Services; use
+**full** for standard Android devices that support Google Play Services. The **FOSS**
+variant does not support location based snooze, otherwise, both are identical.
+
+The **full** variant is available on the Play Store, while the **FOSS** variant is available
+on F-Droid.
+
 ## Documentation
 
 See the [use cases documentation](docs/UseCases.md) for more details on how to use the app and

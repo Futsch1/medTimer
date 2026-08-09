@@ -17,7 +17,7 @@ Documentation lives in the repo as Markdown and follows the same flow as code:
 Today, `docs/` mixes two kinds of content at its top level — user-facing how-tos and architectural notes — alongside this `guidelines/` sub-folder:
 
 | Path                       | Holds                                                | Examples                                                                   |
-|----------------------------|------------------------------------------------------|----------------------------------------------------------------------------|
+| -------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------- |
 | `docs/*.md` (top level)    | User-facing how-tos and architecture notes           | [`UseCases.md`](../UseCases.md), [`reminder_flow.md`](../reminder_flow.md) |
 | `docs/*.png`, `docs/*.svg` | Screenshots and figures referenced by the docs above | `medicine_calendar.png`, `tag.svg`                                         |
 | `docs/guidelines/`         | Contributor & agent standards (this folder)          | this guide, [`kotlin-android.md`](kotlin-android.md)                       |

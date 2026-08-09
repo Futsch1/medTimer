@@ -66,7 +66,7 @@ Architectural rules and module dependency direction: [`docs/guidelines/kotlin-an
 ./gradlew jacocoFullDebugCodeCoverage
 ```
 
-**Instrumented tests:** when you add or change one, run *just that test* locally against an emulator before pushing
+**Instrumented tests:** when you add or change one, run _just that test_ locally against an emulator before pushing
 (e.g. `./gradlew :app:connectedFullDebugAndroidTest --tests <FQN>`). **Do not run the full `connectedAndroidTest` suite or `JacocoDebugCodeCoverage` locally**
 — they need an emulator and take far too long. CI handles the broader matrix.
 See [`docs/guidelines/testing.md`](docs/guidelines/testing.md) for testing conventions.
@@ -109,7 +109,7 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
   Use synthetic data ("Vitamin X 500 mg", "Medicine A") in prompts, tests, examples, and bug reproductions.
 - Commit, fixture, or attach to bug reports any exported CSV/PDF artifacts or `adb backup` output — they contain user medication data.
 - `@Suppress` or weaken an Android Lint / SonarQube finding to make code "pass" — fix the underlying issue.
-  If a suppression is genuinely needed, comment *why* and reference the rule.
+  If a suppression is genuinely needed, comment _why_ and reference the rule.
 - Add a dependency the agent "remembered" without verifying group/artifact, that it's maintained, and that it's pinned via `gradle/libs.versions.toml`.
 
 **Ask first** (get a human decision before proceeding):
