@@ -1,0 +1,36 @@
+Ravimite meeldetuletused ja ajalugu kasutamiseks võrguühenduseta täiesti privaatselt moel
+
+Hoia oma ravimid kontrolli all rakendusega MedTimer
+
+MedTimer on avatud lähtekoodiga ravimite meeldetuletuse rakendus, mis aitab sul oma ravimeid ja tablette tõhusalt hallata ning hoida täielikku kontrolli oma delikaatsete andmete üle.
+
+## Paindlikud ja isikupärastatud meeldetuletused:
+
+* Halda piiramatut arvu ravimeid ning määra iga ravimi jaoks kohandatavad meeldetuletused (sealhulgas lihtsad vaikeseadistused igapäevaste meeldetuletuste jaoks).
+* Koosta paindlikke meeldetuletusi koos pauside ja kindlate päevadega (näiteks rasestumisvastaste pillide jaoks).
+* Nädalavahetuse režiim: lükka meeldetuletused valitud päevadel määratud ajale edasi.
+* Lükka teavitusi edasi hilisemaks või lase endale korduvalt meelde tuletada.
+* Asukohapõhine edasilükkamine: saa uus teavitus, kui jõuad pärast edasilükkamist koju.
+* Lisa jooksvalt täiendavaid annuseid.
+* Loo intervallipõhiseid meeldetuletusi, järjestikuste intervallidega korduvaid meeldetuletusi või intervallimeeldetuletusi, millel on iga päeva jaoks määratud algus- ja lõppaeg.
+* Kasuta alarmitüüpi meeldetuletusi, et tagada teavitus ka siis, kui seade on vaiksel režiimil.
+
+## Lihtne ja turvaline andmehaldus:
+
+* Kinnita või lükka meeldetuletused tagasi, et registreerida ravimi võtmine täpselt.
+* Vaata varasemaid annuseid ülevaatlikult graafiku ja tabelina.
+* Ekspordi oma ravimite ajalugu CSV-failina, et seda oleks lihtne säilitada või tervishoiutöötajatega jagada.
+* Varunda ja taasta oma ravimite loend JSON-failina.
+* Jälgi ravimite varusid ja saa teavitusi, kui ravimid hakkavad otsa saama.
+* Lisa oma ravimitele silte ja filtreeri neid.
+
+## Privaatsus ja võrguühenduseta kasutamine:
+
+* Kõik andmed salvestatakse turvaliselt sinu seadmesse, tagades täieliku privaatsuse ja ligipääsu võrguühendust kasutamata.
+* Internetiühendust pole vaja – sinu ravimite meeldetuletused on alati kättesaadavad.
+
+MedTimer on tasuta rakendus ilma reklaamideta.
+
+Vaata projekti lehte GitHubis: https://github.com/Futsch1/medTimer
+
+Graafika loodi veebilehe https://hotpot.ai abil
