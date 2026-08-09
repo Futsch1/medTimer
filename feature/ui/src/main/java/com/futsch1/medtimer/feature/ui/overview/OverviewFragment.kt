@@ -95,6 +95,10 @@ class OverviewFragment : Fragment() {
         overviewViewModel.refreshWarnings()
     }
 
+    fun jumpToToday() {
+        overviewViewModel.selectDay(LocalDate.now())
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         appOptionsActions.onDestroy()

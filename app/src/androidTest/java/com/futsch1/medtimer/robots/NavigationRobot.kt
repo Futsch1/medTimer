@@ -4,8 +4,7 @@ import androidx.compose.ui.test.assertIsSelected
 import com.futsch1.medtimer.NavTestTags
 
 /**
- * The bottom navigation. Tapping the tab already shown does nothing; leaving and re-entering a tab
- * resets it, which is why tests navigate away and back to get the Overview onto today again.
+ * The bottom navigation. Tapping Overview while it is already shown resets its day to today.
  *
  * The tabs are the one place still selected by tag: NavigationSuiteScaffold exposes no modifier for
  * the bar itself, so there is no container to scope their names to.

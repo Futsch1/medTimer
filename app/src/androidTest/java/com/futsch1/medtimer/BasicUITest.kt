@@ -192,7 +192,7 @@ class BasicUITest : MedTimerTestBase() {
         assertTrue(overview.eventCount() > 0)
 
         navigation.toOverview()
-        overview.assertDaySelected(secondDay)
+        overview.assertDaySelected(today)
 
         navigation.toMedicines()
         navigation.toOverview()
