@@ -11,4 +11,14 @@
         android:name="android.permission.DUMP"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- Hilt test applications are not initialized when package-replacement broadcasts arrive. -->
+    <application android:icon="@mipmap/logo">
+        <receiver
+            android:name="com.futsch1.medtimer.Autostart"
+            tools:node="remove" />
+        <receiver
+            android:name="com.futsch1.medtimer.TimeChangeReceiver"
+            tools:node="remove" />
+    </application>
+
 </manifest>

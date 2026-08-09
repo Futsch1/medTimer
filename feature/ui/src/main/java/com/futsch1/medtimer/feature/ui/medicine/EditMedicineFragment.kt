@@ -92,8 +92,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private var fragmentReady = false
     // Assigned once the medicine has loaded; the bar renders its actions only from that point on.
     private var editMedicineActions by mutableStateOf<EditMedicineActions?>(null)
-    private val medicineNameState = mutableStateOf("")
-    private var medicineName by medicineNameState
+    private var medicineName by mutableStateOf("")
 
     private val idlingResource = SimpleIdlingResource(EditMedicineFragment::class.java.name)
 
@@ -109,8 +108,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         idlingResource.setBusy()
         fragmentView = withTopAppBar(
             inflater.inflate(R.layout.fragment_edit_medicine, container, false),
-            title = medicineName,
-            titleState = medicineNameState,
+            title = { medicineName },
         ) {
             editMedicineActions?.let { EditMedicineMenu(it) }
         }

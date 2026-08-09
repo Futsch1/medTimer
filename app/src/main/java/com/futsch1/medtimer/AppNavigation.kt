@@ -63,15 +63,33 @@ private data class TopLevelNavItem(
 
 // Tab order for the bar and rail. Destination ids come from the nav graph in :feature:ui.
 private val NAV_ITEMS = listOf(
-    TopLevelNavItem(FeatureUiR.id.overviewFragment, CoreUiR.drawable.calendar_event, CoreUiR.string.tab_overview, CoreUiR.string.overview_tab_description, NavTestTags.OVERVIEW),
-    TopLevelNavItem(FeatureUiR.id.medicinesFragment, CoreUiR.drawable.capsule, CoreUiR.string.tab_medicine, CoreUiR.string.medicines_tab_description, NavTestTags.MEDICINES),
-    TopLevelNavItem(FeatureUiR.id.statisticsFragment, CoreUiR.drawable.bar_chart, CoreUiR.string.analysis, CoreUiR.string.statistics_tab_description, NavTestTags.STATISTICS),
+    TopLevelNavItem(
+        FeatureUiR.id.overviewFragment,
+        CoreUiR.drawable.calendar_event,
+        CoreUiR.string.tab_overview,
+        CoreUiR.string.overview_tab_description,
+        NavTestTags.OVERVIEW
+    ),
+    TopLevelNavItem(
+        FeatureUiR.id.medicinesFragment,
+        CoreUiR.drawable.capsule,
+        CoreUiR.string.tab_medicine,
+        CoreUiR.string.medicines_tab_description,
+        NavTestTags.MEDICINES
+    ),
+    TopLevelNavItem(
+        FeatureUiR.id.statisticsFragment,
+        CoreUiR.drawable.bar_chart,
+        CoreUiR.string.analysis,
+        CoreUiR.string.statistics_tab_description,
+        NavTestTags.STATISTICS
+    ),
 )
 
 private val TOP_LEVEL_IDS = NAV_ITEMS.map { it.destinationId }.toSet()
 
-/** Resolves any destination up its hierarchy to one of the three top-level ids (0 if none). */
-private fun topLevelDestinationId(destination: NavDestination): Int =
+/** Resolves a destination to a top-level id; child destinations return 0. */
+internal fun topLevelDestinationId(destination: NavDestination): Int =
     destination.hierarchy.firstOrNull { it.id in TOP_LEVEL_IDS }?.id ?: 0
 
 /**
@@ -95,7 +113,12 @@ fun AppNavigationScaffold(
                 item(
                     selected = currentDestinationId == navItem.destinationId,
                     onClick = { navController?.let { onNavItemClick(it, navItem.destinationId) } },
-                    icon = { Icon(painterResource(navItem.iconRes), contentDescription = stringResource(navItem.descriptionRes)) },
+                    icon = {
+                        Icon(
+                            painterResource(navItem.iconRes),
+                            contentDescription = stringResource(navItem.descriptionRes)
+                        )
+                    },
                     label = { Text(stringResource(navItem.labelRes)) },
                     modifier = Modifier.testTag(navItem.testTag),
                 )
@@ -112,7 +135,7 @@ fun AppNavigationScaffold(
                     val fragment = root.getFragment<NavHostFragment>()
                     val controller = fragment.navController
                     controller.addOnDestinationChangedListener { _, destination, _ ->
-                        currentDestinationId = topLevelDestinationId(destination)
+                        topLevelDestinationId(destination).takeIf { it != 0 }?.let { currentDestinationId = it }
                     }
                     navController = controller
                     onContentBound(fragment)

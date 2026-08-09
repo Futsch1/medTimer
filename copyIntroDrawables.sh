@@ -11,7 +11,7 @@ names=(medicine reminder notification overview analysis)
 dest_files=()
 
 for i in "${!names[@]}"; do
-	dest=./app/src/main/res/drawable/intro_"${names[$i]}".png
+	dest=./core/ui/src/main/res/drawable/intro_"${names[$i]}".png
 	cp -f ./fastlane/metadata/android/en-US/images/phoneScreenshots/"${screenshots[$i]}".png "$dest"
 	dest_files+=("$dest")
 done
@@ -22,13 +22,13 @@ for l in "${locales[@]}"; do
 	lang="${l:0:2}"
 	region="${l:3:5}"
 
-	if [ -d ./app/src/main/res/drawable-"${l}" ]; then
-		dir=./app/src/main/res/drawable-"${l}"
-	elif [ -d ./app/src/main/res/drawable-"${lang}"-r"${region}" ]; then
-		dir=./app/src/main/res/drawable-"${lang}"-r"${region}"
+	if [ -d ./core/ui/src/main/res/drawable-"${l}" ]; then
+		dir=./core/ui/src/main/res/drawable-"${l}"
+	elif [ -d ./core/ui/src/main/res/drawable-"${lang}"-r"${region}" ]; then
+		dir=./core/ui/src/main/res/drawable-"${lang}"-r"${region}"
 	else
-		mkdir ./app/src/main/res/drawable-"${lang}" 2>/dev/null
-		dir=./app/src/main/res/drawable-"${lang}"
+		mkdir ./core/ui/src/main/res/drawable-"${lang}" 2>/dev/null
+		dir=./core/ui/src/main/res/drawable-"${lang}"
 	fi
 
 	for i in "${!names[@]}"; do
