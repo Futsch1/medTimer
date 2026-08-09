@@ -25,7 +25,7 @@ class Robots(rule: ComposeTestRule) {
 
     val reminderSettings = ReminderSettingsRobot(ui, preferences, pickers, dialogs)
     val reminders = ReminderListRobot(ui, reminderSettings)
-    val medicineEditor = MedicineEditorRobot(menus, preferences, pickers)
+    val medicineEditor = MedicineEditorRobot(ui, menus, preferences, pickers)
     val medicineSettings = MedicineSettingsRobot(menus, preferences, IconColorPickerRobot())
     val eventEditor = EventEditorRobot(overview)
     val manualDose = ManualDoseRobot(overview, dialogs, pickers)

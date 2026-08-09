@@ -17,7 +17,9 @@ class MedicineHandlingTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun medicineMoveTest() {
         medicines.create(TEST_MED_1)
+        medicineEditor.assertTitle(TEST_MED_1)
         medicines.create(TEST_MED_2)
+        medicineEditor.assertTitle(TEST_MED_2)
 
         medicines.assertCount(2)
         medicines.assertAtPosition(0, TEST_MED_1)

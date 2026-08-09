@@ -121,7 +121,7 @@ class ManualDose @AssistedInject constructor(
             if (entry.amount == null || entry.medicineId == -1) {
                 getAmountAndContinue(reminderEvent, entry)
             } else {
-                getTimeAndLog(reminderEvent.copy(amount = entry.amount), entry.medicineId)
+                getTimeAndLog(reminderEvent.copy(amount = entry.amount), entry)
             }
         }
     }
@@ -145,7 +145,7 @@ class ManualDose @AssistedInject constructor(
                     if (entry.medicineId == -1) {
                         lastCustomDose = Pair(entry.baseName, amount!!)
                     }
-                    getTimeAndLog(reminderEvent.copy(amount = amount!!), entry.medicineId)
+                    getTimeAndLog(reminderEvent.copy(amount = amount!!), entry)
                 }
         if (!entry.amount.isNullOrBlank()) {
             dialogBuilder.initialText(entry.amount)
@@ -153,28 +153,37 @@ class ManualDose @AssistedInject constructor(
         dialogBuilder.show()
     }
 
-    private fun getTimeAndLog(reminderEvent: ReminderEvent, medicineId: Int) {
+    private fun getTimeAndLog(reminderEvent: ReminderEvent, entry: ManualDoseEntry) {
         val localDateTime = LocalTime.now()
         timePickerDialogFactory.create(localDateTime) { minutes: Int ->
             val remindedInstant: Instant = TimeHelper.instantFromDateAndMinutes(minutes, date)
             activity.lifecycleScope.launch {
-                reminderEventRepository.create(
+                val event = reminderEventRepository.create(
                     reminderEvent.copy(
                         remindedTimestamp = remindedInstant,
-                        processedTimestamp = remindedInstant
+                        processedTimestamp = remindedInstant,
+                        stockBefore = entry.stockBefore,
+                        stockAfter = entry.stockBefore,
+                        stockUnit = entry.stockUnit,
                     )
                 )
-            }
 
-            if (medicineId == -1) {
-                return@create
-            }
-
-            val amount = MedicineHelper.parseAmount(reminderEvent.amount)
-            if (amount != null) {
-                applicationScope.launch {
-                    commandBus.processStockHandling(amount, medicineId, remindedInstant.epochSecond)
+                if (entry.medicineId != -1) {
+                    val amount = MedicineHelper.parseAmount(reminderEvent.amount)
+                    if (amount != null) {
+                        applicationScope.launch {
+                            commandBus.processStockHandling(amount, entry.medicineId, remindedInstant.epochSecond)?.let { stockAfter ->
+                                reminderEventRepository.update(
+                                    event.copy(stockAfter = stockAfter, stockHandled = true)
+                                )
+                            }
+                        }
+                    }
                 }
+            }
+
+            if (entry.medicineId == -1) {
+                return@create
             }
         }.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
@@ -188,6 +197,8 @@ class ManualDose @AssistedInject constructor(
         val iconId: Int
         val medicineId: Int
         val tags: List<String>
+        val stockBefore: Double
+        val stockUnit: String
 
         constructor(name: String, amount: String? = null) {
             this.baseName = name
@@ -197,6 +208,8 @@ class ManualDose @AssistedInject constructor(
             this.iconId = 0
             this.medicineId = -1
             this.tags = ArrayList()
+            this.stockBefore = -1.0
+            this.stockUnit = ""
             amendName()
         }
 
@@ -208,6 +221,8 @@ class ManualDose @AssistedInject constructor(
             this.iconId = medicine.iconId
             this.medicineId = medicine.id
             this.tags = medicine.tags.stream().map { t -> t.name }.collect(Collectors.toList())
+            this.stockBefore = medicine.amount.takeIf { medicine.isStockManagementActive() } ?: -1.0
+            this.stockUnit = medicine.unit
             amendName()
         }
 
