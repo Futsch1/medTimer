@@ -26,6 +26,7 @@ No dependency or gradle changes — `material3-adaptive` is already wired into `
 The failing test asserts the landscape arrangement (event panel right of the calendar), which today's unconditional `Column { calendar; events }` cannot satisfy.
 
 **Files:**
+
 - Create: `feature/ui/src/test/java/com/futsch1/medtimer/feature/ui/statistics/calendar/CalendarContentLayoutTest.kt`
 - Modify: `feature/ui/src/main/java/com/futsch1/medtimer/feature/ui/statistics/calendar/CalendarContent.kt` (the `CalendarContent` function, currently lines 49–123)
 
@@ -306,6 +307,7 @@ git commit -m "#1234 Place Analysis calendar beside event panel in tablet landsc
 ## Task 2: Add a landscape preview
 
 **Files:**
+
 - Modify: `feature/ui/src/main/java/com/futsch1/medtimer/feature/ui/statistics/calendar/CalendarContent.kt` (add a preview beside the existing `CalendarContentPreview`)
 
 - [ ] **Step 1: Add the preview**

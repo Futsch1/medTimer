@@ -3,9 +3,9 @@ name: Test
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 # Cancel in-progress runs when new commits are pushed to the same branch/PR.
 # Keep main and release tags running to completion.
@@ -114,8 +114,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 28, 36 ]
-        profile: [ medium_phone, medium_tablet ]
+        api-level: [28, 36]
+        profile: [medium_phone, medium_tablet]
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: ${{ matrix.api-level }}

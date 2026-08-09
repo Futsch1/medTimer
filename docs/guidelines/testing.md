@@ -28,7 +28,7 @@ A test-first approach is preferred for both bug fixes and new features:
 - **Bug fixes:** write a failing test that reproduces the bug before the fix.
   This proves the fix works and prevents regression.
 - **Features:** write tests alongside the code, not after.
-  If a feature ships without tests, capture *why* in the PR (e.g. "UI-only change, manually verified on emulator").
+  If a feature ships without tests, capture _why_ in the PR (e.g. "UI-only change, manually verified on emulator").
 - Pure refactors and translation-only PRs are exempt — the existing tests are what protect the refactor.
 
 ## Test behavior, not implementation (black box)
@@ -39,7 +39,7 @@ assert on the returned value and observable side effects.
 
 - **Verify outcomes, not interactions.**
   Prefer asserting on the resulting `StateFlow` value or returned object over "method X was called".
-  Reserve `Mockito.verify(...)` for genuine side-effect boundaries where the call *is* the behavior — e.g. that a notification was posted, an alarm scheduled,
+  Reserve `Mockito.verify(...)` for genuine side-effect boundaries where the call _is_ the behavior — e.g. that a notification was posted, an alarm scheduled,
   or a row written via the repository.
 - This keeps tests resilient: a refactor that preserves behavior should not break a single test.
   If a rename or restructuring breaks many tests, they were coupled to the implementation.
@@ -74,6 +74,7 @@ Don't write tests for:
   ```
 
   The form `should X when Y` makes failure messages readable in CI output.
+
 - `@Test` for a single case; `@RunWith(Parameterized::class)` or table-driven loops for parameterized cases.
 - **One assertion focus per test.**
   Multiple `assertEquals` lines that verify the same outcome are fine; tests that interleave Act / Assert for several unrelated outcomes should be split.
@@ -119,8 +120,8 @@ Conventions:
 
 ## Compose tests
 
-When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests live alongside JVM unit tests and use **`createComposeRule()`** with *
-*Robolectric** so they run on the JVM without an emulator. These are JVM tests, so the [Robot pattern](#robot-pattern) does not apply — robots exist only for
+When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests live alongside JVM unit tests and use **`createComposeRule()`** with \*
+\*Robolectric\*\* so they run on the JVM without an emulator. These are JVM tests, so the [Robot pattern](#robot-pattern) does not apply — robots exist only for
 `androidTest`.
 
 - **Target the stateless `Screen` overload** (see [jetpack-compose.md](jetpack-compose.md#screen-pattern)), not the stateful overload that references a ViewModel.
@@ -147,7 +148,7 @@ Instrumented tests read as user intent; how the UI is driven lives in a robot un
 Instrumented tests select by accessible name, scoped to the container it belongs to — like a screen reader. `testTag` is a fallback for structure, not the
 default.
 
-- **Name, then scope.** `hasContentDescription`/`hasText` say *what*; `UiScope` says *where*. Never select on a bare name — the same word ("Delete", "More
+- **Name, then scope.** `hasContentDescription`/`hasText` say _what_; `UiScope` says _where_. Never select on a bare name — the same word ("Delete", "More
   options") appears in multiple places.
 - **All queries go through `UiScope`** (`app/src/androidTest/.../robots/UiScope.kt`) — it is the only place that calls the global `onNode*`/`onAllNodes*`
   finders. `ComposeUi` hands out scopes and nothing else, so there is no unscoped entry point to reach for by accident.

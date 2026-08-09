@@ -245,7 +245,7 @@ Synchronize with something outside React-style state — and only then:
   A `LaunchedEffect { flow.collect { … } }` for UI state reintroduces the lifecycle bugs `collectAsStateWithLifecycle` solves.
 - **Derive data for rendering.**
   Compute it during composition; the Compose Compiler will skip unchanged work.
-  Use `derivedStateOf` only when the derived value updates less frequently than its inputs *and* you can prove it earns its keep.
+  Use `derivedStateOf` only when the derived value updates less frequently than its inputs _and_ you can prove it earns its keep.
 - **Respond to a user event.**
   Put the logic in the event handler (`onClick`, `onValueChange`), where intent is known.
 - **Reset state when a prop changes.**

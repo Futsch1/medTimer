@@ -12,7 +12,7 @@ For commands, see [`AGENTS.md`](../../AGENTS.md); for tests, see [testing.md](te
 The rules below are mechanically checked — CI runs the same gates locally and on PRs.
 
 - **Android Lint** (`app/build.gradle.kts`, `lint { abortOnError = true; warningsAsErrors = true }`) — every warning fails the build.
-  Don't suppress without justification: if you must `@Suppress("RuleId")` or add a `tools:ignore`, include a comment explaining *why*.
+  Don't suppress without justification: if you must `@Suppress("RuleId")` or add a `tools:ignore`, include a comment explaining _why_.
 - **SonarQube / SonarCloud** (project `Futsch1_medTimer` on `sonarcloud.io`) — secondary static analysis.
   New SonarQube issues introduced by a PR block merge.
 - **Kotlin official code style** — line length **160**, four-space indent.
@@ -104,9 +104,9 @@ Map at the boundary using the `toModel/` / `toEntity/` helpers in `:core:databas
   `MainActivity` and any service receiving injected dependencies are `@AndroidEntryPoint`.
 - ViewModels are `@HiltViewModel` with `@Inject constructor(...)`.
 - Provider modules live in `app/src/main/java/com/futsch1/medtimer/di/`:
-    - `DatabaseModule` — singleton Room database + `MedicineRepository`.
-    - `DispatchersModule` — `@Dispatcher(MedTimerDispatchers.X)` qualified `CoroutineDispatcher` providers.
-    - `CoroutineScopesModule` — `@ApplicationScope CoroutineScope`.
+  - `DatabaseModule` — singleton Room database + `MedicineRepository`.
+  - `DispatchersModule` — `@Dispatcher(MedTimerDispatchers.X)` qualified `CoroutineDispatcher` providers.
+  - `CoroutineScopesModule` — `@ApplicationScope CoroutineScope`.
 - Flavor-specific bindings (full vs foss `LocationModule`, `GeofenceRegistrar`) live in the flavor source sets under `app/src/full/.../di/` and
   `app/src/foss/.../di/`.
 - New code injects via constructor (`@Inject`) on ViewModels and via field-injection (`@Inject lateinit var`) only on Android framework classes (Fragments,
@@ -138,16 +138,16 @@ Follow [Android coroutines best practices](https://developer.android.com/kotlin/
 Modules are listed in [`settings.gradle.kts`](../../settings.gradle.kts).
 The current layout:
 
-| Module               | Purpose                                                                                                                                                                                                        |
-|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `:app`               | Application entry point, wiring, screens not yet extracted                                                                                                                                                     |
-| `:core:common`       | Pure-Kotlin utilities (no Android dependencies where possible)                                                                                                                                                 |
-| `:core:domain`       | Domain models and repository interfaces                                                                                                                                                                        |
-| `:core:database`     | Room database, entities, repository implementations, mappers                                                                                                                                                   |
-| `:core:datastore`    | DataStore-based preferences                                                                                                                                                                                    |
+| Module               | Purpose                                                                                                                                                                                                                                                                           |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `:app`               | Application entry point, wiring, screens not yet extracted                                                                                                                                                                                                                        |
+| `:core:common`       | Pure-Kotlin utilities (no Android dependencies where possible)                                                                                                                                                                                                                    |
+| `:core:domain`       | Domain models and repository interfaces                                                                                                                                                                                                                                           |
+| `:core:database`     | Room database, entities, repository implementations, mappers                                                                                                                                                                                                                      |
+| `:core:datastore`    | DataStore-based preferences                                                                                                                                                                                                                                                       |
 | `:core:ui`           | Shared **resources** (strings, drawables, themes, navigation graphs, XML layouts that cross features). Compose theme (`MedTimerTheme`) and reusable composables (`SortableTable`, `TagEventFilter`, `@MedTimerPreview`) live here — see [jetpack-compose.md](jetpack-compose.md). |
-| `:feature:reminders` | Reminder scheduling, notification processing                                                                                                                                                                   |
-| `:feature:ui`        | Overview UI                                                                                                                                                                                                    |
+| `:feature:reminders` | Reminder scheduling, notification processing                                                                                                                                                                                                                                      |
+| `:feature:ui`        | Overview UI                                                                                                                                                                                                                                                                       |
 
 ### When to add a new module
 
@@ -179,7 +179,7 @@ This has two consequences worth memorizing:
 The `distribution` product-flavor dimension produces two builds:
 
 | Flavor | GMS?                           | Source sets                                                              |
-|--------|--------------------------------|--------------------------------------------------------------------------|
+| ------ | ------------------------------ | ------------------------------------------------------------------------ |
 | `full` | Yes (`play-services-location`) | `app/src/full/`, `app/src/testFull/`, plus `feature:reminders/src/full/` |
 | `foss` | No                             | `app/src/foss/` with no-op stubs                                         |
 

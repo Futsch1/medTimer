@@ -129,7 +129,7 @@ private fun TwoPies(state: ChartsState, stacked: Boolean, modifier: Modifier = M
 ## Verification
 
 - `./gradlew assembleFullDebug assembleFossDebug` — both flavors build; adaptive
-  + transitive window symbols resolve.
+  - transitive window symbols resolve.
 - `./gradlew lint` — clean (no new suppressions).
 - `./gradlew testFullDebugUnitTest` (or the targeted module test task) — the new
   landscape test passes.

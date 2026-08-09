@@ -44,6 +44,7 @@ windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 
 `CalendarContent` already imports `androidx.compose.ui.platform.LocalConfiguration`.
 Add:
+
 ```kotlin
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,6 +54,7 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 ```
 
 Detection (computed once near the top, after the existing state is set up):
+
 ```kotlin
 val configuration = LocalConfiguration.current
 val isTabletLandscape = remember(windowAdaptiveInfo, configuration) {

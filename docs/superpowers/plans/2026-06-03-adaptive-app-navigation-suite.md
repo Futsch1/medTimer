@@ -11,6 +11,7 @@
 **Source spec:** `docs/superpowers/specs/2026-06-03-adaptive-app-navigation-suite-design.md`
 
 **Key facts (verified):**
+
 - Top-level destination ids (in `com.futsch1.medtimer.feature.ui.R.id`): `overviewFragment` (graph start), `medicinesFragment`, `statisticsFragment`; plus `preferencesFragment`.
 - Nav icons (in `com.futsch1.medtimer.core.ui.R.drawable`): `calendar_event`, `capsule`, `bar_chart`.
 - Nav labels / content descriptions (in `com.futsch1.medtimer.core.ui.R.string`): `tab_overview`/`overview_tab_description`, `tab_medicine`/`medicines_tab_description`, `analysis`/`statistics_tab_description`.
@@ -33,6 +34,7 @@
 ## Task 1: Enable Compose in the `:app` module
 
 **Files:**
+
 - Modify: `gradle/libs.versions.toml`
 - Modify: `app/build.gradle.kts`
 
@@ -98,6 +100,7 @@ git commit -m "#1234 Enable Compose in the app module for adaptive navigation" -
 ## Task 2: Add `content_main.xml` (layout split, additive)
 
 **Files:**
+
 - Create: `app/src/main/res/layout/content_main.xml`
 
 This is `activity_main.xml` with the `BottomNavigationView` removed and the `navHost`'s bottom constrained to the parent. `activity_main.xml` is left in place for now (deleted in Task 4) so the app keeps building.
@@ -240,6 +243,7 @@ git commit -m "#1234 Add content_main layout (shell without the bottom bar)" -m 
 ## Task 3: `navSuiteType` breakpoint mapping (TDD)
 
 **Files:**
+
 - Create: `app/src/test/java/com/futsch1/medtimer/NavSuiteTypeTest.kt`
 - Create: `app/src/main/java/com/futsch1/medtimer/AppNavigation.kt` (the `navSuiteType` function only in this task; the composable is added in Task 4)
 
@@ -328,6 +332,7 @@ git commit -m "#1234 Add width-based navigation-suite type mapping" -m "Co-Autho
 ## Task 4: Host `NavigationSuiteScaffold` in `MainActivity`
 
 **Files:**
+
 - Modify: `app/src/main/java/com/futsch1/medtimer/AppNavigation.kt` (add `TopLevelNavItem`, `NAV_ITEMS`, `AppNavigationScaffold`)
 - Modify: `app/src/main/java/com/futsch1/medtimer/MainActivity.kt`
 - Delete: `app/src/main/res/layout/activity_main.xml`
@@ -337,6 +342,7 @@ git commit -m "#1234 Add width-based navigation-suite type mapping" -m "Co-Autho
 Append to `app/src/main/java/com/futsch1/medtimer/AppNavigation.kt` (keep the existing `navSuiteType`; add these imports to the top and the declarations below it):
 
 Add imports:
+
 ```kotlin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -362,6 +368,7 @@ import com.futsch1.medtimer.feature.ui.R as FeatureUiR
 ```
 
 Add declarations:
+
 ```kotlin
 private data class TopLevelNavItem(
     val destinationId: Int,
@@ -430,6 +437,7 @@ fun AppNavigationScaffold(
 In `MainActivity.kt` make these changes:
 
 (a) Remove the import `import com.google.android.material.bottomnavigation.BottomNavigationView`. Add:
+
 ```kotlin
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -439,14 +447,17 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.databinding.ContentMainBinding
 ```
+
 (Note: `NavHostFragment` is already imported — do not duplicate. `onNavDestinationSelected`/`setupWithNavController` imports become unused; remove `setupWithNavController` and `onNavDestinationSelected` import lines.)
 
 (b) Add a field to hold the bound NavHostFragment alongside the existing fields (e.g. near `appBarConfiguration`):
+
 ```kotlin
     private var navHostFragment: NavHostFragment? = null
 ```
 
 (c) Replace `start()` (currently lines ~151–170) — swap `setContentView(R.layout.activity_main)` + `setupNavigation()` + the `findViewById` warning wiring for the Compose host:
+
 ```kotlin
     private suspend fun start() {
         setContentView(
@@ -471,6 +482,7 @@ import com.futsch1.medtimer.databinding.ContentMainBinding
 ```
 
 (d) Replace `setupNavigation()` (currently lines ~186–212) with `onContentBound` + `onNavItemClick`:
+
 ```kotlin
     private fun onContentBound(binding: ContentMainBinding, navHostFragment: NavHostFragment) {
         this.navHostFragment = navHostFragment
@@ -519,6 +531,7 @@ import com.futsch1.medtimer.databinding.ContentMainBinding
 ```
 
 Notes:
+
 - `batteryOptimizationWarning`/`exactReminderWarning` field types are already `CardView?`; `binding.batteryOptimizationWarning`/`binding.exactRemindersWarning` are `CardView` (matching). The `findViewById` ids (`R.id.batteryOptimizationWarning`, etc.) now resolve from `content_main.xml`.
 - `onSupportNavigateUp()` (uses `findNavController(R.id.navHost)`) is UNCHANGED — `R.id.navHost` exists in `content_main.xml` and is in the activity's content tree.
 - `onResume()` is UNCHANGED — its `checkBatteryOptimization()`/`checkExactReminders()` use the now-`binding`-backed nullable fields (still null-safe, same tolerance as before if composition has not yet bound).
