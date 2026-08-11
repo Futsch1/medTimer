@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach Schlummern nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasiertes Schlummern erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>
     <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlauben Sie MedTimer den Hintergrundstandortzugriff</string>
+    <string name="location_snooze_permission_disclosure">MedTimer benötigt Zugriff auf Ihren Standort, um standortbasiertes Schlummern zu ermöglichen. Wenn die Funktion aktiviert ist, verwendet MedTimer Ihren Standort im Hintergrund, um Sie bei Ihrer gespeicherten Heimatadresse erneut zu benachrichtigen. MedTimer gibt Ihren Standort nicht weiter.</string>
     <string name="snooze_settings">Schlummer-Einstellungen</string>
     <string name="home_location">Heimstandort</string>
     <string name="home_location_not_set">Nicht festgelegt</string>

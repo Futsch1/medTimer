@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Újraértesítés hazaérkezéskor szundi után</string>
     <string name="location_snooze_no_play_services">A helyzet alapú szundi Google Play Services szolgáltatást igényel, amely nem érhető el ezen az eszközön</string>
     <string name="location_snooze_background_permission">Hazaérkezéskor történő újraértesítéshez engedélyezze a MedTimer számára a háttérben való helymeghatározást</string>
+    <string name="location_snooze_permission_disclosure">A helyzet alapú szundi engedélyezéséhez a MedTimernek hozzáférésre van szüksége a helyadataidhoz. Ha a funkció be van kapcsolva, a MedTimer a háttérben használja a helyadataidat, hogy újra értesítsen, amikor megérkezel a mentett otthoni helyszínedre. A MedTimer nem osztja meg a helyadataidat.</string>
     <string name="snooze_settings">Szundi beállítások</string>
     <string name="home_location">Otthoni helyszín</string>
     <string name="home_location_not_set">Nincs beállítva</string>

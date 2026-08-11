@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Επανειδοποίηση κατά την άφιξη στο σπίτι μετά από αναβολή</string>
     <string name="location_snooze_no_play_services">Η αναβολή βάσει τοποθεσίας απαιτεί τις Υπηρεσίες Google Play, οι οποίες δεν είναι διαθέσιμες σε αυτή τη συσκευή</string>
     <string name="location_snooze_background_permission">Για επανειδοποίηση κατά την άφιξη στο σπίτι, επιτρέψτε στο MedTimer την πρόσβαση στην τοποθεσία στο παρασκήνιο</string>
+    <string name="location_snooze_permission_disclosure">Το MedTimer χρειάζεται πρόσβαση στην τοποθεσία σας για να ενεργοποιήσει την αναβολή βάσει τοποθεσίας. Όταν είναι ενεργοποιημένη, η λειτουργία χρησιμοποιεί την τοποθεσία σας στο παρασκήνιο για να σας ειδοποιήσει ξανά όταν φτάσετε στην αποθηκευμένη τοποθεσία του σπιτιού σας. Το MedTimer δεν κοινοποιεί την τοποθεσία σας.</string>
     <string name="snooze_settings">Ρυθμίσεις αναβολής</string>
     <string name="home_location">Τοποθεσία σπιτιού</string>
     <string name="home_location_not_set">Δεν έχει οριστεί</string>
