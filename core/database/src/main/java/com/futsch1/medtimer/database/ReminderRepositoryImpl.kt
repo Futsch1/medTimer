@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.database
 
+import android.util.Log
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.database.dao.ReminderDao
@@ -34,7 +36,13 @@ class ReminderRepositoryImpl(
     }
 
     override suspend fun create(reminder: Reminder): Int {
-        return reminderDao.create(reminder.toEntity()).toInt()
+        val reminderId = reminderDao.create(reminder.toEntity()).toInt()
+        Log.d(
+            LogTags.REMINDER,
+            "Created reminder: medicineId=${reminder.medicineRelId}, " +
+                    "reminderId=$reminderId, type=${reminder.outOfStockReminderType}"
+        )
+        return reminderId
     }
 
     override suspend fun createMany(reminders: List<Reminder>) {
