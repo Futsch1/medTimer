@@ -9,6 +9,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.utilities.awaitToast
 import java.time.LocalTime
 import kotlin.time.Duration
 
@@ -157,7 +158,9 @@ class MedicineEditorRobot(
         closeKeyboard()
     }
 
-    private fun create() = clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+    private fun create() {
+        awaitToast(ui.getString(R.string.successfully_created_reminder)) { clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder) }
+    }
 
     private companion object {
         val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editAmount
