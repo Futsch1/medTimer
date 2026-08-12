@@ -3,12 +3,14 @@ package com.futsch1.medtimer.feature.ui.medicine.dialogs
 import android.app.Dialog
 import android.text.InputType
 import android.text.method.DigitsKeyListener
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
@@ -161,6 +163,7 @@ class NewReminderStockDialog @AssistedInject constructor(
                 }
 
                 if (!canCreate) {
+                    Log.e(LogTags.REMINDER, "Invalid input, cannot create reminder")
                     Toast.makeText(
                         activity,
                         com.futsch1.medtimer.core.ui.R.string.invalid_input,
