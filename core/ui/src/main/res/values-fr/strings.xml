@@ -320,6 +320,7 @@
     <string name="location_snooze_summary">Notifier à nouveau en rentrant à la maison après avoir mis en veille</string>
     <string name="location_snooze_no_play_services">La répétition basée sur la localisation nécessite Google Play Services, qui n\'est pas disponible sur cet appareil</string>
     <string name="location_snooze_background_permission">Pour être notifié en rentrant à la maison, autorisez MedTimer à accéder à la localisation en arrière-plan</string>
+    <string name="location_snooze_permission_disclosure">MedTimer a besoin d\'accéder à votre localisation pour activer la répétition basée sur la localisation. Lorsque cette fonctionnalité est activée, MedTimer utilise votre localisation en arrière-plan pour vous notifier à nouveau lorsque vous arrivez à votre domicile enregistré. MedTimer ne partage pas votre localisation.</string>
     <string name="snooze_settings">Paramètres de répétition</string>
     <string name="home_location">Position du domicile</string>
     <string name="home_location_not_set">Non définie</string>

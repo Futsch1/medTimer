@@ -320,6 +320,7 @@
     <string name="location_snooze_summary">הודעה חוזרת עם החזרה הביתה לאחר דחייה</string>
     <string name="location_snooze_no_play_services">נודניק מבוסס מיקום דורש שירותי Google Play, שאינם זמינים במכשיר זה</string>
     <string name="location_snooze_background_permission">כדי לקבל הודעה חוזרת עם החזרה הביתה, אפשר ל-MedTimer גישה למיקום ברקע</string>
+    <string name="location_snooze_permission_disclosure">MedTimer זקוקה לגישה למיקום שלך כדי לאפשר נודניק מבוסס מיקום. כאשר התכונה מופעלת, MedTimer משתמשת במיקום שלך ברקע כדי להודיע לך שוב כשתגיע למיקום הבית השמור שלך. MedTimer אינה משתפת את המיקום שלך.</string>
     <string name="snooze_settings">הגדרות נודניק</string>
     <string name="home_location">מיקום הבית</string>
     <string name="home_location_not_set">לא הוגדר</string>

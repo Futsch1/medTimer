@@ -320,6 +320,7 @@
     <string name="location_snooze_summary">Notificar novamente ao chegar em casa após soneca</string>
     <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>
     <string name="location_snooze_background_permission">Para ser notificado ao chegar em casa, permita que o MedTimer acesse a localização em segundo plano</string>
+    <string name="location_snooze_permission_disclosure">O MedTimer precisa acessar sua localização para ativar a soneca baseada em localização. Quando ativado, o MedTimer usa sua localização em segundo plano para notificar você novamente quando chegar à sua localização residencial salva. O MedTimer não compartilha sua localização.</string>
     <string name="snooze_settings">Configurações de soneca</string>
     <string name="home_location">Localização de casa</string>
     <string name="home_location_not_set">Não definida</string>

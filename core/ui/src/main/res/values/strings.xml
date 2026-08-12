@@ -107,6 +107,7 @@
     <string name="location_snooze_summary">Re-notify when arriving home after snoozing</string>
     <string name="location_snooze_no_play_services">Location-based snooze requires Google Play Services, which are not available on this device</string>
     <string name="location_snooze_background_permission">To re-notify when arriving home, allow MedTimer to access location in the background</string>
+    <string name="location_snooze_permission_disclosure">MedTimer needs access to your location to enable location-based snoozing. When enabled, MedTimer uses your location in the background to re-notify you when you arrive at your saved home location. Your location is not shared by MedTimer.</string>
     <string name="generate_test_data">Generate test data</string>
     <string name="generate_test_data_and_events" translatable="false">Generate test data and events</string>
     <string name="create_reminder_dosage_hint">Dosage for new reminder</string>

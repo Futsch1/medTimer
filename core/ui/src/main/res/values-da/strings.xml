@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Påmind igen ved hjemkomst efter udsættelse</string>
     <string name="location_snooze_no_play_services">Lokationsbaseret udsættelse kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>
     <string name="location_snooze_background_permission">For at påminde igen ved hjemkomst skal MedTimer have adgang til din lokation i baggrunden</string>
+    <string name="location_snooze_permission_disclosure">MedTimer skal have adgang til din lokation for at aktivere lokationsbaseret udsættelse. Når funktionen er aktiveret, bruger MedTimer din lokation i baggrunden til at minde dig om det igen, når du ankommer til din gemte hjemmelokation. MedTimer deler ikke din lokation.</string>
     <string name="snooze_settings">Snooze-indstillinger</string>
     <string name="home_location">Hjemsted</string>
     <string name="home_location_not_set">Ikke angivet</string>
