@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Ertelemeden sonra eve gelince yeniden bildirim</string>
     <string name="location_snooze_no_play_services">Konuma dayalı erteleme, bu cihazda bulunmayan Google Play Servislerijini gerektirir</string>
     <string name="location_snooze_background_permission">Eve gelince yeniden bildirim almak için MedTimer\'ın arka planda konuma erişmesine izin verin</string>
+    <string name="location_snooze_permission_disclosure">Konuma dayalı ertelemeyi etkinleştirmek için MedTimer\'ın konumunuza erişmesi gerekir. Özellik etkinleştirildiğinde MedTimer, kayıtlı ev konumunuza vardığınızda sizi yeniden bilgilendirmek için konumunuzu arka planda kullanır. MedTimer konumunuzu paylaşmaz.</string>
     <string name="snooze_settings">Erteleme ayarları</string>
     <string name="home_location">Ev konumu</string>
     <string name="home_location_not_set">Ayarlanmadı</string>

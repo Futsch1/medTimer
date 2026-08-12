@@ -308,6 +308,7 @@
     <string name="location_snooze_summary">小睡后回家时重新提醒</string>
     <string name="location_snooze_no_play_services">基于位置的小睡需要 Google Play 服务，该服务在此设备上不可用</string>
     <string name="location_snooze_background_permission">要在回家时重新接收提醒，请允许 MedTimer 在后台访问位置</string>
+    <string name="location_snooze_permission_disclosure">MedTimer 需要访问您的位置信息才能启用基于位置的小睡功能。启用后，MedTimer 会在后台使用您的位置信息，以便您到达已保存的家庭位置时再次提醒您。MedTimer 不会共享您的位置信息。</string>
     <string name="snooze_settings">小睡设置</string>
     <string name="home_location">家庭位置</string>
     <string name="home_location_not_set">未设置</string>

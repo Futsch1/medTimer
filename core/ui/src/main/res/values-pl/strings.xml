@@ -326,6 +326,7 @@
     <string name="location_snooze_summary">Ponownie powiadom po przybyciu do domu po drzemce</string>
     <string name="location_snooze_no_play_services">Drzemka oparta na lokalizacji wymaga usług Google Play, które nie są dostępne na tym urządzeniu</string>
     <string name="location_snooze_background_permission">Aby ponownie otrzymywać powiadomienia po przybyciu do domu, zezwól MedTimer na dostęp do lokalizacji w tle</string>
+    <string name="location_snooze_permission_disclosure">MedTimer potrzebuje dostępu do Twojej lokalizacji, aby umożliwić drzemkę opartą na lokalizacji. Gdy funkcja jest włączona, MedTimer używa Twojej lokalizacji w tle, aby ponownie powiadomić Cię po dotarciu do zapisanej lokalizacji domu. MedTimer nie udostępnia Twojej lokalizacji.</string>
     <string name="snooze_settings">Ustawienia drzemki</string>
     <string name="home_location">Lokalizacja domowa</string>
     <string name="home_location_not_set">Nie ustawiono</string>

@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">சுணக்கத்திற்குப் பிறகு வீடு திரும்பும்போது மீண்டும் அறிவிக்கவும்</string>
     <string name="location_snooze_no_play_services">இடம் சார்ந்த சுணக்கம் Google Play Services தேவைப்படுகிறது, இது இந்த சாதனத்தில் கிடைக்கவில்லை</string>
     <string name="location_snooze_background_permission">வீடு திரும்பும்போது மீண்டும் அறிவிக்க, MedTimer-க்கு பின்னணியில் இடத்தை அணுக அனுமதிக்கவும்</string>
+    <string name="location_snooze_permission_disclosure">இடம் சார்ந்த சுணக்கத்தை இயக்க MedTimer-க்கு உங்கள் இருப்பிடத்திற்கான அணுகல் தேவை. இந்த அம்சம் இயக்கப்பட்டிருக்கும்போது, சேமிக்கப்பட்ட வீட்டு இருப்பிடத்திற்கு நீங்கள் வரும்போது மீண்டும் அறிவிக்க, MedTimer உங்கள் இருப்பிடத்தைப் பின்னணியில் பயன்படுத்துகிறது. MedTimer உங்கள் இருப்பிடத்தைப் பகிராது.</string>
     <string name="snooze_settings">சுணக்க அமைப்புகள்</string>
     <string name="home_location">வீட்டு இடம்</string>
     <string name="home_location_not_set">அமைக்கப்படவில்லை</string>

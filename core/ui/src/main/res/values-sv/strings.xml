@@ -313,6 +313,7 @@
     <string name="location_snooze_summary">Meddela igen när du anländer hem efter snooze</string>
     <string name="location_snooze_no_play_services">Platsbaserad snooze kräver Google Play Services, som inte är tillgängligt på den här enheten</string>
     <string name="location_snooze_background_permission">För att meddelas vid hemkomst, tillåt MedTimer att komma åt plats i bakgrunden</string>
+    <string name="location_snooze_permission_disclosure">MedTimer behöver åtkomst till din plats för att aktivera platsbaserad snooze. När funktionen är aktiverad använder MedTimer din plats i bakgrunden för att meddela dig igen när du kommer till din sparade hemplats. MedTimer delar inte din plats.</string>
     <string name="snooze_settings">Snooze-inställningar</string>
     <string name="home_location">Hemplats</string>
     <string name="home_location_not_set">Inte inställd</string>

@@ -81,13 +81,23 @@ class SnoozeSettingsFragment : PreferencesFragment() {
                     showInfoDialog(com.futsch1.medtimer.core.ui.R.string.location_snooze_no_play_services)
                     return@OnPreferenceChangeListener false
                 }
-                requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                showLocationPermissionDisclosure()
             } else {
                 geofenceRegistrar.unregisterHomeGeofence()
                 updateLocationPrefsVisibility(false)
             }
             true
         }
+    }
+
+    private fun showLocationPermissionDisclosure() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(com.futsch1.medtimer.core.ui.R.string.location_snooze_permission_disclosure)
+            .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ ->
+                requestFineLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel, null)
+            .show()
     }
 
     private fun setupHomeLocation() {

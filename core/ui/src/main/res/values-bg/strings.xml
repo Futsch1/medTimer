@@ -314,6 +314,7 @@
     <string name="location_snooze_summary">Повторно известяване при завръщане вкъщи след отлагане</string>
     <string name="location_snooze_no_play_services">Отлагането по местоположение изисква Google Play Services, което не е налично на това устройство</string>
     <string name="location_snooze_background_permission">За повторно известяване при завръщане вкъщи, разрешете на MedTimer достъп до местоположението на заден план</string>
+    <string name="location_snooze_permission_disclosure">MedTimer се нуждае от достъп до местоположението ви, за да осигури отлагане по местоположение. Когато е включена, функцията използва местоположението ви във фонов режим, за да ви извести повторно при пристигане на запазеното ви местоположение у дома. MedTimer не споделя местоположението ви.</string>
     <string name="snooze_settings">Настройки за отлагане</string>
     <string name="home_location">Домашно местоположение</string>
     <string name="home_location_not_set">Не е зададено</string>

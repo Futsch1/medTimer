@@ -322,6 +322,7 @@
     <string name="location_snooze_summary">Повторно уведомить при возвращении домой после отсрочки</string>
     <string name="location_snooze_no_play_services">Отсрочка по местоположению требует Google Play Services, которые недоступны на этом устройстве</string>
     <string name="location_snooze_background_permission">Чтобы получать уведомления при возвращении домой, разрешите MedTimer доступ к местоположению в фоне</string>
+    <string name="location_snooze_permission_disclosure">MedTimer нужен доступ к вашему местоположению, чтобы включить отсрочку по местоположению. Когда функция включена, MedTimer использует ваше местоположение в фоновом режиме, чтобы повторно уведомить вас по прибытии к сохранённому домашнему местоположению. MedTimer не передаёт ваше местоположение.</string>
     <string name="snooze_settings">Настройки отложенных уведомлений</string>
     <string name="home_location">Домашнее местоположение</string>
     <string name="home_location_not_set">Не задано</string>
