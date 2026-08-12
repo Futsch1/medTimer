@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
     <string name="continuous_interval_reminder_help">Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Die Erinnerung wiederholt sich kontinuierlich in diesem Intervall.</string>
@@ -334,4 +334,7 @@
     <string name="next_week">Nächste Woche</string>
     <string name="stock_after_simulation_end">Nach %s</string>
     <string name="move_medicine">Medikament verschieben</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Nach oben</string>
+    <string name="close" tools:ignore="MissingTranslation">Schließen</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Mehr Optionen</string>
 </resources>
