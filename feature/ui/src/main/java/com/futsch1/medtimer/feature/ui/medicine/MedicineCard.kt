@@ -54,7 +54,7 @@ fun MedicineCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(4.dp)
             .testTag(MedicineTestTags.MEDICINE_ITEM),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp,
@@ -64,7 +64,7 @@ fun MedicineCard(
         onClick = { onMedicineEdit(medicine.id) }
     ) {
         Row(
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp),
+            modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -72,7 +72,7 @@ fun MedicineCard(
                     MedicineSwatch(
                         icon = medicine.icon?.asImageBitmap(),
                         color = medicine.color,
-                        modifier = Modifier.padding(end = 16.dp),
+                        modifier = Modifier.padding(end = 12.dp),
                     )
                     Column {
                         MedicineHeader(medicine)
@@ -156,7 +156,7 @@ private fun MedicineTags(tags: List<String>) {
                 label = { Text(text = tag) },
                 selected = true,
                 onClick = {},
-                modifier = Modifier.padding(horizontal = 4.dp)
+                modifier = Modifier.padding(horizontal = 2.dp)
             )
         }
         if (overflowCount > 0) {
@@ -164,7 +164,7 @@ private fun MedicineTags(tags: List<String>) {
                 label = { Text(text = stringResource(R.string.more_tags, overflowCount)) },
                 selected = true,
                 onClick = {},
-                modifier = Modifier.padding(horizontal = 4.dp)
+                modifier = Modifier.padding(horizontal = 2.dp)
             )
         }
     }

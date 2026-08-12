@@ -234,7 +234,7 @@ private fun SwipeToDeleteContainer(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .clip(MaterialTheme.shapes.medium)
                         .background(Color(0xFFCC0000).copy(alpha = alpha)),
                     contentAlignment = Alignment.CenterEnd
