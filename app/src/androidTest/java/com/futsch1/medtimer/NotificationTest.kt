@@ -4,6 +4,7 @@ import android.os.Build
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.awaitNextSecond
+import com.futsch1.medtimer.utilities.fireNextAlarmsAfter
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
@@ -19,6 +20,7 @@ private const val FIRST_REMINDER = "First reminder"
 private const val SECOND_REMINDER = "Second reminder"
 private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
 private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
+private const val REPEAT_AFTER_MILLIS = 5_000L
 
 
 @HiltAndroidTest
@@ -26,13 +28,13 @@ class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun notificationTest() {
-        medicines.create(TEST_MED)
+        seed.medicine(TEST_MED) {
+            reminder("1", aboutToFire())
+            linkedReminder("1", after = 1.minutes)
+        }
 
+        medicines.clickItem(0)
         medicineSettings.setColorAndIcon(hex = "deadbe", iconPosition = 1)
-
-        medicineEditor.addReminder("1", aboutToFire())
-
-        reminders.addLinkedReminder(0, minutes = 1)
 
         navigation.toOverview()
 
@@ -53,11 +55,8 @@ class NotificationTest : MedTimerTestBase() {
             dialogs.clickItem(R.string.skip_reminder)
         }
 
-        navigation.toMedicines()
-
-        medicines.create(TEST_MED)
         // Interval reminder (amount 1) 2 hours from now
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
 
         navigation.toAnalysis()
         awaitAndDismissNotification()
@@ -101,9 +100,10 @@ class NotificationTest : MedTimerTestBase() {
 
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        medicines.create(TEST_MED)
-        medicineEditor.addReminder(FIRST_REMINDER, laterToday())
-        medicineEditor.addReminder(SECOND_REMINDER, laterToday())
+        seed.medicine(TEST_MED) {
+            reminder(FIRST_REMINDER, laterToday())
+            reminder(SECOND_REMINDER, laterToday())
+        }
 
         scheduleRemindersNow()
 
@@ -114,6 +114,7 @@ class NotificationTest : MedTimerTestBase() {
         }
         navigation.toOverview()
 
+        fireNextAlarmsAfter(REPEAT_AFTER_MILLIS)
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
         navigation.toAnalysis()
@@ -122,7 +123,7 @@ class NotificationTest : MedTimerTestBase() {
             assertHidden(FIRST_REMINDER)
             val text = assertShows(SECOND_REMINDER).text
 
-            awaitGone(text, timeoutMillis = 120_000)
+            awaitGone(text, timeoutMillis = REPEAT_AFTER_MILLIS * 6)
             assertShows(TEST_MED)
             assertHidden(FIRST_REMINDER)
             assertShows(SECOND_REMINDER)
@@ -134,8 +135,9 @@ class NotificationTest : MedTimerTestBase() {
     fun variableAmount() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        medicines.create(TEST_MED)
-        medicineEditor.addReminder("1", laterToday())
+        seed.medicine(TEST_MED) { reminder("1", laterToday()) }
+
+        medicines.clickItem(0)
         reminders.inSettingsOf(0) { toggleVariableAmount() }
         menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
 
@@ -166,12 +168,11 @@ class NotificationTest : MedTimerTestBase() {
             preferences.click(R.string.combine_notifications)
         }
 
-        medicines.create(TEST_MED)
-        medicineEditor.addReminder("1", laterToday())
-        reminders.inSettingsOf(0) { toggleVariableAmount() }
-        menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
+        val medicineId = seed.medicine(TEST_MED) { reminder("1", laterToday(), variableAmount = true) }
+
         medicines.clickItem(0)
-        medicineEditor.addReminder("Not variable", laterToday())
+        menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
+        seed.remindersOf(medicineId) { reminder("Not variable", laterToday()) }
 
         medicines.clickItem(1)
         medicineEditor.rename(SECOND_ONE)
@@ -212,8 +213,7 @@ class NotificationTest : MedTimerTestBase() {
             dialogs.clickItem(R.string.snooze)
         }
 
-        medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
 
         navigation.toAnalysis()
         notifications.inShade {
@@ -256,8 +256,7 @@ class NotificationTest : MedTimerTestBase() {
     fun hiddenMedicineName() {
         settings.click(R.string.privacy_settings, R.string.hide_med_name)
 
-        medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
         medicines.assertNameContains(TEST_MED)
 
         notifications.inShade { assertShows("T*******") }
@@ -268,8 +267,7 @@ class NotificationTest : MedTimerTestBase() {
     fun bigButtons() {
         settings.click(R.string.display_settings, R.string.big_notifications)
 
-        medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
 
         notifications.inShade {
             assertShows(TEST_MED)
@@ -285,11 +283,12 @@ class NotificationTest : MedTimerTestBase() {
     fun sameTimeReminders() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        medicines.create(TEST_MED)
         val notificationTime = aboutToFire()
 
-        medicineEditor.addReminder("1", notificationTime)
-        medicineEditor.addReminder(SECOND_ONE, notificationTime)
+        seed.medicine(TEST_MED) {
+            reminder("1", notificationTime)
+            reminder(SECOND_ONE, notificationTime)
+        }
 
         notifications.inShade {
             scheduleRemindersNow()
@@ -312,9 +311,9 @@ class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun automaticallyTakenTest() {
-        medicines.create(TEST_MED)
+        seed.medicine(TEST_MED) { reminder("1", aboutToFire()) }
 
-        medicineEditor.addReminder("1", aboutToFire())
+        medicines.clickItem(0)
         reminders.inSettingsOf(0) { toggleAutomaticallyTaken() }
 
         navigation.toOverview()
@@ -332,8 +331,9 @@ class NotificationTest : MedTimerTestBase() {
         val timeToNotify = 10_000L
         alarm.wakeDevice()
 
-        medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", 2.minutes)
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.minutes) }
+
+        medicines.clickItem(0)
         medicineSettings.inSettings { setNotificationImportance(R.string.high_and_alarm) }
 
         navigation.toOverview()
@@ -362,9 +362,7 @@ class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun scheduleReminderTest() {
-        medicines.create(TEST_MED)
-
-        medicineEditor.addReminder("1", laterToday())
+        seed.medicine(TEST_MED) { reminder("1", laterToday()) }
 
         navigation.toOverview()
 
@@ -379,9 +377,10 @@ class NotificationTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun noSkippedButton() {
-        medicines.create(TEST_MED)
-        medicineSettings.inSettings { toggleCannotBeSkipped() }
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED) {
+            cannotBeSkipped()
+            intervalReminder("1", 2.hours)
+        }
 
         notifications.inShade {
             assertShows(TEST_MED)
@@ -396,11 +395,10 @@ class NotificationTest : MedTimerTestBase() {
 
         settings.click(R.string.display_settings, R.string.big_notifications)
 
-        navigation.toMedicines()
-
-        medicines.create(TEST_MED_2)
-        medicineSettings.inSettings { toggleCannotBeSkipped() }
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED_2) {
+            cannotBeSkipped()
+            intervalReminder("1", 2.hours)
+        }
 
         notifications.inShade {
             assertShows(TEST_MED_2)

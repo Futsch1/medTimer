@@ -27,9 +27,9 @@ class ReminderTest : MedTimerTestBase() {
         val pastTime = Calendar.getInstance()
         pastTime.set(year - 1, 1, 1)
 
-        medicines.create("Test")
-        medicineEditor.addReminder("1", laterToday())
+        seed.medicine("Test") { reminder("1", laterToday()) }
 
+        medicines.clickItem(0)
         reminders.inSettingsOf(0) { toggleEnabled() }
 
         navigation.toOverview()
@@ -89,9 +89,9 @@ class ReminderTest : MedTimerTestBase() {
         futureTime.set(year + 1, 1, 1)
         val nowTime = Calendar.getInstance()
 
-        medicines.create("Test")
-        medicineEditor.addIntervalReminder("1", 180.minutes)
+        seed.medicine("Test") { intervalReminder("1", 180.minutes) }
 
+        medicines.clickItem(0)
         reminders.inSettingsOf(0) {
             setIntervalStart(
                 futureTime.time,
@@ -186,7 +186,7 @@ class ReminderTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun editReminderTest() {
-        medicines.create("Test")
+        seed.medicine("Test")
 
         navigation.toOverview()
 
@@ -227,8 +227,7 @@ class ReminderTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun deleteReminderTest() {
-        medicines.create("Test")
-        medicineEditor.addReminder("1", laterToday())
+        seed.medicine("Test") { reminder("1", laterToday()) }
 
         navigation.toOverview()
 
@@ -247,8 +246,7 @@ class ReminderTest : MedTimerTestBase() {
     fun intervalReminderTest() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        medicines.create("Test")
-        medicineEditor.addIntervalReminder("1", intervalWithinToday(10.minutes))
+        seed.medicine("Test") { intervalReminder("1", intervalWithinToday(10.minutes)) }
 
         navigation.toOverview()
 
@@ -275,14 +273,15 @@ class ReminderTest : MedTimerTestBase() {
         )
 
         // Create medicine
-        medicines.create("Test")
+        val medicineId = seed.medicine("Test")
 
         for (cycle in reminderCycles) {
             // Create reminder
-            medicineEditor.addReminder("1", laterToday())
+            seed.remindersOf(medicineId) { reminder("1", laterToday()) }
 
             val cycleStart = Calendar.getInstance()
 
+            medicines.clickItem(0)
             reminders.inSettingsOf(0) {
                 inCycle {
                     setConsecutiveDays(cycle.consecutiveDays)
@@ -336,8 +335,7 @@ class ReminderTest : MedTimerTestBase() {
             pickers.pickTime(windowEnd)
         }
 
-        medicines.create(TEST_MED)
-        medicineEditor.addReminder("1", reminderTime)
+        seed.medicine(TEST_MED) { reminder("1", reminderTime) }
 
         navigation.toOverview()
         overview.assertEventContains(timeFormatter().minutesToTimeString(windowEnd.hour * 60 + windowEnd.minute))
@@ -348,8 +346,7 @@ class ReminderTest : MedTimerTestBase() {
     fun reschedule() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 
-        medicines.create(TEST_MED)
-        medicineEditor.addIntervalReminder("1", intervalWithinToday())
+        seed.medicine(TEST_MED) { intervalReminder("1", intervalWithinToday()) }
 
         navigation.toOverview()
         overview.assertEventCountAtLeast(2)
