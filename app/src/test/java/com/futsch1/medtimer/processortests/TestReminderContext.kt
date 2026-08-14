@@ -68,7 +68,7 @@ class RepositoryFakes {
             val reminderEvent = (it.arguments[0] as ReminderEvent).toEntity()
             reminderEvent.reminderEventId = reminderEvents.size + 1
             reminderEvents.add(reminderEvent)
-            reminderEvents.size.toLong()
+            reminderEvent.toModel()
         }
         `when`(runBlocking { reminderEventRepositoryMock.update(any()) }).thenAnswer {
             val domainEvent = it.arguments[0] as ReminderEvent
