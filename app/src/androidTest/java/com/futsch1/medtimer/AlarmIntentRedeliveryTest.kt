@@ -90,11 +90,12 @@ class AlarmIntentRedeliveryTest {
             )
 
             // A second alarm intent arrives while the activity is on top (singleTop redelivery).
-            // onNewIntent is protected on ComponentActivity, so it is invoked via reflection.
+            // Instrumentation.callActivityOnNewIntent is the exact entry point the framework
+            // uses (ActivityThread -> performNewIntent -> onNewIntent), so this exercises the
+            // real delivery path instead of a reflection shortcut.
             scenario.onActivity { activity ->
-                val onNewIntent = Activity::class.java.getDeclaredMethod("onNewIntent", android.content.Intent::class.java)
-                onNewIntent.isAccessible = true
-                onNewIntent.invoke(activity, ReminderAlarmActivity.getIntent(targetContext, dataB))
+                InstrumentationRegistry.getInstrumentation()
+                    .callActivityOnNewIntent(activity, ReminderAlarmActivity.getIntent(targetContext, dataB))
             }
 
             // The screen must now show the SECOND alarm's medicine, not the previous one.
