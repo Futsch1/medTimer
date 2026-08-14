@@ -29,7 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -116,9 +119,15 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                 }
             }
         }
-        FlowRow {
-            Crossfade(content.medicineName, animationSpec = fadeSpec) { Text(it, fontWeight = FontWeight.Bold) }
-            OptionalDetail(content.dose.takeIf { it.isNotEmpty() }) { Text(" ($it)") }
+        Crossfade(content.medicineName to content.dose, animationSpec = fadeSpec) { (medicineName, dose) ->
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(medicineName)
+                    }
+                    if (dose.isNotEmpty()) append(" ($dose)")
+                },
+            )
         }
     }
 }
@@ -167,6 +176,7 @@ private fun MinimalEventContentPreview() {
 }
 
 @MedTimerPreview
+@Preview(name = "Narrow", widthDp = 200)
 @Composable
 private fun TakenWithIntervalEventContentPreview() {
     MedTimerTheme {
@@ -175,7 +185,7 @@ private fun TakenWithIntervalEventContentPreview() {
                 content = OverviewEventContent(
                     reminderType = ReminderType.TIME_BASED,
                     time = PREVIEW_TIME,
-                    medicineName = "Vitamin D",
+                    medicineName = "Vitamin D + Vitamin C + Vitamin E",
                     dose = "1 tablet",
                     takenTime = PREVIEW_TIME.plus(Duration.ofMinutes(42)),
                     interval = Duration.ofMinutes(150),
@@ -221,9 +231,8 @@ private fun ExpirationEventContentPreview() {
     }
 }
 
-
 @MedTimerPreview
-@Preview(widthDp = 250)
+@Preview(name = "Narrow", widthDp = 250)
 @Composable
 private fun RelativeTimeEventContentPreview() {
     MedTimerTheme {
