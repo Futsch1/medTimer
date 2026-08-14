@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.database
 
+import android.util.Log
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.database.dao.MedicineDao
@@ -28,7 +30,9 @@ class MedicineRepositoryImpl(
     }
 
     override suspend fun create(medicine: Medicine): Int {
-        return medicineDao.create(medicine.toEntity()).toInt()
+        val medicineId = medicineDao.create(medicine.toEntity()).toInt()
+        Log.d(LogTags.DATABASE, "Created medicine: medicineId: $medicineId, name: ${medicine.name}")
+        return medicineId
     }
 
     override suspend fun delete(medicineId: Int) {

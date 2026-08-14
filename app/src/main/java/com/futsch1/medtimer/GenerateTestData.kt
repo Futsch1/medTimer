@@ -92,7 +92,7 @@ class GenerateTestData @AssistedInject constructor(
                     }
                 }
 
-                reminderEventRepository.createAll(reminderEvents.map { it.toModel() })
+                reminderEventRepository.createMany(reminderEvents.map { it.toModel() })
             }
         }
     }

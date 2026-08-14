@@ -38,14 +38,14 @@ class ReminderRepositoryImpl(
     override suspend fun create(reminder: Reminder): Int {
         val reminderId = reminderDao.create(reminder.toEntity()).toInt()
         Log.d(
-            LogTags.REMINDER,
-            "Created reminder: medicineId=${reminder.medicineRelId}, " +
-                    "reminderId=$reminderId, type=${reminder.outOfStockReminderType}"
+            LogTags.DATABASE,
+            "Created reminder: reminderId=$reminderId, medicineId=${reminder.medicineRelId}"
         )
         return reminderId
     }
 
     override suspend fun createMany(reminders: List<Reminder>) {
+        Log.d(LogTags.DATABASE, "Creating many reminders")
         reminderDao.createAll(reminders.map { it.toEntity() })
     }
 
