@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
+import kotlin.test.fail
 
 /**
  * The Material time and date picker dialogs. Locale (12- vs 24-hour, the date input pattern) and
@@ -35,6 +36,7 @@ class MaterialPickers {
     fun confirmTime() = confirmAndAwaitDismissal(com.google.android.material.R.id.material_timepicker_ok_button)
 
     fun pickDate(date: Date) {
+        awaitPicker(com.google.android.material.R.id.confirm_button)
         awaitView(ViewMatchers.withId(com.google.android.material.R.id.mtrl_picker_header_toggle))
         switchToTextInput(com.google.android.material.R.id.mtrl_picker_header_toggle, dateTextInput)
         writeTo(com.google.android.material.R.id.mtrl_picker_text_input_date, inputFormat.format(date))
@@ -42,13 +44,29 @@ class MaterialPickers {
         confirmAndAwaitDismissal(com.google.android.material.R.id.confirm_button)
     }
 
-    /** The picker goes down with a fragment transaction Espresso does not idle on, so the next tap can hit it. */
-    private fun confirmAndAwaitDismissal(buttonId: Int) {
-        clickOn(buttonId)
+    /** Until the picker's window is up, Espresso resolves the screen behind it as the root. */
+    private fun awaitPicker(confirmButtonId: Int) {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
-        val resourceName = instrumentation.targetContext.resources.getResourceName(buttonId)
-        UiDevice.getInstance(instrumentation).wait(Until.gone(By.res(resourceName)), DISMISSAL_TIMEOUT)
+        UiDevice.getInstance(instrumentation)
+            .wait(Until.hasObject(selector(confirmButtonId)), DISMISSAL_TIMEOUT)
     }
+
+    /** A picker left standing swallows the next tap, so the dismissal is retried and then insisted on. */
+    private fun confirmAndAwaitDismissal(buttonId: Int) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val confirmButton = selector(buttonId)
+
+        repeat(CONFIRM_ATTEMPTS) { attempt ->
+            if (attempt == 0 || viewAppears(displayedView(buttonId))) {
+                clickOn(buttonId)
+            }
+            if (device.wait(Until.gone(confirmButton), DISMISSAL_TIMEOUT)) return
+        }
+        fail("The picker was still up after $CONFIRM_ATTEMPTS taps on its confirm button")
+    }
+
+    private fun selector(viewId: Int) =
+        By.res(InstrumentationRegistry.getInstrumentation().targetContext.resources.getResourceName(viewId))
 
     private fun switchToTextInput(toggleId: Int, field: Matcher<View>) {
         repeat(MODE_TOGGLE_ATTEMPTS) {
@@ -60,6 +78,8 @@ class MaterialPickers {
     }
 
     private fun enterTime(hour: Int, minute: Int, isDuration: Boolean) {
+        awaitPicker(com.google.android.material.R.id.material_timepicker_ok_button)
+
         var hour = hour
         if (!DateFormat.is24HourFormat(InstrumentationRegistry.getInstrumentation().targetContext) && !isDuration) {
             clickOn(com.google.android.material.R.id.material_clock_period_am_button)
@@ -122,5 +142,6 @@ class MaterialPickers {
         const val MODE_TOGGLE_ATTEMPTS = 3
         const val MODE_SETTLE_TIMEOUT = 2_000L
         const val DISMISSAL_TIMEOUT = 5_000L
+        const val CONFIRM_ATTEMPTS = 3
     }
 }

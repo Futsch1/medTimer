@@ -44,17 +44,24 @@ class Seed(
         create(MedicineSeed(timeAccess).apply(block).reminders, medicineId)
     }
 
+    /** One write: the app reschedules off each, so a medicine added a reminder at a time is catchable half-built. */
     private suspend fun create(reminders: List<Pair<Reminder, Int?>>, medicineId: Int) {
-        val reminderIds = mutableListOf<Int>()
-        for ((reminder, linkedToPosition) in reminders) {
-            reminderIds += reminderRepository.create(
+        val reminderIds = reminderRepository.createMany(
+            reminders.map { (reminder, _) -> reminder.copy(medicineRelId = medicineId) }
+        )
+
+        // A link holds the position of the reminder it follows, whose id only exists once written.
+        val linked = reminders.mapIndexedNotNull { position, (reminder, linkedToPosition) ->
+            linkedToPosition?.let {
                 reminder.copy(
+                    id = reminderIds[position],
                     medicineRelId = medicineId,
-                    // A linked reminder is built holding the position of the reminder it follows;
-                    // its id only exists once that one has been written.
-                    linkedReminderId = linkedToPosition?.let { reminderIds[it] } ?: 0
+                    linkedReminderId = reminderIds[it]
                 )
-            )
+            }
+        }
+        if (linked.isNotEmpty()) {
+            reminderRepository.updateMany(linked)
         }
     }
 

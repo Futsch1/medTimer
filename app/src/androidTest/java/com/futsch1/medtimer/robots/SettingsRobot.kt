@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
-import androidx.test.espresso.Espresso.pressBack
 
 /**
  * The app settings. The interface is the setting to change; finding it and coming back out again is
@@ -17,7 +16,7 @@ class SettingsRobot(private val menus: MenuRobot, private val preferences: Prefe
         menus.clickAppOption(com.futsch1.medtimer.core.ui.R.string.tab_settings)
         path.forEach { preferences.click(it) }
         block()
-        repeat(path.size + 1) { pressBack() }
+        preferences.leave(path.size + 1)
     }
 
     /** Clicks the last entry of [path], with the entries before it read as nested screens. */

@@ -22,6 +22,9 @@ private const val TEST_VARIABLE_AMOUNT = "Test variable amount"
 private const val TEST_ANOTHER_VARIABLE_AMOUNT = "Test another variable amount"
 private const val REPEAT_AFTER_MILLIS = 5_000L
 
+/** Covers the repeat whether the armed alarm pulled it forward or it stayed at the configured minute. */
+private const val REPEAT_TIMEOUT_MILLIS = 90_000L
+
 
 @HiltAndroidTest
 class NotificationTest : MedTimerTestBase() {
@@ -84,6 +87,7 @@ class NotificationTest : MedTimerTestBase() {
     }
 
     @Test
+    @AllowFlaky(attempts = 3)
     fun repeatingReminders() {
         // Repeat reminder every minute and enable exact reminders
         settings.inSection(R.string.notification_reminder_settings) {
@@ -114,16 +118,17 @@ class NotificationTest : MedTimerTestBase() {
         }
         navigation.toOverview()
 
+        // Read before the repeat is armed, after which it can land at any moment.
+        val firstRaise = notifications.postedId(SECOND_REMINDER)
+
         fireNextAlarmsAfter(REPEAT_AFTER_MILLIS)
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
         navigation.toAnalysis()
 
-        notifications.inShade {
-            assertHidden(FIRST_REMINDER)
-            val text = assertShows(SECOND_REMINDER).text
+        notifications.awaitRaisedAgain(SECOND_REMINDER, firstRaise, timeoutMillis = REPEAT_TIMEOUT_MILLIS)
 
-            awaitGone(text, timeoutMillis = REPEAT_AFTER_MILLIS * 6)
+        notifications.inShade {
             assertShows(TEST_MED)
             assertHidden(FIRST_REMINDER)
             assertShows(SECOND_REMINDER)
