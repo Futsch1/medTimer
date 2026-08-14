@@ -276,4 +276,29 @@
     <string name="reminders_cannot_be_skipped_summary">Sisselülitamisel saab meeldetuletusi tühistada ainult siis, kui ravim on märgitud võetuks. Seda saad iga üksiku ravimi kohta sisse lülitada.</string>
     <string name="close" tools:ignore="MissingTranslation">Sulge</string>
     <string name="more_options" tools:ignore="MissingTranslation">Lisavalikud</string>
+    <string name="exact_reminders_summary">Meeldetuletuste kuvamine ajastatakse täpselt (suurendab akukasutust)</string>
+    <string name="enable_alarm_dialog">Täpsete äratuste toimimiseks luba järgmisest vaatest MedTimeri jaoks sellised õigused</string>
+    <string name="cycle_consecutive_days">Aktiivseid päevi</string>
+    <string name="restore_start">Järgnevaga asendad kõik ravimite seadistused ja /või meeldetuletused.\n\nKas jätkad?</string>
+    <string name="log_additional_dose">Logi täiendav annus</string>
+    <string name="dismiss_notification_action">Tegevus teavitusest loobumisel</string>
+    <string name="weekend_mode_summary">Kindla nädalapäeva ja ajavahemiku puhul viivita teavitust</string>
+    <string name="cycle_pause_days">Peatamise päevad</string>
+    <string name="notification_settings_default">Teavituste seadistuste vaikimisi olulisus/prioriteet</string>
+    <string name="add_linked_reminder">Lisa järgnevale annusele meeldetuletus</string>
+    <string name="linked_reminder_delay">Viivita järgnevat annust</string>
+    <string name="display_settings">Kuvamise seadistused</string>
+    <string name="sticky_on_lockscreen">Püsimeeldetuletus lukustusvaates</string>
+    <string name="ignore_battery_optimization">Eira akukasutuse optimeerimist</string>
+    <string name="reschedule_reminder">Kordusajastamise meeldetuletus</string>
+    <string name="interval_start_condition">Välba alguse tingimus</string>
+    <string name="tag_filter_active">Siltide filter on aktiivne. Ekspordi vaid valitud siltidega andmed.</string>
+    <string name="show_taken_time_in_overview">Näita ülevaates võtmise aega</string>
+    <string name="remind_days_before_expiration">Meeldetuletuse päevi enne aegumist</string>
+    <string name="successfully_created_reminder">Uue meeldetuletuse lisamine õnnestus</string>
+    <string name="create_out_of_stock_reminder">Lisa varude lõppemise meeldetuletus</string>
+    <string name="create_expiration_date_reminder">Lisa aegumiskuupäeva meeldetuletus</string>
+    <string name="exact_reminders_warning_title">Täpsete meeldetuletuste kasutamine on keelatud</string>
+    <string name="exact_reminders_warning_summary">Antud oludes käivitud meeldetuletud paar minutit peale määratud aega. Kui vajad täpseid meeldetuletusi (suurema akukasutusel arvelt), siis palun luba vastavad õigused süsteemi seadistustest.</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Liigu ülespoole</string>
 </resources>
