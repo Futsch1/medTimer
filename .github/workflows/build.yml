@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 # Cancel in-progress runs when new commits are pushed to the same branch/PR.
 # Keep main and release tags running to completion (they publish releases).
