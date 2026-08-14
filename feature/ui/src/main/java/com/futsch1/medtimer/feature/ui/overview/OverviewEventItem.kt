@@ -63,6 +63,7 @@ internal val RAIL_INSET =
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
+@SuppressWarnings("kotlin:S107")
 fun OverviewEventItem(
     content: OverviewEventContent,
     state: OverviewState,
