@@ -47,7 +47,7 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 internal val EVENT_STATE_BUTTON_SIZE = 48.dp
 internal val EVENT_STATE_BUTTON_MARGIN = 8.dp
 
-internal val EVENT_SPACING = 20.dp
+internal val EVENT_SPACING = 12.dp
 
 /** Horizontal centre of the state buttons, which the list draws its connecting pills along. */
 internal val RAIL_CENTER_X = EVENT_STATE_BUTTON_MARGIN + EVENT_STATE_BUTTON_SIZE / 2
@@ -63,6 +63,7 @@ internal val RAIL_INSET =
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
+@SuppressWarnings("kotlin:S107")
 fun OverviewEventItem(
     content: OverviewEventContent,
     state: OverviewState,
@@ -111,7 +112,7 @@ fun OverviewEventItem(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp, end = 8.dp),
             ) {
                 EventContent(
                     content = content,

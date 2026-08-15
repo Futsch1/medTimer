@@ -32,6 +32,7 @@ import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.core.ui.time.rememberFormattedDate
+import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
@@ -84,6 +85,7 @@ fun OverviewScreen(
 
 /** Stateless screen — the `@Preview`/test target. Renders purely from its inputs. */
 @Composable
+@SuppressWarnings("kotlin:S107")
 fun OverviewScreen(
     state: OverviewScreenState,
     selection: SelectionListController<OverviewEvent>,
@@ -99,6 +101,8 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val events = state.events
+    val rangeStart = remember { LocalDate.now().minusYears(3) }
+    val rangeEnd = maxOf(state.simulatedThrough, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
 
     BackHandler(enabled = selection.isInSelectionMode) { selection.exitSelectionMode() }
 
@@ -144,7 +148,7 @@ fun OverviewScreen(
                     OverviewFilterRow(
                         activeFilters = state.activeFilters,
                         onToggleFilter = onToggleFilter,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                     )
                 }
             } else {
@@ -161,20 +165,27 @@ fun OverviewScreen(
                         onToggleFilter = onToggleFilter,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 4.dp),
                     )
                 }
             }
         }
 
-        Box(Modifier.fillMaxSize()) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .overviewDaySwipe { dayOffset ->
+                    val target = state.day.plusDays(dayOffset.toLong())
+                    if (target in rangeStart..rangeEnd) onDaySelected(target)
+                },
+        ) {
             OverviewEventList(
                 events = events,
                 selection = selection,
                 onEventClick = onEventClick,
                 onEnterSelectionMode = onEnterSelectionMode,
                 onAction = { button, event -> onAction(button, listOf(event)) },
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = 8.dp),
             )
 
             ExtendedFloatingActionButton(
