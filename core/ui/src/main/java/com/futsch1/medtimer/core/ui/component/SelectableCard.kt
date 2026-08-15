@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -31,6 +31,7 @@ fun SelectableCard(
     onEnterSelectionMode: () -> Unit,
     modifier: Modifier = Modifier,
     colors: CardColors = CardDefaults.cardColors(),
+    elevation: CardElevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
@@ -41,10 +42,10 @@ fun SelectableCard(
 
     Card(
         colors = colors,
+        elevation = elevation,
         modifier = modifier
             .fillMaxWidth()
             .border(width = 3.dp, color = borderColor, shape = CardDefaults.shape)
-            .clip(CardDefaults.shape)
             .combinedClickable(
                 onClick = { if (isInSelectionMode) onToggleSelection() else onClick() },
                 onLongClick = {

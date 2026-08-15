@@ -29,7 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -55,7 +58,8 @@ private val DETAIL_ICON_SIZE = 16.dp
 @Composable
 internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Modifier) {
     val time = rememberFormattedTime(content.time, content.useRelativeTime)
-    val takenTime = content.takenTime?.let { rememberFormattedTime(it, content.useRelativeTime, sameDayAs = content.time) }
+    val takenTime =
+        content.takenTime?.let { rememberFormattedTime(it, content.useRelativeTime, sameDayAs = content.time) }
     val expirationDate = content.expirationDate?.let { rememberFormattedDate(it) }
     val interval = content.interval?.let {
         "(" + stringResource(CoreUiR.string.interval_time, formatDuration(it)) + ")"
@@ -67,7 +71,10 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             itemVerticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Crossfade(content.reminderType, animationSpec = fadeSpec) {
                     Icon(
                         painter = painterResource(it.getIcon()),
@@ -75,9 +82,12 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                         modifier = Modifier.size(DETAIL_ICON_SIZE),
                     )
                 }
-                Crossfade(time, animationSpec = fadeSpec) { Text(it) }
-                OptionalDetail(takenTime) { animatedTakenTime ->
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Crossfade(time, animationSpec = fadeSpec, modifier = Modifier.weight(1.0f, fill = false)) { Text(it) }
+                OptionalDetail(takenTime, modifier = Modifier.weight(1.0f)) { animatedTakenTime ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
                         Icon(
                             painter = painterResource(CoreUiR.drawable.arrow_right),
                             contentDescription = null,
@@ -108,9 +118,15 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                 }
             }
         }
-        FlowRow {
-            Crossfade(content.medicineName, animationSpec = fadeSpec) { Text(it, fontWeight = FontWeight.Bold) }
-            OptionalDetail(content.dose.takeIf { it.isNotEmpty() }) { Text(" ($it)") }
+        Crossfade(content.medicineName to content.dose, animationSpec = fadeSpec) { (medicineName, dose) ->
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append(medicineName)
+                    }
+                    if (dose.isNotEmpty()) append(" ($dose)")
+                },
+            )
         }
     }
 }
@@ -122,7 +138,7 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
  */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun <T : Any> OptionalDetail(value: T?, content: @Composable (T) -> Unit) {
+private fun <T : Any> OptionalDetail(value: T?, modifier: Modifier = Modifier, content: @Composable (T) -> Unit) {
     val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
     val sizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
     val offsetSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntOffset>()
@@ -133,6 +149,7 @@ private fun <T : Any> OptionalDetail(value: T?, content: @Composable (T) -> Unit
         visible = value != null,
         enter = expandVertically(sizeSpec) + slideInVertically(offsetSpec) { -it } + fadeIn(fadeSpec),
         exit = shrinkVertically(sizeSpec) + slideOutVertically(offsetSpec) { -it } + fadeOut(fadeSpec),
+        modifier = modifier
     ) {
         lastValue?.let { Crossfade(it, animationSpec = fadeSpec) { current -> content(current) } }
     }
@@ -166,7 +183,7 @@ private fun TakenWithIntervalEventContentPreview() {
                 content = OverviewEventContent(
                     reminderType = ReminderType.TIME_BASED,
                     time = PREVIEW_TIME,
-                    medicineName = "Vitamin D",
+                    medicineName = "Vitamin D + Vitamin C + Vitamin E",
                     dose = "1 tablet",
                     takenTime = PREVIEW_TIME.plus(Duration.ofMinutes(42)),
                     interval = Duration.ofMinutes(150),
@@ -206,6 +223,25 @@ private fun ExpirationEventContentPreview() {
                     medicineName = "Amoxicillin",
                     dose = "250 mg",
                     expirationDate = LocalDate.of(2026, 12, 1),
+                ),
+            )
+        }
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun RelativeTimeEventContentPreview() {
+    MedTimerTheme {
+        Surface {
+            EventContent(
+                content = OverviewEventContent(
+                    reminderType = ReminderType.CONTINUOUS_INTERVAL,
+                    time = PREVIEW_TIME,
+                    medicineName = "Ibuprofen",
+                    dose = "",
+                    useRelativeTime = true,
+                    takenTime = PREVIEW_TIME.plus(Duration.ofMinutes(42)),
                 ),
             )
         }

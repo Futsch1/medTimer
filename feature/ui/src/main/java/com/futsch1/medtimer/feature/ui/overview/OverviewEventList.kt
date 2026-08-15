@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -36,6 +37,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
@@ -147,6 +149,21 @@ fun OverviewEventList(
     }
 }
 
+internal fun Modifier.overviewDaySwipe(onDaySwipe: (Int) -> Unit): Modifier =
+    pointerInput(onDaySwipe) {
+        var swipeHandled = false
+        detectHorizontalDragGestures(
+            onDragStart = { swipeHandled = false },
+            onHorizontalDrag = { change, dragAmount ->
+                change.consume()
+                if (!swipeHandled) {
+                    swipeHandled = true
+                    onDaySwipe(if (dragAmount < 0) 1 else -1)
+                }
+            },
+        )
+    }
+
 /**
  * One pill per gap between adjacent events, spanning the corridor between the two neighbouring
  * state buttons. A taller item centres its button further from the gap, so the pill facing it
@@ -174,7 +191,8 @@ private fun DrawScope.drawRailPills(anchors: Collection<Float>, listTop: Float, 
     }
 }
 
-private val EVENT_LIST_PREVIEW_TIME: Instant = LocalDate.of(2026, 5, 28).atTime(8, 0).atZone(ZoneId.systemDefault()).toInstant()
+private val EVENT_LIST_PREVIEW_TIME: Instant =
+    LocalDate.of(2026, 5, 28).atTime(8, 0).atZone(ZoneId.systemDefault()).toInstant()
 
 private class EventListPreviewEvent(
     override val id: Int,
