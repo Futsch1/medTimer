@@ -1,6 +1,8 @@
 package com.futsch1.medtimer.database
 
+import android.util.Log
 import androidx.room.withTransaction
+import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -65,10 +67,16 @@ class ReminderEventRepositoryImpl(
 
     override suspend fun create(reminderEvent: ReminderEvent): ReminderEvent {
         val reminderEventId = reminderEventDao.create(reminderEvent.toEntity())
+        Log.d(
+            LogTags.DATABASE,
+            "Created reminder event: reminderEventId: $reminderEventId, reminderId: ${reminderEvent.reminderId}"
+        )
         return reminderEvent.copy(reminderEventId = reminderEventId.toInt())
     }
 
-    override suspend fun createAll(reminderEvents: List<ReminderEvent>) {
+    override suspend fun createMany(reminderEvents: List<ReminderEvent>) {
+        val reminderIds = reminderEvents.joinToString(", ") { it.reminderId.toString() }
+        Log.d(LogTags.DATABASE, "Creating many reminder events: reminderIds: $reminderIds")
         reminderEventDao.createAll(reminderEvents.map { it.toEntity() })
     }
 

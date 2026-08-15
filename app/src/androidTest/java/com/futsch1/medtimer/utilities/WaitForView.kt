@@ -2,6 +2,7 @@ package com.futsch1.medtimer.utilities
 
 import android.os.SystemClock
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.Root
@@ -11,6 +12,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
+import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeoutException
 
@@ -77,3 +79,35 @@ private fun waitForView(matcher: Matcher<View>, timeoutMillis: Long): ViewAction
             }
         }
     }
+
+
+fun awaitToast(text: String, action: () -> Unit) {
+    var toastDisplayed = false
+
+    // Set up accessibility event listener to catch toast notifications
+    InstrumentationRegistry.getInstrumentation().uiAutomation.setOnAccessibilityEventListener { event ->
+        if (event.eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+            val className = event.className?.toString() ?: ""
+            val eventText = event.text.toString()
+
+            // Check if this is a Toast event with matching text
+            if (className.contains("android.widget.Toast") && eventText.contains(text)) {
+                toastDisplayed = true
+            }
+        }
+    }
+
+    action()
+
+    // Wait for the toast to appear
+    pollUntil(5_000) { toastDisplayed }
+
+    // Clean up the listener
+    InstrumentationRegistry.getInstrumentation().uiAutomation.setOnAccessibilityEventListener(null)
+
+    if (!toastDisplayed) {
+        throw PerformException.Builder()
+            .withCause(TimeoutException("Toast with text '$text' not found within 5 seconds"))
+            .build()
+    }
+}
