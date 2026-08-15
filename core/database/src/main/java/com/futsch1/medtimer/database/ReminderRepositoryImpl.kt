@@ -44,9 +44,9 @@ class ReminderRepositoryImpl(
         return reminderId
     }
 
-    override suspend fun createMany(reminders: List<Reminder>) {
+    override suspend fun createMany(reminders: List<Reminder>): List<Int> {
         Log.d(LogTags.DATABASE, "Creating many reminders")
-        reminderDao.createAll(reminders.map { it.toEntity() })
+        return reminderDao.createAll(reminders.map { it.toEntity() }).map { it.toInt() }
     }
 
     override suspend fun update(reminder: Reminder) {

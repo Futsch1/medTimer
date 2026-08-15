@@ -135,6 +135,7 @@
     <string name="location_snooze_summary">Kui peale edasilükkamist jõuad koju, siis teavita uuesti</string>
     <string name="location_snooze_no_play_services">Asukohapõhine edasilükkamine eeldab, et kasutusel on Google Play teenused, kuid sinu seadmes neid pole</string>
     <string name="location_snooze_background_permission">Teavitamaks kojujõudmisel uuesti, pead lubama MedTimeril tuvastada taaustal asukohta</string>
+    <string name="location_snooze_permission_disclosure">MedTimer vajab sinu asukohale juurdepääsu, et võimaldada asukohapõhist edasilükkamist. Kui funktsioon on lubatud, kasutab MedTimer sinu asukohta taustal, et sind salvestatud koduasukohta jõudmisel uuesti teavitada. MedTimer ei jaga sinu asukohta.</string>
     <string name="weekend_start_time">Algusaeg</string>
     <string name="weekend_end_time">Lõpuaeg</string>
     <string name="custom">Sinu valitud…</string>

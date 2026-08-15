@@ -5,10 +5,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.time.TimeAccess
+import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.di.TimeFormatterEntryPoint
 import com.futsch1.medtimer.harness.FakeTimeAccess
 import com.futsch1.medtimer.harness.MedTimerTestHarness
+import com.futsch1.medtimer.harness.Seed
 import com.futsch1.medtimer.robots.Robots
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.testing.BindValue
@@ -22,6 +25,7 @@ import org.junit.runners.model.Statement
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -40,6 +44,12 @@ abstract class MedTimerTestBase {
     @BindValue
     val timeAccess: TimeAccess = FakeTimeAccess()
 
+    @Inject
+    lateinit var medicineRepository: MedicineRepository
+
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
+
     private val harness = MedTimerTestHarness(this.javaClass.name)
 
     @get:Rule
@@ -55,6 +65,9 @@ abstract class MedTimerTestBase {
         .around(harness)
 
     protected val baristaRule get() = harness.baristaRule
+
+    /** A test's starting data, written past the editor - see [Seed]. */
+    protected val seed by lazy { Seed(medicineRepository, reminderRepository, timeAccess) }
 
     private val robots by lazy { Robots(harness.composeTestRule) }
 
