@@ -106,11 +106,21 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
          * Schedule broadcast so instrumented tests exercise the OS-reentry path end-to-end.
          */
         fun requestScheduleNowForTests(context: Context, delay: Long = 0, repeats: Int = 0) {
-            AlarmProcessor.delay = delay
-            AlarmProcessor.repeats = repeats
+            armNextAlarmsForTests(delay, repeats)
 
             val intent = getRequestScheduleIntent(context)
             context.sendBroadcast(intent, RECEIVER_PERMISSION)
+        }
+
+        /**
+         * Test-only seam: arms the same globals without asking for a schedule, so the next alarms
+         * the app sets on its own - a repeat, a snooze - land after [delay] instead of after the
+         * minutes the user configured. Lets a test wait seconds for a path whose real interval is
+         * minutes, with everything but the alarm timestamp still going through production code.
+         */
+        fun armNextAlarmsForTests(delay: Long, repeats: Int = 0) {
+            AlarmProcessor.delay = delay
+            AlarmProcessor.repeats = repeats
         }
     }
 }

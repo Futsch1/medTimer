@@ -59,12 +59,8 @@ class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun testManualDoseOfDisabledReminder() {
-        // Create medication + reminder
-        medicines.create("Test")
-        medicineEditor.addReminder("1 pill", null)
-
-        // Disable reminder
-        reminders.inSettingsOf(0) { toggleEnabled() }
+        // Create medication with a disabled reminder
+        seed.medicine("Test") { reminder("1 pill", active = false) }
 
         // Create manual dose of the disabled reminder
         navigation.toOverview()

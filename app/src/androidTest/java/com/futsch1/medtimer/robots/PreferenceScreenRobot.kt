@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.futsch1.medtimer.utilities.pollUntil
+import com.futsch1.medtimer.utilities.viewAppears
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
@@ -31,6 +32,17 @@ class PreferenceScreenRobot(private val ui: ComposeUi, private val dialogs: Dial
 
     /** Leaves a nested preference screen opened by [click]. */
     fun back() = pressBack()
+
+    /** Backs out of up to [screens] screens: a press with nothing to pop finishes the activity. */
+    fun leave(screens: Int) {
+        repeat(screens) {
+            if (!onPreferenceScreen()) return
+            pressBack()
+        }
+    }
+
+    private fun onPreferenceScreen(): Boolean =
+        viewAppears(Matchers.allOf(ViewMatchers.withId(androidx.preference.R.id.recycler_view), ViewMatchers.isDisplayed()))
 
     /** Opens the row's edit dialog and replaces its value. */
     fun setValue(@StringRes titleRes: Int, value: String) {

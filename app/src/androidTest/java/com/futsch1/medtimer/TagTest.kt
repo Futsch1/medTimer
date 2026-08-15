@@ -15,7 +15,8 @@ class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun tagHandling() {
-        medicines.create("Test")
+        seed.medicine("Test")
+        medicines.clickItem(0)
 
         tags.inMedicineTags {
             add(NEW_TAG)
@@ -38,7 +39,8 @@ class TagTest : MedTimerTestBase() {
         medicines.assertListContains(NEW_TAG)
         medicines.assertListDoesNotContain(ANOTHER_TAG)
 
-        medicines.create("Test 2")
+        seed.medicine("Test 2")
+        medicines.clickItem(1)
 
         tags.inMedicineTags {
             assertNotChecked(NEW_TAG)
@@ -59,10 +61,12 @@ class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun medicineVisibility() {
-        medicines.create("Test")
+        seed.medicine("Test")
+        medicines.clickItem(0)
         tags.inMedicineTags { add("Tag1") }
 
-        medicines.create("Else")
+        seed.medicine("Else")
+        medicines.clickItem(1)
         tags.inMedicineTags { add("Tag2") }
 
         medicines.assertNameContains("Test")
@@ -91,13 +95,13 @@ class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
-        medicines.create("Test")
+        seed.medicine("Test") { intervalReminder("Amount1", 1.hours) }
+        medicines.clickItem(0)
         tags.inMedicineTags { add("Tag1") }
-        medicineEditor.addIntervalReminder("Amount1", 1.hours)
 
-        medicines.create("Else")
+        seed.medicine("Else") { intervalReminder("Amount2", 1.hours) }
+        medicines.clickItem(1)
         tags.inMedicineTags { add("Tag2") }
-        medicineEditor.addIntervalReminder("Amount2", 1.hours)
 
         // First, deactivate all of Test
         medicines.showList()
