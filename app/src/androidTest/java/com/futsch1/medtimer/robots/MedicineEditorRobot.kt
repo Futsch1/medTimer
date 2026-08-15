@@ -8,6 +8,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
+import com.adevinta.android.barista.interaction.BaristaScrollInteractions.safelyScrollTo
 import com.futsch1.medtimer.core.ui.R
 import java.time.LocalTime
 import kotlin.time.Duration
@@ -44,17 +45,6 @@ class MedicineEditorRobot(
         }
         closeKeyboard()
 
-        create()
-    }
-
-    fun addIntervalReminder(amount: String, interval: Duration) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
-        writeTo(AMOUNT, amount)
-
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalMinutes)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, interval.inWholeMinutes.toString())
-
-        closeKeyboard()
         create()
     }
 
@@ -146,8 +136,10 @@ class MedicineEditorRobot(
         writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, threshold)
     }
 
+    /** On a short screen - a tablet in landscape - the card sits below the dialog's fold. */
     private fun openCard(cardId: Int) {
         clickOn(com.futsch1.medtimer.feature.ui.R.id.addReminder)
+        safelyScrollTo(cardId)
         clickOn(cardId)
     }
 
@@ -157,7 +149,11 @@ class MedicineEditorRobot(
         closeKeyboard()
     }
 
-    private fun create() = clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+    /** The button sits below the dialog's fold on a short screen, same as the cards. */
+    private fun create() {
+        safelyScrollTo(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+    }
 
     private companion object {
         val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editAmount

@@ -53,8 +53,9 @@ class BasicUITest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun menuHandlingTest() {
-        medicines.create("Test")
-        medicineEditor.addReminder("1", laterToday())
+        seed.medicine("Test") { reminder("1", laterToday()) }
+
+        medicines.clickItem(0)
 
         val cycleStart = Calendar.getInstance()
         cycleStart.set(2025, 1, 1)
@@ -103,7 +104,9 @@ class BasicUITest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun notesTest() {
-        medicines.create("Test")
+        seed.medicine("Test")
+
+        medicines.clickItem(0)
 
         val notesText = "Contains catnip\n\nmeow :3"
 
@@ -129,8 +132,7 @@ class BasicUITest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun overviewFilters() {
-        medicines.create("Test")
-        medicineEditor.addIntervalReminder("2", 24.hours)
+        val medicineId = seed.medicine("Test") { intervalReminder("2", 24.hours) }
 
         navigation.toOverview()
         overview.assertEventContains(TEST_2)
@@ -168,9 +170,7 @@ class BasicUITest : MedTimerTestBase() {
         overview.assertEventCount(0)
         overview.toggleFilter(OverviewFilter.SCHEDULED)
 
-        navigation.toMedicines()
-        medicines.clickItem(0)
-        medicineEditor.addReminder("1", laterToday())
+        seed.remindersOf(medicineId) { reminder("1", laterToday()) }
 
         navigation.toOverview()
 

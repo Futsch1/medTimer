@@ -1,6 +1,11 @@
 package com.futsch1.medtimer.robots
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
+import android.os.SystemClock
+import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -58,9 +63,51 @@ class NotificationShadeRobot {
             runCatching { it.text }.getOrNull()
         }.filter { it.isNotBlank() }
 
-    fun awaitGone(text: String, timeoutMillis: Long = DEFAULT_TIMEOUT) {
-        assertTrue(device.wait(Until.gone(By.text(text)), timeoutMillis), "Notification '$text' never disappeared")
+    /** The id [text] is posted under, for [awaitRaisedAgain]. Take it before anything can raise it again. */
+    fun postedId(text: String): Int =
+        assertNotNull(postedIdOrNull(text), "No posted notification contains '$text'. Posted: ${postedDescriptions()}")
+
+    /**
+     * Waits for [text], posted under [previousId], to be raised again - a repeat, a snooze coming back.
+     * Only the new id says so: the shade's timestamp resolves to minutes, and the post time also moves
+     * on a plain update.
+     */
+    fun awaitRaisedAgain(text: String, previousId: Int, timeoutMillis: Long = DEFAULT_TIMEOUT) {
+        val deadline = SystemClock.uptimeMillis() + timeoutMillis
+        var current = previousId
+        while (current == previousId && SystemClock.uptimeMillis() < deadline) {
+            SystemClock.sleep(POLL_INTERVAL)
+            // Raising it again cancels the old one first, so a momentary absence is not an answer.
+            current = postedIdOrNull(text) ?: current
+        }
+        assertTrue(
+            current != previousId,
+            "Notification containing '$text' was never raised again, still posted as id $previousId. " +
+                    "Posted: ${postedDescriptions()}"
+        )
     }
+
+    private fun postedIdOrNull(text: String): Int? =
+        activeNotifications().filter { it.notification.textsOf().any { line -> line.contains(text) } }
+            .maxByOrNull { it.postTime }?.id
+
+    private fun activeNotifications(): List<StatusBarNotification> {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.activeNotifications.toList()
+    }
+
+    /** The posted notifications as the assertions see them, so a failure can explain itself. */
+    private fun postedDescriptions(): List<String> =
+        activeNotifications().map { "id=${it.id} postTime=${it.postTime} ${it.notification.textsOf()}" }
+
+    private fun Notification.textsOf(): List<String> = listOfNotNull(
+        extras.getCharSequence(Notification.EXTRA_TITLE),
+        extras.getCharSequence(Notification.EXTRA_TEXT),
+        extras.getCharSequence(Notification.EXTRA_BIG_TEXT),
+        extras.getCharSequence(Notification.EXTRA_SUB_TEXT),
+    ).map { it.toString() } + (extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)?.map { it.toString() }
+        ?: emptyList())
 
     fun assertShowsAction(@StringRes textRes: Int, vararg args: Any) {
         val label = actionLabel(textRes, *args)
@@ -136,5 +183,6 @@ class NotificationShadeRobot {
 
     companion object {
         const val DEFAULT_TIMEOUT = 2_000L
+        private const val POLL_INTERVAL = 100L
     }
 }

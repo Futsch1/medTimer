@@ -54,10 +54,10 @@ class MedicineHandlingTest : MedTimerTestBase() {
             dialogs.clickItem(R.string.snooze)
         }
 
-        navigation.toMedicines()
-        medicines.create(TEST_MED_1)
-        medicineSettings.inSettings { toggleCannotBeSkipped() }
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED_1) {
+            cannotBeSkipped()
+            intervalReminder("1", 2.hours)
+        }
 
         notifications.inShade {
             assertShows(TEST_MED_1)
@@ -84,9 +84,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
             preferences.click(R.string.reminders_cannot_be_skipped)
         }
 
-        navigation.toMedicines()
-        medicines.create(TEST_MED_1)
-        medicineEditor.addIntervalReminder("1", 2.hours)
+        seed.medicine(TEST_MED_1) { intervalReminder("1", 2.hours) }
 
         notifications.inShade {
             assertShows(TEST_MED_1)

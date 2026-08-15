@@ -30,7 +30,7 @@ interface ReminderDao {
     suspend fun create(reminder: ReminderEntity): Long
 
     @Insert
-    suspend fun createAll(reminders: List<ReminderEntity>)
+    suspend fun createAll(reminders: List<ReminderEntity>): List<Long>
 
     @Update
     suspend fun update(reminder: ReminderEntity)

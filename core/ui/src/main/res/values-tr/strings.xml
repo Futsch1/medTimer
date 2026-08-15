@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
     <string name="continuous_interval_reminder_help">Belirtilen bir andan itibaren bir zaman aralığına (örneğin her 6 saatte bir) dayalı bir hatırlatıcı başlatın. Bu desen, manuel olarak devre dışı bırakılana kadar günün saati kısıtlamalarını göz ardı ederek süreklidir.</string>
@@ -335,4 +335,7 @@
     <string name="next_week">Sonraki hafta</string>
     <string name="stock_after_simulation_end">%s sonrası</string>
     <string name="move_medicine">İlacı taşı</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Yukarı git</string>
+    <string name="close" tools:ignore="MissingTranslation">Kapat</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Daha fazla seçenek</string>
 </resources>
