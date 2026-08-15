@@ -10,5 +10,6 @@ object LogTags {
     const val MAIN = "MedTimerMain"
     const val BIOMETRICS = "Biometrics"
     const val LOCATION = "Location"
-    val SIMULATION = "Simulation"
+    const val SIMULATION = "Simulation"
+    const val DATABASE = "Database"
 }

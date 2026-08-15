@@ -10,6 +10,7 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
 import com.adevinta.android.barista.interaction.BaristaScrollInteractions.safelyScrollTo
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.utilities.awaitToast
 import java.time.LocalTime
 import kotlin.time.Duration
 
@@ -152,7 +153,7 @@ class MedicineEditorRobot(
     /** The button sits below the dialog's fold on a short screen, same as the cards. */
     private fun create() {
         safelyScrollTo(com.futsch1.medtimer.feature.ui.R.id.createReminder)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder)
+        awaitToast(ui.getString(R.string.successfully_created_reminder)) { clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder) }
     }
 
     private companion object {

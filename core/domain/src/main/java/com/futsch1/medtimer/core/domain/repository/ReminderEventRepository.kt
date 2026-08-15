@@ -17,7 +17,7 @@ interface ReminderEventRepository {
     suspend fun getForScheduling(medicines: List<Medicine>): List<ReminderEvent>
     suspend fun getLast(reminderId: Int): ReminderEvent?
     suspend fun create(reminderEvent: ReminderEvent): ReminderEvent
-    suspend fun createAll(reminderEvents: List<ReminderEvent>)
+    suspend fun createMany(reminderEvents: List<ReminderEvent>)
     suspend fun fetch(reminderEventId: Int): ReminderEvent?
     fun getFlow(reminderEventId: Int): Flow<ReminderEvent?>
     suspend fun fetch(reminderId: Int, remindedTimestamp: Long): ReminderEvent?
