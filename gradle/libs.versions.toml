@@ -7,7 +7,7 @@ hilt-navigation-compose = "1.2.0"
 room-plugin = "2.8.4"
 triplet-play = "4.0.0"
 sonarqube = "7.3.0.8198"
-ksp = "2.3.10"
+ksp = "2.3.11"
 
 # AndroidX
 appcompat = "1.7.1"
