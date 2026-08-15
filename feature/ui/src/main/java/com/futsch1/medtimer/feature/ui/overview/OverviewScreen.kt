@@ -84,6 +84,7 @@ fun OverviewScreen(
 
 /** Stateless screen — the `@Preview`/test target. Renders purely from its inputs. */
 @Composable
+@SuppressWarnings("kotlin:S107")
 fun OverviewScreen(
     state: OverviewScreenState,
     selection: SelectionListController<OverviewEvent>,
@@ -144,7 +145,7 @@ fun OverviewScreen(
                     OverviewFilterRow(
                         activeFilters = state.activeFilters,
                         onToggleFilter = onToggleFilter,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                     )
                 }
             } else {
@@ -161,7 +162,7 @@ fun OverviewScreen(
                         onToggleFilter = onToggleFilter,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 4.dp),
                     )
                 }
             }
