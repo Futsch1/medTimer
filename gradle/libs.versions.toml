@@ -10,7 +10,7 @@ sonarqube = "7.3.0.8198"
 ksp = "2.3.11"
 
 # AndroidX
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 core-ktx = "1.19.0"
 constraintlayout = "2.2.2"
 navigation = "2.9.8"
