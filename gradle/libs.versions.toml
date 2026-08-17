@@ -60,7 +60,7 @@ compose-bom = "2026.08.00"
 material3-expressive = "1.5.0-alpha25"
 # Adaptive layout APIs (currentWindowAdaptiveInfo). Latest STABLE line; resolves to androidx.window
 # 1.5.x in practice (upgraded by the Compose BOM's ui dependency) — no separate window pin.
-material3-adaptive = "1.2.0"
+material3-adaptive = "1.3.0"
 vico = "3.2.3"
 kotlinx-collections-immutable = "0.5.1"
 # Compose Compiler Gradle plugin — must match AGP 9.2.1's built-in Kotlin (kotlin-gradle-plugin 2.2.10).
