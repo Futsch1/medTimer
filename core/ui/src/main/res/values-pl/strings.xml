@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Ciągły odstęp rozpoczynający się od %1$s</string>
     <string name="continuous_interval_reminder">Przypomnienie co określony czas</string>
     <string name="continuous_interval_reminder_help">Ustaw przypomnienie, które będzie się powtarzać co dany odstęp czasu (np. co 6 godzin), zaczynając od wybranego momentu. Będzie ono działać bez przerwy, bez względu na porę dnia, dopóki go nie wyłączysz.</string>
@@ -347,4 +347,7 @@
     <string name="next_week">Następny tydzień</string>
     <string name="stock_after_simulation_end">Po %s</string>
     <string name="move_medicine">Przenieś lek</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Przejdź wyżej</string>
+    <string name="close" tools:ignore="MissingTranslation">Zamknij</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Więcej opcji</string>
 </resources>
