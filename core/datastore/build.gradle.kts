@@ -21,6 +21,17 @@ android {
             enableUnitTestCoverage = true
         }
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+            all {
+                it.jvmArgs("-Duser.timezone=Europe/Berlin")
+                it.systemProperty("user.language", "en")
+                it.systemProperty("user.country", "US")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -32,4 +43,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.preference.ktx)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    testImplementation(libs.junit4)
+    testImplementation(kotlin("test-junit"))
+    testImplementation(libs.robolectric)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.test.core)
 }
