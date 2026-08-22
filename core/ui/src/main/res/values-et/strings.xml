@@ -301,4 +301,9 @@
     <string name="exact_reminders_warning_title">Täpsete meeldetuletuste kasutamine on keelatud</string>
     <string name="exact_reminders_warning_summary">Antud oludes käivitud meeldetuletud paar minutit peale määratud aega. Kui vajad täpseid meeldetuletusi (suurema akukasutusel arvelt), siis palun luba vastavad õigused süsteemi seadistustest.</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Liigu ülespoole</string>
+    <string name="battery_optimization_warning_title">Akukasutuse optimeerimine on lülitatud sisse</string>
+    <string name="battery_optimization_warning_summary">Kui sul peaks tekkima probleeme korrektsete ja õigeaegsete teavitustega, siis palun lülita teavituste seadistustest akukasutuse optimeerimine välja.</string>
+    <string name="expiration_settings">Aegumise seadistused</string>
+    <string name="weekly">Iga nädal</string>
+    <string name="monthly">Iga kuu</string>
 </resources>

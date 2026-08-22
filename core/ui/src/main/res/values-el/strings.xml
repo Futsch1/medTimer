@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
     <string name="continuous_interval_reminder_help">Ξεκινήστε μια υπενθύμιση με βάση ένα χρονικό διάστημα (π.χ. κάθε 6 ώρες) από μια καθορισμένη στιγμή. Αυτό το μοτίβο θα είναι συνεχές, αγνοώντας τους περιορισμούς της ώρας της ημέρας, έως ότου απενεργοποιηθεί χειροκίνητα.</string>
@@ -335,4 +335,7 @@
     <string name="next_week">Επόμενη εβδομάδα</string>
     <string name="stock_after_simulation_end">Μετά τις %s</string>
     <string name="move_medicine">Μετακίνηση φαρμάκου</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Πλοήγηση επάνω</string>
+    <string name="close" tools:ignore="MissingTranslation">Κλείσιμο</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Περισσότερες επιλογές</string>
 </resources>
