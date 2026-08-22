@@ -174,8 +174,20 @@ class ReminderAlarmActivity : AppCompatActivity() {
         if (intent != null) {
             Log.d(LogTags.ALARM, "Adding alarm fragment")
             supportFragmentManager.beginTransaction()
-                .add(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
+                .replace(R.id.alarmFragmentContainer, AlarmFragment::class.java, intent.extras).commit()
         }
+    }
+
+    /**
+     * The alarm activity is launched with FLAG_ACTIVITY_SINGLE_TOP, so a second alarm
+     * arriving while it is already on top is delivered here instead of recreating the
+     * activity. Without this, the new alarm's events would be dropped and the screen
+     * would keep showing the previous alarm (see issue #1494).
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        addAlarmFragment(intent)
     }
 
     companion object {

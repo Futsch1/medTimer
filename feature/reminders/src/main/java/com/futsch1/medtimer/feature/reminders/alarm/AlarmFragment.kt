@@ -134,12 +134,18 @@ class AlarmFragment(
 
     private fun closeWithIntent(pendingIntent: PendingIntent) {
         pendingIntent.send()
-        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        requireActivity().finishAndRemoveTask()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(ALARM, "Closing activity")
-        requireActivity().finishAndRemoveTask()
+        Log.d(ALARM, "Alarm fragment view destroyed")
+        // Keep the alarm task out of recents when the alarm closes via a path other than the
+        // action buttons (e.g. system back), while allowing onNewIntent to replace this fragment.
+        // This preserves the pre-existing behavior from 1fd00fa9 ("Fix alarm activity being able
+        // to be restarted"): isFinishing is false during a fragment replacement, true on a real close.
+        if (requireActivity().isFinishing || requireActivity().isDestroyed) {
+            requireActivity().finishAndRemoveTask()
+        }
     }
 }
