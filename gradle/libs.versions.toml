@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-android-gradle-plugin = "9.3.1"
+android-gradle-plugin = "9.3.2"
 hilt = "2.60.1"
 navigation-safe-args = "2.9.8"
 hilt-navigation-compose = "1.4.0"
