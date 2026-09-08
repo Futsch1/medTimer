@@ -36,6 +36,8 @@ import org.robolectric.annotation.Config
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
 import java.time.LocalTime
 import kotlin.test.fail
 
@@ -186,6 +188,32 @@ class CSVExportUnitTest {
             } catch (_: IOException) {
                 fail(EXCEPTION_OCCURRED)
             }
+        }
+    }
+
+    @Test
+    fun testEventCsvFileIsEncodedAsUtf8() {
+        val file = Files.createTempFile("medtimer-export", ".csv").toFile()
+        val reminderEvent = ReminderEvent.default().copy(
+            medicineName = "Médicament 💊",
+            notes = "Über dose"
+        )
+        val csvEventExport = CSVEventExport(
+            listOf(reminderEvent),
+            mock(),
+            context,
+            Dispatchers.Unconfined,
+            timeFormatter
+        )
+
+        try {
+            runBlocking { csvEventExport.exportInternal(file) }
+
+            val exportedText = String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8)
+            check("Médicament 💊" in exportedText)
+            check("Über dose" in exportedText)
+        } finally {
+            check(file.delete())
         }
     }
 

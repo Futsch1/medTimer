@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+import java.nio.charset.StandardCharsets
 
 class CSVMedicineExport @AssistedInject constructor(
     @Assisted private val medicines: List<Medicine>,
@@ -36,7 +37,7 @@ class CSVMedicineExport @AssistedInject constructor(
     public override suspend fun exportInternal(file: File) {
         try {
             withContext(ioDispatcher) {
-                FileWriter(file).use { csvFile ->
+                FileWriter(file, StandardCharsets.UTF_8).use { csvFile ->
                     val headerTexts = listOf(
                         context.getString(R.string.tab_medicine),
                         context.getString(R.string.dosage),

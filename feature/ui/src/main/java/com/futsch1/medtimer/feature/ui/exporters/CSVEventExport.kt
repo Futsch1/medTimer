@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+import java.nio.charset.StandardCharsets
 
 class CSVEventExport @AssistedInject constructor(
     @Assisted private val reminderEvents: List<ReminderEvent>,
@@ -35,7 +36,7 @@ class CSVEventExport @AssistedInject constructor(
     public override suspend fun exportInternal(file: File) {
         try {
             withContext(ioDispatcher) {
-                FileWriter(file).use { csvFile ->
+                FileWriter(file, StandardCharsets.UTF_8).use { csvFile ->
                     val headerTexts: List<String> = getTableHeadersForEventExport(context)
                     csvFile.write(headerTexts.joinToString(";") + "\n")
                     for (reminderEvent in reminderEvents) {
