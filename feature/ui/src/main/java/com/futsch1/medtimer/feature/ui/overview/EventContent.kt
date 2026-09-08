@@ -90,11 +90,13 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Icon(
-                            painter = painterResource(CoreUiR.drawable.arrow_right),
-                            contentDescription = null,
-                            modifier = Modifier.size(DETAIL_ICON_SIZE),
-                        )
+                        if (content.time != null) {
+                            Icon(
+                                painter = painterResource(CoreUiR.drawable.arrow_right),
+                                contentDescription = null,
+                                modifier = Modifier.size(DETAIL_ICON_SIZE),
+                            )
+                        }
                         Text(animatedTakenTime)
                     }
                 }

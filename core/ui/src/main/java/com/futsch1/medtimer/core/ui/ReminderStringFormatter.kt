@@ -49,7 +49,7 @@ class ReminderStringFormatter @Inject constructor(
             else
                 timeFormatter.toConfigurableDateTimeString(reminderEvent.processedTimestamp)
 
-            takenTime = "$takenTime ➡ $processedTime"
+            takenTime = if (takenTime.isEmpty()) processedTime else "$takenTime ➡ $processedTime"
         }
 
         val intervalTime = getLastIntervalTime(reminderEvent)
