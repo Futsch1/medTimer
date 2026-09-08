@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -57,6 +59,7 @@ class AppOptionsActionsImpl @AssistedInject constructor(
         fragment.registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 backupManager.directorySelected(result.data?.data)
+                backupManager.autoBackup()
             }
         }
 
@@ -68,6 +71,14 @@ class AppOptionsActionsImpl @AssistedInject constructor(
             openDirectoryLauncher,
             fragment.parentFragmentManager,
         )
+    }
+
+    init {
+        fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                backupManager.autoBackup()
+            }
+        })
     }
 
     override val versionName: String = BuildConfig.VERSION_NAME

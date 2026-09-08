@@ -101,8 +101,7 @@ class BackupManager @AssistedInject constructor(
                 val selectedValue = BackupInterval.entries[which]
                 preferencesDataSource.setAutomaticBackupInterval(selectedValue)
                 if (selectedValue != BackupInterval.NEVER) {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    openDirectoryLauncher?.launch(intent)
+                    openDirectorySelection()
                 }
                 dialog.dismiss()
             }
@@ -112,11 +111,11 @@ class BackupManager @AssistedInject constructor(
 
     fun directorySelected(uri: Uri?) {
         if (uri != null) {
-            preferencesDataSource.setAutomaticBackupDirectory(uri)
             context.contentResolver.takePersistableUriPermission(
                 uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
+            preferencesDataSource.setAutomaticBackupDirectory(uri)
         }
     }
 
@@ -265,7 +264,16 @@ class BackupManager @AssistedInject constructor(
 
         if (shouldBackup) {
             Log.d(LogTags.BACKUP, "Starting auto backup, last was at $lastBackup")
-            val directoryUri = preferencesDataSource.preferences.value.automaticBackupDirectory ?: return
+            val directoryUri = preferencesDataSource.preferences.value.automaticBackupDirectory
+            if (directoryUri == null) {
+                requestDirectorySelection()
+                return
+            }
+
+            if (!hasWritePermission(directoryUri)) {
+                requestDirectorySelection()
+                return
+            }
 
             lifecycleOwner.lifecycleScope.launch {
                 performAutoBackup(directoryUri)
@@ -299,12 +307,30 @@ class BackupManager @AssistedInject constructor(
                 persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
                 Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
             } else {
-                MaterialAlertDialogBuilder(context)
-                    .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)
-                    .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
-                    .show()
+                requestDirectorySelection()
             }
         }
+    }
+
+    private fun hasWritePermission(uri: Uri): Boolean {
+        return context.contentResolver.persistedUriPermissions.any { permission ->
+            permission.uri == uri && permission.isWritePermission
+        }
+    }
+
+    private fun requestDirectorySelection() {
+        if (openDirectoryLauncher != null) {
+            openDirectorySelection()
+        } else {
+            MaterialAlertDialogBuilder(context)
+                .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)
+                .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> }
+                .show()
+        }
+    }
+
+    private fun openDirectorySelection() {
+        openDirectoryLauncher?.launch(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
     }
 
     private fun saveToDirectory(directoryUri: Uri, filename: String, content: String): Boolean {
