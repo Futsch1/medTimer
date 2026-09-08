@@ -23,10 +23,12 @@ class SimulatedReminderEvent @AssistedInject constructor(
 
     override val content: OverviewEventContent = OverviewEventContent(
         reminderType = scheduledReminder.reminder.reminderType,
-        time = scheduledReminder.timestamp,
+        time = scheduledReminder.timestamp.takeIf { preferencesDataSource.preferences.value.showRemindedTimeInOverview },
         medicineName = scheduledReminder.medicine.name,
         dose = dose(scheduledReminder),
-        stock = projectedStock(simulatedReminder),
+        stock = projectedStock(simulatedReminder).takeIf {
+            preferencesDataSource.preferences.value.showStockChangesInOverview
+        },
         expirationDate = scheduledReminder.medicine.expirationDate
             .takeIf { scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE },
         useRelativeTime = preferencesDataSource.preferences.value.useRelativeDateTime,

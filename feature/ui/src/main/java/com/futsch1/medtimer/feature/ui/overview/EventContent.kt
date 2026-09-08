@@ -57,9 +57,11 @@ private val DETAIL_ICON_SIZE = 16.dp
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Modifier) {
-    val time = rememberFormattedTime(content.time, content.useRelativeTime)
+    val time = content.time?.let { rememberFormattedTime(it, content.useRelativeTime) }
     val takenTime =
-        content.takenTime?.let { rememberFormattedTime(it, content.useRelativeTime, sameDayAs = content.time) }
+        content.takenTime?.let {
+            rememberFormattedTime(it, content.useRelativeTime, sameDayAs = content.time ?: it)
+        }
     val expirationDate = content.expirationDate?.let { rememberFormattedDate(it) }
     val interval = content.interval?.let {
         "(" + stringResource(CoreUiR.string.interval_time, formatDuration(it)) + ")"
@@ -82,7 +84,7 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                         modifier = Modifier.size(DETAIL_ICON_SIZE),
                     )
                 }
-                Crossfade(time, animationSpec = fadeSpec, modifier = Modifier.weight(1.0f, fill = false)) { Text(it) }
+                OptionalDetail(time, modifier = Modifier.weight(1.0f, fill = false)) { Text(it) }
                 OptionalDetail(takenTime, modifier = Modifier.weight(1.0f)) { animatedTakenTime ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

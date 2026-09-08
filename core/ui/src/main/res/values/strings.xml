@@ -314,6 +314,8 @@
     <string name="interval_start_condition">Interval start condition</string>
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
+    <string name="show_reminded_time_in_overview">Show reminded time in overview</string>
+    <string name="show_stock_changes_in_overview">Show stock changes in overview</string>
     <string name="expiration_settings">Expiration settings</string>
     <string name="remind_days_before_expiration">Remind days before expiration</string>
     <string name="weekly">Weekly</string>

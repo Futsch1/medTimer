@@ -30,9 +30,11 @@ class ReminderStringFormatter @Inject constructor(
     private val timeFormatter: TimeFormatter
 ) {
     fun formatReminderEvent(reminderEvent: ReminderEvent): Spanned {
-        var takenTime = timeFormatter.toConfigurableTimeString(
-            reminderEvent.remindedTimestamp, false
-        )
+        var takenTime = if (preferencesDataSource.preferences.value.showRemindedTimeInOverview) {
+            timeFormatter.toConfigurableTimeString(reminderEvent.remindedTimestamp, false)
+        } else {
+            ""
+        }
         val reminderTypeSpan = getReminderTypeSpan(reminderEvent)
         val processedTimestamp = reminderEvent.processedTimestamp.epochSecond
         if (processedTimestamp != 0L && (reminderEvent.status == ReminderEvent.ReminderStatus.TAKEN || reminderEvent.status == ReminderEvent.ReminderStatus.ACKNOWLEDGED) &&
@@ -60,12 +62,13 @@ class ReminderStringFormatter @Inject constructor(
     }
 
     fun formatSimulatedReminder(simulatedReminder: SimulatedReminder): Spanned {
-        val scheduledTime = timeFormatter.toConfigurableTimeString(
-            simulatedReminder.scheduledReminder.timestamp, false
-        )
+        val scheduledTime = if (preferencesDataSource.preferences.value.showRemindedTimeInOverview) {
+            timeFormatter.toConfigurableTimeString(simulatedReminder.scheduledReminder.timestamp, false)
+        } else {
+            ""
+        }
         val reminderTypeSpan = getReminderTypeSpan(simulatedReminder.scheduledReminder.reminder.reminderType)
-        val expectedStockOrExpirationDateSpan =
-            getExpectedStockOrExpirationDateText(simulatedReminder)
+        val expectedStockOrExpirationDateSpan = getExpectedStockOrExpirationDateText(simulatedReminder)
 
         return SpannableStringBuilder()
             .append(reminderTypeSpan)
@@ -159,6 +162,10 @@ class ReminderStringFormatter @Inject constructor(
     private fun getExpectedStockOrExpirationDateText(simulatedReminder: SimulatedReminder): Spanned {
         val span = SpannableStringBuilder()
 
+        if (!preferencesDataSource.preferences.value.showStockChangesInOverview &&
+            simulatedReminder.scheduledReminder.reminder.reminderType != ReminderType.EXPIRATION_DATE
+        ) return span
+
         if (simulatedReminder.scheduledReminder.reminder.reminderType == ReminderType.EXPIRATION_DATE) {
             span.append(", ")
             span.append(timeFormatter.localDateToString(simulatedReminder.scheduledReminder.medicine.expirationDate))
@@ -194,7 +201,9 @@ class ReminderStringFormatter @Inject constructor(
     }
 
     private fun getStockChangeText(reminderEvent: ReminderEvent): Spanned {
-        if (reminderEvent.stockBefore == reminderEvent.stockAfter) return SpannableStringBuilder()
+        if (!preferencesDataSource.preferences.value.showStockChangesInOverview ||
+            reminderEvent.stockBefore == reminderEvent.stockAfter
+        ) return SpannableStringBuilder()
         val span = SpannableStringBuilder()
         val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
         if (drawable != null) {

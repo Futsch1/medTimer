@@ -297,6 +297,8 @@
     <string name="interval_start_condition">Condição de início do intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string>
     <string name="show_taken_time_in_overview">Mostrar hora da toma na visão geral</string>
+    <string name="show_reminded_time_in_overview">Mostrar horário do lembrete na visão geral</string>
+    <string name="show_stock_changes_in_overview">Mostrar alterações no estoque na visão geral</string>
     <string name="expiration_settings">Configurações de vencimento</string>
     <string name="remind_days_before_expiration">Lembrar dias antes do vencimento</string>
     <string name="medicine_stock_settings">Configurações de estoque de medicamentos</string>

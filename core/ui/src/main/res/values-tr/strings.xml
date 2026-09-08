@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Aralık başlangıç koşulu</string>
     <string name="tag_filter_active">Etiket filtresi etkin. Yalnızca eşleşen etiketlere sahip veriler dışa aktarılacaktır.</string>
     <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
+    <string name="show_reminded_time_in_overview">Genel bakışta hatırlatma zamanını göster</string>
+    <string name="show_stock_changes_in_overview">Genel bakışta stok değişikliklerini göster</string>
     <string name="expiration_settings">Son kullanma ayarları</string>
     <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
     <string name="medicine_stock_settings">İlaç stok ayarları</string>

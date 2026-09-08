@@ -39,6 +39,8 @@ data class UserPreferences(
     val combineNotifications: Boolean,
     val useRelativeDateTime: Boolean,
     val showTakenTimeInOverview: Boolean,
+    val showRemindedTimeInOverview: Boolean,
+    val showStockChangesInOverview: Boolean,
     val systemLocale: Boolean,
     val theme: ThemeSetting,
     // Security settings
@@ -77,6 +79,8 @@ data class UserPreferences(
                 combineNotifications = false,
                 useRelativeDateTime = false,
                 showTakenTimeInOverview = true,
+                showRemindedTimeInOverview = true,
+                showStockChangesInOverview = true,
                 systemLocale = false,
                 theme = ThemeSetting.DEFAULT,
                 hideMedicineName = false,

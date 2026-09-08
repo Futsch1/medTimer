@@ -294,6 +294,8 @@
     <string name="interval_start_condition">Välba alguse tingimus</string>
     <string name="tag_filter_active">Siltide filter on aktiivne. Ekspordi vaid valitud siltidega andmed.</string>
     <string name="show_taken_time_in_overview">Näita ülevaates võtmise aega</string>
+    <string name="show_reminded_time_in_overview">Näita ülevaates meeldetuletuse aega</string>
+    <string name="show_stock_changes_in_overview">Näita ülevaates laoseisu muutusi</string>
     <string name="remind_days_before_expiration">Meeldetuletuse päevi enne aegumist</string>
     <string name="successfully_created_reminder">Uue meeldetuletuse lisamine õnnestus</string>
     <string name="create_out_of_stock_reminder">Lisa varude lõppemise meeldetuletus</string>

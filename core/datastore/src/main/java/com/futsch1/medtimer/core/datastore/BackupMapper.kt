@@ -27,6 +27,8 @@ fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
     combineNotifications = combineNotifications,
     useRelativeDateTime = useRelativeDateTime,
     showTakenTimeInOverview = showTakenTimeInOverview,
+    showRemindedTimeInOverview = showRemindedTimeInOverview,
+    showStockChangesInOverview = showStockChangesInOverview,
     systemLocale = systemLocale,
     theme = theme.name,
     hideMedicineName = hideMedicineName,
@@ -69,6 +71,14 @@ fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
     preferencesDataSource.putBoolean(PreferencesDataSource.COMBINE_NOTIFICATIONS, combineNotifications)
     preferencesDataSource.putBoolean(PreferencesDataSource.USE_RELATIVE_DATE_TIME, useRelativeDateTime)
     preferencesDataSource.putBoolean(PreferencesDataSource.SHOW_TAKEN_TIME_IN_OVERVIEW, showTakenTimeInOverview)
+    preferencesDataSource.putBoolean(
+        PreferencesDataSource.SHOW_REMINDED_TIME_IN_OVERVIEW,
+        showRemindedTimeInOverview ?: true
+    )
+    preferencesDataSource.putBoolean(
+        PreferencesDataSource.SHOW_STOCK_CHANGES_IN_OVERVIEW,
+        showStockChangesInOverview ?: true
+    )
     preferencesDataSource.putBoolean(PreferencesDataSource.SYSTEM_LOCALE, systemLocale)
     preferencesDataSource.putString(
         PreferencesDataSource.THEME,
