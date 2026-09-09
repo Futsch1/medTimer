@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Intervallum indítási feltétel</string>
     <string name="tag_filter_active">Címke szűrő aktív. Csak az egyező címkékkel rendelkező adatok kerülnek exportálásra.</string>
     <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
+    <string name="show_reminded_time_in_overview">Emlékeztetési idő megjelenítése az áttekintésben</string>
+    <string name="show_stock_changes_in_overview">Készletváltozások megjelenítése az áttekintésben</string>
     <string name="expiration_settings">Lejárati beállítások</string>
     <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
     <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>

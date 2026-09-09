@@ -133,7 +133,12 @@ class OverviewViewModel @AssistedInject constructor(
         simulatedReminders.map { reminders -> reminders.groupBy { it.scheduledReminder.timestamp.epochDay() } }
 
     val overviewEvents: SharedFlow<List<OverviewEvent>> =
-        combine(reminderEventsByDay, simulatedRemindersByDay, filterState) { eventsByDay, remindersByDay, fs ->
+        combine(
+            reminderEventsByDay,
+            simulatedRemindersByDay,
+            filterState,
+            preferencesDataSource.preferences
+        ) { eventsByDay, remindersByDay, fs, _ ->
             val day = fs.day.toEpochDay()
             getFiltered(eventsByDay[day].orEmpty(), remindersByDay[day].orEmpty(), fs)
         }.flowOn(defaultDispatcher)

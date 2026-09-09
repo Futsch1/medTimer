@@ -26,12 +26,12 @@ class PastReminderEvent @AssistedInject constructor(
 
     override val content: OverviewEventContent = OverviewEventContent(
         reminderType = reminderEvent.reminderType,
-        time = reminderEvent.remindedTimestamp,
+        time = reminderEvent.remindedTimestamp.takeIf { preferences.showRemindedTimeInOverview },
         medicineName = reminderEvent.medicineName,
         dose = reminderEvent.amount,
         takenTime = takenTime(reminderEvent),
         interval = interval(reminderEvent),
-        stock = stockChange(reminderEvent),
+        stock = stockChange(reminderEvent).takeIf { preferences.showStockChangesInOverview },
         useRelativeTime = preferences.useRelativeDateTime,
     )
 

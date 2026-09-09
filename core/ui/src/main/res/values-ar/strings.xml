@@ -315,6 +315,8 @@
     <string name="interval_start_condition">حالة بدء الفاصل الزمني</string>
     <string name="tag_filter_active">مرشح العلامات نشط. سيتم تصدير البيانات التي تحتوي على علامات مطابقة فقط.</string>
     <string name="show_taken_time_in_overview">عرض الوقت المستغرق في النظرة العامة</string>
+    <string name="show_reminded_time_in_overview">عرض وقت التذكير في النظرة العامة</string>
+    <string name="show_stock_changes_in_overview">عرض تغييرات المخزون في النظرة العامة</string>
     <string name="expiration_settings">إعدادات انتهاء الصلاحية</string>
     <string name="remind_days_before_expiration">تذكير بالأيام قبل انتهاء الصلاحية</string>
     <string name="medicine_stock_settings">إعدادات مخزون الأدوية</string>

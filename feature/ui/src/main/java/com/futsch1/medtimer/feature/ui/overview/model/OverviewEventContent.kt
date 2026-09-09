@@ -17,7 +17,7 @@ import java.time.LocalDate
  */
 data class OverviewEventContent(
     val reminderType: ReminderType,
-    val time: Instant,
+    val time: Instant?,
     val medicineName: String,
     val dose: String,
     val takenTime: Instant? = null,
