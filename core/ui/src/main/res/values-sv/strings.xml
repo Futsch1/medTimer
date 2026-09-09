@@ -290,6 +290,8 @@
     <string name="interval_start_condition">Intervallets startvillkor</string>
     <string name="tag_filter_active">Taggfilter aktivt. Endast data med matchande taggar kommer att exporteras.</string>
     <string name="show_taken_time_in_overview">Visa intagningstid i översikt</string>
+    <string name="show_reminded_time_in_overview">Visa påminnelsetid i översikt</string>
+    <string name="show_stock_changes_in_overview">Visa lagerändringar i översikt</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
     <string name="remind_days_before_expiration">Påminn dagar före utgångsdatum</string>
     <string name="medicine_stock_settings">Inställningar för medicinlager</string>

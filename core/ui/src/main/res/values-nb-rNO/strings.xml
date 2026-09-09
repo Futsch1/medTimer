@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="show_reminded_time_in_overview">Vis påminnelsestidspunkt i oversikten</string>
+    <string name="show_stock_changes_in_overview">Vis lagerendringer i oversikten</string>
     <string name="expiration_date">Utløpsdato</string>
     <string name="production_date">Produksjonsdato</string>
     <string name="skipped">Hoppet over</string>

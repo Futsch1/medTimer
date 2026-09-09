@@ -297,6 +297,8 @@
     <string name="interval_start_condition">Condizione di inizio dell\'intervallo</string>
     <string name="tag_filter_active">Filtro etichetta attivo. Verranno esportati solo i dati con etichette corrispondenti.</string>
     <string name="show_taken_time_in_overview">Mostra nella panoramica l\'orario di assunzione</string>
+    <string name="show_reminded_time_in_overview">Mostra nella panoramica l\'ora del promemoria</string>
+    <string name="show_stock_changes_in_overview">Mostra nella panoramica le variazioni delle scorte</string>
     <string name="expiration_settings">Impostazioni di scadenza</string>
     <string name="remind_days_before_expiration">Promemoria giorni prima della scadenza</string>
     <string name="medicine_stock_settings">Impostazioni scorte medicinali</string>

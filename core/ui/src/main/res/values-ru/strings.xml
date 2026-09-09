@@ -299,6 +299,8 @@
     <string name="interval_start_condition">Условие запуска интервала</string>
     <string name="tag_filter_active">Фильтр тегов активен. Будут экспортированы только данные с соответствующими тегами.</string>
     <string name="show_taken_time_in_overview">Показать время приёма в обзоре</string>
+    <string name="show_reminded_time_in_overview">Показать время напоминания в обзоре</string>
+    <string name="show_stock_changes_in_overview">Показать изменения запасов в обзоре</string>
     <string name="expiration_settings">Настройки срока годности</string>
     <string name="remind_days_before_expiration">Напоминать за дни до истечения срока годности</string>
     <string name="medicine_stock_settings">Настройки запасов лекарств</string>
