@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
     <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
     <string name="show_taken_time_in_overview">Ώρες λήψης αγωγών σε επισκόπηση</string>
+    <string name="show_reminded_time_in_overview">Εμφάνιση ώρας υπενθύμισης στην επισκόπηση</string>
+    <string name="show_stock_changes_in_overview">Εμφάνιση αλλαγών αποθέματος στην επισκόπηση</string>
     <string name="expiration_settings">Ρυθμίσεις λήξης</string>
     <string name="remind_days_before_expiration">Εισάγετε τιμή για υπενθύμιση μέρες πριν από τη λήξη</string>
     <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>

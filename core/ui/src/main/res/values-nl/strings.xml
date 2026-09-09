@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Interval startvoorwaarde</string>
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
     <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
+    <string name="show_reminded_time_in_overview">Herinneringstijd in overzicht tonen</string>
+    <string name="show_stock_changes_in_overview">Voorraadwijzigingen in overzicht tonen</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
     <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
     <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>

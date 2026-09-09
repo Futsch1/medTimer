@@ -303,6 +303,8 @@
     <string name="interval_start_condition">Warunek rozpoczęcia interwału</string>
     <string name="tag_filter_active">Filtr tagów aktywny. Eksportowane będą tylko dane z pasującymi tagami.</string>
     <string name="show_taken_time_in_overview">Pokaż godzinę przyjęcia w przeglądzie</string>
+    <string name="show_reminded_time_in_overview">Pokaż czas przypomnienia w przeglądzie</string>
+    <string name="show_stock_changes_in_overview">Pokaż zmiany stanu zapasów w przeglądzie</string>
     <string name="expiration_settings">Ustawienia wygaśnięcia</string>
     <string name="remind_days_before_expiration">Przypomnij dni przed wygaśnięciem</string>
     <string name="medicine_stock_settings">Ustawienia zapasów leków</string>

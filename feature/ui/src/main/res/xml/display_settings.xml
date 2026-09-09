@@ -24,6 +24,16 @@
         app:singleLineTitle="false"
         app:key="show_taken_time_in_overview" />
     <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:title="@string/show_reminded_time_in_overview"
+        app:singleLineTitle="false"
+        app:key="show_reminded_time_in_overview" />
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:title="@string/show_stock_changes_in_overview"
+        app:singleLineTitle="false"
+        app:key="show_stock_changes_in_overview" />
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:title="@string/system_locale"
         app:singleLineTitle="false"

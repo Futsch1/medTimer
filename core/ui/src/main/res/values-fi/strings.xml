@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Intervallin käynnistysehto</string>
     <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
+    <string name="show_reminded_time_in_overview">Näytä muistutusaika yleiskatsauksessa</string>
+    <string name="show_stock_changes_in_overview">Näytä varastomuutokset yleiskatsauksessa</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
     <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
     <string name="medicine_stock_settings">Lääkevaraston asetukset</string>

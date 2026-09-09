@@ -303,6 +303,8 @@
     <string name="interval_start_condition">Умова запуску інтервалу</string>
     <string name="tag_filter_active">Фільтр тегів активний. Експортуватимуться лише дані з відповідними тегами.</string>
     <string name="show_taken_time_in_overview">Показати час прийому в огляді</string>
+    <string name="show_reminded_time_in_overview">Показувати час нагадування в огляді</string>
+    <string name="show_stock_changes_in_overview">Показувати зміни запасу в огляді</string>
     <string name="expiration_settings">Налаштування терміну придатності</string>
     <string name="remind_days_before_expiration">Нагадувати за дні до закінчення терміну придатності</string>
     <string name="medicine_stock_settings">Налаштування запасу ліків</string>
