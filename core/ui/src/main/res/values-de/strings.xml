@@ -310,6 +310,7 @@
     <string name="monthly">Monatlich</string>
     <string name="automatic_backup">Automatisches Backup</string>
     <string name="backup_successful_to">Automatisches Backup erfolgreich: %s</string>
+    <string name="automatic_backup_directory_required">Für automatische Backups muss ein Ordner ausgewählt werden. Wählen Sie im nächsten Dialog einen Ordner aus, um fortzufahren.</string>
     <string name="location_snooze">Standortbasiertes Schlummern</string>
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach Schlummern nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasiertes Schlummern erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>

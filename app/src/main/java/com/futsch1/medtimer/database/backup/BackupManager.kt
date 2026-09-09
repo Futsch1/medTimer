@@ -11,7 +11,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.R
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
@@ -49,6 +48,7 @@ class BackupManager @AssistedInject constructor(
     @param:Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
+    private var directorySelectionHandled = false
 
     @AssistedFactory
     fun interface Factory {
@@ -91,6 +91,7 @@ class BackupManager @AssistedInject constructor(
     }
 
     private fun selectAutomaticBackupInterval() {
+        directorySelectionHandled = false
         val currentInterval = preferencesDataSource.preferences.value.automaticBackupInterval
         val options = context.resources.getStringArray(com.futsch1.medtimer.core.ui.R.array.automatic_backup_options)
         val checkedItem = currentInterval.ordinal
@@ -101,7 +102,7 @@ class BackupManager @AssistedInject constructor(
                 val selectedValue = BackupInterval.entries[which]
                 preferencesDataSource.setAutomaticBackupInterval(selectedValue)
                 if (selectedValue != BackupInterval.NEVER) {
-                    openDirectorySelection()
+                    requestDirectorySelection()
                 }
                 dialog.dismiss()
             }
@@ -119,10 +120,17 @@ class BackupManager @AssistedInject constructor(
         }
     }
 
+    fun directorySelectionFinished(uri: Uri?) {
+        if (uri == null) return
+
+        directorySelectionHandled = false
+        directorySelected(uri)
+    }
+
     private fun openBackup() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.setType("application/json")
+        intent.type = "application/json"
         openFileLauncher?.launch(intent)
     }
 
@@ -305,7 +313,11 @@ class BackupManager @AssistedInject constructor(
         lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
             if (success) {
                 persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
-                Toast.makeText(context, context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename),
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 requestDirectorySelection()
             }
@@ -319,8 +331,16 @@ class BackupManager @AssistedInject constructor(
     }
 
     private fun requestDirectorySelection() {
+        if (directorySelectionHandled) return
+        directorySelectionHandled = true
+
         if (openDirectoryLauncher != null) {
-            openDirectorySelection()
+            MaterialAlertDialogBuilder(context)
+                .setTitle(com.futsch1.medtimer.core.ui.R.string.automatic_backup)
+                .setMessage(com.futsch1.medtimer.core.ui.R.string.automatic_backup_directory_required)
+                .setPositiveButton(com.futsch1.medtimer.core.ui.R.string.ok) { _, _ -> openDirectorySelection() }
+                .setNegativeButton(com.futsch1.medtimer.core.ui.R.string.cancel, null)
+                .show()
         } else {
             MaterialAlertDialogBuilder(context)
                 .setMessage(com.futsch1.medtimer.core.ui.R.string.backup_failed)

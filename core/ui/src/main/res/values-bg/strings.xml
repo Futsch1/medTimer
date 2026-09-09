@@ -310,6 +310,7 @@
     <string name="monthly">Ежемесечно</string>
     <string name="automatic_backup">Автоматично архивиране</string>
     <string name="backup_successful_to">Автоматичното архивиране е успешно: %s</string>
+    <string name="automatic_backup_directory_required">За автоматично архивиране е необходим достъп до папка. Изберете папка в следващия диалог, за да продължите.</string>
     <string name="location_snooze">Отлагане по местоположение</string>
     <string name="location_snooze_summary">Повторно известяване при завръщане вкъщи след отлагане</string>
     <string name="location_snooze_no_play_services">Отлагането по местоположение изисква Google Play Services, което не е налично на това устройство</string>

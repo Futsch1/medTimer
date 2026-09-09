@@ -316,6 +316,7 @@
     <string name="monthly">Mensualmente</string>
     <string name="automatic_backup">Copia de seguridad automática</string>
     <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
+    <string name="automatic_backup_directory_required">Las copias de seguridad automáticas necesitan acceso a una carpeta. Selecciona una carpeta en el siguiente diálogo para continuar.</string>
     <string name="location_snooze">Posponer según ubicación</string>
     <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
     <string name="location_snooze_no_play_services">Posponer según ubicación requiere los servicios de Google Play, que no están disponibles en este dispositivo</string>

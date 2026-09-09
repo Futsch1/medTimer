@@ -309,6 +309,7 @@
     <string name="monthly">Varje månad</string>
     <string name="automatic_backup">Automatisk säkerhetskopiering</string>
     <string name="backup_successful_to">Automatisk säkerhetskopiering lyckades: %s</string>
+    <string name="automatic_backup_directory_required">Automatisk säkerhetskopiering kräver åtkomst till en mapp. Välj en mapp i nästa dialogruta för att fortsätta.</string>
     <string name="location_snooze">Platsbaserad snooze</string>
     <string name="location_snooze_summary">Meddela igen när du anländer hem efter snooze</string>
     <string name="location_snooze_no_play_services">Platsbaserad snooze kräver Google Play Services, som inte är tillgängligt på den här enheten</string>

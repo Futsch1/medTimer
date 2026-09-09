@@ -57,10 +57,8 @@ class AppOptionsActionsImpl @AssistedInject constructor(
 
     private val openDirectoryLauncher =
         fragment.registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                backupManager.directorySelected(result.data?.data)
-                backupManager.autoBackup()
-            }
+            val uri = result.data?.data.takeIf { result.resultCode == Activity.RESULT_OK }
+            backupManager.directorySelectionFinished(uri)
         }
 
     private val backupManager: BackupManager by lazy {
