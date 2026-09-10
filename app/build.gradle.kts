@@ -17,8 +17,8 @@ android {
         minSdk = 28
         multiDexEnabled = true
         targetSdk = 36
-        versionCode = 185
-        versionName = "1.25.2"
+        versionCode = 186
+        versionName = "1.25.3"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
@@ -267,8 +267,8 @@ val exclusions = listOf(
     "**/databinding/**",
     // Kotlin compiler-synthetic classes from inlined stdlib functions
     // (sourcefilename points to non-existent files like Emitters.kt, Comparisons.kt, etc.)
-    "**/*\$\$inlined*.class",
-    "**/*\$\$special\$*.class"
+    $$$"**/*$$inlined*.class",
+    $$$"**/*$$special$*.class"
 )
 
 // Modules included in the aggregated coverage report. The variant is the one built
