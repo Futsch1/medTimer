@@ -2,6 +2,11 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -39,6 +44,7 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.google.gson.Gson
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +56,12 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /** Below this width the week selector and filter row don't both fit on one line and stack instead. */
 private val NAVIGATION_ROW_MIN_WIDTH = 600.dp
+
+/** A day and the event data that was displayed for it when a page transition began. */
+private data class OverviewDayContent(
+    val day: LocalDate,
+    val events: ImmutableList<OverviewEvent>,
+)
 
 @Composable
 fun OverviewScreen(
@@ -100,7 +112,7 @@ fun OverviewScreen(
     topBarActions: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val events = state.events
+    val dayContent = OverviewDayContent(state.day, state.events)
     val rangeStart = remember { LocalDate.now().minusYears(3) }
     val rangeEnd = maxOf(state.simulatedThrough, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
 
@@ -171,32 +183,60 @@ fun OverviewScreen(
             }
         }
 
-        Box(
-            Modifier
-                .fillMaxSize()
-                .overviewDaySwipe { dayOffset ->
-                    val target = state.day.plusDays(dayOffset.toLong())
-                    if (target in rangeStart..rangeEnd) onDaySelected(target)
-                },
-        ) {
-            OverviewEventList(
-                events = events,
-                selection = selection,
-                onEventClick = onEventClick,
-                onEnterSelectionMode = onEnterSelectionMode,
-                onAction = { button, event -> onAction(button, listOf(event)) },
-                modifier = Modifier.padding(end = 8.dp),
-            )
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .overviewDaySwipe(
+                        threshold = constraints.maxWidth.toFloat() / 3.0f,
+                    ) { dayOffset ->
+                        val target = state.day.plusDays(dayOffset.toLong())
+                        if (target in rangeStart..rangeEnd) onDaySelected(target)
+                    },
+            ) {
+                AnimatedContent(
+                    targetState = dayContent,
+                    transitionSpec = {
+                        // Match the content movement to the swipe: later days enter from the right.
+                        val direction = if (targetState.day > initialState.day) {
+                            AnimatedContentTransitionScope.SlideDirection.Left
+                        } else {
+                            AnimatedContentTransitionScope.SlideDirection.Right
+                        }
+                        (
+                                slideIntoContainer(towards = direction) togetherWith
+                                        (
+                                                slideOutOfContainer(towards = direction) +
+                                                        ExitTransition.KeepUntilTransitionsFinished
+                                                )
+                                )
+                            .using(SizeTransform(clip = false))
+                            .apply { targetContentZIndex = 1f }
+                    },
+                    contentAlignment = Alignment.TopStart,
+                    label = "overview_day_content",
+                    modifier = Modifier.fillMaxSize(),
+                ) { content ->
+                    OverviewEventList(
+                        events = content.events,
+                        selection = selection,
+                        onEventClick = onEventClick,
+                        onEnterSelectionMode = onEnterSelectionMode,
+                        onAction = { button, event -> onAction(button, listOf(event)) },
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
+                }
 
-            ExtendedFloatingActionButton(
-                onClick = onLogManualDose,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .testTag(OverviewTestTags.LOG_MANUAL_DOSE),
-                icon = { Icon(painterResource(CoreUiR.drawable.capsule), contentDescription = null) },
-                text = { Text(stringResource(CoreUiR.string.log_additional_dose), maxLines = 2) },
-            )
+                ExtendedFloatingActionButton(
+                    onClick = onLogManualDose,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                        .testTag(OverviewTestTags.LOG_MANUAL_DOSE),
+                    icon = { Icon(painterResource(CoreUiR.drawable.capsule), contentDescription = null) },
+                    text = { Text(stringResource(CoreUiR.string.log_additional_dose), maxLines = 2) },
+                )
+            }
         }
     }
 }

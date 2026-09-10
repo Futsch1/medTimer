@@ -63,6 +63,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import kotlin.math.absoluteValue
 
 /** Caps row width on wide/landscape screens so event rows stay readable instead of stretching edge to edge. */
 private val EVENT_LIST_MAX_WIDTH = 540.dp
@@ -149,23 +150,30 @@ fun OverviewEventList(
     }
 }
 
-internal fun Modifier.overviewDaySwipe(onDaySwipe: (Int) -> Unit): Modifier =
-    pointerInput(onDaySwipe) {
+internal fun Modifier.overviewDaySwipe(threshold: Float, onDaySwipe: (Int) -> Unit): Modifier =
+    pointerInput(threshold, onDaySwipe) {
+        var totalDrag = 0f
         var swipeHandled = false
         detectHorizontalDragGestures(
-            onDragStart = { swipeHandled = false },
+            onDragStart = {
+                totalDrag = 0f
+                swipeHandled = false
+            },
             onHorizontalDrag = { change, dragAmount ->
                 change.consume()
-                if (!swipeHandled) {
+                totalDrag += dragAmount
+            },
+            onDragEnd = {
+                if (!swipeHandled && totalDrag.absoluteValue > threshold) {
                     swipeHandled = true
-                    onDaySwipe(if (dragAmount < 0) 1 else -1)
+                    onDaySwipe(if (totalDrag < 0) 1 else -1)
                 }
             },
         )
     }
 
 /**
- * One pill per gap between adjacent events, spanning the corridor between the two neighbouring
+ * One pill per gap between adjacent events, spanning the corridor between the two neighboring
  * state buttons. A taller item centres its button further from the gap, so the pill facing it
  * stretches toward it.
  *
