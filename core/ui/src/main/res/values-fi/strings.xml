@@ -312,6 +312,7 @@
     <string name="monthly">Kuukausittain</string>
     <string name="automatic_backup">Automaattinen varmuuskopiointi</string>
     <string name="backup_successful_to">Automaattinen varmuuskopiointi onnistui: %s</string>
+    <string name="automatic_backup_directory_required">Automaattiset varmuuskopiot tarvitsevat pääsyn kansioon. Jatka valitsemalla kansio seuraavassa valintaikkunassa.</string>
     <string name="location_snooze">Sijaintipohjainen torkku</string>
     <string name="location_snooze_summary">Ilmoita uudelleen kotiin saapuessa torkutuksen jälkeen</string>
     <string name="location_snooze_no_play_services">Sijaintipohjainen torkku vaatii Google Play -palvelut, jotka eivät ole saatavilla tällä laitteella</string>

@@ -312,6 +312,7 @@
     <string name="monthly">Maandelijks</string>
     <string name="automatic_backup">Automatische back-up</string>
     <string name="backup_successful_to">Automatische back-up geslaagd: %s</string>
+    <string name="automatic_backup_directory_required">Automatische back-ups vereisen toegang tot een map. Selecteer een map in het volgende dialoogvenster om door te gaan.</string>
     <string name="location_snooze">Locatiegebaseerd sluimeren</string>
     <string name="location_snooze_summary">Opnieuw melden bij thuiskomst na sluimeren</string>
     <string name="location_snooze_no_play_services">Locatiegebaseerd sluimeren vereist Google Play Services, die niet beschikbaar zijn op dit apparaat</string>

@@ -312,6 +312,7 @@
     <string name="monthly">Havonta</string>
     <string name="automatic_backup">Automatikus biztonsági mentés</string>
     <string name="backup_successful_to">Automatikus biztonsági mentés sikeres: %s</string>
+    <string name="automatic_backup_directory_required">Az automatikus biztonsági mentéshez hozzáférés szükséges egy mappához. A folytatáshoz válasszon ki egy mappát a következő párbeszédpanelen.</string>
     <string name="location_snooze">Helyzet alapú szundi</string>
     <string name="location_snooze_summary">Újraértesítés hazaérkezéskor szundi után</string>
     <string name="location_snooze_no_play_services">A helyzet alapú szundi Google Play Services szolgáltatást igényel, amely nem érhető el ezen az eszközön</string>

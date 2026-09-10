@@ -324,6 +324,7 @@
     <string name="monthly">Щомісяця</string>
     <string name="automatic_backup">Автоматичне резервне копіювання</string>
     <string name="backup_successful_to">Автоматичне резервне копіювання завершено успішно: %s</string>
+    <string name="automatic_backup_directory_required">Для автоматичного резервного копіювання потрібен доступ до папки. Виберіть папку в наступному діалоговому вікні, щоб продовжити.</string>
     <string name="location_snooze">Відкласти за місцезнаходженням</string>
     <string name="location_snooze_summary">Повторно повідомити при поверненні додому після відкладення</string>
     <string name="location_snooze_no_play_services">Відкладення за місцезнаходженням вимагає Google Play Services, які недоступні на цьому пристрої</string>

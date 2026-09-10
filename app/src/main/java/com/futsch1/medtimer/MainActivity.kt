@@ -32,7 +32,6 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
@@ -62,9 +61,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var persistentDataDataSource: PersistentDataDataSource
-
-    @Inject
-    lateinit var backupManagerFactory: BackupManager.Factory
 
     @Inject
     lateinit var variableAmountHandler: VariableAmountHandler
@@ -245,8 +241,6 @@ class MainActivity : AppCompatActivity() {
                 startService(Intent(applicationContext, ReminderSchedulerService::class.java))
             }
         }
-
-        backupManagerFactory.create(this, this, null, null, supportFragmentManager).autoBackup()
     }
 
     private suspend fun dispatchIntent(intent: Intent) {

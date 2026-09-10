@@ -318,6 +318,7 @@
     <string name="monthly">Mensuel</string>
     <string name="automatic_backup">Sauvegarde automatique</string>
     <string name="backup_successful_to">Sauvegarde automatique réussie : %s</string>
+    <string name="automatic_backup_directory_required">Les sauvegardes automatiques nécessitent l’accès à un dossier. Sélectionnez un dossier dans la boîte de dialogue suivante pour continuer.</string>
     <string name="location_snooze">Répétition basée sur la localisation</string>
     <string name="location_snooze_summary">Notifier à nouveau en rentrant à la maison après avoir mis en veille</string>
     <string name="location_snooze_no_play_services">La répétition basée sur la localisation nécessite Google Play Services, qui n\'est pas disponible sur cet appareil</string>

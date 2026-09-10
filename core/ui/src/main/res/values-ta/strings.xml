@@ -312,6 +312,7 @@
     <string name="monthly">மாதாந்திர</string>
     <string name="automatic_backup">தானியங்கி காப்புப்பிரதி</string>
     <string name="backup_successful_to">தானியங்கி காப்புப்பிரதி வெற்றிகரமாக முடிந்தது: %s</string>
+    <string name="automatic_backup_directory_required">தானியங்கி காப்புப்பிரதிகளுக்கு ஒரு கோப்புறைக்கான அணுகல் தேவை. தொடர அடுத்த உரையாடலில் ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
     <string name="location_snooze">இடம் சார்ந்த சுணக்கம்</string>
     <string name="location_snooze_summary">சுணக்கத்திற்குப் பிறகு வீடு திரும்பும்போது மீண்டும் அறிவிக்கவும்</string>
     <string name="location_snooze_no_play_services">இடம் சார்ந்த சுணக்கம் Google Play Services தேவைப்படுகிறது, இது இந்த சாதனத்தில் கிடைக்கவில்லை</string>

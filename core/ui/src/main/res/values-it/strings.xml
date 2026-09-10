@@ -318,6 +318,7 @@
     <string name="monthly">Mensile</string>
     <string name="automatic_backup">Backup automatico</string>
     <string name="backup_successful_to">Backup automatico riuscito: %s</string>
+    <string name="automatic_backup_directory_required">I backup automatici richiedono l\'accesso a una cartella. Seleziona una cartella nella finestra di dialogo successiva per continuare.</string>
     <string name="location_snooze">Posticipo basato sulla posizione</string>
     <string name="location_snooze_summary">Rinotifica al rientro a casa dopo aver posticipato</string>
     <string name="location_snooze_no_play_services">Il posticipo basato sulla posizione richiede Google Play Services, che non è disponibile su questo dispositivo</string>

@@ -306,6 +306,7 @@
     <string name="monthly">每月</string>
     <string name="automatic_backup">自動備份</string>
     <string name="backup_successful_to">自動備份成功：%s</string>
+    <string name="automatic_backup_directory_required">自動備份需要存取資料夾。請在下一個對話方塊中選取資料夾以繼續。</string>
     <string name="location_snooze">基於位置的小睡</string>
     <string name="location_snooze_summary">小睡後回家時重新提醒</string>
     <string name="location_snooze_no_play_services">基於位置的小睡需要 Google Play 服務，該服務在此裝置上不可用</string>

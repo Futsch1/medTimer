@@ -318,6 +318,7 @@
     <string name="monthly">Mensalmente</string>
     <string name="automatic_backup">Backup automático</string>
     <string name="backup_successful_to">Backup automático bem-sucedido: %s</string>
+    <string name="automatic_backup_directory_required">Os backups automáticos precisam de acesso a uma pasta. Selecione uma pasta na próxima caixa de diálogo para continuar.</string>
     <string name="location_snooze">Soneca baseada em localização</string>
     <string name="location_snooze_summary">Notificar novamente ao chegar em casa após soneca</string>
     <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>

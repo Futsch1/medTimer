@@ -324,6 +324,7 @@
     <string name="monthly">Měsíčně</string>
     <string name="automatic_backup">Automatické zálohování</string>
     <string name="backup_successful_to">Automatické zálohování úspěšné: %s</string>
+    <string name="automatic_backup_directory_required">Automatické zálohy vyžadují přístup ke složce. Pokračujte výběrem složky v následujícím dialogu.</string>
     <string name="location_snooze">Odložení na základě polohy</string>
     <string name="location_snooze_summary">Znovu upozornit po příchodu domů po odložení</string>
     <string name="location_snooze_no_play_services">Odložení na základě polohy vyžaduje Služby Google Play, které nejsou na tomto zařízení dostupné</string>

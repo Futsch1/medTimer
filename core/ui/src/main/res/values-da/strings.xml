@@ -312,6 +312,7 @@
     <string name="monthly">Månedlig</string>
     <string name="automatic_backup">Automatisk backup</string>
     <string name="backup_successful_to">Automatisk backup gennemført: %s</string>
+    <string name="automatic_backup_directory_required">Automatisk sikkerhedskopiering kræver adgang til en mappe. Vælg en mappe i den næste dialog for at fortsætte.</string>
     <string name="location_snooze">Lokationsbaseret udsættelse</string>
     <string name="location_snooze_summary">Påmind igen ved hjemkomst efter udsættelse</string>
     <string name="location_snooze_no_play_services">Lokationsbaseret udsættelse kræver Google Play Services, som ikke er tilgængeligt på denne enhed</string>

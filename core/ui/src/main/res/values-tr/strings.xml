@@ -312,6 +312,7 @@
     <string name="monthly">Aylık</string>
     <string name="automatic_backup">Otomatik yedekleme</string>
     <string name="backup_successful_to">Otomatik yedekleme başarılı: %s</string>
+    <string name="automatic_backup_directory_required">Otomatik yedeklemeler bir klasöre erişim gerektirir. Devam etmek için sonraki iletişim kutusunda bir klasör seçin.</string>
     <string name="location_snooze">Konuma dayalı erteleme</string>
     <string name="location_snooze_summary">Ertelemeden sonra eve gelince yeniden bildirim</string>
     <string name="location_snooze_no_play_services">Konuma dayalı erteleme, bu cihazda bulunmayan Google Play Servislerijini gerektirir</string>
