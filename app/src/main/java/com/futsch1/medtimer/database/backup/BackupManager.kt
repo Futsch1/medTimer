@@ -267,7 +267,6 @@ class BackupManager @AssistedInject constructor(
             BackupInterval.DAILY -> lastBackup.plusDays(1) <= now
             BackupInterval.WEEKLY -> lastBackup.plusDays(7) <= now
             BackupInterval.MONTHLY -> lastBackup.plusDays(30) <= now
-            else -> false
         }
 
         if (shouldBackup) {

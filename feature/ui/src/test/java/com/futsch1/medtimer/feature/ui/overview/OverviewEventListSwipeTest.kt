@@ -35,7 +35,9 @@ class OverviewEventListSwipeTest {
                     Modifier
                         .fillMaxSize()
                         .testTag("overview_content")
-                        .overviewDaySwipe { selectedDay = selectedDay.plusDays(it.toLong()) },
+                        .overviewDaySwipe(threshold = 100f) {
+                            selectedDay = selectedDay.plusDays(it.toLong())
+                        },
                 ) {
                     OverviewEventList(
                         events = persistentListOf(),

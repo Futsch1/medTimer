@@ -171,32 +171,36 @@ fun OverviewScreen(
             }
         }
 
-        Box(
-            Modifier
-                .fillMaxSize()
-                .overviewDaySwipe { dayOffset ->
-                    val target = state.day.plusDays(dayOffset.toLong())
-                    if (target in rangeStart..rangeEnd) onDaySelected(target)
-                },
-        ) {
-            OverviewEventList(
-                events = events,
-                selection = selection,
-                onEventClick = onEventClick,
-                onEnterSelectionMode = onEnterSelectionMode,
-                onAction = { button, event -> onAction(button, listOf(event)) },
-                modifier = Modifier.padding(end = 8.dp),
-            )
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .overviewDaySwipe(
+                        threshold = constraints.maxWidth.toFloat() / 3.0f,
+                    ) { dayOffset ->
+                        val target = state.day.plusDays(dayOffset.toLong())
+                        if (target in rangeStart..rangeEnd) onDaySelected(target)
+                    },
+            ) {
+                OverviewEventList(
+                    events = events,
+                    selection = selection,
+                    onEventClick = onEventClick,
+                    onEnterSelectionMode = onEnterSelectionMode,
+                    onAction = { button, event -> onAction(button, listOf(event)) },
+                    modifier = Modifier.padding(end = 8.dp),
+                )
 
-            ExtendedFloatingActionButton(
-                onClick = onLogManualDose,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .testTag(OverviewTestTags.LOG_MANUAL_DOSE),
-                icon = { Icon(painterResource(CoreUiR.drawable.capsule), contentDescription = null) },
-                text = { Text(stringResource(CoreUiR.string.log_additional_dose), maxLines = 2) },
-            )
+                ExtendedFloatingActionButton(
+                    onClick = onLogManualDose,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                        .testTag(OverviewTestTags.LOG_MANUAL_DOSE),
+                    icon = { Icon(painterResource(CoreUiR.drawable.capsule), contentDescription = null) },
+                    text = { Text(stringResource(CoreUiR.string.log_additional_dose), maxLines = 2) },
+                )
+            }
         }
     }
 }
