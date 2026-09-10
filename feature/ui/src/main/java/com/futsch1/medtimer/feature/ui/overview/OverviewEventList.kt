@@ -162,6 +162,8 @@ internal fun Modifier.overviewDaySwipe(threshold: Float, onDaySwipe: (Int) -> Un
             onHorizontalDrag = { change, dragAmount ->
                 change.consume()
                 totalDrag += dragAmount
+            },
+            onDragEnd = {
                 if (!swipeHandled && totalDrag.absoluteValue > threshold) {
                     swipeHandled = true
                     onDaySwipe(if (totalDrag < 0) 1 else -1)
