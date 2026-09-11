@@ -38,8 +38,9 @@ class VariableAmountHandler @Inject constructor(
             val medicine = medicineRepository.fetch(reminder.medicineRelId) ?: continue
 
             suspendCancellableCoroutine { continuation ->
+                val title = "${activity.getString(R.string.amount)}: ${medicine.name}"
                 TextInputDialogBuilder(activity)
-                    .title(medicine.name)
+                    .title(title)
                     .hint(R.string.dosage)
                     .initialText(reminder.amount)
                     .textSink { amountLocal: String? ->
