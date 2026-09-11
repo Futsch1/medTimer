@@ -34,8 +34,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.File
-import java.io.FileWriter
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.time.LocalTime
@@ -111,24 +112,26 @@ class CSVExportUnitTest {
                 timeFormatter
             )
 
-        Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
-            try {
-                // Call the create method
-                runBlocking { csvEventExport.exportInternal(file) }
+        Mockito.mockConstruction(FileOutputStream::class.java).use {
+            Mockito.mockConstruction(OutputStreamWriter::class.java).use { writerMockedConstruction ->
+                try {
+                    // Call the create method
+                    runBlocking { csvEventExport.exportInternal(file) }
 
-                val fileWriter = fileWriterMockedConstruction.constructed().first()
+                    val fileWriter = writerMockedConstruction.constructed().first()
 
-                // Verify that the FileWriter wrote the correct data to the file
-                Mockito.verify(fileWriter)
-                    .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
-                Mockito.verify(fileWriter)
-                    .write("5/3/21 2:00 AM;Medicine 1;10mg;5/3/21 2:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n")
-                Mockito.verify(fileWriter)
-                    .write("5/3/21 2:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n")
-            } catch (_: ExporterException) {
-                fail(EXCEPTION_OCCURRED)
-            } catch (_: IOException) {
-                fail(EXCEPTION_OCCURRED)
+                    // Verify that the writer wrote the correct data to the file
+                    Mockito.verify(fileWriter)
+                        .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
+                    Mockito.verify(fileWriter)
+                        .write("5/3/21 2:00 AM;Medicine 1;10mg;5/3/21 2:02 AM;Tag1, Tag2;2:14;Notes;2021-05-03T00:00:00Z;2021-05-03T00:02:00Z\n")
+                    Mockito.verify(fileWriter)
+                        .write("5/3/21 2:30 AM;Medicine 2;20mg;;;0:00;;2021-05-03T00:30:00Z;\n")
+                } catch (_: ExporterException) {
+                    fail(EXCEPTION_OCCURRED)
+                } catch (_: IOException) {
+                    fail(EXCEPTION_OCCURRED)
+                }
             }
         }
     }
@@ -163,30 +166,31 @@ class CSVExportUnitTest {
         val fragmentManager =
             mock<FragmentManager>()
 
-        Mockito.mockConstruction(FileWriter::class.java).use { fileWriterMockedConstruction ->
+        Mockito.mockConstruction(FileOutputStream::class.java).use {
+            Mockito.mockConstruction(OutputStreamWriter::class.java).use { writerMockedConstruction ->
+                val csvExport =
+                    CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined, LinkedReminderAlgorithms())
+                try {
+                    // Call the create method
+                    runBlocking { csvExport.exportInternal(file) }
 
-            val csvExport =
-                CSVMedicineExport(medicines, fragmentManager, context, reminderSummaryFormatter, Dispatchers.Unconfined, LinkedReminderAlgorithms())
-            try {
-                // Call the create method
-                runBlocking { csvExport.exportInternal(file) }
+                    val fileWriter =
+                        writerMockedConstruction.constructed().first()
 
-                val fileWriter =
-                    fileWriterMockedConstruction.constructed().first()
-
-                // Verify that the FileWriter wrote the correct data to the file
-                Mockito.verify(fileWriter)
-                    .write("Medicine;Dosage;Time\n")
-                Mockito.verify(fileWriter)
-                    .write("Medicine 1;1;1:00 AM, Every day\n")
-                Mockito.verify(fileWriter)
-                    .write("Medicine 2;2;1:01 AM, Every day\n")
-                Mockito.verify(fileWriter)
-                    .write("Medicine 2;three;1:02 AM, Every day\n")
-            } catch (_: ExporterException) {
-                fail(EXCEPTION_OCCURRED)
-            } catch (_: IOException) {
-                fail(EXCEPTION_OCCURRED)
+                    // Verify that the writer wrote the correct data to the file
+                    Mockito.verify(fileWriter)
+                        .write("Medicine;Dosage;Time\n")
+                    Mockito.verify(fileWriter)
+                        .write("Medicine 1;1;1:00 AM, Every day\n")
+                    Mockito.verify(fileWriter)
+                        .write("Medicine 2;2;1:01 AM, Every day\n")
+                    Mockito.verify(fileWriter)
+                        .write("Medicine 2;three;1:02 AM, Every day\n")
+                } catch (_: ExporterException) {
+                    fail(EXCEPTION_OCCURRED)
+                } catch (_: IOException) {
+                    fail(EXCEPTION_OCCURRED)
+                }
             }
         }
     }
@@ -225,30 +229,32 @@ class CSVExportUnitTest {
         // Create a mock File
         val file = mock<File>()
 
-        Mockito.mockConstruction(FileWriter::class.java)
-            .use { fileWriterMockedConstruction ->
-                val fragmentManager = mock<FragmentManager>()
-                // Create the CSVCreator object
-                val csvEventExport = CSVEventExport(
-                    emptyList(),
-                    fragmentManager,
-                    context,
-                    Dispatchers.Unconfined,
-                    timeFormatter
-                )
-                try {
-                    // Call the create method
-                    runBlocking { csvEventExport.exportInternal(file) }
+        Mockito.mockConstruction(FileOutputStream::class.java).use {
+            Mockito.mockConstruction(OutputStreamWriter::class.java)
+                .use { writerMockedConstruction ->
+                    val fragmentManager = mock<FragmentManager>()
+                    // Create the CSVCreator object
+                    val csvEventExport = CSVEventExport(
+                        emptyList(),
+                        fragmentManager,
+                        context,
+                        Dispatchers.Unconfined,
+                        timeFormatter
+                    )
+                    try {
+                        // Call the create method
+                        runBlocking { csvEventExport.exportInternal(file) }
 
-                    val fileWriter = fileWriterMockedConstruction.constructed().first()
+                        val fileWriter = writerMockedConstruction.constructed().first()
 
-                    // Verify that the FileWriter wrote the correct data to the file
-                    Mockito.verify(fileWriter)
-                        .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
-                } catch (_: ExporterException) {
-                    fail(EXCEPTION_OCCURRED)
-                } catch (_: IOException) {
-                    fail(EXCEPTION_OCCURRED)
+                        // Verify that the writer wrote the correct data to the file
+                        Mockito.verify(fileWriter)
+                            .write("Reminded;Name;Dosage;Taken;Tags;Interval;Notes;Reminded (ISO 8601);Taken (ISO 8601)\n")
+                    } catch (_: ExporterException) {
+                        fail(EXCEPTION_OCCURRED)
+                    } catch (_: IOException) {
+                        fail(EXCEPTION_OCCURRED)
+                    }
                 }
             }
     }
