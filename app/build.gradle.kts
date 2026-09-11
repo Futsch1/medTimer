@@ -161,8 +161,6 @@ dependencies {
     implementation(libs.espresso.idling.concurrent)
     implementation(libs.flexbox)
     implementation(libs.androidx.biometric)
-    implementation(libs.preferencex.ringtone)
-    implementation(libs.preferencex)
     implementation(libs.androidx.documentfile)
     implementation(libs.hilt.android)
 
