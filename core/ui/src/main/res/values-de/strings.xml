@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Intervallstartbedingung</string>
     <string name="tag_filter_active">Tag-Filter aktiv. Es werden nur Daten mit übereinstimmenden Tags exportiert.</string>
     <string name="show_taken_time_in_overview">Zeit der Einnahme in der Übersicht anzeigen</string>
+    <string name="show_reminded_time_in_overview">Erinnerungszeit in der Übersicht anzeigen</string>
+    <string name="show_stock_changes_in_overview">Bestandsänderungen in der Übersicht anzeigen</string>
     <string name="expiration_settings">Ablauf-Einstellungen</string>
     <string name="remind_days_before_expiration">Tage vor Ablauf erinnern</string>
     <string name="medicine_stock_settings">Medikamentenvorratseinstellungen</string>
@@ -310,6 +312,7 @@
     <string name="monthly">Monatlich</string>
     <string name="automatic_backup">Automatisches Backup</string>
     <string name="backup_successful_to">Automatisches Backup erfolgreich: %s</string>
+    <string name="automatic_backup_directory_required">Für automatische Backups muss ein Ordner ausgewählt werden. Wählen Sie im nächsten Dialog einen Ordner aus, um fortzufahren.</string>
     <string name="location_snooze">Standortbasiertes Schlummern</string>
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach Schlummern nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasiertes Schlummern erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>

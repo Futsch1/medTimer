@@ -285,6 +285,8 @@
     <string name="interval_start_condition">间隔启动条件</string>
     <string name="tag_filter_active">标签过滤器已激活。仅导出带有匹配标签的数据。</string>
     <string name="show_taken_time_in_overview">在概览中显示服药时间</string>
+    <string name="show_reminded_time_in_overview">在概览中显示提醒时间</string>
+    <string name="show_stock_changes_in_overview">在概览中显示库存变化</string>
     <string name="expiration_settings">到期设置</string>
     <string name="remind_days_before_expiration">在到期前几天提醒</string>
     <string name="medicine_stock_settings">药品库存设置</string>
@@ -304,6 +306,7 @@
     <string name="monthly">每月</string>
     <string name="automatic_backup">自动备份</string>
     <string name="backup_successful_to">自动备份成功：%s</string>
+    <string name="automatic_backup_directory_required">自动备份需要访问文件夹。请在下一个对话框中选择文件夹以继续。</string>
     <string name="location_snooze">基于位置的小睡</string>
     <string name="location_snooze_summary">小睡后回家时重新提醒</string>
     <string name="location_snooze_no_play_services">基于位置的小睡需要 Google Play 服务，该服务在此设备上不可用</string>

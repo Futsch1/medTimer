@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
     <string name="continuous_interval_reminder_help">Ξεκινήστε μια υπενθύμιση με βάση ένα χρονικό διάστημα (π.χ. κάθε 6 ώρες) από μια καθορισμένη στιγμή. Αυτό το μοτίβο θα είναι συνεχές, αγνοώντας τους περιορισμούς της ώρας της ημέρας, έως ότου απενεργοποιηθεί χειροκίνητα.</string>
@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Κατάσταση έναρξης διαστήματος</string>
     <string name="tag_filter_active">Φίλτρο ετικετών ενεργό. Θα εξαχθούν μόνο τα δεδομένα με αντίστοιχες ετικέτες.</string>
     <string name="show_taken_time_in_overview">Ώρες λήψης αγωγών σε επισκόπηση</string>
+    <string name="show_reminded_time_in_overview">Εμφάνιση ώρας υπενθύμισης στην επισκόπηση</string>
+    <string name="show_stock_changes_in_overview">Εμφάνιση αλλαγών αποθέματος στην επισκόπηση</string>
     <string name="expiration_settings">Ρυθμίσεις λήξης</string>
     <string name="remind_days_before_expiration">Εισάγετε τιμή για υπενθύμιση μέρες πριν από τη λήξη</string>
     <string name="medicine_stock_settings">Ρυθμίσεις αποθέματος φαρμάκων</string>
@@ -310,6 +312,7 @@
     <string name="monthly">Μηνιαία</string>
     <string name="automatic_backup">Αυτόματη δημιουργία αντιγράφων ασφαλείας</string>
     <string name="backup_successful_to">Η αυτόματη δημιουργία αντιγράφων ασφαλείας ήταν επιτυχής: %s</string>
+    <string name="automatic_backup_directory_required">Τα αυτόματα αντίγραφα ασφαλείας απαιτούν πρόσβαση σε έναν φάκελο. Επιλέξτε έναν φάκελο στον επόμενο διάλογο για να συνεχίσετε.</string>
     <string name="location_snooze">Αναβολή βάσει τοποθεσίας</string>
     <string name="location_snooze_summary">Επανειδοποίηση κατά την άφιξη στο σπίτι μετά από αναβολή</string>
     <string name="location_snooze_no_play_services">Η αναβολή βάσει τοποθεσίας απαιτεί τις Υπηρεσίες Google Play, οι οποίες δεν είναι διαθέσιμες σε αυτή τη συσκευή</string>
@@ -335,4 +338,7 @@
     <string name="next_week">Επόμενη εβδομάδα</string>
     <string name="stock_after_simulation_end">Μετά τις %s</string>
     <string name="move_medicine">Μετακίνηση φαρμάκου</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Πλοήγηση επάνω</string>
+    <string name="close" tools:ignore="MissingTranslation">Κλείσιμο</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Περισσότερες επιλογές</string>
 </resources>

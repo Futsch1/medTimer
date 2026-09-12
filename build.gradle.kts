@@ -13,4 +13,7 @@ buildscript {
         google()
         maven { url = uri("https://jitpack.io") }
     }
+    dependencies {
+        classpath(libs.kotlin.gradle.plugin)
+    }
 }

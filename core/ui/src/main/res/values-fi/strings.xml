@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Intervallin käynnistysehto</string>
     <string name="tag_filter_active">Tunnisteiden suodatin aktiivinen. Vain tunnisteiden kanssa vastaavat tiedot viedään.</string>
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
+    <string name="show_reminded_time_in_overview">Näytä muistutusaika yleiskatsauksessa</string>
+    <string name="show_stock_changes_in_overview">Näytä varastomuutokset yleiskatsauksessa</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
     <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
     <string name="medicine_stock_settings">Lääkevaraston asetukset</string>
@@ -310,6 +312,7 @@
     <string name="monthly">Kuukausittain</string>
     <string name="automatic_backup">Automaattinen varmuuskopiointi</string>
     <string name="backup_successful_to">Automaattinen varmuuskopiointi onnistui: %s</string>
+    <string name="automatic_backup_directory_required">Automaattiset varmuuskopiot tarvitsevat pääsyn kansioon. Jatka valitsemalla kansio seuraavassa valintaikkunassa.</string>
     <string name="location_snooze">Sijaintipohjainen torkku</string>
     <string name="location_snooze_summary">Ilmoita uudelleen kotiin saapuessa torkutuksen jälkeen</string>
     <string name="location_snooze_no_play_services">Sijaintipohjainen torkku vaatii Google Play -palvelut, jotka eivät ole saatavilla tällä laitteella</string>

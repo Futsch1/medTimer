@@ -269,6 +269,7 @@
     <string name="automatic_backup">Automaatne varundus</string>
     <string name="duplicate_including_reminders">Tee koopia koos meeldetuletustega</string>
     <string name="backup_successful_to">Automaatne varundus õnnestus: %s</string>
+    <string name="automatic_backup_directory_required">Automaatsed varukoopiad vajavad juurdepääsu kaustale. Jätkamiseks vali järgmises dialoogis kaust.</string>
     <string name="medicine_settings">Ravimite seadistused</string>
     <string name="medicine_cannot_be_skipped">Ravimit ei saa vahele jätta</string>
     <string name="reminders_cannot_be_skipped">Meeldetuletusi ei saa vahele jätta</string>
@@ -294,6 +295,8 @@
     <string name="interval_start_condition">Välba alguse tingimus</string>
     <string name="tag_filter_active">Siltide filter on aktiivne. Ekspordi vaid valitud siltidega andmed.</string>
     <string name="show_taken_time_in_overview">Näita ülevaates võtmise aega</string>
+    <string name="show_reminded_time_in_overview">Näita ülevaates meeldetuletuse aega</string>
+    <string name="show_stock_changes_in_overview">Näita ülevaates laoseisu muutusi</string>
     <string name="remind_days_before_expiration">Meeldetuletuse päevi enne aegumist</string>
     <string name="successfully_created_reminder">Uue meeldetuletuse lisamine õnnestus</string>
     <string name="create_out_of_stock_reminder">Lisa varude lõppemise meeldetuletus</string>
@@ -301,4 +304,9 @@
     <string name="exact_reminders_warning_title">Täpsete meeldetuletuste kasutamine on keelatud</string>
     <string name="exact_reminders_warning_summary">Antud oludes käivitud meeldetuletud paar minutit peale määratud aega. Kui vajad täpseid meeldetuletusi (suurema akukasutusel arvelt), siis palun luba vastavad õigused süsteemi seadistustest.</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Liigu ülespoole</string>
+    <string name="battery_optimization_warning_title">Akukasutuse optimeerimine on lülitatud sisse</string>
+    <string name="battery_optimization_warning_summary">Kui sul peaks tekkima probleeme korrektsete ja õigeaegsete teavitustega, siis palun lülita teavituste seadistustest akukasutuse optimeerimine välja.</string>
+    <string name="expiration_settings">Aegumise seadistused</string>
+    <string name="weekly">Iga nädal</string>
+    <string name="monthly">Iga kuu</string>
 </resources>

@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.PowerManager
-import android.text.InputType
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
@@ -32,21 +31,16 @@ import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ThemeSetting
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.database.backup.BackupManager
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager.Companion.initialize
 import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
-import com.futsch1.medtimer.feature.reminders.api.notificationData.toReminderNotificationData
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
-import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.futsch1.medtimer.feature.ui.overview.OverviewFragment
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -64,10 +58,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var persistentDataDataSource: PersistentDataDataSource
 
     @Inject
-    lateinit var backupManagerFactory: BackupManager.Factory
+    lateinit var variableAmountHandler: VariableAmountHandler
 
     @Inject
-    lateinit var variableAmountHandler: VariableAmountHandler
+    lateinit var customSnoozeHandler: CustomSnoozeHandler
 
     @Inject
     lateinit var biometricsFactory: Biometrics.Factory
@@ -245,8 +239,6 @@ class MainActivity : AppCompatActivity() {
                 startService(Intent(applicationContext, ReminderSchedulerService::class.java))
             }
         }
-
-        backupManagerFactory.create(this, this, null, null, supportFragmentManager).autoBackup()
     }
 
     private suspend fun dispatchIntent(intent: Intent) {
@@ -257,26 +249,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
-                val reminderNotificationData = intent.extras!!.toReminderNotificationData()
-                if (reminderNotificationData.valid) {
-                    TextInputDialogBuilder(this)
-                        .title(com.futsch1.medtimer.core.ui.R.string.snooze_duration)
-                        .hint(com.futsch1.medtimer.core.ui.R.string.minutes_string)
-                        .initialText("")
-                        .inputType(InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_CLASS_NUMBER)
-                        .textSink { snoozeTime: String? ->
-                            snoozeTime?.toIntOrNull()?.toDuration(DurationUnit.MINUTES)
-                                ?.let { duration ->
-                                    applicationScope.launch {
-                                        commandBus.snooze(reminderNotificationData, duration)
-                                    }
-                                }
-                        }
-                        .cancelCallback {
-                            Log.d(LogTags.REMINDER, "Snooze dialog cancelled")
-                        }
-                        .show()
-                }
+                customSnoozeHandler.show(this, intent)
             }
         }
     }

@@ -291,6 +291,8 @@
     <string name="interval_start_condition">Interval startvoorwaarde</string>
     <string name="tag_filter_active">Tagfilter actief. Alleen gegevens met overeenkomende tags worden geëxporteerd.</string>
     <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
+    <string name="show_reminded_time_in_overview">Herinneringstijd in overzicht tonen</string>
+    <string name="show_stock_changes_in_overview">Voorraadwijzigingen in overzicht tonen</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
     <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
     <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>
@@ -310,6 +312,7 @@
     <string name="monthly">Maandelijks</string>
     <string name="automatic_backup">Automatische back-up</string>
     <string name="backup_successful_to">Automatische back-up geslaagd: %s</string>
+    <string name="automatic_backup_directory_required">Automatische back-ups vereisen toegang tot een map. Selecteer een map in het volgende dialoogvenster om door te gaan.</string>
     <string name="location_snooze">Locatiegebaseerd sluimeren</string>
     <string name="location_snooze_summary">Opnieuw melden bij thuiskomst na sluimeren</string>
     <string name="location_snooze_no_play_services">Locatiegebaseerd sluimeren vereist Google Play Services, die niet beschikbaar zijn op dit apparaat</string>

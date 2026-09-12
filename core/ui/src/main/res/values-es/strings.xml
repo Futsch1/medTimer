@@ -297,6 +297,8 @@
     <string name="interval_start_condition">Condición de inicio de intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas activo. Solo se exportarán los datos con etiquetas coincidentes.</string>
     <string name="show_taken_time_in_overview">Mostrar hora de toma en el resumen</string>
+    <string name="show_reminded_time_in_overview">Mostrar hora del recordatorio en el resumen</string>
+    <string name="show_stock_changes_in_overview">Mostrar cambios de stock en el resumen</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
     <string name="remind_days_before_expiration">Recordar días antes del vencimiento</string>
     <string name="medicine_stock_settings">Configuración de existencias de medicamentos</string>
@@ -316,6 +318,7 @@
     <string name="monthly">Mensualmente</string>
     <string name="automatic_backup">Copia de seguridad automática</string>
     <string name="backup_successful_to">Copia de seguridad automática con éxito: %s</string>
+    <string name="automatic_backup_directory_required">Las copias de seguridad automáticas necesitan acceso a una carpeta. Selecciona una carpeta en el siguiente diálogo para continuar.</string>
     <string name="location_snooze">Posponer según ubicación</string>
     <string name="location_snooze_summary">Volver a notificar al llegar a casa después de posponer</string>
     <string name="location_snooze_no_play_services">Posponer según ubicación requiere los servicios de Google Play, que no están disponibles en este dispositivo</string>

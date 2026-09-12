@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="show_reminded_time_in_overview">Sýna áminningartíma í yfirliti</string>
+    <string name="show_stock_changes_in_overview">Sýna birgðabreytingar í yfirliti</string>
     <string name="cycle_reminder">Endurteknar áminningar</string>
     <string name="cycle_start_date">Fyrsta umferð</string>
     <string name="day_of_month_limited">Takmarkað við nokkra daga mánaðar</string>
@@ -199,6 +201,7 @@
     <string name="monthly">Mánaðarlega</string>
     <string name="automatic_backup">Sjálfvirk öryggisafritun</string>
     <string name="backup_successful_to">Sjálfvirk öryggisafritun tókst: %s</string>
+    <string name="automatic_backup_directory_required">Sjálfvirk afritun krefst aðgangs að möppu. Veldu möppu í næsta glugga til að halda áfram.</string>
     <string name="location_snooze">Staðsetningarbundið snooze</string>
     <string name="location_snooze_summary">Tilkynna aftur við heimkomu eftir snooze</string>
     <string name="location_snooze_no_play_services">Staðsetningarbundið snooze krefst Google Play Services, sem er ekki tiltækt á þessum tæki</string>

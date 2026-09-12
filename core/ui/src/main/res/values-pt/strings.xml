@@ -297,6 +297,8 @@
     <string name="interval_start_condition">Condição de início do intervalo</string>
     <string name="tag_filter_active">Filtro de etiquetas ativo. Apenas os dados com etiquetas correspondentes serão exportados.</string>
     <string name="show_taken_time_in_overview">Mostrar hora da toma na visão geral</string>
+    <string name="show_reminded_time_in_overview">Mostrar hora do lembrete na visão geral</string>
+    <string name="show_stock_changes_in_overview">Mostrar alterações de stock na visão geral</string>
     <string name="expiration_settings">Configurações de vencimento</string>
     <string name="remind_days_before_expiration">Lembrar dias antes do vencimento</string>
     <string name="medicine_stock_settings">Configurações de estoque de medicamentos</string>
@@ -316,6 +318,7 @@
     <string name="monthly">Mensal</string>
     <string name="automatic_backup">Cópia de segurança automática</string>
     <string name="backup_successful_to">Cópia de segurança automática com sucesso: %s</string>
+    <string name="automatic_backup_directory_required">As cópias de segurança automáticas precisam de acesso a uma pasta. Selecione uma pasta na caixa de diálogo seguinte para continuar.</string>
     <string name="location_snooze">Soneca baseada em localização</string>
     <string name="location_snooze_summary">Notificar novamente ao chegar a casa após soneca</string>
     <string name="location_snooze_no_play_services">A soneca baseada em localização requer o Google Play Services, que não está disponível neste dispositivo</string>

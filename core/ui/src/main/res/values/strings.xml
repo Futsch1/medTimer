@@ -314,6 +314,8 @@
     <string name="interval_start_condition">Interval start condition</string>
     <string name="tag_filter_active">Tag filter active. Only data with matching tags will be exported.</string>
     <string name="show_taken_time_in_overview">Show taken time in overview</string>
+    <string name="show_reminded_time_in_overview">Show reminded time in overview</string>
+    <string name="show_stock_changes_in_overview">Show stock changes in overview</string>
     <string name="expiration_settings">Expiration settings</string>
     <string name="remind_days_before_expiration">Remind days before expiration</string>
     <string name="weekly">Weekly</string>
@@ -333,6 +335,7 @@
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
+    <string name="automatic_backup_directory_required">Automatic backups require access to a folder. Select a folder in the next dialog to continue.</string>
     <string name="exact_reminders_warning_title">Exact reminders are disabled</string>
     <string name="exact_reminders_warning_summary">Reminders might be raised a few minutes later than scheduled. If you need exact reminders (at the cost of slightly increased battery consumption), enable this in the notification settings.</string>
     <string name="medicine_settings">Medicine settings</string>

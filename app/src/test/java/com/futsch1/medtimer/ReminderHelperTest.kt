@@ -153,6 +153,17 @@ class ReminderHelperTest {
         resultReminder = formatter.formatReminderEvent(reminderEvent)
         assertEquals("  1:00 AM ➡ 1/2/70 1:00 AM\nTest (6)", resultReminder.toString())
 
+        `when`(mockPreferenceDataSource.preferences).thenReturn(
+            MutableStateFlow(
+                UserPreferences.default().copy(
+                    showRemindedTimeInOverview = false,
+                    showTakenTimeInOverview = true
+                )
+            )
+        )
+        resultReminder = formatter.formatReminderEvent(reminderEvent)
+        assertEquals("  1/2/70 1:00 AM\nTest (6)", resultReminder.toString())
+
         // Cleanup
         instantMock.close()
     }

@@ -297,6 +297,8 @@
     <string name="interval_start_condition">Condition de démarrage de l&amp;apos;intervalle</string>
     <string name="tag_filter_active">Filtre de balises actif. Seules les données comportant des balises correspondantes seront exportées.</string>
     <string name="show_taken_time_in_overview">Afficher l\'heure de prise dans l\'aperçu</string>
+    <string name="show_reminded_time_in_overview">Afficher l\'heure du rappel dans l\'aperçu</string>
+    <string name="show_stock_changes_in_overview">Afficher les changements de stock dans l\'aperçu</string>
     <string name="expiration_settings">Paramètres d\'expiration</string>
     <string name="remind_days_before_expiration">Rappel jours avant l\'expiration</string>
     <string name="medicine_stock_settings">Paramètres du stock de médicaments</string>
@@ -316,6 +318,7 @@
     <string name="monthly">Mensuel</string>
     <string name="automatic_backup">Sauvegarde automatique</string>
     <string name="backup_successful_to">Sauvegarde automatique réussie : %s</string>
+    <string name="automatic_backup_directory_required">Les sauvegardes automatiques nécessitent l’accès à un dossier. Sélectionnez un dossier dans la boîte de dialogue suivante pour continuer.</string>
     <string name="location_snooze">Répétition basée sur la localisation</string>
     <string name="location_snooze_summary">Notifier à nouveau en rentrant à la maison après avoir mis en veille</string>
     <string name="location_snooze_no_play_services">La répétition basée sur la localisation nécessite Google Play Services, qui n\'est pas disponible sur cet appareil</string>
