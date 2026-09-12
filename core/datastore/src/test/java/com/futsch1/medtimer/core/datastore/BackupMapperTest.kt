@@ -46,6 +46,8 @@ class BackupMapperTest {
             combineNotifications = true,
             useRelativeDateTime = true,
             showTakenTimeInOverview = false,
+            showRemindedTimeInOverview = true,
+            showStockChangesInOverview = false,
             systemLocale = true,
             theme = ThemeSetting.ALTERNATIVE,
             hideMedicineName = true,
@@ -80,6 +82,8 @@ class BackupMapperTest {
         assertEquals(true, backup.combineNotifications)
         assertEquals(true, backup.useRelativeDateTime)
         assertEquals(false, backup.showTakenTimeInOverview)
+        assertEquals(true, backup.showRemindedTimeInOverview)
+        assertEquals(false, backup.showStockChangesInOverview)
         assertEquals(true, backup.systemLocale)
         assertEquals("ALTERNATIVE", backup.theme)
         assertEquals(true, backup.hideMedicineName)
@@ -119,6 +123,8 @@ class BackupMapperTest {
         assertEquals(false, backup.combineNotifications)
         assertEquals(false, backup.useRelativeDateTime)
         assertEquals(true, backup.showTakenTimeInOverview)
+        assertEquals(true, backup.showRemindedTimeInOverview)
+        assertEquals(true, backup.showStockChangesInOverview)
         assertEquals(false, backup.systemLocale)
         assertEquals("DEFAULT", backup.theme)
         assertEquals(false, backup.hideMedicineName)
