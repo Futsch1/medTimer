@@ -15,8 +15,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileWriter
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStreamWriter
+import java.io.Writer
+import java.nio.charset.StandardCharsets
 
 class CSVMedicineExport @AssistedInject constructor(
     @Assisted private val medicines: List<Medicine>,
@@ -36,7 +39,7 @@ class CSVMedicineExport @AssistedInject constructor(
     public override suspend fun exportInternal(file: File) {
         try {
             withContext(ioDispatcher) {
-                FileWriter(file).use { csvFile ->
+                OutputStreamWriter(FileOutputStream(file), StandardCharsets.UTF_8).use { csvFile ->
                     val headerTexts = listOf(
                         context.getString(R.string.tab_medicine),
                         context.getString(R.string.dosage),
@@ -53,7 +56,7 @@ class CSVMedicineExport @AssistedInject constructor(
         }
     }
 
-    private suspend fun exportMedicine(csvFile: FileWriter, medicine: Medicine) {
+    private suspend fun exportMedicine(csvFile: Writer, medicine: Medicine) {
         val reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders)
         for (reminder in reminders) {
             if (reminder.isOutOfStockOrExpirationReminder) {
