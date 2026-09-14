@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +48,7 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.google.gson.Gson
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,11 +61,19 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 /** Below this width the week selector and filter row don't both fit on one line and stack instead. */
 private val NAVIGATION_ROW_MIN_WIDTH = 600.dp
 
-/** A day and the event data that was displayed for it when a page transition began. */
-private data class OverviewDayContent(
-    val day: LocalDate,
-    val events: ImmutableList<OverviewEvent>,
-)
+internal enum class OverviewDaySlideDirection {
+    LEFT,
+    RIGHT,
+}
+
+internal fun overviewDaySlideDirection(
+    initialDay: LocalDate,
+    targetDay: LocalDate,
+): OverviewDaySlideDirection? = when {
+    targetDay > initialDay -> OverviewDaySlideDirection.LEFT
+    targetDay < initialDay -> OverviewDaySlideDirection.RIGHT
+    else -> null
+}
 
 @Composable
 fun OverviewScreen(
@@ -112,7 +124,11 @@ fun OverviewScreen(
     topBarActions: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val dayContent = OverviewDayContent(state.day, state.events)
+    // Keep the event payload separate from the animation key. The selected day changes before
+    // its asynchronous event query completes, so the incoming composition must be able to update
+    // its events without starting another day transition.
+    val dayContents = remember { mutableStateMapOf<LocalDate, ImmutableList<OverviewEvent>>() }
+    dayContents[state.day] = state.events
     val rangeStart = remember { LocalDate.now().minusYears(3) }
     val rangeEnd = maxOf(state.simulatedThrough, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
 
@@ -188,37 +204,38 @@ fun OverviewScreen(
                 Modifier
                     .fillMaxSize()
                     .overviewDaySwipe(
-                        threshold = constraints.maxWidth.toFloat() / 3.0f,
+                        threshold = constraints.maxWidth.toFloat() / 4.0f,
                     ) { dayOffset ->
                         val target = state.day.plusDays(dayOffset.toLong())
                         if (target in rangeStart..rangeEnd) onDaySelected(target)
                     },
             ) {
                 AnimatedContent(
-                    targetState = dayContent,
+                    targetState = state.day,
                     transitionSpec = {
                         // Match the content movement to the swipe: later days enter from the right.
-                        val direction = if (targetState.day > initialState.day) {
-                            AnimatedContentTransitionScope.SlideDirection.Left
-                        } else {
-                            AnimatedContentTransitionScope.SlideDirection.Right
-                        }
-                        (
-                                slideIntoContainer(towards = direction) togetherWith
-                                        (
-                                                slideOutOfContainer(towards = direction) +
-                                                        ExitTransition.KeepUntilTransitionsFinished
-                                                )
-                                )
-                            .using(SizeTransform(clip = false))
-                            .apply { targetContentZIndex = 1f }
+                        overviewDaySlideDirection(initialState, targetState)?.let { slideDirection ->
+                            val direction = when (slideDirection) {
+                                OverviewDaySlideDirection.LEFT -> AnimatedContentTransitionScope.SlideDirection.Left
+                                OverviewDaySlideDirection.RIGHT -> AnimatedContentTransitionScope.SlideDirection.Right
+                            }
+                            (
+                                    slideIntoContainer(towards = direction, animationSpec = tween(500)) togetherWith
+                                            (
+                                                    slideOutOfContainer(towards = direction, animationSpec = tween(500)) +
+                                                            ExitTransition.KeepUntilTransitionsFinished
+                                                    )
+                                    )
+                                .using(SizeTransform(clip = false))
+                                .apply { targetContentZIndex = 1f }
+                        } ?: (EnterTransition.None togetherWith ExitTransition.None)
                     },
                     contentAlignment = Alignment.TopStart,
                     label = "overview_day_content",
                     modifier = Modifier.fillMaxSize(),
                 ) { content ->
                     OverviewEventList(
-                        events = content.events,
+                        events = dayContents[content] ?: persistentListOf(),
                         selection = selection,
                         onEventClick = onEventClick,
                         onEnterSelectionMode = onEnterSelectionMode,
