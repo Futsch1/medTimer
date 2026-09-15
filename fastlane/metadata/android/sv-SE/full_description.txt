@@ -1,36 +1,36 @@
-Med reminders and history with full offline privacy
+Medicinpåminnelser och -historik med integritet, helt offline
 
-Stay In Control of Your Medications with MedTimer
+Behåll kontrollen över dina mediciner med MedTimer
 
-MedTimer is an open-source medication reminder app designed to help you manage your medications and pills effectively and with full control of your sensitive data.
+MedTimer är en app för medicinpåminnelser med öppen källkod och designad för att hjälpa dig att hantera dina mediciner och tabletter effektivt och med full kontroll över din känsliga data.
 
-Flexible & Personalized Reminders:
+Flexibla & personanpassade påminnelser:
 
-- Manage unlimited medications with customizable reminders per medication (including simple defaults
- for daily reminders).
-- Create flexible reminders with breaks and specific days (e.g. for birth control pills).
-- Weekend mode: Delay reminders to a defined time on chosen days.
-- Snooze notifications for later reminders or be reminded repeatedly.
-- Location-based snooze: be re-notified when arriving home after snoozing.
-- Add extra doses on the fly.
-- Create interval based reminders or reminders following each other in intervals.
+- Hantera ett obegränsat antal mediciner med anpassningsbara påminnelser per medicin (inklusive enkla standardinställningar för dagliga påminnelser).
+- Skapa flexibla påminnelser med pauser och specifika dagar (t.ex. för preventivmedel).
+- Helgläge: Fördröj påminnelser till en specifik tid på valda dagar.
+- Snooza aviseringar för att få en ny påminnelse senare eller få återkommande påminnelser.
+- Platsbaserad snooze: Få en ny avisering när du kommer hem efter att ha snoozat en avisering.
+- Lägg till extra doser i farten.
+- Skapa intervallbaserade påminnelser, påminnelser som följer varandra i intervall eller intervallpåminnelser som begränsas av en start- och en sluttid per dag.
+- Använd påminnelser av alarmtyp för att säkerställa aviseringar även när enheten är inställd på tyst läge.
 
-Simple & Secure Data Management:
+Enkel & säker datahantering:
 
-- Confirm or dismiss reminders to record medication adherence accurately.
-- Get an overview of past doses in a chart and a tabular view.
-- Export your medication history as a CSV file for easy record-keeping or sharing with healthcare professionals.
-- Backup and restore your medication list as JSON file.
-- Medication stock tracking and out of stock reminders.
-- Tag and filter your medication.
+- Bokför noggrant i vilken grad du tar din medicin som det är tänkt, genom att bekräfta eller avfärda påminnelser.
+- Få en överblick över tidigare doser i ett diagram och i en tabellvy.
+- Exportera din läkemedelshistorik som en CSV-fil för enkel bokföring eller för att dela med hälsovårdspersonal.
+- Säkerhetskopiera och återställ din medicinlista till/från en JSON-fil.
+- Håll koll på hur mycket medicin du har på lager och få påminnelser när något är slut.
+- Tagga och filtrera dina mediciner.
 
-Privacy & Offline Accessibility:
+Integritet & tillgänglighet offline:
 
-- All data is stored securely on your device, ensuring complete privacy and offline accessibility.
-- No internet connection required – your medication reminders are always available.
+- All data är i säkert förvar på din enhet, vilket garanterar fullständig integritet och tillgänglighet offline.
+- Det krävs ingen internetanslutning – dina medicinpåminnelser finns alltid tillgängliga.
 
-MedTimer is a free app without adds.
+MedTimer är en gratisapp utan reklam.
 
-See the project page on GitHub: https://github.com/Futsch1/medTimer
+Se projektets sida på GitHub: https://github.com/Futsch1/medTimer
 
-Feature graphic was created with https://hotpot.ai
+Funktionsillustrationerna skapades med hjälp av https://hotpot.ai
