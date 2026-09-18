@@ -309,4 +309,16 @@
     <string name="expiration_settings">Aegumise seadistused</string>
     <string name="weekly">Iga nädal</string>
     <string name="monthly">Iga kuu</string>
+    <string name="once_below_threshold">Kui üks kord jääb alla lävendi</string>
+    <string name="always_below_threshold">Alati, kui jääb alla lävendi</string>
+    <string name="daily_below_threshold">Iga päev, kui jääb alla lävendi</string>
+    <string name="create_reminder_dosage_hint">Annus uue meeldetuletuse jaoks</string>
+    <string name="notification_settings_high">Teavituste seadistuste kõrge olulisus/prioriteet</string>
+    <string name="notification_settings_out_of_stock">Teavituste seadistused, kui varud on otsas</string>
+    <string name="repeat_reminders_summary">Meeldetuletus kordub automaatselt seni, kuni ta märgitakse väetuks või vahelejäetuks</string>
+    <string name="interval_start_reminded">Välp algab meeldetuletusega</string>
+    <string name="interval_start_processed">Välp algab võtmisega või vahelejätmisega</string>
+    <string name="variable_amount">Sisesta annus koos võetuks märkimisega</string>
+    <string name="app_authentication">Eelda rakenduse avamisel autentimist</string>
+    <string name="login">Logi MedTimeri rakendusse kasutades biomeetrilist tuvastust</string>
 </resources>
