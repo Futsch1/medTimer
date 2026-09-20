@@ -7,5 +7,5 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(name = "Light", showBackground = true)
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(name = "Min font scale", showBackground = true, fontScale = 0.85f)
-@Preview(name = "Narrow", widthDp = 200)
+@Preview(name = "Narrow", widthDp = 300)
 annotation class MedTimerPreview()
