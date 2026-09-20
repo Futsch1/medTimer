@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.overscroll
@@ -127,7 +127,7 @@ fun OverviewEventList(
             .drawBehind { drawRailPills(railAnchors.values, listTop, railColor) }
             .testTag(OverviewTestTags.EVENT_LIST),
     ) {
-        items(events, key = { it.id }) { event ->
+        itemsIndexed(events, key = { _, event -> event.id }) { index, event ->
             DisposableEffect(event.id) {
                 onDispose { railAnchors.remove(event.id) }
             }
@@ -143,7 +143,9 @@ fun OverviewEventList(
                 onToggleSelection = { selection.toggleSelection(event) },
                 onEnterSelectionMode = { onEnterSelectionMode(event) },
                 onAction = { button -> onAction(button, event) },
-                modifier = Modifier.animateItem(),
+                modifier = Modifier
+                    .testTag(OverviewTestTags.event(index))
+                    .animateItem(),
                 onRailAnchor = { railAnchors[event.id] = it },
             )
         }

@@ -43,31 +43,31 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     fun clickEventState(index: Int) {
         scrollToEvent(index)
-        stateButtonAtScrolledEvent().performClick()
+        stateButtonAtEvent(index).performClick()
     }
 
     fun clickEvent(index: Int) {
         scrollToEvent(index)
-        eventCardAtScrolledEvent().performClick()
+        eventCardAtEvent(index).performClick()
     }
 
     fun longClickEvent(index: Int) {
         scrollToEvent(index)
-        eventCardAtScrolledEvent().performTouchInput { longClick() }
+        eventCardAtEvent(index).performTouchInput { longClick() }
     }
 
     fun assertEventState(index: Int, @StringRes stateRes: Int) {
         scrollToEvent(index)
 
         val expected = ui.getString(stateRes)
-        list.await { stateDescription(stateButtonAtScrolledEvent()) == expected }
-        stateButtonAtScrolledEvent().assertContentDescriptionEquals(expected)
+        list.await { stateDescription(stateButtonAtEvent(index)) == expected }
+        stateButtonAtEvent(index).assertContentDescriptionEquals(expected)
     }
 
     fun assertEventTextContains(index: Int, substring: String) {
         list.settle()
         scrollToEvent(index)
-        list.await { eventTexts().firstOrNull()?.contains(substring) == true }
+        list.await { eventTextsAtEvent(index).firstOrNull()?.contains(substring) == true }
     }
 
     fun assertEventContains(substring: String) {
@@ -140,10 +140,10 @@ class OverviewRobot(private val ui: ComposeUi) {
         screen.click(day)
     }
 
-    /** Scrolls the requested lazy-list item into the first composed position. */
+    /** Scrolls the requested lazy-list item into composition. */
     private fun scrollToEvent(index: Int) {
         check(list.scrollToIndex(index)) { "Could not scroll Overview event list to index $index" }
-        list.awaitExists(EVENT_STATE_BUTTON)
+        eventScope(index).awaitExists(EVENT_STATE_BUTTON)
     }
 
     private fun actOnEventContaining(substring: String, @StringRes actionRes: Int) {
@@ -164,10 +164,11 @@ class OverviewRobot(private val ui: ComposeUi) {
     private fun currentIndexOf(substring: String): Int? =
         eventTexts().indexOfFirst { it.contains(substring) }.takeIf { it >= 0 }
 
-    /** The requested item is first after [scrollToEvent], even when preceding rows are virtualized. */
-    private fun stateButtonAtScrolledEvent() = list.nodeAt(EVENT_STATE_BUTTON, 0)
+    private fun eventScope(index: Int) = list.scope(OverviewTestTags.event(index))
 
-    private fun eventCardAtScrolledEvent() = list.nodeAt(EVENT_CARD, 0)
+    private fun stateButtonAtEvent(index: Int) = eventScope(index).node(EVENT_STATE_BUTTON)
+
+    private fun eventCardAtEvent(index: Int) = eventScope(index).node(EVENT_CARD)
 
     /** Indices are visual, matching the event texts; the semantics tree is not necessarily in that order. */
     private fun stateButton(index: Int) = list.nodeAt(EVENT_STATE_BUTTON, index)
@@ -181,6 +182,8 @@ class OverviewRobot(private val ui: ComposeUi) {
     private fun stateDescription(index: Int): String? = stateDescription(stateButton(index))
 
     private fun eventTexts(): List<String> = list.textsUnder(EVENT_TEXT)
+
+    private fun eventTextsAtEvent(index: Int): List<String> = eventScope(index).textsUnder(EVENT_TEXT)
 
     private fun allEventTexts(): List<String> = list.allTexts(EVENT_CARD, EVENT_TEXT)
 
