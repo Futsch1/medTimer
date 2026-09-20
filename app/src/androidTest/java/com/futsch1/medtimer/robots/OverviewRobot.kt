@@ -3,6 +3,7 @@ package com.futsch1.medtimer.robots
 import androidx.annotation.StringRes
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasContentDescription
@@ -42,31 +43,31 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     fun clickEventState(index: Int) {
         scrollToEvent(index)
-        stateButton(index).performClick()
+        stateButtonAtScrolledEvent().performClick()
     }
 
     fun clickEvent(index: Int) {
         scrollToEvent(index)
-        eventCard(index).performClick()
+        eventCardAtScrolledEvent().performClick()
     }
 
     fun longClickEvent(index: Int) {
         scrollToEvent(index)
-        eventCard(index).performTouchInput { longClick() }
+        eventCardAtScrolledEvent().performTouchInput { longClick() }
     }
 
     fun assertEventState(index: Int, @StringRes stateRes: Int) {
         scrollToEvent(index)
 
         val expected = ui.getString(stateRes)
-        list.await { stateDescription(index) == expected }
-        stateButton(index).assertContentDescriptionEquals(expected)
+        list.await { stateDescription(stateButtonAtScrolledEvent()) == expected }
+        stateButtonAtScrolledEvent().assertContentDescriptionEquals(expected)
     }
 
     fun assertEventTextContains(index: Int, substring: String) {
         list.settle()
         scrollToEvent(index)
-        list.await { eventTexts().getOrNull(index)?.contains(substring) == true }
+        list.await { eventTexts().firstOrNull()?.contains(substring) == true }
     }
 
     fun assertEventContains(substring: String) {
@@ -139,10 +140,10 @@ class OverviewRobot(private val ui: ComposeUi) {
         screen.click(day)
     }
 
-    /** Indices count composed rows, so the list has to stay anchored at its first item to keep them absolute. */
+    /** Scrolls the requested lazy-list item into the first composed position. */
     private fun scrollToEvent(index: Int) {
-        list.scrollToIndex(0)
-        list.awaitAtLeast(EVENT_STATE_BUTTON, index + 1)
+        check(list.scrollToIndex(index)) { "Could not scroll Overview event list to index $index" }
+        list.awaitExists(EVENT_STATE_BUTTON)
     }
 
     private fun actOnEventContaining(substring: String, @StringRes actionRes: Int) {
@@ -163,16 +164,21 @@ class OverviewRobot(private val ui: ComposeUi) {
     private fun currentIndexOf(substring: String): Int? =
         eventTexts().indexOfFirst { it.contains(substring) }.takeIf { it >= 0 }
 
+    /** The requested item is first after [scrollToEvent], even when preceding rows are virtualized. */
+    private fun stateButtonAtScrolledEvent() = list.nodeAt(EVENT_STATE_BUTTON, 0)
+
+    private fun eventCardAtScrolledEvent() = list.nodeAt(EVENT_CARD, 0)
+
     /** Indices are visual, matching the event texts; the semantics tree is not necessarily in that order. */
     private fun stateButton(index: Int) = list.nodeAt(EVENT_STATE_BUTTON, index)
 
-    private fun stateDescription(index: Int): String? =
+    private fun stateDescription(node: SemanticsNodeInteraction): String? =
         runCatching {
-            stateButton(index).fetchSemanticsNode().config.getOrNull(SemanticsProperties.ContentDescription)
+            node.fetchSemanticsNode().config.getOrNull(SemanticsProperties.ContentDescription)
                 ?.firstOrNull()
         }.getOrNull()
 
-    private fun eventCard(index: Int) = list.nodeAt(EVENT_CARD, index)
+    private fun stateDescription(index: Int): String? = stateDescription(stateButton(index))
 
     private fun eventTexts(): List<String> = list.textsUnder(EVENT_TEXT)
 
