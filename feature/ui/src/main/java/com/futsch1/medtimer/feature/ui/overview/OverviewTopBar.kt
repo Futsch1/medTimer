@@ -31,6 +31,8 @@ object OverviewTestTags {
     const val EVENT_STATE_BUTTON = "overview_event_state"
     const val EVENT_TEXT = "overview_event_text"
 
+    fun event(index: Int) = "overview_event_$index"
+
     fun day(date: java.time.LocalDate) = "overview_day_$date"
 
     fun filter(filter: com.futsch1.medtimer.core.domain.model.OverviewFilter) = "overview_filter_${filter.name}"
@@ -42,6 +44,7 @@ object OverviewTestTags {
  * rather than swapped outright so the surface colour change reads as a mode change.
  */
 @Composable
+@Suppress("kotlin:S107")
 fun OverviewTopBar(
     title: String,
     isInSelectionMode: Boolean,
