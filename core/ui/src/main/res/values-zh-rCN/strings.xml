@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">连续间隔从 %1$s</string>
     <string name="continuous_interval_reminder">连续间隔提醒</string>
     <string name="continuous_interval_reminder_help">从指定时刻开始，根据时间间隔（例如，每 6 小时）启动提醒。此模式是连续的，忽略一天中的时间限制，直到手动停用。</string>
@@ -332,4 +332,7 @@
     <string name="next_week">下一周</string>
     <string name="stock_after_simulation_end">在 %s 之后</string>
     <string name="move_medicine">移动药物</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">向上导航</string>
+    <string name="close" tools:ignore="MissingTranslation">关闭</string>
+    <string name="more_options" tools:ignore="MissingTranslation">更多选项</string>
 </resources>
