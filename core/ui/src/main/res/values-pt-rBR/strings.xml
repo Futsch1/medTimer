@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
@@ -7,7 +7,7 @@
     <string name="cycle_start_date">Início do primeiro ciclo</string>
     <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
     <string name="day_of_month_limited">Limitado a alguns dias do mês</string>
-    <string name="every_day">Diariamente</string>
+    <string name="every_day">Todos os dias</string>
     <string name="every_interval">Cada %s</string>
     <string name="expiration_date">Data de vencimento</string>
     <string name="expiration_date_reminder_help">Lembra quando a data de validade do medicamento é atingida ou um tempo configurável antes dessa data.</string>
@@ -344,4 +344,7 @@
     <string name="next_week">Próxima semana</string>
     <string name="stock_after_simulation_end">Após %s</string>
     <string name="move_medicine">Mover medicamento</string>
+    <string name="navigate_up" tools:ignore="MissingTranslation">Navegar para cima</string>
+    <string name="close" tools:ignore="MissingTranslation">Fechar</string>
+    <string name="more_options" tools:ignore="MissingTranslation">Mais opções</string>
 </resources>
