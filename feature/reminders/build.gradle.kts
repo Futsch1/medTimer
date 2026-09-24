@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.preference.ktx)
-    implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

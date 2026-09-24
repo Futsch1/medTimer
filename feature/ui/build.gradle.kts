@@ -85,8 +85,6 @@ dependencies {
     implementation(libs.calendar)
     implementation(libs.icondialog)
     implementation(libs.flexbox)
-    implementation(libs.preferencex)
-    implementation(libs.preferencex.ringtone)
     implementation(libs.espresso.idling.resource)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

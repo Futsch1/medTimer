@@ -123,7 +123,6 @@ MedTimer uses the following great open source libraries and dependencies:
 - [TableView](https://github.com/evrencoskun/TableView)
 - [androidplot](https://github.com/halfhp/androidplot)
 - [SimplyPDF](https://github.com/wwdablu/SimplyPDF)
-- [AndroidX Preference eXtended](https://github.com/takisoft/preferencex-android)
 - [Mockito](https://github.com/mockito/mockito)
 - [Robolectric](https://github.com/robolectric/robolectric)
 - [Calendar](https://github.com/kizitonwose/Calendar)

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -10,12 +9,11 @@
         android:defaultValue="false"
         android:key="no_vibration_when_silent"
         android:title="@string/no_vibration_when_silent" />
-    <com.takisoft.preferencex.RingtonePreference
+    <com.futsch1.medtimer.feature.ui.preferences.RingtonePreference
         android:defaultValue="content://settings/system/alarm_alert"
         android:key="alarm_ringtone"
         android:ringtoneType="alarm"
         android:showDefault="true"
-        android:title="@string/alarm_ringtone"
-        app:useSimpleSummaryProvider="true" />
+        android:title="@string/alarm_ringtone" />
 
 </androidx.preference.PreferenceScreen>
