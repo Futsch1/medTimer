@@ -2,7 +2,7 @@
 # Plugins
 android-gradle-plugin = "9.4.1"
 hilt = "2.60.1"
-navigation-safe-args = "2.10.0"
+navigation-safe-args = "2.10.1"
 hilt-navigation-compose = "1.4.0"
 room-plugin = "2.8.4"
 triplet-play = "4.1.1"
