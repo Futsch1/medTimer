@@ -81,11 +81,13 @@ class OverviewViewModel @AssistedInject constructor(
         val tick: Long
     )
 
-    private val _state = MutableOverviewScreenState()
-    val state: OverviewScreenState get() = _state
+    val state: OverviewScreenState
+        field = MutableOverviewScreenState()
 
     /** Selection state for the multi-select contextual bar. */
     val selection = SelectionListController<OverviewEvent> { it.id }
+
+    var initializedDay: LocalDate = LocalDate.now()
 
     private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
 
@@ -93,7 +95,7 @@ class OverviewViewModel @AssistedInject constructor(
     private val queryStart = MutableStateFlow(Instant.now().minus(Duration.of(6, ChronoUnit.DAYS)))
 
     fun selectDay(value: LocalDate) {
-        _state.day = value
+        state.day = value
         filterState.update { it.copy(day = value) }
     }
 
@@ -146,9 +148,9 @@ class OverviewViewModel @AssistedInject constructor(
 
     init {
         selection.bind(viewModelScope, overviewEvents)
-        overviewEvents.onEach { _state.events = it.toPersistentList() }.launchIn(viewModelScope)
-        simulatedRemindersRepository.simulatedThrough.onEach { _state.simulatedThrough = it }.launchIn(viewModelScope)
-        preferencesDataSource.preferences.onEach { _state.combineNotifications = it.combineNotifications }
+        overviewEvents.onEach { state.events = it.toPersistentList() }.launchIn(viewModelScope)
+        simulatedRemindersRepository.simulatedThrough.onEach { state.simulatedThrough = it }.launchIn(viewModelScope)
+        preferencesDataSource.preferences.onEach { state.combineNotifications = it.combineNotifications }
             .launchIn(viewModelScope)
         combine(preferencesDataSource.preferences, persistentDataDataSource.data) { _, _ -> }
             .onEach { refreshWarnings() }
@@ -198,12 +200,12 @@ class OverviewViewModel @AssistedInject constructor(
 
 
     fun toggleFilter(f: OverviewFilter) {
-        setFilters(if (f in _state.activeFilters) _state.activeFilters - f else _state.activeFilters + f)
-        persistentDataDataSource.setCheckedFilters(_state.activeFilters)
+        setFilters(if (f in state.activeFilters) state.activeFilters - f else state.activeFilters + f)
+        persistentDataDataSource.setCheckedFilters(state.activeFilters)
     }
 
     fun setFilters(filters: Set<OverviewFilter>) {
-        _state.activeFilters = filters.toPersistentSet()
+        state.activeFilters = filters.toPersistentSet()
         filterState.update { it.copy(activeFilters = filters) }
     }
 
@@ -214,12 +216,12 @@ class OverviewViewModel @AssistedInject constructor(
 
     fun refreshWarnings() {
         val persistentData = persistentDataDataSource.data.value
-        _state.warnings.showBatteryOptimizationWarning = showBatteryOptimizationWarning(
+        state.warnings.showBatteryOptimizationWarning = showBatteryOptimizationWarning(
             warningsSuppressed = isDebugBuild,
             isIgnoringBatteryOptimizations = powerManager.isIgnoringBatteryOptimizations(context.packageName),
             batteryWarningShown = persistentData.batteryWarningShown,
         )
-        _state.warnings.showExactRemindersWarning = showExactRemindersWarning(
+        state.warnings.showExactRemindersWarning = showExactRemindersWarning(
             warningsSuppressed = isDebugBuild,
             exactReminders = preferencesDataSource.preferences.value.exactReminders,
             exactRemindersWarningShown = persistentData.exactRemindersWarningShown,

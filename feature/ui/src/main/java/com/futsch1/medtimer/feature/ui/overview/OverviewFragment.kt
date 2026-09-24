@@ -66,7 +66,6 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
-        overviewViewModel.selectDay(LocalDate.now())
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             MedTimerTheme {
@@ -93,6 +92,10 @@ class OverviewFragment : Fragment() {
         super.onResume()
         // The battery exemption may have been granted in system settings while we were away.
         overviewViewModel.refreshWarnings()
+        if (overviewViewModel.initializedDay != LocalDate.now()) {
+            jumpToToday()
+            overviewViewModel.initializedDay = LocalDate.now()
+        }
     }
 
     fun jumpToToday() {
