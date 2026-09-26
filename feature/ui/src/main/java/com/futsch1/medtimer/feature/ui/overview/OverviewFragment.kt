@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -21,6 +23,8 @@ import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
+import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseDialog
+import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
@@ -32,9 +36,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OverviewFragment : Fragment() {
-    @Inject
-    lateinit var manualDoseFactory: ManualDose.Factory
-
     @Inject
     lateinit var actionsVisitor: ActionsVisitor
 
@@ -56,6 +57,8 @@ class OverviewFragment : Fragment() {
         }
     )
 
+    private val manualDoseViewModel: ManualDoseViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appOptionsActions = appOptionsActionsFactory.create(this)
@@ -68,12 +71,14 @@ class OverviewFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
+            val showManualDoseDialog = rememberSaveable { mutableStateOf(false) }
+
             MedTimerTheme {
                 OverviewScreen(
                     viewModel = overviewViewModel,
                     onEventClick = ::onEventClick,
                     onAction = ::onAction,
-                    onLogManualDose = ::onLogManualDose,
+                    onLogManualDose = { showManualDoseDialog.value = true },
                     topBarActions = {
                         AppOptionsMenuHost(
                             fragment = this@OverviewFragment,
@@ -84,6 +89,27 @@ class OverviewFragment : Fragment() {
                         )
                     },
                 )
+
+                if (showManualDoseDialog.value) {
+                    ManualDoseDialog(
+                        viewModel = manualDoseViewModel,
+                        onSelectMedicineEntry = {
+                            manualDoseViewModel.selectMedicineEntry(it)
+                        },
+                        onSelectAmount = {
+                            manualDoseViewModel.selectAmount(it)
+                        },
+                        onLogManualDose = {
+                            manualDoseViewModel.selectTimeAndLog(it)
+                        },
+                        onStepBack = {
+                            manualDoseViewModel.goOneStepBack()
+                        },
+                        onDismissDialog = {
+                            showManualDoseDialog.value = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -132,17 +158,6 @@ class OverviewFragment : Fragment() {
             actionsVisitor.startVisit(button).use {
                 actions.buttonClicked(actionsVisitor)
             }
-        }
-    }
-
-    private fun onLogManualDose() {
-        lifecycleScope.launch {
-            manualDoseFactory.create(
-                requireContext(),
-                overviewViewModel.medicines.value,
-                requireActivity(),
-                overviewViewModel.state.day
-            ).logManualDose()
         }
     }
 }

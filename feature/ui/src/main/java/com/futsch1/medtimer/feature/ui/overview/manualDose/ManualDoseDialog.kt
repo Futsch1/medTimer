@@ -43,12 +43,13 @@ fun ManualDoseDialog(
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (Instant) -> Unit,
-    onStepBack: () -> Unit
+    onStepBack: () -> Unit,
+    onDismissDialog: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle(initialValue = ManualDoseState())
 
     Dialog(
-        onDismissRequest = {},
+        onDismissRequest = onDismissDialog,
         DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
         ManualDoseDialogContent(
@@ -56,7 +57,8 @@ fun ManualDoseDialog(
             onSelectMedicineEntry,
             onSelectAmount,
             onLogManualDose,
-            onStepBack
+            onStepBack,
+            onDismissDialog
         )
     }
 }
@@ -67,7 +69,8 @@ fun ManualDoseDialogContent(
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (Instant) -> Unit,
-    onStepBack: () -> Unit
+    onStepBack: () -> Unit,
+    onDismissDialog: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -108,6 +111,7 @@ fun ManualDoseDialogContent(
                             val remindedInstant: Instant =
                                 TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now())
                             onLogManualDose(remindedInstant)
+                            onDismissDialog()
                         }
                     }) {
                         Text(stringResource(R.string.enter_time))
@@ -234,7 +238,8 @@ fun ManualDosePreviewMedicine() {
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
                 onLogManualDose = {},
-                onStepBack = {}
+                onStepBack = {},
+                onDismissDialog = {}
             )
         }
     }
@@ -251,7 +256,8 @@ fun ManualDosePreviewAmount() {
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
                 onLogManualDose = {},
-                onStepBack = {}
+                onStepBack = {},
+                onDismissDialog = {}
             )
         }
     }
@@ -268,7 +274,8 @@ fun ManualDosePreviewTime() {
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
                 onLogManualDose = {},
-                onStepBack = {}
+                onStepBack = {},
+                onDismissDialog = {}
             )
         }
     }

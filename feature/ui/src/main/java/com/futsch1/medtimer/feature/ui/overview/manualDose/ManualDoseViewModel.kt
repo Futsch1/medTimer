@@ -39,7 +39,7 @@ class ManualDoseViewModel @Inject constructor(
     private val selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
         MutableStateFlow(ManualDoseMedicineEntry("", null))
 
-    fun selectManualDoseMedicine(manualDoseMedicineEntry: ManualDoseMedicineEntry) {
+    fun selectMedicineEntry(manualDoseMedicineEntry: ManualDoseMedicineEntry) {
         selectedManualDoseEntry.value = manualDoseMedicineEntry
         step.value = ManualDoseStep.AMOUNT
     }
