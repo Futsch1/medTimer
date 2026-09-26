@@ -29,7 +29,7 @@ class ManualDoseViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val commandBus: ReminderCommandBus,
+    private val commandBus: ReminderCommandBus
 ) : ViewModel() {
     private val medicineList: Flow<List<Medicine>> = medicineRepository.getAllFlow()
 
@@ -41,6 +41,7 @@ class ManualDoseViewModel @Inject constructor(
 
     fun selectManualDoseMedicine(manualDoseMedicineEntry: ManualDoseMedicineEntry) {
         selectedManualDoseEntry.value = manualDoseMedicineEntry
+        step.value = ManualDoseStep.AMOUNT
     }
 
     private val _reminderList: Flow<List<Reminder>> = selectedManualDoseEntry.map {
@@ -65,24 +66,45 @@ class ManualDoseViewModel @Inject constructor(
         }
     }
 
+    fun selectAmount(amount: String) {
+        selectedManualDoseAmount.value = amount
+        step.value = ManualDoseStep.TIME
+    }
+
     private val selectedManualDoseAmount: MutableStateFlow<String> = MutableStateFlow("")
+
+    fun goOneStepBack() {
+        when (step.value) {
+            ManualDoseStep.MEDICINE -> {
+                // Nothing to do
+            }
+
+            ManualDoseStep.AMOUNT -> {
+                step.value = ManualDoseStep.MEDICINE
+            }
+
+            ManualDoseStep.TIME -> {
+                step.value = ManualDoseStep.AMOUNT
+            }
+        }
+    }
+
+    private val step: MutableStateFlow<ManualDoseStep> = MutableStateFlow(ManualDoseStep.MEDICINE)
 
     val state: Flow<ManualDoseState> = combine(
         manualDoseMedicines,
         manualDoseAmounts,
         selectedManualDoseEntry,
-        selectedManualDoseAmount
-    ) { medicines, amounts, selectedEntry, selectedManualDoseAmount ->
+        selectedManualDoseAmount,
+        step
+    ) { medicines, amounts, selectedEntry, selectedManualDoseAmount, step ->
         ManualDoseState(
             medicines.toImmutableList(),
             amounts.toImmutableList(),
             selectedEntry,
-            selectedManualDoseAmount
+            selectedManualDoseAmount,
+            step
         )
-    }
-
-    fun selectAmount(amount: String) {
-        selectedManualDoseAmount.value = amount
     }
 
     fun selectTimeAndLog(doseInstant: Instant) {
