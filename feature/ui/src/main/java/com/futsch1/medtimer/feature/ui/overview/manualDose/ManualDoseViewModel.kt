@@ -12,6 +12,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -35,14 +36,14 @@ class ManualDoseViewModel @Inject constructor(
     val manualDoseMedicines: Flow<List<ManualDoseMedicineEntry>> =
         medicineList.map { medicines -> medicines.map { ManualDoseMedicineEntry(it.name, it) } }
 
-    private val _selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
+    private val selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
         MutableStateFlow(ManualDoseMedicineEntry("", null))
 
     fun selectManualDoseMedicine(manualDoseMedicineEntry: ManualDoseMedicineEntry) {
-        _selectedManualDoseEntry.value = manualDoseMedicineEntry
+        selectedManualDoseEntry.value = manualDoseMedicineEntry
     }
 
-    private val _reminderList: Flow<List<Reminder>> = _selectedManualDoseEntry.map {
+    private val _reminderList: Flow<List<Reminder>> = selectedManualDoseEntry.map {
         val medicine = it.medicine
         if (medicine == null) {
             emptyList()
@@ -54,7 +55,7 @@ class ManualDoseViewModel @Inject constructor(
     val manualDoseAmounts: Flow<List<String>> = combine(
         _reminderList,
         persistentDataDataSource.data,
-        _selectedManualDoseEntry
+        selectedManualDoseEntry
     ) { reminders, data, manualDoseEntry ->
         val medicine = manualDoseEntry.medicine
         if (medicine == null) {
@@ -64,15 +65,29 @@ class ManualDoseViewModel @Inject constructor(
         }
     }
 
-    private var selectedManualDoseAmount: String = ""
+    private val selectedManualDoseAmount: MutableStateFlow<String> = MutableStateFlow("")
+
+    val state: Flow<ManualDoseState> = combine(
+        manualDoseMedicines,
+        manualDoseAmounts,
+        selectedManualDoseEntry,
+        selectedManualDoseAmount
+    ) { medicines, amounts, selectedEntry, selectedManualDoseAmount ->
+        ManualDoseState(
+            medicines.toImmutableList(),
+            amounts.toImmutableList(),
+            selectedEntry,
+            selectedManualDoseAmount
+        )
+    }
 
     fun selectAmount(amount: String) {
-        selectedManualDoseAmount = amount
+        selectedManualDoseAmount.value = amount
     }
 
     fun selectTimeAndLog(doseInstant: Instant) {
-        val selectedEntry = _selectedManualDoseEntry.value
-        val amount = selectedManualDoseAmount
+        val selectedEntry = selectedManualDoseEntry.value
+        val amount = selectedManualDoseAmount.value
 
         var reminderEvent = ReminderEvent.default().copy(
             reminderId = -1,
