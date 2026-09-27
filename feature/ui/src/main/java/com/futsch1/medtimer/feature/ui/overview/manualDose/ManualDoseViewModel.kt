@@ -137,7 +137,7 @@ class ManualDoseViewModel @Inject constructor(
 
             selectedEntry.medicine?.let {
                 val amount = MedicineHelper.parseAmount(reminderEvent.amount)
-                if (amount != null) {
+                if (amount != null && it.isStockManagementActive()) {
                     commandBus.processStockHandling(amount, it.id, doseInstant.epochSecond)
                         ?.let { stockAfter ->
                             reminderEventRepository.update(
