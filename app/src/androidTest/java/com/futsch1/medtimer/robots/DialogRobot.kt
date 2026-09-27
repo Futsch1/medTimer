@@ -2,14 +2,13 @@ package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.EspressoException
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.futsch1.medtimer.robots.DialogRobot.Companion.DIALOG_TIMEOUT
 import com.futsch1.medtimer.utilities.awaitView
 import com.futsch1.medtimer.utilities.pollUntil
@@ -29,10 +28,9 @@ class DialogRobot(private val ui: ComposeUi) {
         }
     }
 
-    /** Leaves the dialog without accepting it. */
-    fun dismiss() = pressBack()
-
-    fun enterText(text: String) = writeTo(android.R.id.input, text)
+    fun enterText(text: String) = onView(ViewMatchers.withId(android.R.id.input))
+        .inRoot(RootMatchers.isDialog())
+        .perform(replaceText(text))
 
     fun enterTextAndConfirm(text: String) {
         enterText(text)
@@ -50,10 +48,6 @@ class DialogRobot(private val ui: ComposeUi) {
             inRoot = RootMatchers.isDialog()
         )
     }
-
-    fun assertInputContains(text: String) =
-        onView(ViewMatchers.withId(android.R.id.input))
-            .check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString(text))))
 
     /** Asserts text inside the dialog window, rather than anywhere in the app. */
     fun assertContains(text: String) {
@@ -102,7 +96,9 @@ class DialogRobot(private val ui: ComposeUi) {
     private fun positiveButtonShown(): Boolean {
         var shown = false
         try {
-            onView(ViewMatchers.withId(android.R.id.button1)).check { view, _ -> shown = view?.isShown == true }
+            onView(ViewMatchers.withId(android.R.id.button1))
+                .inRoot(RootMatchers.isDialog())
+                .check { view, _ -> shown = view?.isShown == true }
         } catch (e: RuntimeException) {
             if (e !is EspressoException) throw e
         }

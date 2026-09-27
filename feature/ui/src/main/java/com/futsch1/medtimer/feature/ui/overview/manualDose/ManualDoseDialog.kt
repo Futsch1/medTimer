@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.feature.ui.overview.manualDose
 
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,12 +30,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
@@ -47,6 +51,26 @@ import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
+
+private tailrec fun Context.findFragmentActivity(): FragmentActivity = when (this) {
+    is FragmentActivity -> this
+    is ContextWrapper -> baseContext.findFragmentActivity()
+    else -> error("Manual dose time picker requires a FragmentActivity host")
+}
+
+object ManualDoseTestTags {
+    const val DIALOG = "manual_dose_dialog"
+    const val MEDICINE_LIST = "manual_dose_medicine_list"
+    const val MEDICINE_ENTRY = "manual_dose_medicine_entry"
+    const val AMOUNT_LIST = "manual_dose_amount_list"
+    const val AMOUNT_ENTRY = "manual_dose_amount_entry"
+    const val RECENT_CHOICE = "manual_dose_recent_choice"
+    const val CUSTOM_BUTTON = "manual_dose_custom_button"
+    const val SELECTED_DOSE_SUMMARY = "manual_dose_selected_summary"
+    const val ENTER_TIME = "manual_dose_enter_time"
+    const val CANCEL = "manual_dose_cancel"
+    const val BACK = "manual_dose_back"
+}
 
 @Composable
 fun ManualDoseDialog(
@@ -93,7 +117,8 @@ private fun DialogContent(
         modifier = Modifier
             .fillMaxWidth(0.94f)
             .widthIn(max = 520.dp)
-            .heightIn(max = 680.dp),
+            .heightIn(max = 680.dp)
+            .testTag(ManualDoseTestTags.DIALOG),
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 6.dp,
@@ -163,13 +188,18 @@ private fun DialogContent(
                             Text(stringResource(R.string.use_current_time))
                         }
                         OutlinedButton(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag(ManualDoseTestTags.ENTER_TIME),
                             onClick = {
                                 val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
                                 pickerFactory.create(LocalTime.now()) { minutes ->
                                     onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
                                     onDismissDialog()
-                                }
+                                }.show(
+                                    context.findFragmentActivity().supportFragmentManager,
+                                    TimePickerDialogFactory.DIALOG_TAG,
+                                )
                             },
                         ) {
                             Text(stringResource(R.string.enter_time))
@@ -186,11 +216,17 @@ private fun DialogContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                TextButton(onClick = onDismissDialog) {
+                TextButton(
+                    onClick = onDismissDialog,
+                    modifier = Modifier.testTag(ManualDoseTestTags.CANCEL),
+                ) {
                     Text(stringResource(R.string.cancel))
                 }
                 if (state.step != ManualDoseStep.MEDICINE) {
-                    OutlinedButton(onClick = onStepBack) {
+                    OutlinedButton(
+                        onClick = onStepBack,
+                        modifier = Modifier.testTag(ManualDoseTestTags.BACK),
+                    ) {
                         Text(stringResource(R.string.back))
                     }
                 }
@@ -310,7 +346,9 @@ private fun HeaderIcon(complete: Boolean, current: Boolean, index: Int) {
 @Composable
 private fun SelectedDoseSummary(state: ManualDoseState) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(ManualDoseTestTags.SELECTED_DOSE_SUMMARY),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.secondaryContainer,
     ) {
@@ -352,6 +390,7 @@ private fun RecentChoice(label: String, onClick: () -> Unit) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag(ManualDoseTestTags.RECENT_CHOICE)
                     .clickable(onClick = onClick),
                 shape = MaterialTheme.shapes.medium,
                 color = MaterialTheme.colorScheme.secondaryContainer,
@@ -375,7 +414,7 @@ fun CustomButton(
 ) {
     val context = LocalContext.current
     OutlinedButton(
-        modifier = modifier,
+        modifier = modifier.testTag(ManualDoseTestTags.CUSTOM_BUTTON),
         onClick = {
             TextInputDialogBuilder(context).title(R.string.log_additional_dose)
                 .hint(text)
@@ -394,13 +433,16 @@ fun MedicineList(
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier.heightIn(max = 300.dp),
+        modifier = modifier
+            .heightIn(max = 300.dp)
+            .testTag(ManualDoseTestTags.MEDICINE_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag(ManualDoseTestTags.MEDICINE_ENTRY)
                     .clickable { onSelectMedicineEntry(entry) },
             ) {
                 Row(
@@ -434,13 +476,16 @@ fun AmountList(
     onSelectAmount: (String) -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier.heightIn(max = 300.dp),
+        modifier = modifier
+            .heightIn(max = 300.dp)
+            .testTag(ManualDoseTestTags.AMOUNT_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(amounts, key = { it }) { amount ->
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag(ManualDoseTestTags.AMOUNT_ENTRY)
                     .clickable { onSelectAmount(amount) },
             ) {
                 Row(

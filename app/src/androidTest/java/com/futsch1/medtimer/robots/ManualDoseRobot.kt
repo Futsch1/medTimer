@@ -1,67 +1,131 @@
 package com.futsch1.medtimer.robots
 
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains
-import org.hamcrest.Matchers.hasToString
-import com.futsch1.medtimer.core.ui.R as CoreUiR
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
 
-/**
- * Logging a dose by hand from the Overview: pick a medicine (or invent one), give an amount, confirm
- * the time. The dialogs it walks through are its own.
- */
+/** Drives the Compose manual-dose dialog while keeping the test-facing picker vocabulary. */
 class ManualDoseRobot(
+    private val ui: ComposeUi,
     private val overview: OverviewRobot,
     private val dialogs: DialogRobot,
     private val pickers: MaterialPickers,
 ) {
+    private val dialog get() = ui.scope(ManualDoseTestTags.DIALOG)
+    private val medicineList get() = dialog.scope(ManualDoseTestTags.MEDICINE_LIST)
+    private val amountList get() = dialog.scope(ManualDoseTestTags.AMOUNT_LIST)
 
-    /** Opens the picker and runs [block] on it, for the tests that assert on what it offers. */
+    /** Opens the dialog and runs [block] on it, for tests that assert what it offers. */
     fun inPicker(block: ManualDoseRobot.() -> Unit) {
         overview.logManualDose()
+        dialog.awaitSelfExists()
         block()
     }
 
-    fun log(name: String, amount: String? = null) = inPicker {
-        choose(name)
-        amount?.let { enterAmount(it) }
+    fun log(name: String, amount: String) = inPicker {
+        selectMedicine(name)
+        selectAmount(amount)
         confirmTime()
     }
 
-    /** Logs a dose for a medicine that does not exist, typing its name into the picker. */
+    /** Logs a dose for a medicine that does not exist, typing its name and leaving amount blank. */
     fun logCustom(name: String) = inPicker {
         chooseCustom(name)
+        enterAmount("")
         confirmTime()
     }
 
-    fun choose(name: String) = scrollTo(name).perform(click())
-
+    /** Chooses the dialog's Custom medicine action and enters the supplied name. */
     fun chooseCustom(name: String) {
-        dialogs.clickItem(CoreUiR.string.custom)
+        dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
         dialogs.enterText(name)
-        // The name dialog and the amount dialog behind it are dismissed by the same button.
         dialogs.confirm(retryIfStillVisible = false)
-        dialogs.confirm()
+        dialog.awaitSelfExists()
     }
 
-    fun enterAmount(amount: String) = dialogs.enterTextAndConfirm(amount)
+    /** Opens Custom amount and enters [amount]. An empty value is supported for legacy tests. */
+    fun enterAmount(amount: String) {
+        dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
+        dialogs.enterTextAndConfirm(amount)
+    }
 
-    fun confirmTime() = pickers.confirmTime()
+    /** Opens the time picker and accepts its prefilled current time. */
+    fun confirmTime() {
+        dialog.click(hasTestTag(ManualDoseTestTags.ENTER_TIME))
+        pickers.confirmTime()
+    }
 
-    fun cancel() = dialogs.dismiss()
+    fun cancel() = dialog.click(hasTestTag(ManualDoseTestTags.CANCEL))
 
-    /** The picker lists previously logged doses as suggestions. */
-    fun assertSuggests(text: String) = assertContains(com.futsch1.medtimer.feature.ui.R.id.entry_text, text)
+    /** The staged dialog offers the previous custom amount as a recent choice. */
+    fun assertAmountPrefilled(expected: String) {
+        assertAmountOffered(expected)
+    }
 
-    fun assertOffers(name: String) = scrollTo(name).check(matches(isDisplayed()))
+    private fun selectMedicineIfPresent(label: String): Boolean {
+        val item = hasTestTag(ManualDoseTestTags.MEDICINE_ENTRY)
+        if (!medicineList.exists(item)) return false
+        medicineList.scrollUntilText(
+            itemMatcher = item,
+            textMatcher = hasText(label),
+            substring = label,
+        )
+        val entry = item and hasText(label)
+        if (!medicineList.exists(entry)) return false
+        medicineList.click(entry)
+        return true
+    }
 
-    fun assertAmountPrefilled(expected: String) = dialogs.assertInputContains(expected)
+    fun selectMedicine(label: String) {
+        if (recentChoiceExists(label)) {
+            chooseRecent(label)
+            return
+        }
+        check(selectMedicineIfPresent(label)) { "Medicine '$label' is not offered" }
+    }
 
-    private fun scrollTo(name: String) = onData(hasToString(name))
-        .inAdapterView(withId(androidx.appcompat.R.id.select_dialog_listview))
-        .inRoot(isDialog())
+    private fun selectAmount(amount: String) {
+        if (recentChoiceExists(amount)) {
+            chooseRecent(amount)
+            return
+        }
+        val item = hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY)
+        if (amountList.exists(item)) {
+            amountList.scrollUntilText(
+                itemMatcher = item,
+                textMatcher = hasText(amount),
+                substring = amount,
+            )
+            val entry = item and hasText(amount)
+            if (amountList.exists(entry)) {
+                amountList.click(entry)
+                return
+            }
+        }
+
+        dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
+        dialogs.enterTextAndConfirm(amount)
+    }
+
+    private fun assertAmountOffered(amount: String) {
+        if (recentChoiceExists(amount)) {
+            dialog.assertDisplayed(recentMatcher(amount))
+            return
+        }
+        amountList.scrollUntilText(
+            itemMatcher = hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY),
+            textMatcher = hasText(amount),
+            substring = amount,
+        )
+        amountList.assertDisplayed(
+            hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY) and hasText(amount),
+        )
+    }
+
+    private fun recentChoiceExists(label: String): Boolean = dialog.exists(recentMatcher(label))
+
+    private fun recentMatcher(label: String) =
+        hasTestTag(ManualDoseTestTags.RECENT_CHOICE) and hasText(label)
+
+    private fun chooseRecent(label: String) = dialog.click(recentMatcher(label))
 }

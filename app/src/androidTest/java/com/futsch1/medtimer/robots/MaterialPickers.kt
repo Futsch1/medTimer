@@ -4,6 +4,7 @@ import android.text.format.DateFormat
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -58,7 +59,9 @@ class MaterialPickers {
 
         repeat(CONFIRM_ATTEMPTS) { attempt ->
             if (attempt == 0 || viewAppears(displayedView(buttonId))) {
-                clickOn(buttonId)
+                onView(ViewMatchers.withId(buttonId))
+                    .inRoot(RootMatchers.isDialog())
+                    .perform(ViewActions.click())
             }
             if (device.wait(Until.gone(confirmButton), DISMISSAL_TIMEOUT)) return
         }
