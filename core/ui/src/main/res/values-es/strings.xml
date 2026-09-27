@@ -345,4 +345,5 @@
     <string name="stock_after_simulation_end">Después de %s</string>
     <string name="move_medicine">Mover medicamento</string>
     <string name="recent_custom">Elemento personalizado reciente</string>
+    <string name="use_current_time">Usar la hora actual</string>
 </resources>

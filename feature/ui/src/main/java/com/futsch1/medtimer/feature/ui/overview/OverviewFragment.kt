@@ -78,7 +78,11 @@ class OverviewFragment : Fragment() {
                     viewModel = overviewViewModel,
                     onEventClick = ::onEventClick,
                     onAction = ::onAction,
-                    onLogManualDose = { showManualDoseDialog.value = true },
+                    onLogManualDose = {
+                        showManualDoseDialog.value = true
+                        manualDoseViewModel.reset()
+                        manualDoseViewModel.selectDay(overviewViewModel.state.day)
+                                      },
                     topBarActions = {
                         AppOptionsMenuHost(
                             fragment = this@OverviewFragment,

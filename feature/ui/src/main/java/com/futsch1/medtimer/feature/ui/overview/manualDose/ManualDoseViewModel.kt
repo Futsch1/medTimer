@@ -10,6 +10,7 @@ import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -18,7 +19,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 data class ManualDoseMedicineEntry(val label: String, val medicine: Medicine?)
@@ -29,7 +32,8 @@ class ManualDoseViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val reminderEventRepository: ReminderEventRepository,
     private val persistentDataDataSource: PersistentDataDataSource,
-    private val commandBus: ReminderCommandBus
+    private val commandBus: ReminderCommandBus,
+    private val timeFormatter: TimeFormatter
 ) : ViewModel() {
     private val medicineList: Flow<List<Medicine>> = medicineRepository.getAllFlow()
 
@@ -110,22 +114,32 @@ class ManualDoseViewModel @Inject constructor(
         )
     }
 
+    private val selectedDay: MutableStateFlow<LocalDate> = MutableStateFlow(LocalDate.now())
+
+    fun selectDay(day: LocalDate) {
+        selectedDay.value = day
+    }
+
     val state: Flow<ManualDoseState> = combine(
         availableState,
         selectedManualDoseEntry,
         selectedManualDoseAmount,
+        selectedDay,
         step
-    ) { available, selectedEntry, selectedAmount, step ->
+    ) { available, selectedEntry, selectedAmount, selectedDay, step ->
         available.copy(
             selectedMedicine = selectedEntry,
             selectedAmount = selectedAmount,
+            selectedDay = if (selectedDay != LocalDate.now()) timeFormatter.localDateToString(selectedDay) else null,
             step = step,
         )
     }
 
-    fun selectTimeAndLog(doseInstant: Instant) {
+    fun selectTimeAndLog(doseLocalTime: LocalTime) {
         val selectedEntry = selectedManualDoseEntry.value
         val amount = selectedManualDoseAmount.value
+        val doseDateTime = selectedDay.value.atTime(doseLocalTime)
+        val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
 
         var reminderEvent = ReminderEvent.default().copy(
             reminderId = -1,
@@ -168,5 +182,11 @@ class ManualDoseViewModel @Inject constructor(
             persistentDataDataSource.setLastCustomDoseAmount(amount)
             persistentDataDataSource.setLastCustomDose(selectedEntry.label)
         }
+    }
+
+    fun reset() {
+        selectedManualDoseEntry.value = ManualDoseMedicineEntry("", null)
+        selectedManualDoseAmount.value = ""
+        step.value = ManualDoseStep.MEDICINE
     }
 }

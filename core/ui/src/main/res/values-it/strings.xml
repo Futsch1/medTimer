@@ -348,4 +348,5 @@
     <string name="close" tools:ignore="MissingTranslation">Chiudi</string>
     <string name="more_options" tools:ignore="MissingTranslation">Altre opzioni</string>
     <string name="recent_custom">Ultimo elemento personalizzato</string>
+    <string name="use_current_time">Usa l’ora attuale</string>
 </resources>

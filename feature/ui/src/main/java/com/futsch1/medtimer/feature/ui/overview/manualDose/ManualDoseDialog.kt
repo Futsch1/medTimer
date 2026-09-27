@@ -36,19 +36,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
-import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
@@ -56,7 +53,7 @@ fun ManualDoseDialog(
     viewModel: ManualDoseViewModel,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (Instant) -> Unit,
+    onLogManualDose: (LocalTime) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
@@ -86,7 +83,7 @@ private fun DialogContent(
     state: ManualDoseState,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (Instant) -> Unit,
+    onLogManualDose: (LocalTime) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
@@ -101,7 +98,7 @@ private fun DialogContent(
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 6.dp,
     ) {
-        Column(modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)) {
+        Column(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)) {
             Header(
                 state = state,
                 modifier = Modifier.padding(horizontal = 24.dp),
@@ -142,10 +139,10 @@ private fun DialogContent(
                             modifier = Modifier.weight(1f, fill = false),
                             onSelectAmount = onSelectAmount,
                         )
-                            RecentChoice(
-                                label = state.lastCustomDoseAmount,
-                                onClick = { onSelectAmount(state.lastCustomDoseAmount) },
-                            )
+                        RecentChoice(
+                            label = state.lastCustomDoseAmount,
+                            onClick = { onSelectAmount(state.lastCustomDoseAmount) },
+                        )
                         CustomButton(R.string.amount, Modifier.fillMaxWidth(), onSelectAmount)
                     }
 
@@ -159,20 +156,18 @@ private fun DialogContent(
                         Button(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
-                                onLogManualDose(Instant.now())
+                                onLogManualDose(LocalTime.now())
                                 onDismissDialog()
                             },
                         ) {
-                            Text(stringResource(R.string.take_now))
+                            Text(stringResource(R.string.use_current_time))
                         }
                         OutlinedButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
                                 pickerFactory.create(LocalTime.now()) { minutes ->
-                                    // TODO: Pass the selected date from the ViewModel.
-                                    val instant = TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now())
-                                    onLogManualDose(instant)
+                                    onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
                                     onDismissDialog()
                                 }
                             },
@@ -208,13 +203,18 @@ private fun DialogContent(
 private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = stringResource(R.string.log_additional_dose),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
         )
+        if (state.selectedDay != null) {
+            Text(
+                text = state.selectedDay
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -358,7 +358,7 @@ private fun RecentChoice(label: String, onClick: () -> Unit) {
             ) {
                 Text(
                     text = label,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
@@ -383,7 +383,7 @@ fun CustomButton(
                 .show()
         },
     ) {
-        Text("+  ${stringResource(R.string.custom)}")
+        Text(stringResource(R.string.custom))
     }
 }
 
@@ -406,7 +406,7 @@ fun MedicineList(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     entry.medicine?.let { medicine ->
@@ -446,7 +446,7 @@ fun AmountList(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -459,7 +459,7 @@ fun AmountList(
 
 fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
     medicineEntries = listOf(
-        ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
+        ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1, useColor = true)),
         ManualDoseMedicineEntry("Medicine A", Medicine.default().copy(id = 2)),
         ManualDoseMedicineEntry("Medicine B", Medicine.default().copy(id = 3)),
     ).toImmutableList(),
@@ -468,6 +468,7 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
     lastCustomDoseAmount = "5 ml",
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
+    selectedDay = "08/01/2026",
     step = step,
 )
 

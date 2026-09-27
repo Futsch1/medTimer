@@ -349,7 +349,7 @@
     <string name="close">Close</string>
     <string name="more_options">More options</string>
     <string name="back">Back</string>
-    <string name="take_now">Take now</string>
+    <string name="use_current_time">Use current time</string>
     <string name="enter_time">Enter taken time</string>
     <string name="medicine">Medicine</string>
 </resources>

@@ -17,6 +17,7 @@ data class ManualDoseState(
     val lastCustomDoseAmount: String = "",
     val selectedMedicine: ManualDoseMedicineEntry? = null,
     val selectedAmount: String? = null,
+    val selectedDay: String? = null,
     val step: ManualDoseStep = ManualDoseStep.MEDICINE
 )
 

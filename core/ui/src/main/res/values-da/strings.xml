@@ -339,4 +339,5 @@
     <string name="stock_after_simulation_end">Efter %s</string>
     <string name="move_medicine">Flyt medicin</string>
     <string name="recent_custom">Seneste brugerdefinerede element</string>
+    <string name="use_current_time">Brug det aktuelle tidspunkt</string>
 </resources>

@@ -336,4 +336,5 @@
     <string name="close" tools:ignore="MissingTranslation">关闭</string>
     <string name="more_options" tools:ignore="MissingTranslation">更多选项</string>
     <string name="recent_custom">最近使用的自定义项</string>
+    <string name="use_current_time">使用当前时间</string>
 </resources>

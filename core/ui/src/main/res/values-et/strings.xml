@@ -322,4 +322,5 @@
     <string name="app_authentication">Eelda rakenduse avamisel autentimist</string>
     <string name="login">Logi MedTimeri rakendusse kasutades biomeetrilist tuvastust</string>
     <string name="recent_custom">Viimati kasutatud kohandatud kirje</string>
+    <string name="use_current_time">Kasuta praegust kellaaega</string>
 </resources>

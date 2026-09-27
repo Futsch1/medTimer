@@ -347,4 +347,5 @@
     <string name="stock_after_simulation_end">После %s</string>
     <string name="move_medicine">Переместить лекарство</string>
     <string name="recent_custom">Последний пользовательский элемент</string>
+    <string name="use_current_time">Использовать текущее время</string>
 </resources>
