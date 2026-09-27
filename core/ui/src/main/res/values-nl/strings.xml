@@ -338,4 +338,5 @@
     <string name="next_week">Volgende week</string>
     <string name="stock_after_simulation_end">Na %s</string>
     <string name="move_medicine">Medicijn verplaatsen</string>
+    <string name="recent_custom">Laatst gebruikte eigen invoer</string>
 </resources>

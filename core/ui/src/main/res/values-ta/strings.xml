@@ -338,4 +338,5 @@
     <string name="next_week">அடுத்த வாரம்</string>
     <string name="stock_after_simulation_end">%s க்குப் பிறகு</string>
     <string name="move_medicine">மருந்தை நகர்த்து</string>
+    <string name="recent_custom">சமீபத்திய தனிப்பயன் பதிவு</string>
 </resources>

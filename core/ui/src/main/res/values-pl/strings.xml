@@ -353,4 +353,5 @@
     <string name="navigate_up" tools:ignore="MissingTranslation">Przejdź wyżej</string>
     <string name="close" tools:ignore="MissingTranslation">Zamknij</string>
     <string name="more_options" tools:ignore="MissingTranslation">Więcej opcji</string>
+    <string name="recent_custom">Ostatni niestandardowy wpis</string>
 </resources>

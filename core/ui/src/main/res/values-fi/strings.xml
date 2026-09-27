@@ -338,4 +338,5 @@
     <string name="next_week">Seuraava viikko</string>
     <string name="stock_after_simulation_end">%s jälkeen</string>
     <string name="move_medicine">Siirrä lääke</string>
+    <string name="recent_custom">Viimeisin mukautettu merkintä</string>
 </resources>

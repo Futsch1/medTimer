@@ -341,4 +341,5 @@
     <string name="navigate_up" tools:ignore="MissingTranslation">Πλοήγηση επάνω</string>
     <string name="close" tools:ignore="MissingTranslation">Κλείσιμο</string>
     <string name="more_options" tools:ignore="MissingTranslation">Περισσότερες επιλογές</string>
+    <string name="recent_custom">Πρόσφατη προσαρμοσμένη καταχώριση</string>
 </resources>

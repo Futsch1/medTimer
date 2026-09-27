@@ -321,4 +321,5 @@
     <string name="variable_amount">Sisesta annus koos võetuks märkimisega</string>
     <string name="app_authentication">Eelda rakenduse avamisel autentimist</string>
     <string name="login">Logi MedTimeri rakendusse kasutades biomeetrilist tuvastust</string>
+    <string name="recent_custom">Viimati kasutatud kohandatud kirje</string>
 </resources>

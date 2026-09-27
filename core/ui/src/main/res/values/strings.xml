@@ -69,6 +69,7 @@
     <string name="expiration_date_notification">The medicine %1$s expires on %2$s.\nConsider replacing the medicine.</string>
     <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
     <string name="recent_events">Recent events</string>
+    <string name="recent_custom">Recent custom</string>
     <string name="next_reminders">Next reminders</string>
     <string name="all_taken">All taken (%s)</string>
     <string name="preview_next_reminders_widget_line" translatable="false">12:00: 1 Selen (200 µg)</string>

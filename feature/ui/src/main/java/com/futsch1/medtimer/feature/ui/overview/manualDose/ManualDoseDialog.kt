@@ -39,7 +39,9 @@ import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
@@ -112,19 +114,21 @@ private fun DialogContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 when (state.step) {
                     ManualDoseStep.MEDICINE -> {
-                        Text(
-                            text = stringResource(R.string.medicine),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
+                        SectionLabel(R.string.medicine)
                         MedicineList(
                             medicineEntries = state.medicineEntries,
+                            modifier = Modifier.weight(1f, fill = false),
                             onSelectMedicineEntry = onSelectMedicineEntry,
+                        )
+                        RecentChoice(
+                            label = state.lastCustomMedicineEntry.label,
+                            onClick = { onSelectMedicineEntry(state.lastCustomMedicineEntry) },
                         )
                         CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
                             onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
@@ -132,15 +136,16 @@ private fun DialogContent(
                     }
 
                     ManualDoseStep.AMOUNT -> {
-                        Text(
-                            text = stringResource(R.string.amount),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
+                        SectionLabel(R.string.amount)
                         AmountList(
                             amounts = state.amounts,
+                            modifier = Modifier.weight(1f, fill = false),
                             onSelectAmount = onSelectAmount,
                         )
+                            RecentChoice(
+                                label = state.lastCustomDoseAmount,
+                                onClick = { onSelectAmount(state.lastCustomDoseAmount) },
+                            )
                         CustomButton(R.string.amount, Modifier.fillMaxWidth(), onSelectAmount)
                     }
 
@@ -327,6 +332,42 @@ private fun SelectedDoseSummary(state: ManualDoseState) {
 }
 
 @Composable
+private fun SectionLabel(@StringRes label: Int) {
+    Text(
+        text = stringResource(label),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+    )
+}
+
+@Composable
+private fun RecentChoice(label: String, onClick: () -> Unit) {
+    if (label.isNotBlank()) {
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                text = stringResource(R.string.recent_custom),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onClick),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                Text(
+                    text = label,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun CustomButton(
     @StringRes text: Int,
     modifier: Modifier = Modifier,
@@ -349,10 +390,11 @@ fun CustomButton(
 @Composable
 fun MedicineList(
     medicineEntries: ImmutableList<ManualDoseMedicineEntry>,
+    modifier: Modifier = Modifier,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.heightIn(max = 300.dp),
+        modifier = modifier.heightIn(max = 300.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
@@ -365,10 +407,20 @@ fun MedicineList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 14.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(entry.label, style = MaterialTheme.typography.bodyLarge)
+                    entry.medicine?.let { medicine ->
+                        MedicineSwatch(
+                            icon = rememberMedicineIcon(medicine.iconId),
+                            color = medicine.color.takeIf { medicine.useColor },
+                            modifier = Modifier.padding(end = 12.dp),
+                        )
+                    }
+                    Text(
+                        text = entry.label,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
                 }
             }
         }
@@ -378,10 +430,11 @@ fun MedicineList(
 @Composable
 fun AmountList(
     amounts: ImmutableList<String>,
+    modifier: Modifier = Modifier,
     onSelectAmount: (String) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.heightIn(max = 300.dp),
+        modifier = modifier.heightIn(max = 300.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(amounts, key = { it }) { amount ->
@@ -410,7 +463,9 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
         ManualDoseMedicineEntry("Medicine A", Medicine.default().copy(id = 2)),
         ManualDoseMedicineEntry("Medicine B", Medicine.default().copy(id = 3)),
     ).toImmutableList(),
+    lastCustomMedicineEntry = ManualDoseMedicineEntry("Medicine C", null),
     amounts = listOf("1 tablet", "2 tablets").toImmutableList(),
+    lastCustomDoseAmount = "5 ml",
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
     step = step,
