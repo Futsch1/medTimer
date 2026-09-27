@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -39,6 +40,8 @@ class SimulatedRemindersRepository @Inject constructor(
 
     private val _simulatedThrough = MutableStateFlow(LocalDate.MIN)
     override val simulatedThrough: StateFlow<LocalDate> = _simulatedThrough.asStateFlow()
+
+    private val completedCalculations = MutableStateFlow(0)
 
     private val _stockRunOutDates = MutableStateFlow<Map<Int, LocalDate?>>(emptyMap())
     override val stockRunOutDates: StateFlow<Map<Int, LocalDate?>> = _stockRunOutDates.asStateFlow()
@@ -66,6 +69,7 @@ class SimulatedRemindersRepository @Inject constructor(
                 } catch (e: Exception) {
                     Log.e(LogTags.SIMULATION, "Future reminders simulation failed", e)
                 } finally {
+                    completedCalculations.value += 1
                     if (triggerChannel.isEmpty) {
                         idlingResource.setIdle()
                     }
@@ -97,6 +101,12 @@ class SimulatedRemindersRepository @Inject constructor(
         Log.d(LogTags.SIMULATION, "Queuing future reminders simulation through $endDay")
         idlingResource.setBusy()
         triggerChannel.trySend(endDay)
+    }
+
+    suspend fun awaitCalculation() {
+        val completedBeforeRequest = completedCalculations.value
+        triggerCalculation()
+        completedCalculations.first { it > completedBeforeRequest }
     }
 
     private suspend fun runSimulation(endDay: LocalDate) {
