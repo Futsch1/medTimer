@@ -346,4 +346,10 @@
     <string name="move_medicine">הזז תרופה</string>
     <string name="recent_custom">הפריט המותאם אישית האחרון</string>
     <string name="use_current_time">שימוש בשעה הנוכחית</string>
+    <string name="navigate_up">נווט למעלה</string>
+    <string name="close">סגור</string>
+    <string name="more_options">אפשרויות נוספות</string>
+    <string name="back">חזרה</string>
+    <string name="enter_time">הזן את זמן הנטילה</string>
+    <string name="medicine">תרופה</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
@@ -343,4 +343,7 @@
     <string name="more_options" tools:ignore="MissingTranslation">Περισσότερες επιλογές</string>
     <string name="recent_custom">Πρόσφατη προσαρμοσμένη καταχώριση</string>
     <string name="use_current_time">Χρήση τρέχουσας ώρας</string>
+    <string name="back">Πίσω</string>
+    <string name="enter_time">Εισαγωγή ώρας λήψης</string>
+    <string name="medicine">Φάρμακο</string>
 </resources>

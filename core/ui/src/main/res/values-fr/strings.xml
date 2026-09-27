@@ -346,4 +346,10 @@
     <string name="move_medicine">Déplacer le médicament</string>
     <string name="recent_custom">Dernier élément personnalisé</string>
     <string name="use_current_time">Utiliser l’heure actuelle</string>
+    <string name="navigate_up">Remonter</string>
+    <string name="close">Fermer</string>
+    <string name="more_options">Plus d\'options</string>
+    <string name="back">Retour</string>
+    <string name="enter_time">Saisir l\'heure de prise</string>
+    <string name="medicine">Médicament</string>
 </resources>

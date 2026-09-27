@@ -340,4 +340,10 @@
     <string name="move_medicine">Премести лекарство</string>
     <string name="recent_custom">Последен персонализиран елемент</string>
     <string name="use_current_time">Използвай текущия час</string>
+    <string name="navigate_up">Нагоре</string>
+    <string name="close">Затвори</string>
+    <string name="more_options">Още опции</string>
+    <string name="back">Назад</string>
+    <string name="enter_time">Въведи час на приемане</string>
+    <string name="medicine">Лекарство</string>
 </resources>

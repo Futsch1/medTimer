@@ -352,4 +352,10 @@
     <string name="move_medicine">Перемістити ліки</string>
     <string name="recent_custom">Останній власний запис</string>
     <string name="use_current_time">Використати поточний час</string>
+    <string name="navigate_up">Навігація вгору</string>
+    <string name="close">Закрити</string>
+    <string name="more_options">Більше опцій</string>
+    <string name="back">Назад</string>
+    <string name="enter_time">Введіть час прийому</string>
+    <string name="medicine">Ліки</string>
 </resources>

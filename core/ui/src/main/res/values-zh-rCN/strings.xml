@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">连续间隔从 %1$s</string>
     <string name="continuous_interval_reminder">连续间隔提醒</string>
@@ -337,4 +337,7 @@
     <string name="more_options" tools:ignore="MissingTranslation">更多选项</string>
     <string name="recent_custom">最近使用的自定义项</string>
     <string name="use_current_time">使用当前时间</string>
+    <string name="back">返回</string>
+    <string name="enter_time">输入服药时间</string>
+    <string name="medicine">药品</string>
 </resources>

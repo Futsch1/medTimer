@@ -340,4 +340,10 @@
     <string name="move_medicine">Medicijn verplaatsen</string>
     <string name="recent_custom">Laatst gebruikte eigen invoer</string>
     <string name="use_current_time">Huidige tijd gebruiken</string>
+    <string name="navigate_up">Omhoog navigeren</string>
+    <string name="close">Sluiten</string>
+    <string name="more_options">Meer opties</string>
+    <string name="back">Terug</string>
+    <string name="enter_time">Ingenomen tijd invoeren</string>
+    <string name="medicine">Medicijn</string>
 </resources>

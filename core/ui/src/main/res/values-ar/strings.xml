@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
@@ -367,4 +367,7 @@
     <string name="more_options" tools:ignore="MissingTranslation">خيارات أكثر</string>
     <string name="recent_custom">آخر عنصر مخصص</string>
     <string name="use_current_time">استخدم الوقت الحالي</string>
+    <string name="back">رجوع</string>
+    <string name="enter_time">أدخل وقت الأخذ</string>
+    <string name="medicine">الدواء</string>
 </resources>
