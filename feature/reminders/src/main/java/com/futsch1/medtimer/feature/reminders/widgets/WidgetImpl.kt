@@ -24,6 +24,10 @@ class WidgetImpl(
     private val lineProvider: WidgetLineProvider,
     private val widgetIds: WidgetIds
 ) {
+    suspend fun prepareForUpdate() {
+        lineProvider.prepareForUpdate()
+    }
+
     fun updateAppWidget(
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
@@ -112,11 +116,14 @@ class WidgetImpl(
     }
 }
 
-fun performWidgetUpdate(
+suspend fun performWidgetUpdate(
     widgetImpl: WidgetImpl,
     appWidgetIds: IntArray,
     appWidgetManager: AppWidgetManager
 ) {
+    if (appWidgetIds.isEmpty()) return
+
+    widgetImpl.prepareForUpdate()
     for (appWidgetId in appWidgetIds) {
         widgetImpl.updateAppWidget(appWidgetManager, appWidgetId)
     }
