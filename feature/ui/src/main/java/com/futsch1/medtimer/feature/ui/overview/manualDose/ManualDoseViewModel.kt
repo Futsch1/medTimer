@@ -33,8 +33,11 @@ class ManualDoseViewModel @Inject constructor(
 ) : ViewModel() {
     private val medicineList: Flow<List<Medicine>> = medicineRepository.getAllFlow()
 
-    val manualDoseMedicines: Flow<List<ManualDoseMedicineEntry>> =
+    private val manualDoseMedicines: Flow<List<ManualDoseMedicineEntry>> =
         medicineList.map { medicines -> medicines.map { ManualDoseMedicineEntry(it.name, it) } }
+
+    private val lastCustomMedicineEntry: Flow<ManualDoseMedicineEntry> =
+        persistentDataDataSource.data.map { data -> ManualDoseMedicineEntry(data.lastCustomDose, null) }
 
     private val selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
         MutableStateFlow(ManualDoseMedicineEntry("", null))
@@ -53,18 +56,20 @@ class ManualDoseViewModel @Inject constructor(
         }
     }
 
-    val manualDoseAmounts: Flow<List<String>> = combine(
+    private val manualDoseAmounts: Flow<List<String>> = combine(
         _reminderList,
-        persistentDataDataSource.data,
         selectedManualDoseEntry
-    ) { reminders, data, manualDoseEntry ->
+    ) { reminders, manualDoseEntry ->
         val medicine = manualDoseEntry.medicine
         if (medicine == null) {
-            listOf(data.lastCustomDoseAmount)
+            emptyList()
         } else {
             reminders.map { it.amount }.distinct()
         }
     }
+
+    private val lastCustomDoseAmount: Flow<String> =
+        persistentDataDataSource.data.map { data -> data.lastCustomDoseAmount }
 
     fun selectAmount(amount: String) {
         selectedManualDoseAmount.value = amount
@@ -91,19 +96,30 @@ class ManualDoseViewModel @Inject constructor(
 
     private val step: MutableStateFlow<ManualDoseStep> = MutableStateFlow(ManualDoseStep.MEDICINE)
 
-    val state: Flow<ManualDoseState> = combine(
+    private val availableState: Flow<ManualDoseState> = combine(
         manualDoseMedicines,
+        lastCustomMedicineEntry,
         manualDoseAmounts,
+        lastCustomDoseAmount
+    ) { medicines, lastCustomMedicineEntry, amounts, lastCustomDoseAmount ->
+        ManualDoseState(
+            medicineEntries = medicines.toImmutableList(),
+            lastCustomMedicineEntry = lastCustomMedicineEntry,
+            amounts = amounts.toImmutableList(),
+            lastCustomDoseAmount = lastCustomDoseAmount,
+        )
+    }
+
+    val state: Flow<ManualDoseState> = combine(
+        availableState,
         selectedManualDoseEntry,
         selectedManualDoseAmount,
         step
-    ) { medicines, amounts, selectedEntry, selectedManualDoseAmount, step ->
-        ManualDoseState(
-            medicines.toImmutableList(),
-            amounts.toImmutableList(),
-            selectedEntry,
-            selectedManualDoseAmount,
-            step
+    ) { available, selectedEntry, selectedAmount, step ->
+        available.copy(
+            selectedMedicine = selectedEntry,
+            selectedAmount = selectedAmount,
+            step = step,
         )
     }
 
