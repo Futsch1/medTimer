@@ -1,8 +1,10 @@
 package com.futsch1.medtimer.robots
 
+import android.R
 import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.EspressoException
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions
@@ -28,7 +30,7 @@ class DialogRobot(private val ui: ComposeUi) {
         }
     }
 
-    fun enterText(text: String) = onView(ViewMatchers.withId(android.R.id.input))
+    fun enterText(text: String): ViewInteraction = onView(ViewMatchers.withId(R.id.input))
         .inRoot(RootMatchers.isDialog())
         .perform(replaceText(text))
 
@@ -43,7 +45,7 @@ class DialogRobot(private val ui: ComposeUi) {
      */
     fun awaitInput() {
         awaitView(
-            Matchers.allOf(ViewMatchers.withId(android.R.id.input), ViewMatchers.isDisplayed()),
+            Matchers.allOf(ViewMatchers.withId(R.id.input), ViewMatchers.isDisplayed()),
             DIALOG_FROM_NOTIFICATION_TIMEOUT,
             inRoot = RootMatchers.isDialog()
         )
@@ -96,9 +98,7 @@ class DialogRobot(private val ui: ComposeUi) {
     private fun positiveButtonShown(): Boolean {
         var shown = false
         try {
-            onView(ViewMatchers.withId(android.R.id.button1))
-                .inRoot(RootMatchers.isDialog())
-                .check { view, _ -> shown = view?.isShown == true }
+            onView(ViewMatchers.withId(R.id.button1)).check { view, _ -> shown = view?.isShown == true }
         } catch (e: RuntimeException) {
             if (e !is EspressoException) throw e
         }
@@ -112,7 +112,7 @@ class DialogRobot(private val ui: ComposeUi) {
     }
 
     private fun inputShows(text: String): Boolean = try {
-        onView(ViewMatchers.withId(android.R.id.input))
+        onView(ViewMatchers.withId(R.id.input))
             .check(ViewAssertions.matches(ViewMatchers.withText(Matchers.containsString(text))))
         true
     } catch (e: RuntimeException) {

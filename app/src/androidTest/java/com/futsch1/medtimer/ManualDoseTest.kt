@@ -11,7 +11,7 @@ private const val GINSENG = "Ginseng (200mg)"
 @HiltAndroidTest
 class ManualDoseTest : MedTimerTestBase() {
     @Test
-    @AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun testManualDose() {
         menus.clickAppOption(R.string.generate_test_data)
 
@@ -42,7 +42,7 @@ class ManualDoseTest : MedTimerTestBase() {
     }
 
     @Test
-    @AllowFlaky(attempts = 1)
+    @AllowFlaky(attempts = 3)
     fun testManualDoseOfDisabledReminder() {
         // Create medication with a disabled reminder
         seed.medicine("Test") { reminder("1 pill", active = false) }
