@@ -346,4 +346,17 @@
     <string name="back">Takaisin</string>
     <string name="enter_time">Syötä otettu aika</string>
     <string name="medicine">Lääke</string>
+    <string name="levels">Pitoisuudet</string>
+    <string name="level_estimate">Pitoisuusarvio</string>
+    <string name="half_life">Puoliintumisaika (tuntia)</string>
+    <string name="time_to_peak">Aika huippuun (tuntia)</string>
+    <string name="half_life_summary">Aseta arvioidaksesi tämän lääkkeen pitoisuutta elimistössä ajan myötä analyysinäkymässä</string>
+    <string name="time_to_peak_summary">Aika annoksen ottamisesta sen korkeimpaan pitoisuuteen</string>
+    <string name="pk_disclaimer">Suhteellinen pitoisuus arvioitu otetuista annoksista yksinkertaisella mallilla. Ei lääketieteellinen neuvo.</string>
+    <string name="pk_empty">Aseta puoliintumisaika ja aika huippuun lääkkeen asetuksissa nähdäksesi sen arvioidun pitoisuuden täällä.</string>
+    <string name="pk_settings_info">Pitoisuudet arvioidaan yhden tilan mallilla ja ensimmäisen kertaluvun imeytymisellä. Sekä puoliintumisaika että aika huippuun on asetettava. Annosmäärissä voi käyttää mitä tahansa yksikköä (esim. 2,5 mg), mutta lääkkeen kaikkien annosten on käytettävä samaa.</string>
+    <string name="pk_ignored_doses">Annoksia ilman luettavaa määrää (esim. 2,5 mg) ei huomioida: %1$d</string>
+    <string name="pk_unit_conflict">%1$s ei näy, koska sen annoksissa käytetään eri yksiköitä: %2$s. Muuta määrät niin, että kaikissa käytetään samaa yksikköä.</string>
+    <string name="pk_no_unit">ei yksikköä</string>
+    <string name="custom_range">Mukautettu</string>
 </resources>

@@ -136,7 +136,9 @@ class GenerateTestData @AssistedInject constructor(
                 sortOrder = sortOrder,
                 tags = emptyList(),
                 reminders = reminders.map { it.toReminder(0).toModel() },
-                cannotBeSkipped = false
+                cannotBeSkipped = false,
+                halfLifeHours = 0.0,
+                timeToPeakHours = 0.0
             )
         }
     }

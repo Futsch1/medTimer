@@ -354,4 +354,17 @@
     <string name="back">Назад</string>
     <string name="enter_time">Введите время приёма</string>
     <string name="medicine">Лекарство</string>
+    <string name="levels">Уровни</string>
+    <string name="level_estimate">Оценка уровня</string>
+    <string name="half_life">Период полувыведения (часы)</string>
+    <string name="time_to_peak">Время до пика (часы)</string>
+    <string name="half_life_summary">Укажите, чтобы оценивать уровень этого лекарства в организме с течением времени на экране анализа</string>
+    <string name="time_to_peak_summary">Время от приёма дозы до её максимального уровня</string>
+    <string name="pk_disclaimer">Относительный уровень, оценённый по принятым дозам с помощью простой модели. Не является медицинской рекомендацией.</string>
+    <string name="pk_empty">Укажите период полувыведения и время до пика в настройках лекарства, чтобы увидеть здесь его расчётный уровень.</string>
+    <string name="pk_settings_info">Уровни оцениваются по однокамерной модели с всасыванием первого порядка. Необходимо указать и период полувыведения, и время до пика. Количество дозы можно указывать в любой единице (например, 2,5 mg), но все дозы одного лекарства должны использовать одну и ту же.</string>
+    <string name="pk_ignored_doses">Дозы без читаемого количества (например, 2,5 mg) не учитываются: %1$d</string>
+    <string name="pk_unit_conflict">%1$s не отображается, так как его дозы указаны в разных единицах: %2$s. Измените количества, чтобы все они использовали одну единицу.</string>
+    <string name="pk_no_unit">без единицы</string>
+    <string name="custom_range">Пользовательский</string>
 </resources>

@@ -352,4 +352,17 @@
     <string name="back">Retour</string>
     <string name="enter_time">Saisir l\'heure de prise</string>
     <string name="medicine">Médicament</string>
+    <string name="levels">Niveaux</string>
+    <string name="level_estimate">Estimation du niveau</string>
+    <string name="half_life">Demi-vie (heures)</string>
+    <string name="time_to_peak">Délai jusqu\'au pic (heures)</string>
+    <string name="half_life_summary">Définir pour estimer le niveau de ce médicament dans l\'organisme au fil du temps dans l\'écran d\'analyse</string>
+    <string name="time_to_peak_summary">Délai entre la prise d\'une dose et son niveau le plus élevé</string>
+    <string name="pk_disclaimer">Niveau relatif estimé à partir de vos doses prises à l\'aide d\'un modèle simple. Ne constitue pas un avis médical.</string>
+    <string name="pk_empty">Définissez une demi-vie et un délai jusqu\'au pic dans les paramètres d\'un médicament pour voir ici son niveau estimé.</string>
+    <string name="pk_settings_info">Les niveaux sont estimés avec un modèle à un compartiment et une absorption d\'ordre un. La demi-vie et le délai jusqu\'au pic doivent tous deux être définis. Les quantités peuvent utiliser n\'importe quelle unité (p. ex. 2,5 mg), mais toutes les doses d\'un médicament doivent utiliser la même.</string>
+    <string name="pk_ignored_doses">Les doses sans quantité lisible (p. ex. 2,5 mg) ne sont pas prises en compte : %1$d</string>
+    <string name="pk_unit_conflict">%1$s n\'est pas affiché car ses doses utilisent des unités différentes : %2$s. Modifiez les quantités pour qu\'elles utilisent toutes la même unité.</string>
+    <string name="pk_no_unit">sans unité</string>
+    <string name="custom_range">Personnalisé</string>
 </resources>

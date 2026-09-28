@@ -2,9 +2,12 @@ package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import android.app.NotificationManager
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.ColorPickerDialog
@@ -40,6 +43,9 @@ class MedicineSettingsFragment : MedicinePreferences(
     lateinit var notificationManager: NotificationManager
 
     override fun customSetup(modelData: Medicine) {
+        setupAmountEdit(findPreference("half_life_hours")!!)
+        setupAmountEdit(findPreference("time_to_peak_hours")!!)
+
         findPreference<ListPreference>("notification_importance")?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
                 if (newValue == "2") {
@@ -70,7 +76,19 @@ class MedicineSettingsFragment : MedicinePreferences(
                     com.futsch1.medtimer.core.ui.R.string.high_and_alarm
                 ) else getString(com.futsch1.medtimer.core.ui.R.string.high)
             }
+
+        findPreference<EditTextPreference>("half_life_hours")?.summary =
+            hoursSummary(modelData.halfLifeHours, com.futsch1.medtimer.core.ui.R.string.half_life_summary)
+        findPreference<EditTextPreference>("time_to_peak_hours")?.summary =
+            hoursSummary(modelData.timeToPeakHours, com.futsch1.medtimer.core.ui.R.string.time_to_peak_summary)
     }
+
+    private fun hoursSummary(hours: Double, @StringRes unsetSummary: Int): String =
+        if (hours > 0.0) {
+            MedicineHelper.formatAmount(hours, getString(com.futsch1.medtimer.core.ui.R.string.hours_abbr))
+        } else {
+            getString(unsetSummary)
+        }
 
     fun showEnablePermissionsDialog() {
         showEnableFullScreenIntentDialog(requireContext(), notificationManager)
