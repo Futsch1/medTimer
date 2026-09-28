@@ -216,4 +216,6 @@
     <string name="set_home_location_confirm">Setja heimilisstaðsetningu á\n%1$s, %2$s?</string>
     <string name="home_location_error">Ekki tókst að ákvarða núverandi staðsetningu þína</string>
     <string name="stock_after_simulation_end">Eftir %s</string>
+    <string name="recent_custom">Síðasta sérsniðna færsla</string>
+    <string name="use_current_time">Nota núverandi tíma</string>
 </resources>

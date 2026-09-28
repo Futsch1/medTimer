@@ -338,4 +338,12 @@
     <string name="next_week">Seuraava viikko</string>
     <string name="stock_after_simulation_end">%s jälkeen</string>
     <string name="move_medicine">Siirrä lääke</string>
+    <string name="recent_custom">Viimeisin mukautettu merkintä</string>
+    <string name="use_current_time">Käytä nykyistä aikaa</string>
+    <string name="navigate_up">Siirry ylös</string>
+    <string name="close">Sulje</string>
+    <string name="more_options">Lisää asetuksia</string>
+    <string name="back">Takaisin</string>
+    <string name="enter_time">Syötä otettu aika</string>
+    <string name="medicine">Lääke</string>
 </resources>

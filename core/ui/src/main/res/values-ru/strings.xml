@@ -346,4 +346,12 @@
     <string name="next_week">Следующая неделя</string>
     <string name="stock_after_simulation_end">После %s</string>
     <string name="move_medicine">Переместить лекарство</string>
+    <string name="recent_custom">Последний пользовательский элемент</string>
+    <string name="use_current_time">Использовать текущее время</string>
+    <string name="navigate_up">Перейти назад</string>
+    <string name="close">Закрыть</string>
+    <string name="more_options">Дополнительные параметры</string>
+    <string name="back">Назад</string>
+    <string name="enter_time">Введите время приёма</string>
+    <string name="medicine">Лекарство</string>
 </resources>

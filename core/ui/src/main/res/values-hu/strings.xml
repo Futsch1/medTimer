@@ -338,4 +338,12 @@
     <string name="next_week">Következő hét</string>
     <string name="stock_after_simulation_end">%s után</string>
     <string name="move_medicine">Gyógyszer áthelyezése</string>
+    <string name="recent_custom">Legutóbbi egyéni elem</string>
+    <string name="use_current_time">Aktuális idő használata</string>
+    <string name="navigate_up">Navigálás felfelé</string>
+    <string name="close">Bezárás</string>
+    <string name="more_options">További lehetőségek</string>
+    <string name="back">Vissza</string>
+    <string name="enter_time">Bevétel idejének megadása</string>
+    <string name="medicine">Gyógyszer</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="continuous_interval_reminder">連續間隔提醒</string>
@@ -335,4 +335,9 @@
     <string name="navigate_up" tools:ignore="MissingTranslation">向上瀏覽</string>
     <string name="close" tools:ignore="MissingTranslation">關閉</string>
     <string name="more_options" tools:ignore="MissingTranslation">更多選項</string>
+    <string name="recent_custom">最近使用的自訂項目</string>
+    <string name="use_current_time">使用目前時間</string>
+    <string name="back">返回</string>
+    <string name="enter_time">輸入服用時間</string>
+    <string name="medicine">藥物</string>
 </resources>

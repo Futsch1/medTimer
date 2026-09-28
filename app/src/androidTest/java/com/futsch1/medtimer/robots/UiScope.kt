@@ -53,6 +53,10 @@ class UiScope internal constructor(
     fun awaitExists(matcher: SemanticsMatcher, timeoutMillis: Long = DEFAULT_TIMEOUT) =
         awaitAtLeast(matcher, 1, timeoutMillis)
 
+    /** Waits for this scope's anchor itself, rather than for a matching descendant. */
+    fun awaitSelfExists(timeoutMillis: Long = DEFAULT_TIMEOUT) =
+        await(timeoutMillis) { rule.onAllNodes(anchor).fetchSemanticsNodes().isNotEmpty() }
+
     fun awaitGone(timeoutMillis: Long = DEFAULT_TIMEOUT) =
         await(timeoutMillis) { rule.onAllNodes(anchor).fetchSemanticsNodes().isEmpty() }
 

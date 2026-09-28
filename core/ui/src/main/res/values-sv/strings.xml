@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
@@ -341,4 +341,9 @@
     <string name="close" tools:ignore="MissingTranslation">Stäng</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Navigera uppåt</string>
     <string name="more_options" tools:ignore="MissingTranslation">Fler alternativ</string>
+    <string name="recent_custom">Senast använda anpassade post</string>
+    <string name="use_current_time">Använd aktuell tid</string>
+    <string name="back">Tillbaka</string>
+    <string name="enter_time">Ange intagen tid</string>
+    <string name="medicine">Medicin</string>
 </resources>

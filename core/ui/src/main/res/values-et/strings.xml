@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="expiration_date">Aegumise kuupäev</string>
     <string name="skipped">Vahelejäetud</string>
@@ -321,4 +321,29 @@
     <string name="variable_amount">Sisesta annus koos võetuks märkimisega</string>
     <string name="app_authentication">Eelda rakenduse avamisel autentimist</string>
     <string name="login">Logi MedTimeri rakendusse kasutades biomeetrilist tuvastust</string>
+    <string name="recent_custom">Viimati kasutatud kohandatud kirje</string>
+    <string name="use_current_time">Kasuta praegust kellaaega</string>
+    <string name="windowed_interval_reminder">Akendatud intervalliga meeldetuletus</string>
+    <string name="windowed_interval_reminder_help">Määra igapäevane aktiivne aken (nt 9:00 kuni 21:00), mille alguses käivitub esimene meeldetuletus alati alguskellaajal. Järgnevad meeldetuletused käivituvad fikseeritud intervallidega kuni lõppkellaaja saabumiseni. Kogu muster lähtestatakse iga päev.</string>
+    <string name="override_dnd_summary">Esitab teavituse heli, kui lubatud on ainult vibratsioon või kui aktiivne on režiim „Mitte segada“ ilma vibratsiooni või vaikimiseta</string>
+    <string name="enable_dnd_dialog">Teavituste heli alati esitamise lubamiseks luba MedTimerile juurdepääs režiimile „Mitte segada“ järgnevas menüüs</string>
+    <string name="invalid_amount">Kogus peab sisaldama arvu, et lubada selle meeldetuletuse ravimivaru jälgimine.</string>
+    <string name="sticky_on_lockscreen_summary">Meeldetuletusi ei saa lukustuskuvalt sulgeda, ainult teavituste paneelist\nMärkus: mõned nutikellad ei kuva teavitusi, kui see on lubatud</string>
+    <string name="high_and_alarm">Kõrge + alarm</string>
+    <string name="reminder_enabled_summary">Keela, et peatada kõik selle meeldetuletuse teavitused</string>
+    <string name="add_linked_reminder_summary">Loob järelmeeldetuletuse, mis planeeritakse teatud aja pärast selle meeldetuletuse käivitumist.</string>
+    <string name="cyclic_reminder_summary">Määrab korduva aktiivsete ja peatatud päevade mustri, alustades antud kuupäevast. Meeldetuletus käivitab teavituse ainult aktiivsetel päevadel. Kasuta seda näiteks rasestumisvastaste pillide jaoks.</string>
+    <string name="variable_amount_summary">Kui on aktiivne, kuvatakse meeldetuletuse võtmisel dialoog annuse sisestamiseks.</string>
+    <string name="automatically_taken_summary">Kui on aktiivne, meeldetuletust ei kuvata teavitusena ja see märgitakse automaatselt võetuks (kasulik ainult varu jälgimiseks).</string>
+    <string name="reminder_status_summary">Lülita sisse, et määrata esimese või viimase teavituse kuupäev. Jäta mõlemad välja lülitatuks, kui kuupäevapiirangut ei soovi.</string>
+    <string name="system_locale_summary">Kui välja lülitatud, kasutab rakendus rakendusele määratud keelega vastavat seadistust.</string>
+    <string name="raised">Käivitatud</string>
+    <string name="acknowledged">Kinnitatud</string>
+    <string name="by_name">Nime järgi</string>
+    <string name="by_creation_date_ascending">Loomiskuupäeva järgi kasvavalt</string>
+    <string name="by_creation_date_descending">Loomiskuupäeva järgi kahanevalt</string>
+    <string name="stock_after_simulation_end">Pärast %s</string>
+    <string name="back">Tagasi</string>
+    <string name="enter_time">Sisesta võtmise aeg</string>
+    <string name="medicine">Ravim</string>
 </resources>

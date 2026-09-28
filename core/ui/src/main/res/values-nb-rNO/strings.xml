@@ -65,4 +65,6 @@
     <string name="export_events_csv">Eksporter hendelser som CSV</string>
     <string name="export_medicines_pdf">Eksporter legemidler som PDF</string>
     <string name="export_medicines_csv">Eksporter legemidler som CSV</string>
+    <string name="recent_custom">Siste egendefinerte oppføring</string>
+    <string name="use_current_time">Bruk gjeldende klokkeslett</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
@@ -347,4 +347,9 @@
     <string name="navigate_up" tools:ignore="MissingTranslation">Navegar para cima</string>
     <string name="close" tools:ignore="MissingTranslation">Fechar</string>
     <string name="more_options" tools:ignore="MissingTranslation">Mais opções</string>
+    <string name="recent_custom">Último item personalizado</string>
+    <string name="use_current_time">Usar o horário atual</string>
+    <string name="back">Voltar</string>
+    <string name="enter_time">Insira o horário tomado</string>
+    <string name="medicine">Medicamento</string>
 </resources>
