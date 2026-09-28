@@ -340,4 +340,17 @@
     <string name="back">返回</string>
     <string name="enter_time">輸入服用時間</string>
     <string name="medicine">藥物</string>
+    <string name="levels">濃度</string>
+    <string name="level_estimate">濃度估算</string>
+    <string name="half_life">半衰期（小時）</string>
+    <string name="time_to_peak">達峰時間（小時）</string>
+    <string name="half_life_summary">設定後可在分析畫面中估算此藥物在體內隨時間變化的濃度</string>
+    <string name="time_to_peak_summary">從服藥到達到最高濃度所需的時間</string>
+    <string name="pk_disclaimer">根據您已服用的劑量，使用簡單模型估算的相對濃度。不構成醫療建議。</string>
+    <string name="pk_empty">在藥物設定中設定半衰期和達峰時間，即可在此處檢視其估算濃度。</string>
+    <string name="pk_settings_info">濃度採用具有一級吸收的一室模型估算。必須同時設定半衰期和達峰時間。劑量可以使用任意單位（例如 2.5 mg），但同一藥物的所有劑量必須使用相同單位。</string>
+    <string name="pk_ignored_doses">未計入無法識別劑量（例如 2.5 mg）的記錄：%1$d</string>
+    <string name="pk_unit_conflict">%1$s 未顯示，因為其劑量使用了不同的單位：%2$s。請修改劑量，使其全部使用相同單位。</string>
+    <string name="pk_no_unit">無單位</string>
+    <string name="custom_range">自訂</string>
 </resources>

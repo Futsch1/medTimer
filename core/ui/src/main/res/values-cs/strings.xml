@@ -358,4 +358,17 @@
     <string name="back">Zpět</string>
     <string name="enter_time">Zadejte čas užití</string>
     <string name="medicine">Léky</string>
+    <string name="levels">Hladiny</string>
+    <string name="level_estimate">Odhad hladiny</string>
+    <string name="half_life">Poločas (hodiny)</string>
+    <string name="time_to_peak">Doba do vrcholu (hodiny)</string>
+    <string name="half_life_summary">Nastavte pro odhad hladiny tohoto léku v těle v čase na obrazovce analýzy</string>
+    <string name="time_to_peak_summary">Doba od užití dávky do její nejvyšší hladiny</string>
+    <string name="pk_disclaimer">Relativní hladina odhadnutá z užitých dávek pomocí jednoduchého modelu. Nejde o lékařskou radu.</string>
+    <string name="pk_empty">Nastavte poločas a dobu do vrcholu v nastavení léku, abyste zde viděli jeho odhadovanou hladinu.</string>
+    <string name="pk_settings_info">Hladiny se odhadují jednokompartmentovým modelem s absorpcí prvního řádu. Musí být nastaven poločas i doba do vrcholu. Množství dávek může být v libovolné jednotce (např. 2.5 mg), ale všechny dávky jednoho léku musí používat stejnou.</string>
+    <string name="pk_ignored_doses">Dávky bez čitelného množství (např. 2.5 mg) nejsou zahrnuty: %1$d</string>
+    <string name="pk_unit_conflict">%1$s se nezobrazuje, protože jeho dávky používají různé jednotky: %2$s. Upravte množství tak, aby všechna používala stejnou jednotku.</string>
+    <string name="pk_no_unit">bez jednotky</string>
+    <string name="custom_range">Vlastní</string>
 </resources>

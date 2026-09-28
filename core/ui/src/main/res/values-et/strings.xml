@@ -346,4 +346,17 @@
     <string name="back">Tagasi</string>
     <string name="enter_time">Sisesta võtmise aeg</string>
     <string name="medicine">Ravim</string>
+    <string name="levels">Tasemed</string>
+    <string name="level_estimate">Taseme hinnang</string>
+    <string name="half_life">Poolväärtusaeg (tundi)</string>
+    <string name="time_to_peak">Aeg tipuni (tundi)</string>
+    <string name="half_life_summary">Määra, et hinnata selle ravimi taset kehas aja jooksul analüüsikuval</string>
+    <string name="time_to_peak_summary">Aeg annuse võtmisest kuni selle kõrgeima tasemeni</string>
+    <string name="pk_disclaimer">Lihtsa mudeli abil võetud annustest hinnatud suhteline tase. Ei ole meditsiiniline nõuanne.</string>
+    <string name="pk_empty">Määra ravimi seadetes poolväärtusaeg ja aeg tipuni, et näha siin selle hinnangulist taset.</string>
+    <string name="pk_settings_info">Tasemeid hinnatakse ühekambrilise mudeliga, milles imendumine on esimest järku. Määratud peavad olema nii poolväärtusaeg kui ka aeg tipuni. Annuste kogused võivad olla mis tahes ühikus (nt 2,5 mg), kuid ühe ravimi kõik annused peavad kasutama sama ühikut.</string>
+    <string name="pk_ignored_doses">Loetava koguseta annuseid (nt 2,5 mg) ei arvestata: %1$d</string>
+    <string name="pk_unit_conflict">%1$s ei ole kuvatud, sest selle annused kasutavad erinevaid ühikuid: %2$s. Muuda koguseid nii, et kõik kasutaksid sama ühikut.</string>
+    <string name="pk_no_unit">ühikuta</string>
+    <string name="custom_range">Kohandatud</string>
 </resources>

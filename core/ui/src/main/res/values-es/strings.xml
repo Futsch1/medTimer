@@ -352,4 +352,17 @@
     <string name="back">Atrás</string>
     <string name="enter_time">Introducir hora de toma</string>
     <string name="medicine">Medicamento</string>
+    <string name="levels">Niveles</string>
+    <string name="level_estimate">Estimación del nivel</string>
+    <string name="half_life">Vida media (horas)</string>
+    <string name="time_to_peak">Tiempo hasta el pico (horas)</string>
+    <string name="half_life_summary">Establécelo para estimar el nivel de este medicamento en el cuerpo a lo largo del tiempo en la pantalla de análisis</string>
+    <string name="time_to_peak_summary">Tiempo desde que se toma una dosis hasta su nivel más alto</string>
+    <string name="pk_disclaimer">Nivel relativo estimado a partir de las dosis tomadas mediante un modelo sencillo. No es consejo médico.</string>
+    <string name="pk_empty">Establece una vida media y un tiempo hasta el pico en los ajustes de un medicamento para ver aquí su nivel estimado.</string>
+    <string name="pk_settings_info">Los niveles se estiman con un modelo monocompartimental con absorción de primer orden. Deben establecerse tanto la vida media como el tiempo hasta el pico. Las cantidades de las dosis pueden usar cualquier unidad (p. ej., 2,5 mg), pero todas las dosis de un medicamento deben usar la misma.</string>
+    <string name="pk_ignored_doses">Las dosis sin una cantidad legible (p. ej., 2,5 mg) no se incluyen: %1$d</string>
+    <string name="pk_unit_conflict">%1$s no se muestra porque sus dosis usan unidades distintas: %2$s. Cambia las cantidades para que todas usen la misma unidad.</string>
+    <string name="pk_no_unit">sin unidad</string>
+    <string name="custom_range">Personalizado</string>
 </resources>

@@ -346,4 +346,17 @@
     <string name="back">Zurück</string>
     <string name="enter_time">Einnahmezeit eingeben</string>
     <string name="medicine">Medikament</string>
+    <string name="levels">Spiegel</string>
+    <string name="level_estimate">Spiegelschätzung</string>
+    <string name="half_life">Halbwertszeit (Stunden)</string>
+    <string name="time_to_peak">Zeit bis zum Maximum (Stunden)</string>
+    <string name="half_life_summary">Festlegen, um den Spiegel dieses Medikaments im Körper im Zeitverlauf im Analysebildschirm zu schätzen</string>
+    <string name="time_to_peak_summary">Zeit von der Einnahme einer Dosis bis zu ihrem höchsten Spiegel</string>
+    <string name="pk_disclaimer">Relativer Spiegel, geschätzt aus deinen eingenommenen Dosen mit einem einfachen Modell. Keine medizinische Beratung.</string>
+    <string name="pk_empty">Lege in den Einstellungen eines Medikaments eine Halbwertszeit und die Zeit bis zum Maximum fest, um hier seinen geschätzten Spiegel zu sehen.</string>
+    <string name="pk_settings_info">Spiegel werden mit einem Ein-Kompartiment-Modell mit Absorption erster Ordnung geschätzt. Halbwertszeit und Zeit bis zum Maximum müssen beide festgelegt sein. Dosismengen können eine beliebige Einheit haben (z. B. 2,5 mg), aber alle Dosen eines Medikaments müssen dieselbe verwenden.</string>
+    <string name="pk_ignored_doses">Dosen ohne lesbare Menge (z. B. 2,5 mg) werden nicht berücksichtigt: %1$d</string>
+    <string name="pk_unit_conflict">%1$s wird nicht angezeigt, weil seine Dosen unterschiedliche Einheiten verwenden: %2$s. Ändere die Mengen so, dass alle dieselbe Einheit verwenden.</string>
+    <string name="pk_no_unit">keine Einheit</string>
+    <string name="custom_range">Benutzerdefiniert</string>
 </resources>

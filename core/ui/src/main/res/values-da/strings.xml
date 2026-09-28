@@ -346,4 +346,17 @@
     <string name="back">Tilbage</string>
     <string name="enter_time">Angiv indtaget tidspunkt</string>
     <string name="medicine">Medicin</string>
+    <string name="levels">Niveauer</string>
+    <string name="level_estimate">Niveauestimat</string>
+    <string name="half_life">Halveringstid (timer)</string>
+    <string name="time_to_peak">Tid til maksimum (timer)</string>
+    <string name="half_life_summary">Angiv for at estimere niveauet af denne medicin i kroppen over tid på analyseskærmen</string>
+    <string name="time_to_peak_summary">Tid fra en dosis tages, til den når sit højeste niveau</string>
+    <string name="pk_disclaimer">Relativt niveau estimeret ud fra dine indtagne doser med en simpel model. Ikke medicinsk rådgivning.</string>
+    <string name="pk_empty">Angiv en halveringstid og tid til maksimum i en medicins indstillinger for at se dens estimerede niveau her.</string>
+    <string name="pk_settings_info">Niveauer estimeres med en ét-kompartmentmodel med førsteordens absorption. Både halveringstid og tid til maksimum skal angives. Dosismængder kan bruge en vilkårlig enhed (f.eks. 2.5 mg), men alle doser af en medicin skal bruge den samme.</string>
+    <string name="pk_ignored_doses">Doser uden en læsbar mængde (f.eks. 2.5 mg) er ikke medtaget: %1$d</string>
+    <string name="pk_unit_conflict">%1$s vises ikke, fordi dens doser bruger forskellige enheder: %2$s. Ret mængderne, så de alle bruger den samme enhed.</string>
+    <string name="pk_no_unit">ingen enhed</string>
+    <string name="custom_range">Brugerdefineret</string>
 </resources>
