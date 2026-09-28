@@ -352,4 +352,19 @@
     <string name="use_current_time">Use current time</string>
     <string name="enter_time">Enter taken time</string>
     <string name="medicine">Medicine</string>
+    <string name="levels">Levels</string>
+    <string name="level_estimate">Level estimate</string>
+    <string name="half_life">Half-life (hours)</string>
+    <string name="time_to_peak">Time to peak (hours)</string>
+    <string name="half_life_summary">Set to estimate the level of this medicine in the body over time in the analysis screen</string>
+    <string name="time_to_peak_summary">Time from taking a dose until its highest level</string>
+    <string name="pk_disclaimer">Relative level estimated from your taken doses using a simple model. Not medical advice.</string>
+    <string name="pk_empty">Set a half-life and time to peak in a medicine\'s settings to see its estimated level here.</string>
+    <string name="pk_settings_info">Levels are estimated with a one-compartment model with first-order absorption. Both half-life and time to peak must be set. Dose amounts can use any unit (e.g. 2.5 mg), but all doses of a medicine must use the same one.</string>
+    <string name="pk_ignored_doses">Doses without a readable amount (e.g. 2.5 mg) are not included: %1$d</string>
+    <string name="pk_extra_numbers">%1$s is not shown because some doses contain more than one number in the amount, like \"%2$s\". Change them to a single amount.</string>
+    <string name="pk_incomplete_number">%1$s is not shown because some amounts cannot be read completely with your phone\'s number format, like \"%2$s\". Write decimals with \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s is not shown because its doses use different units: %2$s. Change the amounts so they all use the same unit.</string>
+    <string name="pk_no_unit">no unit</string>
+    <string name="custom_range">Custom</string>
 </resources>

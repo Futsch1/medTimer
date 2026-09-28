@@ -346,4 +346,19 @@
     <string name="back">Terug</string>
     <string name="enter_time">Ingenomen tijd invoeren</string>
     <string name="medicine">Medicijn</string>
+    <string name="levels">Spiegels</string>
+    <string name="level_estimate">Spiegelschatting</string>
+    <string name="half_life">Halfwaardetijd (uren)</string>
+    <string name="time_to_peak">Tijd tot piek (uren)</string>
+    <string name="half_life_summary">Instellen om de spiegel van dit medicijn in het lichaam in de loop van de tijd te schatten in het analysescherm</string>
+    <string name="time_to_peak_summary">Tijd vanaf het innemen van een dosis tot de hoogste spiegel</string>
+    <string name="pk_disclaimer">Relatieve spiegel geschat op basis van je ingenomen doses met een eenvoudig model. Geen medisch advies.</string>
+    <string name="pk_empty">Stel een halfwaardetijd en tijd tot piek in bij de instellingen van een medicijn om hier de geschatte spiegel te zien.</string>
+    <string name="pk_settings_info">Spiegels worden geschat met een eencompartimentmodel met eerste-orde-absorptie. Zowel de halfwaardetijd als de tijd tot piek moeten zijn ingesteld. Dosishoeveelheden mogen elke eenheid gebruiken (bijv. 2,5 mg), maar alle doses van een medicijn moeten dezelfde gebruiken.</string>
+    <string name="pk_ignored_doses">Doses zonder leesbare hoeveelheid (bijv. 2,5 mg) worden niet meegeteld: %1$d</string>
+    <string name="pk_extra_numbers">%1$s wordt niet getoond omdat sommige doses meer dan één getal in de hoeveelheid bevatten, zoals \"%2$s\". Wijzig ze in één hoeveelheid.</string>
+    <string name="pk_incomplete_number">%1$s wordt niet getoond omdat sommige hoeveelheden niet volledig kunnen worden gelezen met de getalnotatie van je telefoon, zoals \"%2$s\". Schrijf decimalen met \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s wordt niet getoond omdat de doses verschillende eenheden gebruiken: %2$s. Pas de hoeveelheden aan zodat ze allemaal dezelfde eenheid gebruiken.</string>
+    <string name="pk_no_unit">geen eenheid</string>
+    <string name="custom_range">Aangepast</string>
 </resources>

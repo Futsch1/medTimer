@@ -352,4 +352,19 @@
     <string name="back">Voltar</string>
     <string name="enter_time">Insira o horário tomado</string>
     <string name="medicine">Medicamento</string>
+    <string name="levels">Níveis</string>
+    <string name="level_estimate">Estimativa de nível</string>
+    <string name="half_life">Meia-vida (horas)</string>
+    <string name="time_to_peak">Tempo até o pico (horas)</string>
+    <string name="half_life_summary">Defina para estimar o nível deste medicamento no corpo ao longo do tempo na tela de análise</string>
+    <string name="time_to_peak_summary">Tempo desde a tomada de uma dose até seu nível mais alto</string>
+    <string name="pk_disclaimer">Nível relativo estimado a partir das doses tomadas usando um modelo simples. Não é orientação médica.</string>
+    <string name="pk_empty">Defina uma meia-vida e um tempo até o pico nas configurações de um medicamento para ver aqui o nível estimado.</string>
+    <string name="pk_settings_info">Os níveis são estimados com um modelo de um compartimento com absorção de primeira ordem. É necessário definir a meia-vida e o tempo até o pico. As quantidades das doses podem usar qualquer unidade (ex.: 2,5 mg), mas todas as doses de um medicamento precisam usar a mesma.</string>
+    <string name="pk_ignored_doses">As doses sem quantidade legível (ex.: 2,5 mg) não são incluídas: %1$d</string>
+    <string name="pk_extra_numbers">%1$s não é exibido porque algumas doses contêm mais de um número na quantidade, como \"%2$s\". Altere-as para uma única quantidade.</string>
+    <string name="pk_incomplete_number">%1$s não é exibido porque algumas quantidades não podem ser lidas por completo com o formato numérico do celular, como \"%2$s\". Escreva as casas decimais com \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s não é exibido porque suas doses usam unidades diferentes: %2$s. Altere as quantidades para que todas usem a mesma unidade.</string>
+    <string name="pk_no_unit">sem unidade</string>
+    <string name="custom_range">Personalizado</string>
 </resources>

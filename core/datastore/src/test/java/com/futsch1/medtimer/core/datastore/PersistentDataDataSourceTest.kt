@@ -261,6 +261,12 @@ class PersistentDataDataSourceTest {
     }
 
     @Test
+    fun `activeStatisticsFragment parses LEVELS from 3`() {
+        defaultPrefs.edit().putInt(PersistentDataDataSource.ACTIVE_STATISTICS_FRAGMENT, 3).commit()
+        assertEquals(StatisticFragment.LEVELS, dataSource.data.value.activeStatisticsFragment)
+    }
+
+    @Test
     fun `activeStatisticsFragment defaults to CALENDAR on invalid`() {
         defaultPrefs.edit().putInt(PersistentDataDataSource.ACTIVE_STATISTICS_FRAGMENT, 99).commit()
         assertEquals(StatisticFragment.CALENDAR, dataSource.data.value.activeStatisticsFragment)
