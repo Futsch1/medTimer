@@ -94,7 +94,8 @@ private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
 /**
  * Fans [buttons] out along an arc to the right of the anchor (mirrored left in RTL), over a
  * radial scrim radiating from that same point.
- * Buttons reveal bottom-most first and collapse in reverse before the popup unmounts.
+ * Buttons reveal top-most first, so the primary action (Taken) shows up immediately, and collapse
+ * in reverse before the popup unmounts.
  * Runs in a window-sized popup, with everything positioned against [anchorCoordinates] — the state
  * button's own measured position — rather than by anchoring the popup window itself.
  *
@@ -226,7 +227,8 @@ private fun ArcActionButtons(
             ArcScrim(expanded)
             orderedButtons.forEachIndexed { index, button ->
                 AnimatedVisibility(
-                    visible = index < revealedCount,
+                    // orderedButtons runs bottom-most first, so count the reveal from its end.
+                    visible = index >= orderedButtons.size - revealedCount,
                     enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()),
                     exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
