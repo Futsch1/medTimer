@@ -5,21 +5,25 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.LOCATION_SNOOZE_ENABLED
+import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.SNOOZE_DURATION
 import com.futsch1.medtimer.core.domain.model.HomeLocation
 import com.futsch1.medtimer.core.location.GeofenceRegistrar
 import com.futsch1.medtimer.core.location.LocationProvider
 import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -62,9 +66,32 @@ class SnoozeSettingsFragment : PreferencesFragment() {
 
         setPreferencesFromResource(R.xml.snooze_settings, rootKey)
 
+        setupSnoozeDuration()
         setupLocationSnooze()
         setupHomeLocation()
         setupShowOnMap()
+    }
+
+    private fun setupSnoozeDuration() {
+        val preference = preferenceScreen.findPreference<ListPreference>(SNOOZE_DURATION) ?: return
+        preference.summaryProvider = Preference.SummaryProvider<ListPreference> { pref ->
+            snoozeDurationSummary(pref.value, pref.entries, pref.entryValues) { minutes ->
+                "$minutes ${resources.getQuantityString(com.futsch1.medtimer.core.ui.R.plurals.minutes, minutes)}"
+            }
+        }
+        preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            if (newValue != SET_SNOOZE_DURATION_VALUE) {
+                return@OnPreferenceChangeListener true
+            }
+            TextInputDialogBuilder(requireActivity())
+                .title(com.futsch1.medtimer.core.ui.R.string.snooze_duration)
+                .hint(com.futsch1.medtimer.core.ui.R.string.minutes_string)
+                .initialText("")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .textSink { text -> parseSnoozeMinutes(text)?.let { preference.value = it.toString() } }
+                .show()
+            false
+        }
     }
 
     private fun setupLocationSnooze() {

@@ -229,6 +229,7 @@
     <string name="tags">Tagi</string>
     <string name="friday">Piątek</string>
     <string name="custom">Niestandardowe…</string>
+    <string name="set_duration">Ustaw czas…</string>
     <string name="next_month">Następny miesiąc</string>
     <string name="minutes_1">1 minuta</string>
     <string name="advanced_settings">Zaawansowane</string>

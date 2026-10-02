@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Başlangıç saati</string>
     <string name="weekend_end_time">Bitiş saati</string>
     <string name="custom">Özel…</string>
+    <string name="set_duration">Süre belirle…</string>
     <string name="advanced_settings">Gelişmiş ayarlar</string>
     <string name="cycle_pause_days">Ara günleri</string>
     <string name="reminders">Hatırlatıcılar</string>

@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Aloitusaika</string>
     <string name="weekend_end_time">Lopetusaika</string>
     <string name="custom">Mukautettu…</string>
+    <string name="set_duration">Aseta kesto…</string>
     <string name="advanced_settings">Edistyneet asetukset</string>
     <string name="cycle_pause_days">Taukopäivät</string>
     <string name="reminders">Muistutukset</string>

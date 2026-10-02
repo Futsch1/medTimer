@@ -134,6 +134,7 @@
     <string name="saturday">星期六</string>
     <string name="sunday">星期天</string>
     <string name="custom">自定…</string>
+    <string name="set_duration">設定時長…</string>
     <string name="weekend_mode_summary">在每週的特定日子，在指定時間段內延後通知</string>
     <string name="weekend_start_time">開始時間</string>
     <string name="weekend_end_time">結束時間</string>
