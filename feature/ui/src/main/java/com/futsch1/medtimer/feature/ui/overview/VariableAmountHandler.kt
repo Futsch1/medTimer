@@ -16,6 +16,7 @@ import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -31,11 +32,10 @@ class VariableAmountHandler @Inject constructor(
         val reminderNotificationData = intent.extras!!.toReminderNotificationData()
         if (!reminderNotificationData.valid) return
 
-        for (eventId in reminderNotificationData.reminderEventIds) {
-            val event = reminderEventRepository.fetch(eventId) ?: continue
-            if (event.status != ReminderEvent.ReminderStatus.RAISED) continue
+        val eventsAskingForAmount = withContext(ioDispatcher) { takeDosesWithoutAmount(reminderNotificationData.reminderEventIds) }
+        for (event in eventsAskingForAmount) {
+            val eventId = event.reminderEventId
             val reminder = reminderRepository.fetch(event.reminderId) ?: continue
-            if (!reminder.variableAmount) continue
             val medicine = medicineRepository.fetch(reminder.medicineRelId) ?: continue
 
             suspendCancellableCoroutine { continuation ->
@@ -61,6 +61,20 @@ class VariableAmountHandler @Inject constructor(
                     .show()
             }
         }
+    }
+
+    /**
+     * A combined notification opens the amount dialog as soon as one of its doses asks for an amount.
+     * Takes the open doses that don't ask right away and returns the open ones that do, so no dose of
+     * the notification is left unprocessed.
+     */
+    internal suspend fun takeDosesWithoutAmount(eventIds: List<Int>): List<ReminderEvent> {
+        val openEvents = eventIds.mapNotNull { openReminderEvent(it) }
+        val (askingEvents, plainEvents) = openEvents.partition { it.askForAmount }
+        if (plainEvents.isNotEmpty()) {
+            commandBus.markReminderEvents(plainEvents.map { it.reminderEventId }, ReminderEvent.ReminderStatus.TAKEN)
+        }
+        return askingEvents
     }
 
     /**

@@ -76,7 +76,31 @@ class VariableAmountHandlerTest {
         assertEquals(ReminderEvent.ReminderStatus.RAISED, captor.firstValue.status)
     }
 
+    @Test
+    fun `should take doses that do not ask for an amount and only prompt for the others`() = runTest {
+        val askingEvent = event(ReminderEvent.ReminderStatus.RAISED).copy(askForAmount = true)
+        val plainEvent = event(ReminderEvent.ReminderStatus.RAISED).copy(reminderEventId = OTHER_EVENT_ID)
+        whenever(reminderEventRepository.fetch(EVENT_ID)).thenReturn(askingEvent)
+        whenever(reminderEventRepository.fetch(OTHER_EVENT_ID)).thenReturn(plainEvent)
+
+        val toPrompt = handler.takeDosesWithoutAmount(listOf(EVENT_ID, OTHER_EVENT_ID))
+
+        assertEquals(listOf(askingEvent), toPrompt)
+        verify(commandBus).markReminderEvents(listOf(OTHER_EVENT_ID), ReminderEvent.ReminderStatus.TAKEN)
+    }
+
+    @Test
+    fun `should not prompt for doses that are no longer open`() = runTest {
+        whenever(reminderEventRepository.fetch(EVENT_ID)).thenReturn(event(ReminderEvent.ReminderStatus.TAKEN).copy(askForAmount = true))
+
+        val toPrompt = handler.takeDosesWithoutAmount(listOf(EVENT_ID))
+
+        assertEquals(emptyList<ReminderEvent>(), toPrompt)
+        verify(commandBus, never()).markReminderEvents(any(), any())
+    }
+
     private companion object {
+        const val OTHER_EVENT_ID = 12
         const val EVENT_ID = 11
     }
 }
