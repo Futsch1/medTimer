@@ -142,6 +142,7 @@
     <string name="cycle_pause_days">暂停服药提醒天数</string>
     <string name="reminders">提醒</string>
     <string name="filter">查找</string>
+    <string name="search">搜索</string>
     <string name="seven_days">7 天</string>
     <string name="analysis">记录分析</string>
     <string name="tabular_view">表格视图</string>

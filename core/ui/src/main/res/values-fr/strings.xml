@@ -152,6 +152,7 @@
     <string name="cycle_pause_days">Jours de pause</string>
     <string name="reminders">Rappels</string>
     <string name="filter">Filtre</string>
+    <string name="search">Rechercher</string>
     <string name="seven_days">7 jours</string>
     <string name="analysis">Analyse</string>
     <string name="tabular_view">Vue tabulaire</string>

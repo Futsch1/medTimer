@@ -37,8 +37,22 @@ class ManualDoseViewModel @Inject constructor(
 ) : ViewModel() {
     private val medicineList: Flow<List<Medicine>> = medicineRepository.getAllFlow()
 
-    private val manualDoseMedicines: Flow<List<ManualDoseMedicineEntry>> =
-        medicineList.map { medicines -> medicines.map { ManualDoseMedicineEntry(it.name, it) } }
+    private val searchQuery = MutableStateFlow("")
+
+    fun search(query: String) {
+        searchQuery.value = query
+    }
+
+    private data class MedicineChoices(val entries: List<ManualDoseMedicineEntry>, val query: String, val showSearch: Boolean)
+
+    private val manualDoseMedicines: Flow<MedicineChoices> =
+        combine(medicineList, searchQuery) { medicines, query ->
+            MedicineChoices(
+                entries = medicines.filter { it.name.contains(query.trim(), ignoreCase = true) }.map { ManualDoseMedicineEntry(it.name, it) },
+                query = query,
+                showSearch = medicines.size > SEARCH_MIN_MEDICINES,
+            )
+        }
 
     private val lastCustomMedicineEntry: Flow<ManualDoseMedicineEntry> =
         persistentDataDataSource.data.map { data -> ManualDoseMedicineEntry(data.lastCustomDose, null) }
@@ -107,7 +121,9 @@ class ManualDoseViewModel @Inject constructor(
         lastCustomDoseAmount
     ) { medicines, lastCustomMedicineEntry, amounts, lastCustomDoseAmount ->
         ManualDoseState(
-            medicineEntries = medicines.toImmutableList(),
+            medicineEntries = medicines.entries.toImmutableList(),
+            searchQuery = medicines.query,
+            showSearch = medicines.showSearch,
             lastCustomMedicineEntry = lastCustomMedicineEntry,
             amounts = amounts.toImmutableList(),
             lastCustomDoseAmount = lastCustomDoseAmount,
@@ -185,8 +201,14 @@ class ManualDoseViewModel @Inject constructor(
     }
 
     fun reset() {
+        searchQuery.value = ""
         selectedManualDoseEntry.value = ManualDoseMedicineEntry("", null)
         selectedManualDoseAmount.value = ""
         step.value = ManualDoseStep.MEDICINE
+    }
+
+    private companion object {
+        /** Roughly what the medicine list shows without scrolling; below that a search field is just clutter. */
+        const val SEARCH_MIN_MEDICINES = 5
     }
 }

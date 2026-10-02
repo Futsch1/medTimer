@@ -235,6 +235,7 @@
     <string name="reminders">Meeldetuletused</string>
     <string name="sort">Järjestus</string>
     <string name="filter">Filtreeri</string>
+    <string name="search">Otsi</string>
     <string name="use_relative_date_time">Suhteline kuupäev/kellaaeg</string>
     <string name="use_relative_date_time_summary">Näita meeldetuletuste jaoks suhtelist kuupäeva/kellaaega</string>
     <string name="big_notifications">Teavituste suured nupud</string>
