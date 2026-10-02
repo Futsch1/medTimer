@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -79,8 +77,8 @@ private val ARC_Y_STEP = 48.dp
 /** Angular step shaping the horizontal bulge only (via cosine); see [ARC_Y_STEP] for vertical spacing. */
 private const val ARC_STEP_ANGLE_DEG = 45f
 
-private val ARC_ENTER_STAGGER_DELAY = 70.milliseconds
-private val ARC_EXIT_STAGGER_DELAY = 40.milliseconds
+private val ARC_ENTER_STAGGER_DELAY = 23.milliseconds
+private val ARC_EXIT_STAGGER_DELAY = 13.milliseconds
 private val ARC_EXIT_DURATION = 220.milliseconds
 
 /** Display order top-to-bottom; buttons not visible for a given event are simply skipped. */
@@ -229,7 +227,7 @@ private fun ArcActionButtons(
             orderedButtons.forEachIndexed { index, button ->
                 AnimatedVisibility(
                     visible = index < revealedCount,
-                    enter = fadeIn(spring(stiffness = Spring.StiffnessLow)),
+                    enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()),
                     exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
                     SmallFloatingActionButton(onClick = { onAction(button) }) {
