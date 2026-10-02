@@ -7,6 +7,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -70,6 +71,7 @@ class EditEventViewModelTest {
             reminderRepository,
             commandBus,
             timeFormatter,
+            CoroutineScope(UnconfinedTestDispatcher()),
         )
     }
 
