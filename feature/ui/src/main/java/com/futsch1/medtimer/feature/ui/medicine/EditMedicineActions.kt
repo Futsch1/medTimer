@@ -72,7 +72,7 @@ class EditMedicineActions @AssistedInject constructor(
     fun duplicate() {
         // Navigate up only once the copy is stored: leaving the screen cancels lifecycleScope.
         fragment.lifecycleScope.launch {
-            val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
+            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
             assignTags(medicine.id, newMedicineId)
             navController.navigateUp()
         }
@@ -81,7 +81,7 @@ class EditMedicineActions @AssistedInject constructor(
     fun duplicateIncludingReminders() {
         fragment.lifecycleScope.launch {
             val fullMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
-            val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
+            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
             reminderRepository.createMany(fullMedicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
             assignTags(medicine.id, newMedicineId)
             navController.navigateUp()
@@ -101,6 +101,8 @@ class EditMedicineActions @AssistedInject constructor(
             { }
         )
     }
+
+    private fun copyName(name: String) = fragment.getString(CoreUiR.string.duplicate_name, name)
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
         val oldFullMedicine = medicineRepository.fetch(oldMedicineId) ?: return

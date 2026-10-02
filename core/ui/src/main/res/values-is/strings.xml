@@ -197,6 +197,7 @@
     <string name="amount">Magn</string>
     <string name="duplicate">Afrita</string>
     <string name="duplicate_including_reminders">Afrita ásamt áminningum</string>
+    <string name="duplicate_name">%1$s (afrit)</string>
     <string name="weekly">Vikulega</string>
     <string name="monthly">Mánaðarlega</string>
     <string name="automatic_backup">Sjálfvirk öryggisafritun</string>

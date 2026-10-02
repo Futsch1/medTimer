@@ -268,6 +268,7 @@
     <string name="duplicate">Tee koopia</string>
     <string name="automatic_backup">Automaatne varundus</string>
     <string name="duplicate_including_reminders">Tee koopia koos meeldetuletustega</string>
+    <string name="duplicate_name">%1$s (koopia)</string>
     <string name="backup_successful_to">Automaatne varundus õnnestus: %s</string>
     <string name="automatic_backup_directory_required">Automaatsed varukoopiad vajavad juurdepääsu kaustale. Jätkamiseks vali järgmises dialoogis kaust.</string>
     <string name="medicine_settings">Ravimite seadistused</string>
