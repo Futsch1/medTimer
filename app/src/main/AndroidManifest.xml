@@ -48,7 +48,8 @@
             android:exported="true"
             android:configChanges="locale|layoutDirection"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.MedTimer">
+            android:theme="@style/Theme.MedTimer"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
