@@ -2,7 +2,9 @@ package com.futsch1.medtimer
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -128,7 +130,9 @@ fun AppNavigationScaffold(
     ) {
         // NavigationSuiteScaffold already consumes the space its bar or rail occupies, so padding the
         // full system bars here resolves to exactly the sides the content still has to avoid.
-        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
+        // The keyboard is included so the Fragment content shrinks above it and scroll containers can
+        // bring the focused field into view, rather than leaving it underneath the keyboard.
+        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.ime))) {
             AndroidViewBinding(ContentMainBinding::inflate, Modifier.weight(1f)) {
                 // The update block runs on every recomposition; set up exactly once.
                 if (navController == null) {
