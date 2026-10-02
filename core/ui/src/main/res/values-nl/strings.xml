@@ -328,6 +328,7 @@
     <string name="home_location_error">Kon uw huidige locatie niet bepalen</string>
     <string name="exact_reminders_warning_title">Exacte herinneringen zijn uitgeschakeld</string>
     <string name="exact_reminders_warning_summary">Herinneringen kunnen een paar minuten later dan gepland worden gegeven. Als u exacte herinneringen nodig heeft (ten koste van een iets hoger batterijverbruik), schakel dit in bij de meldingsinstellingen.</string>
+    <string name="enable">Inschakelen</string>
     <string name="medicine_settings">Medicatie-instellingen</string>
     <string name="medicine_cannot_be_skipped">Medicatie kan niet worden overgeslagen</string>
     <string name="medicine_cannot_be_skipped_summary">Indien ingeschakeld, kunnen alle herinneringen voor dit medicament alleen worden gesloten door het medicament als ingenomen te markeren.</string>
