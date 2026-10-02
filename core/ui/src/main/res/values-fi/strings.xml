@@ -328,6 +328,7 @@
     <string name="home_location_error">Nykyistä sijaintiasi ei voitu määrittää</string>
     <string name="exact_reminders_warning_title">Tarkat muistutukset ovat poissa käytöstä</string>
     <string name="exact_reminders_warning_summary">Muistutukset saattavat tulla muutaman minuutin myöhemmin kuin ajastettu. Jos tarvitset tarkkoja muistutuksia (hieman lisääntyneen akkukulutuksen kustannuksella), ota tämä käyttöön ilmoitusasetuksissa.</string>
+    <string name="enable">Ota käyttöön</string>
     <string name="medicine_settings">Lääkeasetukset</string>
     <string name="medicine_cannot_be_skipped">Lääkettä ei voi ohittaa</string>
     <string name="medicine_cannot_be_skipped_summary">Jos käytössä, kaikki tämän lääkkeen muistutukset voidaan poistaa vain merkitsemällä lääke otetuksi.</string>

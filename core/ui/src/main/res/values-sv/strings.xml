@@ -328,6 +328,7 @@
     <string name="linked_reminder_delay">Fördröjning för följande dos</string>
     <string name="exact_reminders_warning_title">Exakta påminnelser är inaktiverade</string>
     <string name="exact_reminders_warning_summary">Påminnelser kan visas några minuter senare än planerat. Om du behöver exakta påminnelser (på bekostnad av något ökad batteriförbrukning) aktiverar du detta i aviseringsinställningarna.</string>
+    <string name="enable">Aktivera</string>
     <string name="medicine_settings">Medicinsinställningar</string>
     <string name="medicine_cannot_be_skipped">Medicin kan inte hoppas över</string>
     <string name="medicine_cannot_be_skipped_summary">Om aktiverat kan alla påminnelser för denna medicin endast stängas av genom att markera medicinen som tagen.</string>

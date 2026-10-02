@@ -328,6 +328,7 @@
     <string name="home_location_error">Kunne ikke bestemme din aktuelle placering</string>
     <string name="exact_reminders_warning_title">Præcise påmindelser er deaktiveret</string>
     <string name="exact_reminders_warning_summary">Påmindelser kan muligvis komme et par minutter senere end planlagt. Hvis du har brug for præcise påmindelser (på bekostning af en let øget batteriforbrug), skal du aktivere dette i notifikationsindstillingerne.</string>
+    <string name="enable">Aktivér</string>
     <string name="medicine_settings">Medicinindstillinger</string>
     <string name="medicine_cannot_be_skipped">Medicin kan ikke springes over</string>
     <string name="medicine_cannot_be_skipped_summary">Hvis aktiveret, kan alle påmindelser for denne medicin kun afvises ved at markere medicinen som taget.</string>

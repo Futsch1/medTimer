@@ -328,6 +328,7 @@
     <string name="home_location_error">Nem sikerült meghatározni a jelenlegi tartózkodási helyét</string>
     <string name="exact_reminders_warning_title">Pontos emlékeztetők letiltva</string>
     <string name="exact_reminders_warning_summary">Az emlékeztetők néhány perccel később jelenhetnek meg a tervezettnél. Ha pontos emlékeztetőkre van szüksége (az akkumulátor valamivel nagyobb fogyasztásának árán), engedélyezze ezt az értesítési beállításokban.</string>
+    <string name="enable">Engedélyezés</string>
     <string name="medicine_settings">Gyógyszer beállítások</string>
     <string name="medicine_cannot_be_skipped">A gyógyszer nem hagyható ki</string>
     <string name="medicine_cannot_be_skipped_summary">Ha engedélyezve van, az ehhez a gyógyszerhez tartozó összes emlékeztető csak a gyógyszer bevételének jelzésével nyugtázható.</string>
