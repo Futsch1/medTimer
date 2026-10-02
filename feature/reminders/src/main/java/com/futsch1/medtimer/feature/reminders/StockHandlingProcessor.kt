@@ -26,7 +26,10 @@ class StockHandlingProcessor @Inject constructor(
 
     private suspend fun checkForThreshold(medicine: Medicine, decreaseAmount: Double, processedInstant: Instant) {
         for (reminder in medicine.reminders) {
-            if (reminder.outOfStockReminderType == Reminder.OutOfStockReminderType.OFF || medicine.amount > reminder.outOfStockThreshold) {
+            if (!reminder.active ||
+                reminder.outOfStockReminderType == Reminder.OutOfStockReminderType.OFF ||
+                medicine.amount > reminder.outOfStockThreshold
+            ) {
                 continue
             }
             val showEvent =
