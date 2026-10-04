@@ -16,6 +16,13 @@ class EventEditorRobot(private val overview: OverviewRobot) {
         pressBack()
     }
 
+    /** Opens the event whose text contains [substring], runs [block] and returns to the Overview. */
+    fun forEventContaining(substring: String, block: EventEditorRobot.() -> Unit) {
+        overview.clickEventContaining(substring)
+        block()
+        pressBack()
+    }
+
     fun assertName(expected: String) = assertContains(NAME, expected)
 
     fun assertNameDoesNotContain(text: String) = assertNotContains(NAME, text)
