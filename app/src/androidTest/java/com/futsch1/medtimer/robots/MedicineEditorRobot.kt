@@ -67,9 +67,9 @@ class MedicineEditorRobot(
         writeTo(AMOUNT, amount)
         closeKeyboard()
 
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyStartTime)
+        pickers.openTimePickerFrom(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyStartTime)
         pickers.pickTime(windowStart)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyEndTime)
+        pickers.openTimePickerFrom(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyEndTime)
         pickers.pickTime(windowEnd)
 
         setIntervalHours(interval)
