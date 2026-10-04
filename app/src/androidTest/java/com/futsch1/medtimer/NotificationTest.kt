@@ -315,6 +315,36 @@ class NotificationTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun takingCombinedRemindersFromOverviewRemovesNotification() {
+        settings.click(R.string.display_settings, R.string.combine_notifications)
+
+        val notificationTime = aboutToFire()
+
+        seed.medicine(TEST_MED) {
+            reminder("1", notificationTime)
+            reminder(SECOND_ONE, notificationTime)
+        }
+
+        notifications.inShade {
+            scheduleRemindersNow()
+            assertShows(TEST_MED)
+            assertShows(SECOND_ONE)
+        }
+
+        navigation.toOverview()
+        // A long click selects both doses of the combined notification
+        overview.longClickEvent(0)
+        overview.assertSelectionCount(2)
+        overview.clickSelectionAction(R.string.taken)
+
+        overview.assertEventState(0, R.string.taken)
+        overview.assertEventState(1, R.string.taken)
+
+        notifications.inShade { assertHidden(TEST_MED) }
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun automaticallyTakenTest() {
         seed.medicine(TEST_MED) { reminder("1", aboutToFire()) }
 

@@ -86,7 +86,10 @@ class NotificationProcessor @Inject constructor(
         reminderNotificationData: ReminderNotificationData,
         reminderEventIds: List<Int>
     ) {
-        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(reminderEventIds)
+        // The shown notification can predate an update that is still being posted, so also drop
+        // the events that are no longer open.
+        val closedReminderEventIds = reminderNotificationData.reminderEventIds.filter { isClosed(it) }
+        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(reminderEventIds + closedReminderEventIds)
         val reminderNotification = reminderNotificationFactory.create(newReminderNotificationData)
         if (reminderNotification != null) {
             notifications.showNotification(reminderNotification, reminderNotificationData.notificationId)
@@ -95,6 +98,9 @@ class NotificationProcessor @Inject constructor(
             cancelNotification(reminderNotificationData.notificationId)
         }
     }
+
+    private suspend fun isClosed(reminderEventId: Int) =
+        reminderEventRepository.fetch(reminderEventId)?.status != ReminderEvent.ReminderStatus.RAISED
 
     private suspend fun rescheduleRepeat(reminderNotificationData: ReminderNotificationData) {
         val preferences = preferencesDataSource.preferences.value

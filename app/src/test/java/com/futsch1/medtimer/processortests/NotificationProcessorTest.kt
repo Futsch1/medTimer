@@ -208,4 +208,26 @@ class NotificationProcessorTest {
         // First reminder still raised
         assertEquals(ReminderEventEntity.ReminderEntityStatus.RAISED, testReminderContext.repositoryFakes.reminderEvents[0].status)
     }
+
+    @Test
+    fun removeLastOpenFromStaleNotification() {
+        testReminderContext.instant = Instant.ofEpochSecond(10)
+        testReminderContext.notificationId = 2
+        fillWithTwoReminders(testReminderContext)
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
+        // The first event was already taken, but its re-posted notification is not shown yet
+        testReminderContext.repositoryFakes.reminderEvents[0].status = ReminderEventEntity.ReminderEntityStatus.TAKEN
+        testReminderContext.notificationManagerFake.add(1, intArrayOf(1, 2), intArrayOf(1, 2))
+
+        runBlocking {
+            notificationProcessor.processReminderEventsInNotification(
+                listOf(2),
+                ReminderEvent.ReminderStatus.TAKEN
+            )
+        }
+        // No event is open anymore, so the notification is removed instead of showing the taken one again
+        verify(testReminderContext.notificationManagerFake.mock, times(1)).cancel(1)
+        verify(testReminderContext.notificationManagerFake.mock, never()).notify(eq(1), any())
+    }
 }
