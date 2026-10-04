@@ -1,5 +1,9 @@
 package com.futsch1.medtimer.feature.ui.overview.manualDose
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
@@ -37,19 +41,20 @@ class ManualDoseViewModel @Inject constructor(
 ) : ViewModel() {
     private val medicineList: Flow<List<Medicine>> = medicineRepository.getAllFlow()
 
-    private val searchQuery = MutableStateFlow("")
+    /** Snapshot state, so the search field reads every keystroke back immediately. */
+    var searchQuery by mutableStateOf("")
+        private set
 
     fun search(query: String) {
-        searchQuery.value = query
+        searchQuery = query
     }
 
-    private data class MedicineChoices(val entries: List<ManualDoseMedicineEntry>, val query: String, val showSearch: Boolean)
+    private data class MedicineChoices(val entries: List<ManualDoseMedicineEntry>, val showSearch: Boolean)
 
     private val manualDoseMedicines: Flow<MedicineChoices> =
-        combine(medicineList, searchQuery) { medicines, query ->
+        combine(medicineList, snapshotFlow { searchQuery.trim() }) { medicines, query ->
             MedicineChoices(
-                entries = medicines.filter { it.name.contains(query.trim(), ignoreCase = true) }.map { ManualDoseMedicineEntry(it.name, it) },
-                query = query,
+                entries = medicines.filter { it.name.contains(query, ignoreCase = true) }.map { ManualDoseMedicineEntry(it.name, it) },
                 showSearch = medicines.size > SEARCH_MIN_MEDICINES,
             )
         }
@@ -122,7 +127,6 @@ class ManualDoseViewModel @Inject constructor(
     ) { medicines, lastCustomMedicineEntry, amounts, lastCustomDoseAmount ->
         ManualDoseState(
             medicineEntries = medicines.entries.toImmutableList(),
-            searchQuery = medicines.query,
             showSearch = medicines.showSearch,
             lastCustomMedicineEntry = lastCustomMedicineEntry,
             amounts = amounts.toImmutableList(),
@@ -201,14 +205,14 @@ class ManualDoseViewModel @Inject constructor(
     }
 
     fun reset() {
-        searchQuery.value = ""
+        searchQuery = ""
         selectedManualDoseEntry.value = ManualDoseMedicineEntry("", null)
         selectedManualDoseAmount.value = ""
         step.value = ManualDoseStep.MEDICINE
     }
 
     private companion object {
-        /** Roughly what the medicine list shows without scrolling; below that a search field is just clutter. */
-        const val SEARCH_MIN_MEDICINES = 5
+        /** About as many medicines as the list shows before it scrolls; below that a search field is just clutter. */
+        const val SEARCH_MIN_MEDICINES = 4
     }
 }

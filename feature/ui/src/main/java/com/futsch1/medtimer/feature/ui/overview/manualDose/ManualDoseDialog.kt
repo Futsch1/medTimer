@@ -95,6 +95,7 @@ fun ManualDoseDialog(
     ) {
         DialogContent(
             state = state,
+            searchQuery = viewModel.searchQuery,
             onSearch = onSearch,
             onSelectMedicineEntry = onSelectMedicineEntry,
             onSelectAmount = onSelectAmount,
@@ -108,6 +109,7 @@ fun ManualDoseDialog(
 @Composable
 private fun DialogContent(
     state: ManualDoseState,
+    searchQuery: String,
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
@@ -148,7 +150,7 @@ private fun DialogContent(
                     ManualDoseStep.MEDICINE -> {
                         SectionLabel(R.string.medicine)
                         if (state.showSearch) {
-                            MedicineSearchField(state.searchQuery, onSearch)
+                            MedicineSearchField(searchQuery, onSearch)
                         }
                         MedicineList(
                             medicineEntries = state.medicineEntries,
@@ -439,7 +441,7 @@ private fun MedicineSearchField(query: String, onSearch: (String) -> Unit) {
         value = query,
         onValueChange = onSearch,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text(stringResource(R.string.search)) },
+        label = { Text(stringResource(R.string.search)) },
         leadingIcon = { Icon(painterResource(R.drawable.search), contentDescription = null) },
         singleLine = true,
     )
@@ -560,6 +562,7 @@ private fun ManualDosePreview(step: ManualDoseStep) {
         Surface {
             DialogContent(
                 state = previewState(step),
+                searchQuery = "",
                 onSearch = {},
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},

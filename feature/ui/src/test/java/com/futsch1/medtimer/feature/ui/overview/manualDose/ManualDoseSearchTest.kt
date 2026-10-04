@@ -48,12 +48,12 @@ class ManualDoseSearchTest {
         viewModel.reset()
 
         assertEquals(manyMedicines, viewModel.labels())
-        assertEquals("", viewModel.state.first().searchQuery)
+        assertEquals("", viewModel.searchQuery)
     }
 
     @Test
     fun `should offer the search field only when there are more medicines than fit the list`() = runTest {
-        assertTrue(viewModelWith(manyMedicines).state.first().showSearch)
-        assertFalse(viewModelWith(manyMedicines.take(5)).state.first().showSearch)
+        assertTrue(viewModelWith(manyMedicines.take(5)).state.first().showSearch)
+        assertFalse(viewModelWith(manyMedicines.take(4)).state.first().showSearch)
     }
 }
