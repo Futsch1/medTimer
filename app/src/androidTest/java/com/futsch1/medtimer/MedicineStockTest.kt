@@ -310,4 +310,22 @@ class MedicineStockTest : MedTimerTestBase() {
         scheduleRemindersNow()
         notifications.inShade { assertShows(notificationTitle) }
     }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun pausedDailyStockReminderTest() {
+        val notificationTitle =
+            InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
+
+        seed.medicine("Test") {
+            stock(10.5)
+            dailyStockReminder(threshold = 14.0, at = laterToday())
+        }
+
+        medicines.clickItem(0)
+        reminders.inSettingsOf(0) { toggleEnabled() }
+
+        scheduleRemindersNow()
+        notifications.inShade { assertHidden(notificationTitle) }
+    }
 }

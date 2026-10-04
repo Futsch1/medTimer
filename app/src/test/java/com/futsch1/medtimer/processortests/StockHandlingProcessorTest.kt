@@ -7,18 +7,13 @@ import com.futsch1.medtimer.feature.reminders.ShowReminderNotificationProcessor
 import com.futsch1.medtimer.feature.reminders.StockHandlingProcessor
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.time.Instant
 
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = [36])
 class StockHandlingProcessorTest {
 
     private val medicineRepository: MedicineRepository = mock()
