@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
@@ -105,7 +105,7 @@ fun AppNavigationScaffold(
     var navController by remember { mutableStateOf<NavController?>(null) }
     var currentDestinationId by remember { mutableIntStateOf(0) }
 
-    val navigationSuiteType = navSuiteType(currentWindowAdaptiveInfo())
+    val navigationSuiteType = navSuiteType(currentWindowAdaptiveInfoV2())
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {

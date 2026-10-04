@@ -72,7 +72,7 @@ class TagDataFromMedicine @AssistedInject constructor(
     override fun addTag(tagName: String) {
         fragment.lifecycleScope.launch(dispatcher) {
             val tagId = tagRepository.create(Tag(tagName, 0))
-            viewModel.associateTag(medicineId, tagId.toInt())
+            viewModel.associateTag(medicineId, tagId)
         }
     }
 }

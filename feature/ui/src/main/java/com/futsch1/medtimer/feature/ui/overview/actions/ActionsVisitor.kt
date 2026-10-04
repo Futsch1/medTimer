@@ -81,8 +81,6 @@ class ActionsVisitor @Inject constructor(
                             ReminderEvent.ReminderStatus.ACKNOWLEDGED
                         )
                     }
-
-                    else -> Unit
                 }
             }
         }
@@ -182,7 +180,10 @@ class ActionsVisitor @Inject constructor(
         )
         if (taken && scheduledReminder.reminder.variableAmount) {
             fragmentActivity.startActivity(
-                getVariableAmountActivityIntent(fragmentActivity, ReminderNotificationData.fromReminderEvent(reminderEvent))
+                getVariableAmountActivityIntent(
+                    fragmentActivity,
+                    ReminderNotificationData.fromReminderEvent(reminderEvent)
+                )
             )
         } else {
             val status = if (taken) ReminderEvent.ReminderStatus.TAKEN else ReminderEvent.ReminderStatus.SKIPPED
@@ -196,7 +197,10 @@ class ActionsVisitor @Inject constructor(
             scheduledReminder.timestamp.epochSecond
         )
         applicationScope.launch {
-            commandBus.markReminderEvents(listOf(reminderEvent.reminderEventId), ReminderEvent.ReminderStatus.ACKNOWLEDGED)
+            commandBus.markReminderEvents(
+                listOf(reminderEvent.reminderEventId),
+                ReminderEvent.ReminderStatus.ACKNOWLEDGED
+            )
         }
     }
 }
