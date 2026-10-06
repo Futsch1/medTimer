@@ -219,6 +219,15 @@ class NotificationTest : MedTimerTestBase() {
             dialogs.enterTextAndConfirm("120")
             preferences.assertSummary(R.string.snooze_duration, twoHours)
         }
+
+        settings.inSection(R.string.snooze_settings) {
+            preferences.assertSummary(R.string.snooze_duration, twoHours)
+            preferences.click(R.string.snooze_duration)
+            dialogs.clickItem(R.string.set_duration)
+            dialogs.awaitInput()
+            dialogs.assertContains("120")
+            dialogs.confirm()
+        }
     }
 
     @Test
