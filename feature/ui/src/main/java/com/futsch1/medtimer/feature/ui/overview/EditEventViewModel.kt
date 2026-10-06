@@ -3,10 +3,13 @@ package com.futsch1.medtimer.feature.ui.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,6 +29,8 @@ import javax.inject.Inject
 class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderEventRepository: ReminderEventRepository,
+    private val reminderRepository: ReminderRepository,
+    private val commandBus: ReminderCommandBus,
     private val timeFormatter: TimeFormatter,
 ) : ViewModel() {
 
@@ -146,8 +151,54 @@ class EditEventViewModel @Inject constructor(
                 status = status ?: event.status
             )
 
-            reminderEventRepository.update(updatedEvent)
+            val appliedEvent = applyStockChange(event, updatedEvent)
+            reminderEventRepository.update(appliedEvent)
+            // Base the next update on the event just written, otherwise editing the sheet again
+            // applies the stock change of this edit once more
+            storedEvent = appliedEvent
         }
+    }
+
+    /**
+     * Corrects the medicine stock when the edited amount or status changes how much stock this dose
+     * takes. Runs the same stock handling a dose marked as taken or skipped from a notification
+     * runs, so the stock shown on the overview and in out of stock reminders matches the event.
+     */
+    private suspend fun applyStockChange(originalEvent: ReminderEvent, updatedEvent: ReminderEvent): ReminderEvent {
+        // Events of medicines without stock management carry no stock, so there is nothing to correct
+        if (originalEvent.stockBefore < 0) return updatedEvent
+
+        val amountChange = stockAmountChange(originalEvent, updatedEvent) ?: return updatedEvent
+        val medicineId = reminderRepository.fetch(updatedEvent.reminderId)?.medicineRelId ?: return updatedEvent
+
+        val stockAfter = commandBus.processStockHandling(
+            amountChange,
+            medicineId,
+            updatedEvent.processedTimestamp.epochSecond
+        ) ?: return updatedEvent
+
+        return updatedEvent.copy(
+            stockHandled = updatedEvent.status == ReminderEvent.ReminderStatus.TAKEN,
+            stockAfter = stockAfter
+        )
+    }
+
+    /**
+     * The stock this edit takes from (positive) or hands back to (negative) the medicine, or null
+     * when the edit leaves the stock untouched.
+     */
+    private fun stockAmountChange(originalEvent: ReminderEvent, updatedEvent: ReminderEvent): Double? {
+        val originalAmount = MedicineHelper.parseAmount(originalEvent.amount) ?: return null
+        val updatedAmount = MedicineHelper.parseAmount(updatedEvent.amount) ?: return null
+
+        val amountChange = when {
+            originalEvent.stockHandled && updatedEvent.status == ReminderEvent.ReminderStatus.SKIPPED -> -originalAmount
+            originalEvent.stockHandled -> updatedAmount - originalAmount
+            updatedEvent.status == ReminderEvent.ReminderStatus.TAKEN -> updatedAmount
+            else -> return null
+        }
+
+        return amountChange.takeIf { it != 0.0 }
     }
 
     private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {
