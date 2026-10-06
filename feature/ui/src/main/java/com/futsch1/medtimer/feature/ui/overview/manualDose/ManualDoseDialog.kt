@@ -61,6 +61,7 @@ private tailrec fun Context.findFragmentActivity(): FragmentActivity = when (thi
 
 object ManualDoseTestTags {
     const val DIALOG = "manual_dose_dialog"
+    const val MEDICINE_SEARCH = "manual_dose_medicine_search"
     const val MEDICINE_LIST = "manual_dose_medicine_list"
     const val MEDICINE_ENTRY = "manual_dose_medicine_entry"
     const val AMOUNT_LIST = "manual_dose_amount_list"
@@ -440,7 +441,9 @@ private fun MedicineSearchField(query: String, onSearch: (String) -> Unit) {
     OutlinedTextField(
         value = query,
         onValueChange = onSearch,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(ManualDoseTestTags.MEDICINE_SEARCH),
         label = { Text(stringResource(R.string.search)) },
         leadingIcon = { Icon(painterResource(R.drawable.search), contentDescription = null) },
         singleLine = true,
