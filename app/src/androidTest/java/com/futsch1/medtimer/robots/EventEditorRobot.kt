@@ -41,6 +41,8 @@ class EventEditorRobot(private val overview: OverviewRobot) {
 
     fun markSkipped() = clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedToggleButton)
 
+    fun setAmount(text: String) = writeTo(AMOUNT, text)
+
     fun setNotes(text: String) = writeTo(NOTES, text)
 
     fun setRemindedAt(time: String, date: String) {
