@@ -37,9 +37,18 @@ def get_status(case: ET.Element) -> tuple[str, ET.Element | None]:
     return "PASS", None
 
 
-def print_test_case(case: ET.Element, counts: dict[str, int], failures: list[tuple[ET.Element, ET.Element]]) -> None:
+def print_test_case(
+    case: ET.Element,
+    counts: dict[str, int],
+    failures: list[tuple[ET.Element, ET.Element]],
+) -> None:
     status, detail = get_status(case)
-    count_key = {"PASS": "passed", "FAIL": "failed", "ERROR": "errors", "SKIP": "skipped"}[status]
+    count_key = {
+        "PASS": "passed",
+        "FAIL": "failed",
+        "ERROR": "errors",
+        "SKIP": "skipped",
+    }[status]
     counts[count_key] += 1
 
     classname = case.get("classname", "")
