@@ -3,11 +3,13 @@ package com.futsch1.medtimer
 import android.os.Build
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.utilities.assertSecondaryAlarmAfter
 import com.futsch1.medtimer.utilities.awaitNextSecond
 import com.futsch1.medtimer.utilities.fireNextAlarmsAfter
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import java.time.Instant
 import java.time.LocalDate
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -227,7 +229,9 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         dialogs.awaitInput()
+        val firstSnooze = Instant.now()
         dialogs.enterTextAndConfirm("5")
+        assertSecondaryAlarmAfter(firstSnooze, 5.minutes)
 
         navigation.toOverview()
 
@@ -250,7 +254,9 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         dialogs.awaitInput()
+        val secondSnooze = Instant.now()
         dialogs.enterTextAndConfirm("13")
+        assertSecondaryAlarmAfter(secondSnooze, 13.minutes)
 
         navigation.toOverview()
         overview.assertEventState(1, R.string.reminded)
