@@ -340,4 +340,19 @@
     <string name="back">返回</string>
     <string name="enter_time">输入服药时间</string>
     <string name="medicine">药品</string>
+    <string name="levels">浓度</string>
+    <string name="level_estimate">浓度估算</string>
+    <string name="half_life">半衰期（小时）</string>
+    <string name="time_to_peak">达峰时间（小时）</string>
+    <string name="half_life_summary">设置后可在分析界面中估算该药物在体内随时间变化的浓度</string>
+    <string name="time_to_peak_summary">从服药到达到最高浓度所需的时间</string>
+    <string name="pk_disclaimer">根据您已服用的剂量，使用简单模型估算的相对浓度。不构成医疗建议。</string>
+    <string name="pk_empty">在药物设置中设置半衰期和达峰时间，即可在此处查看其估算浓度。</string>
+    <string name="pk_settings_info">浓度采用具有一级吸收的一室模型估算。必须同时设置半衰期和达峰时间。剂量可以使用任意单位（例如 2.5 mg），但同一药物的所有剂量必须使用相同单位。</string>
+    <string name="pk_ignored_doses">未计入无法识别剂量（例如 2.5 mg）的记录：%1$d</string>
+    <string name="pk_extra_numbers">%1$s 未显示，因为部分剂量中包含多个数字，例如“%2$s”。请将其改为单一剂量。</string>
+    <string name="pk_incomplete_number">%1$s 未显示，因为部分剂量无法按手机的数字格式完整读取，例如“%2$s”。请使用“%3$s”作为小数点。</string>
+    <string name="pk_unit_conflict">%1$s 未显示，因为其剂量使用了不同的单位：%2$s。请修改剂量，使其全部使用相同单位。</string>
+    <string name="pk_no_unit">无单位</string>
+    <string name="custom_range">自定义</string>
 </resources>

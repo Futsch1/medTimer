@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.component.SortableTableRow
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarDayEvent
+import com.futsch1.medtimer.feature.ui.statistics.levels.LevelsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
@@ -23,6 +24,7 @@ interface StatisticsScreenState {
     val activeView: StatisticFragment
     val analysisDays: Int
     val charts: ChartsState?
+    val levels: LevelsState?
 
     /** The Table view's filter text — updates instantly so the field stays responsive. */
     val query: String
@@ -50,6 +52,7 @@ class MutableStatisticsScreenState(
     override var activeView by mutableStateOf(activeView)
     override var analysisDays by mutableIntStateOf(analysisDays)
     override var charts by mutableStateOf<ChartsState?>(null)
+    override var levels by mutableStateOf<LevelsState?>(null)
     override var query by mutableStateOf("")
     override var calendarDayEvents by mutableStateOf<ImmutableMap<LocalDate, List<CalendarDayEvent>>>(persistentMapOf())
 

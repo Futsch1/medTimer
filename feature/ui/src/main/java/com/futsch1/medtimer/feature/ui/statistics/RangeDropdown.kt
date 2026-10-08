@@ -33,10 +33,13 @@ val ANALYSIS_RANGES: List<Pair<Int, Int>> = listOf(
     R.string.thirty_days to 30,
 )
 
-/** Chip-styled dropdown for picking the Analysis time range (drives the Charts view only). */
+/**
+ * Chip-styled dropdown for picking the Analysis time range (drives the Charts and Levels views). [custom] shows a custom label
+ * instead of the selected preset, e.g. after the Levels chart was pinch-zoomed.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Modifier = Modifier) {
+internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Modifier = Modifier, custom: Boolean = false) {
     var expanded by remember { mutableStateOf(false) }
     val selectedLabel = (ANALYSIS_RANGES.firstOrNull { it.second == days } ?: ANALYSIS_RANGES.first()).first
     val rotation by animateFloatAsState(targetValue = if (expanded) 180f else 0f, label = "rangeArrowRotation")
@@ -45,7 +48,7 @@ internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mo
         FilterChip(
             selected = true,
             onClick = {},
-            label = { Text(stringResource(selectedLabel)) },
+            label = { Text(stringResource(if (custom) R.string.custom_range else selectedLabel)) },
             trailingIcon = {
                 Icon(painterResource(R.drawable.caret_down_fill), contentDescription = null, modifier = Modifier.rotate(rotation))
             },

@@ -50,6 +50,8 @@ class MedicineDataStore @AssistedInject constructor(
             "amount" -> MedicineHelper.formatAmount(modelData.amount, "")
             "stock_unit" -> modelData.unit
             "stock_refill_size" -> MedicineHelper.formatAmount(modelData.refillSize, "")
+            "half_life_hours" -> formatOptionalHours(modelData.halfLifeHours)
+            "time_to_peak_hours" -> formatOptionalHours(modelData.timeToPeakHours)
             "production_date" -> timeFormatter.localDateToString(modelData.productionDate)
             "expiration_date" -> timeFormatter.localDateToString(modelData.expirationDate)
             "notification_importance" -> if (modelData.notificationImportance == Medicine.NotificationImportance.DEFAULT) {
@@ -71,6 +73,9 @@ class MedicineDataStore @AssistedInject constructor(
             "stock_refill_size" -> MedicineHelper.parseAmount(value)
                 ?.let { modelData = modelData.copy(refillSize = it) }
 
+            "half_life_hours" -> modelData = modelData.copy(halfLifeHours = parseOptionalHours(value))
+            "time_to_peak_hours" -> modelData = modelData.copy(timeToPeakHours = parseOptionalHours(value))
+
             "production_date" -> modelData =
                 modelData.copy(productionDate = timeFormatter.stringToLocalDate(value!!)!!)
 
@@ -87,6 +92,11 @@ class MedicineDataStore @AssistedInject constructor(
             medicineRepository.update(modelData)
         }
     }
+
+    // 0 means "not set" for the level estimate parameters; an empty input clears them
+    private fun formatOptionalHours(hours: Double): String = if (hours > 0.0) MedicineHelper.formatAmount(hours, "") else ""
+
+    private fun parseOptionalHours(value: String?): Double = MedicineHelper.parseAmount(value)?.coerceAtLeast(0.0) ?: 0.0
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.core.domain.model
 
 import android.app.NotificationManager
 import android.graphics.Color
+import com.futsch1.medtimer.core.domain.pk.PharmacokineticModel
 import java.time.LocalDate
 
 data class Medicine(
@@ -21,7 +22,9 @@ data class Medicine(
     val sortOrder: Double,
     val tags: List<Tag>,
     val reminders: List<Reminder>,
-    val cannotBeSkipped: Boolean
+    val cannotBeSkipped: Boolean,
+    val halfLifeHours: Double,
+    val timeToPeakHours: Double
 ) {
     enum class NotificationImportance(val value: Int) {
         DEFAULT(NotificationManager.IMPORTANCE_DEFAULT),
@@ -48,6 +51,10 @@ data class Medicine(
         return (amount != 0.0 || hasStockReminder())
     }
 
+    /** Returns the model to estimate the drug level with, or null unless both half-life and time to peak are configured. */
+    fun pharmacokineticModel(): PharmacokineticModel? =
+        if (halfLifeHours > 0.0 && timeToPeakHours > 0.0) PharmacokineticModel(halfLifeHours, timeToPeakHours) else null
+
     private fun hasStockReminder(): Boolean {
         return reminders.any { reminder -> reminder.outOfStockReminderType != Reminder.OutOfStockReminderType.OFF }
     }
@@ -70,7 +77,9 @@ data class Medicine(
             sortOrder = 1.0,
             tags = emptyList(),
             reminders = emptyList(),
-            cannotBeSkipped = false
+            cannotBeSkipped = false,
+            halfLifeHours = 0.0,
+            timeToPeakHours = 0.0
         )
     }
 }
