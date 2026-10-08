@@ -58,6 +58,7 @@ class AlarmProcessor @Inject constructor(
 
     // Per-event slots — snooze/repeat/show/location-snooze. Leaves slot 0 untouched.
     fun setSecondaryAlarm(reminderNotificationData: ReminderNotificationData): Boolean {
+        lastSecondaryAlarmForTests = reminderNotificationData.remindInstant
         reminderNotificationData.remindInstant = adjustTimestamp(timeAccess, reminderNotificationData.remindInstant)
 
         for (reminderEventId in reminderNotificationData.reminderEventIds) {
@@ -153,5 +154,12 @@ class AlarmProcessor @Inject constructor(
 
         var delay: Long = -1
         var repeats: Int = -1
+
+        /**
+         * Test-only seam: the time the last per-event alarm (a snooze, a repeat) was asked for, before
+         * [adjustTimestamp] moves it, so a test can check the interval without waiting it out.
+         */
+        @Volatile
+        var lastSecondaryAlarmForTests: Instant? = null
     }
 }
