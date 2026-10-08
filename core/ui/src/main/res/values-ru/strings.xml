@@ -336,6 +336,7 @@
     <string name="home_location_error">Не удалось определить ваше текущее местоположение</string>
     <string name="exact_reminders_warning_title">Точные напоминания отключены</string>
     <string name="exact_reminders_warning_summary">Напоминания могут срабатывать на несколько минут позже запланированного. Если вам нужны точные напоминания (за счёт незначительного увеличения расхода батареи), включите это в настройках уведомлений.</string>
+    <string name="enable">Включить</string>
     <string name="medicine_settings">Настройки лекарства</string>
     <string name="medicine_cannot_be_skipped">Лекарство нельзя пропустить</string>
     <string name="medicine_cannot_be_skipped_summary">Если включено, все напоминания об этом лекарстве можно закрыть только отметив лекарство как принятое.</string>

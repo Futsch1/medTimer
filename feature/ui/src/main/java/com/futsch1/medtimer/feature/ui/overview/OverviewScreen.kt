@@ -1,6 +1,10 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import android.app.AlarmManager
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -32,6 +36,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.common.helpers.safeStartActivity
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.ReminderType
@@ -84,6 +89,7 @@ fun OverviewScreen(
     topBarActions: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     OverviewScreen(
         state = viewModel.state,
         selection = viewModel.selection,
@@ -91,6 +97,10 @@ fun OverviewScreen(
         onToggleFilter = viewModel::toggleFilter,
         onDismissBatteryWarning = viewModel::dismissBatteryWarning,
         onDismissExactRemindersWarning = viewModel::dismissExactRemindersWarning,
+        onEnableExactReminders = {
+            viewModel.enableExactReminders()
+            requestExactAlarmPermissionIfNeeded(context)
+        },
         onEnterSelectionMode = { event ->
             viewModel.selection.enterSelectionMode()
             if (viewModel.state.combineNotifications) {
@@ -107,6 +117,18 @@ fun OverviewScreen(
     )
 }
 
+/**
+ * Exact reminders also need the system's exact alarm permission on Android 12+;
+ * sends the user to grant it when it is still missing.
+ */
+private fun requestExactAlarmPermissionIfNeeded(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+        context.getSystemService(AlarmManager::class.java)?.canScheduleExactAlarms() == false
+    ) {
+        safeStartActivity(context, Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+    }
+}
+
 /** Stateless screen — the `@Preview`/test target. Renders purely from its inputs. */
 @Composable
 @SuppressWarnings("kotlin:S107")
@@ -117,6 +139,7 @@ fun OverviewScreen(
     onToggleFilter: (OverviewFilter) -> Unit,
     onDismissBatteryWarning: () -> Unit,
     onDismissExactRemindersWarning: () -> Unit,
+    onEnableExactReminders: () -> Unit,
     onEnterSelectionMode: (OverviewEvent) -> Unit,
     onEventClick: (OverviewEvent) -> Unit,
     onAction: (Button, List<OverviewEvent>) -> Unit,
@@ -157,6 +180,7 @@ fun OverviewScreen(
             state = state.warnings,
             onDismissBatteryWarning = onDismissBatteryWarning,
             onDismissExactRemindersWarning = onDismissExactRemindersWarning,
+            onEnableExactReminders = onEnableExactReminders,
         )
 
         BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -338,6 +362,7 @@ private fun OverviewScreenPreview() {
                 onToggleFilter = {},
                 onDismissBatteryWarning = {},
                 onDismissExactRemindersWarning = {},
+                onEnableExactReminders = {},
                 onEnterSelectionMode = {},
                 onEventClick = {},
                 onAction = { _, _ -> },

@@ -340,6 +340,7 @@
     <string name="home_location_error">Nie można określić bieżącej lokalizacji</string>
     <string name="exact_reminders_warning_title">Dokładne przypomnienia są wyłączone</string>
     <string name="exact_reminders_warning_summary">Przypomnienia mogą być wyświetlane kilka minut później niż zaplanowano. Jeśli potrzebujesz dokładnych przypomnień (kosztem nieznacznie zwiększonego zużycia baterii), włącz tę opcję w ustawieniach powiadomień.</string>
+    <string name="enable">Włącz</string>
     <string name="medicine_settings">Ustawienia leku</string>
     <string name="medicine_cannot_be_skipped">Lek nie może być pominięty</string>
     <string name="medicine_cannot_be_skipped_summary">Jeśli włączone, wszystkie przypomnienia dla tego leku można odrzucić tylko przez oznaczenie leku jako przyjętego.</string>

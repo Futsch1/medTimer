@@ -112,6 +112,13 @@ class OverviewRobot(private val ui: ComposeUi) {
     fun assertActionAbsent(@StringRes labelRes: Int) =
         actionMenu.assertAbsent(hasText(ui.getString(labelRes)))
 
+    /** The warning cards above the event list, found by their title. */
+    fun assertWarningShown(@StringRes titleRes: Int) = screen.assertDisplayed(hasText(ui.getString(titleRes)))
+
+    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !screen.exists(hasText(ui.getString(titleRes))) }
+
+    fun clickWarningButton(@StringRes labelRes: Int) = screen.click(hasText(ui.getString(labelRes)))
+
     fun logManualDose() = screen.click(hasTestTag(OverviewTestTags.LOG_MANUAL_DOSE))
 
     fun previousWeek() = screen.click(description(CoreUiR.string.previous_week))

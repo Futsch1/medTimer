@@ -334,6 +334,7 @@
     <string name="home_location_error">Não foi possível determinar sua localização atual</string>
     <string name="exact_reminders_warning_title">Lembretes exatos estão desativados</string>
     <string name="exact_reminders_warning_summary">Os lembretes podem ser exibidos alguns minutos após o horário programado. Se você precisar de lembretes exatos (com um leve aumento no consumo de bateria), ative isso nas configurações de notificação.</string>
+    <string name="enable">Ativar</string>
     <string name="medicine_settings">Configurações do medicamento</string>
     <string name="medicine_cannot_be_skipped">Medicamento não pode ser ignorado</string>
     <string name="medicine_cannot_be_skipped_summary">Se ativado, todos os lembretes deste medicamento só podem ser dispensados marcando o medicamento como tomado.</string>

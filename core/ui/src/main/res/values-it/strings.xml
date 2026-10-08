@@ -334,6 +334,7 @@
     <string name="home_location_error">Impossibile determinare la posizione attuale</string>
     <string name="exact_reminders_warning_title">I promemoria esatti sono disabilitati</string>
     <string name="exact_reminders_warning_summary">I promemoria potrebbero essere attivati alcuni minuti dopo il previsto. Se hai bisogno di promemoria esatti (a costo di un leggero aumento del consumo della batteria), abilitalo nelle impostazioni delle notifiche.</string>
+    <string name="enable">Attiva</string>
     <string name="medicine_settings">Impostazioni farmaco</string>
     <string name="medicine_cannot_be_skipped">Il farmaco non può essere saltato</string>
     <string name="medicine_cannot_be_skipped_summary">Se abilitato, tutti i promemoria per questo farmaco possono essere eliminati solo contrassegnando il farmaco come assunto.</string>
