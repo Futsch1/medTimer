@@ -37,6 +37,7 @@ jobs:
     env:
       EMULATOR_TARGET: google_apis
       EMULATOR_ARCH: x86_64
+      GRADLE_TASK: ${{ inputs.gradle-task }}
     steps:
       - name: Delete unnecessary tools
         uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6
@@ -80,7 +81,7 @@ jobs:
           script: |
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
-            EXIT_CODE=0 && ./gradlew ${{ inputs.gradle-task }} --info || EXIT_CODE=$? && (adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true) && exit $EXIT_CODE
+            bash -c 'gradle_status=0; ./gradlew "$GRADLE_TASK" || gradle_status=$?; python3 .github/scripts/summarize-android-test-results.py app/build/outputs/androidTest-results || true; adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true; exit "$gradle_status"'
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
