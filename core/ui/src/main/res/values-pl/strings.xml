@@ -99,6 +99,7 @@
     <string name="time">Czas</string>
     <string name="ok">OK</string>
     <string name="filter">Filtruj</string>
+    <string name="search">Szukaj</string>
     <string name="tab_medicine">Lekarstwa</string>
     <string name="add_reminder">Dodaj przypomnienie</string>
     <string name="delete">Usuń</string>

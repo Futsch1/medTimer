@@ -147,6 +147,7 @@
     <string name="cycle_pause_days">Ημέρες παύσης της αγωγής</string>
     <string name="reminders">Υπενθυμίσεις</string>
     <string name="filter">Κριτήρια αναζήτησης</string>
+    <string name="search">Αναζήτηση</string>
     <string name="seven_days">7 ημέρες</string>
     <string name="analysis">Ανάλυση</string>
     <string name="tabular_view">Προβολή σε μορφή πίνακα</string>
