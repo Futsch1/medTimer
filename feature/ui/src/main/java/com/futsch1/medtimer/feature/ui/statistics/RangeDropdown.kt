@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.ui.statistics
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FilterChip
@@ -47,7 +48,11 @@ internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Mo
             onClick = {},
             label = { Text(stringResource(selectedLabel)) },
             trailingIcon = {
-                Icon(painterResource(R.drawable.caret_down_fill), contentDescription = null, modifier = Modifier.rotate(rotation))
+                Icon(
+                    painterResource(R.drawable.caret_down_fill),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(rotation)
+                )
             },
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
