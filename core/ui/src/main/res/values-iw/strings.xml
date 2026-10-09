@@ -153,6 +153,7 @@
     <string name="reminders">תזכורות</string>
     <string name="sort">מיינו</string>
     <string name="filter">סננו</string>
+    <string name="search">חיפוש</string>
     <string name="seven_days">7 ימים</string>
     <string name="analysis">ניתוח נתונים</string>
     <string name="tabular_view">תצוגה טבלאית</string>
@@ -334,6 +335,7 @@
     <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
     <string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string>
     <string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string>
+    <string name="enable">הפעלה</string>
     <string name="medicine_settings">הגדרות תרופה</string>
     <string name="medicine_cannot_be_skipped">לא ניתן לדלג על תרופה</string>
     <string name="medicine_cannot_be_skipped_summary">אם מופעל, ניתן לסגור את כל התזכורות לתרופה זו רק על ידי סימון התרופה כנלקחה.</string>
@@ -352,4 +354,19 @@
     <string name="back">חזרה</string>
     <string name="enter_time">הזן את זמן הנטילה</string>
     <string name="medicine">תרופה</string>
+    <string name="levels">רמות</string>
+    <string name="level_estimate">הערכת רמה</string>
+    <string name="half_life">זמן מחצית חיים (שעות)</string>
+    <string name="time_to_peak">זמן עד לשיא (שעות)</string>
+    <string name="half_life_summary">הגדר כדי להעריך את רמת התרופה בגוף לאורך זמן במסך הניתוח</string>
+    <string name="time_to_peak_summary">הזמן מנטילת מנה ועד לרמה הגבוהה ביותר שלה</string>
+    <string name="pk_disclaimer">רמה יחסית המוערכת מהמנות שנטלת באמצעות מודל פשוט. אין זו עצה רפואית.</string>
+    <string name="pk_empty">הגדר זמן מחצית חיים וזמן עד לשיא בהגדרות התרופה כדי לראות כאן את הרמה המוערכת שלה.</string>
+    <string name="pk_settings_info">הרמות מוערכות באמצעות מודל חד-תאי עם ספיגה מסדר ראשון. יש להגדיר גם זמן מחצית חיים וגם זמן עד לשיא. כמויות המנות יכולות להיות בכל יחידה (למשל 2.5 mg), אך כל המנות של תרופה צריכות להשתמש באותה יחידה.</string>
+    <string name="pk_ignored_doses">מנות ללא כמות קריאה (למשל 2.5 mg) אינן נכללות: %1$d</string>
+    <string name="pk_extra_numbers">%1$s אינה מוצגת כי חלק מהמנות מכילות יותר ממספר אחד בכמות, כמו \"%2$s\". שנה אותן לכמות אחת.</string>
+    <string name="pk_incomplete_number">%1$s אינה מוצגת כי לא ניתן לקרוא חלק מהכמויות במלואן בתבנית המספרים של הטלפון, כמו \"%2$s\". כתוב שברים עשרוניים עם \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s אינה מוצגת כי המנות שלה משתמשות ביחידות שונות: %2$s. שנה את הכמויות כך שכולן ישתמשו באותה יחידה.</string>
+    <string name="pk_no_unit">ללא יחידה</string>
+    <string name="custom_range">מותאם אישית</string>
 </resources>

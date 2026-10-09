@@ -97,6 +97,9 @@ class OverviewFragment : Fragment() {
                 if (showManualDoseDialog.value) {
                     ManualDoseDialog(
                         viewModel = manualDoseViewModel,
+                        onSearch = {
+                            manualDoseViewModel.search(it)
+                        },
                         onSelectMedicineEntry = {
                             manualDoseViewModel.selectMedicineEntry(it)
                         },

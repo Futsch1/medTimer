@@ -28,7 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -71,7 +71,7 @@ fun CalendarContent(
     futureMonths: Int = 0,
     // Injectable (defaults to the live value) so layout tests supply a computed window size. The
     // detection below stays inlined per the "no shared helper" decision. Matches ChartsContent.
-    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
 ) {
     // Pre-select today so its events show on open, matching the legacy calendar's default day.
     var selectedDate by rememberSaveable { mutableStateOf<LocalDate?>(LocalDate.now()) }

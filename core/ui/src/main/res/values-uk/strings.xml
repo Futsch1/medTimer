@@ -157,6 +157,7 @@
     <string name="cycle_pause_days">Призупинити дні</string>
     <string name="reminders">Нагадування</string>
     <string name="filter">Фільтр</string>
+    <string name="search">Пошук</string>
     <string name="seven_days">7 днів</string>
     <string name="analysis">Аналітика</string>
     <string name="tabular_view">Табличний вигляд</string>
@@ -340,6 +341,7 @@
     <string name="home_location_error">Не вдалося визначити ваше поточне місцезнаходження</string>
     <string name="exact_reminders_warning_title">Точні нагадування вимкнено</string>
     <string name="exact_reminders_warning_summary">Нагадування можуть з&amp;apos;являтися на кілька хвилин пізніше за розкладом. Якщо вам потрібні точні нагадування (ціною незначного збільшення споживання заряду батареї), увімкніть це в налаштуваннях сповіщень.</string>
+    <string name="enable">Увімкнути</string>
     <string name="medicine_settings">Налаштування ліків</string>
     <string name="medicine_cannot_be_skipped">Ліки не можна пропустити</string>
     <string name="medicine_cannot_be_skipped_summary">Якщо увімкнено, усі нагадування для цих ліків можна закрити лише позначивши ліки як прийняті.</string>
@@ -358,4 +360,19 @@
     <string name="back">Назад</string>
     <string name="enter_time">Введіть час прийому</string>
     <string name="medicine">Ліки</string>
+    <string name="levels">Рівні</string>
+    <string name="level_estimate">Оцінка рівня</string>
+    <string name="half_life">Період напіввиведення (години)</string>
+    <string name="time_to_peak">Час до піку (години)</string>
+    <string name="half_life_summary">Вкажіть, щоб оцінювати рівень цього ліку в організмі з часом на екрані аналізу</string>
+    <string name="time_to_peak_summary">Час від прийому дози до її найвищого рівня</string>
+    <string name="pk_disclaimer">Відносний рівень, оцінений за прийнятими дозами за допомогою простої моделі. Не є медичною порадою.</string>
+    <string name="pk_empty">Вкажіть період напіввиведення та час до піку в налаштуваннях ліку, щоб побачити тут його розрахунковий рівень.</string>
+    <string name="pk_settings_info">Рівні оцінюються за однокамерною моделлю з всмоктуванням першого порядку. Потрібно вказати і період напіввиведення, і час до піку. Кількість дози можна вказувати в будь-якій одиниці (наприклад, 2,5 mg), але всі дози одного ліку мають використовувати ту саму.</string>
+    <string name="pk_ignored_doses">Дози без читабельної кількості (наприклад, 2,5 mg) не враховуються: %1$d</string>
+    <string name="pk_extra_numbers">%1$s не відображається, оскільки деякі дози містять у кількості більше одного числа, наприклад \"%2$s\". Змініть їх на одну кількість.</string>
+    <string name="pk_incomplete_number">%1$s не відображається, оскільки деякі кількості неможливо повністю прочитати в числовому форматі телефону, наприклад \"%2$s\". Записуйте дробову частину через \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s не відображається, оскільки його дози вказано в різних одиницях: %2$s. Змініть кількості, щоб усі вони використовували ту саму одиницю.</string>
+    <string name="pk_no_unit">без одиниці</string>
+    <string name="custom_range">Користувацьке</string>
 </resources>

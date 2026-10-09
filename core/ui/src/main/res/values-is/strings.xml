@@ -124,6 +124,7 @@
     <string name="reminders">Áminningar</string>
     <string name="sort">Raða</string>
     <string name="filter">Sía</string>
+    <string name="search">Leita</string>
     <string name="seven_days">7 daga</string>
     <string name="analysis">Greining</string>
     <string name="tabular_view">Töfluyfirlit</string>
@@ -218,4 +219,19 @@
     <string name="stock_after_simulation_end">Eftir %s</string>
     <string name="recent_custom">Síðasta sérsniðna færsla</string>
     <string name="use_current_time">Nota núverandi tíma</string>
+    <string name="levels">Magn</string>
+    <string name="level_estimate">Mat á magni</string>
+    <string name="half_life">Helmingunartími (klst.)</string>
+    <string name="time_to_peak">Tími að hámarki (klst.)</string>
+    <string name="half_life_summary">Stilltu til að áætla magn þessa lyfs í líkamanum yfir tíma á greiningarskjánum</string>
+    <string name="time_to_peak_summary">Tími frá töku skammts þar til hann nær hæsta magni</string>
+    <string name="pk_disclaimer">Hlutfallslegt magn áætlað út frá teknum skömmtum með einföldu líkani. Ekki læknisráð.</string>
+    <string name="pk_empty">Stilltu helmingunartíma og tíma að hámarki í stillingum lyfs til að sjá áætlað magn þess hér.</string>
+    <string name="pk_settings_info">Magn er áætlað með eins hólfs líkani með fyrsta stigs frásogi. Bæði helmingunartími og tími að hámarki verða að vera stillt. Magn skammta má vera í hvaða einingu sem er (t.d. 2,5 mg), en allir skammtar lyfs verða að nota sömu einingu.</string>
+    <string name="pk_ignored_doses">Skammtar án læsilegs magns (t.d. 2,5 mg) eru ekki taldir með: %1$d</string>
+    <string name="pk_extra_numbers">%1$s er ekki sýnt vegna þess að sumir skammtar innihalda fleiri en eina tölu í magninu, eins og \"%2$s\". Breyttu þeim í eitt magn.</string>
+    <string name="pk_incomplete_number">%1$s er ekki sýnt vegna þess að ekki er hægt að lesa sum magn að fullu með talnasniði símans, eins og \"%2$s\". Skrifaðu aukastafi með \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s er ekki sýnt vegna þess að skammtar þess nota mismunandi einingar: %2$s. Breyttu magninu þannig að allir noti sömu einingu.</string>
+    <string name="pk_no_unit">engin eining</string>
+    <string name="custom_range">Sérsnið</string>
 </resources>

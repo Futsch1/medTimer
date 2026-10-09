@@ -177,6 +177,7 @@
     <string name="cycle_pause_days">أيام التوقف</string>
     <string name="reminders">التذكيرات</string>
     <string name="filter">تصفية</string>
+    <string name="search">بحث</string>
     <string name="seven_days">7 أيام</string>
     <string name="analysis">تحليل</string>
     <string name="tabular_view">عرض جدولي</string>
@@ -352,6 +353,7 @@
     <string name="home_location_error">تعذّر تحديد موقعك الحالي</string>
     <string name="exact_reminders_warning_title">التذكيرات الدقيقة معطّلة</string>
     <string name="exact_reminders_warning_summary">قد تظهر التذكيرات بعد دقائق قليلة من الموعد المحدد. إذا كنت بحاجة إلى تذكيرات دقيقة (على حساب زيادة طفيفة في استهلاك البطارية)، فعّل هذا في إعدادات الإشعارات.</string>
+    <string name="enable">تفعيل</string>
     <string name="medicine_settings">إعدادات الدواء</string>
     <string name="medicine_cannot_be_skipped">لا يمكن تخطي الدواء</string>
     <string name="medicine_cannot_be_skipped_summary">إذا تم التفعيل، لا يمكن إغلاق جميع التذكيرات لهذا الدواء إلا بتأكيد تناوله.</string>
@@ -370,4 +372,19 @@
     <string name="back">رجوع</string>
     <string name="enter_time">أدخل وقت الأخذ</string>
     <string name="medicine">الدواء</string>
+    <string name="levels">المستويات</string>
+    <string name="level_estimate">تقدير المستوى</string>
+    <string name="half_life">عمر النصف (ساعات)</string>
+    <string name="time_to_peak">وقت الوصول إلى الذروة (ساعات)</string>
+    <string name="half_life_summary">اضبطه لتقدير مستوى هذا الدواء في الجسم مع مرور الوقت في شاشة التحليل</string>
+    <string name="time_to_peak_summary">الوقت من تناول الجرعة حتى أعلى مستوى لها</string>
+    <string name="pk_disclaimer">مستوى نسبي مُقدَّر من الجرعات التي تناولتها باستخدام نموذج بسيط. ليس نصيحة طبية.</string>
+    <string name="pk_empty">اضبط عمر النصف ووقت الوصول إلى الذروة في إعدادات الدواء لرؤية مستواه المقدَّر هنا.</string>
+    <string name="pk_settings_info">تُقدَّر المستويات باستخدام نموذج أحادي الحجرة مع امتصاص من الدرجة الأولى. يجب ضبط عمر النصف ووقت الوصول إلى الذروة كليهما. يمكن استخدام أي وحدة لكميات الجرعات (مثل 2.5 mg)، لكن يجب أن تستخدم جميع جرعات الدواء الوحدة نفسها.</string>
+    <string name="pk_ignored_doses">الجرعات التي لا تحتوي على كمية مقروءة (مثل 2.5 mg) غير مشمولة: %1$d</string>
+    <string name="pk_extra_numbers">لا يُعرض %1$s لأن بعض الجرعات تحتوي على أكثر من رقم في الكمية، مثل \"%2$s\". غيّرها إلى كمية واحدة.</string>
+    <string name="pk_incomplete_number">لا يُعرض %1$s لأن بعض الكميات لا يمكن قراءتها بالكامل بتنسيق الأرقام في هاتفك، مثل \"%2$s\". اكتب الكسور العشرية باستخدام \"%3$s\".</string>
+    <string name="pk_unit_conflict">لا يُعرض %1$s لأن جرعاته تستخدم وحدات مختلفة: %2$s. عدّل الكميات بحيث تستخدم جميعها الوحدة نفسها.</string>
+    <string name="pk_no_unit">بدون وحدة</string>
+    <string name="custom_range">مخصّص</string>
 </resources>

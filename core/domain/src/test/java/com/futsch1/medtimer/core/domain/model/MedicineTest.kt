@@ -38,4 +38,19 @@ class MedicineTest {
         val medicine = medicineWith(LocalDate.now().minusDays(1))
         assertEquals(true, medicine.hasExpired())
     }
+
+    @Test
+    fun `pharmacokineticModel is null unless both parameters are set`() {
+        assertEquals(null, Medicine.default().pharmacokineticModel())
+        assertEquals(null, Medicine.default().copy(halfLifeHours = 120.0).pharmacokineticModel())
+        assertEquals(null, Medicine.default().copy(timeToPeakHours = 48.0).pharmacokineticModel())
+    }
+
+    @Test
+    fun `pharmacokineticModel uses half-life and time to peak`() {
+        val model = Medicine.default().copy(halfLifeHours = 120.0, timeToPeakHours = 48.0).pharmacokineticModel()!!
+
+        assertEquals(120.0, model.halfLifeHours, 0.0)
+        assertEquals(48.0, model.effectiveTimeToPeakHours, 1e-6)
+    }
 }
