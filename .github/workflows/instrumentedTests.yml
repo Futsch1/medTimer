@@ -81,7 +81,11 @@ jobs:
           script: |
             adb shell settings put global auto_time 0
             adb shell su 0 toybox date 0801160025
-            bash -c 'gradle_status=0; ./gradlew "$GRADLE_TASK" || gradle_status=$?; python3 .github/scripts/summarize-android-test-results.py app/build/outputs/androidTest-results || true; adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true; exit "$gradle_status"'
+            gradle_status=0
+            ./gradlew "$GRADLE_TASK" || gradle_status=$?
+            python3 .github/scripts/summarize-android-test-results.py app/build/outputs/androidTest-results || true
+            adb pull /sdcard/googletest/test_outputfiles app/build/outputs/androidTest-results/ || true
+            exit "$gradle_status"
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
