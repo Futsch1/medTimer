@@ -79,9 +79,6 @@ jobs:
           arch: ${{ env.EMULATOR_ARCH }}
           target: ${{ env.EMULATOR_TARGET }}
           disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
-          ram-size: 4096M
           cores: 4
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
