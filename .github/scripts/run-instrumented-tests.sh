@@ -28,24 +28,40 @@ stop_logcat() {
 trap stop_logcat EXIT
 
 adb logcat -c
+logcat_filters=(
+  TestRunner:V
+  AndroidJUnitRunner:V
+  AndroidRuntime:E
+)
+case "${INCLUDE_APP_LOGS:-false}" in
+  true)
+    printf 'MedTimer app debug log streaming is enabled.\n'
+    logcat_filters+=(
+      SchedulerDebug:V
+      ReminderDebug:V
+      BackupDebug:V
+      StockHandlingDebug:V
+      AlarmDebug:V
+      AutostartDebug:V
+      MedTimerMain:V
+      Biometrics:V
+      Location:V
+      Simulation:V
+      Database:V
+      SimpleIdlingResource:V
+      WidgetImpl:V
+    )
+    ;;
+  false|'')
+    printf 'MedTimer app debug log streaming is disabled.\n'
+    ;;
+  *)
+    printf 'INCLUDE_APP_LOGS must be true or false; got %s.\n' "$INCLUDE_APP_LOGS" >&2
+    exit 2
+    ;;
+esac
 printf 'Streaming Android test-runner and runtime-error logcat while %s runs.\n' "$GRADLE_TASK"
-adb logcat -v time -s \
-  TestRunner:V \
-  AndroidJUnitRunner:V \
-  AndroidRuntime:E \
-  SchedulerDebug:V \
-  ReminderDebug:V \
-  BackupDebug:V \
-  StockHandlingDebug:V \
-  AlarmDebug:V \
-  AutostartDebug:V \
-  MedTimerMain:V \
-  Biometrics:V \
-  Location:V \
-  Simulation:V \
-  Database:V \
-  SimpleIdlingResource:V \
-  WidgetImpl:V &
+adb logcat -v time -s "${logcat_filters[@]}" &
 logcat_pid=$!
 
 # Keep the Gradle status while continuing to collect diagnostics and device output.

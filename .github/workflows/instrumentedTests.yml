@@ -25,6 +25,11 @@ on:
         description: Name of the uploaded test-report artifact
         required: true
         type: string
+      include-app-logs:
+        description: Whether to stream MedTimer app debug logs during instrumented tests
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -38,6 +43,7 @@ jobs:
       EMULATOR_TARGET: google_apis
       EMULATOR_ARCH: x86_64
       GRADLE_TASK: ${{ inputs.gradle-task }}
+      INCLUDE_APP_LOGS: ${{ inputs.include-app-logs }}
     steps:
       - name: Delete unnecessary tools
         uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6
