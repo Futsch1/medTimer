@@ -235,6 +235,7 @@
     <string name="reminders">Meeldetuletused</string>
     <string name="sort">Järjestus</string>
     <string name="filter">Filtreeri</string>
+    <string name="search">Otsi</string>
     <string name="use_relative_date_time">Suhteline kuupäev/kellaaeg</string>
     <string name="use_relative_date_time_summary">Näita meeldetuletuste jaoks suhtelist kuupäeva/kellaaega</string>
     <string name="big_notifications">Teavituste suured nupud</string>
@@ -304,6 +305,7 @@
     <string name="create_expiration_date_reminder">Lisa aegumiskuupäeva meeldetuletus</string>
     <string name="exact_reminders_warning_title">Täpsete meeldetuletuste kasutamine on keelatud</string>
     <string name="exact_reminders_warning_summary">Antud oludes käivitud meeldetuletud paar minutit peale määratud aega. Kui vajad täpseid meeldetuletusi (suurema akukasutusel arvelt), siis palun luba vastavad õigused süsteemi seadistustest.</string>
+    <string name="enable">Luba</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Liigu ülespoole</string>
     <string name="battery_optimization_warning_title">Akukasutuse optimeerimine on lülitatud sisse</string>
     <string name="battery_optimization_warning_summary">Kui sul peaks tekkima probleeme korrektsete ja õigeaegsete teavitustega, siis palun lülita teavituste seadistustest akukasutuse optimeerimine välja.</string>
@@ -347,4 +349,19 @@
     <string name="back">Tagasi</string>
     <string name="enter_time">Sisesta võtmise aeg</string>
     <string name="medicine">Ravim</string>
+    <string name="levels">Tasemed</string>
+    <string name="level_estimate">Taseme hinnang</string>
+    <string name="half_life">Poolväärtusaeg (tundi)</string>
+    <string name="time_to_peak">Aeg tipuni (tundi)</string>
+    <string name="half_life_summary">Määra, et hinnata selle ravimi taset kehas aja jooksul analüüsikuval</string>
+    <string name="time_to_peak_summary">Aeg annuse võtmisest kuni selle kõrgeima tasemeni</string>
+    <string name="pk_disclaimer">Lihtsa mudeli abil võetud annustest hinnatud suhteline tase. Ei ole meditsiiniline nõuanne.</string>
+    <string name="pk_empty">Määra ravimi seadetes poolväärtusaeg ja aeg tipuni, et näha siin selle hinnangulist taset.</string>
+    <string name="pk_settings_info">Tasemeid hinnatakse ühekambrilise mudeliga, milles imendumine on esimest järku. Määratud peavad olema nii poolväärtusaeg kui ka aeg tipuni. Annuste kogused võivad olla mis tahes ühikus (nt 2,5 mg), kuid ühe ravimi kõik annused peavad kasutama sama ühikut.</string>
+    <string name="pk_ignored_doses">Loetava koguseta annuseid (nt 2,5 mg) ei arvestata: %1$d</string>
+    <string name="pk_extra_numbers">%1$s ei ole kuvatud, sest mõne annuse kogus sisaldab rohkem kui üht arvu, nagu \"%2$s\". Muuda need üheks koguseks.</string>
+    <string name="pk_incomplete_number">%1$s ei ole kuvatud, sest mõnda kogust ei saa telefoni numbrivorminguga täielikult lugeda, nagu \"%2$s\". Kirjuta kümnendkohad märgiga \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s ei ole kuvatud, sest selle annused kasutavad erinevaid ühikuid: %2$s. Muuda koguseid nii, et kõik kasutaksid sama ühikut.</string>
+    <string name="pk_no_unit">ühikuta</string>
+    <string name="custom_range">Kohandatud</string>
 </resources>

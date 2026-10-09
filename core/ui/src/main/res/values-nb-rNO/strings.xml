@@ -68,4 +68,19 @@
     <string name="export_medicines_csv">Eksporter legemidler som CSV</string>
     <string name="recent_custom">Siste egendefinerte oppføring</string>
     <string name="use_current_time">Bruk gjeldende klokkeslett</string>
+    <string name="levels">Nivåer</string>
+    <string name="level_estimate">Nivåestimat</string>
+    <string name="half_life">Halveringstid (timer)</string>
+    <string name="time_to_peak">Tid til topp (timer)</string>
+    <string name="half_life_summary">Angi for å estimere nivået av denne medisinen i kroppen over tid på analyseskjermen</string>
+    <string name="time_to_peak_summary">Tid fra en dose tas til den når sitt høyeste nivå</string>
+    <string name="pk_disclaimer">Relativt nivå estimert fra dosene du har tatt ved hjelp av en enkel modell. Ikke medisinsk råd.</string>
+    <string name="pk_empty">Angi en halveringstid og tid til topp i innstillingene for en medisin for å se det estimerte nivået her.</string>
+    <string name="pk_settings_info">Nivåer estimeres med en énkompartmentmodell med førsteordens absorpsjon. Både halveringstid og tid til topp må angis. Dosemengder kan bruke hvilken som helst enhet (f.eks. 2,5 mg), men alle doser av en medisin må bruke den samme.</string>
+    <string name="pk_ignored_doses">Doser uten en lesbar mengde (f.eks. 2,5 mg) er ikke tatt med: %1$d</string>
+    <string name="pk_extra_numbers">%1$s vises ikke fordi noen doser inneholder mer enn ett tall i mengden, som \"%2$s\". Endre dem til én mengde.</string>
+    <string name="pk_incomplete_number">%1$s vises ikke fordi noen mengder ikke kan leses helt med telefonens tallformat, som \"%2$s\". Skriv desimaler med \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s vises ikke fordi dosene bruker ulike enheter: %2$s. Endre mengdene slik at alle bruker samme enhet.</string>
+    <string name="pk_no_unit">ingen enhet</string>
+    <string name="custom_range">Egendefinert</string>
 </resources>

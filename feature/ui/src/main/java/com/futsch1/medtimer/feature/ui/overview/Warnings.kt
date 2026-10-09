@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -29,6 +30,7 @@ fun Warnings(
     state: OverviewWarnings,
     onDismissBatteryWarning: () -> Unit,
     onDismissExactRemindersWarning: () -> Unit,
+    onEnableExactReminders: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -52,6 +54,7 @@ fun Warnings(
                 titleRes = CoreUiR.string.exact_reminders_warning_title,
                 summaryRes = CoreUiR.string.exact_reminders_warning_summary,
                 onDismiss = onDismissExactRemindersWarning,
+                action = WarningAction(CoreUiR.string.enable, onEnableExactReminders),
             )
         }
     }
@@ -67,12 +70,16 @@ private val dismissTransition: ExitTransition
                 shrinkTowards = Alignment.Top,
             )
 
+/** An optional extra button on a [WarningCard] that resolves the warning's cause directly. */
+private class WarningAction(val labelRes: Int, val onClick: () -> Unit)
+
 @Composable
 private fun WarningCard(
     titleRes: Int,
     summaryRes: Int,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    action: WarningAction? = null,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
@@ -93,14 +100,24 @@ private fun WarningCard(
                 text = stringResource(summaryRes),
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
             )
-            TextButton(
-                onClick = onDismiss,
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.align(Alignment.End),
             ) {
-                Text(
-                    text = stringResource(CoreUiR.string.ok),
-                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                )
+                if (action != null) {
+                    TextButton(onClick = action.onClick) {
+                        Text(
+                            text = stringResource(action.labelRes),
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        )
+                    }
+                }
+                TextButton(onClick = onDismiss) {
+                    Text(
+                        text = stringResource(CoreUiR.string.ok),
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    )
+                }
             }
         }
     }
@@ -117,6 +134,7 @@ private fun WarningsBothPreview() {
             },
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
+            onEnableExactReminders = {},
         )
     }
 }
@@ -132,6 +150,7 @@ private fun WarningsExactRemindersPreview() {
             },
             onDismissBatteryWarning = {},
             onDismissExactRemindersWarning = {},
+            onEnableExactReminders = {},
         )
     }
 }

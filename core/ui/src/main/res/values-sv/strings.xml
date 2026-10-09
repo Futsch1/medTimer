@@ -160,6 +160,7 @@
     <string name="cycle_pause_days">Pausdagar</string>
     <string name="reminders">Påminnelser</string>
     <string name="filter">Filter</string>
+    <string name="search">Sök</string>
     <string name="seven_days">7 dagar</string>
     <string name="analysis">Analys</string>
     <string name="name">Namn</string>
@@ -329,6 +330,7 @@
     <string name="linked_reminder_delay">Fördröjning för följande dos</string>
     <string name="exact_reminders_warning_title">Exakta påminnelser är inaktiverade</string>
     <string name="exact_reminders_warning_summary">Påminnelser kan visas några minuter senare än planerat. Om du behöver exakta påminnelser (på bekostnad av något ökad batteriförbrukning) aktiverar du detta i aviseringsinställningarna.</string>
+    <string name="enable">Aktivera</string>
     <string name="medicine_settings">Medicinsinställningar</string>
     <string name="medicine_cannot_be_skipped">Medicin kan inte hoppas över</string>
     <string name="medicine_cannot_be_skipped_summary">Om aktiverat kan alla påminnelser för denna medicin endast stängas av genom att markera medicinen som tagen.</string>
@@ -347,4 +349,19 @@
     <string name="back">Tillbaka</string>
     <string name="enter_time">Ange intagen tid</string>
     <string name="medicine">Medicin</string>
+    <string name="levels">Nivåer</string>
+    <string name="level_estimate">Nivåuppskattning</string>
+    <string name="half_life">Halveringstid (timmar)</string>
+    <string name="time_to_peak">Tid till topp (timmar)</string>
+    <string name="half_life_summary">Ange för att uppskatta nivån av detta läkemedel i kroppen över tid på analysskärmen</string>
+    <string name="time_to_peak_summary">Tid från intag av en dos tills den når sin högsta nivå</string>
+    <string name="pk_disclaimer">Relativ nivå uppskattad från dina tagna doser med en enkel modell. Inte medicinsk rådgivning.</string>
+    <string name="pk_empty">Ange en halveringstid och tid till topp i ett läkemedels inställningar för att se dess uppskattade nivå här.</string>
+    <string name="pk_settings_info">Nivåer uppskattas med en enkompartmentmodell med första ordningens absorption. Både halveringstid och tid till topp måste anges. Dosmängder kan använda valfri enhet (t.ex. 2,5 mg), men alla doser av ett läkemedel måste använda samma.</string>
+    <string name="pk_ignored_doses">Doser utan en läsbar mängd (t.ex. 2,5 mg) räknas inte med: %1$d</string>
+    <string name="pk_extra_numbers">%1$s visas inte eftersom vissa doser innehåller mer än ett tal i mängden, som \"%2$s\". Ändra dem till en enda mängd.</string>
+    <string name="pk_incomplete_number">%1$s visas inte eftersom vissa mängder inte kan läsas helt med telefonens talformat, som \"%2$s\". Skriv decimaler med \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s visas inte eftersom dess doser använder olika enheter: %2$s. Ändra mängderna så att alla använder samma enhet.</string>
+    <string name="pk_no_unit">ingen enhet</string>
+    <string name="custom_range">Anpassad</string>
 </resources>

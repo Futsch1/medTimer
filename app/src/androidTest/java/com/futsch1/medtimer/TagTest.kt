@@ -97,13 +97,17 @@ class TagTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
-        seed.medicine("Test") { intervalReminder("Amount1", 1.hours) }
+        // Tag before any dose is raised: a reminder event keeps the tags its medicine had when it was raised.
+        val test = seed.medicine("Test")
         medicines.clickItem(0)
         tags.inMedicineTags { add("Tag1") }
 
-        seed.medicine("Else") { intervalReminder("Amount2", 1.hours) }
+        val other = seed.medicine("Else")
         medicines.clickItem(1)
         tags.inMedicineTags { add("Tag2") }
+
+        seed.remindersOf(test) { intervalReminder("Amount1", 1.hours) }
+        seed.remindersOf(other) { intervalReminder("Amount2", 1.hours) }
 
         // First, deactivate all of Test
         medicines.showList()

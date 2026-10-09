@@ -5,7 +5,8 @@ import java.time.LocalDate
 enum class StatisticFragment {
     CHARTS,
     TABLE,
-    CALENDAR
+    CALENDAR,
+    LEVELS
 }
 
 enum class OverviewFilter {

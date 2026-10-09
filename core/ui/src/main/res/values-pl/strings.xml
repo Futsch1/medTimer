@@ -99,6 +99,7 @@
     <string name="time">Czas</string>
     <string name="ok">OK</string>
     <string name="filter">Filtruj</string>
+    <string name="search">Szukaj</string>
     <string name="tab_medicine">Lekarstwa</string>
     <string name="add_reminder">Dodaj przypomnienie</string>
     <string name="delete">Usuń</string>
@@ -341,6 +342,7 @@
     <string name="home_location_error">Nie można określić bieżącej lokalizacji</string>
     <string name="exact_reminders_warning_title">Dokładne przypomnienia są wyłączone</string>
     <string name="exact_reminders_warning_summary">Przypomnienia mogą być wyświetlane kilka minut później niż zaplanowano. Jeśli potrzebujesz dokładnych przypomnień (kosztem nieznacznie zwiększonego zużycia baterii), włącz tę opcję w ustawieniach powiadomień.</string>
+    <string name="enable">Włącz</string>
     <string name="medicine_settings">Ustawienia leku</string>
     <string name="medicine_cannot_be_skipped">Lek nie może być pominięty</string>
     <string name="medicine_cannot_be_skipped_summary">Jeśli włączone, wszystkie przypomnienia dla tego leku można odrzucić tylko przez oznaczenie leku jako przyjętego.</string>
@@ -359,4 +361,19 @@
     <string name="back">Wstecz</string>
     <string name="enter_time">Wprowadź czas zażycia</string>
     <string name="medicine">Lek</string>
+    <string name="levels">Poziomy</string>
+    <string name="level_estimate">Szacowanie poziomu</string>
+    <string name="half_life">Okres półtrwania (godziny)</string>
+    <string name="time_to_peak">Czas do szczytu (godziny)</string>
+    <string name="half_life_summary">Ustaw, aby oszacować poziom tego leku w organizmie w czasie na ekranie analizy</string>
+    <string name="time_to_peak_summary">Czas od przyjęcia dawki do osiągnięcia najwyższego poziomu</string>
+    <string name="pk_disclaimer">Względny poziom oszacowany na podstawie przyjętych dawek przy użyciu prostego modelu. To nie jest porada medyczna.</string>
+    <string name="pk_empty">Ustaw okres półtrwania i czas do szczytu w ustawieniach leku, aby zobaczyć tutaj jego szacowany poziom.</string>
+    <string name="pk_settings_info">Poziomy są szacowane za pomocą modelu jednokompartmentowego z wchłanianiem pierwszego rzędu. Należy ustawić zarówno okres półtrwania, jak i czas do szczytu. Ilości dawek mogą być w dowolnej jednostce (np. 2,5 mg), ale wszystkie dawki leku muszą używać tej samej.</string>
+    <string name="pk_ignored_doses">Dawki bez czytelnej ilości (np. 2,5 mg) nie są uwzględniane: %1$d</string>
+    <string name="pk_extra_numbers">%1$s nie jest wyświetlany, ponieważ niektóre dawki zawierają w ilości więcej niż jedną liczbę, np. \"%2$s\". Zmień je na jedną ilość.</string>
+    <string name="pk_incomplete_number">%1$s nie jest wyświetlany, ponieważ niektórych ilości nie można w pełni odczytać w formacie liczb telefonu, np. \"%2$s\". Wpisuj miejsca dziesiętne ze znakiem \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s nie jest wyświetlany, ponieważ jego dawki używają różnych jednostek: %2$s. Zmień ilości tak, aby wszystkie używały tej samej jednostki.</string>
+    <string name="pk_no_unit">brak jednostki</string>
+    <string name="custom_range">Niestandardowe</string>
 </resources>

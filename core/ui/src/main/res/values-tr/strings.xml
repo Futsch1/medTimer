@@ -147,6 +147,7 @@
     <string name="cycle_pause_days">Ara günleri</string>
     <string name="reminders">Hatırlatıcılar</string>
     <string name="filter">Filtre</string>
+    <string name="search">Ara</string>
     <string name="seven_days">7 gün</string>
     <string name="analysis">Analiz</string>
     <string name="tabular_view">Tablolu görünüm</string>
@@ -329,6 +330,7 @@
     <string name="home_location_error">Mevcut konumunuz belirlenemedi</string>
     <string name="exact_reminders_warning_title">Tam hatırlatıcılar devre dışı</string>
     <string name="exact_reminders_warning_summary">Hatırlatıcılar planlanandan birkaç dakika geç gönderilebilir. Tam hatırlatıcılara ihtiyaç duyuyorsanız (biraz daha fazla pil tüketimi pahasına), bunu bildirim ayarlarından etkinleştirebilirsiniz.</string>
+    <string name="enable">Etkinleştir</string>
     <string name="medicine_settings">İlaç ayarları</string>
     <string name="medicine_cannot_be_skipped">İlaç atlanamaz</string>
     <string name="medicine_cannot_be_skipped_summary">Etkinleştirilirse, bu ilaca ait tüm hatırlatıcılar yalnızca ilaç alındı olarak işaretlenerek kapatılabilir.</string>
@@ -347,4 +349,19 @@
     <string name="back">Geri</string>
     <string name="enter_time">Alınan zamanı girin</string>
     <string name="medicine">İlaç</string>
+    <string name="levels">Düzeyler</string>
+    <string name="level_estimate">Düzey tahmini</string>
+    <string name="half_life">Yarılanma ömrü (saat)</string>
+    <string name="time_to_peak">Zirveye kadar süre (saat)</string>
+    <string name="half_life_summary">Analiz ekranında bu ilacın vücuttaki düzeyini zaman içinde tahmin etmek için ayarlayın</string>
+    <string name="time_to_peak_summary">Bir dozun alınmasından en yüksek düzeyine kadar geçen süre</string>
+    <string name="pk_disclaimer">Aldığınız dozlardan basit bir model kullanılarak tahmin edilen göreli düzey. Tıbbi tavsiye değildir.</string>
+    <string name="pk_empty">Tahmini düzeyini burada görmek için bir ilacın ayarlarında yarılanma ömrü ve zirveye kadar süre belirleyin.</string>
+    <string name="pk_settings_info">Düzeyler, birinci dereceden emilimli tek kompartmanlı bir modelle tahmin edilir. Hem yarılanma ömrü hem de zirveye kadar süre belirlenmelidir. Doz miktarları herhangi bir birim kullanabilir (ör. 2,5 mg), ancak bir ilacın tüm dozları aynı birimi kullanmalıdır.</string>
+    <string name="pk_ignored_doses">Okunabilir miktarı olmayan dozlar (ör. 2,5 mg) dahil edilmez: %1$d</string>
+    <string name="pk_extra_numbers">%1$s gösterilmiyor çünkü bazı dozların miktarında birden fazla sayı var, örneğin \"%2$s\". Bunları tek bir miktara değiştirin.</string>
+    <string name="pk_incomplete_number">%1$s gösterilmiyor çünkü bazı miktarlar telefonunuzun sayı biçimiyle tam olarak okunamıyor, örneğin \"%2$s\". Ondalıkları \"%3$s\" ile yazın.</string>
+    <string name="pk_unit_conflict">%1$s gösterilmiyor çünkü dozları farklı birimler kullanıyor: %2$s. Miktarları hepsi aynı birimi kullanacak şekilde değiştirin.</string>
+    <string name="pk_no_unit">birim yok</string>
+    <string name="custom_range">Özel</string>
 </resources>
