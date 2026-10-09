@@ -2,6 +2,12 @@ name: Test
 
 on:
   workflow_dispatch:
+    inputs:
+      include-app-logs:
+        description: Stream MedTimer app debug logs during instrumented tests
+        required: false
+        type: boolean
+        default: false
   push:
     branches: [main]
   pull_request:
@@ -105,6 +111,7 @@ jobs:
       gradle-task: jacocoFullDebugCodeCoverage
       coverage: true
       artifact-name: TestReports
+      include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit
 
   # Compatibility instrumented fan-out (API x form-factor) — gated behind compile-test.
@@ -123,4 +130,5 @@ jobs:
       gradle-task: connectedFullDebugAndroidTest
       coverage: false
       artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
+      include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit
