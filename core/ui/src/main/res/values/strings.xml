@@ -154,6 +154,7 @@
     <string name="weekend_start_time">Start time</string>
     <string name="weekend_end_time">End time</string>
     <string name="custom">Custom…</string>
+    <string name="set_duration">Set duration…</string>
     <string name="advanced_settings">Advanced settings</string>
     <string name="cycle_pause_days">Pause days</string>
     <string name="reminders">Reminders</string>

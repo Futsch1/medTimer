@@ -173,6 +173,7 @@
     <string name="weekend_start_time">وقت البدء</string>
     <string name="weekend_end_time">وقت الانتهاء</string>
     <string name="custom">مخصّص…</string>
+    <string name="set_duration">تحديد المدة…</string>
     <string name="advanced_settings">إعدادات متقدّمة</string>
     <string name="cycle_pause_days">أيام التوقف</string>
     <string name="reminders">التذكيرات</string>

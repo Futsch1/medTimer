@@ -148,6 +148,7 @@
     <string name="weekend_start_time">שעת התחלה</string>
     <string name="weekend_end_time">שעת סיום</string>
     <string name="custom">מותאם אישית…</string>
+    <string name="set_duration">הגדרת משך…</string>
     <string name="advanced_settings">הגדרות מתקדמות</string>
     <string name="cycle_pause_days">ימי הפסקה</string>
     <string name="reminders">תזכורות</string>

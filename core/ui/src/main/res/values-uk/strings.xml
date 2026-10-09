@@ -153,6 +153,7 @@
     <string name="weekend_start_time">Час початку</string>
     <string name="weekend_end_time">Час завершення</string>
     <string name="custom">Користувацьке…</string>
+    <string name="set_duration">Задати тривалість…</string>
     <string name="advanced_settings">Розширені налаштування</string>
     <string name="cycle_pause_days">Призупинити дні</string>
     <string name="reminders">Нагадування</string>

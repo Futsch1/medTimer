@@ -156,6 +156,7 @@
     <string name="weekend_start_time">Starttid</string>
     <string name="weekend_end_time">Sluttid</string>
     <string name="custom">Anpassa…</string>
+    <string name="set_duration">Ange varaktighet…</string>
     <string name="advanced_settings">Avancerade inställnignar</string>
     <string name="cycle_pause_days">Pausdagar</string>
     <string name="reminders">Påminnelser</string>

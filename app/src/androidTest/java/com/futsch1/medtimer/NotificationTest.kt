@@ -1,7 +1,9 @@
 package com.futsch1.medtimer
 
 import android.os.Build
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.ui.Interval
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.assertSecondaryAlarmAfter
 import com.futsch1.medtimer.utilities.awaitNextSecond
@@ -206,6 +208,28 @@ class NotificationTest : MedTimerTestBase() {
         dialogs.enterTextAndConfirm("Test variable amount again")
 
         overview.assertEventContains("Test variable amount again")
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun setSnoozeDuration() {
+        val twoHours = Interval(120).toTranslatedString(InstrumentationRegistry.getInstrumentation().targetContext)
+
+        settings.inSection(R.string.snooze_settings) {
+            preferences.click(R.string.snooze_duration)
+            dialogs.clickItem(R.string.set_duration)
+            dialogs.enterTextAndConfirm("120")
+            preferences.assertSummary(R.string.snooze_duration, twoHours)
+        }
+
+        settings.inSection(R.string.snooze_settings) {
+            preferences.assertSummary(R.string.snooze_duration, twoHours)
+            preferences.click(R.string.snooze_duration)
+            dialogs.clickItem(R.string.set_duration)
+            dialogs.awaitInput()
+            dialogs.assertContains("120")
+            dialogs.confirm()
+        }
     }
 
     @Test
