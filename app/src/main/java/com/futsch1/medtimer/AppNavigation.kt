@@ -1,8 +1,13 @@
 package com.futsch1.medtimer
 
+import android.graphics.Rect
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -11,12 +16,15 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +37,25 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 import com.futsch1.medtimer.databinding.ContentMainBinding
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R as FeatureUiR
+
+/**
+ * Brings the focused View back into view once the content has shrunk above the keyboard. Below API 30 the
+ * keyboard insets arrive in one step, and a NestedScrollView then keeps a scroll position that leaves the
+ * focused field underneath the keyboard. From API 30 on it already stays in view; this is then a no-op.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun KeepFocusedViewAboveKeyboard() {
+    val view = LocalView.current
+    val imeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(imeVisible) {
+        if (imeVisible) {
+            // Wait for the layout that applies the keyboard padding.
+            withFrameNanos {}
+            view.rootView.findFocus()?.let { it.requestRectangleOnScreen(Rect(0, 0, it.width, it.height)) }
+        }
+    }
+}
 
 /**
  * The nav items are the only selectors with no container to scope them to: NavigationSuiteScaffold
@@ -126,9 +153,12 @@ fun AppNavigationScaffold(
         },
         layoutType = navigationSuiteType,
     ) {
+        KeepFocusedViewAboveKeyboard()
         // NavigationSuiteScaffold already consumes the space its bar or rail occupies, so padding the
         // full system bars here resolves to exactly the sides the content still has to avoid.
-        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
+        // The keyboard is included so the Fragment content shrinks above it and scroll containers can
+        // bring the focused field into view, rather than leaving it underneath the keyboard.
+        Column(Modifier.windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.ime))) {
             AndroidViewBinding(ContentMainBinding::inflate, Modifier.weight(1f)) {
                 // The update block runs on every recomposition; set up exactly once.
                 if (navController == null) {
