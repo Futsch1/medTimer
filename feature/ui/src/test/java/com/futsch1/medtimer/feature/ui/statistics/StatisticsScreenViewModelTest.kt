@@ -14,6 +14,7 @@ import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
+import com.futsch1.medtimer.feature.ui.statistics.levels.LevelsPresenter
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTablePresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,6 +53,7 @@ class StatisticsScreenViewModelTest {
     private val tagEventFilter = TagEventFilter()
     private val timeFormatter: TimeFormatter = mock()
     private val chartsPresenter = ChartsPresenter(timeFormatter)
+    private val levelsPresenter = LevelsPresenter(timeFormatter)
     private val reminderTablePresenter = ReminderTablePresenter(timeFormatter)
 
     private val dataFlow = MutableStateFlow(PersistentData.default())
@@ -234,11 +236,31 @@ class StatisticsScreenViewModelTest {
         assertEquals(30, viewModel.state.charts?.days)
     }
 
+    // ── levels ────────────────────────────────────────────────────────────────
+
+    @Test
+    fun `levels only include medicines with a half-life and follow the analysis range`() {
+        whenever(timeFormatter.daysSinceEpochToDateString(any())).thenReturn("day")
+        medicinesFlow.value = listOf(
+            Medicine.default().copy(name = "Medicine A", halfLifeHours = 120.0, timeToPeakHours = 48.0),
+            Medicine.default().copy(name = "Vitamin X"),
+        )
+
+        assertEquals(listOf("Medicine A"), viewModel.state.levels?.series?.map { it.medicineName })
+        assertEquals(7, viewModel.state.levels?.days)
+
+        viewModel.onSelectRange(14)
+        Snapshot.sendApplyNotifications()
+
+        assertEquals(14, viewModel.state.levels?.days)
+    }
+
     // ── helpers ───────────────────────────────────────────────────────────────
 
     private fun buildViewModel() = StatisticsScreenViewModel(
         statisticsProvider = statisticsProvider,
         chartsPresenter = chartsPresenter,
+        levelsPresenter = levelsPresenter,
         reminderTablePresenter = reminderTablePresenter,
         calendarEventsProvider = calendarEventsProvider,
         medicineRepository = medicineRepository,

@@ -147,6 +147,7 @@
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="reminders">Erinnerungen</string>
     <string name="filter">Filter</string>
+    <string name="search">Suchen</string>
     <string name="seven_days">7 Tage</string>
     <string name="analysis">Analyse</string>
     <string name="tabular_view">Tabellenansicht</string>
@@ -328,6 +329,7 @@
     <string name="home_location_error">Aktueller Standort konnte nicht ermittelt werden</string>
     <string name="exact_reminders_warning_title">Exakte Erinnerungen sind deaktiviert</string>
     <string name="exact_reminders_warning_summary">Erinnerungen könnten einige Minuten später als geplant ausgelöst werden. Falls exakte Erinnerungen benötigt werden (auf Kosten eines leicht erhöhten Akkuverbrauchs), kann dies in den Benachrichtigungseinstellungen aktiviert werden.</string>
+    <string name="enable">Aktivieren</string>
     <string name="medicine_settings">Medikament-Einstellungen</string>
     <string name="medicine_cannot_be_skipped">Medikament kann nicht übersprungen werden</string>
     <string name="medicine_cannot_be_skipped_summary">Wenn aktiviert, können alle Erinnerungen für dieses Medikament nur durch Markieren des Medikaments als eingenommen bestätigt werden.</string>
@@ -346,4 +348,19 @@
     <string name="back">Zurück</string>
     <string name="enter_time">Einnahmezeit eingeben</string>
     <string name="medicine">Medikament</string>
+    <string name="levels">Spiegel</string>
+    <string name="level_estimate">Spiegelschätzung</string>
+    <string name="half_life">Halbwertszeit (Stunden)</string>
+    <string name="time_to_peak">Zeit bis zum Maximum (Stunden)</string>
+    <string name="half_life_summary">Festlegen, um den Spiegel dieses Medikaments im Körper im Zeitverlauf im Analysebildschirm zu schätzen</string>
+    <string name="time_to_peak_summary">Zeit von der Einnahme einer Dosis bis zu ihrem höchsten Spiegel</string>
+    <string name="pk_disclaimer">Relativer Spiegel, geschätzt aus deinen eingenommenen Dosen mit einem einfachen Modell. Keine medizinische Beratung.</string>
+    <string name="pk_empty">Lege in den Einstellungen eines Medikaments eine Halbwertszeit und die Zeit bis zum Maximum fest, um hier seinen geschätzten Spiegel zu sehen.</string>
+    <string name="pk_settings_info">Spiegel werden mit einem Ein-Kompartiment-Modell mit Absorption erster Ordnung geschätzt. Halbwertszeit und Zeit bis zum Maximum müssen beide festgelegt sein. Dosismengen können eine beliebige Einheit haben (z. B. 2,5 mg), aber alle Dosen eines Medikaments müssen dieselbe verwenden.</string>
+    <string name="pk_ignored_doses">Dosen ohne lesbare Menge (z. B. 2,5 mg) werden nicht berücksichtigt: %1$d</string>
+    <string name="pk_extra_numbers">%1$s wird nicht angezeigt, weil einige Dosen mehr als eine Zahl in der Menge enthalten, wie \"%2$s\". Ändere sie in eine einzelne Menge.</string>
+    <string name="pk_incomplete_number">%1$s wird nicht angezeigt, weil einige Mengen mit dem Zahlenformat deines Telefons nicht vollständig gelesen werden können, wie \"%2$s\". Schreibe Dezimalstellen mit \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s wird nicht angezeigt, weil seine Dosen unterschiedliche Einheiten verwenden: %2$s. Ändere die Mengen so, dass alle dieselbe Einheit verwenden.</string>
+    <string name="pk_no_unit">keine Einheit</string>
+    <string name="custom_range">Benutzerdefiniert</string>
 </resources>

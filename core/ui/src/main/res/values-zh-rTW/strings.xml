@@ -142,6 +142,7 @@
     <string name="reminders">提醒</string>
     <string name="sort">排序</string>
     <string name="filter">篩選</string>
+    <string name="search">搜尋</string>
     <string name="seven_days">7 天</string>
     <string name="analysis">分析</string>
     <string name="fourteen_days">14 天</string>
@@ -322,6 +323,7 @@
     <string name="home_location_error">無法確定您目前的位置</string>
     <string name="exact_reminders_warning_title">精確提醒已停用</string>
     <string name="exact_reminders_warning_summary">提醒可能會比排定時間晚幾分鐘觸發。如需精確提醒（會稍微增加電池消耗），請在通知設定中啟用此功能。</string>
+    <string name="enable">啟用</string>
     <string name="medicine_settings">藥物設定</string>
     <string name="medicine_cannot_be_skipped">藥物不可跳過</string>
     <string name="medicine_cannot_be_skipped_summary">若啟用，此藥物的所有提醒只能透過標記為已服用來關閉。</string>
@@ -340,4 +342,19 @@
     <string name="back">返回</string>
     <string name="enter_time">輸入服用時間</string>
     <string name="medicine">藥物</string>
+    <string name="levels">濃度</string>
+    <string name="level_estimate">濃度估算</string>
+    <string name="half_life">半衰期（小時）</string>
+    <string name="time_to_peak">達峰時間（小時）</string>
+    <string name="half_life_summary">設定後可在分析畫面中估算此藥物在體內隨時間變化的濃度</string>
+    <string name="time_to_peak_summary">從服藥到達到最高濃度所需的時間</string>
+    <string name="pk_disclaimer">根據您已服用的劑量，使用簡單模型估算的相對濃度。不構成醫療建議。</string>
+    <string name="pk_empty">在藥物設定中設定半衰期和達峰時間，即可在此處檢視其估算濃度。</string>
+    <string name="pk_settings_info">濃度採用具有一級吸收的一室模型估算。必須同時設定半衰期和達峰時間。劑量可以使用任意單位（例如 2.5 mg），但同一藥物的所有劑量必須使用相同單位。</string>
+    <string name="pk_ignored_doses">未計入無法識別劑量（例如 2.5 mg）的記錄：%1$d</string>
+    <string name="pk_extra_numbers">%1$s 未顯示，因為部分劑量中包含多個數字，例如「%2$s」。請將其改為單一劑量。</string>
+    <string name="pk_incomplete_number">%1$s 未顯示，因為部分劑量無法依手機的數字格式完整讀取，例如「%2$s」。請使用「%3$s」作為小數點。</string>
+    <string name="pk_unit_conflict">%1$s 未顯示，因為其劑量使用了不同的單位：%2$s。請修改劑量，使其全部使用相同單位。</string>
+    <string name="pk_no_unit">無單位</string>
+    <string name="custom_range">自訂</string>
 </resources>

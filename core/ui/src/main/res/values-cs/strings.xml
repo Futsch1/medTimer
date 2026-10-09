@@ -158,6 +158,7 @@
     <string name="reminders">Připomenutí</string>
     <string name="sort">Seřadit</string>
     <string name="filter">Filtr</string>
+    <string name="search">Hledat</string>
     <string name="seven_days">7 dní</string>
     <string name="analysis">Analýza</string>
     <string name="tabular_view">Tabulkový přehled</string>
@@ -340,6 +341,7 @@
     <string name="home_location_error">Nepodařilo se určit vaši aktuální polohu</string>
     <string name="exact_reminders_warning_title">Přesná připomenutí jsou zakázána</string>
     <string name="exact_reminders_warning_summary">Připomenutí mohou být zobrazena o několik minut později, než je naplánováno. Pokud potřebujete přesná připomenutí (za cenu mírně zvýšené spotřeby baterie), povolte je v nastavení oznámení.</string>
+    <string name="enable">Povolit</string>
     <string name="medicine_settings">Nastavení léku</string>
     <string name="medicine_cannot_be_skipped">Lék nelze přeskočit</string>
     <string name="medicine_cannot_be_skipped_summary">Je-li povoleno, všechna připomenutí tohoto léku lze zamítnout pouze označením léku jako užitého.</string>
@@ -358,4 +360,19 @@
     <string name="back">Zpět</string>
     <string name="enter_time">Zadejte čas užití</string>
     <string name="medicine">Léky</string>
+    <string name="levels">Hladiny</string>
+    <string name="level_estimate">Odhad hladiny</string>
+    <string name="half_life">Poločas (hodiny)</string>
+    <string name="time_to_peak">Doba do vrcholu (hodiny)</string>
+    <string name="half_life_summary">Nastavte pro odhad hladiny tohoto léku v těle v čase na obrazovce analýzy</string>
+    <string name="time_to_peak_summary">Doba od užití dávky do její nejvyšší hladiny</string>
+    <string name="pk_disclaimer">Relativní hladina odhadnutá z užitých dávek pomocí jednoduchého modelu. Nejde o lékařskou radu.</string>
+    <string name="pk_empty">Nastavte poločas a dobu do vrcholu v nastavení léku, abyste zde viděli jeho odhadovanou hladinu.</string>
+    <string name="pk_settings_info">Hladiny se odhadují jednokompartmentovým modelem s absorpcí prvního řádu. Musí být nastaven poločas i doba do vrcholu. Množství dávek může být v libovolné jednotce (např. 2.5 mg), ale všechny dávky jednoho léku musí používat stejnou.</string>
+    <string name="pk_ignored_doses">Dávky bez čitelného množství (např. 2.5 mg) nejsou zahrnuty: %1$d</string>
+    <string name="pk_extra_numbers">%1$s se nezobrazuje, protože některé dávky obsahují v množství více než jedno číslo, například \"%2$s\". Změňte je na jedno množství.</string>
+    <string name="pk_incomplete_number">%1$s se nezobrazuje, protože některá množství nelze s formátem čísel vašeho telefonu přečíst celá, například \"%2$s\". Desetinná místa pište s \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s se nezobrazuje, protože jeho dávky používají různé jednotky: %2$s. Upravte množství tak, aby všechna používala stejnou jednotku.</string>
+    <string name="pk_no_unit">bez jednotky</string>
+    <string name="custom_range">Vlastní</string>
 </resources>

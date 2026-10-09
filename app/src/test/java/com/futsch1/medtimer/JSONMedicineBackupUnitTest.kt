@@ -54,6 +54,8 @@ internal class JSONMedicineBackupUnitTest {
                 productionDate = 1
                 expirationDate = 2
                 cannotBeSkipped = true
+                halfLifeHours = 120.0
+                timeToPeakHours = 48.0
             }
             tags = listOf(TagBackup("Tag A"))
         })
@@ -81,7 +83,9 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": true,
         "productionDate": 1,
         "expirationDate": 2,
-        "cannotBeSkipped": true
+        "cannotBeSkipped": true,
+        "halfLifeHours": 120.0,
+        "timeToPeakHours": 48.0
       },
       "tags": [
         {
@@ -260,7 +264,9 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": false,
         "productionDate": 0,
         "expirationDate": 0,
-        "cannotBeSkipped": false
+        "cannotBeSkipped": false,
+        "halfLifeHours": 0.0,
+        "timeToPeakHours": 0.0
       },
       "tags": [],
       "reminders": [
@@ -316,7 +322,9 @@ internal class JSONMedicineBackupUnitTest {
         "showNotificationAsAlarm": false,
         "productionDate": 0,
         "expirationDate": 0,
-        "cannotBeSkipped": false
+        "cannotBeSkipped": false,
+        "halfLifeHours": 0.0,
+        "timeToPeakHours": 0.0
       },
       "tags": [],
       "reminders": [

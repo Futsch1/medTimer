@@ -148,6 +148,7 @@
     <string name="reminders">Emlékezők</string>
     <string name="sort">Rendezés</string>
     <string name="filter">Szűrés</string>
+    <string name="search">Keresés</string>
     <string name="seven_days">7 nap</string>
     <string name="analysis">Elemzés</string>
     <string name="tabular_view">Táblázatos nézet</string>
@@ -328,6 +329,7 @@
     <string name="home_location_error">Nem sikerült meghatározni a jelenlegi tartózkodási helyét</string>
     <string name="exact_reminders_warning_title">Pontos emlékeztetők letiltva</string>
     <string name="exact_reminders_warning_summary">Az emlékeztetők néhány perccel később jelenhetnek meg a tervezettnél. Ha pontos emlékeztetőkre van szüksége (az akkumulátor valamivel nagyobb fogyasztásának árán), engedélyezze ezt az értesítési beállításokban.</string>
+    <string name="enable">Engedélyezés</string>
     <string name="medicine_settings">Gyógyszer beállítások</string>
     <string name="medicine_cannot_be_skipped">A gyógyszer nem hagyható ki</string>
     <string name="medicine_cannot_be_skipped_summary">Ha engedélyezve van, az ehhez a gyógyszerhez tartozó összes emlékeztető csak a gyógyszer bevételének jelzésével nyugtázható.</string>
@@ -346,4 +348,19 @@
     <string name="back">Vissza</string>
     <string name="enter_time">Bevétel idejének megadása</string>
     <string name="medicine">Gyógyszer</string>
+    <string name="levels">Szintek</string>
+    <string name="level_estimate">Szintbecslés</string>
+    <string name="half_life">Felezési idő (óra)</string>
+    <string name="time_to_peak">Csúcsig eltelt idő (óra)</string>
+    <string name="half_life_summary">Állítsa be, hogy az elemzés képernyőn megbecsülje a gyógyszer szintjét a szervezetben az idő függvényében</string>
+    <string name="time_to_peak_summary">Az adag bevételétől a legmagasabb szintig eltelt idő</string>
+    <string name="pk_disclaimer">A bevett adagokból egyszerű modellel becsült relatív szint. Nem orvosi tanács.</string>
+    <string name="pk_empty">Állítson be felezési időt és csúcsig eltelt időt egy gyógyszer beállításaiban, hogy itt lássa a becsült szintjét.</string>
+    <string name="pk_settings_info">A szinteket egykompartmentes modell becsüli elsőrendű felszívódással. A felezési időt és a csúcsig eltelt időt is be kell állítani. Az adagok mennyisége bármilyen mértékegységben megadható (pl. 2,5 mg), de egy gyógyszer minden adagjának ugyanazt kell használnia.</string>
+    <string name="pk_ignored_doses">Olvasható mennyiség nélküli adagok (pl. 2,5 mg) nincsenek beleszámítva: %1$d</string>
+    <string name="pk_extra_numbers">A(z) %1$s nem jelenik meg, mert egyes adagok mennyisége egynél több számot tartalmaz, például \"%2$s\". Módosítsa őket egyetlen mennyiségre.</string>
+    <string name="pk_incomplete_number">A(z) %1$s nem jelenik meg, mert egyes mennyiségek nem olvashatók be teljesen a telefon számformátumával, például \"%2$s\". A tizedeseket \"%3$s\" jellel írja.</string>
+    <string name="pk_unit_conflict">A(z) %1$s nem jelenik meg, mert az adagjai különböző mértékegységeket használnak: %2$s. Módosítsa a mennyiségeket, hogy mind ugyanazt a mértékegységet használja.</string>
+    <string name="pk_no_unit">nincs mértékegység</string>
+    <string name="custom_range">Egyedi</string>
 </resources>

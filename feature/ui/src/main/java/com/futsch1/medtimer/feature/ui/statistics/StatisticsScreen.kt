@@ -24,6 +24,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -36,6 +41,7 @@ import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.statistics.calendar.CalendarContent
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsContent
+import com.futsch1.medtimer.feature.ui.statistics.levels.LevelsContent
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTable
 
 object StatisticsTestTags {
@@ -44,6 +50,7 @@ object StatisticsTestTags {
     /** Scopes the range entries; each is then selected by its own label. */
     const val RANGE_MENU = "statistics_range_menu"
     const val TABLE_FILTER = "statistics_table_filter"
+    const val LEVELS_CHART = "statistics_levels_chart"
 
     fun viewChip(view: StatisticFragment) = "statistics_view_${view.name}"
 }
@@ -76,6 +83,11 @@ fun StatisticsScreen(
     onEditEvent: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // Pinch-zooming the Levels chart picks a custom visible span; it is only UI state and not persisted. Selecting a range from
+    // the dropdown bumps the reset key, which restores the chart to that range even if the same range is picked again.
+    var levelsZoomResetKey by rememberSaveable { mutableIntStateOf(0) }
+    var levelsCustomZoom by remember { mutableStateOf(false) }
+
     Column(modifier = modifier.fillMaxSize()) {
         // FilterChip's clickable Surface reserves a 48dp minimum interactive size, making the header taller than the
         // 32dp chip pills. Disabling the reservation here is layout-only — the system still expands the touch target at
@@ -98,11 +110,21 @@ fun StatisticsScreen(
                     ViewChip(R.drawable.calendar3, R.string.calendar, StatisticFragment.CALENDAR, state.activeView) {
                         onSelectView(StatisticFragment.CALENDAR)
                     }
+                    ViewChip(R.drawable.graph_up, R.string.levels, StatisticFragment.LEVELS, state.activeView) {
+                        onSelectView(StatisticFragment.LEVELS)
+                    }
                 }
 
-                // The Analysis range drives the Charts only — show the control only there (matches the legacy app).
-                AnimatedVisibility(visible = state.activeView == StatisticFragment.CHARTS) {
-                    RangeDropdown(days = state.analysisDays, onSelectRange = onSelectRange)
+                // The Analysis range drives the Charts and Levels only — show the control only there.
+                AnimatedVisibility(visible = state.activeView == StatisticFragment.CHARTS || state.activeView == StatisticFragment.LEVELS) {
+                    RangeDropdown(
+                        days = state.analysisDays,
+                        custom = levelsCustomZoom && state.activeView == StatisticFragment.LEVELS,
+                        onSelectRange = { days ->
+                            if (state.activeView == StatisticFragment.LEVELS) levelsZoomResetKey++
+                            onSelectRange(days)
+                        },
+                    )
                 }
             }
         }
@@ -131,6 +153,9 @@ fun StatisticsScreen(
                     )
 
                     StatisticFragment.CALENDAR -> CalendarContent(dayEvents = state.calendarDayEvents)
+                    StatisticFragment.LEVELS -> state.levels?.let {
+                        LevelsContent(it, zoomResetKey = levelsZoomResetKey, onCustomZoomChange = { custom -> levelsCustomZoom = custom })
+                    }
                 }
             }
         }

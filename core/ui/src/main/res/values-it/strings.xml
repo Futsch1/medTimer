@@ -152,6 +152,7 @@
     <string name="cycle_pause_days">Giorni di pausa</string>
     <string name="reminders">Promemoria</string>
     <string name="filter">Filtro</string>
+    <string name="search">Cerca</string>
     <string name="seven_days">7 giorni</string>
     <string name="analysis">Analisi</string>
     <string name="tabular_view">Vista tabellare</string>
@@ -334,6 +335,7 @@
     <string name="home_location_error">Impossibile determinare la posizione attuale</string>
     <string name="exact_reminders_warning_title">I promemoria esatti sono disabilitati</string>
     <string name="exact_reminders_warning_summary">I promemoria potrebbero essere attivati alcuni minuti dopo il previsto. Se hai bisogno di promemoria esatti (a costo di un leggero aumento del consumo della batteria), abilitalo nelle impostazioni delle notifiche.</string>
+    <string name="enable">Attiva</string>
     <string name="medicine_settings">Impostazioni farmaco</string>
     <string name="medicine_cannot_be_skipped">Il farmaco non può essere saltato</string>
     <string name="medicine_cannot_be_skipped_summary">Se abilitato, tutti i promemoria per questo farmaco possono essere eliminati solo contrassegnando il farmaco come assunto.</string>
@@ -352,4 +354,19 @@
     <string name="back">Indietro</string>
     <string name="enter_time">Inserisci l\'orario di assunzione</string>
     <string name="medicine">Farmaco</string>
+    <string name="levels">Livelli</string>
+    <string name="level_estimate">Stima del livello</string>
+    <string name="half_life">Emivita (ore)</string>
+    <string name="time_to_peak">Tempo al picco (ore)</string>
+    <string name="half_life_summary">Imposta per stimare il livello di questo farmaco nel corpo nel tempo nella schermata di analisi</string>
+    <string name="time_to_peak_summary">Tempo dall\'assunzione di una dose al suo livello massimo</string>
+    <string name="pk_disclaimer">Livello relativo stimato dalle dosi assunte tramite un modello semplice. Non è un consiglio medico.</string>
+    <string name="pk_empty">Imposta un\'emivita e un tempo al picco nelle impostazioni di un farmaco per vederne qui il livello stimato.</string>
+    <string name="pk_settings_info">I livelli sono stimati con un modello monocompartimentale con assorbimento di primo ordine. Devono essere impostati sia l\'emivita sia il tempo al picco. Le quantità delle dosi possono usare qualsiasi unità (ad es. 2,5 mg), ma tutte le dosi di un farmaco devono usare la stessa.</string>
+    <string name="pk_ignored_doses">Le dosi senza una quantità leggibile (ad es. 2,5 mg) non sono incluse: %1$d</string>
+    <string name="pk_extra_numbers">%1$s non viene mostrato perché alcune dosi contengono più di un numero nella quantità, come \"%2$s\". Cambiale in una sola quantità.</string>
+    <string name="pk_incomplete_number">%1$s non viene mostrato perché alcune quantità non possono essere lette completamente con il formato numerico del telefono, come \"%2$s\". Scrivi i decimali con \"%3$s\".</string>
+    <string name="pk_unit_conflict">%1$s non viene mostrato perché le sue dosi usano unità diverse: %2$s. Modifica le quantità in modo che usino tutte la stessa unità.</string>
+    <string name="pk_no_unit">nessuna unità</string>
+    <string name="custom_range">Personalizzato</string>
 </resources>
