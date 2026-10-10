@@ -1,3 +1,5 @@
+require 'fileutils'
+
 # Customize this file, documentation can be found here:
 # https://docs.fastlane.tools/actions/
 # All available actions: https://docs.fastlane.tools/actions
@@ -20,5 +22,91 @@ platform(:android) do
   lane(:build_and_screengrab) do
     gradle(task: 'assembleDebug assembleAndroidTest')
     capture_android_screenshots
+  end
+
+  desc('Capture Play Store screenshots for every supported locale and update the store and intro assets')
+  lane(:capture_store_screenshots) do
+    project_root = File.expand_path('..', __dir__)
+    app_apk = File.join(project_root, 'app/build/outputs/apk/full/debug/MedTimer-full-debug.apk')
+    tests_apk = File.join(project_root, 'app/build/outputs/apk/androidTest/full/debug/MedTimer-full-debug-androidTest.apk')
+    output_directory = File.join(project_root, 'app/build/store-screenshot-output')
+    locales = [
+      'en-US', 'ar', 'bg', 'cs-CZ', 'da-DK', 'de-DE', 'el-GR', 'es-ES', 'fi-FI', 'fr-FR',
+      'hu-HU', 'it-IT', 'iw-IL', 'nl-NL', 'pl-PL', 'pt-BR', 'ru-RU', 'sv-SE', 'ta-IN', 'tr-TR',
+      'uk', 'zh-CN', 'zh-TW'
+    ]
+    expected_screenshots = (1..8).map { |number| "#{number}.png" }
+
+    gradle(task: 'assembleFullDebug assembleFullDebugAndroidTest')
+    capture_android_screenshots(
+      locales: locales,
+      clear_previous_screenshots: true,
+      output_directory: output_directory,
+      app_package_name: 'com.futsch1.medtimer',
+      tests_package_name: 'com.futsch1.medtimer.test',
+      use_tests_in_classes: ['com.futsch1.medtimer.ScreenshotsTest'],
+      test_instrumentation_runner: 'com.futsch1.medtimer.harness.MedTimerHiltTestRunner',
+      app_apk_path: app_apk,
+      tests_apk_path: tests_apk,
+      reinstall_app: true,
+      use_timestamp_suffix: false
+    )
+
+    screenshots_by_locale = locales.to_h do |locale|
+      screenshots_directory = File.join(output_directory, locale, 'images', 'phoneScreenshots')
+      captured_screenshots = Dir.glob(File.join(screenshots_directory, '*.png')).map { |path| File.basename(path) }.sort
+      unless captured_screenshots == expected_screenshots
+        UI.user_error!("Expected screenshots #{expected_screenshots}, found #{captured_screenshots} in #{screenshots_directory}")
+      end
+      [locale, screenshots_directory]
+    end
+
+    screenshots_by_locale.each do |locale, screenshots_directory|
+      destination = File.join(project_root, 'fastlane/metadata/android', locale, 'images/phoneScreenshots')
+      FileUtils.mkdir_p(destination)
+      expected_screenshots.each do |filename|
+        FileUtils.cp(File.join(screenshots_directory, filename), File.join(destination, filename))
+      end
+      UI.success("Copied #{expected_screenshots.length} screenshots for #{locale} to #{destination}")
+    end
+
+    # The legacy script owns the locale-specific intro drawable names and image optimization.
+    Dir.chdir(project_root) { sh('bash', './copyIntroDrawables.sh') }
+  end
+
+  desc('Capture the beginner guide image with its focused AndroidTest and copy it into the guide assets')
+  lane(:capture_help_screenshot) do
+    project_root = File.expand_path('..', __dir__)
+    app_apk = File.join(project_root, 'app/build/outputs/apk/full/debug/MedTimer-full-debug.apk')
+    tests_apk = File.join(project_root, 'app/build/outputs/apk/androidTest/full/debug/MedTimer-full-debug-androidTest.apk')
+    output_directory = File.join(project_root, 'app/build/help-screenshot-output')
+
+    gradle(task: 'assembleFullDebug assembleFullDebugAndroidTest')
+    capture_android_screenshots(
+      locales: ['en-US'],
+      clear_previous_screenshots: true,
+      output_directory: output_directory,
+      app_package_name: 'com.futsch1.medtimer',
+      tests_package_name: 'com.futsch1.medtimer.test',
+      use_tests_in_classes: ['com.futsch1.medtimer.HelpScreenshotTest'],
+      test_instrumentation_runner: 'com.futsch1.medtimer.harness.MedTimerHiltTestRunner',
+      app_apk_path: app_apk,
+      tests_apk_path: tests_apk,
+      reinstall_app: true,
+      use_timestamp_suffix: false
+    )
+
+    screenshot = File.join(
+      output_directory,
+      'en-US',
+      'images',
+      'phoneScreenshots',
+      'getting-started-medicine-reminder.png'
+    )
+    UI.user_error!("Expected focused guide screenshot at #{screenshot}") unless File.file?(screenshot)
+
+    destination = File.join(project_root, 'docs/help/images/medicine-reminder.png')
+    FileUtils.cp(screenshot, destination)
+    UI.success("Copied AndroidTest screenshot to #{destination}")
   end
 end

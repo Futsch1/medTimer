@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Βοήθεια</string>
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
     <string name="continuous_interval_reminder_help">Ξεκινήστε μια υπενθύμιση με βάση ένα χρονικό διάστημα (π.χ. κάθε 6 ώρες) από μια καθορισμένη στιγμή. Αυτό το μοτίβο θα είναι συνεχές, αγνοώντας τους περιορισμούς της ώρας της ημέρας, έως ότου απενεργοποιηθεί χειροκίνητα.</string>

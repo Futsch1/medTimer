@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Nápověda</string>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
     <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>

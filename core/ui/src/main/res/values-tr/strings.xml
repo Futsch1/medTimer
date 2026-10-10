@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Yardım</string>
     <string name="continuous_from">Sürekli aralık başlangıcı %1$s</string>
     <string name="continuous_interval_reminder">Sürekli aralık hatırlatıcısı</string>
     <string name="continuous_interval_reminder_help">Belirtilen bir andan itibaren bir zaman aralığına (örneğin her 6 saatte bir) dayalı bir hatırlatıcı başlatın. Bu desen, manuel olarak devre dışı bırakılana kadar günün saati kısıtlamalarını göz ardı ederek süreklidir.</string>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Súgó</string>
     <string name="continuous_from">Kezdő időpont: %1$s</string>
     <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
     <string name="continuous_interval_reminder_help">Beállíthatsz egy kiválasztott időponttól induló, ismétlődő emlékeztetőt (pl. hat óránként). Az ismétlődés folytonos, nem veszi figyelembe a napszakot, és csak kézzel kapcsolható ki.</string>

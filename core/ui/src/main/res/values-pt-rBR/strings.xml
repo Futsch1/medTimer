@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Ajuda</string>
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
     <string name="continuous_interval_reminder_help">Inicie um lembrete com base em um intervalo de tempo (por exemplo, a cada 6 horas) a partir de um momento especificado. Este padrão é contínuo, ignorando as restrições de horário do dia, até ser desativado manualmente.</string>

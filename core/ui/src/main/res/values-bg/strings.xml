@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Помощ</string>
     <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
     <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Ayuda</string>
     <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
     <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>

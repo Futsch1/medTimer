@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
+    <string name="help">Справка</string>
     <string name="continuous_from">Непрерывный интервал, начиная с %1$s</string>
     <string name="continuous_interval_reminder">Напоминание о непрерывном интервале</string>
     <string name="continuous_interval_reminder_help">Начните напоминание на основе временного интервала (например, каждые 6 часов) с указанного момента. Этот шаблон является непрерывным, игнорируя ограничения по времени суток, пока не будет отключен вручную.</string>

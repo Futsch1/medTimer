@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Aiuto</string>
     <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
     <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>

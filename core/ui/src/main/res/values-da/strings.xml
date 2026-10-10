@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Hjælp</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
     <string name="continuous_interval_reminder_help">Start en påmindelse baseret på et tidsinterval (f.eks. hver 6. time) fra et bestemt tidspunkt. Dette mønster er kontinuerligt og ignorerer begrænsninger for tid på dagen, indtil det deaktiveres manuelt.</string>

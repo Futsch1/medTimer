@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Hjälp</string>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
     <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>

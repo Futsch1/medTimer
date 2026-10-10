@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Hilfe</string>
     <string name="continuous_from">Kontinuierliches Intervall beginnend ab %1$s</string>
     <string name="continuous_interval_reminder">Kontinuierliche Intervallerinnerung</string>
     <string name="continuous_interval_reminder_help">Erinnerung basierend auf einem Zeitintervall (z.B. alle 6 Stunden) ab einem bestimmten Zeitpunkt. Die Erinnerung wiederholt sich kontinuierlich in diesem Intervall.</string>

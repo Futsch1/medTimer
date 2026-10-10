@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">مساعدة</string>
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
     <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>

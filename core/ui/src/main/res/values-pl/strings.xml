@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Pomoc</string>
     <string name="continuous_from">Ciągły odstęp rozpoczynający się od %1$s</string>
     <string name="continuous_interval_reminder">Przypomnienie co określony czas</string>
     <string name="continuous_interval_reminder_help">Ustaw przypomnienie, które będzie się powtarzać co dany odstęp czasu (np. co 6 godzin), zaczynając od wybranego momentu. Będzie ono działać bez przerwy, bez względu na porę dnia, dopóki go nie wyłączysz.</string>

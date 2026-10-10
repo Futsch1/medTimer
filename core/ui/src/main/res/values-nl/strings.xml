@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Help</string>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
     <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>

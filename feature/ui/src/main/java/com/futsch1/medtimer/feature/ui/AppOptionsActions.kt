@@ -17,6 +17,7 @@ interface AppOptionsActions {
     fun configureAutomaticBackup()
     fun generateTestData(withEvents: Boolean)
     fun showAppIntro()
+    fun openHelp(topic: String?)
     fun onDestroy()
 }
 

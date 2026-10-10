@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Ohje</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
     <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>

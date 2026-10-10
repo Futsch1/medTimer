@@ -11,6 +11,7 @@ ksp = "2.3.12"
 
 # AndroidX
 appcompat = "1.8.0"
+webkit = "1.17.1"
 core-ktx = "1.19.0"
 constraintlayout = "2.2.2"
 navigation = "2.10.2"
@@ -47,6 +48,7 @@ uiautomator = "2.4.0"
 barista = "4.3.0"
 
 # Build
+commonmark = "0.30.0"
 desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
 
@@ -70,6 +72,7 @@ kotlin-compose-compiler = "2.4.20"
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-compose-compiler" }
 # AndroidX
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
@@ -118,6 +121,7 @@ uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = 
 barista = { module = "com.adevinta.android:barista", version.ref = "barista" }
 
 # Build
+commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 

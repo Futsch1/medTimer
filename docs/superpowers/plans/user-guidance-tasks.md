@@ -2,7 +2,7 @@
 
 **Source:** [Agreed plan](user-guidance.md). That plan remains the scope and decision authority.
 **Audience:** Contributors implementing the plan step by step.
-**Status:** Task 1 complete; source inspection accepted in place of a live walkthrough. Task 2 is next. Check off work only after its acceptance criteria are verified.
+**Status:** Tasks 1–2 complete; source inspection accepted for task 1 and the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md). Task 3 is next. Check off work only after its acceptance criteria are verified.
 
 ## How to use this checklist
 
@@ -32,7 +32,7 @@ For every implementation task:
 | Done | Task | Depends on | Verifiable outcome |
 | --- | --- | --- | --- |
 | [x] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
-| [ ] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
+| [x] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
 | [ ] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
 | [ ] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
@@ -71,26 +71,26 @@ Review drafts: [Getting started](user-guidance-getting-started-draft.md) and
 
 **Depends on:** Task 1. **Decision checkpoint:** Choose the reader before production implementation.
 
-- [ ] Compare a lightweight Markdown reader with build-time conversion to local static HTML, including build tooling, dependencies, accessibility, and maintenance cost.
-- [ ] Time-box the experiment before starting; record the bound and outcome in the PR or contributor-facing notes.
-- [ ] Demonstrate one topic containing a screenshot, an internal topic link, return navigation, and offline rendering.
-- [ ] Review large text, screen-reader usability, and normal Android Back behavior.
-- [ ] Demonstrate integration and release packaging in both `full` and `foss`.
-- [ ] Choose one production approach; do not retain two production rendering paths.
-- [ ] Confirm the canonical source layout, topic identifiers/destinations, contents page, image layout, and packaging procedure. `docs/help/README.md` is a candidate, not a pre-decided requirement.
-- [ ] Define internal and external link behavior. If choosing HTML, specify safe local-asset handling and keep JavaScript disabled.
-- [ ] Verify any necessary dependency is maintained and pinned; do not upgrade the toolchain.
-- [ ] Document how to build/read the guide and how derived assets are generated deterministically.
-- [ ] Select a targeted release-like testing strategy that exercises intro/warning behavior without weakening production checks.
+- [x] Compare a lightweight Markdown reader with build-time conversion to local static HTML, including build tooling, dependencies, accessibility, and maintenance cost.
+- [x] Time-box the experiment to one focused working session (four-hour cap); record the bound and outcome in [Task 2 evidence](user-guidance-reader-spike.md).
+- [x] Demonstrate one topic containing a screenshot, an internal topic link, return navigation, and offline rendering.
+- [x] Review enlarged text, TalkBack-accessible headings/links/image alt text, and normal Android Back behavior.
+- [x] Demonstrate integration and release packaging in both `full` and `foss`.
+- [x] Choose build-time Markdown-to-local-HTML as the sole production rendering path.
+- [x] Confirm the canonical source layout, topic identifiers/destinations, contents page, image layout, and packaging procedure in [Task 2 evidence](user-guidance-reader-spike.md).
+- [x] Define internal and external link behavior; generated HTML uses safe local-asset handling and disables JavaScript and network loads.
+- [x] Verify necessary dependencies are maintained and pinned; no toolchain upgrade.
+- [x] Document how to build/read the guide and how derived assets are generated deterministically.
+- [x] Select targeted release-like intro/warning tests using a test-only `@IsDebugBuild = false` binding. Their implementation belongs to the intro/warning tasks; production debug suppression stays unchanged.
 
-**Acceptance:** One reproducible approach satisfies all spike demonstrations and constraints. Remaining tasks can use settled topic destinations and packaging rather than inventing a second source of content.
+**Acceptance:** One reproducible approach satisfies all spike demonstrations and constraints. Remaining tasks use settled topic destinations and packaging rather than inventing a second source of content. Evidence: [Task 2 reader spike](user-guidance-reader-spike.md).
 
 ## Task 3 — Ship the first beginner Help slice
 
 **Depends on:** Task 2.
 
 - [ ] Finalize and bundle Getting started using the selected source layout and reader.
-- [ ] Add a simple Help contents page and a permanent main overflow Help entry in release builds and both flavors.
+- [x] Add a simple Help contents page and a permanent main overflow Help entry in release builds and both flavors (implemented ahead of task 3 to make the spike usable).
 - [ ] Make the English-only guide limitation clear when the app language is not English.
 - [ ] Add non-blocking no-medicines guidance explaining the medicine-then-reminder relationship and offering the next action.
 - [ ] Add guidance for a medicine without reminders, explaining that a medicine alone does not schedule notifications and pointing to Add reminder.

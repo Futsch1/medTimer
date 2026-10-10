@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">עזרה</string>
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
     <string name="continuous_interval_reminder_help">התחילו תזכורת על בסיס מרווח זמן (למשל, כל 6 שעות) מנקודת זמן מסוימת. דפוס זה הוא רציף, ומתעלם מהמגבלות של שעת היום, עד לכיבוי ידני.</string>

@@ -37,6 +37,7 @@ object AppOptionsTestTags {
  * three groups of two or three items.
  */
 @Composable
+@Suppress("kotlin:S107")
 fun AppOptionsMenu(
     actions: AppOptionsActions,
     hasTags: Boolean,
@@ -82,17 +83,34 @@ fun AppOptionsMenu(
             }
 
             item(CoreUiR.string.tab_settings, CoreUiR.drawable.gear, onClick = onOpenSettings)
+            item(CoreUiR.string.help, CoreUiR.drawable.info_circle) { actions.openHelp(null) }
 
             HorizontalDivider()
             MenuSectionLabel(CoreUiR.string.event_data)
-            item(CoreUiR.string.export_pdf, CoreUiR.drawable.filetype_pdf, CoreUiR.string.export_events_pdf) { onExportEvents(false) }
-            item(CoreUiR.string.export_csv, CoreUiR.drawable.filetype_csv, CoreUiR.string.export_events_csv) { onExportEvents(true) }
+            item(
+                CoreUiR.string.export_pdf,
+                CoreUiR.drawable.filetype_pdf,
+                CoreUiR.string.export_events_pdf
+            ) { onExportEvents(false) }
+            item(
+                CoreUiR.string.export_csv,
+                CoreUiR.drawable.filetype_csv,
+                CoreUiR.string.export_events_csv
+            ) { onExportEvents(true) }
             item(CoreUiR.string.clear_events, CoreUiR.drawable.trash, onClick = onClearEvents)
 
             HorizontalDivider()
             MenuSectionLabel(CoreUiR.string.medicine_data)
-            item(CoreUiR.string.export_pdf, CoreUiR.drawable.filetype_pdf, CoreUiR.string.export_medicines_pdf) { onExportMedicines(false) }
-            item(CoreUiR.string.export_csv, CoreUiR.drawable.filetype_csv, CoreUiR.string.export_medicines_csv) { onExportMedicines(true) }
+            item(
+                CoreUiR.string.export_pdf,
+                CoreUiR.drawable.filetype_pdf,
+                CoreUiR.string.export_medicines_pdf
+            ) { onExportMedicines(false) }
+            item(
+                CoreUiR.string.export_csv,
+                CoreUiR.drawable.filetype_csv,
+                CoreUiR.string.export_medicines_csv
+            ) { onExportMedicines(true) }
 
             HorizontalDivider()
             item(CoreUiR.string.automatic_backup, CoreUiR.drawable.gear, onClick = actions::configureAutomaticBackup)

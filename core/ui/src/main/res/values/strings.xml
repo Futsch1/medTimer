@@ -8,6 +8,7 @@
     <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
     <string name="day_of_month_limited">Limited to some days of the month</string>
     <string name="every_day">Every day</string>
+    <string name="help">Help</string>
     <string name="every_interval">Every %s</string>
     <string name="expiration_date">Expiration date</string>
     <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">உதவி</string>
     <string name="continuous_from">தொடர்ச்சியான இடைவெளி %1$s இலிருந்து தொடங்குகிறது</string>
     <string name="continuous_interval_reminder">தொடர்ச்சியான இடைவெளி நினைவூட்டல்</string>
     <string name="continuous_interval_reminder_help">ஒரு குறிப்பிட்ட தருணத்திலிருந்து ஒரு நேர இடைவெளியின் அடிப்படையில் (எ.கா., ஒவ்வொரு 6 மணி நேரத்திற்கும்) ஒரு நினைவூட்டலைத் தொடங்கவும். இந்த முறை தொடர்ச்சியானது, দিনের நேரக் கட்டுப்பாடுகளைப் புறக்கணித்து, கைமுறையாக செயலிழக்கப்படும் வரை.</string>

@@ -1,3 +1,5 @@
+import com.futsch1.build.GenerateHelpGuideTask
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.triplet.play)
@@ -133,6 +135,21 @@ android {
     }
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        val taskName = "generate${variant.name.replaceFirstChar(Char::uppercase)}HelpGuideAssets"
+        val generateHelpGuideAssets = tasks.register<GenerateHelpGuideTask>(taskName) {
+            description = "Generate assets for the help guide"
+            group = "Help"
+            guideDirectory.set(rootProject.layout.projectDirectory.dir("docs/help"))
+        }
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            generateHelpGuideAssets,
+            GenerateHelpGuideTask::outputDirectory
+        )
+    }
+}
+
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:database"))
@@ -152,6 +169,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.webkit)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">說明</string>
     <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="continuous_interval_reminder">連續間隔提醒</string>
     <string name="continuous_interval_reminder_help">從指定時間點開始，根據時間間隔（例如每 6 小時）啟動提醒。此模式是連續的，忽略一天中的時間限制，直到手動停用為止。</string>
