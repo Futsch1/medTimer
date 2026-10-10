@@ -11,12 +11,20 @@ import com.futsch1.medtimer.feature.reminders.SnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.StockHandlingProcessor
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.command.ReminderCommandBusImpl
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.yield
 import org.junit.Test
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.stub
 import java.time.Instant
+import kotlin.test.assertEquals
 
 /**
  * Guards the reminder scheduling chain: every command that can disturb alarm state
@@ -63,6 +71,38 @@ class ReminderCommandBusImplTest {
             // Show reminder may have rescheduled the next due reminder, so the
             // next-reminder alarm must be recomputed afterwards
             verify(scheduleNextReminderNotificationProcessor).scheduleNextReminder()
+        }
+    }
+
+    /**
+     * Marking events re-posts the notification without the processed events. Concurrent calls (one per
+     * event when several are marked from the overview) each read the original notification and the last
+     * one to re-post wins, leaving an already taken event in the notification (#1589).
+     */
+    @Test
+    fun markReminderEventsProcessesOneCallAtATime() {
+        runBlocking {
+            val gate = CompletableDeferred<Unit>()
+            var inside = 0
+            var maxInside = 0
+            notificationProcessor.stub {
+                onBlocking { processReminderEventsInNotification(any(), any()) } doSuspendableAnswer {
+                    inside++
+                    maxInside = maxOf(maxInside, inside)
+                    gate.await()
+                    inside--
+                    Unit
+                }
+            }
+
+            val first = launch { commandBus.markReminderEvents(listOf(11), ReminderEvent.ReminderStatus.TAKEN) }
+            val second = launch { commandBus.markReminderEvents(listOf(12), ReminderEvent.ReminderStatus.TAKEN) }
+            yield()
+            yield()
+            gate.complete(Unit)
+            joinAll(first, second)
+
+            assertEquals(1, maxInside)
         }
     }
 
