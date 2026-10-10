@@ -14,7 +14,7 @@ app; they are not medical advice.
 4. Open **Overview** and check the next scheduled date, medicine, dosage, and time. If 08:00 has passed today, look at
    tomorrow.
 
-![Medicine A reminder example](images/medicine-reminder.png)
+   ![The upcoming Medicine A reminder in Overview](images/getting-started-upcoming-reminder.png)
 
 An upcoming entry is a schedule preview, not confirmation that Android delivered a notification.
 
