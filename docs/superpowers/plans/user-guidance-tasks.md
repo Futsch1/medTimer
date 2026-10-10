@@ -2,7 +2,7 @@
 
 **Source:** [Agreed plan](user-guidance.md). That plan remains the scope and decision authority.
 **Audience:** Contributors implementing the plan step by step.
-**Status:** Not started. Check off work only after its acceptance criteria are verified.
+**Status:** Task 1 complete; source inspection accepted in place of a live walkthrough. Task 2 is next. Check off work only after its acceptance criteria are verified.
 
 ## How to use this checklist
 
@@ -31,7 +31,7 @@ For every implementation task:
 
 | Done | Task | Depends on | Verifiable outcome |
 | --- | --- | --- | --- |
-| [ ] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
+| [x] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
 | [ ] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
 | [ ] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
 | [ ] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
@@ -50,14 +50,20 @@ Tasks 4–8 can be developed independently after task 3. Tasks 10–11 may start
 
 **Depends on:** None.
 
-- [ ] Walk through adding a medicine, adding its reminder, choosing a type, and checking the upcoming reminder in the current app.
-- [ ] Inspect relevant implementation and tests; distinguish tests that own creation flows from fixtures that bypass them.
-- [ ] Inventory notification preferences, Android permissions/settings, Overview warnings, dismissal behavior, and intro skip/permission behavior.
-- [ ] Record current labels, navigation, defaults, and supporting code/tests in contributor-facing notes or the PR, not in user instructions.
-- [ ] Draft Getting started: medicine first, reminder second, a synthetic daily fixed-time example, and checking the expected upcoming time.
-- [ ] Draft Notifications missing or late: separate setup/scheduling problems from delivery problems and flag anything still unverified.
-- [ ] Inventory useful sections of `docs/UseCases.md` and map them to proposed beginner, troubleshooting, or advanced topics.
-- [ ] List content and screenshot gaps without requiring complete feature coverage before proceeding.
+- [x] Trace adding a medicine, adding its reminder, choosing a type, and checking the upcoming reminder through current implementation and tests. Source inspection accepted by the project owner in place of a live walkthrough for task 1; no live verification claimed.
+- [x] Inspect relevant implementation and tests; distinguish tests that own creation flows from fixtures that bypass them.
+- [x] Inventory notification preferences, Android permissions/settings, Overview warnings, dismissal behavior, and intro skip/permission behavior.
+- [x] Record current labels, navigation, defaults, and supporting code/tests in contributor-facing notes or the PR, not in user instructions.
+- [x] Draft Getting started: medicine first, reminder second, a synthetic daily fixed-time example, and checking the expected upcoming time.
+- [x] Draft Notifications missing or late: separate setup/scheduling problems from delivery problems and flag anything still unverified.
+- [x] Inventory useful sections of `docs/UseCases.md` and map them to proposed beginner, troubleshooting, or advanced topics.
+- [x] List content and screenshot gaps without requiring complete feature coverage before proceeding.
+
+Evidence and verification: [Task 1 inventory (2026-10-10)](user-guidance-inventory-2026-10-10.md).
+Review drafts: [Getting started](user-guidance-getting-started-draft.md) and
+[Notifications missing or late](user-guidance-notifications-draft.md). These do not settle task 2's production source layout.
+
+**Acceptance decision:** The project owner accepts the source inspection and drafts as sufficient for task 1; a live walkthrough is not required for this inventory. The dated inventory records the original verification boundary and is retained as a snapshot. Its pending walkthrough does not block task 2. This decision does not waive later UI, screenshot, permission, or release verification requirements.
 
 **Acceptance:** The beginner draft covers the complete medicine-to-upcoming-reminder path, distinguishes scheduling from confirmed delivery, and identifies unresolved claims. Existing instructions remain available until replacements are ready.
 
