@@ -44,7 +44,7 @@ class SetupGuidanceTest {
 
     @Test
     fun `should hide selected medicine guidance when its reminder is added`() {
-        val medicine = medicine(id = 1)
+        val medicine = medicine(id = 2)
         val withReminder = medicine.copy(reminders = listOf(Reminder.default().copy(medicineRelId = 1)))
 
         assertEquals(SetupGuidance.ADD_REMINDER, setupGuidance(listOf(medicine), selectedMedicineId = 1))

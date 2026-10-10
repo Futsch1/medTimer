@@ -7,16 +7,16 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.KeyEvent
 import android.webkit.WebView
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.graphics.drawable.toDrawable
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.toDrawable
 import androidx.webkit.WebViewAssetLoader
 import com.futsch1.medtimer.core.ui.R
 import kotlin.math.roundToInt
@@ -29,7 +29,7 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = false
-        setStyle(STYLE_NORMAL, com.futsch1.medtimer.core.ui.R.style.Theme_MedTimer)
+        setStyle(STYLE_NORMAL, R.style.Theme_MedTimer)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = super.onCreateDialog(savedInstanceState).apply {
@@ -43,7 +43,11 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: android.view.LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val surfaceColor = TypedValue().let { value ->
             requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, value, true)
             value.data

@@ -2,7 +2,7 @@
 
 **Source:** [Agreed plan](user-guidance.md). That plan remains the scope and decision authority.
 **Audience:** Contributors implementing the plan step by step.
-**Status:** Tasks 1–3 complete; source inspection accepted for task 1 and the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md). Task 4 is next. Check off work only after its acceptance criteria are verified.
+**Status:** Tasks 1–4 complete; source inspection accepted for task 1, the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md), and Task 4 capture evidence is recorded below. Check off work only after its acceptance criteria are verified.
 
 ## How to use this checklist
 
@@ -34,7 +34,7 @@ For every implementation task:
 | [x] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
 | [x] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
 | [x] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
-| [ ] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
+| [x] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
 | [ ] | 6. Guide checking the upcoming reminder | 3 | Post-creation next step without tutorial tracking |
 | [ ] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
@@ -109,14 +109,22 @@ Review drafts: [Getting started](user-guidance-getting-started-draft.md) and
 
 **Depends on:** Task 3.
 
-- [ ] Reuse the existing instrumented harness, robots, locale handling, and Screengrab mechanism rather than creating a second capture framework.
-- [ ] Add focused English-only scenarios for first-use states and the beginner setup path, with descriptive image names.
-- [ ] Use synthetic data and stable time/data arrangements compatible with the harness. Assert the intended UI state before capture.
-- [ ] Exercise setup actions in the scenario that owns the creation flow; do not present seeded fixtures as evidence that creation works.
-- [ ] Run each added or changed screenshot test locally on an emulator.
-- [ ] Review and commit approved guide images, reference them from the relevant topics, and verify offline rendering.
-- [ ] Document image provenance, the exact focused capture command, and when regeneration is necessary.
-- [ ] Ensure ordinary builds use committed images and do not require an emulator or the all-locale store screenshot run.
+- [x] Reuse the existing instrumented harness, robots, locale handling, and Screengrab mechanism rather than creating a second capture framework.
+- [x] Add a focused English-only capture scenario for the beginner setup path, with first-use state assertions and a descriptive image name.
+- [x] Use synthetic data and stable time/data arrangements compatible with the harness. Assert the intended UI state before capture.
+- [x] Exercise setup actions in the scenario that owns the creation flow; do not present seeded fixtures as evidence that creation works.
+- [x] Run each added or changed screenshot test locally on an emulator.
+- [x] Review and commit approved guide images, reference them from the relevant topics, and verify offline rendering.
+- [x] Document image provenance, the exact focused capture command, and when regeneration is necessary.
+- [x] Ensure ordinary builds use committed images and do not require an emulator or the all-locale store screenshot run.
+
+**Capture procedure and provenance:** Run `fastlane android capture_help_screenshot` with an emulator connected. The `capture_help_screenshot` lane builds the full-flavor debug app and AndroidTest APK, sets the device to 24-hour time, invokes only `HelpScreenshotTest` under Screengrab with the `en-US` locale, and copies the named capture from `app/build/help-screenshot-output/` to `docs/help/images/`. It does not invoke the all-locale Play Store screenshot lane.
+
+`HelpScreenshotTest` creates synthetic **Medicine A** through the UI. It asserts the no-medicines guidance and the saved medicine's no-reminders guidance, then creates dosage **1** at **08:00** and captures Overview after asserting that the next day's event shows the medicine and formatted time. The committed image `getting-started-upcoming-reminder.png` is embedded in [`Getting started`](../../help/getting-started.md).
+
+Regenerate and review this image when any depicted labels, navigation, layout/theme, or corresponding instructions change. The capture lane pins English and 24-hour time for the intended 08:00 example; verify the capture before replacing the committed file. Ordinary guide builds copy this committed local image and do not need an emulator. `./gradlew :app:generateFullDebugHelpGuideAssets` passed and the generated local HTML references the bundled image.
+
+**Verification:** `fastlane android capture_help_screenshot` passed on a connected API 36 emulator (one instrumented test; one English screenshot captured). `./gradlew :app:generateFullDebugHelpGuideAssets` and `./gradlew lint` passed. Reviewed the screenshot and generated HTML link.
 
 **Acceptance:** Contributors can regenerate just the documentation images. Bundled screenshots match their instructions, resolve offline, and contain no real medication data.
 

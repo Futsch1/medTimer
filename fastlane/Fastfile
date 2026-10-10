@@ -82,6 +82,7 @@ platform(:android) do
     output_directory = File.join(project_root, 'app/build/help-screenshot-output')
 
     gradle(task: 'assembleFullDebug assembleFullDebugAndroidTest')
+    sh('adb', 'shell', 'settings', 'put', 'system', 'time_12_24', '24')
     capture_android_screenshots(
       locales: ['en-US'],
       clear_previous_screenshots: true,
@@ -96,17 +97,17 @@ platform(:android) do
       use_timestamp_suffix: false
     )
 
-    screenshot = File.join(
-      output_directory,
-      'en-US',
-      'images',
-      'phoneScreenshots',
-      'getting-started-medicine-reminder.png'
-    )
-    UI.user_error!("Expected focused guide screenshot at #{screenshot}") unless File.file?(screenshot)
+    screenshot_directory = File.join(output_directory, 'en-US', 'images', 'phoneScreenshots')
+    screenshots = {
+      'getting-started-upcoming-reminder.png' => 'getting-started-upcoming-reminder.png'
+    }
+    screenshots.each do |filename, destination_name|
+      source = File.join(screenshot_directory, filename)
+      UI.user_error!("Expected focused guide screenshot at #{source}") unless File.file?(source)
 
-    destination = File.join(project_root, 'docs/help/images/medicine-reminder.png')
-    FileUtils.cp(screenshot, destination)
-    UI.success("Copied AndroidTest screenshot to #{destination}")
+      destination = File.join(project_root, 'docs/help/images', destination_name)
+      FileUtils.cp(source, destination)
+      UI.success("Copied AndroidTest screenshot to #{destination}")
+    end
   end
 end
