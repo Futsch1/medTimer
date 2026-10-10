@@ -5,6 +5,7 @@ import androidx.compose.ui.test.hasText
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
@@ -28,6 +29,16 @@ class MedicineEditorRobot(
 
     fun assertTitle(expected: String) =
         ui.scope(com.futsch1.medtimer.core.ui.ScreenTestTags.TOP_APP_BAR).assertDisplayed(hasText(expected))
+
+    fun assertReminderSetupGuidanceDisplayed() = assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.setupReminderGuidance)
+
+    fun assertReminderSetupGuidanceAbsent() = assertNotDisplayed(com.futsch1.medtimer.feature.ui.R.id.setupReminderGuidance)
+
+    fun openGettingStartedFromGuidance() = clickOn(com.futsch1.medtimer.feature.ui.R.id.setupGettingStarted)
+
+    fun openAddReminderFromGuidance() = clickOn(com.futsch1.medtimer.feature.ui.R.id.setupAddReminder)
+
+    fun closeReminderTypeChooser() = pressBack()
 
     fun rename(name: String) = writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, name)
 

@@ -21,6 +21,7 @@ class HelpRobot(private val menus: MenuRobot) {
     }
 
     fun assertGettingStartedDisplayed() {
+        findText("This guide is currently available in English only.")
         findText("MedTimer stores medicines and reminders separately.")
     }
 

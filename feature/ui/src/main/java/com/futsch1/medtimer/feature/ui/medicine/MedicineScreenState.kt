@@ -10,10 +10,12 @@ import kotlinx.collections.immutable.persistentListOf
 
 interface MedicineScreenState {
     val medicines: ImmutableList<MedicineScreenItem>
+    val setupGuidance: SetupGuidance
 }
 
 class MutableMedicineScreenState : MedicineScreenState {
     override var medicines by mutableStateOf<ImmutableList<MedicineScreenItem>>(persistentListOf())
+    override var setupGuidance by mutableStateOf(SetupGuidance.NONE)
 }
 
 data class StockState(

@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">A(z) %1$s nem jelenik meg, mert az adagjai különböző mértékegységeket használnak: %2$s. Módosítsa a mennyiségeket, hogy mind ugyanazt a mértékegységet használja.</string>
     <string name="pk_no_unit">nincs mértékegység</string>
     <string name="custom_range">Egyedi</string>
+    <string name="setup_no_medicines_guidance">Először adj hozzá egy gyógyszert, majd egy emlékeztetőt hozzá. A gyógyszer önmagában nem ütemez értesítéseket.</string>
+    <string name="setup_no_reminders_guidance">A gyógyszer önmagában nem ütemez értesítéseket. Adj hozzá emlékeztetőt az értesítések ütemezéséhez.</string>
+    <string name="setup_guidance_getting_started">Első lépések</string>
 </resources>

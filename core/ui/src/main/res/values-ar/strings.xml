@@ -388,4 +388,7 @@
     <string name="pk_unit_conflict">لا يُعرض %1$s لأن جرعاته تستخدم وحدات مختلفة: %2$s. عدّل الكميات بحيث تستخدم جميعها الوحدة نفسها.</string>
     <string name="pk_no_unit">بدون وحدة</string>
     <string name="custom_range">مخصّص</string>
+    <string name="setup_no_medicines_guidance">أضف دواءً أولاً، ثم أضف تذكيرًا له. الدواء وحده لا يجدول الإشعارات.</string>
+    <string name="setup_no_reminders_guidance">الدواء وحده لا يجدول الإشعارات. أضف تذكيرًا لجدولة الإشعارات.</string>
+    <string name="setup_guidance_getting_started">البدء</string>
 </resources>

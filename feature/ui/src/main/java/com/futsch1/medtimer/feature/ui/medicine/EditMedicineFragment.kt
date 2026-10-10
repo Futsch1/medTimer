@@ -27,6 +27,8 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.component.withTopAppBar
+import com.futsch1.medtimer.feature.ui.AppOptionsActions
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTypeDialog
 import com.google.android.material.button.MaterialButton
@@ -61,6 +63,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var applicationScope: CoroutineScope
 
     @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
+    @Inject
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
     @Inject
@@ -88,6 +93,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var reminderRepository: ReminderRepository
 
     private var medicine: Medicine? = null
+    private lateinit var appOptionsActions: AppOptionsActions
     private lateinit var fragmentView: View
     private var fragmentReady = false
     // Assigned once the medicine has loaded; the bar renders its actions only from that point on.
@@ -100,6 +106,11 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private lateinit var adapter: ReminderViewAdapter
     private lateinit var selectIconButton: MaterialButton
     var notes: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appOptionsActions = appOptionsActionsFactory.create(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -149,6 +160,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     override fun onDestroy() {
         super.onDestroy()
+        appOptionsActions.onDestroy()
         idlingResource.destroy()
     }
 
@@ -193,6 +205,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
         viewLifecycleOwner.lifecycleScope.launch {
             reminderRepository.getAllFlow(getMedicineId()).collect {
                 sortAndSubmitList(it)
+                fragmentView.findViewById<View>(R.id.setupReminderGuidance).visibility =
+                    if (setupGuidance(listOf(medicine.copy(reminders = it)), medicine.id) == SetupGuidance.ADD_REMINDER) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
                 setFragmentReady()
             }
         }
@@ -276,6 +294,12 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private fun setupAddReminderButton(medicine: Medicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
         fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), medicine) }
+        fragmentView.findViewById<MaterialButton>(R.id.setupAddReminder).setOnClickListener {
+            fab.performClick()
+        }
+        fragmentView.findViewById<MaterialButton>(R.id.setupGettingStarted).setOnClickListener {
+            appOptionsActions.openHelp("getting-started")
+        }
     }
 
     private fun sortAndSubmitList(reminders: List<Reminder>) {

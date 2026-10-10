@@ -81,6 +81,9 @@
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
     <string name="add_reminder">Add reminder</string>
+    <string name="setup_no_medicines_guidance">Add a medicine first, then add a reminder for it. A medicine by itself does not schedule notifications.</string>
+    <string name="setup_no_reminders_guidance">A medicine by itself does not schedule notifications. Add a reminder to schedule notifications.</string>
+    <string name="setup_guidance_getting_started">Getting started</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="dosage">Dosage</string>

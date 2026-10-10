@@ -5,6 +5,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.onView
@@ -50,6 +51,30 @@ class MedicinesRobot(
     }
 
     fun count(): Int = list.count(MEDICINE_ITEM)
+
+    fun assertAddMedicineGuidanceDisplayed() {
+        showList()
+        screen.assertDisplayed(hasText(ui.getString(CoreUiR.string.setup_no_medicines_guidance)))
+    }
+
+    fun assertAddMedicineGuidanceAbsent() {
+        showList()
+        screen.assertAbsent(hasText(ui.getString(CoreUiR.string.setup_no_medicines_guidance)))
+    }
+
+    fun clickAddMedicineFromGuidance() {
+        showList()
+        screen.click(hasTestTag(MedicineTestTags.SETUP_ADD_MEDICINE))
+    }
+
+    fun createFromGuidance(name: String) {
+        clickAddMedicineFromGuidance()
+        onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.medicineName))
+            .inRoot(RootMatchers.isDialog())
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        writeTo(com.futsch1.medtimer.feature.ui.R.id.medicineName, name)
+        dialogs.confirm()
+    }
 
     fun clickItem(position: Int) {
         showList()

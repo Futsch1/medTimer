@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s காட்டப்படவில்லை, ஏனெனில் அதன் டோஸ்கள் வெவ்வேறு அலகுகளைப் பயன்படுத்துகின்றன: %2$s. அனைத்தும் ஒரே அலகைப் பயன்படுத்தும்படி அளவுகளை மாற்றவும்.</string>
     <string name="pk_no_unit">அலகு இல்லை</string>
     <string name="custom_range">தனிப்பயன்</string>
+    <string name="setup_no_medicines_guidance">முதலில் ஒரு மருந்தைச் சேர்த்து, பின்னர் அதற்கான நினைவூட்டலைச் சேர்க்கவும். மருந்து மட்டும் அறிவிப்புகளைத் திட்டமிடாது.</string>
+    <string name="setup_no_reminders_guidance">மருந்து மட்டும் அறிவிப்புகளைத் திட்டமிடாது. அறிவிப்புகளைத் திட்டமிட நினைவூட்டலைச் சேர்க்கவும்.</string>
+    <string name="setup_guidance_getting_started">தொடங்குதல்</string>
 </resources>

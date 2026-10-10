@@ -358,4 +358,7 @@
     <string name="pk_unit_conflict">%1$s 未顯示，因為其劑量使用了不同的單位：%2$s。請修改劑量，使其全部使用相同單位。</string>
     <string name="pk_no_unit">無單位</string>
     <string name="custom_range">自訂</string>
+    <string name="setup_no_medicines_guidance">請先新增藥物，再為它新增提醒。只有藥物不會排程通知。</string>
+    <string name="setup_no_reminders_guidance">只有藥物不會排程通知。新增提醒以排程通知。</string>
+    <string name="setup_guidance_getting_started">開始使用</string>
 </resources>

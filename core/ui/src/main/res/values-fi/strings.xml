@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s ei näy, koska sen annoksissa käytetään eri yksiköitä: %2$s. Muuta määrät niin, että kaikissa käytetään samaa yksikköä.</string>
     <string name="pk_no_unit">ei yksikköä</string>
     <string name="custom_range">Mukautettu</string>
+    <string name="setup_no_medicines_guidance">Lisää ensin lääke ja lisää sitten sille muistutus. Pelkkä lääke ei ajasta ilmoituksia.</string>
+    <string name="setup_no_reminders_guidance">Pelkkä lääke ei ajasta ilmoituksia. Lisää muistutus ajastaaksesi ilmoitukset.</string>
+    <string name="setup_guidance_getting_started">Aloittaminen</string>
 </resources>

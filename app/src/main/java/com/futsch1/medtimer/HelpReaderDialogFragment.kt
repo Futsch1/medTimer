@@ -109,10 +109,12 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
 
     private fun navigateBack() {
         val currentPath = webView.url?.let(Uri::parse)?.path
-        if (currentPath == "$ASSET_PATH$CONTENTS_PAGE") {
-            dismiss()
+        val openedDirectlyOnTopic = !arguments?.getString(ARG_TOPIC).isNullOrBlank()
+        val atContents = currentPath == "$ASSET_PATH$CONTENTS_PAGE"
+        if (webView.canGoBack() && (!atContents || openedDirectlyOnTopic)) {
+            webView.goBack()
         } else {
-            webView.loadUrl("$ASSET_ORIGIN$ASSET_PATH$CONTENTS_PAGE")
+            dismiss()
         }
     }
 

@@ -66,7 +66,7 @@ Hints depend on actual state, not whether they were previously viewed:
 
 An empty Overview day alone must not trigger first-setup guidance: a valid schedule may have nothing due that day. Account for interrupted setup, existing users, and legitimate medicines without reminders. Guidance must remain non-blocking and avoid repeatedly interrupting normal use.
 
-The exact post-creation presentation is an implementation detail to settle during the first vertical slice; it must not introduce tutorial-progress state.
+For the post-creation next step, show a non-blocking snackbar after a reminder is successfully created. Its message points users to Overview to check the upcoming time; an action opens Getting started. Show it only for a successful creation event; do not persist tutorial progress or show recurring setup prompts.
 
 ## Intro and Help
 

@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s vises ikke, fordi dens doser bruger forskellige enheder: %2$s. Ret mængderne, så de alle bruger den samme enhed.</string>
     <string name="pk_no_unit">ingen enhed</string>
     <string name="custom_range">Brugerdefineret</string>
+    <string name="setup_no_medicines_guidance">Tilføj først en medicin, og tilføj derefter en påmindelse til den. En medicin alene planlægger ikke notifikationer.</string>
+    <string name="setup_no_reminders_guidance">En medicin alene planlægger ikke notifikationer. Tilføj en påmindelse for at planlægge notifikationer.</string>
+    <string name="setup_guidance_getting_started">Kom godt i gang</string>
 </resources>

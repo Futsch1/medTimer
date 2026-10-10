@@ -370,4 +370,7 @@
     <string name="pk_unit_conflict">%1$s non viene mostrato perché le sue dosi usano unità diverse: %2$s. Modifica le quantità in modo che usino tutte la stessa unità.</string>
     <string name="pk_no_unit">nessuna unità</string>
     <string name="custom_range">Personalizzato</string>
+    <string name="setup_no_medicines_guidance">Aggiungi prima un medicinale e poi un promemoria. Un medicinale da solo non pianifica notifiche.</string>
+    <string name="setup_no_reminders_guidance">Un medicinale da solo non pianifica notifiche. Aggiungi un promemoria per pianificare le notifiche.</string>
+    <string name="setup_guidance_getting_started">Per iniziare</string>
 </resources>

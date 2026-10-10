@@ -64,8 +64,8 @@
     <string name="please_wait">Bitte warten…</string>
     <string name="notification_title">Erinnerung an ein Medikament</string>
     <string name="refill_amount">Nachfüllen (%s)</string>
-    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte füllen Sie das Medikament bald nach.</string>
-    <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwägen Sie, das Medikament zu ersetzen.</string>
+    <string name="out_of_stock_notification">Nur noch %2$s von %1$s übrig!\nBitte fülle das Medikament bald nach.</string>
+    <string name="expiration_date_notification">Das Medikament %1$s verfällt am %2$s.\nErwäge, das Medikament zu ersetzen.</string>
     <string name="widget_disabled_privacy">Widgets aus Datenschutzgründen deaktiviert — App öffnen, um Erinnerungen anzuzeigen</string>
     <string name="recent_events">Kürzliche Ereignisse</string>
     <string name="next_reminders">Nächste Erinnerungen</string>
@@ -165,11 +165,11 @@
     <string name="edit_event">Ereignis bearbeiten</string>
     <string name="intro_welcome">Willkommen bei MedTimer!</string>
     <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen, um an Medikamente zu erinnern.</string>
-    <string name="intro_medicine_description">Verwenden Sie die Registerkarte \"Medikamente\" um ein Medikament zu erstellen, das Sie einnehmen und an das Sie erinnert werden möchten. Sie können Medikamente Tags zuordnen und den Füllstand überwachen.</string>
-    <string name="intro_reminder_description">Wählen Sie ein Medikament aus, um seine Details zu bearbeiten und Erinnerungen für die verschiedenen Einnahmezeiten zu erstellen.\n\nEs gibt verschiedene Erinnerungstypen wie zeitbasiert oder intervallbasiert, weiterhin lassen sich Erinnerungen auf bestimmte Tage beschränken.</string>
+    <string name="intro_medicine_description">Verwende die Registerkarte \"Medikamente\" um ein Medikament zu erstellen, das du einnehmen und an das du erinnert werden möchtest. Du kannst Medikamente Tags zuordnen und den Füllstand überwachen.</string>
+    <string name="intro_reminder_description">Wähle ein Medikament aus, um seine Details zu bearbeiten und Erinnerungen für die verschiedenen Einnahmezeiten zu erstellen.\n\nEs gibt verschiedene Erinnerungstypen wie zeitbasiert oder intervallbasiert, weiterhin lassen sich Erinnerungen auf bestimmte Tage beschränken.</string>
     <string name="intro_notification_description">Sobald eine Erinnerung fällig ist, erscheint eine Benachrichtigung, die Ihnen die Möglichkeit gibt, eine Dosis als eingenommen zu markieren (durch Klicken auf die Schaltfläche \"Eingenommen\"), zu überspringen (durch Verwerfen der Benachrichtigung) oder nach einiger Zeit erneut erinnert zu werden (\"Schlummern\").</string>
-    <string name="intro_overview_description">Auf dem Übersichtsbildschirm können Sie anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Klicken bearbeitet.\n\n Darüber hinaus können Sie manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
-    <string name="intro_analysis_description">Die App speichert alle Ereignisse. Sie können Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
+    <string name="intro_overview_description">Auf dem Übersichtsbildschirm kannst du anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Klicken bearbeitet.\n\n Darüber hinaus kannst du manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
+    <string name="intro_analysis_description">Die App speichert alle Ereignisse. Du kannst Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
@@ -201,7 +201,7 @@
     <string name="add_linked_reminder">Verknüpfte Erinnerung hinzufügen</string>
     <string name="linked_reminder_delay">Verzögerung der verknüpften Erinnerung</string>
     <string name="delay">Verzögerung</string>
-    <string name="delete_re_raise_event">Möchten Sie dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
+    <string name="delete_re_raise_event">Möchtest du dieses Ereignis löschen und die Benachrichtigung erneut auslösen?</string>
     <string name="interval_based_reminder">Intervallbasierte Erinnerung</string>
     <string name="minutes_string">Minuten</string>
     <string name="hours_string">Stunden</string>
@@ -230,7 +230,7 @@
     <string name="unlimited">Unbegrenzt</string>
     <string name="override_dnd">Benachrichtigungston immer abspielen</string>
     <string name="override_dnd_summary">Spielt Benachrichtigungstöne, wenn nur der Vibrationsalarm eingeschaltet ist, oder Nicht Stören ohne Vibration oder Stumm</string>
-    <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktivieren Sie den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
+    <string name="enable_dnd_dialog">Um das Abspielen von Benachrichtigungstönen während Nicht Stören zu ermöglichen, aktiviere den Nicht Stören-Zugang für MedTimer im folgenden Menü</string>
     <string name="app_authentication">Authentifizierung notwendig für Zugriff auf die App</string>
     <string name="login">Anmeldung bei MedTimer mit biometrischer Authentifizierung</string>
     <string name="privacy_settings">Datenschutz-Einstellungen</string>
@@ -253,7 +253,7 @@
     <string name="automatically_taken">Automatisch als eingenommen markieren</string>
     <string name="sort">Sortieren</string>
     <string name="high_and_alarm">Hoch + Alarm</string>
-    <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktivieren Sie dies für MedTimer im folgenden Menü</string>
+    <string name="enable_notification_alarm_dialog">Um die Anzeige von Erinnerungen als Alarme zu ermöglichen, aktiviere dies für MedTimer im folgenden Menü</string>
     <string name="reminder_status">Aktiver Datumsbereich</string>
     <string name="reminder_enabled">Erinnerung aktiviert</string>
     <string name="reminder_enabled_summary">Deaktivieren, um alle Benachrichtigungen für diese Erinnerung zu pausieren</string>
@@ -287,7 +287,7 @@
     <string name="combine_notifications">Gleichzeitige Benachrichtigungen zusammenfassen</string>
     <string name="combine_notifications_summary">Wenn diese Option aktiviert ist, werden Benachrichtigungen mit derselben Uhrzeit zu einer einzigen Benachrichtigung zusammengefasst</string>
     <string name="battery_optimization_warning_title">Batterieoptimierung ist aktiviert</string>
-    <string name="battery_optimization_warning_summary">Falls Sie Probleme mit verpassten Benachrichtigungen haben, können Sie die Batterieoptimierung für diese App in den Benachrichtigungseinstellungen deaktivieren.</string>
+    <string name="battery_optimization_warning_summary">Falls du Probleme mit verpassten Benachrichtigungen hast, kannst du die Batterieoptimierung für diese App in den Benachrichtigungseinstellungen deaktivieren.</string>
     <string name="ignore_battery_optimization">Batterieoptimierung ignorieren</string>
     <string name="reschedule_reminder">Erinnerung verschieben</string>
     <string name="interval_start_condition">Intervallstartbedingung</string>
@@ -314,12 +314,12 @@
     <string name="monthly">Monatlich</string>
     <string name="automatic_backup">Automatisches Backup</string>
     <string name="backup_successful_to">Automatisches Backup erfolgreich: %s</string>
-    <string name="automatic_backup_directory_required">Für automatische Backups muss ein Ordner ausgewählt werden. Wählen Sie im nächsten Dialog einen Ordner aus, um fortzufahren.</string>
+    <string name="automatic_backup_directory_required">Für automatische Backups muss ein Ordner ausgewählt werden. Wähle im nächsten Dialog einen Ordner aus, um fortzufahren.</string>
     <string name="location_snooze">Standortbasiertes Schlummern</string>
     <string name="location_snooze_summary">Erneut benachrichtigen, wenn man nach Schlummern nach Hause kommt</string>
     <string name="location_snooze_no_play_services">Standortbasiertes Schlummern erfordert Google Play Services, die auf diesem Gerät nicht verfügbar sind</string>
-    <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlauben Sie MedTimer den Hintergrundstandortzugriff</string>
-    <string name="location_snooze_permission_disclosure">MedTimer benötigt Zugriff auf Ihren Standort, um standortbasiertes Schlummern zu ermöglichen. Wenn die Funktion aktiviert ist, verwendet MedTimer Ihren Standort im Hintergrund, um Sie bei Ihrer gespeicherten Heimatadresse erneut zu benachrichtigen. MedTimer gibt Ihren Standort nicht weiter.</string>
+    <string name="location_snooze_background_permission">Um bei der Heimkehr erneut benachrichtigt zu werden, erlaube MedTimer den Hintergrundstandortzugriff</string>
+    <string name="location_snooze_permission_disclosure">MedTimer benötigt Zugriff auf Ihren Standort, um standortbasiertes Schlummern zu ermöglichen. Wenn die Funktion aktiviert ist, verwendet MedTimer Ihren Standort im Hintergrund, um dich bei deiner gespeicherten Heimatadresse erneut zu benachrichtigen. MedTimer gibt Ihren Standort nicht weiter.</string>
     <string name="snooze_settings">Schlummer-Einstellungen</string>
     <string name="home_location">Heimstandort</string>
     <string name="home_location_not_set">Nicht festgelegt</string>
@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s wird nicht angezeigt, weil seine Dosen unterschiedliche Einheiten verwenden: %2$s. Ändere die Mengen so, dass alle dieselbe Einheit verwenden.</string>
     <string name="pk_no_unit">keine Einheit</string>
     <string name="custom_range">Benutzerdefiniert</string>
+    <string name="setup_no_medicines_guidance">Füge zuerst ein Medikament und danach eine Erinnerung dafür hinzu. Ein Medikament allein erzeugt keine Benachrichtigungen.</string>
+    <string name="setup_no_reminders_guidance">Ein Medikament allein erzeugt keine Benachrichtigungen. Füge eine Erinnerung hinzu, um Benachrichtigungen zu planen.</string>
+    <string name="setup_guidance_getting_started">Erste Schritte</string>
 </resources>

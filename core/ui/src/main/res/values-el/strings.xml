@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">Το %1$s δεν εμφανίζεται επειδή οι δόσεις του χρησιμοποιούν διαφορετικές μονάδες: %2$s. Αλλάξτε τις ποσότητες ώστε να χρησιμοποιούν όλες την ίδια μονάδα.</string>
     <string name="pk_no_unit">χωρίς μονάδα</string>
     <string name="custom_range">Προσαρμοσμένη</string>
+    <string name="setup_no_medicines_guidance">Προσθέστε πρώτα ένα φάρμακο και έπειτα μια υπενθύμιση για αυτό. Ένα φάρμακο από μόνο του δεν προγραμματίζει ειδοποιήσεις.</string>
+    <string name="setup_no_reminders_guidance">Ένα φάρμακο από μόνο του δεν προγραμματίζει ειδοποιήσεις. Προσθέστε μια υπενθύμιση για να προγραμματίσετε ειδοποιήσεις.</string>
+    <string name="setup_guidance_getting_started">Ξεκινώντας</string>
 </resources>

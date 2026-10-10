@@ -370,4 +370,7 @@
     <string name="pk_unit_conflict">%1$s no se muestra porque sus dosis usan unidades distintas: %2$s. Cambia las cantidades para que todas usen la misma unidad.</string>
     <string name="pk_no_unit">sin unidad</string>
     <string name="custom_range">Personalizado</string>
+    <string name="setup_no_medicines_guidance">Añade primero un medicamento y después un recordatorio para él. Un medicamento por sí solo no programa notificaciones.</string>
+    <string name="setup_no_reminders_guidance">Un medicamento por sí solo no programa notificaciones. Añade un recordatorio para programar notificaciones.</string>
+    <string name="setup_guidance_getting_started">Primeros pasos</string>
 </resources>

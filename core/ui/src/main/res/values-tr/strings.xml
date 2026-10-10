@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s gösterilmiyor çünkü dozları farklı birimler kullanıyor: %2$s. Miktarları hepsi aynı birimi kullanacak şekilde değiştirin.</string>
     <string name="pk_no_unit">birim yok</string>
     <string name="custom_range">Özel</string>
+    <string name="setup_no_medicines_guidance">Önce bir ilaç, ardından onun için bir hatırlatıcı ekleyin. Tek başına bir ilaç bildirimleri planlamaz.</string>
+    <string name="setup_no_reminders_guidance">Tek başına bir ilaç bildirimleri planlamaz. Bildirimleri planlamak için hatırlatıcı ekleyin.</string>
+    <string name="setup_guidance_getting_started">Başlarken</string>
 </resources>

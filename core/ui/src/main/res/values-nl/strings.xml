@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s wordt niet getoond omdat de doses verschillende eenheden gebruiken: %2$s. Pas de hoeveelheden aan zodat ze allemaal dezelfde eenheid gebruiken.</string>
     <string name="pk_no_unit">geen eenheid</string>
     <string name="custom_range">Aangepast</string>
+    <string name="setup_no_medicines_guidance">Voeg eerst een medicijn toe en daarna een herinnering ervoor. Een medicijn alleen plant geen meldingen in.</string>
+    <string name="setup_no_reminders_guidance">Een medicijn alleen plant geen meldingen in. Voeg een herinnering toe om meldingen in te plannen.</string>
+    <string name="setup_guidance_getting_started">Aan de slag</string>
 </resources>

@@ -358,4 +358,7 @@
     <string name="pk_unit_conflict">%1$s 未显示，因为其剂量使用了不同的单位：%2$s。请修改剂量，使其全部使用相同单位。</string>
     <string name="pk_no_unit">无单位</string>
     <string name="custom_range">自定义</string>
+    <string name="setup_no_medicines_guidance">先添加一种药品，再为它添加提醒。仅添加药品不会安排通知。</string>
+    <string name="setup_no_reminders_guidance">仅添加药品不会安排通知。添加提醒以安排通知。</string>
+    <string name="setup_guidance_getting_started">入门</string>
 </resources>

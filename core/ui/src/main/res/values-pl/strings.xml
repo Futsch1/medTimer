@@ -376,4 +376,7 @@
     <string name="pk_unit_conflict">%1$s nie jest wyświetlany, ponieważ jego dawki używają różnych jednostek: %2$s. Zmień ilości tak, aby wszystkie używały tej samej jednostki.</string>
     <string name="pk_no_unit">brak jednostki</string>
     <string name="custom_range">Niestandardowe</string>
+    <string name="setup_no_medicines_guidance">Najpierw dodaj lek, a następnie przypomnienie do niego. Sam lek nie zaplanuje powiadomień.</string>
+    <string name="setup_no_reminders_guidance">Sam lek nie zaplanuje powiadomień. Dodaj przypomnienie, aby zaplanować powiadomienia.</string>
+    <string name="setup_guidance_getting_started">Pierwsze kroki</string>
 </resources>

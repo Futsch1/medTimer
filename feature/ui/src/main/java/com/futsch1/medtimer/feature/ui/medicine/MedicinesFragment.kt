@@ -117,7 +117,8 @@ class MedicinesFragment : Fragment() {
                             lifecycleScope.launch {
                                 medicineRepository.move(medicineId, newPosition)
                             }
-                        }
+                        },
+                        onOpenHelp = { appOptionsActions.openHelp("getting-started") }
                     )
                   }
                 }

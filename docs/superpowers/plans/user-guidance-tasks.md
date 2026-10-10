@@ -2,7 +2,7 @@
 
 **Source:** [Agreed plan](user-guidance.md). That plan remains the scope and decision authority.
 **Audience:** Contributors implementing the plan step by step.
-**Status:** Tasks 1–2 complete; source inspection accepted for task 1 and the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md). Task 3 is next. Check off work only after its acceptance criteria are verified.
+**Status:** Tasks 1–3 complete; source inspection accepted for task 1 and the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md). Task 4 is next. Check off work only after its acceptance criteria are verified.
 
 ## How to use this checklist
 
@@ -33,7 +33,7 @@ For every implementation task:
 | --- | --- | --- | --- |
 | [x] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
 | [x] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
-| [ ] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
+| [x] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
 | [ ] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
 | [ ] | 6. Guide checking the upcoming reminder | 3 | Post-creation next step without tutorial tracking |
@@ -89,19 +89,21 @@ Review drafts: [Getting started](user-guidance-getting-started-draft.md) and
 
 **Depends on:** Task 2.
 
-- [ ] Finalize and bundle Getting started using the selected source layout and reader.
+- [x] Finalize and bundle Getting started using the selected source layout and reader.
 - [x] Add a simple Help contents page and a permanent main overflow Help entry in release builds and both flavors (implemented ahead of task 3 to make the spike usable).
-- [ ] Make the English-only guide limitation clear when the app language is not English.
-- [ ] Add non-blocking no-medicines guidance explaining the medicine-then-reminder relationship and offering the next action.
-- [ ] Add guidance for a medicine without reminders, explaining that a medicine alone does not schedule notifications and pointing to Add reminder.
-- [ ] Derive guidance from actual medicine/reminder state, not prior hint viewing or an empty Overview day.
-- [ ] Cover interrupted setup and existing users; hide guidance when its condition stops applying without penalizing legitimate medicines without reminders.
-- [ ] Decide the post-creation presentation for task 6 during this slice, without adding tutorial-progress state.
-- [ ] Add JVM tests for relevant state transitions, including a valid schedule with nothing due on the selected day.
-- [ ] Add and run focused UI tests for menu access, contents/topic navigation, contextual links, and Back behavior.
-- [ ] Link the active guide from the product README and index its topics.
+- [x] Make the English-only guide limitation clear in both contents and the directly linked Getting started topic.
+- [x] Add non-blocking no-medicines guidance explaining the medicine-then-reminder relationship and offering the next action.
+- [x] Add guidance for a medicine without reminders, explaining that a medicine alone does not schedule notifications and pointing to Add reminder.
+- [x] Derive guidance from saved medicine/reminder state, not prior hint viewing or an empty Overview day.
+- [x] Cover interrupted setup and existing users; hide guidance when its condition stops applying, while keeping reminder-free medicines valid.
+- [x] Settle task 6's presentation: after a successful reminder creation, a non-blocking snackbar points to Overview's upcoming time and offers Getting started; no tutorial-progress state.
+- [x] Add JVM tests for state transitions, including a valid weekly schedule with nothing due on the selected day.
+- [x] Add and run focused UI tests for menu access, contents/topic navigation, contextual links, state changes, and Back behavior.
+- [x] Link the active guide from the product README and index its topics.
 
-**Acceptance:** A user can open Help offline and follow the complete setup path. Setup hints reflect actual state and never treat an empty day as missing setup. Release-like and both-flavor verification demonstrate Help availability.
+**Verification:** `./gradlew :feature:ui:test` passed for full and foss. Focused emulator runs passed for `SetupGuidanceTest` and `HelpReaderTest` on the full flavor. `./gradlew assembleDebug` and `./gradlew :app:assembleFullRelease :app:assembleFossRelease` passed; both release APKs were inspected and contain `index.html`, `getting-started.html`, and the guide image. `./gradlew lint` passed. The English-only notice is asserted on the contents page and direct topic entry; the guide itself remains English in all app locales.
+
+**Acceptance:** A user can open Help offline and follow the complete setup path. Setup hints reflect actual state and never treat an empty day as missing setup. Release-like and both-flavor packaging verification demonstrates Help availability.
 
 ## Task 4 — Establish focused documentation screenshots
 

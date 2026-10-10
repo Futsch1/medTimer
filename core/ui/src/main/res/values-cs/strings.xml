@@ -376,4 +376,7 @@
     <string name="pk_unit_conflict">%1$s se nezobrazuje, protože jeho dávky používají různé jednotky: %2$s. Upravte množství tak, aby všechna používala stejnou jednotku.</string>
     <string name="pk_no_unit">bez jednotky</string>
     <string name="custom_range">Vlastní</string>
+    <string name="setup_no_medicines_guidance">Nejprve přidejte lék a potom k němu připomenutí. Samotný lék neplánuje oznámení.</string>
+    <string name="setup_no_reminders_guidance">Samotný lék neplánuje oznámení. Přidejte připomenutí, abyste naplánovali oznámení.</string>
+    <string name="setup_guidance_getting_started">Začínáme</string>
 </resources>

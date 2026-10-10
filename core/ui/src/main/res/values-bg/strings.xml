@@ -364,4 +364,7 @@
     <string name="pk_unit_conflict">%1$s не се показва, защото дозите му използват различни единици: %2$s. Променете количествата, така че всички да използват една и съща единица.</string>
     <string name="pk_no_unit">без единица</string>
     <string name="custom_range">Персонализиран</string>
+    <string name="setup_no_medicines_guidance">Първо добавете лекарство, а след това напомняне за него. Само лекарство не планира известия.</string>
+    <string name="setup_no_reminders_guidance">Само лекарство не планира известия. Добавете напомняне, за да планирате известия.</string>
+    <string name="setup_guidance_getting_started">Първи стъпки</string>
 </resources>
