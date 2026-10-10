@@ -309,6 +309,7 @@
     <string name="create_expiration_date_reminder">Lejárati dátum emlékeztető létrehozása</string>
     <string name="duplicate">Duplikálás</string>
     <string name="duplicate_including_reminders">Duplikálás emlékeztetőkkel együtt</string>
+    <string name="duplicate_name">%1$s (másolat)</string>
     <string name="weekly">Hetente</string>
     <string name="monthly">Havonta</string>
     <string name="automatic_backup">Automatikus biztonsági mentés</string>

@@ -335,6 +335,7 @@
     <string name="create_expiration_date_reminder">Create expiration date reminder</string>
     <string name="duplicate">Duplicate</string>
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
+    <string name="duplicate_name">%1$s (copy)</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
     <string name="automatic_backup_directory_required">Automatic backups require access to a folder. Select a folder in the next dialog to continue.</string>
