@@ -66,7 +66,7 @@ Hints depend on actual state, not whether they were previously viewed:
 
 An empty Overview day alone must not trigger first-setup guidance: a valid schedule may have nothing due that day. Account for interrupted setup, existing users, and legitimate medicines without reminders. Guidance must remain non-blocking and avoid repeatedly interrupting normal use.
 
-For the post-creation next step, show a non-blocking snackbar after a reminder is successfully created. Its message points users to Overview to check the upcoming time; an action opens Getting started. Show it only for a successful creation event; do not persist tutorial progress or show recurring setup prompts.
+Decision: skip the post-creation Snackbar task. The bundled Getting started topic already points users to Overview and explains that the upcoming entry is a schedule preview rather than confirmation of notification delivery. The proposed Snackbar added little value after review and conflicted with the existing reminder-creation Toast, making the combined feedback unclear. Do not add tutorial progress or another post-creation interruption unless a later UX review establishes a clearer benefit.
 
 ## Intro and Help
 

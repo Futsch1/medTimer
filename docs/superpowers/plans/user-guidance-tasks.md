@@ -2,7 +2,7 @@
 
 **Source:** [Agreed plan](user-guidance.md). That plan remains the scope and decision authority.
 **Audience:** Contributors implementing the plan step by step.
-**Status:** Tasks 1–4 complete; source inspection accepted for task 1, the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md), and Task 4 capture evidence is recorded below. Check off work only after its acceptance criteria are verified.
+**Status:** Task 6 is intentionally skipped by decision because the existing Getting started topic already covers the upcoming-reminder check and the proposed Snackbar conflicted with the creation Toast. Source inspection was accepted for task 1, the reader spike is recorded in [Task 2 evidence](user-guidance-reader-spike.md), and Task 4 capture evidence is recorded below. Check off work only after its acceptance criteria are verified.
 
 ## How to use this checklist
 
@@ -36,7 +36,7 @@ For every implementation task:
 | [x] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
 | [x] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
-| [ ] | 6. Guide checking the upcoming reminder | 3 | Post-creation next step without tutorial tracking |
+| [—] | 6. Guide checking the upcoming reminder (skipped) | 3 | Existing offline guide retained; no extra post-creation interruption |
 | [ ] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
 | [ ] | 8. Ship notification troubleshooting | 3 | Verified offline help, accessible after warning dismissal |
 | [ ] | 9. Migrate reviewed use cases | 3, 8 | Task-oriented replacements and safe archival |
@@ -147,9 +147,11 @@ pre-existing failure in `SetupGuidanceTest.should hide selected medicine guidanc
 
 **Acceptance:** Users can understand the two choices and open relevant offline help without losing control of their selection.
 
-## Task 6 — Guide checking the upcoming reminder
+## Task 6 — Guide checking the upcoming reminder (skipped)
 
 **Depends on:** Task 3.
+
+**Decision:** Skip this task. The existing bundled Getting started topic already tells users to open Overview, check the next scheduled date and time, and treat the entry as a schedule preview rather than confirmation of notification delivery. During review, the proposed Snackbar was not considered sufficiently valuable and was obscured/conflicted by the existing successful-creation Toast. Revert the proposed UI, test, and resource changes; do not add a replacement interruption or tutorial-progress state.
 
 - [ ] Implement the non-blocking post-creation presentation settled in task 3.
 - [ ] Point users toward checking the upcoming reminder and comparing its time with their intended setup.
