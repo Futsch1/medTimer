@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
@@ -156,7 +156,7 @@
     <string name="weekend_start_time">Starttid</string>
     <string name="weekend_end_time">Sluttid</string>
     <string name="custom">Anpassa…</string>
-    <string name="advanced_settings">Avancerade inställnignar</string>
+    <string name="advanced_settings">Avancerade inställningar</string>
     <string name="cycle_pause_days">Pausdagar</string>
     <string name="reminders">Påminnelser</string>
     <string name="filter">Filter</string>
