@@ -3,7 +3,7 @@
     <string name="help">עזרה</string>
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
-    <string name="continuous_interval_reminder_help">התחילו תזכורת על בסיס מרווח זמן (למשל, כל 6 שעות) מנקודת זמן מסוימת. דפוס זה הוא רציף, ומתעלם מהמגבלות של שעת היום, עד לכיבוי ידני.</string>
+    <string name="continuous_interval_reminder_help">חזרו לאחר משך זמן קבוע מנקודת התחלה, למשל כל 6 שעות.</string>
     <string name="cycle_reminder">תזכורת מחזורית</string>
     <string name="cycle_start_date">תחילת סבב ראשון</string>
     <string name="daily_from_to">מחזור יומי בין %1$s ל%2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">דולגה</string>
     <string name="taken">נלקחה</string>
     <string name="time_based_reminder">תזכורת מבוססת זמן</string>
-    <string name="time_based_reminder_help">קבעו שעות מסוימות (למשל, 8:00) והגדירו דפוס חזרה. זה מאפשר שליטה מדויקת על ימי השבוע הספציפיים, ימים בחודש או לוחות מחזוריים מורכבים (כמו \'כל 3 ימים\').</string>
+    <string name="time_based_reminder_help">הזכירו בשעות שנבחרו, למשל בכל יום בשעה 8:00.</string>
     <string name="weekday_limited">מוגבל לימים מסויימים בשבוע</string>
     <string name="windowed_interval_reminder">חלון תזכורת מחזורי</string>
-    <string name="windowed_interval_reminder_help">הגדירו חלון פעיל יומי (למשל, 9:00 עד 21:00) שבו התזכורת הראשונה תמיד בשעת הפתיחה. תזכורות הבאות מופעלות במרווחים קבועים עד שהשעה הסופית מגיעה. הדפוס המלא מתאפס בכל יום.</string>
+    <string name="windowed_interval_reminder_help">חזרו במרווחים במהלך חלון זמן יומי, למשל מ-9:00 עד 21:00.</string>
     <plurals name="days" tools:ignore="MissingQuantity">
         <item quantity="one">יום</item>
         <item quantity="two">יומיים</item>
@@ -373,4 +373,5 @@
     <string name="setup_no_medicines_guidance">הוסיפו תחילה תרופה ולאחר מכן תזכורת עבורה. תרופה לבדה אינה מתזמנת התראות.</string>
     <string name="setup_no_reminders_guidance">תרופה לבדה אינה מתזמנת התראות. הוסיפו תזכורת כדי לתזמן התראות.</string>
     <string name="setup_guidance_getting_started">תחילת העבודה</string>
+    <string name="reminder_types_help">מידע נוסף על סוגי התזכורות</string>
 </resources>

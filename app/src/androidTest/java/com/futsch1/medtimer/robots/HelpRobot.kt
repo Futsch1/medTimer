@@ -16,6 +16,11 @@ class HelpRobot(private val menus: MenuRobot) {
         findText("Getting started").click()
     }
 
+    fun assertReminderTypesDisplayed() {
+        findText("Reminder types")
+        findText("Continuous interval reminder")
+    }
+
     fun assertContentsDisplayed() {
         findText("This guide is currently available in English only.")
     }

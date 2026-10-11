@@ -3,7 +3,7 @@
     <string name="help">Aide</string>
     <string name="continuous_from">Intervalle continu à partir de %1$s</string>
     <string name="continuous_interval_reminder">Rappel à intervalle continu</string>
-    <string name="continuous_interval_reminder_help">Démarrez un rappel basé sur un intervalle de temps (par exemple, toutes les 6 heures) à partir d\'un moment précis. Ce modèle est continu, ignorant les contraintes de temps de la journée, jusqu\'à ce qu\'il soit désactivé manuellement.</string>
+    <string name="continuous_interval_reminder_help">Répétez après une durée fixe à partir d’un moment de départ, par exemple toutes les 6 heures.</string>
     <string name="cycle_reminder">Rappel cyclique</string>
     <string name="cycle_start_date">Début du premier cycle</string>
     <string name="daily_from_to">Intervalle journalier de %1$s à %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Sauté</string>
     <string name="taken">Pris</string>
     <string name="time_based_reminder">Rappel en fonction de l\'heure</string>
-    <string name="time_based_reminder_help">Définissez des heures spécifiques (par exemple, 8h00) et configurez un schéma récurrent. Cela permet un contrôle précis sur des jours de la semaine spécifiques, des jours du mois ou des calendriers périodiques complexes (comme « tous les 3 jours »).</string>
+    <string name="time_based_reminder_help">Rappelez à des heures choisies, par exemple tous les jours à 8 h 00.</string>
     <string name="weekday_limited">Limité à certains jours de la semaine</string>
     <string name="windowed_interval_reminder">Rappel d\'intervalle fenêtré</string>
-    <string name="windowed_interval_reminder_help">Définissez une fenêtre active quotidienne (par exemple, de 9 h à 21 h) où le premier rappel est toujours à l\'heure de début. Les rappels suivants se déclenchent à intervalles fixes jusqu\'à ce que l\'heure de fin soit atteinte. Le schéma complet se réinitialise chaque jour.</string>
+    <string name="windowed_interval_reminder_help">Répétez à intervalles réguliers pendant une plage horaire quotidienne, par exemple de 9 h 00 à 21 h 00.</string>
     <plurals name="days" ns0:ignore="UnusedQuantity">
         <item quantity="one" ns0:ignore="ImpliedQuantity">jour</item>
         <item quantity="other">jours</item>
@@ -373,4 +373,5 @@
     <string name="setup_no_medicines_guidance">Ajoutez d’abord un médicament, puis un rappel pour celui-ci. Un médicament seul ne programme pas de notifications.</string>
     <string name="setup_no_reminders_guidance">Un médicament seul ne programme pas de notifications. Ajoutez un rappel pour programmer les notifications.</string>
     <string name="setup_guidance_getting_started">Premiers pas</string>
+    <string name="reminder_types_help">En savoir plus sur les types de rappels</string>
 </resources>

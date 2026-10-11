@@ -3,7 +3,7 @@
     <string name="help">Ayuda</string>
     <string name="continuous_from">Intervalo continuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Recordatorio de intervalo continuo</string>
-    <string name="continuous_interval_reminder_help">Inicie un recordatorio basado en un intervalo de tiempo (p. ej., cada 6 horas) a partir de un momento específico. Este patrón es continuo, ignorando las limitaciones de la hora del día, hasta que se desactive manualmente.</string>
+    <string name="continuous_interval_reminder_help">Repita después de un periodo fijo desde un momento de inicio, por ejemplo, cada 6 horas.</string>
     <string name="cycle_reminder">Recordatorios cíclicos</string>
     <string name="cycle_start_date">Inicio del primer ciclo</string>
     <string name="daily_from_to">Intervalo diario de %1$s a %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Omitido</string>
     <string name="taken">Tomado</string>
     <string name="time_based_reminder">Recordatorio basado en la hora</string>
-    <string name="time_based_reminder_help">Establezca horas específicas (p. ej., 8:00 a. m.) y configure un patrón recurrente. Esto permite un control preciso sobre días de la semana específicos, días del mes o programaciones periódicas complejas (como \'cada 3 días\').</string>
+    <string name="time_based_reminder_help">Recuerde a las horas seleccionadas, por ejemplo, todos los días a las 8:00.</string>
     <string name="weekday_limited">Limitado a algunos días laborables</string>
     <string name="windowed_interval_reminder">Recordatorio de intervalo con ventana</string>
-    <string name="windowed_interval_reminder_help">Defina una ventana activa diaria (p. ej., de 9 a. m. a 9 p. m.) en la que el primer recordatorio siempre se envía a la hora de inicio. Los recordatorios posteriores se activan a intervalos fijos hasta alcanzar la hora de finalización. El ciclo completo se restablece cada día.</string>
+    <string name="windowed_interval_reminder_help">Repita a intervalos durante una franja horaria diaria, por ejemplo, de 9:00 a 21:00.</string>
     <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one">día</item>
         <item quantity="other">días</item>
@@ -373,4 +373,5 @@
     <string name="setup_no_medicines_guidance">Añade primero un medicamento y después un recordatorio para él. Un medicamento por sí solo no programa notificaciones.</string>
     <string name="setup_no_reminders_guidance">Un medicamento por sí solo no programa notificaciones. Añade un recordatorio para programar notificaciones.</string>
     <string name="setup_guidance_getting_started">Primeros pasos</string>
+    <string name="reminder_types_help">Más información sobre los tipos de recordatorio</string>
 </resources>

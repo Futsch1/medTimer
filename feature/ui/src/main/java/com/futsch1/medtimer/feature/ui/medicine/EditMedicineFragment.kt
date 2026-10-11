@@ -293,7 +293,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private fun setupAddReminderButton(medicine: Medicine) {
         val fab = fragmentView.findViewById<ExtendedFloatingActionButton>(R.id.addReminder)
-        fab.setOnClickListener { newReminderTypeDialogFactory.create(requireActivity(), medicine) }
+        fab.setOnClickListener {
+            newReminderTypeDialogFactory.create(requireActivity(), medicine, appOptionsActions)
+        }
         fragmentView.findViewById<MaterialButton>(R.id.setupAddReminder).setOnClickListener {
             fab.performClick()
         }

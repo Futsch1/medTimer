@@ -3,7 +3,7 @@
     <string name="help">Nápověda</string>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
-    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
+    <string name="continuous_interval_reminder_help">Opakovat po pevně stanovené době od počátečního okamžiku, například každých 6 hodin.</string>
     <string name="cycle_reminder">Opakované připomenutí</string>
     <string name="cycle_start_date">Začátek prvního cyklu</string>
     <string name="daily_from_to">Denní interval od %1$s do %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Přeskočeno</string>
     <string name="taken">Užito</string>
     <string name="time_based_reminder">Připomenutí založené na čase</string>
-    <string name="time_based_reminder_help">Nastavte specifické časy (např. 8 ráno) a nastavte režim opakování. To umožňuje přesnou kontrolu nad konkrétními dny v týdnu, dny v měsící nebo složitějšími plány (jako \"každé 3 dny\").</string>
+    <string name="time_based_reminder_help">Připomínat ve vybraných časech, například každý den v 8:00.</string>
     <string name="weekday_limited">Omezeno na určité dny v týdnu</string>
     <string name="windowed_interval_reminder">Intervalové připomenutí v rámci rozsahu</string>
-    <string name="windowed_interval_reminder_help">Definuje denní aktivní rozsah časů (např. od 9 ráno do 9 večer), kde je první připomenutí vždy v počáteční čas. Následná připomenutí se spustí v pevné intervaly, dokud není dosaženo koncového času. Další den začíná odznova.</string>
+    <string name="windowed_interval_reminder_help">Opakovat v intervalech během denního časového okna, například od 9:00 do 21:00.</string>
     <plurals name="days">
         <item quantity="one">den</item>
         <item quantity="few">dny</item>
@@ -379,4 +379,5 @@
     <string name="setup_no_medicines_guidance">Nejprve přidejte lék a potom k němu připomenutí. Samotný lék neplánuje oznámení.</string>
     <string name="setup_no_reminders_guidance">Samotný lék neplánuje oznámení. Přidejte připomenutí, abyste naplánovali oznámení.</string>
     <string name="setup_guidance_getting_started">Začínáme</string>
+    <string name="reminder_types_help">Další informace o typech připomenutí</string>
 </resources>

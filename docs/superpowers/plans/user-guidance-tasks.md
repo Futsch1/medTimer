@@ -132,11 +132,18 @@ Regenerate and review this image when any depicted labels, navigation, layout/th
 
 **Depends on:** Task 3.
 
-- [ ] Add short fixed-time versus interval guidance at the existing choice point using translatable Android strings.
-- [ ] Link directly to the related guide topic and verify Back returns to the choice context.
-- [ ] Keep the choice explicit: do not silently choose a type or recommend a medical schedule.
-- [ ] Review guide wording and hint wording together against current behavior.
-- [ ] Add and run focused coverage for guidance visibility, topic navigation, and unchanged selection behavior.
+- [x] Add short fixed-time versus interval guidance at the existing choice point using translatable Android strings.
+- [x] Link directly to the related guide topic and verify Back returns to the choice context.
+- [x] Keep the choice explicit: do not silently choose a type or recommend a medical schedule.
+- [x] Review guide wording and hint wording together against current behavior.
+- [x] Add and run focused coverage for guidance visibility, topic navigation, and unchanged selection behavior.
+
+Implementation: the existing reminder-type dialog now has concise translated descriptions for time-based,
+continuous-interval, and windowed-interval reminders, plus a single non-selecting link to the bundled
+`reminder-types` topic. The topic explains all three scheduling choices and the stock/expiration choices.
+The focused `SetupGuidanceTest.setupGuidanceFollowsSavedMedicineAndReminderState` passed on the full-flavor
+API 36 emulator. `assembleDebug` and `lint` also passed. The full feature UI JVM suite still contains one
+pre-existing failure in `SetupGuidanceTest.should hide selected medicine guidance when its reminder is added`.
 
 **Acceptance:** Users can understand the two choices and open relevant offline help without losing control of their selection.
 

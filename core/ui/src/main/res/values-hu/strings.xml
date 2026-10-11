@@ -3,7 +3,7 @@
     <string name="help">Súgó</string>
     <string name="continuous_from">Kezdő időpont: %1$s</string>
     <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
-    <string name="continuous_interval_reminder_help">Beállíthatsz egy kiválasztott időponttól induló, ismétlődő emlékeztetőt (pl. hat óránként). Az ismétlődés folytonos, nem veszi figyelembe a napszakot, és csak kézzel kapcsolható ki.</string>
+    <string name="continuous_interval_reminder_help">Ismétlés egy kezdő időponttól számított meghatározott idő elteltével, például 6 óránként.</string>
     <string name="cycle_reminder">Ciklikus emlékeztető</string>
     <string name="cycle_start_date">Az első ciklus kezdete</string>
     <string name="daily_from_to">Napi időablak: %1$s – %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Kihagyva</string>
     <string name="taken">Bevéve</string>
     <string name="time_based_reminder">Időpont alapú emlékeztető</string>
-    <string name="time_based_reminder_help">Válassz időpontot (pl. 8:00) és állíts be ismétlődést. Kiválaszthatod, hogy a hét és a hónap mely napjain kapj emlékeztetőt, vagy akár összetett szabályokat is beállíthatsz (pl. „minden 3. nap”).</string>
+    <string name="time_based_reminder_help">Emlékeztetés a kiválasztott időpontokban, például minden nap 8:00-kor.</string>
     <string name="weekday_limited">Csak bizonyos hétköznapokra korlátozva</string>
     <string name="windowed_interval_reminder">Időablakos ismétlődő emlékeztető</string>
-    <string name="windowed_interval_reminder_help">Állíts be egy napi időablakot (pl. 9:00–21:00), ahol az első emlékeztető mindig a kezdő időpontban jelenik meg. A következő emlékeztetők meghatározott időközönként érkeznek, amíg el nem érik a befejező időpontot. A minta másnap újraindul.</string>
+    <string name="windowed_interval_reminder_help">Ismétlés egy napi időablakon belül, például 9:00 és 21:00 között.</string>
     <plurals name="days">
         <item quantity="one">nap</item>
         <item quantity="other">nap</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Először adj hozzá egy gyógyszert, majd egy emlékeztetőt hozzá. A gyógyszer önmagában nem ütemez értesítéseket.</string>
     <string name="setup_no_reminders_guidance">A gyógyszer önmagában nem ütemez értesítéseket. Adj hozzá emlékeztetőt az értesítések ütemezéséhez.</string>
     <string name="setup_guidance_getting_started">Első lépések</string>
+    <string name="reminder_types_help">További információ az emlékeztetőtípusokról</string>
 </resources>

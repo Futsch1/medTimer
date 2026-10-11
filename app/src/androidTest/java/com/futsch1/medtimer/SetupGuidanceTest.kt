@@ -26,6 +26,10 @@ class SetupGuidanceTest : MedTimerTestBase() {
 
         medicineEditor.openAddReminderFromGuidance()
         assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
+        medicineEditor.openReminderTypesHelp()
+        help.assertReminderTypesDisplayed()
+        help.pressBack()
+        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
         medicineEditor.closeReminderTypeChooser()
         medicineEditor.addReminder("1", laterToday())
         medicineEditor.assertReminderSetupGuidanceAbsent()

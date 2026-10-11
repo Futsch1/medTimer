@@ -3,7 +3,7 @@
     <string name="help">Ohje</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
-    <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>
+    <string name="continuous_interval_reminder_help">Toista kiinteän ajan kuluttua aloitushetkestä, esimerkiksi 6 tunnin välein.</string>
     <string name="cycle_reminder">Kiertävät muistutukset</string>
     <string name="cycle_start_date">Ensimmäisen kierroksen alku</string>
     <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Ohitettu</string>
     <string name="taken">Otettu</string>
     <string name="time_based_reminder">Aikapohjainen muistutus</string>
-    <string name="time_based_reminder_help">Aseta tietyt ajat (esim. klo 8.00) ja määritä toistuva kaava. Tämä mahdollistaa tarkan hallinnan tietyille viikonpäiville, kuukauden päiville tai monimutkaisille jaksollisille aikatauluille (kuten \"joka 3. päivä\").</string>
+    <string name="time_based_reminder_help">Muistuta valittuina kellonaikoina, esimerkiksi joka päivä klo 8.00.</string>
     <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="windowed_interval_reminder">Ikkunallinen intervallimuistutus</string>
-    <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
+    <string name="windowed_interval_reminder_help">Toista aikavälein päivittäisen aikaikkunan aikana, esimerkiksi klo 9.00–21.00.</string>
     <plurals name="days">
         <item quantity="one">päivä</item>
         <item quantity="other">päivää</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Lisää ensin lääke ja lisää sitten sille muistutus. Pelkkä lääke ei ajasta ilmoituksia.</string>
     <string name="setup_no_reminders_guidance">Pelkkä lääke ei ajasta ilmoituksia. Lisää muistutus ajastaaksesi ilmoitukset.</string>
     <string name="setup_guidance_getting_started">Aloittaminen</string>
+    <string name="reminder_types_help">Lue lisää muistutustyypeistä</string>
 </resources>

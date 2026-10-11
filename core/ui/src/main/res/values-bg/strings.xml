@@ -3,7 +3,7 @@
     <string name="help">Помощ</string>
     <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
-    <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>
+    <string name="continuous_interval_reminder_help">Повтаряйте след фиксирана продължителност от начален момент, например на всеки 6 часа.</string>
     <string name="cycle_reminder">Циклични напомняния</string>
     <string name="cycle_start_date">Начало на първия цикъл</string>
     <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Пропуснато</string>
     <string name="taken">Взето</string>
     <string name="time_based_reminder">Напомняне с време</string>
-    <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
+    <string name="time_based_reminder_help">Напомняйте в избрани часове, например всеки ден в 8:00 ч.</string>
     <string name="weekday_limited">Ограничено до определени дни</string>
     <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
-    <string name="windowed_interval_reminder_help">Определете дневен активен прозорец (напр. от 9 до 21 ч.), в който първото напомняне винаги е в началния час. Последващите напомняния се задействат на определени интервали до достигане на крайния час. Пълният модел се нулира всеки ден.</string>
+    <string name="windowed_interval_reminder_help">Повтаряйте на интервали в рамките на дневен времеви прозорец, например от 9:00 до 21:00 ч.</string>
     <plurals name="days">
         <item quantity="one">ден</item>
         <item quantity="other">дни</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Първо добавете лекарство, а след това напомняне за него. Само лекарство не планира известия.</string>
     <string name="setup_no_reminders_guidance">Само лекарство не планира известия. Добавете напомняне, за да планирате известия.</string>
     <string name="setup_guidance_getting_started">Първи стъпки</string>
+    <string name="reminder_types_help">Научете повече за типовете напомняния</string>
 </resources>

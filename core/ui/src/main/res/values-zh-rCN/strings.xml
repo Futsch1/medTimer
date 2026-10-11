@@ -3,7 +3,7 @@
     <string name="help">帮助</string>
     <string name="continuous_from">连续间隔从 %1$s</string>
     <string name="continuous_interval_reminder">连续间隔提醒</string>
-    <string name="continuous_interval_reminder_help">从指定时刻开始，根据时间间隔（例如，每 6 小时）启动提醒。此模式是连续的，忽略一天中的时间限制，直到手动停用。</string>
+    <string name="continuous_interval_reminder_help">从指定的开始时间起，每隔固定时长重复提醒，例如每 6 小时一次。</string>
     <string name="cycle_reminder">循环提醒</string>
     <string name="cycle_start_date">周期提醒开始日期</string>
     <string name="daily_from_to">每日间隔从 %1$s 到 %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">已跳过</string>
     <string name="taken">已服用</string>
     <string name="time_based_reminder">定时提醒</string>
-    <string name="time_based_reminder_help">设置特定时间（例如，上午 8:00）并配置重复模式。这样可以精确控制特定的工作日、月份的日期或复杂的周期性计划（例如“每 3 天”）。</string>
+    <string name="time_based_reminder_help">在指定的时间提醒，例如每天上午 8:00。</string>
     <string name="weekday_limited">一周中的某几天</string>
     <string name="windowed_interval_reminder">窗口间隔提醒</string>
-    <string name="windowed_interval_reminder_help">定义一个每日活动窗口（例如，上午 9 点到晚上 9 点），其中第一个提醒总是在开始时间。后续提醒会以固定的时间间隔触发，直到到达结束时间。整个模式每天都会重置。</string>
+    <string name="windowed_interval_reminder_help">在每日时间范围内按间隔重复提醒，例如上午 9:00 至晚上 9:00。</string>
     <plurals name="days">
         <item quantity="other">天</item>
     </plurals>
@@ -361,4 +361,5 @@
     <string name="setup_no_medicines_guidance">先添加一种药品，再为它添加提醒。仅添加药品不会安排通知。</string>
     <string name="setup_no_reminders_guidance">仅添加药品不会安排通知。添加提醒以安排通知。</string>
     <string name="setup_guidance_getting_started">入门</string>
+    <string name="reminder_types_help">详细了解提醒类型</string>
 </resources>

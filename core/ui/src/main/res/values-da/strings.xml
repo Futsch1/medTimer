@@ -3,7 +3,7 @@
     <string name="help">Hjælp</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
-    <string name="continuous_interval_reminder_help">Start en påmindelse baseret på et tidsinterval (f.eks. hver 6. time) fra et bestemt tidspunkt. Dette mønster er kontinuerligt og ignorerer begrænsninger for tid på dagen, indtil det deaktiveres manuelt.</string>
+    <string name="continuous_interval_reminder_help">Gentag efter en fast varighed fra et starttidspunkt, f.eks. hver 6. time.</string>
     <string name="cycle_reminder">Gentagende påmindelse</string>
     <string name="cycle_start_date">Første cyklusstart</string>
     <string name="daily_from_to">Dagligt interval fra %1$s til %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Sprunget over</string>
     <string name="taken">Taget</string>
     <string name="time_based_reminder">Tidsbaseret påmindelse</string>
-    <string name="time_based_reminder_help">Indstil specifikke tidspunkter (f.eks. 8:00) og konfigurer et tilbagevendende mønster. Dette giver præcis kontrol over specifikke ugedage, månedsdage eller komplekse periodiske tidsplaner (som \'hver 3. dag\').</string>
+    <string name="time_based_reminder_help">Påmind på valgte tidspunkter, f.eks. hver dag kl. 8:00.</string>
     <string name="weekday_limited">Begrænset til nogle ugedage</string>
     <string name="windowed_interval_reminder">Vinduesintervalpåmindelse</string>
-    <string name="windowed_interval_reminder_help">Angiv et dagligt aktivt tidsrum (fx 09.00–21.00), hvor første påmindelse altid sendes ved starttidspunktet. Derefter udsendes påmindelser med faste intervaller frem til sluttidspunktet. Mønstret nulstilles hver dag.</string>
+    <string name="windowed_interval_reminder_help">Gentag med intervaller inden for et dagligt tidsrum, f.eks. fra kl. 9:00 til 21:00.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dage</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Tilføj først en medicin, og tilføj derefter en påmindelse til den. En medicin alene planlægger ikke notifikationer.</string>
     <string name="setup_no_reminders_guidance">En medicin alene planlægger ikke notifikationer. Tilføj en påmindelse for at planlægge notifikationer.</string>
     <string name="setup_guidance_getting_started">Kom godt i gang</string>
+    <string name="reminder_types_help">Få mere at vide om påmindelsestyper</string>
 </resources>

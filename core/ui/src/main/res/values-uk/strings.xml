@@ -3,7 +3,7 @@
     <string name="help">Довідка</string>
     <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
-    <string name="continuous_interval_reminder_help">Почніть нагадування на основі часового інтервалу (наприклад, кожні 6 годин) із зазначеного моменту. Цей шаблон є безперервним, ігноруючи обмеження часу доби, доки не буде деактивовано вручну.</string>
+    <string name="continuous_interval_reminder_help">Повторювати через фіксований проміжок часу від моменту початку, наприклад кожні 6 годин.</string>
     <string name="cycle_reminder">Циклічні нагадування</string>
     <string name="cycle_start_date">Початок першого циклу</string>
     <string name="daily_from_to">Щоденний інтервал від %1$s до %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Пропущено</string>
     <string name="taken">Прийнято</string>
     <string name="time_based_reminder">Нагадування за розкладом</string>
-    <string name="time_based_reminder_help">Встановіть певний час (наприклад, 8:00 ранку) і налаштуйте повторюваний шаблон. Це дозволяє точно контролювати певні дні тижня, дні місяця або складні періодичні розклади (наприклад, «кожні 3 дні»).</string>
+    <string name="time_based_reminder_help">Нагадувати у вибраний час, наприклад щодня о 8:00.</string>
     <string name="weekday_limited">Обмежується деякими будніми днями</string>
     <string name="windowed_interval_reminder">Нагадування з інтервалом у вікні</string>
-    <string name="windowed_interval_reminder_help">Визначити щоденне активне вікно (наприклад, з 9:00 до 21:00), де перше нагадування завжди спрацьовує на початку цього періоду. Наступні нагадування з’являються з фіксованим інтервалом, доки не буде досягнуто кінця активного вікна. Увесь шаблон скидається щодня.</string>
+    <string name="windowed_interval_reminder_help">Повторювати через інтервали протягом щоденного часового вікна, наприклад з 9:00 до 21:00.</string>
     <plurals name="days">
         <item quantity="one" ns0:ignore="ImpliedQuantity">день</item>
         <item quantity="other">дні</item>
@@ -379,4 +379,5 @@
     <string name="setup_no_medicines_guidance">Спочатку додайте ліки, а потім нагадування для них. Самі ліки не планують сповіщення.</string>
     <string name="setup_no_reminders_guidance">Самі ліки не планують сповіщення. Додайте нагадування, щоб запланувати сповіщення.</string>
     <string name="setup_guidance_getting_started">Початок роботи</string>
+    <string name="reminder_types_help">Докладніше про типи нагадувань</string>
 </resources>

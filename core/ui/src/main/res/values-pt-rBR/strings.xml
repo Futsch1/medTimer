@@ -3,7 +3,7 @@
     <string name="help">Ajuda</string>
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
-    <string name="continuous_interval_reminder_help">Inicie um lembrete com base em um intervalo de tempo (por exemplo, a cada 6 horas) a partir de um momento especificado. Este padrão é contínuo, ignorando as restrições de horário do dia, até ser desativado manualmente.</string>
+    <string name="continuous_interval_reminder_help">Repetir após um período fixo a partir de um momento inicial, por exemplo, a cada 6 horas.</string>
     <string name="cycle_reminder">Lembrete cíclico</string>
     <string name="cycle_start_date">Início do primeiro ciclo</string>
     <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Pulado</string>
     <string name="taken">Tomado</string>
     <string name="time_based_reminder">Lembrete baseado em horário</string>
-    <string name="time_based_reminder_help">Defina horários específicos (por exemplo, 8:00) e configure um padrão recorrente. Isso permite um controle preciso sobre dias específicos da semana, dias do mês ou programações periódicas complexas (como \'a cada 3 dias\').</string>
+    <string name="time_based_reminder_help">Lembrar nos horários escolhidos, por exemplo, todos os dias às 8:00.</string>
     <string name="weekday_limited">Limitado a alguns dias da semana</string>
     <string name="windowed_interval_reminder">Lembrete de intervalo com janela</string>
-    <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
+    <string name="windowed_interval_reminder_help">Repetir em intervalos durante uma janela diária, por exemplo, das 9:00 às 21:00.</string>
     <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
         <item quantity="other">dias</item>
@@ -373,4 +373,5 @@
     <string name="setup_no_medicines_guidance">Adicione primeiro um medicamento e, em seguida, um lembrete para ele. Um medicamento sozinho não agenda notificações.</string>
     <string name="setup_no_reminders_guidance">Um medicamento sozinho não agenda notificações. Adicione um lembrete para agendar notificações.</string>
     <string name="setup_guidance_getting_started">Primeiros passos</string>
+    <string name="reminder_types_help">Saiba mais sobre os tipos de lembrete</string>
 </resources>

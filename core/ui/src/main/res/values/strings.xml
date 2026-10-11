@@ -2,7 +2,7 @@
 <resources>
     <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="continuous_interval_reminder">Continuous interval reminder</string>
-    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
+    <string name="continuous_interval_reminder_help">Repeat after a fixed duration, such as every 6 hours, from a starting moment.</string>
     <string name="cycle_reminder">Cyclic reminder</string>
     <string name="cycle_start_date">First cycle start</string>
     <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Skipped</string>
     <string name="taken">Taken</string>
     <string name="time_based_reminder">Time based reminder</string>
-    <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
+    <string name="time_based_reminder_help">Remind at selected clock times, such as 8:00 AM every day.</string>
     <string name="weekday_limited">Limited to some weekdays</string>
     <string name="windowed_interval_reminder">Windowed interval reminder</string>
-    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9:00 AM to 9:00 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="windowed_interval_reminder_help">Repeat at intervals during a daily time window, such as 9:00 AM to 9:00 PM.</string>
     <plurals name="days">
         <item quantity="one">day</item>
         <item quantity="other">days</item>
@@ -84,6 +84,7 @@
     <string name="setup_no_medicines_guidance">Add a medicine first, then add a reminder for it. A medicine by itself does not schedule notifications.</string>
     <string name="setup_no_reminders_guidance">A medicine by itself does not schedule notifications. Add a reminder to schedule notifications.</string>
     <string name="setup_guidance_getting_started">Getting started</string>
+    <string name="reminder_types_help">Learn more about reminder types</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="dosage">Dosage</string>

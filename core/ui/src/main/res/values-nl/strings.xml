@@ -3,7 +3,7 @@
     <string name="help">Help</string>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
-    <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
+    <string name="continuous_interval_reminder_help">Herhaal na een vaste tijdsduur vanaf een startmoment, bijvoorbeeld elke 6 uur.</string>
     <string name="cycle_reminder">Cyclische herinnering</string>
     <string name="cycle_start_date">Start eerste cyclus</string>
     <string name="daily_from_to">Dagelijks interval van %1$s tot %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Overgeslagen</string>
     <string name="taken">Ingenomen</string>
     <string name="time_based_reminder">Herinnering op basis van tijd</string>
-    <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
+    <string name="time_based_reminder_help">Herinner op geselecteerde tijdstippen, bijvoorbeeld elke dag om 8:00 uur.</string>
     <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="windowed_interval_reminder">Herinnering met interval binnen een tijdvenster</string>
-    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9:00 uur tot 21:00 uur) waarbij de eerste herinnering altijd op de starttijd valt. Volgende herinneringen worden met vaste intervallen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag gereset.</string>
+    <string name="windowed_interval_reminder_help">Herhaal met intervallen binnen een dagelijks tijdvenster, bijvoorbeeld van 9:00 tot 21:00 uur.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dagen</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Voeg eerst een medicijn toe en daarna een herinnering ervoor. Een medicijn alleen plant geen meldingen in.</string>
     <string name="setup_no_reminders_guidance">Een medicijn alleen plant geen meldingen in. Voeg een herinnering toe om meldingen in te plannen.</string>
     <string name="setup_guidance_getting_started">Aan de slag</string>
+    <string name="reminder_types_help">Meer informatie over herinneringstypen</string>
 </resources>

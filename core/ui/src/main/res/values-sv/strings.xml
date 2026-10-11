@@ -3,7 +3,7 @@
     <string name="help">Hjälp</string>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
-    <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
+    <string name="continuous_interval_reminder_help">Upprepa efter en fast tidslängd från en starttidpunkt, till exempel var 6:e timme.</string>
     <string name="cycle_reminder">Återkommande påminnelser</string>
     <string name="cycle_start_date">Första cykelstart</string>
     <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Överhoppad</string>
     <string name="taken">Tagen</string>
     <string name="time_based_reminder">Tidsbaserad påminnelse</string>
-    <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
+    <string name="time_based_reminder_help">Påminn vid valda klockslag, till exempel varje dag klockan 08:00.</string>
     <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="windowed_interval_reminder">Fönsterintervallpåminnelse</string>
-    <string name="windowed_interval_reminder_help">Definiera ett bestämd tidsintervall per dag (t.ex. 09:00 till 21:00) där den första påminnelsen alltid kommer vid starttiden. Senare påminnelser kommer med bestämda intervall fram till sluttiden. Mönstret börjar om varje dag.</string>
+    <string name="windowed_interval_reminder_help">Upprepa med intervall under ett dagligt tidsintervall, till exempel 09:00–21:00.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dagar</item>
@@ -367,4 +367,5 @@
     <string name="setup_no_medicines_guidance">Lägg först till ett läkemedel och sedan en påminnelse för det. Ett läkemedel i sig schemalägger inga aviseringar.</string>
     <string name="setup_no_reminders_guidance">Ett läkemedel i sig schemalägger inga aviseringar. Lägg till en påminnelse för att schemalägga aviseringar.</string>
     <string name="setup_guidance_getting_started">Kom igång</string>
+    <string name="reminder_types_help">Läs mer om påminnelsetyper</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
+import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.button.MaterialButton
 import dagger.assisted.Assisted
@@ -18,12 +19,17 @@ import java.time.LocalDate
 class NewReminderTypeDialog @AssistedInject constructor(
     @Assisted val activity: FragmentActivity,
     @Assisted val medicine: Medicine,
+    @Assisted val appOptionsActions: AppOptionsActions,
     val newReminderDialogFactory: NewReminderDialog.Factory,
     val newReminderStockDialogFactory: NewReminderStockDialog.Factory
 ) {
     @AssistedFactory
     fun interface Factory {
-        fun create(activity: FragmentActivity, medicine: Medicine): NewReminderTypeDialog
+        fun create(
+            activity: FragmentActivity,
+            medicine: Medicine,
+            appOptionsActions: AppOptionsActions
+        ): NewReminderTypeDialog
     }
 
     private val dialog: Dialog = Dialog(activity)
@@ -96,6 +102,9 @@ class NewReminderTypeDialog @AssistedInject constructor(
 
         dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {
             dialog.dismiss()
+        }
+        dialog.findViewById<MaterialButton>(R.id.reminderTypesHelp).setOnClickListener {
+            appOptionsActions.openHelp("reminder-types")
         }
 
         dialog.show()

@@ -40,6 +40,11 @@ class MedicineEditorRobot(
 
     fun closeReminderTypeChooser() = pressBack()
 
+    fun openReminderTypesHelp() {
+        safelyScrollTo(com.futsch1.medtimer.feature.ui.R.id.reminderTypesHelp)
+        clickOn(com.futsch1.medtimer.feature.ui.R.id.reminderTypesHelp)
+    }
+
     fun rename(name: String) = writeTo(com.futsch1.medtimer.feature.ui.R.id.editMedicineName, name)
 
     fun setAmount(amount: String) = writeTo(AMOUNT, amount)

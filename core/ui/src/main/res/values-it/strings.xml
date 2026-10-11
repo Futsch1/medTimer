@@ -3,7 +3,7 @@
     <string name="help">Aiuto</string>
     <string name="continuous_from">Intervallo continuo a partire da %1$s</string>
     <string name="continuous_interval_reminder">Promemoria continuo a intervalli</string>
-    <string name="continuous_interval_reminder_help">Imposta un promemoria che si ripete a un intervallo fisso e continuo (ad es. ogni 6 ore), a partire da un\'orario a scelta, fino alla disattivazione, ignorando eventuali vincoli sugli orari giornalieri.</string>
+    <string name="continuous_interval_reminder_help">Ripeti dopo una durata fissa a partire da un momento iniziale, ad esempio ogni 6 ore.</string>
     <string name="cycle_reminder">Promemoria ciclico</string>
     <string name="cycle_start_date">Inizio del primo ciclo</string>
     <string name="daily_from_to">Intervallo giornaliero da %1$s a %2$s</string>
@@ -25,10 +25,10 @@
     <string name="skipped">Saltato</string>
     <string name="taken">Preso</string>
     <string name="time_based_reminder">Promemoria basato sull\'orario</string>
-    <string name="time_based_reminder_help">Imposta orari fissi (ad es. 8:00) e configura modelli ricorrenti. Permette di scegliere i giorni della settimana, del mese o programmi periodici complessi (come \'ogni 3 giorni\').</string>
+    <string name="time_based_reminder_help">Ricorda agli orari scelti, ad esempio ogni giorno alle 8:00.</string>
     <string name="weekday_limited">Limitato ad alcuni giorni della settimana</string>
     <string name="windowed_interval_reminder">Promemoria a intervalli con finestra temporale</string>
-    <string name="windowed_interval_reminder_help">Imposta una finestra oraria giornaliera (es. 9:00–21:00). Il primo avviso parte all\'inizio, poi si ripete a intervalli fissi fino alla fine. Il ciclo si resetta ogni giorno.</string>
+    <string name="windowed_interval_reminder_help">Ripeti a intervalli durante una fascia oraria giornaliera, ad esempio dalle 9:00 alle 21:00.</string>
     <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one">giorno</item>
         <item quantity="other">giorni</item>
@@ -373,4 +373,5 @@
     <string name="setup_no_medicines_guidance">Aggiungi prima un medicinale e poi un promemoria. Un medicinale da solo non pianifica notifiche.</string>
     <string name="setup_no_reminders_guidance">Un medicinale da solo non pianifica notifiche. Aggiungi un promemoria per pianificare le notifiche.</string>
     <string name="setup_guidance_getting_started">Per iniziare</string>
+    <string name="reminder_types_help">Scopri di più sui tipi di promemoria</string>
 </resources>
