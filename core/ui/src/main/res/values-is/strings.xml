@@ -142,11 +142,12 @@
     <string name="intro_welcome">Velkomin í MedTimer!</string>
     <string name="create_reminder_dosage_hint">Skammtur fyrir nýja áminningu</string>
     <string name="intro_welcome_description">MedTimer er frjálst og opið smáforrit með áherslu á friðhelgi, til að minna á lyfjatöku.\n\nÞað þarf að hafa leyfi til að senda tilkynningar, þ.e. áminningar um lyfjatöku.</string>
-    <string name="intro_medicine_description">Notið flipann \"Lyf\" til að skrá þau lyf sem þú tekur og vilt fá áminningar um. Þú getur tengt merkingar við lyf og fylgst með áfyllingum.</string>
-    <string name="intro_reminder_description">Veljið lyf til að skrá upplýsingar og búa til áminningar um mismunandi skammta sem þú þarft að taka\n\nÁminningar geta verið á ákveðnum timum, ákveðnu millibili og á ákveðnum dögum.</string>
-    <string name="intro_notification_description">þegar komið er að áminningu, birtist tilkynning sem gefur þér kost á að merkja hvort skammtur hafi þegar verið tekinn (með því að merkja sem \"Tekið\"), \"Hunsa\" áminningu eða fá nýja áminningu eftir stutta stund (\"Snooze\").</string>
-    <string name="intro_overview_description">Á yfirlits-skjánum getur þú séð væntanlegar áminningar og síðustu áminningar. Hægt er að breyta áminningum með því að strjúka til hægri eða eyða með því að strjúka til vinstri.\n\nAuk þess getur þú skráð handvirkt auka-skammta af skráðum lyfjum eða eitthvað sérsniðið.</string>
-    <string name="intro_analysis_description">Forritið geymir allar áminningar. Þú getur skoðað fyrri skammta á greiningar-skjánum og flutt út lyfja-annál með því smella á punktana þrjá. Lyfja-annállinn verður geymdur þótt þú fjarlægir lyf eða eyðir áminningum.</string>
+<string name="intro_setup">Settu upp fyrstu áminninguna þína</string>
+<string name="intro_setup_description">Bættu fyrst við lyfi og bættu síðan við áminningu fyrir það. MedTimer geymir þessar upplýsingar á tækinu þínu og sendir lyfjaupplýsingarnar þínar ekki neitt.\n\nLestu Upphafsleiðbeiningar til að sjá öll skref uppsetningarinnar.</string>
+<string name="intro_getting_started_link">Upphafsleiðbeiningar</string>
+<string name="intro_overview_orientation_description">Yfirlitið sýnir áminningar fyrir valinn dag. Veldu dag úr vikuröðinni. Stöðutáknið við hverja áminningu sýnir hvort hún sé í bið, búið sé að minna á hana, hún hafi verið tekin, sleppt eða frestað þar til heim er komið. Þú getur ýtt á táknið til að breyta stöðu áminningarinnar.</string>
+<string name="intro_notifications">Tilkynningaheimild</string>
+<string name="intro_notifications_description">MedTimer þarf heimild til að senda tilkynningar svo það geti látið þig vita þegar áminning er tímabær. Þú getur sleppt kynningunni og valið hvort þú leyfir tilkynningar; þú getur breytt þessu síðar í Android-stillingunum.</string>
     <string name="show_intro">Sýna upplýsingar um forrit</string>
     <string name="are_you_sure_delete_reminder_event">Ertu viss um að þú viljir eyða þessari áminningu?</string>
     <string name="notification_importance">Forgangur tilkynninga</string>

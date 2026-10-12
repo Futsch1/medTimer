@@ -159,7 +159,6 @@
     <string name="event_data">Registro dos eventos</string>
     <string name="backup">Backup</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
-    <string name="intro_analysis_description">O aplicativo armazena todos os eventos de lembrete. Você pode analisar suas doses anteriores na tela de análise e exportar seu histórico através do menu kebab (três pontos). O histórico permanecerá mesmo que medicamentos ou lembretes sejam excluídos ou renomeados.</string>
     <string name="show_intro">Mostrar introdução do aplicativo</string>
     <string name="notification_importance">Prioridade da notificação</string>
     <string name="notification_settings_default">Prioridade padrão das configurações de notificação</string>
@@ -212,7 +211,6 @@
     <string name="minutes_15">15 minutos</string>
     <string name="notification_reminder_settings">Configurações de notificações e lembretes</string>
     <string name="time_between_repetitions">Tempo entre repetições</string>
-    <string name="intro_reminder_description">Selecione um medicamento para editar seus detalhes e criar lembretes para as diferentes doses que você precisa tomar.\n\nOs lembretes podem ser baseados em tempo ou intervalo e podem ser limitados a dias específicos.</string>
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>
     <string name="period_end">Ativo até</string>
@@ -239,13 +237,16 @@
     <string name="days_abbr">d</string>
     <string name="weeks_abbr">s</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
+<string name="intro_setup">Configure o seu primeiro lembrete</string>
+<string name="intro_setup_description">Adicione primeiro um medicamento e, em seguida, adicione um lembrete para ele. O MedTimer mantém estas informações no seu dispositivo e não envia os seus dados de medicação para lado nenhum.\n\nPara consultar todos os passos de configuração, leia Introdução.</string>
+<string name="intro_getting_started_link">Introdução</string>
+<string name="intro_overview_orientation_description">A visão geral mostra os lembretes do dia selecionado. Selecione um dia na linha da semana. O ícone de estado junto a cada lembrete mostra se está pendente, se foi emitido um lembrete, tomado, ignorado ou adiado até chegar a casa. Pode premir o ícone para alterar o estado do lembrete.</string>
+<string name="intro_notifications">Permissão para notificações</string>
+<string name="intro_notifications_description">O MedTimer precisa de permissão para enviar notificações e avisar quando chegar a hora de um lembrete. Pode ignorar a introdução e escolher se pretende permitir notificações; pode alterar esta opção mais tarde nas definições do Android.</string>
     <string name="number_of_repetitions">Número de repetições</string>
-    <string name="intro_notification_description">Quando o horário de um lembrete chegar, uma notificação aparecerá oferecendo-lhe a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
     <string name="enable_dnd_dialog">Para permitir que os sons de notificação sejam sempre reproduzidos, ative o acesso ao Não perturbe pelo MedTimer no menu a seguir</string>
-    <string name="intro_overview_description">Na tela de visão geral, você pode ver os próximos lembretes e os últimos eventos de lembrete. Os eventos de lembrete podem ser editados deslizando para a direita e excluídos deslizando para a esquerda.\n\nAlém disso, você pode registrar manualmente doses adicionais de um dos medicamentos configurados ou de um personalizado.</string>
     <string name="invalid_input">Entrada inválida</string>
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
-    <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>

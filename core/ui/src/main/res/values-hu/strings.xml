@@ -166,11 +166,12 @@
     <string name="edit_event">Esemény szerkesztése</string>
     <string name="intro_welcome">Üdvözlünk a MedTimerben!</string>
     <string name="intro_welcome_description">A MedTimer egy ingyenes és nyílt forráskódú gyógyszeremlékeztető alkalmazás, amely a magánszféra védelmét helyezi előtérbe.\n\nAz alkalmazásnak engedélyre van szüksége, hogy értesítéseket jeleníthessen meg a gyógyszeremlékeztetőkhöz.</string>
-    <string name="intro_medicine_description">Használd a „Gyógyszerek” fület a szedett gyógyszerek létrehozásához, amelyekről emlékeztetőt szeretnél kapni. A gyógyszerekhez címkéket is rendelhetsz, és beállíthatod a készleteiket.</string>
-    <string name="intro_reminder_description">Válassz ki egy gyógyszert a részletek szerkesztéséhez, és hozz létre emlékeztetőket a gyógyszer különböző adagjaihoz.\n\nAz emlékeztetők lehetnek időponthoz vagy intervallumhoz kötöttek, és korlátozhatók bizonyos napokra.</string>
-    <string name="intro_notification_description">Ha egy emlékeztető esedékessé válik, egy értesítés jelenik meg, amely lehetőséget ad arra, hogy az adagot megjelöld bevettnek (a „BEVÉVE” gomb megnyomásával), kihagyd (az értesítés elvetésével), vagy kérd a későbbi újra emlékeztetését (az „EMLÉKEZTETÉS KÉSŐBB” gomb megnyomásával).</string>
-    <string name="intro_overview_description">Az áttekintő képernyőn láthatod a közelgő emlékeztetőket és az utolsó emlékeztető eseményeket. Az emlékeztető eseményeket jobbra húzással szerkesztheted, balra húzással törölheted.\n\nEzen felül manuálisan is rögzíthetsz további adagokat: választhatsz a már felvett gyógyszerek közül, vagy az „Egyedi…” gomb megnyomásával megadhatod a gyógyszer nevét.</string>
-    <string name="intro_analysis_description">Az alkalmazás tárolja az összes emlékeztető eseményt. Az elmúlt adagjaidat az Elemzés képernyőn elemezheted, és történetedet a hárompontos menü segítségével exportálhatod. Az előzmények akkor is megmaradnak, ha a gyógyszereket vagy emlékeztetőket törlöd vagy módosítod.</string>
+<string name="intro_setup">Állítsd be az első emlékeztetődet</string>
+<string name="intro_setup_description">Először adj hozzá egy gyógyszert, majd adj hozzá egy hozzá tartozó emlékeztetőt. A MedTimer ezeket az adatokat az eszközödön tárolja, és a gyógyszeradataidat nem küldi sehova.\n\nA teljes beállítási lépésekért olvasd el az Első lépések részt.</string>
+<string name="intro_getting_started_link">Első lépések</string>
+<string name="intro_overview_orientation_description">Az Áttekintés a kiválasztott nap emlékeztetőit jeleníti meg. Válassz ki egy napot a hetek sorából. Az egyes emlékeztetők melletti állapotikon jelzi, hogy az emlékeztető függőben van, jelezve lett, be lett véve, ki lett hagyva vagy hazaérésig el lett halasztva. Az ikon megnyomásával módosíthatod az emlékeztető állapotát.</string>
+<string name="intro_notifications">Értesítési engedély</string>
+<string name="intro_notifications_description">A MedTimernek értesítési engedélyre van szüksége, hogy jelezzen, amikor esedékes egy emlékeztető. Kihagyhatod a bevezetőt, és kiválaszthatod, hogy engedélyezed-e az értesítéseket; ezt később az Android beállításaiban is módosíthatod.</string>
     <string name="show_intro">Alkalmazás bemutatása</string>
     <string name="are_you_sure_delete_reminder_event">Biztosan törölni szeretnéd az emlékeztető eseményt?</string>
     <string name="notification_importance">Értesítési prioritás</string>

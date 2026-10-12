@@ -37,7 +37,7 @@ For every implementation task:
 | [x] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
 | [—] | 6. Guide checking the upcoming reminder (skipped) | 3 | Existing offline guide retained; no extra post-creation interruption |
-| [ ] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
+| [x] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
 | [ ] | 8. Ship notification troubleshooting | 3 | Verified offline help, accessible after warning dismissal |
 | [ ] | 9. Migrate reviewed use cases | 3, 8 | Task-oriented replacements and safe archival |
 | [ ] | 10. Formalize contributor and agent maintenance | 2, 4 | Operational documentation checklist and capture procedure |
@@ -166,13 +166,15 @@ pre-existing failure in `SetupGuidanceTest.should hide selected medicine guidanc
 
 **Depends on:** Task 3.
 
-- [ ] Replace the six-slide feature tour with orientation covering MedTimer and privacy, medicine then reminder, and notification-permission context.
-- [ ] Link to Getting started rather than teaching Analysis, tags, or stock before setup.
-- [ ] Preserve first-launch production presentation and current notification-permission request behavior, including when skipping the intro.
-- [ ] Keep the existing intro replay menu item debug-only; do not make replay a prerequisite for Help access.
-- [ ] Review new/changed strings with the existing translation workflow.
-- [ ] Add and run focused tests for first launch, normal completion, skipping, permission behavior, Help access, and the replay-menu distinction.
-- [ ] Exercise the release-like strategy chosen in task 2 rather than relying on debug suppression behavior.
+- [x] Replace the six-slide feature tour with orientation covering MedTimer and privacy, medicine then reminder, and notification-permission context.
+- [x] Link to Getting started rather than teaching Analysis, tags, or stock before setup.
+- [x] Preserve first-launch production presentation and current notification-permission request behavior, including when skipping the intro.
+- [x] Keep the existing intro replay menu item debug-only; do not make replay a prerequisite for Help access.
+- [x] Review new/changed strings with the existing translation workflow.
+- [x] Add and run focused tests for first launch, normal completion, skipping, permission behavior, Help access, and the replay-menu distinction.
+- [x] Exercise the release-like strategy chosen in task 2 rather than relying on debug suppression behavior.
+
+**Verification:** The intro now has four orientation slides: MedTimer/privacy, medicine-then-reminder setup, Overview day selection and reminder-state icons, and notification permission. The setup slide opens the bundled Getting started topic. Production permission request and skip handling remain unchanged; the debug-only replay menu remains available only through the existing debug-gated menu action. `IntroReleaseBehaviorTest` passed on the full-flavor API 36 emulator with `@IsDebugBuild = false`, covering first launch, completion, and skip. The updated `BasicUITest.appIntro` passed, including Help access and replay behavior. `./gradlew assembleDebug` and `./gradlew lint` passed.
 
 **Acceptance:** The shorter intro is skippable and permission handling is unchanged. Release users can reread guidance through Help without an intro replay menu.
 

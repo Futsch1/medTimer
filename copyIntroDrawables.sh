@@ -5,8 +5,8 @@ if [ "$1" = "--optipng" ]; then
 	use_optipng=true
 fi
 
-screenshots=(2 3 5 1 6)
-names=(medicine reminder notification overview analysis)
+screenshots=(2 5 1)
+names=(medicine notification overview)
 
 dest_files=()
 

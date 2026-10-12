@@ -162,11 +162,12 @@
     <string name="edit_event">Rediger hændelse</string>
     <string name="intro_welcome">Velkommen til MedTimer!</string>
     <string name="intro_welcome_description">MedTimer er en gratis open source-app til medicinpåmindelser med fokus på privatliv.\n\nDen kræver tilladelse til at vise notifikationer for medicinpåmindelser.</string>
-    <string name="intro_medicine_description">Brug fanen \"Medicin\" til at oprette den medicin, du tager og vil have påmindelser om. Du kan tilføje tags og konfigurere lagerbeholdning.</string>
-    <string name="intro_reminder_description">Vælg en medicin for at redigere detaljer og oprette påmindelser for de doser, du skal tage.\n\nPåmindelser kan være tids- eller intervalbaserede og kan begrænses til bestemte dage.</string>
-    <string name="intro_notification_description">Når en påmindelse udløses, vises en notifikation, hvor du kan markere dosis som taget (ved at trykke på knappen \"TAGET\"), springe den over ved at afvise notifikationen eller få en ny påmindelse senere (\"SNOOZE\").</string>
-    <string name="intro_overview_description">På oversigtsskærmen kan du se kommende påmindelser og de seneste hændelser. Påmindelser kan redigeres ved at swipe til højre og slettes ved at swipe til venstre.\n\nDu kan også manuelt registrere ekstra doser af enten en konfigureret medicin eller en brugerdefineret.</string>
-    <string name="intro_analysis_description">Appen gemmer alle påmindelseshændelser. På analysesiden kan du gennemgå tidligere doser og eksportere historikken via menuen med tre prikker. Historikken bevares, selv hvis medicin eller påmindelser slettes eller omdøbes.</string>
+<string name="intro_setup">Konfigurer din første påmindelse</string>
+<string name="intro_setup_description">Tilføj først en medicin, og tilføj derefter en påmindelse for den. MedTimer gemmer disse oplysninger på din enhed og sender ikke dine medicinoplysninger nogen steder hen.\n\nLæs „Kom godt i gang“ for at se alle trin i opsætningen.</string>
+<string name="intro_getting_started_link">Kom godt i gang</string>
+<string name="intro_overview_orientation_description">Oversigten viser påmindelser for den valgte dag. Vælg en dag i ugerækken. Statusikonet ved siden af hver påmindelse viser, om den afventer, er påmindet, taget, sprunget over eller udsat, indtil du er hjemme. Du kan trykke på ikonet for at ændre påmindelsens status.</string>
+<string name="intro_notifications">Tilladelse til notifikationer</string>
+<string name="intro_notifications_description">MedTimer skal have tilladelse til notifikationer for at advare dig, når det er tid til en påmindelse. Du kan springe introduktionen over og vælge, om du vil tillade notifikationer; du kan ændre dette senere i Android-indstillingerne.</string>
     <string name="show_intro">Vis app-intro</string>
     <string name="are_you_sure_delete_reminder_event">Er du sikker på, at du vil slette påmindelseshændelsen?</string>
     <string name="notification_importance">Notifikationsprioritet</string>

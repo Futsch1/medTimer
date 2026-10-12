@@ -172,7 +172,12 @@
     <string name="edit_event">ערכו אירוע</string>
     <string name="intro_welcome">ברוכים הבאים למדטיימר!</string>
     <string name="intro_welcome_description">מדטיימר היא אפליקצית תזכורות לנטילת תרופות חינמית וקוד פתוח עם דגש על פרטיות.\n\nהיא דורשת הרשאה כדי להראות התראות לתזכורות התרופות.</string>
-    <string name="intro_medicine_description">תשתמשו בלשונית \"תרופות\" כדי ליצור את התרופות שאתם נוטלים ורוצים לקבל עליהן תזכורת. אתם יכולים להקצות תגים לתרופות ולהגדיר את המלאי שלהן.</string>
+<string name="intro_setup">הגדרת התזכורת הראשונה שלך</string>
+<string name="intro_setup_description">תחילה הוסף תרופה, ולאחר מכן הוסף עבורה תזכורת. MedTimer שומר את המידע הזה במכשיר שלך ואינו שולח את נתוני התרופות שלך לשום מקום.\n\nלקבלת שלבי ההגדרה המלאים, קרא את תחילת העבודה.</string>
+<string name="intro_getting_started_link">תחילת העבודה</string>
+<string name="intro_overview_orientation_description">הסקירה מציגה תזכורות עבור היום שנבחר. בחר יום משורת השבוע. סמל המצב שלצד כל תזכורת מציג אם היא ממתינה, התבצעה תזכורת לגביה, נלקחה, דולגה או הושהתה עד ההגעה הביתה. ניתן ללחוץ עליו כדי לשנות את מצב התזכורת.</string>
+<string name="intro_notifications">הרשאת התראות</string>
+<string name="intro_notifications_description">MedTimer זקוק להרשאת התראות כדי להתריע בפניך כשמועד התזכורת מגיע. ניתן לדלג על ההקדמה ולבחור אם לאפשר התראות; אפשר לשנות זאת מאוחר יותר בהגדרות Android.</string>
     <string name="show_intro">הראה מבוא לאפליקציה</string>
     <string name="are_you_sure_delete_reminder_event">האם אתם בטוחים שאתם רוצים למחוק את אירוע התזכורת?</string>
     <string name="notification_importance">עדיפות התראה</string>
@@ -249,10 +254,6 @@
     <string name="sticky_on_lockscreen">תזכורות קבועות על מסך הנעילה</string>
     <string name="ignore_battery_optimization">התעלם מאופטימיזציית הסוללה</string>
     <string name="reschedule_reminder">תזמנו מחדש את התזכורת</string>
-    <string name="intro_reminder_description">בחרו תרופות כדי לערוך את פרטיהן וליצור תזכורות עבור המינונים השונים שאתם צריכים ליטול.\n\nהתזכורות יכולות להיות מבוססות זמן או מחזור וניתן להגביל אותן לימים ספציפיים.</string>
-    <string name="intro_notification_description">כאשר תזכורת מגיעה, תופיע התראה שמאפשרת לסמן מנה כנלקחה (בלחיצה על כפתור \"נלקח\"), שדולגה (על ידי סגירת ההתראה) או לקבל תזכורת שוב לאחר זמן מסוים (\"דחה\").</string>
-    <string name="intro_overview_description">במסך התצוגה הכללית, תוכלו לראות תזכורות קרובות ואת אירועי התזכורות האחרונים. ניתן לערוך אירועי תזכורת על ידי החלקה ימינה ולמחוק אותם על ידי החלקה שמאלה.\n\nבנוסף, תוכלו לרשום ידנית מנות נוספות של אחת התרופות שהוגדרו או של תרופה מותאמת אישית.</string>
-    <string name="intro_analysis_description">האפליקציה שומרת את כל אירועי התזכורות. תוכלו לנתח את המנות הקודמות שלכם במסך הניתוח ולייצא את ההיסטוריה דרך תפריט הקבאב (שלוש הנקודות). ההיסטוריה תישאר גם אם תרופות או תזכורות נמחקו או החליפו שם.</string>
     <string name="sticky_on_lockscreen_summary">לא ניתן להסיר תזכורות ממסך הנעילה ניתן לעשות זאת רק ממגירת ההתראות\nהערה: ייתכן שחלק מהשעונים החכמים כבר לא יציגו התראות במידה ופעילה</string>
     <string name="big_notifications">כפתורי התראה גדולים</string>
     <string name="reminded">הוזכר</string>

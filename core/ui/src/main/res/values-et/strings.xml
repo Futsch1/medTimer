@@ -146,11 +146,12 @@
     <string name="edit_event">Muuda sündmust</string>
     <string name="intro_welcome">Tere tulemast, see on MedTimer!</string>
     <string name="intro_welcome_description">MedTimer on tasuta ja avatud lähtekoodiga ravimite võtmise meeldetuletusrakendus, mille puhul on keskendutud privaatsusele.\n\nRakendus vajab luba ravimite võtmise meeldetuletuste teavituste kuvamiseks.</string>
-    <string name="intro_medicine_description">Kasuta vahekaarti „Ravimid“, et lisada ravimid, mida võtad ja mille kohta soovid meeldetuletust saada. Ravimitele saad määrata sildid ja seadistada nende varusid.</string>
-    <string name="intro_reminder_description">Valides ravimi saad muuta selle andmeid ja luua meeldetuletusi ravimi erinevate annuste võtmiseks.\n\nMeeldetuletused võivad olla ajapõhised või intervallipõhised ning neid saad piirata teatud päevadega.</string>
-    <string name="intro_notification_description">Kui meeldetuletus on kätte jõudnud, ilmub teade, mis annab sulle võimaluse märkida annus võetuks (klõpsates nuppu „VÕETUD“), vahele jäetuks (teate sulgedes) või paluda mõne aja pärast uuesti meeldetuletust (klõpsates nuppu „LÜKKA EDASI“).</string>
-    <string name="intro_overview_description">Ülevaateekraanil näed eelseisvaid meeldetuletusi ja viimaseid meeldetuletusi. Meeldetuletusi saad muuta paremale viipamisega ja kustutada vasakule viipamisega.\n\nLisaks saad käsitsi registreerida täiendavaid annuseid kas mõne seadistatud ravimi või ise lisatud ravimi puhul.</string>
-    <string name="intro_analysis_description">Rakendus salvestab kõik meeldetuletused. Analüüsivaates saad uurida oma varasemaid annuseid ning eksportida ajaloo „kebab“-menüü (kolm punkti) kaudu. Ajalugu säilib isegi siis, kui ravimid või meeldetuletused kustutatakse või neile antakse uus nimi.</string>
+<string name="intro_setup">Seadista oma esimene meeldetuletus</string>
+<string name="intro_setup_description">Lisa esmalt ravim ja seejärel sellele meeldetuletus. MedTimer hoiab seda teavet sinu seadmes ega saada sinu ravimite andmeid mitte kuhugi.\n\nTäielike seadistamisjuhiste saamiseks vaata jaotist „Alustamine“.</string>
+<string name="intro_getting_started_link">Alustamine</string>
+<string name="intro_overview_orientation_description">Ülevaade näitab valitud päeva meeldetuletusi. Vali nädalarealt päev. Iga meeldetuletuse kõrval olev olekuikoon näitab, kas see on ootel, meelde tuletatud, võetud, vahele jäetud või koju jõudmiseni edasi lükatud. Meeldetuletuse oleku muutmiseks vajuta ikoonil.</string>
+<string name="intro_notifications">Teavituste luba</string>
+<string name="intro_notifications_description">MedTimer vajab teavituste luba, et anda sulle märku, kui on meeldetuletuse aeg. Võid sissejuhatuse vahele jätta ja valida, kas lubada teavitused; seda saad hiljem Androidi seadetes muuta.</string>
     <string name="show_intro">Näita rakenduse sissejuhatavat vaadet</string>
     <string name="are_you_sure_delete_reminder_event">Kas oled kindel, et soovid meeldetuletuse kustutada?</string>
     <string name="notification_importance">Teavituse olulisus</string>

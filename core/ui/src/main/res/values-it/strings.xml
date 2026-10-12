@@ -171,11 +171,12 @@
     <string name="edit_event">Modifica l\'evento</string>
     <string name="intro_welcome">Benvenuto su MedTimer!</string>
     <string name="intro_welcome_description">MedTimer è un\'applicazione gratuita e open-source per i promemoria dei farmaci con particolare attenzione alla privacy.\n\nRichiede il permesso di mostrare le notifiche dei promemoria dei farmaci.</string>
-    <string name="intro_medicine_description">Usa la scheda \"Farmaci\" per aggiungere il farmaco che stai assumendo e che desideri ricordare. È possibile assegnare etichette ai farmaci e configurarne le scorte.</string>
-    <string name="intro_reminder_description">Seleziona un farmaco per modificarne i dettagli e creare i promemoria per le diverse dosi del farmaco che intendi assumere.\n\nI promemoria possono essere basati sull\'orario o su intervalli e possono essere limitati a giorni specifici.</string>
-    <string name="intro_notification_description">Alla scadenza di un promemoria viene visualizzata una notifica che offre la possibilità di contrassegnare la dose come assunta (cliccando sul pulsante \"PRESO\"), saltata (eliminando la notifica) o di essere nuovamente avvisati dopo un certo tempo (\"POSTICIPA\").</string>
-    <string name="intro_overview_description">Nella schermata di riepilogo è possibile vedere i prossimi promemoria e gli ultimi eventi di promemoria. Gli eventi di promemoria possono essere modificati facendo scorrere il dito verso destra e cancellati facendolo scorrere verso sinistra.\n\nInoltre è possibile registrare manualmente dosi aggiuntive di uno dei farmaci configurati o di un farmaco personalizzato.</string>
-    <string name="intro_analysis_description">L\'applicazione memorizza tutti gli eventi di promemoria. Puoi analizzare le dosi assunte nella schermata di Analisi ed esportare la cronologia tramite il menu con i tre puntini. La cronologia si conserva anche se i farmaci o i promemoria vengono eliminati o rinominati.</string>
+<string name="intro_setup">Configura il tuo primo promemoria</string>
+<string name="intro_setup_description">Aggiungi prima un medicinale, poi aggiungi un promemoria per esso. MedTimer conserva queste informazioni sul tuo dispositivo e non invia i tuoi dati sui farmaci da nessuna parte.\n\nPer conoscere tutti i passaggi della configurazione, leggi Inizia.</string>
+<string name="intro_getting_started_link">Inizia</string>
+<string name="intro_overview_orientation_description">La panoramica mostra i promemoria del giorno selezionato. Seleziona un giorno dalla riga della settimana. L’icona dello stato accanto a ogni promemoria mostra se è in sospeso, segnalato, assunto, ignorato o posticipato fino al rientro a casa; puoi toccarla per modificare lo stato del promemoria.</string>
+<string name="intro_notifications">Autorizzazione alle notifiche</string>
+<string name="intro_notifications_description">MedTimer ha bisogno dell’autorizzazione alle notifiche per avvisarti quando è il momento di un promemoria. Puoi saltare l’introduzione e scegliere se consentire le notifiche; puoi modificare questa scelta in seguito nelle impostazioni di Android.</string>
     <string name="show_intro">Mostra l\'introduzione dell\'app</string>
     <string name="are_you_sure_delete_reminder_event">Vuoi davvero eliminare l\'evento di promemoria?</string>
     <string name="notification_importance">Priorità della notifica</string>

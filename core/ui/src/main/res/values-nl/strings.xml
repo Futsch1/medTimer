@@ -165,11 +165,12 @@
     <string name="edit_event">Herinnering bewerken</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
-    <string name="intro_medicine_description">Gebruik het tabblad \'Medicijnen\' om de medicijnen aan te maken die u gebruikt en waarvoor u een herinnering wilt ontvangen. U kunt tags aan medicijnen toewijzen en de voorraad ervan configureren.</string>
-    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen te maken voor de verschillende doses die u moet innemen.\n\nHerinneringen kunnen tijd- of intervalgebaseerd zijn en kunnen worden beperkt tot specifieke dagen.</string>
-    <string name="intro_notification_description">Zodra er een herinnering is, verschijnt er een melding die je de mogelijkheid geeft om een dosis te markeren als ingenomen (door op de knop \"INGENOMEN\" te klikken), overgeslagen (door de melding te negeren) of na enige tijd opnieuw te worden herinnerd (\"SNOOZEN\").</string>
-    <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen.\n\nVerder kun je handmatig extra doses van een van de geconfigureerde behandelingen of een aangepast behandeling registreren.</string>
-    <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als behandelingen of herinneringen worden verwijderd of een andere naam krijgen.</string>
+<string name="intro_setup">Stel je eerste herinnering in</string>
+<string name="intro_setup_description">Voeg eerst een medicijn toe en voeg er daarna een herinnering voor toe. MedTimer bewaart deze informatie op je apparaat en stuurt je medicatiegegevens nergens naartoe.\n\nLees Aan de slag voor alle stappen voor het instellen.</string>
+<string name="intro_getting_started_link">Aan de slag</string>
+<string name="intro_overview_orientation_description">Het overzicht toont herinneringen voor de geselecteerde dag. Selecteer een dag in de weekrij. Het statuspictogram naast elke herinnering geeft aan of deze in behandeling is, gemeld is, ingenomen is, overgeslagen is of tot thuiskomst is uitgesteld. Je kunt erop drukken om de status van de herinnering te wijzigen.</string>
+<string name="intro_notifications">Meldingsmachtiging</string>
+<string name="intro_notifications_description">MedTimer heeft toestemming voor meldingen nodig om je te waarschuwen wanneer een herinnering moet worden uitgevoerd. Je kunt de introductie overslaan en kiezen of je meldingen wilt toestaan; je kunt dit later wijzigen in de Android-instellingen.</string>
     <string name="show_intro">Toon app intro</string>
     <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je de herinneringsgebeurtenis wilt verwijderen?</string>
     <string name="notification_importance">Prioriteit melding</string>

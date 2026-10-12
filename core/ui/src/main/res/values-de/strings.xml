@@ -165,11 +165,12 @@
     <string name="edit_event">Ereignis bearbeiten</string>
     <string name="intro_welcome">Willkommen bei MedTimer!</string>
     <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen, um an Medikamente zu erinnern.</string>
-    <string name="intro_medicine_description">Verwende die Registerkarte \"Medikamente\" um ein Medikament zu erstellen, das du einnehmen und an das du erinnert werden möchtest. Du kannst Medikamente Tags zuordnen und den Füllstand überwachen.</string>
-    <string name="intro_reminder_description">Wähle ein Medikament aus, um seine Details zu bearbeiten und Erinnerungen für die verschiedenen Einnahmezeiten zu erstellen.\n\nEs gibt verschiedene Erinnerungstypen wie zeitbasiert oder intervallbasiert, weiterhin lassen sich Erinnerungen auf bestimmte Tage beschränken.</string>
-    <string name="intro_notification_description">Sobald eine Erinnerung fällig ist, erscheint eine Benachrichtigung, die Ihnen die Möglichkeit gibt, eine Dosis als eingenommen zu markieren (durch Klicken auf die Schaltfläche \"Eingenommen\"), zu überspringen (durch Verwerfen der Benachrichtigung) oder nach einiger Zeit erneut erinnert zu werden (\"Schlummern\").</string>
-    <string name="intro_overview_description">Auf dem Übersichtsbildschirm kannst du anstehende Erinnerungen und die letzten Erinnerungsereignisse sehen. Erinnerungsereignisse können durch Klicken bearbeitet.\n\n Darüber hinaus kannst du manuell zusätzliche Einnahmen eines der konfigurierten Medikamente oder eines benutzerdefinierten Medikaments aufzeichnen.</string>
-    <string name="intro_analysis_description">Die App speichert alle Ereignisse. Du kannst Ihre vergangenen Einnahmen im Analysebildschirm analysieren und Ihren Verlauf über das Kebab-Menü (drei Punkte) exportieren. Der Verlauf bleibt erhalten, auch wenn Medikamente oder Erinnerungen gelöscht oder umbenannt werden.</string>
+<string name="intro_setup">Erste Erinnerung einrichten</string>
+<string name="intro_setup_description">Füge zuerst ein Medikament und anschließend eine Erinnerung dafür hinzu. MedTimer speichert diese Informationen auf deinem Gerät und sendet deine Medikamentendaten nirgendwohin.\n\nEine vollständige Anleitung zur Einrichtung findest du unter „Erste Schritte“.</string>
+<string name="intro_getting_started_link">Erste Schritte</string>
+<string name="intro_overview_orientation_description">Die Übersicht zeigt Erinnerungen für den ausgewählten Tag. Wähle einen Tag aus der Wochenzeile aus. Das Statussymbol neben jeder Erinnerung zeigt an, ob sie aussteht, bereits gemeldet, eingenommen oder übersprungen wurde oder bis zu deiner Rückkehr nach Hause schlummert. Du kannst darauf drücken, um den Status der Erinnerung zu ändern.</string>
+<string name="intro_notifications">Benachrichtigungsberechtigung</string>
+<string name="intro_notifications_description">MedTimer benötigt die Berechtigung für Benachrichtigungen, um dich zu benachrichtigen, wenn eine Erinnerung fällig ist. Du kannst die Einführung überspringen und festlegen, ob Benachrichtigungen erlaubt werden sollen. Dies kannst du später in den Android-Einstellungen ändern.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>

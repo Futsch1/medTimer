@@ -159,10 +159,12 @@
     <string name="edit_event">編輯時間</string>
     <string name="intro_welcome">歡迎來到 MedTimer！</string>
     <string name="intro_welcome_description">MedTimer 是一款免費且開放原始碼的用藥提醒應用程式，注重隱私保護。\n\n它需要通知權限才能顯示用藥提醒。</string>
-    <string name="intro_medicine_description">請使用「藥品」分頁來建立你正在服用並希望被提醒的藥品。你可以為藥品設定標籤並管理其庫存。</string>
-    <string name="intro_reminder_description">選擇一個藥品以編輯其詳細資料，並為你需要服用的不同劑量建立提醒。\n\n提醒可以根據時間或間隔設定，並可限定於特定的日期。</string>
-    <string name="intro_notification_description">當提醒到期時，會出現一則通知，你可以選擇將該劑量標記為已服用（按下「已服用」按鈕）、略過（關閉通知），或在一段時間後再次提醒（「延後」）。</string>
-    <string name="intro_analysis_description">此應用程式會儲存所有的提醒事件。你可以在分析畫面中檢視過去的服藥紀錄，並透過右上角的選單（三個點）匯出歷史資料。即使藥品或提醒被刪除或重新命名，歷史紀錄仍會保留。</string>
+<string name="intro_setup">設定您的第一個提醒</string>
+<string name="intro_setup_description">請先新增一種藥物，然後為它新增提醒。MedTimer 會將這些資訊保留在您的裝置上，不會將您的用藥資料傳送到任何地方。\n\n如需完整的設定步驟，請閱讀「開始使用」。</string>
+<string name="intro_getting_started_link">開始使用</string>
+<string name="intro_overview_orientation_description">「總覽」會顯示所選日期的提醒。請從星期列中選擇一天。每個提醒旁的狀態圖示會顯示提醒是待處理、已提醒、已服用、已跳過，還是已延後到回家後。您可以按下圖示來變更提醒狀態。</string>
+<string name="intro_notifications">通知權限</string>
+<string name="intro_notifications_description">MedTimer 需要通知權限，才能在提醒到期時通知您。您可以跳過介紹，並選擇是否允許通知；之後可以在 Android 設定中變更此選項。</string>
     <string name="notification_importance">通知優先權</string>
     <string name="are_you_sure_delete_reminder_event">您確定要刪除這個提醒事件嗎？</string>
     <string name="notification_settings_default">通知設定預設優先權</string>
@@ -170,7 +172,6 @@
     <string name="notification_settings_out_of_stock">庫存不足提醒設定</string>
     <string name="show_intro">顯示應用程式介紹</string>
     <string name="time_after">在藥品 y 之後 x 小時</string>
-    <string name="intro_overview_description">在總覽畫面中，你可以查看即將到來的提醒以及最近的提醒事件。提醒事件可向右滑動進行編輯，向左滑動則可刪除。\n\n此外，你也可以手動記錄額外的劑量，無論是已設定的藥品或自訂藥品都可以。</string>
     <string name="calendar">行事曆</string>
     <string name="date">日期</string>
     <string name="active">啟動</string>

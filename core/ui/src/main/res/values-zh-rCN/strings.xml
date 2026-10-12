@@ -159,11 +159,12 @@
     <string name="edit_event">编辑服药记录</string>
     <string name="intro_welcome">欢迎使用 MedTimer!</string>
     <string name="intro_welcome_description">MedTimer 注重隐私、开源免费，提醒你按时服药。\n\n请授予权限以显示服药提醒通知。</string>
-    <string name="intro_medicine_description">在“药品”选项卡创建你正服用并想被提醒服用的药物。你可以分配药品标签并配置它们的存货。</string>
-    <string name="intro_reminder_description">选择一个药品可以编辑详细信息，可以创建不同剂量的多个提醒。\n\n提醒可以基于时间或间隔来设置，可以限定到特定某些天。</string>
-    <string name="intro_notification_description">到了设定的提醒时间，会出现一则通知，提供三种操作选项。标记为已服用（单击“已服用”按钮），跳过（关闭此通知），或一段时间后再次提醒（“打盹”）。</string>
-    <string name="intro_overview_description">在主页会显示下次服药提醒与近期服药记录。向右滑动以编辑服药记录，向左滑动以删除服药记录。\n\n此外，也可以手动记录已添加药品或未添加药品的单次服药记录。</string>
-    <string name="intro_analysis_description">所有服药记录储存于本地。您可以在“分析”页面中查看过去的用药情况，也可以通过 更多（三个点）菜单导出历史记录。即使药品、服药记录被删除或重命名，已导出的历史记录也会保留。</string>
+<string name="intro_setup">设置您的第一个提醒</string>
+<string name="intro_setup_description">请先添加一种药物，然后为其添加提醒。MedTimer 会将这些信息保存在您的设备上，不会将您的用药数据发送到任何地方。\n\n如需查看完整的设置步骤，请阅读“入门指南”。</string>
+<string name="intro_getting_started_link">入门指南</string>
+<string name="intro_overview_orientation_description">“概览”会显示所选日期的提醒。从星期栏中选择一天。每个提醒旁边的状态图标会显示提醒是待处理、已提醒、已服用、已跳过，还是已推迟到回家后。您可以按下该图标来更改提醒状态。</string>
+<string name="intro_notifications">通知权限</string>
+<string name="intro_notifications_description">MedTimer 需要通知权限，以便在提醒到期时通知您。您可以跳过介绍，并选择是否允许通知；之后可以在 Android 设置中更改此选项。</string>
     <string name="show_intro">查看使用说明</string>
     <string name="are_you_sure_delete_reminder_event">您确定要删除该服药记录吗？</string>
     <string name="notification_importance">通知优先级</string>

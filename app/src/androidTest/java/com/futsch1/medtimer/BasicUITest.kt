@@ -124,7 +124,16 @@ class BasicUITest : MedTimerTestBase() {
     fun appIntro() {
         appIntro.show()
         appIntro.assertPage(R.string.intro_welcome, R.string.intro_welcome_description)
-        appIntro.skip()
+        appIntro.next()
+        appIntro.assertPage(R.string.intro_setup, R.string.intro_setup_description)
+        appIntro.openGettingStarted()
+        help.assertGettingStartedDisplayed()
+        help.pressBack()
+        appIntro.next()
+        appIntro.assertPage(R.string.tab_overview, R.string.intro_overview_orientation_description)
+        appIntro.next()
+        appIntro.assertPage(R.string.intro_notifications, R.string.intro_notifications_description)
+        appIntro.done()
 
         navigation.assertOverviewShown()
     }

@@ -170,8 +170,6 @@
     <string name="name">Nazwa</string>
     <string name="event_data">Dane zdarzeń</string>
     <string name="backup">Kopia zapasowa</string>
-    <string name="intro_medicine_description">Użyj zakładki „Lekarstwa”, aby utworzyć lek, który przyjmujesz i chcesz otrzymać przypomnienie. Możesz przypisać tagi do leków i skonfigurować ich zapasy.</string>
-    <string name="intro_reminder_description">Wybierz lek, aby edytować jego szczegóły i utworzyć przypomnienia dla różnych dawek, które musisz przyjąć.\n\nPrzypomnienia mogą być oparte na czasie lub odstępach oraz ograniczone do określonych dni.</string>
     <string name="show_intro">Pokaż intro aplikacji</string>
     <string name="are_you_sure_delete_reminder_event">Czy na pewno chcesz usunąć wydarzenie przypomnienia?</string>
     <string name="notification_importance">Priorytet powiadomień</string>
@@ -203,7 +201,6 @@
     <string name="login">Odblokuj MedTimer</string>
     <string name="re_raise_event">Ponów zdarzenie</string>
     <string name="minutes_10">10 minut</string>
-    <string name="intro_notification_description">Gdy nadejdzie termin przypomnienia, pojawi się powiadomienie, które umożliwi Ci oznaczenie dawki jako przyjętej (poprzez kliknięcie przycisku „PRZYJĘTO”), pominięcie jej (poprzez odrzucenie powiadomienia) lub ponowne wyświetlenie przypomnienia po pewnym czasie („DRZEMKA”).</string>
     <string name="tab_settings">Ustawienia</string>
     <string name="add_medicine">Dodaj lek</string>
     <string name="dosage">Dawkowanie</string>
@@ -214,6 +211,12 @@
     <string name="privacy_settings">Prywatność</string>
     <string name="are_you_sure_delete_medicine">Czy na pewno chcesz usunąć ten lek?</string>
     <string name="intro_welcome_description">MedTimer to darmowa i otwartoźródłowa aplikacja przypominająca o zażyciu leków, która kładzie nacisk na prywatność.\n\nWymagane jest zezwolenie na wyświetlanie powiadomień przypominających o lekach.</string>
+<string name="intro_setup">Skonfiguruj swoje pierwsze przypomnienie</string>
+<string name="intro_setup_description">Najpierw dodaj lek, a następnie dodaj dla niego przypomnienie. MedTimer przechowuje te informacje na urządzeniu i nie wysyła danych o lekach w żadne miejsce.\n\nAby poznać wszystkie kroki konfiguracji, przeczytaj sekcję Pierwsze kroki.</string>
+<string name="intro_getting_started_link">Pierwsze kroki</string>
+<string name="intro_overview_orientation_description">Widok przeglądu pokazuje przypomnienia dla wybranego dnia. Wybierz dzień z wiersza tygodnia. Ikona stanu obok każdego przypomnienia pokazuje, czy jest ono oczekujące, przypomniane, przyjęte, pominięte lub odłożone do powrotu do domu. Możesz ją nacisnąć, aby zmienić stan przypomnienia.</string>
+<string name="intro_notifications">Zezwolenie na powiadomienia</string>
+<string name="intro_notifications_description">MedTimer potrzebuje zezwolenia na powiadomienia, aby ostrzegać Cię, gdy nadejdzie pora przypomnienia. Możesz pominąć wprowadzenie i wybrać, czy zezwolić na powiadomienia; później możesz zmienić to w ustawieniach Androida.</string>
     <string name="clear_events">Wyczyść całą historię</string>
     <string name="exact_reminders">Dokładne przypomnienia</string>
     <string name="hide_med_name">Ukryj nazwę leku w powiadomieniu</string>
@@ -223,7 +226,6 @@
     <string name="exact_reminders_summary">Przypomnienia są zaplanowane na dokładny czas (zwiększa to zużycie baterii)</string>
     <string name="edit_event">Edytuj zdarzenie</string>
     <string name="period_start">Aktywne od</string>
-    <string name="intro_overview_description">Na ekranie przeglądu możesz zobaczyć nadchodzące przypomnienia i ostatnie wydarzenia przypomnień. Wydarzenia przypomnień można edytować, przesuwając w prawo i usuwać, przesuwając w lewo.\n\nCo więcej, możesz ręcznie wprowadzić dodatkowe dawki jednego ze skonfigurowanych lub niestandardowych leków.</string>
     <string name="repeat_reminders_summary">Automatyczne powtarza przypomnienie, dopóki nie zostanie oznaczone jako przyjęto lub pominięto</string>
     <string name="delete_re_raise_event">Czy chcesz usunąć to zdarzenie i ponownie wysłać powiadomienie?</string>
     <string name="amount">Ilość</string>
@@ -240,7 +242,6 @@
     <string name="hours_abbr">g</string>
     <string name="days_abbr">d</string>
     <string name="weeks_abbr">t</string>
-    <string name="intro_analysis_description">Aplikacja przechowuje wszystkie zdarzenia przypominające. Możesz analizować swoje poprzednie dawki na ekranie analizy i eksportować historię za pomocą menu kebab (trzy kropki). Historia zostanie zachowana, nawet jeśli leki lub przypomnienia zostaną usunięte lub przemianowane.</string>
     <string name="notification_settings_high">Wysoki priorytet</string>
     <string name="notification_settings_out_of_stock">Ustawienia przypomnienia o wyczerpaniu zapasów</string>
     <string name="notification_settings_default">Domyślny priorytet</string>
