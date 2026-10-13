@@ -35,8 +35,8 @@ fi
 
 adb shell settings put global auto_time 0
 adb shell su 0 toybox date 0801160025
-emulator_time=$(adb shell date '+%Y-%m-%d %H:%M' | tr -d '\r')
-if [[ $emulator_time != '2025-08-01 16:00' ]]; then
+emulator_time=$(adb shell date +%Y-%m-%d_%H:%M | tr -d '\r')
+if [[ $emulator_time != '2025-08-01_16:00' ]]; then
 	echo "Could not pin emulator clock to the instrumented-test time (got '$emulator_time')." >&2
 	exit 1
 fi
