@@ -19,4 +19,17 @@
         android:title="@string/medicine_cannot_be_skipped"
         android:key="cannot_be_skipped"
         android:summary="@string/medicine_cannot_be_skipped_summary" />
+    <PreferenceCategory app:title="@string/level_estimate">
+        <Preference
+            app:icon="@drawable/info_circle"
+            app:key="pk_info"
+            app:selectable="false"
+            app:summary="@string/pk_settings_info" />
+        <EditTextPreference
+            app:key="half_life_hours"
+            app:title="@string/half_life" />
+        <EditTextPreference
+            app:key="time_to_peak_hours"
+            app:title="@string/time_to_peak" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

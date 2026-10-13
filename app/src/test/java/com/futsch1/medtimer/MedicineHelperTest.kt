@@ -18,7 +18,9 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.text.NumberFormat
 import java.time.LocalDate
+import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import com.futsch1.medtimer.core.ui.R
@@ -26,6 +28,27 @@ import com.futsch1.medtimer.core.ui.R
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class MedicineHelperTest {
+    @Test
+    fun `parseAmount with requireComplete only accepts numbers the locale reads completely`() {
+        val us = NumberFormat.getNumberInstance(Locale.US)
+        val hungarian = NumberFormat.getNumberInstance(Locale.forLanguageTag("hu-HU"))
+        val german = NumberFormat.getNumberInstance(Locale.GERMANY)
+
+        // Without requireComplete, the number format silently stops at a character it cannot use
+        assertEquals(10.0, MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = false))
+        assertNull(MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = true))
+        assertEquals(10.5, MedicineHelper.parseAmount("10,5 mg", hungarian, requireComplete = true))
+        assertEquals(10.5, MedicineHelper.parseAmount("10.5mg", us, requireComplete = true))
+        assertNull(MedicineHelper.parseAmount("1.2.3", us, requireComplete = true))
+        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5", us, requireComplete = true))
+        // A separator at the end of the number is not part of it
+        assertEquals(5.0, MedicineHelper.parseAmount("5. mg", us, requireComplete = true))
+        assertEquals(5.0, MedicineHelper.parseAmount("5, then", us, requireComplete = true))
+        // Read completely, but as a thousands separator; this cannot be detected
+        assertEquals(125.0, MedicineHelper.parseAmount("12.5", german, requireComplete = true))
+        assertNull(MedicineHelper.parseAmount("no number", us, requireComplete = true))
+    }
+
     @Test
     fun testParse() {
         assertEquals(3.5, MedicineHelper.parseAmount("3.5"))

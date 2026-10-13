@@ -7,6 +7,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import java.text.NumberFormat
 import java.text.ParseException
+import java.text.ParsePosition
 import java.util.regex.Pattern
 
 object MedicineHelper {
@@ -61,17 +62,33 @@ object MedicineHelper {
         return fmt.format(amount) + if (unit.isEmpty()) "" else " $unit"
     }
 
-    fun parseAmount(amount: String?): Double? {
-        val matcher = AMOUNT_PATTERN.matcher(amount ?: "")
+    /**
+     * Parses the first number in [amount] with the device's number format.
+     *
+     * By default, the number format reads as much of the number as it can, so "10.5" is read as 10 if "." is not a separator in
+     * the device's locale. With [requireComplete], null is returned instead unless the whole number is read (separators at its
+     * end, as in "5. mg", are ignored).
+     */
+    fun parseAmount(amount: String?, requireComplete: Boolean = false): Double? =
+        numberFormat.get()?.let { parseAmount(amount, it, requireComplete) }
 
-        return if (matcher.find() && matcher.group(0) != null) {
-            try {
-                numberFormat.get()?.parse(matcher.group(0)!!.replace(" ", ""))?.toDouble()
+    /** [parseAmount] with an explicit number [format], e.g. to test other locales. */
+    fun parseAmount(amount: String?, format: NumberFormat, requireComplete: Boolean): Double? {
+        val matcher = AMOUNT_PATTERN.matcher(amount ?: "")
+        if (!matcher.find()) {
+            return null
+        }
+        val number = matcher.group(0)!!.replace(" ", "")
+        if (!requireComplete) {
+            return try {
+                format.parse(number)?.toDouble()
             } catch (_: ParseException) {
                 null
             }
-        } else {
-            null
         }
+        val complete = number.trimEnd('.', ',')
+        val position = ParsePosition(0)
+        val parsed = format.parse(complete, position) ?: return null
+        return parsed.toDouble().takeIf { position.index == complete.length }
     }
 }

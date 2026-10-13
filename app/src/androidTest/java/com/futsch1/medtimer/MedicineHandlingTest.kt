@@ -56,7 +56,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
 
         seed.medicine(TEST_MED_1) {
             cannotBeSkipped()
-            intervalReminder("1", 2.hours)
+            intervalReminder("1", intervalWithinToday(2.hours))
         }
 
         notifications.inShade {
@@ -84,7 +84,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
             preferences.click(R.string.reminders_cannot_be_skipped)
         }
 
-        seed.medicine(TEST_MED_1) { intervalReminder("1", 2.hours) }
+        seed.medicine(TEST_MED_1) { intervalReminder("1", intervalWithinToday(2.hours)) }
 
         notifications.inShade {
             assertShows(TEST_MED_1)

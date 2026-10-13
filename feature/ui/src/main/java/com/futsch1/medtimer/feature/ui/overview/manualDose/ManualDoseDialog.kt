@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,6 +61,7 @@ private tailrec fun Context.findFragmentActivity(): FragmentActivity = when (thi
 
 object ManualDoseTestTags {
     const val DIALOG = "manual_dose_dialog"
+    const val MEDICINE_SEARCH = "manual_dose_medicine_search"
     const val MEDICINE_LIST = "manual_dose_medicine_list"
     const val MEDICINE_ENTRY = "manual_dose_medicine_entry"
     const val AMOUNT_LIST = "manual_dose_amount_list"
@@ -75,6 +77,7 @@ object ManualDoseTestTags {
 @Composable
 fun ManualDoseDialog(
     viewModel: ManualDoseViewModel,
+    onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (LocalTime) -> Unit,
@@ -93,6 +96,8 @@ fun ManualDoseDialog(
     ) {
         DialogContent(
             state = state,
+            searchQuery = viewModel.searchQuery,
+            onSearch = onSearch,
             onSelectMedicineEntry = onSelectMedicineEntry,
             onSelectAmount = onSelectAmount,
             onLogManualDose = onLogManualDose,
@@ -105,6 +110,8 @@ fun ManualDoseDialog(
 @Composable
 private fun DialogContent(
     state: ManualDoseState,
+    searchQuery: String,
+    onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (LocalTime) -> Unit,
@@ -143,6 +150,9 @@ private fun DialogContent(
                 when (state.step) {
                     ManualDoseStep.MEDICINE -> {
                         SectionLabel(R.string.medicine)
+                        if (state.showSearch) {
+                            MedicineSearchField(searchQuery, onSearch)
+                        }
                         MedicineList(
                             medicineEntries = state.medicineEntries,
                             modifier = Modifier.weight(1f, fill = false),
@@ -427,6 +437,20 @@ fun CustomButton(
 }
 
 @Composable
+private fun MedicineSearchField(query: String, onSearch: (String) -> Unit) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onSearch,
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(ManualDoseTestTags.MEDICINE_SEARCH),
+        label = { Text(stringResource(R.string.search)) },
+        leadingIcon = { Icon(painterResource(R.drawable.search), contentDescription = null) },
+        singleLine = true,
+    )
+}
+
+@Composable
 fun MedicineList(
     medicineEntries: ImmutableList<ManualDoseMedicineEntry>,
     modifier: Modifier = Modifier,
@@ -541,6 +565,8 @@ private fun ManualDosePreview(step: ManualDoseStep) {
         Surface {
             DialogContent(
                 state = previewState(step),
+                searchQuery = "",
+                onSearch = {},
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
                 onLogManualDose = {},

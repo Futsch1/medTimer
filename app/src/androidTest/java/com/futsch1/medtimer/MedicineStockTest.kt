@@ -268,7 +268,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun undoStockOnReraiseTest() {
+    fun stockFollowsEventChangesTest() {
         seed.medicine("Test") {
             stock(amount = 10.0, unit = "pills")
             reminder("2", laterToday())
@@ -278,19 +278,28 @@ class MedicineStockTest : MedTimerTestBase() {
 
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
+        assertStock(8.0)
 
-        navigation.toMedicines()
-        medicines.clickItem(0)
-        medicineEditor.assertStockAmount(MedicineHelper.formatAmount(8.0, "pills"))
+        eventEditor.forEvent(0) { setAmount("3") }
+        assertStock(7.0)
 
-        navigation.toOverview()
+        eventEditor.forEvent(0) { markSkipped() }
+        assertStock(10.0)
+
+        eventEditor.forEvent(0) { markTaken() }
+        assertStock(7.0)
+
         overview.clickEventState(0)
         overview.clickAction(R.string.re_raise_event)
         dialogs.confirm()
+        assertStock(10.0)
+    }
 
+    private fun assertStock(pills: Double) {
         navigation.toMedicines()
         medicines.clickItem(0)
-        medicineEditor.assertStockAmount(MedicineHelper.formatAmount(10.0, "pills"))
+        medicineEditor.assertStockAmount(MedicineHelper.formatAmount(pills, "pills"))
+        navigation.toOverview()
     }
 
     @Test

@@ -31,7 +31,8 @@ class ScreenshotsTest : MedTimerTestBase() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         menus.clickAppOption(R.string.generate_test_data)
 
-        eventEditor.forEvent(0) { assertMedicineNotes("Some note") }
+        // Position 0 is time-of-day dependent: before 07:00 the just-raised Selen interval dose sorts first.
+        eventEditor.forEventContaining(B12) { assertMedicineNotes("Some note") }
 
         overview.take(GINSENG)
         overview.skip(B12)

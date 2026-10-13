@@ -14,5 +14,7 @@ class MedicineBackup(
     var showNotificationAsAlarm: Boolean = false,
     var productionDate: Long = 0,
     var expirationDate: Long = 0,
-    var cannotBeSkipped: Boolean = false
+    var cannotBeSkipped: Boolean = false,
+    var halfLifeHours: Double = 0.0,
+    var timeToPeakHours: Double = 0.0
 )

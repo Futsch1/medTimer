@@ -18,7 +18,7 @@ android {
         multiDexEnabled = true
         targetSdk = 36
         versionCode = 187
-        versionName = "1.25.4"
+        versionName = "1.26.0"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")

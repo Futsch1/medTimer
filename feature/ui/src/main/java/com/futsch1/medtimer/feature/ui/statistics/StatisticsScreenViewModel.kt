@@ -13,6 +13,7 @@ import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.filter.TagEventFilter
 import com.futsch1.medtimer.feature.ui.statistics.charts.ChartsPresenter
+import com.futsch1.medtimer.feature.ui.statistics.levels.LevelsPresenter
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderRowFilter
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderRowFilterInputs
 import com.futsch1.medtimer.feature.ui.statistics.table.ReminderTablePresenter
@@ -21,10 +22,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -33,6 +36,7 @@ import kotlinx.coroutines.flow.shareIn
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * Drives the Statistics screen. Following `docs/guidelines/jetpack-compose.md` §State holders, the
@@ -45,6 +49,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class StatisticsScreenViewModel @Inject constructor(
     statisticsProvider: StatisticsProvider,
     chartsPresenter: ChartsPresenter,
+    levelsPresenter: LevelsPresenter,
     reminderTablePresenter: ReminderTablePresenter,
     calendarEventsProvider: CalendarEventsProvider,
     medicineRepository: MedicineRepository,
@@ -68,6 +73,14 @@ class StatisticsScreenViewModel @Inject constructor(
     // Search input lives on a flow so the field updates instantly while only the (potentially heavy)
     // row scan is debounced and pushed off the main thread.
     private val searchTextFlow = MutableStateFlow("")
+
+    // Ticks periodically so the levels, which are split at the current time, keep up with it while the screen is open.
+    private val levelsClock = flow {
+        while (true) {
+            emit(Unit)
+            delay(LEVELS_REFRESH_INTERVAL)
+        }
+    }
 
     // One shared read of the taken/skipped reminder events feeds charts, table, and calendar — the
     // Room flow is cold, so subscribing per view would spin up three independent DB observers.
@@ -94,6 +107,20 @@ class StatisticsScreenViewModel @Inject constructor(
         }
             .flowOn(ioDispatcher)
             .onEach { _state.charts = it }
+            .launchIn(viewModelScope)
+
+        // Estimated levels share the Analysis range with the charts, but only medicines with half-life and time to peak set appear.
+        // The curve is split at the current time, so it is also recomputed periodically while the screen is open.
+        combine(
+            reminderEvents,
+            snapshotFlow { _state.analysisDays },
+            medicineRepository.getAllFlow(),
+            levelsClock,
+        ) { events, days, medicines, _ ->
+            levelsPresenter.present(events, medicines, days)
+        }
+            .flowOn(ioDispatcher)
+            .onEach { _state.levels = it }
             .launchIn(viewModelScope)
 
         // All taken/skipped events, tag-filtered, then presented as rows. The in-screen text filter is
@@ -159,5 +186,6 @@ class StatisticsScreenViewModel @Inject constructor(
         private const val ALL_MEDICINES = -1
         private const val CALENDAR_PAST_MONTHS = 3
         private const val SEARCH_DEBOUNCE_MILLIS = 300L
+        private val LEVELS_REFRESH_INTERVAL = 5.minutes
     }
 }

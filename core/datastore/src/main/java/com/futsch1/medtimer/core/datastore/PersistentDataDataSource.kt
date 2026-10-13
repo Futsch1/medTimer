@@ -169,6 +169,7 @@ class PersistentDataDataSource @Inject constructor(
             activeStatisticsFragment = when (defaultSharedPreferences.getInt(ACTIVE_STATISTICS_FRAGMENT, default.activeStatisticsFragment.ordinal)) {
                 StatisticFragment.CHARTS.ordinal -> StatisticFragment.CHARTS
                 StatisticFragment.TABLE.ordinal -> StatisticFragment.TABLE
+                StatisticFragment.LEVELS.ordinal -> StatisticFragment.LEVELS
                 else -> StatisticFragment.CALENDAR
             },
             analysisDays = defaultSharedPreferences.getInt(ANALYSIS_DAYS, default.analysisDays),

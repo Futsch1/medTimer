@@ -238,6 +238,11 @@ class OverviewViewModel @AssistedInject constructor(
         refreshWarnings()
     }
 
+    fun enableExactReminders() {
+        preferencesDataSource.putBoolean(PreferencesDataSource.EXACT_REMINDERS, true)
+        dismissExactRemindersWarning()
+    }
+
     private fun getFiltered(
         events: List<ReminderEvent>,
         reminders: List<SimulatedReminder>,

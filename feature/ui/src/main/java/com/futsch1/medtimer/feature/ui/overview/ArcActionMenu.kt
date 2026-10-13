@@ -1,8 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
@@ -79,8 +77,8 @@ private val ARC_Y_STEP = 48.dp
 /** Angular step shaping the horizontal bulge only (via cosine); see [ARC_Y_STEP] for vertical spacing. */
 private const val ARC_STEP_ANGLE_DEG = 45f
 
-private val ARC_ENTER_STAGGER_DELAY = 70.milliseconds
-private val ARC_EXIT_STAGGER_DELAY = 40.milliseconds
+private val ARC_ENTER_STAGGER_DELAY = 23.milliseconds
+private val ARC_EXIT_STAGGER_DELAY = 13.milliseconds
 private val ARC_EXIT_DURATION = 220.milliseconds
 
 /** Display order top-to-bottom; buttons not visible for a given event are simply skipped. */
@@ -96,7 +94,8 @@ private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
 /**
  * Fans [buttons] out along an arc to the right of the anchor (mirrored left in RTL), over a
  * radial scrim radiating from that same point.
- * Buttons reveal bottom-most first and collapse in reverse before the popup unmounts.
+ * Buttons reveal top-most first, so the primary action (Taken) shows up immediately, and collapse
+ * in reverse before the popup unmounts.
  * Runs in a window-sized popup, with everything positioned against [anchorCoordinates] — the state
  * button's own measured position — rather than by anchoring the popup window itself.
  *
@@ -228,8 +227,9 @@ private fun ArcActionButtons(
             ArcScrim(expanded)
             orderedButtons.forEachIndexed { index, button ->
                 AnimatedVisibility(
-                    visible = index < revealedCount,
-                    enter = fadeIn(spring(stiffness = Spring.StiffnessLow)),
+                    // orderedButtons runs bottom-most first, so count the reveal from its end.
+                    visible = index >= orderedButtons.size - revealedCount,
+                    enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()),
                     exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
                     SmallFloatingActionButton(onClick = { onAction(button) }) {

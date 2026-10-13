@@ -22,7 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.Posture
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -84,7 +84,7 @@ fun ChartsContent(
     modifier: Modifier = Modifier,
     // Injectable (defaults to the live value) so layout tests supply a computed window size. The
     // detection below stays inlined per the "no shared helper" decision. Matches Now in Android.
-    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
 ) {
     val configuration = LocalConfiguration.current
     val isTabletLandscape = remember(windowAdaptiveInfo, configuration) {

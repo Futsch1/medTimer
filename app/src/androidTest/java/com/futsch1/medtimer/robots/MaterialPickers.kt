@@ -44,12 +44,29 @@ class MaterialPickers {
         confirmAndAwaitDismissal(com.google.android.material.R.id.confirm_button)
     }
 
+    /**
+     * Taps the time field [fieldId] until its picker is up. Right after a previous picker closes, the
+     * dialog re-focuses the last field and re-shows the IME, which moves the window under the tap;
+     * the tap then lands on the still-focused previous field, whose TimeEditor swallows it.
+     */
+    fun openTimePickerFrom(fieldId: Int) {
+        val okButton = com.google.android.material.R.id.material_timepicker_ok_button
+        repeat(OPEN_ATTEMPTS) {
+            closeKeyboard()
+            clickOn(fieldId)
+            if (pickerAppears(okButton)) return
+        }
+        fail("No time picker opened after $OPEN_ATTEMPTS taps on its field")
+    }
+
     /** Until the picker's window is up, Espresso resolves the screen behind it as the root. */
     private fun awaitPicker(confirmButtonId: Int) {
-        val instrumentation = InstrumentationRegistry.getInstrumentation()
-        UiDevice.getInstance(instrumentation)
-            .wait(Until.hasObject(selector(confirmButtonId)), DISMISSAL_TIMEOUT)
+        if (!pickerAppears(confirmButtonId)) fail("The picker did not open")
     }
+
+    private fun pickerAppears(confirmButtonId: Int): Boolean =
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .wait(Until.hasObject(selector(confirmButtonId)), DISMISSAL_TIMEOUT)
 
     /** A picker left standing swallows the next tap, so the dismissal is retried and then insisted on. */
     private fun confirmAndAwaitDismissal(buttonId: Int) {
@@ -143,5 +160,6 @@ class MaterialPickers {
         const val MODE_SETTLE_TIMEOUT = 2_000L
         const val DISMISSAL_TIMEOUT = 5_000L
         const val CONFIRM_ATTEMPTS = 3
+        const val OPEN_ATTEMPTS = 3
     }
 }

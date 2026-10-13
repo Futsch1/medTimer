@@ -20,7 +20,9 @@ fun Medicine.toEntity(): MedicineEntity = MedicineEntity(
     showNotificationAsAlarm = showNotificationAsAlarm,
     productionDate = productionDate.toEpochDay(),
     expirationDate = expirationDate.toEpochDay(),
-    cannotBeSkipped = cannotBeSkipped
+    cannotBeSkipped = cannotBeSkipped,
+    halfLifeHours = halfLifeHours,
+    timeToPeakHours = timeToPeakHours
 )
 
 fun FullMedicineEntity.toModel(): Medicine {
@@ -41,6 +43,8 @@ fun FullMedicineEntity.toModel(): Medicine {
         sortOrder = medicine.sortOrder,
         tags = tags.map { it.toModel() },
         reminders = reminders.map { it.toModel() },
-        cannotBeSkipped = medicine.cannotBeSkipped
+        cannotBeSkipped = medicine.cannotBeSkipped,
+        halfLifeHours = medicine.halfLifeHours,
+        timeToPeakHours = medicine.timeToPeakHours
     )
 }

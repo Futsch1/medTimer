@@ -62,4 +62,22 @@ class ManualDoseTest : MedTimerTestBase() {
         overview.clickEventState(0)
         overview.assertActionAbsent(R.string.re_raise_event)
     }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun searchMedicine() {
+        listOf("Vitamin X 500 mg", "Omega 3", "Vitamin D", "Ginseng", "Magnesium").forEach { seed.medicine(it) }
+
+        navigation.toOverview()
+
+        manualDose.inPicker {
+            search("vitamin")
+            assertMedicinesOffered("Vitamin X 500 mg", "Vitamin D")
+            selectMedicine("Vitamin D")
+            enterAmount("1")
+            confirmTime()
+        }
+
+        overview.assertEventContains("Vitamin D")
+    }
 }

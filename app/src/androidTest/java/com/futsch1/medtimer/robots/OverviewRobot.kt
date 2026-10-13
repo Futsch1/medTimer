@@ -51,6 +51,13 @@ class OverviewRobot(private val ui: ComposeUi) {
         eventCardAtEvent(index).performClick()
     }
 
+    fun clickEventContaining(substring: String) {
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
+        val index = currentIndexOf(substring)
+        assertTrue(index != null, "No Overview event contains '$substring': ${eventTexts()}")
+        list.nodeAt(EVENT_CARD, index).performClick()
+    }
+
     fun longClickEvent(index: Int) {
         scrollToEvent(index)
         eventCardAtEvent(index).performTouchInput { longClick() }
@@ -104,6 +111,13 @@ class OverviewRobot(private val ui: ComposeUi) {
 
     fun assertActionAbsent(@StringRes labelRes: Int) =
         actionMenu.assertAbsent(hasText(ui.getString(labelRes)))
+
+    /** The warning cards above the event list, found by their title. */
+    fun assertWarningShown(@StringRes titleRes: Int) = screen.assertDisplayed(hasText(ui.getString(titleRes)))
+
+    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !screen.exists(hasText(ui.getString(titleRes))) }
+
+    fun clickWarningButton(@StringRes labelRes: Int) = screen.click(hasText(ui.getString(labelRes)))
 
     fun logManualDose() = screen.click(hasTestTag(OverviewTestTags.LOG_MANUAL_DOSE))
 

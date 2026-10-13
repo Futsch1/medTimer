@@ -16,6 +16,13 @@ class EventEditorRobot(private val overview: OverviewRobot) {
         pressBack()
     }
 
+    /** Opens the event whose text contains [substring], runs [block] and returns to the Overview. */
+    fun forEventContaining(substring: String, block: EventEditorRobot.() -> Unit) {
+        overview.clickEventContaining(substring)
+        block()
+        pressBack()
+    }
+
     fun assertName(expected: String) = assertContains(NAME, expected)
 
     fun assertNameDoesNotContain(text: String) = assertNotContains(NAME, text)
@@ -40,6 +47,8 @@ class EventEditorRobot(private val overview: OverviewRobot) {
     fun markTaken() = clickOn(com.futsch1.medtimer.feature.ui.R.id.takenToggleButton)
 
     fun markSkipped() = clickOn(com.futsch1.medtimer.feature.ui.R.id.skippedToggleButton)
+
+    fun setAmount(text: String) = writeTo(AMOUNT, text)
 
     fun setNotes(text: String) = writeTo(NOTES, text)
 

@@ -381,4 +381,21 @@ class ReminderTest : MedTimerTestBase() {
         val pauseDays: Int,
         val shouldHaveInfo: Boolean
     )
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun lastAmountStaysAboveKeyboard() {
+        seed.medicine("Medicine A") {
+            repeat(REMINDERS_FILLING_THE_SCREEN) { reminder("${it + 1}", laterToday((it + 1).minutes)) }
+        }
+
+        medicines.clickItem(0)
+
+        reminders.assertLastAmountStaysAboveKeyboard()
+    }
+
+    private companion object {
+        /** Enough reminder cards that the last one sits at the bottom of the screen, where the keyboard opens. */
+        const val REMINDERS_FILLING_THE_SCREEN = 6
+    }
 }

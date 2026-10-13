@@ -192,8 +192,18 @@ class NewReminderDialog @AssistedInject constructor(
                 }
                 if (reminder.reminderType == ReminderType.WINDOWED_INTERVAL) {
                     updatedReminder = updatedReminder.copy(
-                        intervalStartTimeOfDay = LocalTime.ofSecondOfDay(dailyStartTimeEditor.getMinutes() * 60L),
-                        intervalEndTimeOfDay = LocalTime.ofSecondOfDay(dailyEndTimeEditor.getMinutes() * 60L)
+                        intervalStartTimeOfDay = LocalTime.ofSecondOfDay(
+                            (dailyStartTimeEditor.getMinutes() * 60L).coerceIn(
+                                0,
+                                24 * 60 * 60 - 1
+                            )
+                        ),
+                        intervalEndTimeOfDay = LocalTime.ofSecondOfDay(
+                            (dailyEndTimeEditor.getMinutes() * 60L).coerceIn(
+                                0,
+                                24 * 60 * 60 - 1
+                            )
+                        )
                     )
                 }
                 if (reminderTime.minutes >= 0) {

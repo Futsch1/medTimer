@@ -3,11 +3,16 @@ package com.futsch1.medtimer.feature.ui.overview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +31,10 @@ import javax.inject.Inject
 class EditEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderEventRepository: ReminderEventRepository,
+    private val reminderRepository: ReminderRepository,
+    private val commandBus: ReminderCommandBus,
     private val timeFormatter: TimeFormatter,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     companion object {
@@ -129,8 +137,12 @@ class EditEventViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the sheet is dismissed, right before it is removed and this ViewModel is cleared,
+     * so the save runs in the application scope to complete regardless.
+     */
     fun updateEvent() {
-        viewModelScope.launch {
+        applicationScope.launch {
             val event = storedEvent ?: return@launch
             val remindedTimestamp =
                 computeTimestamp(event.remindedTimestamp, _remindedMinutes.value, _remindedDate.value)
@@ -146,8 +158,27 @@ class EditEventViewModel @Inject constructor(
                 status = status ?: event.status
             )
 
-            reminderEventRepository.update(updatedEvent)
+            reminderEventRepository.update(correctStock(event, updatedEvent))
         }
+    }
+
+    /**
+     * Keeps the medicine's stock in line with an edited amount or taken/skipped status,
+     * deducting or returning the difference to what was deducted when the event was processed.
+     * Manual doses carry no reminder and therefore no link to a medicine, so they are left as they are.
+     */
+    private suspend fun correctStock(original: ReminderEvent, edited: ReminderEvent): ReminderEvent {
+        val medicineId = reminderRepository.fetch(original.reminderId)?.medicineRelId ?: return edited
+        val deducted = if (original.stockHandled) MedicineHelper.parseAmount(original.amount) ?: 0.0 else 0.0
+        val toDeduct = if (edited.status == ReminderEvent.ReminderStatus.TAKEN) MedicineHelper.parseAmount(edited.amount) else null
+        val correction = (toDeduct ?: 0.0) - deducted
+        val corrected = edited.copy(stockHandled = toDeduct != null)
+        if (correction == 0.0) {
+            return corrected
+        }
+
+        commandBus.processStockHandling(correction, medicineId, edited.processedTimestamp.epochSecond)
+        return if (corrected.stockAfter >= 0) corrected.copy(stockAfter = maxOf(0.0, corrected.stockAfter - correction)) else corrected
     }
 
     private fun computeTimestamp(original: Instant, minutes: Int, date: LocalDate): Instant {

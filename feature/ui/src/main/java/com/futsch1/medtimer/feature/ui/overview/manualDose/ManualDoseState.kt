@@ -12,6 +12,7 @@ enum class ManualDoseStep {
 
 data class ManualDoseState(
     val medicineEntries: ImmutableList<ManualDoseMedicineEntry> = persistentListOf(),
+    val showSearch: Boolean = false,
     val lastCustomMedicineEntry: ManualDoseMedicineEntry = ManualDoseMedicineEntry("", null),
     val amounts: ImmutableList<String> = persistentListOf(),
     val lastCustomDoseAmount: String = "",

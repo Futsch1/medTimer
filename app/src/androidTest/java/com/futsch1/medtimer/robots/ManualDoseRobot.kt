@@ -2,6 +2,7 @@ package com.futsch1.medtimer.robots
 
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performTextInput
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
 
 /** Drives the Compose manual-dose dialog while keeping the test-facing picker vocabulary. */
@@ -74,6 +75,17 @@ class ManualDoseRobot(
         if (!medicineList.exists(entry)) return false
         medicineList.click(entry)
         return true
+    }
+
+    /** Types into the search field that the medicine step shows once the list gets long. */
+    fun search(query: String) {
+        dialog.awaitExists(hasTestTag(ManualDoseTestTags.MEDICINE_SEARCH))
+        dialog.node(hasTestTag(ManualDoseTestTags.MEDICINE_SEARCH)).performTextInput(query)
+        dialog.settle()
+    }
+
+    fun assertMedicinesOffered(vararg labels: String) {
+        medicineList.await { medicineList.textsUnder(hasTestTag(ManualDoseTestTags.MEDICINE_ENTRY)).sorted() == labels.sorted() }
     }
 
     fun selectMedicine(label: String) {
