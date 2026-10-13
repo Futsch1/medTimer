@@ -241,6 +241,7 @@
     <string name="disable_widget_summary">Estä widgettejä näyttämästä arkaluonteisia lääketietoja aloitusnäytöllä</string>
     <string name="re_raise_event">Nosta tapahtuma uudelleen</string>
     <string name="notification_reminder_settings">Ilmoitus- ja muistutusasetukset</string>
+    <string name="notifications_missing_or_late">Ilmoitukset puuttuvat tai saapuvat myöhässä</string>
     <string name="display_settings">Näyttöasetukset</string>
     <string name="use_relative_date_time_summary">Näytä suhteellinen päivämäärä/aika muistutuksille</string>
     <string name="use_relative_date_time">Suhteellinen päivämäärä/aika</string>

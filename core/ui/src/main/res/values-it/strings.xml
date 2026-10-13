@@ -246,6 +246,7 @@
     <string name="disable_widget_summary">Impedisce ai widget di visualizzare informazioni sensibili sui farmaci nella schermata iniziale</string>
     <string name="re_raise_event">Rilancia l\'evento</string>
     <string name="notification_reminder_settings">Impostazioni di notifica e promemoria</string>
+    <string name="notifications_missing_or_late">Notifiche mancanti o in ritardo</string>
     <string name="display_settings">Impostazioni visualizzazione</string>
     <string name="use_relative_date_time_summary">Mostra la data/ora relativa per i promemoria</string>
     <string name="use_relative_date_time">Data/ora relativa</string>

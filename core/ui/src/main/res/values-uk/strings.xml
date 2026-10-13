@@ -252,6 +252,7 @@
     <string name="disable_widget_summary">Заборонити віджетам відображати конфіденційну інформацію про ліки на головному екрані</string>
     <string name="re_raise_event">Повторно запустити подію</string>
     <string name="notification_reminder_settings">Налаштування сповіщень та нагадувань</string>
+    <string name="notifications_missing_or_late">Сповіщення відсутні або надходять із запізненням</string>
     <string name="display_settings">Налаштування відображення</string>
     <string name="use_relative_date_time_summary">Показувати відносну дату/час для нагадувань</string>
     <string name="use_relative_date_time">Відносна дата/час</string>

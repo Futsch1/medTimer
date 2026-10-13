@@ -246,6 +246,7 @@
     <string name="disable_widget_summary">Empêcher les widgets d\'afficher des informations sensibles sur les médicaments sur l\'écran d\'accueil</string>
     <string name="re_raise_event">Redéclencher l\'événement</string>
     <string name="notification_reminder_settings">Paramètres de notification et de rappel</string>
+    <string name="notifications_missing_or_late">Notifications manquantes ou en retard</string>
     <string name="display_settings">Paramètres d\'affichage</string>
     <string name="use_relative_date_time_summary">Afficher la date et l\'heure relatives pour les rappels</string>
     <string name="use_relative_date_time">Date/heure relative</string>

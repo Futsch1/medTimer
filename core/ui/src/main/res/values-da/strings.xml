@@ -241,6 +241,7 @@
     <string name="disable_widget_summary">Forhindre widgets i at vise følsomme medicin-oplysninger på startskærmen</string>
     <string name="re_raise_event">Genaktiver hændelse</string>
     <string name="notification_reminder_settings">Notifikations- og påmindelsesindstillinger</string>
+    <string name="notifications_missing_or_late">Manglende eller forsinkede notifikationer</string>
     <string name="display_settings">Skærmindstillinger</string>
     <string name="use_relative_date_time_summary">Vis relativ dato/tid for påmindelser</string>
     <string name="use_relative_date_time">Relativ dato/tid</string>

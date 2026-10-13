@@ -240,6 +240,7 @@
     <string name="disable_widget_summary">Verhindert, dass Widgets sensible Medikamenteninformationen auf dem Startbildschirm anzeigen</string>
     <string name="re_raise_event">Ereignis erneut auslösen</string>
     <string name="notification_reminder_settings">Einstellungen für Benachrichtigungen und Erinnerungen</string>
+    <string name="notifications_missing_or_late">Benachrichtigungen fehlen oder kommen verspätet</string>
     <string name="display_settings">Anzeigeeinstellungen</string>
     <string name="use_relative_date_time_summary">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
     <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>

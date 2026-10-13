@@ -253,6 +253,7 @@
     <string name="disable_widget_summary">Zabránit widgetům zobrazovat citlivé informace o léčivech na domovské obrazovce</string>
     <string name="re_raise_event">Znovu vyvolat událost</string>
     <string name="notification_reminder_settings">Nastavení notifikací a připomenutí</string>
+    <string name="notifications_missing_or_late">Chybějící nebo opožděná oznámení</string>
     <string name="display_settings">Nastavení zobrazení</string>
     <string name="use_relative_date_time_summary">Zobrazit relativní datum/čas pro připomenutí</string>
     <string name="use_relative_date_time">Relativní datum/čas</string>

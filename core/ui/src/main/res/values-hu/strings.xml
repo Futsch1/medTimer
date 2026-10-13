@@ -241,6 +241,7 @@
     <string name="disable_widget_summary">Megakadályozza, hogy a widgetek érzékeny gyógyszerinformációkat jelenítsenek meg a kezdőképernyőn</string>
     <string name="re_raise_event">Esemény megismétlése</string>
     <string name="notification_reminder_settings">Értesítési és emlékeztető beállítások</string>
+    <string name="notifications_missing_or_late">Hiányzó vagy késő értesítések</string>
     <string name="display_settings">Megjelenítési beállítások</string>
     <string name="use_relative_date_time_summary">Megjeleníti az emlékeztetők idejét hozzávetőleges formában is</string>
     <string name="use_relative_date_time">Hozzávetőleges dátum/idő</string>

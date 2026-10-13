@@ -210,6 +210,7 @@
     <string name="generate_test_data">Gerar dados de teste</string>
     <string name="minutes_15">15 minutos</string>
     <string name="notification_reminder_settings">Configurações de notificações e lembretes</string>
+    <string name="notifications_missing_or_late">Notificações em falta ou atrasadas</string>
     <string name="time_between_repetitions">Tempo entre repetições</string>
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>

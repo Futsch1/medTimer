@@ -115,9 +115,20 @@ class OverviewRobot(private val ui: ComposeUi) {
     /** The warning cards above the event list, found by their title. */
     fun assertWarningShown(@StringRes titleRes: Int) = screen.assertDisplayed(hasText(ui.getString(titleRes)))
 
-    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !screen.exists(hasText(ui.getString(titleRes))) }
+    fun isWarningShown(@StringRes titleRes: Int) = screen.exists(hasText(ui.getString(titleRes)))
 
-    fun clickWarningButton(@StringRes labelRes: Int) = screen.click(hasText(ui.getString(labelRes)))
+    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !isWarningShown(titleRes) }
+
+    fun clickWarningButton(@StringRes titleRes: Int, @StringRes labelRes: Int) =
+        warning(titleRes).click(hasText(ui.getString(labelRes)))
+
+    private fun warning(@StringRes titleRes: Int) = screen.scope(
+        when (titleRes) {
+            CoreUiR.string.battery_optimization_warning_title -> OverviewTestTags.BATTERY_WARNING
+            CoreUiR.string.exact_reminders_warning_title -> OverviewTestTags.EXACT_REMINDERS_WARNING
+            else -> error("Unknown Overview warning title resource: $titleRes")
+        }
+    )
 
     fun logManualDose() = screen.click(hasTestTag(OverviewTestTags.LOG_MANUAL_DOSE))
 

@@ -240,6 +240,7 @@
     <string name="disable_widget_summary">Förhindra widgets från att visa känslig läkemedelsinformation på startskärmen</string>
     <string name="re_raise_event">Återskapa händelse</string>
     <string name="notification_reminder_settings">Inställningar för aviseringar och påminnelser</string>
+    <string name="notifications_missing_or_late">Aviseringar saknas eller kommer sent</string>
     <string name="display_settings">Displayinställningar</string>
     <string name="use_relative_date_time_summary">Visa relativ datum/tid för påminnelser</string>
     <string name="use_relative_date_time">Relativ datum/tid</string>

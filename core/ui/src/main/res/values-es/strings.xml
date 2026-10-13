@@ -246,6 +246,7 @@
     <string name="disable_widget_summary">Evitar que los widgets muestren información sensible sobre medicamentos en la pantalla de inicio</string>
     <string name="re_raise_event">Volver a activar el evento</string>
     <string name="notification_reminder_settings">Configuración de notificaciones y recordatorios</string>
+    <string name="notifications_missing_or_late">Notificaciones ausentes o tardías</string>
     <string name="display_settings">Configuración de la pantalla</string>
     <string name="use_relative_date_time_summary">Mostrar la fecha/hora relativa de los recordatorios</string>
     <string name="use_relative_date_time">Fecha/hora relativa</string>

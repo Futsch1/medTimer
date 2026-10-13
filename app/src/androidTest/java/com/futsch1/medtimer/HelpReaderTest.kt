@@ -8,29 +8,29 @@ import org.junit.Test
 class HelpReaderTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
-    fun toolbarBackReturnsToContentsBeforeClosing() {
+    fun helpReaderNavigationWorksFromMenuAndNotificationSettings() {
         help.open()
+        help.assertContentsDisplayed()
+        help.openNotificationsMissingOrLate()
+        help.assertNotificationsMissingOrLateDisplayed()
+        help.pressToolbarBack()
         help.assertContentsDisplayed()
 
         help.openGettingStarted()
         help.assertGettingStartedDisplayed()
+        help.openReminderTypes()
+        help.assertReminderTypesDisplayed()
+        help.pressToolbarBack()
+        help.assertGettingStartedDisplayed()
         help.pressToolbarBack()
         help.assertContentsDisplayed()
-        help.pressToolbarBack()
+        help.pressBack()
         navigation.assertOverviewShown()
-    }
 
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun systemBackReturnsToContentsBeforeClosing() {
-        help.open()
-        help.assertContentsDisplayed()
-
-        help.openGettingStarted()
-        help.assertGettingStartedDisplayed()
+        settings.openNotificationsHelp()
+        help.assertNotificationsMissingOrLateDisplayed()
         help.pressBack()
-        help.assertContentsDisplayed()
-        help.pressBack()
+        settings.returnToOverviewFromNotificationSettings()
         navigation.assertOverviewShown()
     }
 }

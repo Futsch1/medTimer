@@ -240,6 +240,7 @@
     <string name="disable_widget_summary">Voorkom dat widgets gevoelige medicatie-informatie weergeven op het startscherm</string>
     <string name="re_raise_event">De gebeurtenis opnieuw activeren</string>
     <string name="notification_reminder_settings">Instellingen voor meldingen en herinneringen</string>
+    <string name="notifications_missing_or_late">Meldingen ontbreken of komen te laat</string>
     <string name="display_settings">Weergave-instellingen</string>
     <string name="use_relative_date_time_summary">Toon relatieve datum/tijd voor herinneringen</string>
     <string name="use_relative_date_time">Relatieve datum/tijd</string>

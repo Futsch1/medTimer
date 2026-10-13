@@ -267,6 +267,7 @@
     <string name="disable_widget_summary">منع الأدوات من عرض معلومات الدواء الحساسة على الشاشة الرئيسية</string>
     <string name="re_raise_event">أعد إظهار الحدث</string>
     <string name="notification_reminder_settings">إعدادات الإشعارات والتذكيرات</string>
+    <string name="notifications_missing_or_late">الإشعارات مفقودة أو متأخرة</string>
     <string name="display_settings">إعدادات العرض</string>
     <string name="use_relative_date_time_summary">عرض التاريخ/الوقت النسبي للتذكيرات</string>
     <string name="use_relative_date_time">التاريخ/الوقت النسبي</string>

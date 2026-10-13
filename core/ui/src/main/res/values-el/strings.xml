@@ -239,6 +239,7 @@
     <string name="disable_widget_summary">Αποτροπή εμφάνισης ευαίσθητων πληροφοριών φαρμάκων από γραφικά στοιχεία στην αρχική οθόνη</string>
     <string name="re_raise_event">Επανενεργοποίηση ειδοποίησης συμβάντος</string>
     <string name="notification_reminder_settings">Ρυθμίσεις ειδοποίησης και υπενθύμισης</string>
+    <string name="notifications_missing_or_late">Οι ειδοποιήσεις λείπουν ή καθυστερούν</string>
     <string name="display_settings">Ρυθμίσεις προβολής</string>
     <string name="use_relative_date_time_summary">Εμφάνιση του παρελθόντος χρόνου για τα συμβάντα υπενθυμίσεων</string>
     <string name="use_relative_date_time">Σχετική ημερομηνία/ώρα</string>

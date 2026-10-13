@@ -252,6 +252,7 @@
     <string name="enable_dnd_dialog">Aby umożliwić ciągłe odtwarzanie dźwięków powiadomień, włącz opcję Nie przeszkadzać dla MedTimer w następującym menu</string>
     <string name="add_tag">Dodaj tag</string>
     <string name="notification_reminder_settings">Powiadomienia i przypomnienia</string>
+    <string name="notifications_missing_or_late">Brakujące lub opóźnione powiadomienia</string>
     <string name="display_settings">Wyświetlanie</string>
     <string name="use_relative_date_time_summary">Wyświetlanie względnej daty/godziny dla przypomnień</string>
     <string name="use_relative_date_time">Względna data/godzina</string>

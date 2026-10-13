@@ -16,6 +16,19 @@ class HelpRobot(private val menus: MenuRobot) {
         findText("Getting started").click()
     }
 
+    fun openNotificationsMissingOrLate() {
+        findText("Notifications missing or late").click()
+    }
+
+    fun openReminderTypes() {
+        findText("learn more about reminder types").click()
+    }
+
+    fun assertNotificationsMissingOrLateDisplayed() {
+        findText("A schedule problem and a delivery problem need different checks.")
+        findText("What the Overview warnings mean")
+    }
+
     fun assertReminderTypesDisplayed() {
         findText("Reminder types")
         findText("Continuous interval reminder")

@@ -248,6 +248,7 @@
     <string name="disable_widget_summary">Запретить виджетам отображать конфиденциальную информацию о лекарствах на главном экране</string>
     <string name="re_raise_event">Повторно вызвать событие</string>
     <string name="notification_reminder_settings">Настройки уведомлений и напоминаний</string>
+    <string name="notifications_missing_or_late">Уведомления не приходят или приходят с задержкой</string>
     <string name="display_settings">Настройки дисплея</string>
     <string name="use_relative_date_time_summary">Показывайте относительную дату/время для напоминаний</string>
     <string name="use_relative_date_time">Относительная дата/время</string>

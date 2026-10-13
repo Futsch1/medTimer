@@ -22,6 +22,8 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.OVERR
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource.Companion.STICKY_ON_LOCKSCREEN
 import com.futsch1.medtimer.core.domain.model.DismissNotificationAction
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.feature.ui.AppOptionsActions
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +31,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationSettingsFragment : PreferencesFragment() {
+    @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
     @Inject
     lateinit var preferencesDataSource: PreferencesDataSource
 
@@ -41,6 +46,13 @@ class NotificationSettingsFragment : PreferencesFragment() {
     @Inject
     lateinit var notificationManager: NotificationManager
 
+    private lateinit var appOptionsActions: AppOptionsActions
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appOptionsActions = appOptionsActionsFactory.create(this)
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferencesDataSource
 
@@ -49,6 +61,10 @@ class NotificationSettingsFragment : PreferencesFragment() {
         setupNotificationSettings()
         setupExactReminders()
         setupBatteryOptimization()
+        preferenceScreen.findPreference<Preference>("notifications_missing_or_late")?.setOnPreferenceClickListener {
+            appOptionsActions.openHelp("notifications-missing-or-late")
+            true
+        }
 
         setupPreferencesLink(
             this,
@@ -207,5 +223,10 @@ class NotificationSettingsFragment : PreferencesFragment() {
         if (!notificationManager.isNotificationPolicyAccessGranted) {
             resetBooleanPreferenceAndReload(OVERRIDE_DND)
         }
+    }
+
+    override fun onDestroy() {
+        appOptionsActions.onDestroy()
+        super.onDestroy()
     }
 }

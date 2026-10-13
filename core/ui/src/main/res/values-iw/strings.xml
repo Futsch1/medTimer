@@ -247,6 +247,7 @@
     <string name="disable_widget_summary">מניעת הצגת מידע רגיש על תרופות על ידי ווידג\'טים במסך הבית</string>
     <string name="re_raise_event">הקפצו את האירוע</string>
     <string name="notification_reminder_settings">הגדרות תזכורות והתראות</string>
+    <string name="notifications_missing_or_late">התראות חסרות או מאוחרות</string>
     <string name="display_settings">הגדרות תצוגה</string>
     <string name="use_relative_date_time_summary">הראה תאריך/זמן יחסי לתזכורות</string>
     <string name="use_relative_date_time">תאריך/זמן יחסי</string>

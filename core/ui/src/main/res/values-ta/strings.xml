@@ -240,6 +240,7 @@
     <string name="disable_widget_summary">முகப்பு திரையில் விட்ஜெட்கள் முக்கிய மருந்து தகவலை காட்டாமல் தடுக்கவும்</string>
     <string name="re_raise_event">மீண்டும் உயர்த்தும் நிகழ்வு</string>
     <string name="notification_reminder_settings">அறிவிப்பு மற்றும் நினைவூட்டல் அமைப்புகள்</string>
+    <string name="notifications_missing_or_late">அறிவிப்புகள் வரவில்லை அல்லது தாமதமாக வருகின்றன</string>
     <string name="display_settings">காட்சி அமைப்புகள்</string>
     <string name="use_relative_date_time_summary">நினைவூட்டல்களுக்கு தொடர்புடைய தேதி/நேரத்தை காட்டு</string>
     <string name="use_relative_date_time">ஒப்பீட்டு தேதி/நேரம்</string>

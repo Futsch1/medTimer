@@ -236,6 +236,7 @@
     <string name="disable_widget">Деактивиране на приспособленията на началния екран</string>
     <string name="disable_widget_summary">Предотвратяване на показването на чувствителна информация за лекарства в приспособленията</string>
     <string name="notification_reminder_settings">Настройки на известията и напомнянията</string>
+    <string name="notifications_missing_or_late">Известията липсват или закъсняват</string>
     <string name="use_relative_date_time_summary">Покажи относителни време/дата за напомнянията</string>
     <string name="use_relative_date_time">Относителни време/дата</string>
     <string name="invalid_amount">Количеството трябва да има число за следене на наличните лекарства за това напомняне.</string>

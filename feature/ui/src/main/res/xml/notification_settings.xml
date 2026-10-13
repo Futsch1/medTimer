@@ -6,37 +6,37 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/bell"
         android:title="@string/notification_settings_default"
-        app:singleLineTitle="false"
-        app:key="notification_settings_default" />
+        app:key="notification_settings_default"
+        app:singleLineTitle="false" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/bell"
         android:title="@string/notification_settings_high"
-        app:singleLineTitle="false"
-        app:key="notification_settings_high" />
+        app:key="notification_settings_high"
+        app:singleLineTitle="false" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/bell"
         android:title="@string/notification_settings_out_of_stock"
-        app:singleLineTitle="false"
-        app:key="notification_settings_out_of_stock" />
+        app:key="notification_settings_out_of_stock"
+        app:singleLineTitle="false" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
         android:summary="@string/override_dnd_summary"
         android:title="@string/override_dnd"
-        app:singleLineTitle="false"
-        app:key="override_dnd" />
+        app:key="override_dnd"
+        app:singleLineTitle="false" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:summary="@string/repeat_reminders_summary"
         android:title="@string/repeat_reminders"
-        app:singleLineTitle="false"
-        app:key="repeat_reminders_preferences" />
+        app:key="repeat_reminders_preferences"
+        app:singleLineTitle="false" />
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/dismiss_notification_action"
@@ -51,28 +51,35 @@
         android:defaultValue="false"
         android:summary="@string/reminders_cannot_be_skipped_summary"
         android:title="@string/reminders_cannot_be_skipped"
-        app:singleLineTitle="false"
-        app:key="cannot_skip_reminders" />
+        app:key="cannot_skip_reminders"
+        app:singleLineTitle="false" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
         android:summary="@string/sticky_on_lockscreen_summary"
         android:title="@string/sticky_on_lockscreen"
-        app:singleLineTitle="false"
-        app:key="sticky_on_lockscreen" />
+        app:key="sticky_on_lockscreen"
+        app:singleLineTitle="false" />
     <SwitchPreferenceCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
         android:summary="@string/exact_reminders_summary"
         android:title="@string/exact_reminders"
-        app:singleLineTitle="false"
-        app:key="exact_reminders" />
+        app:key="exact_reminders"
+        app:singleLineTitle="false" />
     <Preference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:key="ignore_battery_optimization"
         android:title="@string/ignore_battery_optimization"
+        app:singleLineTitle="false" />
+    <Preference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/question_circle"
+        android:key="notifications_missing_or_late"
+        android:title="@string/notifications_missing_or_late"
         app:singleLineTitle="false" />
 </androidx.preference.PreferenceScreen>

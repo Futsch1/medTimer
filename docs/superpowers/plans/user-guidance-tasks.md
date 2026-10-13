@@ -38,7 +38,7 @@ For every implementation task:
 | [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
 | [—] | 6. Guide checking the upcoming reminder (skipped) | 3 | Existing offline guide retained; no extra post-creation interruption |
 | [x] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
-| [ ] | 8. Ship notification troubleshooting | 3 | Verified offline help, accessible after warning dismissal |
+| [x] | 8. Ship notification troubleshooting | 3 | Verified offline help, accessible after warning dismissal |
 | [ ] | 9. Migrate reviewed use cases | 3, 8 | Task-oriented replacements and safe archival |
 | [ ] | 10. Formalize contributor and agent maintenance | 2, 4 | Operational documentation checklist and capture procedure |
 | [ ] | 11. Add mechanical validation to CI | 2, 3 | Packaging, local-link, image, and destination checks |
@@ -182,16 +182,29 @@ pre-existing failure in `SetupGuidanceTest.should hide selected medicine guidanc
 
 **Depends on:** Task 3; use the inventory from task 1.
 
-- [ ] Verify and finalize Notifications missing or late against current app and Android behavior.
-- [ ] Explain relevant preferences and permissions/settings, with separate setup/scheduling and delivery checks.
-- [ ] Describe Overview warnings as helpful prompts, not proof of reliable delivery. Account for the exact-reminders warning checking the app preference rather than independently certifying system permission.
-- [ ] Add the topic to Help contents and appropriate existing troubleshooting contexts without broadening into a diagnostics redesign.
-- [ ] Keep access available after battery/exact-reminder warnings have been persistently dismissed.
-- [ ] Avoid delivery guarantees and claims of exhaustive manufacturer-specific coverage.
-- [ ] Add and run focused tests for direct topic navigation, offline use, and access after warning dismissal, including release-like warning behavior.
-- [ ] Capture any needed images through task 4's focused workflow.
+- [x] Verify and finalize Notifications missing or late against current app behavior, labels, permission gates, and Android settings entry points.
+- [x] Explain relevant preferences and permissions/settings, with separate setup/scheduling and delivery checks.
+- [x] Describe Overview warnings as helpful prompts, not proof of reliable delivery. The guide notes that the exact-reminders warning checks the app preference, not system permission.
+- [x] Add the topic to Help contents, link it from Getting started, and add a direct entry in Notification and reminder settings without broadening diagnostics.
+- [x] Keep the permanent Help menu and the settings link available after battery/exact-reminder warnings are dismissed.
+- [x] Avoid delivery guarantees and claims of exhaustive manufacturer-specific coverage.
+- [x] Add and run focused reader and release-like warning tests for direct navigation, bundled offline content, and access after persistent warning dismissal.
+- [x] Review whether screenshots were needed; text guidance is sufficient because Android settings vary and no fixed system screen is required.
 
-**Acceptance:** Notification help is verified, bundled, and permanently reachable even when warnings no longer appear.
+**Implementation and verification:** Added [`Notifications missing or late`](../../help/notifications-missing-or-late.md) to the generated Help contents, linked it from Getting started, and added a localized direct link in **Settings → Notification and reminder settings**. The guide separates schedule checks from Android delivery settings and explains persistent warning dismissal accurately. Android permission and settings behavior was cross-checked against current app code and labels; wording avoids promising delivery or covering every manufacturer.
+
+`HelpReaderTest.helpReaderNavigationWorksFromMenuAndNotificationSettings` passed on the connected API 28 emulator, covering contents/topic links, toolbar and system Back, the contextual settings link, and bundled content. `ExactRemindersWarningTest` passed with `@IsDebugBuild = false`, covering exact-warning dismissal, persistent warning absence after leaving and returning to Overview, and continued Help access after dismissing both visible warnings. The focused commands were:
+
+```bash
+./gradlew :app:connectedFullDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.futsch1.medtimer.HelpReaderTest
+./gradlew :app:connectedFullDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.futsch1.medtimer.ExactRemindersWarningTest
+```
+
+Full and FOSS Help asset generation passed; `./gradlew assembleDebug lint` passed. No screenshot was necessary. Android 12+ exact-alarm behavior is source-checked; the connected emulator for this focused run is API 28.
+
+**Acceptance:** Notification help is bundled offline and permanently reachable even when warnings no longer appear.
 
 ## Task 9 — Migrate reviewed use cases
 

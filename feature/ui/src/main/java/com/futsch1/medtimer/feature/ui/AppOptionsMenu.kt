@@ -83,7 +83,7 @@ fun AppOptionsMenu(
             }
 
             item(CoreUiR.string.tab_settings, CoreUiR.drawable.gear, onClick = onOpenSettings)
-            item(CoreUiR.string.help, CoreUiR.drawable.info_circle) { actions.openHelp(null) }
+            item(CoreUiR.string.help, CoreUiR.drawable.question_circle) { actions.openHelp(null) }
 
             HorizontalDivider()
             MenuSectionLabel(CoreUiR.string.event_data)

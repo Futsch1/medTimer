@@ -259,6 +259,7 @@
     <string name="disable_widget_summary">Prevent widgets from displaying sensitive medication information on the home screen</string>
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
+    <string name="notifications_missing_or_late">Notifications missing or late</string>
     <string name="snooze_settings">Snooze settings</string>
     <string name="home_location">Home location</string>
     <string name="home_location_not_set">Not set</string>
