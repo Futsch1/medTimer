@@ -81,10 +81,7 @@ jobs:
           disable-animations: true
           cores: 4
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: |
-            adb shell settings put global auto_time 0
-            adb shell su 0 toybox date 0801160025
-            bash .github/scripts/run-instrumented-tests.sh
+          script: bash .github/scripts/run-instrumented-tests.sh
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
