@@ -57,7 +57,7 @@ jobs:
             -keypass "$SIGNING_ALIAS_PASSWORD" $FULL_AAB_RELEASE_DIRECTORY/MedTimer-full-release.aab "$SIGNING_ALIAS"
         continue-on-error: true
       - name: Upload Full App Bundle
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: aab-full
           path: ${{env.FULL_AAB_RELEASE_DIRECTORY}}/MedTimer-full-release.aab
@@ -84,7 +84,7 @@ jobs:
           rm $FULL_APK_RELEASE_DIRECTORY/MedTimer-full-release-unsigned.apk
         continue-on-error: true
       - name: Upload Full App Package
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: apk-full
           path: ${{env.FULL_APK_RELEASE_DIRECTORY}}/MedTimer-full-release-signed.apk
@@ -105,7 +105,7 @@ jobs:
           rm $FOSS_APK_RELEASE_DIRECTORY/MedTimer-foss-release-unsigned.apk
         continue-on-error: true
       - name: Upload FOSS App Package
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: apk-foss
           path: ${{env.FOSS_APK_RELEASE_DIRECTORY}}/MedTimer-foss-release-signed.apk
