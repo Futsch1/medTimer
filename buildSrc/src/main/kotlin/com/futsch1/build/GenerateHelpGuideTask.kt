@@ -1,8 +1,8 @@
 package com.futsch1.build
 
-import org.commonmark.parser.Parser
 import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.Link
+import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
@@ -56,8 +56,8 @@ abstract class GenerateHelpGuideTask : DefaultTask() {
         val suffixIndex = indexOfAny(charArrayOf('#', '?')).let { if (it < 0) length else it }
         val path = substring(0, suffixIndex)
         if (!path.endsWith(".md", ignoreCase = true)) return this
-        val htmlPath = if (path.substringAfterLast('/').equals("README.md", ignoreCase = true)) {
-            path.dropLast("README.md".length) + "index.html"
+        val htmlPath = if (path.substringAfterLast('/').equals("index.md", ignoreCase = true)) {
+            path.dropLast("index.md".length) + "index.html"
         } else {
             path.dropLast(3) + ".html"
         }

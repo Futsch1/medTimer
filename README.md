@@ -96,7 +96,7 @@ on F-Droid.
 
 ## Documentation
 
-Open the in-app offline [Help guide](docs/help/README.md) for getting started and task-oriented help.
+Open the in-app offline [Help guide](docs/help/index.md) for getting started and task-oriented help.
 [More tasks](docs/help/more-tasks.md) index covers additional app features.
 
 ## Contributing

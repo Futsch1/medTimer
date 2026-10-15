@@ -1,6 +1,6 @@
 # Reminder types
 
-This guide is available in English only.
+Help is currently available in English only.
 
 MedTimer offers several reminder types. Choose the one that matches how you want the reminder to be scheduled; these
 examples describe app behavior and are not medical advice.
@@ -25,4 +25,4 @@ and 21:00**. The pattern starts again each day within the configured window.
 The choice screen also includes reminders based on a medicine's stock level or expiration date. These are
 condition-based reminders rather than clock-time or interval schedules.
 
-[Help contents](README.md)
+[Help contents](index.md)

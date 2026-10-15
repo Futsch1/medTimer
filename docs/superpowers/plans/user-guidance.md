@@ -57,12 +57,12 @@ No public website is required. Markdown remains readable in the repository.
 
 Hints depend on actual state, not whether they were previously viewed:
 
-| Context | Guidance |
-| --- | --- |
-| No medicines | Explain the medicine-then-reminder relationship and offer the next action. |
-| A medicine has no reminders | Explain that the medicine alone does not schedule notifications and point to Add reminder. |
-| Choosing a reminder type | Give brief fixed-time/interval guidance with access to the related help topic; do not silently choose a type. |
-| After reminder creation | Point toward checking the upcoming reminder. |
+| Context                     | Guidance                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| No medicines                | Explain the medicine-then-reminder relationship and offer the next action.                                    |
+| A medicine has no reminders | Explain that the medicine alone does not schedule notifications and point to Add reminder.                    |
+| Choosing a reminder type    | Give brief fixed-time/interval guidance with access to the related help topic; do not silently choose a type. |
+| After reminder creation     | Point toward checking the upcoming reminder.                                                                  |
 
 An empty Overview day alone must not trigger first-setup guidance: a valid schedule may have nothing due that day. Account for interrupted setup, existing users, and legitimate medicines without reminders. Guidance must remain non-blocking and avoid repeatedly interrupting normal use.
 

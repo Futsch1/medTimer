@@ -1,6 +1,6 @@
 # Notifications missing or late
 
-This guide is available in English only.
+Help is currently available in English only.
 
 A reminder shown in **Overview** is a schedule preview, not proof that Android delivered a notification.
 
@@ -31,8 +31,9 @@ Android's settings.
 
 ## 2. Check Android notification permission and categories
 
-On Android 13 and later, allow MedTimer's notification permission. If permission was denied or changed, open Android *
-*Settings** for MedTimer and check that notifications are allowed. Android's menu labels can vary by version and device.
+On Android 13 and later, allow MedTimer's notification permission. If permission was denied or changed, open Android
+**Settings** for MedTimer and check that notifications are allowed. Android's menu labels can vary by version and
+device.
 
 In MedTimer, open **Settings → Notification and reminder settings**. These entries open Android's settings for MedTimer
 notification categories:
@@ -52,9 +53,9 @@ when needed; enabling it does not guarantee sound in every device state.
 
 In **Settings → Notification and reminder settings**:
 
-- **Exact reminders** is available on Android 12 and later. The app option and Android's exact-alarm permission are
-  separate checks. If exact alarms are not allowed, MedTimer uses inexact alarms, so a reminder may appear later than
-  its scheduled time. Exact alarms do not guarantee delivery or sound.
+- **Exact reminders** is available on Android 12 and later. If exact alarms are not allowed, MedTimer uses inexact
+  alarms, so a reminder may appear later than its scheduled time (from a few seconds to several minutes). Exact alarms
+  do not guarantee delivery or sound.
 - **Ignore battery optimization** opens an Android request to exempt MedTimer from battery optimization. This entry is
   hidden when Android reports that the app is already exempt. If notifications are missing or late, you can also review
   the device's app battery restrictions.
@@ -91,4 +92,4 @@ These options behave separately from notification permission and scheduling. If 
 settings appear correct but notifications are still missing or late, MedTimer cannot confirm the cause or guarantee
 delivery; Android behavior also depends on device software and settings.
 
-[Help contents](README.md)
+[Help contents](index.md)

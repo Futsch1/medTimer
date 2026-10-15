@@ -12,6 +12,8 @@ import java.time.LocalTime
 @HiltAndroidTest
 class HelpScreenshotTest : MedTimerTestBase() {
     companion object {
+        private const val TEST_MEDICINE_NAME = "Medicine A"
+
         @JvmField
         @ClassRule
         val localeTestRule: LocaleTestRule = LocaleTestRule()
@@ -23,10 +25,10 @@ class HelpScreenshotTest : MedTimerTestBase() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
 
         medicines.assertAddMedicineGuidanceDisplayed()
-        medicines.create("Medicine A")
+        medicines.create(TEST_MEDICINE_NAME)
         medicines.showList()
-        medicines.clickNamed("Medicine A")
-        medicineEditor.assertTitle("Medicine A")
+        medicines.clickNamed(TEST_MEDICINE_NAME)
+        medicineEditor.assertTitle(TEST_MEDICINE_NAME)
         medicineEditor.assertReminderSetupGuidanceDisplayed()
 
         val reminderTime = LocalTime.of(8, 0)
@@ -34,7 +36,7 @@ class HelpScreenshotTest : MedTimerTestBase() {
 
         navigation.toOverview()
         overview.selectDay(frozenToday().plusDays(1))
-        overview.assertEventContains("Medicine A")
+        overview.assertEventContains(TEST_MEDICINE_NAME)
         overview.assertEventContains(timeFormatter().minutesToTimeString(reminderTime.hour * 60 + reminderTime.minute))
         toast.waitForToastToExpire()
         Screengrab.screenshot("getting-started-upcoming-reminder")

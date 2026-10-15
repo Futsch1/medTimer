@@ -1,9 +1,9 @@
 # Getting started
 
-This guide is available in English only.
+Help is currently available in English only.
 
 MedTimer stores medicines and reminders separately. Add a medicine, then add a reminder for it. A medicine without a
-reminder does not schedule one.
+reminder does not schedule notifications.
 
 This example uses fictional **Medicine A**, dosage **1**, and a daily reminder at **08:00**. These values explain the
 app; they are not medical advice.
@@ -17,7 +17,7 @@ app; they are not medical advice.
 
    ![The upcoming Medicine A reminder in Overview](images/getting-started-upcoming-reminder.png)
 
-An upcoming entry is a schedule preview, not confirmation that Android delivered a notification. If a reminder is
-missing or late, see [Notifications missing or late](notifications-missing-or-late.md).
+An upcoming entry is a schedule preview, not confirmation that Android delivered a notification. If the notification for
+a reminder is missing or late, see [Notifications missing or late](notifications-missing-or-late.md).
 
-[Help contents](README.md)
+[Help contents](index.md)

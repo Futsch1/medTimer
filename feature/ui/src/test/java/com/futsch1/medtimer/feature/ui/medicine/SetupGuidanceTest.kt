@@ -11,17 +11,17 @@ import kotlin.test.assertFalse
 
 class SetupGuidanceTest {
     @Test
-    fun `should offer adding a medicine when none exist`() {
+    fun shouldOfferAddingMedicineWhenNoneExist() {
         assertEquals(SetupGuidance.ADD_MEDICINE, setupGuidance(emptyList()))
     }
 
     @Test
-    fun `should not nag on the medicine list when a medicine exists without reminders`() {
+    fun shouldNotNagOnMedicineListWhenMedicineHasNoReminders() {
         assertEquals(SetupGuidance.NONE, setupGuidance(listOf(medicine(id = 1))))
     }
 
     @Test
-    fun `should offer adding a reminder for the selected medicine when it has none`() {
+    fun shouldOfferReminderForSelectedMedicineWithoutOne() {
         assertEquals(
             SetupGuidance.ADD_REMINDER,
             setupGuidance(listOf(medicine(id = 1)), selectedMedicineId = 1)
@@ -29,7 +29,7 @@ class SetupGuidanceTest {
     }
 
     @Test
-    fun `should hide setup guidance when a valid schedule has nothing due on the selected day`() {
+    fun shouldHideSetupGuidanceWhenNothingIsDueOnSelectedDay() {
         val selectedDay = LocalDate.of(2026, 10, 13)
         val scheduledReminder = Reminder.default().copy(
             medicineRelId = 1,
@@ -43,8 +43,8 @@ class SetupGuidanceTest {
     }
 
     @Test
-    fun `should hide selected medicine guidance when its reminder is added`() {
-        val medicine = medicine(id = 2)
+    fun shouldHideSelectedMedicineGuidanceAfterReminderAdded() {
+        val medicine = medicine(id = 1)
         val withReminder = medicine.copy(reminders = listOf(Reminder.default().copy(medicineRelId = 1)))
 
         assertEquals(SetupGuidance.ADD_REMINDER, setupGuidance(listOf(medicine), selectedMedicineId = 1))
