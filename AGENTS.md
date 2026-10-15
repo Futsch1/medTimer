@@ -2,6 +2,7 @@
 
 Terse, machine-facing summary for AI coding assistants.
 For the detailed conventions — coding style, architecture, testing, docs — read [`docs/guidelines/`](docs/guidelines/README.md).
+When changing user-visible behavior or bundled Help, follow the [Help maintenance checklist](docs/guidelines/documentation-guidelines.md#maintaining-the-bundled-help-guide).
 AI-specific hygiene (boundaries, secrets, attribution) lives in this file under [AI hygiene](#ai-hygiene).
 When this file and the guidelines disagree, the guidelines win; flag the drift in your PR.
 

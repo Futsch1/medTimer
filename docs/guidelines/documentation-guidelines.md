@@ -39,6 +39,59 @@ Rules of thumb:
 - The root [`README.md`](../../README.md) is the product-facing overview.
   Cross-reference, don't duplicate.
 
+## Maintaining the bundled Help guide
+
+The offline, English-language guide is bundled with the app. Its canonical sources are:
+
+- `docs/help/README.md` for the Help contents page.
+- `docs/help/<topic-id>.md` for each topic; the topic ID becomes its generated `.html` destination.
+- `docs/help/images/<descriptive-name>.<ext>` for committed screenshots and other local images.
+
+Edit these Markdown and image sources only. The app's build generates static HTML and copies the guide assets into each variant; generated files under
+`app/build/` are disposable presentation artifacts and must not be edited by hand.
+
+Generate the guide assets for both flavors with:
+
+```bash
+./gradlew :app:generateFullDebugHelpGuideAssets :app:generateFossDebugHelpGuideAssets
+```
+
+To verify integration and release packaging, build both release variants:
+
+```bash
+./gradlew :app:assembleFullRelease :app:assembleFossRelease
+```
+
+Open Help from the app's main overflow menu to review the bundled guide. Changes to Markdown or images are picked up by the build; ordinary builds use
+committed images and do not need an emulator.
+
+### Help maintenance checklist
+
+When changing user-visible behavior or UI:
+
+1. Identify affected Help topics and contextual app hints/strings.
+2. Update applicable topics and hints in the same PR as the behavior change.
+3. Review each affected screenshot against the current UI and instructions. Regenerate only images that are now inaccurate; do not recapture unrelated images.
+4. For a draft or substantive topic revision, include relevant supporting code/tests in the PR or record contributor-facing evidence of the behavior
+   reviewed. Keep implementation references out of user instructions.
+5. If no documentation change is needed, explain why in the PR.
+6. Verify current labels, navigation, defaults, and behavior yourself. LLM assistance can help draft or review, but does not replace this verification.
+7. Use synthetic medication data only. Never include real medication data in documentation, screenshots, or agent prompts.
+
+### Focused Help screenshot capture
+
+Reuse the existing `HelpScreenshotTest` and Screengrab workflow; do not use the all-locale store screenshot lane for Help. With an emulator connected, run:
+
+```bash
+fastlane android capture_help_screenshot
+```
+
+The lane builds the full-flavor debug app and AndroidTest APK, sets the emulator to 24-hour time, runs only
+`com.futsch1.medtimer.HelpScreenshotTest` in `en-US`, and copies the named capture from `app/build/help-screenshot-output/` to `docs/help/images/`. The test
+creates synthetic **Medicine A** through the UI, asserts the setup states and upcoming event, and captures
+`getting-started-upcoming-reminder.png`. Review the resulting image before committing it, and update its topic reference if its name or location changes. Run
+any added or changed screenshot test locally on an emulator; ordinary guide generation and builds do not require one.
+
 ## Choose the right type of doc (Diátaxis)
 
 Be clear which of the four kinds you're writing — mixing them makes docs hard to use:

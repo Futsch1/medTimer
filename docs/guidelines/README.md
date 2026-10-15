@@ -13,7 +13,7 @@ Guidelines are written in **English**.
 
 | Document                                                   | Audience         | Purpose                                                                                |
 | ---------------------------------------------------------- | ---------------- | -------------------------------------------------------------------------------------- |
-| [documentation-guidelines.md](documentation-guidelines.md) | All contributors | How to write and organize docs — docs-as-code, Diátaxis, style, file naming            |
+| [documentation-guidelines.md](documentation-guidelines.md) | All contributors | How to write and organize docs, including the bundled Help maintenance and screenshot workflow |
 | [kotlin-android.md](kotlin-android.md)                     | All contributors | Kotlin + Android conventions: MVVM, Hilt, Room, Coroutines/Flow, multi-module, flavors |
 | [jetpack-compose.md](jetpack-compose.md)                   | All contributors | Jetpack Compose conventions (target standard — Compose not yet adopted)                |
 | [testing.md](testing.md)                                   | All contributors | JVM unit, instrumented, fuzz, and Compose testing patterns and what to prioritize      |

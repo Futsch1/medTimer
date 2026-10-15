@@ -253,13 +253,15 @@ A focused API 36 emulator attempt to exercise the new topic links through `HelpR
 
 **Depends on:** Tasks 2 and 4. **Release gate:** Complete before the first new-help release.
 
-- [ ] Extend `docs/guidelines/documentation-guidelines.md` with the guide source layout, reader/build procedure, and focused screenshot workflow.
-- [ ] Add an operational checklist: identify affected topics and hints; update them in the behavior PR; review images; regenerate only inaccurate images.
-- [ ] Require supporting code/tests in the PR or contributor-facing evidence for drafts and substantive topic revisions, without placing implementation references in user instructions.
-- [ ] Require a PR explanation when no documentation change is needed.
-- [ ] State that LLM assistance does not replace verifying labels, navigation, defaults, and behavior.
-- [ ] State that agents edit canonical sources, not generated presentation artifacts, and never use real medication data.
-- [ ] Link the operational checklist from `AGENTS.md` and update relevant documentation indexes.
+- [x] Extend `docs/guidelines/documentation-guidelines.md` with the guide source layout, reader/build procedure, and focused screenshot workflow.
+- [x] Add an operational checklist: identify affected topics and hints; update them in the behavior PR; review images; regenerate only inaccurate images.
+- [x] Require supporting code/tests in the PR or contributor-facing evidence for drafts and substantive topic revisions, without placing implementation references in user instructions.
+- [x] Require a PR explanation when no documentation change is needed.
+- [x] State that LLM assistance does not replace verifying labels, navigation, defaults, and behavior.
+- [x] State that agents edit canonical sources, not generated presentation artifacts, and never use real medication data.
+- [x] Link the operational checklist from `AGENTS.md` and update relevant documentation indexes.
+
+**Implementation and verification:** Added the source layout, full/FOSS guide generation and release build commands, reader review path, maintenance checklist, evidence expectations, privacy boundary, and exact focused screenshot lane procedure to [`documentation-guidelines.md`](../../guidelines/documentation-guidelines.md#maintaining-the-bundled-help-guide). Linked the checklist from [`AGENTS.md`](../../../AGENTS.md) and updated the [`guidelines index`](../../guidelines/README.md). Confirmed the capture procedure against `fastlane/Fastfile` and `HelpScreenshotTest`. Both flavor guide-generation tasks passed (up-to-date); edited Markdown links and `git diff --check` passed. No release build or emulator run was needed for these documentation changes.
 
 **Acceptance:** A human or agent can find the exact maintenance and capture procedure, including evidence expectations and privacy boundaries.
 
