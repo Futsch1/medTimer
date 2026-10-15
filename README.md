@@ -96,9 +96,8 @@ on F-Droid.
 
 ## Documentation
 
-Open the in-app offline [Help guide](docs/help/README.md) for getting started. See the
-[use cases documentation](docs/UseCases.md) for more details on how to use the app and the specific
-use cases it can satisfy.
+Open the in-app offline [Help guide](docs/help/README.md) for getting started and task-oriented help. Its
+[More tasks](docs/help/more-tasks.md) index covers additional app features.
 
 Some details of the reminder flow is documented in the [reminder flow documentation](docs/reminder_flow.md).
 

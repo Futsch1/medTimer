@@ -16,11 +16,13 @@ Documentation lives in the repo as Markdown and follows the same flow as code:
 
 Today, `docs/` mixes two kinds of content at its top level — user-facing how-tos and architectural notes — alongside this `guidelines/` sub-folder:
 
-| Path                       | Holds                                                | Examples                                                                   |
-| -------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------- |
-| `docs/*.md` (top level)    | User-facing how-tos and architecture notes           | [`UseCases.md`](../UseCases.md), [`reminder_flow.md`](../reminder_flow.md) |
-| `docs/*.png`, `docs/*.svg` | Screenshots and figures referenced by the docs above | `medicine_calendar.png`, `tag.svg`                                         |
-| `docs/guidelines/`         | Contributor & agent standards (this folder)          | this guide, [`kotlin-android.md`](kotlin-android.md)                       |
+| Path                    | Holds                                             | Examples                                                                     |
+| ----------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `docs/*.md` (top level) | Compatibility pointers and architecture notes    | [`UseCases.md`](../UseCases.md), [`reminder_flow.md`](../reminder_flow.md)   |
+| `docs/help/`            | Canonical task-oriented user guide and its index  | [`Help contents`](../help/README.md), [`More tasks`](../help/more-tasks.md)  |
+| `docs/help/images/`     | Screenshots used by active Help topics           | `getting-started-upcoming-reminder.png`                                      |
+| `docs/archive/`         | Superseded documents and historical figures      | [`Archived use cases`](../archive/use-cases.md)                              |
+| `docs/guidelines/`      | Contributor & agent standards (this folder)      | this guide, [`kotlin-android.md`](kotlin-android.md)                         |
 
 The taxonomy will grow as the repo does.
 Plausible future sub-folders, modeled on common open-source patterns — add them only when there is real content to place:
@@ -91,4 +93,4 @@ Keep technical terms and identifiers in English even when discussing localizatio
 - [Google developer documentation style guide](https://developers.google.com/style) — 2025.
 - [Write the Docs](https://www.writethedocs.org/guide/) — docs-as-code and user-centered principles.
 
-_Last reviewed: 2026-05-26._
+_Last reviewed: 2026-10-15._
