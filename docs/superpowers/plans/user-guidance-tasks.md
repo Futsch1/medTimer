@@ -29,20 +29,20 @@ For every implementation task:
 
 ## Progress and dependencies
 
-| Done | Task | Depends on | Verifiable outcome |
-| --- | --- | --- | --- |
-| [x] | 1. Inventory behavior and draft content | None | Evidence-backed beginner and notification drafts |
-| [x] | 2. Complete the bounded reader spike | 1 | One selected reader and reproducible packaging path |
-| [x] | 3. Ship the first beginner Help slice | 2 | Offline Getting started plus state-based setup hints |
-| [x] | 4. Establish focused documentation screenshots | 3 | Reproducible English captures bundled with the guide |
-| [ ] | 5. Guide reminder-type selection | 3 | Non-blocking type guidance and direct topic access |
-| [—] | 6. Guide checking the upcoming reminder (skipped) | 3 | Existing offline guide retained; no extra post-creation interruption |
-| [x] | 7. Shorten the intro without changing permissions | 3 | Orientation-only intro, including skip coverage |
-| [x] | 8. Ship notification troubleshooting | 3 | Verified offline help, accessible after warning dismissal |
-| [x] | 9. Migrate reviewed use cases | 3, 8 | Task-oriented replacements and safe archival |
-| [ ] | 10. Formalize contributor and agent maintenance | 2, 4 | Operational documentation checklist and capture procedure |
-| [ ] | 11. Add mechanical validation to CI | 2, 3 | Packaging, local-link, image, and destination checks |
-| [ ] | 12. Complete release review | 4–11 | Both flavors and release-like behavior verified |
+| Done | Task                                              | Depends on | Verifiable outcome                                                   |
+| ---- | ------------------------------------------------- | ---------- | -------------------------------------------------------------------- |
+| [x]  | 1. Inventory behavior and draft content           | None       | Evidence-backed beginner and notification drafts                     |
+| [x]  | 2. Complete the bounded reader spike              | 1          | One selected reader and reproducible packaging path                  |
+| [x]  | 3. Ship the first beginner Help slice             | 2          | Offline Getting started plus state-based setup hints                 |
+| [x]  | 4. Establish focused documentation screenshots    | 3          | Reproducible English captures bundled with the guide                 |
+| [ ]  | 5. Guide reminder-type selection                  | 3          | Non-blocking type guidance and direct topic access                   |
+| [—]  | 6. Guide checking the upcoming reminder (skipped) | 3          | Existing offline guide retained; no extra post-creation interruption |
+| [x]  | 7. Shorten the intro without changing permissions | 3          | Orientation-only intro, including skip coverage                      |
+| [x]  | 8. Ship notification troubleshooting              | 3          | Verified offline help, accessible after warning dismissal            |
+| [x]  | 9. Migrate reviewed use cases                     | 3, 8       | Task-oriented replacements and safe archival                         |
+| [ ]  | 10. Formalize contributor and agent maintenance   | 2, 4       | Operational documentation checklist and capture procedure            |
+| [x]  | 11. Add mechanical validation to CI               | 2, 3       | Packaging, local-link, image, and destination checks                 |
+| [ ]  | 12. Complete release review                       | 4–11       | Both flavors and release-like behavior verified                      |
 
 Tasks 4–8 can be developed independently after task 3. Tasks 10–11 may start earlier once their dependencies are ready; neither may be postponed beyond the first release.
 
@@ -220,26 +220,26 @@ Full and FOSS Help asset generation passed; `./gradlew assembleDebug lint` passe
 
 **Replacement coverage review:** Current labels were checked in `core/ui/src/main/res/values/strings.xml` and the reminder/settings preference XML; behavior was cross-checked against `ReminderTest`, scheduler tests, and the feature UI plus Android tests named below. The old document's illustrations were visually reviewed and moved with the archived document. They show the former UI and were not re-captured or asserted to match current screens, so none are reused in active Help. The migrated topics therefore do not depend on them. No user-facing screenshot was needed for these text-only procedures.
 
-| Superseded section | Active replacement / review disposition | Evidence reviewed |
-| --- | --- | --- |
-| Birth control pills | Generic cycle configuration in [Adjust reminder schedules](../../help/scheduling-reminders.md); removed the medical regimen example and dosage guidance. | `cycle_reminder`, `cycle_start_date`, `cycle_consecutive_days`, `cycle_pause_days`; `ReminderTest.cyclicReminderTest`; scheduler cycle cases. |
-| Tapering off a medicine | Date-range configuration in [Adjust reminder schedules](../../help/scheduling-reminders.md); no dose-change recommendation. | `ReminderTest.activeReminderTest`; Advanced settings → Reminder status labels. |
-| Reminder every n weeks | Weekdays and cycles in [Adjust reminder schedules](../../help/scheduling-reminders.md); omitted the old arithmetic shortcut in favor of previewing the schedule. | `ReminderTest.cyclicReminderTest`; scheduler day/cycle tests; `Remind on weekdays`. |
-| Disable a medicine | Deactivate/reactivate all reminders in [Manage medicines and reminders](../../help/manage-medicines.md). | `deactivate_all` / `activate_all`; `TagTest.activateAndOverviewVisibility`; `ReminderTest.activeIntervalReminderTest`. |
-| Validate reminder settings | Medicine calendar in [Review and record events](../../help/review-events.md), plus beginner upcoming-time check in [Getting started](../../help/getting-started.md). Wording explicitly says schedule preview, not delivery proof. | `calendar`; `CalendarTest`; `CalendarEventsProviderTest`; Overview simulated-event model. |
-| Different notification sounds | Notification category and priority in [Customize notification behavior](../../help/notification-options.md). | `notification_importance`, `high_and_alarm`, notification settings implementation; notification troubleshooting topic. |
-| Modify events | Event status and editing in [Review and record events](../../help/review-events.md). | Overview action/editor robots and `ActionsVisitor`; event editor implementation. |
-| Additional dose with preset amount | Additional dose and inactive-reminder preset in [Review and record events](../../help/review-events.md). | `ManualDoseTest.testManualDose` and `testManualDoseOfDisabledReminder`; Manual dose UI. |
-| Export medication history | CSV/PDF event export and privacy caution in [Review and record events](../../help/review-events.md). | `event_data`, `export_events_csv`, `export_events_pdf`; export menu/implementation. |
-| Further customization to snooze | App snooze duration and Android-owned snoozing in [Customize notification behavior](../../help/notification-options.md); no fixed Android path or device promise. | `snooze_duration`; `NotificationTest.customSnooze`; snooze settings XML. |
-| More nagging, repeating reminders | Repeat count/delay in [Customize notification behavior](../../help/notification-options.md), with explicit warning that repeats do not fix scheduling or delivery. | `repeat_reminders`; `NotificationTest.repeatingReminders`; repeat preferences XML. |
-| Following doses | Linked reminders in [Adjust reminder schedules](../../help/scheduling-reminders.md); removed the old sample medication sequence. | `add_linked_reminder`; `ReminderTest.deleteLinkedReminderTest`; linked scheduler tests. |
-| Interval reminders | Continuous/windowed interval behavior in [Reminder types](../../help/reminder-types.md) and [Adjust reminder schedules](../../help/scheduling-reminders.md); removed claims that delivery spacing is guaranteed. | Reminder type strings; `ReminderTest.activeIntervalReminderTest` / `reminderTypeTest`; interval/windowed scheduler tests. |
-| Medicine stock tracking | Stock, refills, and thresholds in [Manage medicines and reminders](../../help/manage-medicines.md). | `MedicineStockTest.medicineStockTest`, `reminderAmountWarningTest`; stock settings XML and `StockSettingsFragment`. |
-| Stock tracking for another person | Automatic marking explained as bookkeeping, not proof of intake, in [Manage medicines and reminders](../../help/manage-medicines.md). | `automatically_taken` and summary string; `NotificationTest.automaticallyTakenTest`; reminder settings implementation. |
-| Using MedTimer for several people | Tags and filters in [Manage medicines and reminders](../../help/manage-medicines.md); phrased as organization/filtering, not separate-user accounts. | `tags`; `TagTest.tagHandling` / `medicineVisibility`; tag management/filter implementation. |
-| Intervals during daytime | Windowed intervals in [Reminder types](../../help/reminder-types.md) and [Adjust reminder schedules](../../help/scheduling-reminders.md); no detailed start-condition claim for the unresolved creation behavior. | Windowed type labels; `ReminderTest.reminderTypeTest`; windowed scheduler tests; task 1 inventory limitation. |
-| Alarm reminders | Alarm priority, settings, and limits in [Customize notification behavior](../../help/notification-options.md), cross-linked to [Notifications missing or late](../../help/notifications-missing-or-late.md). | `high_and_alarm`; alarm settings XML; `NotificationTest.alarmTest`; notification troubleshooting source review. |
+| Superseded section                 | Active replacement / review disposition                                                                                                                                                                                            | Evidence reviewed                                                                                                                             |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Birth control pills                | Generic cycle configuration in [Adjust reminder schedules](../../help/scheduling-reminders.md); removed the medical regimen example and dosage guidance.                                                                           | `cycle_reminder`, `cycle_start_date`, `cycle_consecutive_days`, `cycle_pause_days`; `ReminderTest.cyclicReminderTest`; scheduler cycle cases. |
+| Tapering off a medicine            | Date-range configuration in [Adjust reminder schedules](../../help/scheduling-reminders.md); no dose-change recommendation.                                                                                                        | `ReminderTest.activeReminderTest`; Advanced settings → Reminder status labels.                                                                |
+| Reminder every n weeks             | Weekdays and cycles in [Adjust reminder schedules](../../help/scheduling-reminders.md); omitted the old arithmetic shortcut in favor of previewing the schedule.                                                                   | `ReminderTest.cyclicReminderTest`; scheduler day/cycle tests; `Remind on weekdays`.                                                           |
+| Disable a medicine                 | Deactivate/reactivate all reminders in [Manage medicines and reminders](../../help/manage-medicines.md).                                                                                                                           | `deactivate_all` / `activate_all`; `TagTest.activateAndOverviewVisibility`; `ReminderTest.activeIntervalReminderTest`.                        |
+| Validate reminder settings         | Medicine calendar in [Review and record events](../../help/review-events.md), plus beginner upcoming-time check in [Getting started](../../help/getting-started.md). Wording explicitly says schedule preview, not delivery proof. | `calendar`; `CalendarTest`; `CalendarEventsProviderTest`; Overview simulated-event model.                                                     |
+| Different notification sounds      | Notification category and priority in [Customize notification behavior](../../help/notification-options.md).                                                                                                                       | `notification_importance`, `high_and_alarm`, notification settings implementation; notification troubleshooting topic.                        |
+| Modify events                      | Event status and editing in [Review and record events](../../help/review-events.md).                                                                                                                                               | Overview action/editor robots and `ActionsVisitor`; event editor implementation.                                                              |
+| Additional dose with preset amount | Additional dose and inactive-reminder preset in [Review and record events](../../help/review-events.md).                                                                                                                           | `ManualDoseTest.testManualDose` and `testManualDoseOfDisabledReminder`; Manual dose UI.                                                       |
+| Export medication history          | CSV/PDF event export and privacy caution in [Review and record events](../../help/review-events.md).                                                                                                                               | `event_data`, `export_events_csv`, `export_events_pdf`; export menu/implementation.                                                           |
+| Further customization to snooze    | App snooze duration and Android-owned snoozing in [Customize notification behavior](../../help/notification-options.md); no fixed Android path or device promise.                                                                  | `snooze_duration`; `NotificationTest.customSnooze`; snooze settings XML.                                                                      |
+| More nagging, repeating reminders  | Repeat count/delay in [Customize notification behavior](../../help/notification-options.md), with explicit warning that repeats do not fix scheduling or delivery.                                                                 | `repeat_reminders`; `NotificationTest.repeatingReminders`; repeat preferences XML.                                                            |
+| Following doses                    | Linked reminders in [Adjust reminder schedules](../../help/scheduling-reminders.md); removed the old sample medication sequence.                                                                                                   | `add_linked_reminder`; `ReminderTest.deleteLinkedReminderTest`; linked scheduler tests.                                                       |
+| Interval reminders                 | Continuous/windowed interval behavior in [Reminder types](../../help/reminder-types.md) and [Adjust reminder schedules](../../help/scheduling-reminders.md); removed claims that delivery spacing is guaranteed.                   | Reminder type strings; `ReminderTest.activeIntervalReminderTest` / `reminderTypeTest`; interval/windowed scheduler tests.                     |
+| Medicine stock tracking            | Stock, refills, and thresholds in [Manage medicines and reminders](../../help/manage-medicines.md).                                                                                                                                | `MedicineStockTest.medicineStockTest`, `reminderAmountWarningTest`; stock settings XML and `StockSettingsFragment`.                           |
+| Stock tracking for another person  | Automatic marking explained as bookkeeping, not proof of intake, in [Manage medicines and reminders](../../help/manage-medicines.md).                                                                                              | `automatically_taken` and summary string; `NotificationTest.automaticallyTakenTest`; reminder settings implementation.                        |
+| Using MedTimer for several people  | Tags and filters in [Manage medicines and reminders](../../help/manage-medicines.md); phrased as organization/filtering, not separate-user accounts.                                                                               | `tags`; `TagTest.tagHandling` / `medicineVisibility`; tag management/filter implementation.                                                   |
+| Intervals during daytime           | Windowed intervals in [Reminder types](../../help/reminder-types.md) and [Adjust reminder schedules](../../help/scheduling-reminders.md); no detailed start-condition claim for the unresolved creation behavior.                  | Windowed type labels; `ReminderTest.reminderTypeTest`; windowed scheduler tests; task 1 inventory limitation.                                 |
+| Alarm reminders                    | Alarm priority, settings, and limits in [Customize notification behavior](../../help/notification-options.md), cross-linked to [Notifications missing or late](../../help/notifications-missing-or-late.md).                       | `high_and_alarm`; alarm settings XML; `NotificationTest.alarmTest`; notification troubleshooting source review.                               |
 
 The former `docs/UseCases.md` now contains only a replacement pointer; its complete historical text and referenced images are in `docs/archive/use-cases.md` and `docs/archive/images/`. The product README and Help contents link only to active Help. `docs/reminder_flow.md` remains architectural documentation and was not moved.
 
@@ -269,16 +269,20 @@ A focused API 36 emulator attempt to exercise the new topic links through `HelpR
 
 **Depends on:** Tasks 2 and 3. **Release gate:** Complete before the first new-help release.
 
-- [ ] Add a reproducible local/CI check for generation and packaging using the chosen reader approach.
-- [ ] Validate local topic links, fragment targets where used, and image references.
-- [ ] Validate that app-linked help destinations exist.
-- [ ] Add checker tests with intentionally broken links, missing images, and missing destinations so failures are actionable.
-- [ ] Run the checks against migrated topics as task 9 lands.
-- [ ] Integrate checks into the appropriate existing CI workflow and document the local command.
-- [ ] Keep checks lightweight: no LLM invocation, screenshot emulator, or all-locale capture requirement for documentation builds/PRs.
-- [ ] Make clear that mechanical checks do not establish semantic correctness.
+- [x] Add a reproducible local/CI check for generation and packaging using the chosen reader approach.
+- [x] Validate local topic links, fragment targets where used, and image references.
+- [x] Validate that app-linked help destinations exist.
+- [x] Add checker tests with intentionally broken links, missing images, and missing destinations so failures are actionable.
+- [x] Run the checks against migrated topics as task 9 lands.
+- [x] Integrate checks into the appropriate existing CI workflow and document the local command.
+- [x] Keep checks lightweight: no LLM invocation, screenshot emulator, or all-locale capture requirement for documentation builds/PRs.
+- [x] Make clear that mechanical checks do not establish semantic correctness.
 
-**Acceptance:** Broken bundled references and destinations fail mechanically; valid content builds without external content downloads or an emulator.
+**Implementation and verification:** Added `./gradlew :app:validateHelpGuide`, which runs the Python standard-library checker tests, generates both debug-flavor guide assets, and validates generated topic links, fragment targets, local images, literal Help destinations in production Kotlin sources, and every generated guide asset inside both debug APKs. APK assembly remains a separate, explicit `assembleDebug` step in `test.yml`. Regression tests cover valid references and packaging, broken local links, missing fragments, missing images, missing app destinations, and app destination discovery. The local commands and semantic limitations are documented in [`documentation-guidelines.md`](../../guidelines/documentation-guidelines.md#maintaining-the-bundled-help-guide).
+
+`./gradlew assembleDebug --console=plain` followed by `./gradlew :app:validateHelpGuide --console=plain` passed: 8 checker tests; both flavor APKs validated. The migrated Help corpus passes. No emulator or external content download is needed.
+
+**Acceptance:** Broken bundled references and destinations fail mechanically; valid content builds without external content downloads or an emulator. Mechanical success is not evidence of semantic accuracy.
 
 ## Task 12 — Complete release review
 
