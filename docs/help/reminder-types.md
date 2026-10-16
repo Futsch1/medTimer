@@ -2,8 +2,7 @@
 
 Help is currently available in English only.
 
-MedTimer offers several reminder types. Choose the one that matches how you want the reminder to be scheduled; these
-examples describe app behavior and are not medical advice.
+MedTimer offers several reminder types. Choose the one that matches how you want the reminder to be scheduled.
 
 ## Time based reminder
 

@@ -2,8 +2,8 @@
 
 Help is currently available in English only.
 
-These settings describe when MedTimer schedules entries; they do not
-recommend when a medicine should be taken. Use a schedule provided by your health professional.
+These settings describe when MedTimer schedules entries; they do not recommend when a medicine should be taken. Use a
+schedule provided by your health professional.
 
 Open **Medicine**, select a medicine, open the reminder, then choose **Advanced settings**. Available options depend on
 the reminder type.
@@ -13,8 +13,8 @@ the reminder type.
 For a time-based reminder, use **Remind on weekdays** or **Remind on days of month** to limit the dates when it is
 active. An empty selection means no restriction for that option.
 
-To limit a reminder to a date range, open **Reminder status** in Advanced settings and enable **Period start** and/or \*
-\*Period end\*\*. A reminder outside its active range is not scheduled.
+To limit a reminder to a date range, open **Reminder status** in Advanced settings and enable **Period start** and/or
+**Period end**. A reminder outside its active range is not scheduled.
 
 ## Set a repeating active/pause cycle
 
