@@ -24,7 +24,7 @@
             android:name=".ReminderProcessorBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
-            android:permission="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
+            android:permission="${applicationId}.NOTIFICATION_PROCESSED" />
 
         <receiver
             android:name=".widgets.NextRemindersWidgetProvider"

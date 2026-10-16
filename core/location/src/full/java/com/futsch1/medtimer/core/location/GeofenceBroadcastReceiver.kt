@@ -24,14 +24,13 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
             val forward = Intent(ProcessorCode.GeofenceEntered.action)
                 .setClassName(context.packageName, REMINDER_RECEIVER_CLASS)
-            context.sendBroadcast(forward, REMINDER_RECEIVER_PERMISSION)
+            // Mirrors ReminderProcessorBroadcastReceiver.receiverPermission, which this module cannot depend on.
+            context.sendBroadcast(forward, "${context.packageName}.NOTIFICATION_PROCESSED")
         }
     }
 
     companion object {
         private const val REMINDER_RECEIVER_CLASS =
             "com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver"
-        private const val REMINDER_RECEIVER_PERMISSION =
-            "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
     }
 }

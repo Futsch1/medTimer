@@ -62,7 +62,8 @@ object FileHelper {
 
 
     fun shareFile(context: Context, file: File) {
-        val uri = FileProvider.getUriForFile(context, "com.futsch1.medtimer.fileprovider", file)
+        // Matches the manifest's ${applicationId}.fileprovider authority, which follows a debug ID suffix
+        val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val intentShareFile = Intent(Intent.ACTION_SEND)
 
         intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()))

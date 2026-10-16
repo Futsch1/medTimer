@@ -9,7 +9,7 @@ import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
-import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.RECEIVER_PERMISSION
+import com.futsch1.medtimer.feature.reminders.ReminderProcessorBroadcastReceiver.Companion.receiverPermission
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.notificationData.toPendingIntent
 import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
@@ -74,7 +74,7 @@ class AlarmProcessor @Inject constructor(
             )
             val reminderIntent = getReminderAction(context)
             reminderNotificationData.writeTo(reminderIntent)
-            context.sendBroadcast(reminderIntent, RECEIVER_PERMISSION)
+            context.sendBroadcast(reminderIntent, receiverPermission(context))
             return false
         }
 
@@ -134,7 +134,7 @@ class AlarmProcessor @Inject constructor(
             action = "com.futsch1.medtimer.NEXT_REMINDER_WIDGET_UPDATE"
         }
 
-        context.sendBroadcast(intent, "com.futsch1.medtimer.NOTIFICATION_PROCESSED")
+        context.sendBroadcast(intent, receiverPermission(context))
     }
 
     companion object {
