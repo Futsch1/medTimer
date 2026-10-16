@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">Pomoc</string>
+    <string name="help_english_only">Pomoc jest obecnie dostępna tylko w języku angielskim.</string>
     <string name="continuous_from">Ciągły odstęp rozpoczynający się od %1$s</string>
     <string name="continuous_interval_reminder">Przypomnienie co określony czas</string>
     <string name="continuous_interval_reminder_help">Powtarzaj po określonym czasie od wybranego momentu, np. co 6 godzin.</string>

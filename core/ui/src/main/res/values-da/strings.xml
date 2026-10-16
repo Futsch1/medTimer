@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="help">Hjælp</string>
+    <string name="help_english_only">Hjælpen er i øjeblikket kun tilgængelig på engelsk.</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
     <string name="continuous_interval_reminder_help">Gentag efter en fast varighed fra et starttidspunkt, f.eks. hver 6. time.</string>

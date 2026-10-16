@@ -14,7 +14,8 @@ import androidx.webkit.WebViewAssetLoader
 internal class HelpGuideWebViewClient(
     private val assetLoader: WebViewAssetLoader,
     private val onRendererGone: (WebView) -> Unit,
-    private val openExternalLink: (Uri) -> Unit
+    private val openExternalLink: (Uri) -> Unit,
+    private val pageFinished: (String) -> Unit
 ) : WebViewClient() {
     override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
         onRendererGone(view)
@@ -23,6 +24,10 @@ internal class HelpGuideWebViewClient(
 
     override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
         assetLoader.shouldInterceptRequest(request.url)
+
+    override fun onPageFinished(view: WebView, url: String) {
+        pageFinished(url)
+    }
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         val uri = request.url

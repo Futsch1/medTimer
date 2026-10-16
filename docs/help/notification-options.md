@@ -1,7 +1,5 @@
 # Customize notification behavior
 
-Help is currently available in English only.
-
 Android notification behavior varies by Android version and device.
 
 These options do not guarantee that a notification will be delivered or make a schedule medically appropriate. For

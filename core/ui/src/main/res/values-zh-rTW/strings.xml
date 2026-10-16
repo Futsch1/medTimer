@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">說明</string>
+    <string name="help_english_only">說明目前僅提供英文版本。</string>
     <string name="continuous_from">連續間隔，從 %1$s 開始</string>
     <string name="continuous_interval_reminder">連續間隔提醒</string>
     <string name="continuous_interval_reminder_help">從指定的開始時間起，每隔固定時長重複提醒，例如每 6 小時一次。</string>

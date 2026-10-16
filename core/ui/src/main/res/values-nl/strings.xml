@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="help">Help</string>
+    <string name="help_english_only">De help is momenteel alleen beschikbaar in het Engels.</string>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
     <string name="continuous_interval_reminder_help">Herhaal na een vaste tijdsduur vanaf een startmoment, bijvoorbeeld elke 6 uur.</string>

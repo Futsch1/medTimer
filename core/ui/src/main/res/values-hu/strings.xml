@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="help">Súgó</string>
+    <string name="help_english_only">A súgó jelenleg csak angol nyelven érhető el.</string>
     <string name="continuous_from">Kezdő időpont: %1$s</string>
     <string name="continuous_interval_reminder">Folytonos ismétlődő emlékeztető</string>
     <string name="continuous_interval_reminder_help">Ismétlés egy kezdő időponttól számított meghatározott idő elteltével, például 6 óránként.</string>

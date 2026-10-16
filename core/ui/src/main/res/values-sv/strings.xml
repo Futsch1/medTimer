@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">Hjälp</string>
+    <string name="help_english_only">Hjälpen är för närvarande endast tillgänglig på engelska.</string>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
     <string name="continuous_interval_reminder_help">Upprepa efter en fast tidslängd från en starttidpunkt, till exempel var 6:e timme.</string>

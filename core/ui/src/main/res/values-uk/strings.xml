@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:ns0="http://schemas.android.com/tools">
     <string name="help">Довідка</string>
+    <string name="help_english_only">Довідка наразі доступна лише англійською мовою.</string>
     <string name="continuous_from">Безперервний інтервал, починаючи з %1$s</string>
     <string name="continuous_interval_reminder">Безперервне нагадування про інтервал</string>
     <string name="continuous_interval_reminder_help">Повторювати через фіксований проміжок часу від моменту початку, наприклад кожні 6 годин.</string>

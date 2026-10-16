@@ -1,7 +1,5 @@
 # Notifications missing or late
 
-Help is currently available in English only.
-
 A reminder shown in **Overview** is a schedule preview, not proof that Android delivered a notification.
 
 First check the schedule in MedTimer. If it is correct, check Android's permission and notification settings. A schedule

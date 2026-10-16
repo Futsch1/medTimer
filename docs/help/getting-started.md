@@ -1,7 +1,5 @@
 # Getting started
 
-Help is currently available in English only.
-
 MedTimer stores medicines and reminders separately. Add a medicine, then add a reminder for it. A medicine without a
 reminder does not schedule notifications.
 

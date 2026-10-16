@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="help">Ohje</string>
+    <string name="help_english_only">Ohje on tällä hetkellä saatavilla vain englanniksi.</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
     <string name="continuous_interval_reminder_help">Toista kiinteän ajan kuluttua aloitushetkestä, esimerkiksi 6 tunnin välein.</string>

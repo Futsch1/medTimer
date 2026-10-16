@@ -1,7 +1,5 @@
 # Adjust reminder schedules
 
-Help is currently available in English only.
-
 These settings describe when MedTimer schedules entries; they do not recommend when a medicine should be taken. Use a
 schedule provided by your health professional.
 

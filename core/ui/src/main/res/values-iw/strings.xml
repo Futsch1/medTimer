@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">עזרה</string>
+    <string name="help_english_only">העזרה זמינה כרגע באנגלית בלבד.</string>
     <string name="continuous_from">מחזור מתמשך מתחיל מ%1$s</string>
     <string name="continuous_interval_reminder">תזכורת מחזורית מתמשכת</string>
     <string name="continuous_interval_reminder_help">חזרו לאחר משך זמן קבוע מנקודת התחלה, למשל כל 6 שעות.</string>

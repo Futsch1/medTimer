@@ -13,17 +13,21 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toUri
 import androidx.webkit.WebViewAssetLoader
 import com.futsch1.medtimer.core.ui.R
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /** Full-screen offline guide shown over the current destination; Back returns to contents before closing. */
 class HelpReaderDialogFragment : AppCompatDialogFragment() {
     private lateinit var webView: WebView
+    private lateinit var toolbar: Toolbar
     private var webViewDestroyed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +56,24 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
             requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, value, true)
             value.data
         }
-        val toolbar = Toolbar(requireContext()).apply {
+        toolbar = Toolbar(requireContext()).apply {
             title = getString(R.string.help)
             setBackgroundColor(surfaceColor)
             setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
             setNavigationContentDescription(R.string.back)
             setNavigationOnClickListener { navigateBack() }
+        }
+        val languageNotice = TextView(requireContext()).apply {
+            text = getString(R.string.help_english_only)
+            textSize = 12f
+            setTextColor(TypedValue().let { value ->
+                requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, value, true)
+                value.data
+            })
+            val horizontalPadding = (16 * resources.displayMetrics.density).roundToInt()
+            val verticalPadding = (4 * resources.displayMetrics.density).roundToInt()
+            setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+            visibility = if (resources.configuration.locales[0].language == Locale.ENGLISH.language) View.GONE else View.VISIBLE
         }
         webViewDestroyed = false
         webView = WebView(requireContext()).apply {
@@ -74,6 +90,7 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(surfaceColor)
             addView(toolbar, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            addView(languageNotice, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             addView(webView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         }
     }
@@ -91,7 +108,14 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
                 webViewDestroyed = true
                 dismissAllowingStateLoss()
             },
-            openExternalLink = ::openExternalLink
+            openExternalLink = ::openExternalLink,
+            pageFinished = { url ->
+                val topic = url.toUri().path
+                    ?.removePrefix(ASSET_PATH)
+                    ?.removeSuffix(".html")
+                    ?.takeIf(TOPIC_PATTERN::matches)
+                toolbar.setTag(R.id.help_reader_topic, topic)
+            }
         )
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

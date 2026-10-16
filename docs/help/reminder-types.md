@@ -1,7 +1,5 @@
 # Reminder types
 
-Help is currently available in English only.
-
 MedTimer offers several reminder types. Choose the one that matches how you want the reminder to be scheduled.
 
 ## Time based reminder

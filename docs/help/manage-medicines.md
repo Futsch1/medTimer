@@ -1,7 +1,5 @@
 # Manage medicines and reminders
 
-Help is currently available in English only.
-
 ## Pause or resume all reminders for a medicine
 
 Open **Medicine**, select the medicine, and use its options menu to choose **Deactivate all reminders**. The reminder

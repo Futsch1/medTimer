@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">Ajuda</string>
+    <string name="help_english_only">A ajuda está atualmente disponível apenas em inglês.</string>
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
     <string name="continuous_interval_reminder_help">Repetir após um período fixo a partir de um momento inicial, por exemplo, a cada 6 horas.</string>

@@ -1,7 +1,5 @@
 # Review and record events
 
-Help is currently available in English only.
-
 ## Preview a medicine's schedule
 
 Open **Medicine**, select a medicine, and choose **Calendar**. Scheduled dates are marked in the calendar; select a date

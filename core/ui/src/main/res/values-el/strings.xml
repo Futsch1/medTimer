@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">Βοήθεια</string>
+    <string name="help_english_only">Η βοήθεια είναι προς το παρόν διαθέσιμη μόνο στα Αγγλικά.</string>
     <string name="continuous_from">Συνεχές διάστημα που ξεκινά από %1$s</string>
     <string name="continuous_interval_reminder">Συνεχόμενη υπενθύμιση χρονικού διαστήματος</string>
     <string name="continuous_interval_reminder_help">Επαναλάβετε μετά από σταθερή διάρκεια από μια στιγμή έναρξης, π.χ. κάθε 6 ώρες.</string>
