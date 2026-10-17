@@ -18,8 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.futsch1.medtimer.core.common.di.Dispatcher
-import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -28,7 +26,6 @@ import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
@@ -46,7 +43,6 @@ class EditMedicineActions @AssistedInject constructor(
     private val reminderRepository: ReminderRepository,
     private val tagRepository: TagRepository,
     private val editMedicineSubmenusFactory: EditMedicineSubmenus.Factory,
-    @param:Dispatcher(MedTimerDispatchers.IO) private val dispatcher: CoroutineDispatcher
 ) {
 
     @AssistedFactory
@@ -74,17 +70,18 @@ class EditMedicineActions @AssistedInject constructor(
     }
 
     fun duplicate() {
-        fragment.lifecycleScope.launch(dispatcher) {
-            val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
+        // Navigate up only once the copy is stored: leaving the screen cancels lifecycleScope.
+        fragment.lifecycleScope.launch {
+            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
             assignTags(medicine.id, newMedicineId)
+            navController.navigateUp()
         }
-        navController.navigateUp()
     }
 
     fun duplicateIncludingReminders() {
         fragment.lifecycleScope.launch {
             val fullMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
-            val newMedicineId = medicineRepository.create(medicine.copy(id = 0))
+            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
             reminderRepository.createMany(fullMedicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
             assignTags(medicine.id, newMedicineId)
             navController.navigateUp()
@@ -104,6 +101,8 @@ class EditMedicineActions @AssistedInject constructor(
             { }
         )
     }
+
+    private fun copyName(name: String) = fragment.getString(CoreUiR.string.duplicate_name, name)
 
     private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
         val oldFullMedicine = medicineRepository.fetch(oldMedicineId) ?: return
