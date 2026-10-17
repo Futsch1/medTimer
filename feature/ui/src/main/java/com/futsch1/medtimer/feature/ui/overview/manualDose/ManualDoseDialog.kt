@@ -269,35 +269,14 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStep
             ManualDoseStep.entries.forEachIndexed { index, step ->
                 val current = step == state.step
                 val complete = index < state.step.ordinal
-                val label = when (step) {
-                    ManualDoseStep.MEDICINE -> stringResource(R.string.medicine)
-                    ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
-                    ManualDoseStep.TIME -> stringResource(R.string.time)
-                }
-                val onClick: () -> Unit = {
-                    when (step) {
-                        ManualDoseStep.MEDICINE -> {
-                            if (state.step == ManualDoseStep.AMOUNT) {
-                                onStepBack()
-                            }
-                            if (state.step == ManualDoseStep.TIME) {
-                                onStepBack()
-                                onStepBack()
-                            }
-                        }
-
-                        ManualDoseStep.AMOUNT -> {
-                            if (state.step == ManualDoseStep.TIME) {
-                                onStepBack()
-                            }
-                        }
-
-                        ManualDoseStep.TIME -> {
-                            // No action
-                        }
-                    }
-                }
-                HeaderStepItem(Modifier.weight(1f), label, current, complete, index, onClick)
+                HeaderStepItem(
+                    modifier = Modifier.weight(1f),
+                    label = headerStepLabel(step),
+                    current = current,
+                    complete = complete,
+                    index = index,
+                    onClick = headerStepClick(step, state.step, onStepBack),
+                )
             }
         }
         if (state.step == ManualDoseStep.AMOUNT) {
@@ -307,6 +286,30 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStep
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+    }
+}
+
+@Composable
+private fun headerStepLabel(step: ManualDoseStep): String = when (step) {
+    ManualDoseStep.MEDICINE -> stringResource(R.string.medicine)
+    ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
+    ManualDoseStep.TIME -> stringResource(R.string.time)
+}
+
+private fun headerStepClick(
+    step: ManualDoseStep,
+    currentStep: ManualDoseStep,
+    onStepBack: () -> Unit,
+): () -> Unit = {
+    when (step) {
+        ManualDoseStep.MEDICINE -> when (currentStep) {
+            ManualDoseStep.AMOUNT -> onStepBack()
+            ManualDoseStep.TIME -> repeat(2) { onStepBack() }
+            ManualDoseStep.MEDICINE -> Unit
+        }
+
+        ManualDoseStep.AMOUNT -> if (currentStep == ManualDoseStep.TIME) onStepBack()
+        ManualDoseStep.TIME -> Unit
     }
 }
 

@@ -33,6 +33,11 @@ import java.time.LocalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManualDoseViewModelTest {
+    private companion object {
+        const val MEDICINE_A = "Medicine A"
+        const val TWO_TABLETS = "2 tablets"
+    }
+
     private val reminderEventRepository: ReminderEventRepository = mock()
     private val persistentDataDataSource: PersistentDataDataSource = mock()
 
@@ -64,20 +69,20 @@ class ManualDoseViewModelTest {
         )
         val beforeLog = Instant.now()
 
-        viewModel.selectMedicineEntry(ManualDoseMedicineEntry("Medicine A", null))
-        viewModel.selectAmount("2 tablets")
+        viewModel.selectMedicineEntry(ManualDoseMedicineEntry(MEDICINE_A, null))
+        viewModel.selectAmount(TWO_TABLETS)
         viewModel.selectTimeAndLog(LocalTime.now())
 
         val afterLog = Instant.now()
         val eventCaptor = argumentCaptor<ReminderEvent>()
         verify(reminderEventRepository).create(eventCaptor.capture())
         val event = eventCaptor.firstValue
-        assertEquals("Medicine A", event.medicineName)
-        assertEquals("2 tablets", event.amount)
+        assertEquals(MEDICINE_A, event.medicineName)
+        assertEquals(TWO_TABLETS, event.amount)
         assertEquals(-1, event.reminderId)
         assertTrue(event.remindedTimestamp >= beforeLog)
         assertTrue(event.remindedTimestamp <= afterLog)
         assertEquals(event.remindedTimestamp, event.processedTimestamp)
-        verify(persistentDataDataSource).addManualDose(ManualDose("Medicine A", null, "2 tablets"))
+        verify(persistentDataDataSource).addManualDose(ManualDose(MEDICINE_A, null, TWO_TABLETS))
     }
 }

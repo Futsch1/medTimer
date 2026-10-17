@@ -26,6 +26,10 @@ import java.time.LocalDate
 @Config(sdk = [36])
 class PersistentDataDataSourceTest {
 
+    private companion object {
+        const val MEDICINE_A = "Medicine A"
+    }
+
     private lateinit var dataSource: PersistentDataDataSource
     private lateinit var defaultPrefs: android.content.SharedPreferences
     private lateinit var medTimerPrefs: android.content.SharedPreferences
@@ -49,7 +53,7 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `addCustomDose stores the three most recent doses in order`() {
-        dataSource.addManualDose(ManualDose("Medicine A", 1, "1"))
+        dataSource.addManualDose(ManualDose(MEDICINE_A, 1, "1"))
         dataSource.addManualDose(ManualDose("Medicine B", 2, "2"))
         dataSource.addManualDose(ManualDose("Medicine C", 3, "3"))
         dataSource.addManualDose(ManualDose("Medicine D", 4, "4"))
@@ -426,9 +430,9 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `data flow emits on medTimer preference change`() = runTest {
-        dataSource.addManualDose(ManualDose("Medicine A", 1, "1"))
+        dataSource.addManualDose(ManualDose(MEDICINE_A, 1, "1"))
         val value = dataSource.data.first()
-        assertEquals(listOf(ManualDose("Medicine A", 1, "1")), value.lastManualDoses.doses)
+        assertEquals(listOf(ManualDose(MEDICINE_A, 1, "1")), value.lastManualDoses.doses)
     }
 
     @Test
