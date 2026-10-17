@@ -34,7 +34,7 @@ on:
         description: Optional zero-based Android test shard index (the compatibility matrix uses two shards)
         required: false
         type: string
-        default: ''
+        default: ""
 
 permissions:
   contents: read

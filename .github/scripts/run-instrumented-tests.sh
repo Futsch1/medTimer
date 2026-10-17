@@ -19,7 +19,7 @@ fi
 
 if [[ -n ${TEST_SHARD_INDEX:-} ]]; then
 	test_shard_count=2
-	if [[ ! ${TEST_SHARD_INDEX} =~ ^[0-9]+$ ]] || (( TEST_SHARD_INDEX >= test_shard_count )); then
+	if [[ ! ${TEST_SHARD_INDEX} =~ ^[0-9]+$ ]] || ((TEST_SHARD_INDEX >= test_shard_count)); then
 		echo "TEST_SHARD_INDEX must be between 0 and $((test_shard_count - 1))." >&2
 		exit 2
 	fi
