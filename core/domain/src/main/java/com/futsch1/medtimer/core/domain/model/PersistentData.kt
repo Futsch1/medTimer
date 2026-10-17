@@ -15,10 +15,12 @@ enum class OverviewFilter {
     TAKEN, SKIPPED, SCHEDULED, RAISED
 }
 
-class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
-    val doses: MutableList<Pair<String, String>> = decode(encodedString).take(maxDoses).toMutableList()
+data class ManualDose(val medicineLabel: String?, val medicineId: Int?, val amount: String?)
 
-    fun addDose(dose: Pair<String, String>) {
+class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
+    val doses: MutableList<ManualDose> = decode(encodedString).take(maxDoses).toMutableList()
+
+    fun addDose(dose: ManualDose) {
         if (maxDoses <= 0) return
         doses.add(0, dose)
         while (doses.size > maxDoses) {
@@ -30,14 +32,13 @@ class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
         return Gson().toJson(doses)
     }
 
-    private fun decode(encodedString: String): MutableList<Pair<String, String>> {
-        val list: List<Pair<String, String>> = try {
-            val type = object : TypeToken<List<Pair<String, String>>>() {}.type
-            Gson().fromJson(encodedString, type) ?: emptyList()
+    private fun decode(encodedString: String): MutableList<ManualDose> {
+        return try {
+            val type = object : TypeToken<List<ManualDose>>() {}.type
+            Gson().fromJson<List<ManualDose>>(encodedString, type)?.toMutableList() ?: mutableListOf()
         } catch (_: Exception) {
-            emptyList()
+            mutableListOf()
         }
-        return list.toMutableList()
     }
 }
 

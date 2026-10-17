@@ -14,7 +14,7 @@ data class ManualDoseState(
     val medicineEntries: ImmutableList<ManualDoseMedicineEntry> = persistentListOf(),
     val showSearch: Boolean = false,
     val amounts: ImmutableList<String> = persistentListOf(),
-    val lastCustomDoses: ImmutableList<Pair<String, String>> = persistentListOf(),
+    val lastCustomDoses: ImmutableList<ManualDoseMedicineWithAmountEntry> = persistentListOf(),
     val selectedMedicine: ManualDoseMedicineEntry? = null,
     val selectedAmount: String? = null,
     val selectedDay: String? = null,

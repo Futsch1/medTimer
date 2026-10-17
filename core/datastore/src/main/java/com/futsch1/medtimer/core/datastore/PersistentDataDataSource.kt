@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.datastore.di.DefaultPreferences
 import com.futsch1.medtimer.core.datastore.di.MedTimerPreferences
+import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.ManualDoses
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
@@ -48,9 +49,11 @@ class PersistentDataDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getPersistentData())
 
-    fun addManualDose(manualDose: Pair<String, String>) {
-        data.value.lastManualDoses.addDose(manualDose)
-        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSES, data.value.lastManualDoses.encode()) }
+    fun addManualDose(manualDose: ManualDose) {
+        if (!data.value.lastManualDoses.doses.contains(manualDose)) {
+            data.value.lastManualDoses.addDose(manualDose)
+            medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSES, data.value.lastManualDoses.encode()) }
+        }
     }
 
     fun setActiveStatisticsFragment(fragment: StatisticFragment) {
@@ -160,17 +163,8 @@ class PersistentDataDataSource @Inject constructor(
         notificationId = notificationId
     )
 
-    private fun getCustomDoses(): ManualDoses {
-        medTimerSharedPreferences.getString(LAST_CUSTOM_DOSES, null)?.let { return ManualDoses(it) }
-
-        val legacyMedicine = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE, null).orEmpty()
-        val legacyAmount = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE_AMOUNT, null).orEmpty()
-        return if (legacyMedicine.isNotBlank()) {
-            ManualDoses(gson.toJson(listOf(legacyMedicine to legacyAmount)))
-        } else {
-            ManualDoses("")
-        }
-    }
+    private fun getCustomDoses(): ManualDoses =
+        ManualDoses(medTimerSharedPreferences.getString(LAST_CUSTOM_DOSES, null).orEmpty())
 
     private fun getPersistentData(): PersistentData {
         val default = PersistentData.default()
@@ -219,8 +213,6 @@ class PersistentDataDataSource @Inject constructor(
         const val INTRO_SHOWN = "intro_shown"
         const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
         const val NOTIFICATION_ID = "notificationId"
-        const val LAST_CUSTOM_DOSE = "lastCustomDose"
-        const val LAST_CUSTOM_DOSE_AMOUNT = "lastCustomDoseAmount"
         const val FILTER_TAGS = "filterTags"
         const val CHECKED_FILTERS = "checkedFilters"
         const val PENDING_SNOOZES = "pending_location_snoozes"

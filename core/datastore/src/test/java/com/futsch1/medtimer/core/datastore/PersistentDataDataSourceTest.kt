@@ -2,6 +2,7 @@ package com.futsch1.medtimer.core.datastore
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
@@ -48,25 +49,19 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `addCustomDose stores the three most recent doses in order`() {
-        dataSource.addManualDose("Medicine A" to "1")
-        dataSource.addManualDose("Medicine B" to "2")
-        dataSource.addManualDose("Medicine C" to "3")
-        dataSource.addManualDose("Medicine D" to "4")
+        dataSource.addManualDose(ManualDose("Medicine A", 1, "1"))
+        dataSource.addManualDose(ManualDose("Medicine B", 2, "2"))
+        dataSource.addManualDose(ManualDose("Medicine C", 3, "3"))
+        dataSource.addManualDose(ManualDose("Medicine D", 4, "4"))
 
         assertEquals(
-            listOf("Medicine D" to "4", "Medicine C" to "3", "Medicine B" to "2"),
+            listOf(
+                ManualDose("Medicine D", 4, "4"),
+                ManualDose("Medicine C", 3, "3"),
+                ManualDose("Medicine B", 2, "2"),
+            ),
             dataSource.data.value.lastManualDoses.doses,
         )
-    }
-
-    @Test
-    fun `legacy last custom dose is available as a recent dose`() {
-        medTimerPrefs.edit()
-            .putString(PersistentDataDataSource.LAST_CUSTOM_DOSE, "Medicine A")
-            .putString(PersistentDataDataSource.LAST_CUSTOM_DOSE_AMOUNT, "1")
-            .commit()
-
-        assertEquals(listOf("Medicine A" to "1"), dataSource.data.value.lastManualDoses.doses)
     }
 
     @Test
@@ -431,9 +426,9 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `data flow emits on medTimer preference change`() = runTest {
-        dataSource.addManualDose("Medicine A" to "1")
+        dataSource.addManualDose(ManualDose("Medicine A", 1, "1"))
         val value = dataSource.data.first()
-        assertEquals(listOf("Medicine A" to "1"), value.lastManualDoses.doses)
+        assertEquals(listOf(ManualDose("Medicine A", 1, "1")), value.lastManualDoses.doses)
     }
 
     @Test

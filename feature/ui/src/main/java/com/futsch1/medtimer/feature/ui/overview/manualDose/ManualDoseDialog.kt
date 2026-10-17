@@ -80,7 +80,6 @@ fun ManualDoseDialog(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onSelectRecentDose: (Pair<String, String>) -> Unit,
     onLogManualDose: (LocalTime) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -101,7 +100,6 @@ fun ManualDoseDialog(
             onSearch = onSearch,
             onSelectMedicineEntry = onSelectMedicineEntry,
             onSelectAmount = onSelectAmount,
-            onSelectRecentDose = onSelectRecentDose,
             onLogManualDose = onLogManualDose,
             onStepBack = onStepBack,
             onDismissDialog = onDismissDialog,
@@ -116,7 +114,6 @@ private fun DialogContent(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onSelectRecentDose: (Pair<String, String>) -> Unit,
     onLogManualDose: (LocalTime) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -164,7 +161,10 @@ private fun DialogContent(
                         )
                         RecentDoses(
                             doses = state.lastCustomDoses,
-                            onSelectRecentDose = onSelectRecentDose,
+                            onSelectMedicineEntry = onSelectMedicineEntry,
+                            onSelectAmount = onSelectAmount,
+                            onLogManualDose = onLogManualDose,
+                            onDismissDialog = onDismissDialog,
                         )
                         CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
                             onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
@@ -421,8 +421,11 @@ private fun SectionLabel(@StringRes label: Int) {
 
 @Composable
 private fun RecentDoses(
-    doses: ImmutableList<Pair<String, String>>,
-    onSelectRecentDose: (Pair<String, String>) -> Unit,
+    doses: ImmutableList<ManualDoseMedicineWithAmountEntry>,
+    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
+    onSelectAmount: (String) -> Unit,
+    onLogManualDose: (LocalTime) -> Unit,
+    onDismissDialog: () -> Unit
 ) {
     if (doses.isNotEmpty()) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -432,32 +435,39 @@ private fun RecentDoses(
                 color = MaterialTheme.colorScheme.primary,
             )
             doses.forEach { dose ->
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(ManualDoseTestTags.RECENT_DOSE)
-                        .clickable { onSelectRecentDose(dose) },
-                    shape = MaterialTheme.shapes.medium,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+                if (dose.label.isNotBlank()) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(ManualDoseTestTags.RECENT_DOSE)
+                            .clickable {
+                                onSelectMedicineEntry(ManualDoseMedicineEntry(dose.label, dose.medicine))
+                                onSelectAmount(dose.amount)
+                                onLogManualDose(LocalTime.now())
+                                onDismissDialog()
+                            },
+                        shape = MaterialTheme.shapes.medium,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                     ) {
-                        Text(
-                            text = dose.first,
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        )
-                        if (dose.second.isNotBlank()) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Text(
-                                text = dose.second,
-                                modifier = Modifier.padding(start = 12.dp),
-                                style = MaterialTheme.typography.bodyMedium,
+                                text = dose.label,
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
+                            if (dose.amount.isNotBlank()) {
+                                Text(
+                                    text = dose.amount,
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                )
+                            }
                         }
                     }
                 }
@@ -582,7 +592,7 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
         ManualDoseMedicineEntry("Medicine A", Medicine.default().copy(id = 2)),
         ManualDoseMedicineEntry("Medicine B", Medicine.default().copy(id = 3)),
     ).toImmutableList(),
-    lastCustomDoses = listOf("Medicine C" to "5 ml").toImmutableList(),
+    lastCustomDoses = listOf(ManualDoseMedicineWithAmountEntry("Medicine C", null, "5 mg")).toImmutableList(),
     amounts = listOf("1 tablet", "2 tablets").toImmutableList(),
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
@@ -618,7 +628,6 @@ private fun ManualDosePreview(step: ManualDoseStep) {
                 onSearch = {},
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
-                onSelectRecentDose = {},
                 onLogManualDose = {},
                 onStepBack = {},
                 onDismissDialog = {},

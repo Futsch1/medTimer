@@ -7,26 +7,30 @@ class ManualDosesTest {
     @Test
     fun `should keep at most the three newest doses`() {
         val customDoses = ManualDoses("")
-        customDoses.addDose("Medicine A" to "1")
-        customDoses.addDose("Medicine B" to "2")
-        customDoses.addDose("Medicine C" to "3")
-        customDoses.addDose("Medicine D" to "4")
+        customDoses.addDose(ManualDose("Medicine A", 1, "1"))
+        customDoses.addDose(ManualDose("Medicine B", 2, "2"))
+        customDoses.addDose(ManualDose("Medicine C", 3, "3"))
+        customDoses.addDose(ManualDose("Medicine D", 4, "4"))
 
         assertEquals(
-            listOf("Medicine D" to "4", "Medicine C" to "3", "Medicine B" to "2"),
+            listOf(
+                ManualDose("Medicine D", 4, "4"),
+                ManualDose("Medicine C", 3, "3"),
+                ManualDose("Medicine B", 2, "2"),
+            ),
             customDoses.doses,
         )
     }
 
     @Test
     fun `should round trip doses through encoding`() {
-        val original = ManualDoses("").apply { addDose("Medicine A" to "1 tablet") }
+        val original = ManualDoses("").apply { addDose(ManualDose("Medicine A", 7, "1 tablet")) }
 
         assertEquals(original.doses, ManualDoses(original.encode()).doses)
     }
 
     @Test
     fun `should tolerate corrupt encoded data`() {
-        assertEquals(emptyList<Pair<String, String>>(), ManualDoses("invalid").doses)
+        assertEquals(emptyList<ManualDose>(), ManualDoses("invalid").doses)
     }
 }

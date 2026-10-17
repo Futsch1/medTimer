@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.overview.manualDose
 
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
@@ -28,6 +29,7 @@ import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.time.Instant
+import java.time.LocalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManualDoseViewModelTest {
@@ -49,7 +51,7 @@ class ManualDoseViewModelTest {
     }
 
     @Test
-    fun `should immediately log a recent custom dose with the current timestamp`() = runTest {
+    fun `should log a manual dose with the current timestamp`() = runTest {
         val viewModel = ManualDoseViewModel(
             medicineRepository = mock<MedicineRepository>().also {
                 whenever(it.getAllFlow()).thenReturn(flowOf(emptyList()))
@@ -62,7 +64,9 @@ class ManualDoseViewModelTest {
         )
         val beforeLog = Instant.now()
 
-        viewModel.logRecentDose("Medicine A" to "2 tablets")
+        viewModel.selectMedicineEntry(ManualDoseMedicineEntry("Medicine A", null))
+        viewModel.selectAmount("2 tablets")
+        viewModel.selectTimeAndLog(LocalTime.now())
 
         val afterLog = Instant.now()
         val eventCaptor = argumentCaptor<ReminderEvent>()
@@ -74,6 +78,6 @@ class ManualDoseViewModelTest {
         assertTrue(event.remindedTimestamp >= beforeLog)
         assertTrue(event.remindedTimestamp <= afterLog)
         assertEquals(event.remindedTimestamp, event.processedTimestamp)
-        verify(persistentDataDataSource).addManualDose("Medicine A" to "2 tablets")
+        verify(persistentDataDataSource).addManualDose(ManualDose("Medicine A", null, "2 tablets"))
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -30,6 +31,7 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 data class ManualDoseMedicineEntry(val label: String, val medicine: Medicine?)
+data class ManualDoseMedicineWithAmountEntry(val label: String, val medicine: Medicine?, val amount: String)
 
 @HiltViewModel
 class ManualDoseViewModel @Inject constructor(
@@ -118,13 +120,20 @@ class ManualDoseViewModel @Inject constructor(
     private val availableState: Flow<ManualDoseState> = combine(
         manualDoseMedicines,
         manualDoseAmounts,
+        medicineList,
         persistentDataDataSource.data
-    ) { medicines, amounts, persistentData ->
+    ) { medicines, amounts, medicineList, persistentData ->
         ManualDoseState(
             medicineEntries = medicines.entries.toImmutableList(),
             showSearch = medicines.showSearch,
             amounts = amounts.toImmutableList(),
-            lastCustomDoses = persistentData.lastManualDoses.doses.toImmutableList(),
+            lastCustomDoses = persistentData.lastManualDoses.doses.map {
+                ManualDoseMedicineWithAmountEntry(
+                    it.medicineLabel ?: "",
+                    it.medicineId?.let { id -> medicineList.find { medicine -> medicine.id == id } },
+                    it.amount ?: ""
+                )
+            }.toImmutableList(),
         )
     }
 
@@ -153,10 +162,6 @@ class ManualDoseViewModel @Inject constructor(
         val doseDateTime = selectedDay.value.atTime(doseLocalTime)
         val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
         logDose(selectedManualDoseEntry.value, selectedManualDoseAmount.value, doseInstant)
-    }
-
-    fun logRecentDose(dose: Pair<String, String>) {
-        logDose(ManualDoseMedicineEntry(dose.first, null), dose.second, Instant.now())
     }
 
     private fun logDose(selectedEntry: ManualDoseMedicineEntry, amount: String, doseInstant: Instant) {
@@ -197,7 +202,7 @@ class ManualDoseViewModel @Inject constructor(
             }
         }
 
-        persistentDataDataSource.addManualDose(Pair(selectedEntry.label, amount))
+        persistentDataDataSource.addManualDose(ManualDose(selectedEntry.label, selectedEntry.medicine?.id, amount))
     }
 
     fun reset() {

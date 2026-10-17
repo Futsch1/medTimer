@@ -82,7 +82,7 @@ class OverviewFragment : Fragment() {
                         showManualDoseDialog.value = true
                         manualDoseViewModel.reset()
                         manualDoseViewModel.selectDay(overviewViewModel.state.day)
-                                      },
+                    },
                     topBarActions = {
                         AppOptionsMenuHost(
                             fragment = this@OverviewFragment,
@@ -105,10 +105,6 @@ class OverviewFragment : Fragment() {
                         },
                         onSelectAmount = {
                             manualDoseViewModel.selectAmount(it)
-                        },
-                        onSelectRecentDose = {
-                            manualDoseViewModel.logRecentDose(it)
-                            showManualDoseDialog.value = false
                         },
                         onLogManualDose = {
                             manualDoseViewModel.selectTimeAndLog(it)
