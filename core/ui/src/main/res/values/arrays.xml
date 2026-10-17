@@ -46,6 +46,7 @@
         <item>@string/minutes_30</item>
         <item>@string/minutes_60</item>
         <item>@string/custom</item>
+        <item>@string/set_duration</item>
     </string-array>
     <string-array name="snooze_duration_values">
         <item>5</item>
@@ -54,6 +55,7 @@
         <item>30</item>
         <item>60</item>
         <item>-1</item>
+        <item>-2</item>
     </string-array>
     <string-array name="days">
         <item>@string/monday</item>

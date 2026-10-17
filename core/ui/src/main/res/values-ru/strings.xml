@@ -149,6 +149,7 @@
     <string name="weekend_start_time">Время начала</string>
     <string name="weekend_end_time">Время окончания</string>
     <string name="custom">Пользовательский…</string>
+    <string name="set_duration">Задать длительность…</string>
     <string name="advanced_settings">Продвинутые настройки</string>
     <string name="cycle_pause_days">Дни паузы</string>
     <string name="reminders">Напоминания</string>

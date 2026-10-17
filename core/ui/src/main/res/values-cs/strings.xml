@@ -153,6 +153,7 @@
     <string name="weekend_start_time">Čas začátku</string>
     <string name="weekend_end_time">Čas konce</string>
     <string name="custom">Vlastní…</string>
+    <string name="set_duration">Nastavit dobu…</string>
     <string name="advanced_settings">Pokročilá nastavení</string>
     <string name="cycle_pause_days">Pozastavit dny</string>
     <string name="reminders">Připomenutí</string>

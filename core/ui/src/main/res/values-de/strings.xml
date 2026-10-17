@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Startzeit</string>
     <string name="weekend_end_time">Endzeit</string>
     <string name="custom">Benutzerdefiniert…</string>
+    <string name="set_duration">Dauer festlegen…</string>
     <string name="advanced_settings">Erweiterte Einstellungen</string>
     <string name="cycle_pause_days">Tage Pause</string>
     <string name="reminders">Erinnerungen</string>

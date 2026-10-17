@@ -138,6 +138,7 @@
     <string name="weekend_start_time">开始时间</string>
     <string name="weekend_end_time">结束时间</string>
     <string name="custom">自定义……</string>
+    <string name="set_duration">设置时长…</string>
     <string name="advanced_settings">详细设置</string>
     <string name="cycle_pause_days">暂停服药提醒天数</string>
     <string name="reminders">提醒</string>

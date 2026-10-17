@@ -144,6 +144,7 @@
     <string name="weekend_start_time">தொடக்க நேரம்</string>
     <string name="weekend_end_time">முடிவு நேரம்</string>
     <string name="custom">வழக்கம்…</string>
+    <string name="set_duration">கால அளவை அமை…</string>
     <string name="advanced_settings">மேம்பட்ட அமைப்புகள்</string>
     <string name="cycle_pause_days">இடைநிறுத்த நாட்கள்</string>
     <string name="reminders">நினைவூட்டல்கள்</string>

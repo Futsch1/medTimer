@@ -139,6 +139,7 @@
     <string name="weekend_start_time">Starttidspunkt</string>
     <string name="weekend_end_time">Sluttidspunkt</string>
     <string name="custom">Brugerdefineret…</string>
+    <string name="set_duration">Angiv varighed…</string>
     <string name="advanced_settings">Avancerede indstillinger</string>
     <string name="cycle_pause_days">Pausedage</string>
     <string name="reminders">Påmindelser</string>

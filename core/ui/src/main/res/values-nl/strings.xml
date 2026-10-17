@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Begintijd</string>
     <string name="weekend_end_time">Eindtijd</string>
     <string name="custom">Aangepast…</string>
+    <string name="set_duration">Duur instellen…</string>
     <string name="advanced_settings">Geavanceerde instellingen</string>
     <string name="cycle_pause_days">Pauzedagen</string>
     <string name="reminders">Herinneringen</string>

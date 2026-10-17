@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Kezdési idő</string>
     <string name="weekend_end_time">Befejezési idő</string>
     <string name="custom">Egyedi…</string>
+    <string name="set_duration">Időtartam megadása…</string>
     <string name="advanced_settings">Speciális beállítások</string>
     <string name="cycle_pause_days">Szünetnapok</string>
     <string name="reminders">Emlékezők</string>

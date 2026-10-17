@@ -139,6 +139,7 @@
     <string name="weekend_start_time">Algusaeg</string>
     <string name="weekend_end_time">Lõpuaeg</string>
     <string name="custom">Sinu valitud…</string>
+    <string name="set_duration">Määra kestus…</string>
     <string name="advanced_settings">Seadistused oskuskasutajale</string>
     <string name="name">Nimi</string>
     <string name="event_data">Sündmuse andmed</string>

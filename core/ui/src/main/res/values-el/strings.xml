@@ -143,6 +143,7 @@
     <string name="weekend_start_time">Ώρα έναρξης</string>
     <string name="weekend_end_time">Ώρα λήξης</string>
     <string name="custom">Προσαρμοσμένη…</string>
+    <string name="set_duration">Ορισμός διάρκειας…</string>
     <string name="advanced_settings">Σύνθετες ρυθμίσεις</string>
     <string name="cycle_pause_days">Ημέρες παύσης της αγωγής</string>
     <string name="reminders">Υπενθυμίσεις</string>
