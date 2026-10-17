@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.core.domain.model
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.time.LocalDate
 
 enum class StatisticFragment {
@@ -13,6 +15,33 @@ enum class OverviewFilter {
     TAKEN, SKIPPED, SCHEDULED, RAISED
 }
 
+data class ManualDose(val medicineLabel: String?, val medicineId: Int?, val amount: String?)
+
+class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
+    val doses: MutableList<ManualDose> = decode(encodedString).take(maxDoses).toMutableList()
+
+    fun addDose(dose: ManualDose) {
+        if (maxDoses <= 0) return
+        doses.add(0, dose)
+        while (doses.size > maxDoses) {
+            doses.removeAt(doses.lastIndex)
+        }
+    }
+
+    fun encode(): String {
+        return Gson().toJson(doses)
+    }
+
+    private fun decode(encodedString: String): MutableList<ManualDose> {
+        return try {
+            val type = object : TypeToken<List<ManualDose>>() {}.type
+            Gson().fromJson<List<ManualDose>>(encodedString, type)?.toMutableList() ?: mutableListOf()
+        } catch (_: Exception) {
+            mutableListOf()
+        }
+    }
+}
+
 data class PersistentData(
     val showNotifications: Boolean,
     val iconColor: Int,
@@ -23,8 +52,7 @@ data class PersistentData(
     val introShown: Boolean,
     val lastAutomaticBackup: LocalDate,
     val notificationId: Int,
-    val lastCustomDose: String,
-    val lastCustomDoseAmount: String,
+    val lastManualDoses: ManualDoses,
     val filterTags: Set<String>,
     val checkedFilters: Set<OverviewFilter>
 ) {
@@ -40,8 +68,7 @@ data class PersistentData(
                 introShown = false,
                 lastAutomaticBackup = LocalDate.EPOCH,
                 notificationId = 0,
-                lastCustomDose = "",
-                lastCustomDoseAmount = "",
+                lastManualDoses = ManualDoses(""),
                 filterTags = emptySet(),
                 checkedFilters = emptySet()
             )

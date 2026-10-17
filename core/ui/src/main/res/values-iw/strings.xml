@@ -348,7 +348,7 @@
     <string name="next_week">שבוע הבא</string>
     <string name="stock_after_simulation_end">אחרי %s</string>
     <string name="move_medicine">הזז תרופה</string>
-    <string name="recent_custom">הפריט המותאם אישית האחרון</string>
+    <string name="recent_doses">מנות אחרונות</string>
     <string name="use_current_time">שימוש בשעה הנוכחית</string>
     <string name="navigate_up">נווט למעלה</string>
     <string name="close">סגור</string>

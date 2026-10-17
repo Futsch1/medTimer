@@ -58,9 +58,12 @@ class ManualDoseRobot(
 
     fun cancel() = dialog.click(hasTestTag(ManualDoseTestTags.CANCEL))
 
-    /** The staged dialog offers the previous custom amount as a recent choice. */
-    fun assertAmountPrefilled(expected: String) {
-        assertAmountOffered(expected)
+    fun assertRecentDoseOffered(medicine: String, amount: String) {
+        dialog.assertDisplayed(recentDoseMatcher(medicine, amount))
+    }
+
+    fun selectRecentDose(medicine: String, amount: String) {
+        dialog.click(recentDoseMatcher(medicine, amount))
     }
 
     private fun selectMedicineIfPresent(label: String): Boolean {
@@ -89,18 +92,10 @@ class ManualDoseRobot(
     }
 
     fun selectMedicine(label: String) {
-        if (recentChoiceExists(label)) {
-            chooseRecent(label)
-            return
-        }
         check(selectMedicineIfPresent(label)) { "Medicine '$label' is not offered" }
     }
 
     private fun selectAmount(amount: String) {
-        if (recentChoiceExists(amount)) {
-            chooseRecent(amount)
-            return
-        }
         val item = hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY)
         if (amountList.exists(item)) {
             amountList.scrollUntilText(
@@ -119,25 +114,7 @@ class ManualDoseRobot(
         dialogs.enterTextAndConfirm(amount)
     }
 
-    private fun assertAmountOffered(amount: String) {
-        if (recentChoiceExists(amount)) {
-            dialog.assertDisplayed(recentMatcher(amount))
-            return
-        }
-        amountList.scrollUntilText(
-            itemMatcher = hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY),
-            textMatcher = hasText(amount),
-            substring = amount,
-        )
-        amountList.assertDisplayed(
-            hasTestTag(ManualDoseTestTags.AMOUNT_ENTRY) and hasText(amount),
-        )
-    }
-
-    private fun recentChoiceExists(label: String): Boolean = dialog.exists(recentMatcher(label))
-
-    private fun recentMatcher(label: String) =
-        hasTestTag(ManualDoseTestTags.RECENT_CHOICE) and hasText(label)
-
-    private fun chooseRecent(label: String) = dialog.click(recentMatcher(label))
+    private fun recentDoseMatcher(medicine: String, amount: String) =
+        hasTestTag(ManualDoseTestTags.RECENT_DOSE) and hasText(medicine, substring = true) and
+            hasText(amount, substring = true)
 }

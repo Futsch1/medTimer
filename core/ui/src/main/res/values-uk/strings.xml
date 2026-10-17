@@ -354,7 +354,7 @@
     <string name="next_week">Наступний тиждень</string>
     <string name="stock_after_simulation_end">Після %s</string>
     <string name="move_medicine">Перемістити ліки</string>
-    <string name="recent_custom">Останній власний запис</string>
+    <string name="recent_doses">Останні дози</string>
     <string name="use_current_time">Використати поточний час</string>
     <string name="navigate_up">Навігація вгору</string>
     <string name="close">Закрити</string>

@@ -2,6 +2,7 @@ package com.futsch1.medtimer.core.datastore
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
@@ -25,6 +26,10 @@ import java.time.LocalDate
 @Config(sdk = [36])
 class PersistentDataDataSourceTest {
 
+    private companion object {
+        const val MEDICINE_A = "Medicine A"
+    }
+
     private lateinit var dataSource: PersistentDataDataSource
     private lateinit var defaultPrefs: android.content.SharedPreferences
     private lateinit var medTimerPrefs: android.content.SharedPreferences
@@ -47,21 +52,20 @@ class PersistentDataDataSourceTest {
     // ── B: Write-read setters ──────────────────────────────────────────
 
     @Test
-    fun `setLastCustomDose roundtrip`() {
-        dataSource.setLastCustomDose("Aspirin 500mg")
-        assertEquals("Aspirin 500mg", dataSource.data.value.lastCustomDose)
-    }
+    fun `addCustomDose stores the three most recent doses in order`() {
+        dataSource.addManualDose(ManualDose(MEDICINE_A, 1, "1"))
+        dataSource.addManualDose(ManualDose("Medicine B", 2, "2"))
+        dataSource.addManualDose(ManualDose("Medicine C", 3, "3"))
+        dataSource.addManualDose(ManualDose("Medicine D", 4, "4"))
 
-    @Test
-    fun `setLastCustomDose with empty string`() {
-        dataSource.setLastCustomDose("")
-        assertEquals("", dataSource.data.value.lastCustomDose)
-    }
-
-    @Test
-    fun `setLastCustomDoseAmount roundtrip`() {
-        dataSource.setLastCustomDoseAmount("1.5")
-        assertEquals("1.5", dataSource.data.value.lastCustomDoseAmount)
+        assertEquals(
+            listOf(
+                ManualDose("Medicine D", 4, "4"),
+                ManualDose("Medicine C", 3, "3"),
+                ManualDose("Medicine B", 2, "2"),
+            ),
+            dataSource.data.value.lastManualDoses.doses,
+        )
     }
 
     @Test
@@ -160,7 +164,8 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `setCheckedFilters roundtrip with multiple filters`() {
-        val filters = setOf(OverviewFilter.TAKEN, OverviewFilter.SKIPPED, OverviewFilter.SCHEDULED, OverviewFilter.RAISED)
+        val filters =
+            setOf(OverviewFilter.TAKEN, OverviewFilter.SKIPPED, OverviewFilter.SCHEDULED, OverviewFilter.RAISED)
         dataSource.setCheckedFilters(filters)
         assertEquals(filters, dataSource.data.value.checkedFilters)
     }
@@ -319,7 +324,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `remove by eventId drops entire entry when all events match`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2), mutableListOf(10, 20), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                listOf(1, 2),
+                mutableListOf(10, 20),
+                1
+            )
+        )
         dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(3), mutableListOf(30), 2))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
@@ -331,7 +343,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `remove by eventId keeps unmatched eventIds within same entry`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2, 3), mutableListOf(10, 20, 30), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                listOf(1, 2, 3),
+                mutableListOf(10, 20, 30),
+                1
+            )
+        )
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(20))
 
@@ -371,7 +390,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `pending snooze with empty reminderIds`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), emptyList(), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                emptyList(),
+                mutableListOf(10),
+                1
+            )
+        )
 
         val loaded = dataSource.getPendingLocationSnoozes()
         assertEquals(1, loaded.size)
@@ -404,9 +430,9 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `data flow emits on medTimer preference change`() = runTest {
-        dataSource.setLastCustomDose("Test")
+        dataSource.addManualDose(ManualDose(MEDICINE_A, 1, "1"))
         val value = dataSource.data.first()
-        assertEquals("Test", value.lastCustomDose)
+        assertEquals(listOf(ManualDose(MEDICINE_A, 1, "1")), value.lastManualDoses.doses)
     }
 
     @Test

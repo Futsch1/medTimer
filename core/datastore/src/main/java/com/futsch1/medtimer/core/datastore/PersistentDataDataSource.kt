@@ -5,6 +5,8 @@ import androidx.core.content.edit
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.datastore.di.DefaultPreferences
 import com.futsch1.medtimer.core.datastore.di.MedTimerPreferences
+import com.futsch1.medtimer.core.domain.model.ManualDose
+import com.futsch1.medtimer.core.domain.model.ManualDoses
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.domain.model.PendingSnooze
 import com.futsch1.medtimer.core.domain.model.PersistentData
@@ -47,12 +49,11 @@ class PersistentDataDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getPersistentData())
 
-    fun setLastCustomDose(lastCustomDose: String) {
-        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE, lastCustomDose) }
-    }
-
-    fun setLastCustomDoseAmount(lastCustomDoseAmount: String) {
-        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSE_AMOUNT, lastCustomDoseAmount) }
+    fun addManualDose(manualDose: ManualDose) {
+        if (!data.value.lastManualDoses.doses.contains(manualDose)) {
+            data.value.lastManualDoses.addDose(manualDose)
+            medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSES, data.value.lastManualDoses.encode()) }
+        }
     }
 
     fun setActiveStatisticsFragment(fragment: StatisticFragment) {
@@ -118,7 +119,8 @@ class PersistentDataDataSource @Inject constructor(
     fun removePendingLocationSnoozesForReminderEventIds(reminderEventIds: List<Int>) {
         val current = getPendingSnoozeList()
         val updated = current.mapNotNull { snooze ->
-            val keptIndices = snooze.reminderEventIds.indices.filter { i -> snooze.reminderEventIds[i] !in reminderEventIds }
+            val keptIndices =
+                snooze.reminderEventIds.indices.filter { i -> snooze.reminderEventIds[i] !in reminderEventIds }
             when {
                 keptIndices.isEmpty() -> null
                 keptIndices.size == snooze.reminderEventIds.size -> snooze
@@ -161,28 +163,39 @@ class PersistentDataDataSource @Inject constructor(
         notificationId = notificationId
     )
 
+    private fun getCustomDoses(): ManualDoses =
+        ManualDoses(medTimerSharedPreferences.getString(LAST_CUSTOM_DOSES, null).orEmpty())
+
     private fun getPersistentData(): PersistentData {
         val default = PersistentData.default()
         return PersistentData(
             showNotifications = defaultSharedPreferences.getBoolean(SHOW_NOTIFICATION, default.showNotifications),
             iconColor = defaultSharedPreferences.getInt(ICON_COLOR, default.iconColor),
-            activeStatisticsFragment = when (defaultSharedPreferences.getInt(ACTIVE_STATISTICS_FRAGMENT, default.activeStatisticsFragment.ordinal)) {
+            activeStatisticsFragment = when (defaultSharedPreferences.getInt(
+                ACTIVE_STATISTICS_FRAGMENT,
+                default.activeStatisticsFragment.ordinal
+            )) {
                 StatisticFragment.CHARTS.ordinal -> StatisticFragment.CHARTS
                 StatisticFragment.TABLE.ordinal -> StatisticFragment.TABLE
                 StatisticFragment.LEVELS.ordinal -> StatisticFragment.LEVELS
                 else -> StatisticFragment.CALENDAR
             },
             analysisDays = defaultSharedPreferences.getInt(ANALYSIS_DAYS, default.analysisDays),
-            batteryWarningShown = defaultSharedPreferences.getBoolean(BATTERY_WARNING_SHOWN, default.batteryWarningShown),
-            exactRemindersWarningShown = defaultSharedPreferences.getBoolean(EXACT_REMINDERS_WARNING_SHOWN, default.exactRemindersWarningShown),
+            batteryWarningShown = defaultSharedPreferences.getBoolean(
+                BATTERY_WARNING_SHOWN,
+                default.batteryWarningShown
+            ),
+            exactRemindersWarningShown = defaultSharedPreferences.getBoolean(
+                EXACT_REMINDERS_WARNING_SHOWN,
+                default.exactRemindersWarningShown
+            ),
             introShown = defaultSharedPreferences.getBoolean(INTRO_SHOWN, default.introShown),
             lastAutomaticBackup = defaultSharedPreferences.getString(LAST_AUTOMATIC_BACKUP, null)
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { LocalDate.parse(it) }
                 ?: default.lastAutomaticBackup,
             notificationId = medTimerSharedPreferences.getInt(NOTIFICATION_ID, default.notificationId),
-            lastCustomDose = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE, null) ?: default.lastCustomDose,
-            lastCustomDoseAmount = medTimerSharedPreferences.getString(LAST_CUSTOM_DOSE_AMOUNT, null) ?: default.lastCustomDoseAmount,
+            lastManualDoses = getCustomDoses(),
             filterTags = medTimerSharedPreferences.getStringSet(FILTER_TAGS, emptySet()) ?: emptySet(),
             checkedFilters = medTimerSharedPreferences.getStringSet(CHECKED_FILTERS, emptySet())
                 ?.mapNotNull { kotlin.runCatching { OverviewFilter.valueOf(it) }.getOrNull() }
@@ -200,10 +213,9 @@ class PersistentDataDataSource @Inject constructor(
         const val INTRO_SHOWN = "intro_shown"
         const val LAST_AUTOMATIC_BACKUP = "last_automatic_backup"
         const val NOTIFICATION_ID = "notificationId"
-        const val LAST_CUSTOM_DOSE = "lastCustomDose"
-        const val LAST_CUSTOM_DOSE_AMOUNT = "lastCustomDoseAmount"
         const val FILTER_TAGS = "filterTags"
         const val CHECKED_FILTERS = "checkedFilters"
         const val PENDING_SNOOZES = "pending_location_snoozes"
+        const val LAST_CUSTOM_DOSES = "lastCustomDoses"
     }
 }

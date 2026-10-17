@@ -66,7 +66,7 @@ object ManualDoseTestTags {
     const val MEDICINE_ENTRY = "manual_dose_medicine_entry"
     const val AMOUNT_LIST = "manual_dose_amount_list"
     const val AMOUNT_ENTRY = "manual_dose_amount_entry"
-    const val RECENT_CHOICE = "manual_dose_recent_choice"
+    const val RECENT_DOSE = "manual_dose_recent_dose"
     const val CUSTOM_BUTTON = "manual_dose_custom_button"
     const val SELECTED_DOSE_SUMMARY = "manual_dose_selected_summary"
     const val ENTER_TIME = "manual_dose_enter_time"
@@ -134,6 +134,7 @@ private fun DialogContent(
             Header(
                 state = state,
                 modifier = Modifier.padding(horizontal = 24.dp),
+                onStepBack = onStepBack
             )
             HorizontalDivider(
                 modifier = Modifier.padding(top = 20.dp),
@@ -158,9 +159,12 @@ private fun DialogContent(
                             modifier = Modifier.weight(1f, fill = false),
                             onSelectMedicineEntry = onSelectMedicineEntry,
                         )
-                        RecentChoice(
-                            label = state.lastCustomMedicineEntry.label,
-                            onClick = { onSelectMedicineEntry(state.lastCustomMedicineEntry) },
+                        RecentDoses(
+                            doses = state.lastCustomDoses,
+                            onSelectMedicineEntry = onSelectMedicineEntry,
+                            onSelectAmount = onSelectAmount,
+                            onLogManualDose = onLogManualDose,
+                            onDismissDialog = onDismissDialog,
                         )
                         CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
                             onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
@@ -173,10 +177,6 @@ private fun DialogContent(
                             amounts = state.amounts,
                             modifier = Modifier.weight(1f, fill = false),
                             onSelectAmount = onSelectAmount,
-                        )
-                        RecentChoice(
-                            label = state.lastCustomDoseAmount,
-                            onClick = { onSelectAmount(state.lastCustomDoseAmount) },
                         )
                         CustomButton(R.string.amount, Modifier.fillMaxWidth(), onSelectAmount)
                     }
@@ -246,7 +246,7 @@ private fun DialogContent(
 }
 
 @Composable
-private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
+private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStepBack: () -> Unit) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -269,12 +269,14 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
             ManualDoseStep.entries.forEachIndexed { index, step ->
                 val current = step == state.step
                 val complete = index < state.step.ordinal
-                val label = when (step) {
-                    ManualDoseStep.MEDICINE -> stringResource(R.string.medicine)
-                    ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
-                    ManualDoseStep.TIME -> stringResource(R.string.time)
-                }
-                HeaderStepItem(Modifier.weight(1f), label, current, complete, index)
+                HeaderStepItem(
+                    modifier = Modifier.weight(1f),
+                    label = headerStepLabel(step),
+                    current = current,
+                    complete = complete,
+                    index = index,
+                    onClick = headerStepClick(step, state.step, onStepBack),
+                )
             }
         }
         if (state.step == ManualDoseStep.AMOUNT) {
@@ -288,7 +290,38 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun HeaderStepItem(modifier: Modifier, label: String, current: Boolean, complete: Boolean, index: Int) {
+private fun headerStepLabel(step: ManualDoseStep): String = when (step) {
+    ManualDoseStep.MEDICINE -> stringResource(R.string.medicine)
+    ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
+    ManualDoseStep.TIME -> stringResource(R.string.time)
+}
+
+private fun headerStepClick(
+    step: ManualDoseStep,
+    currentStep: ManualDoseStep,
+    onStepBack: () -> Unit,
+): () -> Unit = {
+    when (step) {
+        ManualDoseStep.MEDICINE -> when (currentStep) {
+            ManualDoseStep.AMOUNT -> onStepBack()
+            ManualDoseStep.TIME -> repeat(2) { onStepBack() }
+            ManualDoseStep.MEDICINE -> Unit
+        }
+
+        ManualDoseStep.AMOUNT -> if (currentStep == ManualDoseStep.TIME) onStepBack()
+        ManualDoseStep.TIME -> Unit
+    }
+}
+
+@Composable
+private fun HeaderStepItem(
+    modifier: Modifier,
+    label: String,
+    current: Boolean,
+    complete: Boolean,
+    index: Int,
+    onClick: () -> Unit
+) {
     Surface(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
@@ -297,6 +330,7 @@ private fun HeaderStepItem(modifier: Modifier, label: String, current: Boolean, 
             complete -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceContainerHighest
         },
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -389,28 +423,57 @@ private fun SectionLabel(@StringRes label: Int) {
 }
 
 @Composable
-private fun RecentChoice(label: String, onClick: () -> Unit) {
-    if (label.isNotBlank()) {
+private fun RecentDoses(
+    doses: ImmutableList<ManualDoseMedicineWithAmountEntry>,
+    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
+    onSelectAmount: (String) -> Unit,
+    onLogManualDose: (LocalTime) -> Unit,
+    onDismissDialog: () -> Unit
+) {
+    if (doses.isNotEmpty()) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = stringResource(R.string.recent_custom),
+                text = stringResource(R.string.recent_doses),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
             )
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(ManualDoseTestTags.RECENT_CHOICE)
-                    .clickable(onClick = onClick),
-                shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colorScheme.secondaryContainer,
-            ) {
-                Text(
-                    text = label,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                )
+            doses.forEach { dose ->
+                if (dose.label.isNotBlank()) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(ManualDoseTestTags.RECENT_DOSE)
+                            .clickable {
+                                onSelectMedicineEntry(ManualDoseMedicineEntry(dose.label, dose.medicine))
+                                onSelectAmount(dose.amount)
+                                onLogManualDose(LocalTime.now())
+                                onDismissDialog()
+                            },
+                        shape = MaterialTheme.shapes.medium,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = dose.label,
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                            if (dose.amount.isNotBlank()) {
+                                Text(
+                                    text = dose.amount,
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -532,9 +595,8 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
         ManualDoseMedicineEntry("Medicine A", Medicine.default().copy(id = 2)),
         ManualDoseMedicineEntry("Medicine B", Medicine.default().copy(id = 3)),
     ).toImmutableList(),
-    lastCustomMedicineEntry = ManualDoseMedicineEntry("Medicine C", null),
+    lastCustomDoses = listOf(ManualDoseMedicineWithAmountEntry("Medicine C", null, "5 mg")).toImmutableList(),
     amounts = listOf("1 tablet", "2 tablets").toImmutableList(),
-    lastCustomDoseAmount = "5 ml",
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
     selectedDay = "08/01/2026",

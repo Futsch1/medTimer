@@ -348,7 +348,7 @@
     <string name="next_week">Próxima semana</string>
     <string name="stock_after_simulation_end">Após %s</string>
     <string name="move_medicine">Mover medicamento</string>
-    <string name="recent_custom">Último item personalizado</string>
+    <string name="recent_doses">Doses recentes</string>
     <string name="use_current_time">Usar a hora atual</string>
     <string name="navigate_up">Navegar para cima</string>
     <string name="close">Fechar</string>
