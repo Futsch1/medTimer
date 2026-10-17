@@ -116,8 +116,9 @@ jobs:
       include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit
 
-  # Compatibility instrumented fan-out (API x form-factor) — gated behind compile-test.
-  # Note: API 36 / medium_phone overlaps with coverage-instrumented above; redundancy left intentionally.
+  # Compatibility coverage across APIs and form factors. AndroidJUnitRunner automatically
+  # distributes discovered tests over two shards, so newly added test classes are included.
+  # API 36 / medium_phone overlaps with the full coverage run above intentionally.
   compatibility-instrumented:
     needs: compile-test
     strategy:
@@ -125,12 +126,14 @@ jobs:
       matrix:
         api-level: [28, 36]
         profile: [medium_phone, medium_tablet]
+        shard-index: ['0', '1']
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: ${{ matrix.api-level }}
       profile: ${{ matrix.profile }}
       gradle-task: connectedFullDebugAndroidTest
       coverage: false
-      artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
+      test-shard-index: ${{ matrix.shard-index }}
+      artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }} shard ${{ matrix.shard-index }}
       include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit

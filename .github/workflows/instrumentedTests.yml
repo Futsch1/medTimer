@@ -30,6 +30,11 @@ on:
         required: false
         type: boolean
         default: false
+      test-shard-index:
+        description: Optional zero-based Android test shard index (the compatibility matrix uses two shards)
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -44,6 +49,7 @@ jobs:
       EMULATOR_ARCH: x86_64
       GRADLE_TASK: ${{ inputs.gradle-task }}
       INCLUDE_APP_LOGS: ${{ inputs.include-app-logs }}
+      TEST_SHARD_INDEX: ${{ inputs.test-shard-index }}
     steps:
       - name: Delete unnecessary tools
         uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6
