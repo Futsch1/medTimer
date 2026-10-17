@@ -66,6 +66,27 @@ class ReminderAlarmActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The alarm activity is single instance, so the full screen intent of a following alarm is
+     * delivered here instead of [onCreate]. Show the reminders of that alarm, otherwise the screen
+     * keeps showing the reminders of the alarm before.
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        val extras = intent.extras ?: return
+        val alarmFragment =
+            supportFragmentManager.findFragmentById(R.id.alarmFragmentContainer) as? AlarmFragment
+        if (alarmFragment == null) {
+            addAlarmFragment(intent)
+        } else {
+            // Showing it in the running fragment keeps the alarm open; removing the fragment would
+            // close it through its onDestroyView
+            alarmFragment.showReminderNotificationData(extras)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(alarmExecutor) {
