@@ -106,6 +106,10 @@ class OverviewFragment : Fragment() {
                         onSelectAmount = {
                             manualDoseViewModel.selectAmount(it)
                         },
+                        onSelectRecentDose = {
+                            manualDoseViewModel.logRecentDose(it)
+                            showManualDoseDialog.value = false
+                        },
                         onLogManualDose = {
                             manualDoseViewModel.selectTimeAndLog(it)
                         },

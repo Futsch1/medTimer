@@ -342,7 +342,7 @@
     <string name="next_week">அடுத்த வாரம்</string>
     <string name="stock_after_simulation_end">%s க்குப் பிறகு</string>
     <string name="move_medicine">மருந்தை நகர்த்து</string>
-    <string name="recent_custom">சமீபத்திய தனிப்பயன் பதிவு</string>
+    <string name="recent_doses">சமீபத்திய மருந்தளவுகள்</string>
     <string name="use_current_time">தற்போதைய நேரத்தைப் பயன்படுத்து</string>
     <string name="navigate_up">மேலே செல்</string>
     <string name="close">மூடு</string>

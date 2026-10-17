@@ -342,7 +342,7 @@
     <string name="next_week">Næste uge</string>
     <string name="stock_after_simulation_end">Efter %s</string>
     <string name="move_medicine">Flyt medicin</string>
-    <string name="recent_custom">Seneste brugerdefinerede element</string>
+    <string name="recent_doses">Seneste doser</string>
     <string name="use_current_time">Brug det aktuelle tidspunkt</string>
     <string name="navigate_up">Naviger opad</string>
     <string name="close">Luk</string>

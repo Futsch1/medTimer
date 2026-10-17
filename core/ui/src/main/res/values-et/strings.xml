@@ -325,7 +325,7 @@
     <string name="variable_amount">Sisesta annus koos võetuks märkimisega</string>
     <string name="app_authentication">Eelda rakenduse avamisel autentimist</string>
     <string name="login">Logi MedTimeri rakendusse kasutades biomeetrilist tuvastust</string>
-    <string name="recent_custom">Viimati kasutatud kohandatud kirje</string>
+    <string name="recent_doses">Hiljutised annused</string>
     <string name="use_current_time">Kasuta praegust kellaaega</string>
     <string name="windowed_interval_reminder">Akendatud intervalliga meeldetuletus</string>
     <string name="windowed_interval_reminder_help">Määra igapäevane aktiivne aken (nt 9:00 kuni 21:00), mille alguses käivitub esimene meeldetuletus alati alguskellaajal. Järgnevad meeldetuletused käivituvad fikseeritud intervallidega kuni lõppkellaaja saabumiseni. Kogu muster lähtestatakse iga päev.</string>

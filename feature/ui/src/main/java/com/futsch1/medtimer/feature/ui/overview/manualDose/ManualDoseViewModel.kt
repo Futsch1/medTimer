@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -54,13 +55,11 @@ class ManualDoseViewModel @Inject constructor(
     private val manualDoseMedicines: Flow<MedicineChoices> =
         combine(medicineList, snapshotFlow { searchQuery.trim() }) { medicines, query ->
             MedicineChoices(
-                entries = medicines.filter { it.name.contains(query, ignoreCase = true) }.map { ManualDoseMedicineEntry(it.name, it) },
+                entries = medicines.filter { it.name.contains(query, ignoreCase = true) }
+                    .map { ManualDoseMedicineEntry(it.name, it) },
                 showSearch = medicines.size > SEARCH_MIN_MEDICINES,
             )
         }
-
-    private val lastCustomMedicineEntry: Flow<ManualDoseMedicineEntry> =
-        persistentDataDataSource.data.map { data -> ManualDoseMedicineEntry(data.lastCustomDose, null) }
 
     private val selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
         MutableStateFlow(ManualDoseMedicineEntry("", null))
@@ -91,9 +90,6 @@ class ManualDoseViewModel @Inject constructor(
         }
     }
 
-    private val lastCustomDoseAmount: Flow<String> =
-        persistentDataDataSource.data.map { data -> data.lastCustomDoseAmount }
-
     fun selectAmount(amount: String) {
         selectedManualDoseAmount.value = amount
         step.value = ManualDoseStep.TIME
@@ -121,16 +117,14 @@ class ManualDoseViewModel @Inject constructor(
 
     private val availableState: Flow<ManualDoseState> = combine(
         manualDoseMedicines,
-        lastCustomMedicineEntry,
         manualDoseAmounts,
-        lastCustomDoseAmount
-    ) { medicines, lastCustomMedicineEntry, amounts, lastCustomDoseAmount ->
+        persistentDataDataSource.data
+    ) { medicines, amounts, persistentData ->
         ManualDoseState(
             medicineEntries = medicines.entries.toImmutableList(),
             showSearch = medicines.showSearch,
-            lastCustomMedicineEntry = lastCustomMedicineEntry,
             amounts = amounts.toImmutableList(),
-            lastCustomDoseAmount = lastCustomDoseAmount,
+            lastCustomDoses = persistentData.lastManualDoses.doses.toImmutableList(),
         )
     }
 
@@ -156,11 +150,16 @@ class ManualDoseViewModel @Inject constructor(
     }
 
     fun selectTimeAndLog(doseLocalTime: LocalTime) {
-        val selectedEntry = selectedManualDoseEntry.value
-        val amount = selectedManualDoseAmount.value
         val doseDateTime = selectedDay.value.atTime(doseLocalTime)
         val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
+        logDose(selectedManualDoseEntry.value, selectedManualDoseAmount.value, doseInstant)
+    }
 
+    fun logRecentDose(dose: Pair<String, String>) {
+        logDose(ManualDoseMedicineEntry(dose.first, null), dose.second, Instant.now())
+    }
+
+    private fun logDose(selectedEntry: ManualDoseMedicineEntry, amount: String, doseInstant: Instant) {
         var reminderEvent = ReminderEvent.default().copy(
             reminderId = -1,
             status = ReminderEvent.ReminderStatus.TAKEN,
@@ -198,10 +197,7 @@ class ManualDoseViewModel @Inject constructor(
             }
         }
 
-        if (selectedEntry.medicine == null) {
-            persistentDataDataSource.setLastCustomDoseAmount(amount)
-            persistentDataDataSource.setLastCustomDose(selectedEntry.label)
-        }
+        persistentDataDataSource.addManualDose(Pair(selectedEntry.label, amount))
     }
 
     fun reset() {

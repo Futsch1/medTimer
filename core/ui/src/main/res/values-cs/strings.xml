@@ -357,7 +357,7 @@
     <string name="more_options" tools:ignore="MissingTranslation">Více možností</string>
     <string name="close" tools:ignore="MissingTranslation">Zavřít</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Navigovat nahoru</string>
-    <string name="recent_custom">Naposledy zadaná vlastní položka</string>
+    <string name="recent_doses">Poslední dávky</string>
     <string name="use_current_time">Použít aktuální čas</string>
     <string name="back">Zpět</string>
     <string name="enter_time">Zadejte čas užití</string>

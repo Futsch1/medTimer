@@ -25,7 +25,7 @@ class ManualDoseTest : MedTimerTestBase() {
         overview.assertEventContains("Test")
 
         manualDose.inPicker {
-            selectMedicine("Test")
+            chooseCustom("Test")
             enterAmount("13")
             confirmTime()
         }
@@ -33,10 +33,10 @@ class ManualDoseTest : MedTimerTestBase() {
         overview.assertEventContains(TEST_13_)
 
         manualDose.inPicker {
-            selectMedicine("Test")
-            assertAmountPrefilled("13")
-            cancel()
+            assertRecentDoseOffered("Test", "13")
+            selectRecentDose("Test", "13")
         }
+        overview.assertEventContains(TEST_13_)
 
         navigation.toMedicines()
     }

@@ -25,6 +25,8 @@ dependencies {
     api(libs.kotlinx.coroutines.core)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    implementation(libs.gson)
+
     testImplementation(libs.junit4)
     testImplementation(kotlin("test-junit"))
 }

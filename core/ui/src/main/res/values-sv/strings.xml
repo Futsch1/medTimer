@@ -345,7 +345,7 @@
     <string name="close" tools:ignore="MissingTranslation">Stäng</string>
     <string name="navigate_up" tools:ignore="MissingTranslation">Navigera uppåt</string>
     <string name="more_options" tools:ignore="MissingTranslation">Fler alternativ</string>
-    <string name="recent_custom">Senast använda anpassade post</string>
+    <string name="recent_doses">Senaste doser</string>
     <string name="use_current_time">Använd aktuell tid</string>
     <string name="back">Tillbaka</string>
     <string name="enter_time">Ange intagen tid</string>

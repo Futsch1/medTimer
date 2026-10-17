@@ -47,21 +47,26 @@ class PersistentDataDataSourceTest {
     // ── B: Write-read setters ──────────────────────────────────────────
 
     @Test
-    fun `setLastCustomDose roundtrip`() {
-        dataSource.setLastCustomDose("Aspirin 500mg")
-        assertEquals("Aspirin 500mg", dataSource.data.value.lastCustomDose)
+    fun `addCustomDose stores the three most recent doses in order`() {
+        dataSource.addManualDose("Medicine A" to "1")
+        dataSource.addManualDose("Medicine B" to "2")
+        dataSource.addManualDose("Medicine C" to "3")
+        dataSource.addManualDose("Medicine D" to "4")
+
+        assertEquals(
+            listOf("Medicine D" to "4", "Medicine C" to "3", "Medicine B" to "2"),
+            dataSource.data.value.lastManualDoses.doses,
+        )
     }
 
     @Test
-    fun `setLastCustomDose with empty string`() {
-        dataSource.setLastCustomDose("")
-        assertEquals("", dataSource.data.value.lastCustomDose)
-    }
+    fun `legacy last custom dose is available as a recent dose`() {
+        medTimerPrefs.edit()
+            .putString(PersistentDataDataSource.LAST_CUSTOM_DOSE, "Medicine A")
+            .putString(PersistentDataDataSource.LAST_CUSTOM_DOSE_AMOUNT, "1")
+            .commit()
 
-    @Test
-    fun `setLastCustomDoseAmount roundtrip`() {
-        dataSource.setLastCustomDoseAmount("1.5")
-        assertEquals("1.5", dataSource.data.value.lastCustomDoseAmount)
+        assertEquals(listOf("Medicine A" to "1"), dataSource.data.value.lastManualDoses.doses)
     }
 
     @Test
@@ -160,7 +165,8 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `setCheckedFilters roundtrip with multiple filters`() {
-        val filters = setOf(OverviewFilter.TAKEN, OverviewFilter.SKIPPED, OverviewFilter.SCHEDULED, OverviewFilter.RAISED)
+        val filters =
+            setOf(OverviewFilter.TAKEN, OverviewFilter.SKIPPED, OverviewFilter.SCHEDULED, OverviewFilter.RAISED)
         dataSource.setCheckedFilters(filters)
         assertEquals(filters, dataSource.data.value.checkedFilters)
     }
@@ -319,7 +325,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `remove by eventId drops entire entry when all events match`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2), mutableListOf(10, 20), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                listOf(1, 2),
+                mutableListOf(10, 20),
+                1
+            )
+        )
         dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(200), listOf(3), mutableListOf(30), 2))
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(10, 20))
@@ -331,7 +344,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `remove by eventId keeps unmatched eventIds within same entry`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), listOf(1, 2, 3), mutableListOf(10, 20, 30), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                listOf(1, 2, 3),
+                mutableListOf(10, 20, 30),
+                1
+            )
+        )
 
         dataSource.removePendingLocationSnoozesForReminderEventIds(listOf(20))
 
@@ -371,7 +391,14 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `pending snooze with empty reminderIds`() {
-        dataSource.addPendingLocationSnooze(PendingSnooze(Instant.ofEpochSecond(100), emptyList(), mutableListOf(10), 1))
+        dataSource.addPendingLocationSnooze(
+            PendingSnooze(
+                Instant.ofEpochSecond(100),
+                emptyList(),
+                mutableListOf(10),
+                1
+            )
+        )
 
         val loaded = dataSource.getPendingLocationSnoozes()
         assertEquals(1, loaded.size)
@@ -404,9 +431,9 @@ class PersistentDataDataSourceTest {
 
     @Test
     fun `data flow emits on medTimer preference change`() = runTest {
-        dataSource.setLastCustomDose("Test")
+        dataSource.addManualDose("Medicine A" to "1")
         val value = dataSource.data.first()
-        assertEquals("Test", value.lastCustomDose)
+        assertEquals(listOf("Medicine A" to "1"), value.lastManualDoses.doses)
     }
 
     @Test
