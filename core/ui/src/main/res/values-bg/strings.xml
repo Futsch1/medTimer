@@ -145,6 +145,7 @@
     <string name="weekend_start_time">Начален час</string>
     <string name="weekend_end_time">Краен час</string>
     <string name="custom">Ръчно…</string>
+    <string name="set_duration">Задай продължителност…</string>
     <string name="advanced_settings">Разширени настройки</string>
     <string name="cycle_pause_days">Дни за пауза</string>
     <string name="reminders">Напомняния</string>
@@ -313,6 +314,7 @@
     <string name="create_expiration_date_reminder">Създаване на напомняне за срок на годност</string>
     <string name="duplicate">Дублиране</string>
     <string name="duplicate_including_reminders">Дублиране, включително напомнянията</string>
+    <string name="duplicate_name">%1$s (копие)</string>
     <string name="weekly">Ежеседмично</string>
     <string name="monthly">Ежемесечно</string>
     <string name="automatic_backup">Автоматично архивиране</string>

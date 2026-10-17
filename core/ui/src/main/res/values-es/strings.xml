@@ -150,6 +150,7 @@
     <string name="weekend_start_time">Hora de inicio</string>
     <string name="weekend_end_time">Hora de fin</string>
     <string name="custom">Personalizado…</string>
+    <string name="set_duration">Establecer duración…</string>
     <string name="advanced_settings">Ajustes avanzados</string>
     <string name="cycle_pause_days">Días de pausa</string>
     <string name="reminders">Recordatorios</string>
@@ -319,6 +320,7 @@
     <string name="create_expiration_date_reminder">Crear recordatorio de fecha de vencimiento</string>
     <string name="duplicate">Duplicar</string>
     <string name="duplicate_including_reminders">Duplicar incluyendo recordatorios</string>
+    <string name="duplicate_name">%1$s (copia)</string>
     <string name="weekly">Semanalmente</string>
     <string name="monthly">Mensualmente</string>
     <string name="automatic_backup">Copia de seguridad automática</string>

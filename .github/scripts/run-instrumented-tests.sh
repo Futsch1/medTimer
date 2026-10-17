@@ -27,6 +27,21 @@ stop_logcat() {
 }
 trap stop_logcat EXIT
 
+# Build before pinning the emulator clock: Gradle setup/assembly can take long enough for the
+# emulator to resynchronize its clock before instrumentation starts. Pin it after that work.
+if ! ./gradlew :app:assembleFullDebugAndroidTest; then
+	exit 1
+fi
+
+adb shell settings put global auto_time 0
+adb shell su 0 toybox date 0801160025
+emulator_time=$(adb shell date +%Y-%m-%d_%H:%M | tr -d '\r')
+if [[ $emulator_time != '2025-08-01_16:00' ]]; then
+	echo "Could not pin emulator clock to the instrumented-test time (got '$emulator_time')." >&2
+	exit 1
+fi
+printf 'Pinned emulator clock to %s before running tests.\n' "$emulator_time"
+
 adb logcat -c
 logcat_filters=(
 	TestRunner:V

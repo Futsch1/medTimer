@@ -120,6 +120,7 @@
     <string name="weekend_start_time">Upphafsími</string>
     <string name="weekend_end_time">Lokatími</string>
     <string name="custom">Sérsnið…</string>
+    <string name="set_duration">Stilla tímalengd…</string>
     <string name="advanced_settings">Ítarlegri stillingar</string>
     <string name="cycle_pause_days">Hvíldardagar</string>
     <string name="reminders">Áminningar</string>
@@ -200,6 +201,7 @@
     <string name="amount">Magn</string>
     <string name="duplicate">Afrita</string>
     <string name="duplicate_including_reminders">Afrita ásamt áminningum</string>
+    <string name="duplicate_name">%1$s (afrit)</string>
     <string name="weekly">Vikulega</string>
     <string name="monthly">Mánaðarlega</string>
     <string name="automatic_backup">Sjálfvirk öryggisafritun</string>

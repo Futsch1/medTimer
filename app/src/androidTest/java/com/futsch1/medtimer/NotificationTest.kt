@@ -1,7 +1,9 @@
 package com.futsch1.medtimer
 
 import android.os.Build
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.ui.Interval
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.assertSecondaryAlarmAfter
 import com.futsch1.medtimer.utilities.awaitNextSecond
@@ -210,6 +212,28 @@ class NotificationTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun setSnoozeDuration() {
+        val twoHours = Interval(120).toTranslatedString(InstrumentationRegistry.getInstrumentation().targetContext)
+
+        settings.inSection(R.string.snooze_settings) {
+            preferences.click(R.string.snooze_duration)
+            dialogs.clickItem(R.string.set_duration)
+            dialogs.enterTextAndConfirm("120")
+            preferences.assertSummary(R.string.snooze_duration, twoHours)
+        }
+
+        settings.inSection(R.string.snooze_settings) {
+            preferences.assertSummary(R.string.snooze_duration, twoHours)
+            preferences.click(R.string.snooze_duration)
+            dialogs.clickItem(R.string.set_duration)
+            dialogs.awaitInput()
+            dialogs.assertContains("120")
+            dialogs.confirm()
+        }
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun customSnooze() {
         settings.inSection(R.string.snooze_settings) {
             preferences.click(R.string.snooze_duration)
@@ -317,6 +341,36 @@ class NotificationTest : MedTimerTestBase() {
 
         overview.assertEventState(0, R.string.skipped)
         overview.assertEventState(1, R.string.skipped)
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun takingCombinedRemindersFromOverviewRemovesNotification() {
+        settings.click(R.string.display_settings, R.string.combine_notifications)
+
+        val notificationTime = aboutToFire()
+
+        seed.medicine(TEST_MED) {
+            reminder("1", notificationTime)
+            reminder(SECOND_ONE, notificationTime)
+        }
+
+        notifications.inShade {
+            scheduleRemindersNow()
+            assertShows(TEST_MED)
+            assertShows(SECOND_ONE)
+        }
+
+        navigation.toOverview()
+        // A long click selects both doses of the combined notification
+        overview.longClickEvent(0)
+        overview.assertSelectionCount(2)
+        overview.clickSelectionAction(R.string.taken)
+
+        overview.assertEventState(0, R.string.taken)
+        overview.assertEventState(1, R.string.taken)
+
+        notifications.assertRemoved(TEST_MED)
     }
 
     @Test

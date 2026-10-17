@@ -151,6 +151,7 @@
     <string name="weekend_start_time">Время начала</string>
     <string name="weekend_end_time">Время окончания</string>
     <string name="custom">Пользовательский…</string>
+    <string name="set_duration">Задать длительность…</string>
     <string name="advanced_settings">Продвинутые настройки</string>
     <string name="cycle_pause_days">Дни паузы</string>
     <string name="reminders">Напоминания</string>
@@ -321,6 +322,7 @@
     <string name="create_expiration_date_reminder">Создать напоминание о сроке годности</string>
     <string name="duplicate">Дублировать</string>
     <string name="duplicate_including_reminders">Дублировать вместе с напоминаниями</string>
+    <string name="duplicate_name">%1$s (копия)</string>
     <string name="weekly">Еженедельно</string>
     <string name="monthly">Ежемесячно</string>
     <string name="automatic_backup">Автоматическое резервное копирование</string>

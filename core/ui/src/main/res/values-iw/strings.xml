@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">עזרה</string>
     <string name="help_english_only">העזרה זמינה כרגע באנגלית בלבד.</string>
@@ -78,7 +78,7 @@
     <string name="all_taken">הכל נלקח (%s)</string>
     <string name="app_url">מדטיימר בGithub</string>
     <string name="tab_settings">הגדרות</string>
-    <string name="tab_overview">ראיה כללית</string>
+    <string name="tab_overview">סקירה</string>
     <string name="tab_medicine">תרופות</string>
     <string name="add_medicine">הוסיפו תרופה</string>
     <string name="add_reminder">הוסיפו תזכורת</string>
@@ -150,6 +150,7 @@
     <string name="weekend_start_time">שעת התחלה</string>
     <string name="weekend_end_time">שעת סיום</string>
     <string name="custom">מותאם אישית…</string>
+    <string name="set_duration">הגדרת משך…</string>
     <string name="advanced_settings">הגדרות מתקדמות</string>
     <string name="cycle_pause_days">ימי הפסקה</string>
     <string name="reminders">תזכורות</string>
@@ -319,6 +320,7 @@
     <string name="create_expiration_date_reminder">יצירת תזכורת תאריך תפוגה</string>
     <string name="duplicate">שכפול</string>
     <string name="duplicate_including_reminders">שכפול כולל תזכורות</string>
+    <string name="duplicate_name">%1$s (עותק)</string>
     <string name="weekly">שבועי</string>
     <string name="monthly">חודשי</string>
     <string name="automatic_backup">גיבוי אוטומטי</string>
@@ -338,7 +340,7 @@
     <string name="set_home_location_confirm">להגדיר את מיקום הבית ל-\n%1$s, %2$s?</string>
     <string name="home_location_error">לא ניתן לקבוע את מיקומך הנוכחי</string>
     <string name="exact_reminders_warning_title">תזכורות מדויקות מושבתות</string>
-    <string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם אתה זקוק לתזכורות מדויקות (במחיר של עלייה קלה בצריכת הסוללה), הפעל זאת בהגדרות ההתראות.</string>
+    <string name="exact_reminders_warning_summary">התזכורות עשויות להישלח מספר דקות מאוחר מהמתוזמן. אם יש צורך בתזכורות מדויקות (במחיר עלייה קלה בצריכת הסוללה), נא להפעיל זאת בהגדרות ההתראות.</string>
     <string name="enable">הפעלה</string>
     <string name="medicine_settings">הגדרות תרופה</string>
     <string name="medicine_cannot_be_skipped">לא ניתן לדלג על תרופה</string>

@@ -81,10 +81,7 @@ jobs:
           disable-animations: true
           cores: 4
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          script: |
-            adb shell settings put global auto_time 0
-            adb shell su 0 toybox date 0801160025
-            bash .github/scripts/run-instrumented-tests.sh
+          script: bash .github/scripts/run-instrumented-tests.sh
 
       - name: Upload coverage to Qlty
         if: inputs.coverage && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
@@ -113,7 +110,7 @@ jobs:
         if: ${{ inputs.coverage && env.SONAR_TOKEN != '' }}
         run: ./gradlew sonar
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: ${{ inputs.artifact-name }}

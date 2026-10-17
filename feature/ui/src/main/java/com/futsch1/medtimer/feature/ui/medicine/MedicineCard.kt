@@ -138,6 +138,7 @@ private fun MedicineHeader(medicine: MedicineScreenItem) {
     )
 }
 
+@OptIn(ExperimentalFlexBoxApi::class)
 @Composable
 private fun MedicineTags(tags: List<String>) {
     if (tags.isEmpty()) return

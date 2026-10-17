@@ -160,6 +160,7 @@
     <string name="weekend_start_time">Start time</string>
     <string name="weekend_end_time">End time</string>
     <string name="custom">Custom…</string>
+    <string name="set_duration">Set duration…</string>
     <string name="advanced_settings">Advanced settings</string>
     <string name="cycle_pause_days">Pause days</string>
     <string name="reminders">Reminders</string>
@@ -343,6 +344,7 @@
     <string name="create_expiration_date_reminder">Create expiration date reminder</string>
     <string name="duplicate">Duplicate</string>
     <string name="duplicate_including_reminders">Duplicate including reminders</string>
+    <string name="duplicate_name">%1$s (copy)</string>
     <string name="automatic_backup">Automatic backup</string>
     <string name="backup_successful_to">Automatic backup successful: %s</string>
     <string name="automatic_backup_directory_required">Automatic backups require access to a folder. Select a folder in the next dialog to continue.</string>

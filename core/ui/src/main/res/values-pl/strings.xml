@@ -234,6 +234,7 @@
     <string name="tags">Tagi</string>
     <string name="friday">Piątek</string>
     <string name="custom">Niestandardowe…</string>
+    <string name="set_duration">Ustaw czas trwania…</string>
     <string name="next_month">Następny miesiąc</string>
     <string name="minutes_1">1 minuta</string>
     <string name="advanced_settings">Zaawansowane</string>
@@ -325,6 +326,7 @@
     <string name="create_expiration_date_reminder">Utwórz przypomnienie o dacie wygaśnięcia</string>
     <string name="duplicate">Duplikuj</string>
     <string name="duplicate_including_reminders">Duplikuj wraz z przypomnieniami</string>
+    <string name="duplicate_name">%1$s (kopia)</string>
     <string name="weekly">Tygodniowo</string>
     <string name="monthly">Miesięcznie</string>
     <string name="automatic_backup">Automatyczna kopia zapasowa</string>

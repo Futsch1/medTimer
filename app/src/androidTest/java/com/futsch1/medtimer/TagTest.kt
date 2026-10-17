@@ -1,5 +1,6 @@
 package com.futsch1.medtimer
 
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -54,6 +55,7 @@ class TagTest : MedTimerTestBase() {
         }
 
         menus.clickEditMedicineOption(R.string.duplicate)
+        medicines.assertNameContains(InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.duplicate_name, "Test 2"))
         medicines.clickItem(2)
         tags.inMedicineTags { assertChecked(NEW_TAG) }
     }

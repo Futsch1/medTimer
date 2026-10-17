@@ -11,6 +11,8 @@ import com.futsch1.medtimer.feature.reminders.SnoozeProcessor
 import com.futsch1.medtimer.feature.reminders.StockHandlingProcessor
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,6 +29,13 @@ class ReminderCommandBusImpl @Inject constructor(
     private val stockHandlingProcessor: StockHandlingProcessor,
     private val locationSnoozeProcessor: LocationSnoozeProcessor,
 ) : ReminderCommandBus {
+
+    /**
+     * Marking events reads the shown notification and re-posts it without the processed events.
+     * Concurrent calls would each start from the same notification and the last re-post would win,
+     * bringing back events another call already processed.
+     */
+    private val markReminderEventsMutex = Mutex()
 
     override suspend fun scheduleNextNotification() {
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
@@ -56,7 +65,9 @@ class ReminderCommandBusImpl @Inject constructor(
     }
 
     override suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {
-        notificationProcessor.processReminderEventsInNotification(reminderEventIds, status)
+        markReminderEventsMutex.withLock {
+            notificationProcessor.processReminderEventsInNotification(reminderEventIds, status)
+        }
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
     }
 

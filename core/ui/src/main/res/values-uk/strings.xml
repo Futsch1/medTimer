@@ -155,6 +155,7 @@
     <string name="weekend_start_time">Час початку</string>
     <string name="weekend_end_time">Час завершення</string>
     <string name="custom">Користувацьке…</string>
+    <string name="set_duration">Задати тривалість…</string>
     <string name="advanced_settings">Розширені налаштування</string>
     <string name="cycle_pause_days">Призупинити дні</string>
     <string name="reminders">Нагадування</string>
@@ -325,6 +326,7 @@
     <string name="create_expiration_date_reminder">Створити нагадування про термін придатності</string>
     <string name="duplicate">Дублювати</string>
     <string name="duplicate_including_reminders">Дублювати разом із нагадуваннями</string>
+    <string name="duplicate_name">%1$s (копія)</string>
     <string name="weekly">Щотижня</string>
     <string name="monthly">Щомісяця</string>
     <string name="automatic_backup">Автоматичне резервне копіювання</string>
