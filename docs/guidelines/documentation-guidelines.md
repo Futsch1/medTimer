@@ -18,7 +18,7 @@ Today, `docs/` mixes two kinds of content at its top level — user-facing how-t
 this `guidelines/` sub-folder:
 
 | Path                | Holds                                            | Examples                                                                   |
-|---------------------|--------------------------------------------------|----------------------------------------------------------------------------|
+| ------------------- | ------------------------------------------------ | -------------------------------------------------------------------------- |
 | `docs/help/`        | Canonical task-oriented user guide and its index | [`Help contents`](../help/index.md), [`More tasks`](../help/more-tasks.md) |
 | `docs/help/images/` | Screenshots used by active Help topics           | `getting-started-upcoming-reminder.png`                                    |
 | `docs/guidelines/`  | Contributor & agent standards (this folder)      | this guide, [`kotlin-android.md`](kotlin-android.md)                       |
