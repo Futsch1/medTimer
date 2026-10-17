@@ -23,9 +23,8 @@ permissions:
   contents: read
   id-token: write
 
-# Staged pipeline: lint -> unit tests -> compile -> instrumented fan-out.
-# The instrumented jobs (coverage run + compatibility matrix) only start once
-# lint, unit tests and the compile step have all succeeded.
+# Parallel verification: lint, unit tests and compile run independently.
+# Instrumented jobs only start once all three have succeeded.
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -48,7 +47,6 @@ jobs:
           path: app/build/reports/lint-results-fullDebug.html
 
   unit-tests:
-    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -89,7 +87,6 @@ jobs:
             core/database/build/reports/tests/testDebugUnitTest
 
   compile-test:
-    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -101,14 +98,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-overwrite-existing: true
-      - name: Compile debug and instrumented test APKs
-        run: ./gradlew assembleDebug :app:assembleFullDebugAndroidTest
+      - name: Compile (assemble both flavors)
+        run: ./gradlew assembleDebug
       - name: Validate bundled Help guide and packaged assets
         run: ./gradlew :app:validateHelpGuide
 
-  # Coverage instrumented run (single config) — gated behind compile-test.
+  # Coverage instrumented run (single config) — gated behind all verification jobs.
   coverage-instrumented:
-    needs: compile-test
+    needs: [lint, unit-tests, compile-test]
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: 36
@@ -123,7 +120,7 @@ jobs:
   # distributes discovered tests over two shards, so newly added test classes are included.
   # API 36 / medium_phone overlaps with the full coverage run above intentionally.
   compatibility-instrumented:
-    needs: compile-test
+    needs: [lint, unit-tests, compile-test]
     strategy:
       fail-fast: false
       matrix:
