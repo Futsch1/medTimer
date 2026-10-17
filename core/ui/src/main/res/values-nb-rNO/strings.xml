@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="help_english_only">Hjelpen er for øyeblikket bare tilgjengelig på engelsk.</string>
     <string name="show_reminded_time_in_overview">Vis påminnelsestidspunkt i oversikten</string>
     <string name="show_stock_changes_in_overview">Vis lagerendringer i oversikten</string>
     <string name="expiration_date">Utløpsdato</string>
@@ -83,4 +84,10 @@
     <string name="pk_unit_conflict">%1$s vises ikke fordi dosene bruker ulike enheter: %2$s. Endre mengdene slik at alle bruker samme enhet.</string>
     <string name="pk_no_unit">ingen enhet</string>
     <string name="custom_range">Egendefinert</string>
-</resources>
+
+<string name="intro_setup">Konfigurer din første påminnelse</string>
+<string name="intro_setup_description">Legg først til en medisin, og legg deretter til en påminnelse for den. MedTimer lagrer denne informasjonen på enheten din og sender ikke medisinopplysningene dine noe sted.\n\nLes Kom i gang for å se alle trinnene i oppsettet.</string>
+<string name="intro_getting_started_link">Kom i gang</string>
+<string name="intro_overview_orientation_description">Oversikten viser påminnelser for den valgte dagen. Velg en dag fra ukerekken. Statusikonet ved siden av hver påminnelse viser om den venter, det er varslet om den, den er tatt, hoppet over eller utsatt til du er hjemme. Du kan trykke på ikonet for å endre påminnelsens status.</string>
+<string name="intro_notifications">Varslingstillatelse</string>
+<string name="intro_notifications_description">MedTimer trenger tillatelse til å sende varsler for å varsle deg når en påminnelse forfaller. Du kan hoppe over introduksjonen og velge om du vil tillate varsler. Dette kan endres senere i Android-innstillingene.</string></resources>

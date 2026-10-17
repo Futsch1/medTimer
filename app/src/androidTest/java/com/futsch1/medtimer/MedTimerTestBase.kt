@@ -12,6 +12,7 @@ import com.futsch1.medtimer.di.TimeFormatterEntryPoint
 import com.futsch1.medtimer.harness.FakeTimeAccess
 import com.futsch1.medtimer.harness.MedTimerTestHarness
 import com.futsch1.medtimer.harness.Seed
+import com.futsch1.medtimer.robots.HelpRobot
 import com.futsch1.medtimer.robots.Robots
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.testing.BindValue
@@ -82,6 +83,7 @@ abstract class MedTimerTestBase {
     protected val statistics get() = robots.statistics
     protected val settings get() = robots.settings
     protected val notifications get() = robots.notifications
+    protected val toast get() = robots.toast
 
     protected val reminders get() = robots.reminders
     protected val medicineEditor get() = robots.medicineEditor
@@ -92,6 +94,7 @@ abstract class MedTimerTestBase {
     protected val notes get() = robots.notes
     protected val calendar get() = robots.calendar
     protected val appIntro get() = robots.appIntro
+    protected val help get() = HelpRobot(menus)
     protected val alarm get() = robots.alarm
     protected val shareSheet get() = robots.shareSheet
     protected val export get() = robots.export

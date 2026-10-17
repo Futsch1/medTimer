@@ -19,6 +19,15 @@ class SettingsRobot(private val menus: MenuRobot, private val preferences: Prefe
         preferences.leave(path.size + 1)
     }
 
+    /** Opens the notification troubleshooting topic from its contextual link in notification settings. */
+    fun openNotificationsHelp() {
+        menus.clickAppOption(com.futsch1.medtimer.core.ui.R.string.tab_settings)
+        preferences.click(com.futsch1.medtimer.core.ui.R.string.notification_reminder_settings)
+        preferences.click(com.futsch1.medtimer.core.ui.R.string.notifications_missing_or_late)
+    }
+
+    fun returnToOverviewFromNotificationSettings() = preferences.leave(2)
+
     /** Clicks the last entry of [path], with the entries before it read as nested screens. */
     fun click(@StringRes vararg path: Int) {
         val sections = path.dropLast(1).toIntArray()

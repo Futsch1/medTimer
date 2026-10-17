@@ -23,9 +23,8 @@ permissions:
   contents: read
   id-token: write
 
-# Staged pipeline: lint -> unit tests -> compile -> instrumented fan-out.
-# The instrumented jobs (coverage run + compatibility matrix) only start once
-# lint, unit tests and the compile step have all succeeded.
+# Parallel verification: lint, unit tests and compile run independently.
+# Instrumented jobs only start once all three have succeeded.
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -36,8 +35,9 @@ jobs:
         with:
           java-version: "21"
           distribution: temurin
-          cache: gradle
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-overwrite-existing: true
       - name: Android lint
         run: ./gradlew lint
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -47,7 +47,6 @@ jobs:
           path: app/build/reports/lint-results-fullDebug.html
 
   unit-tests:
-    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -56,8 +55,9 @@ jobs:
         with:
           java-version: "21"
           distribution: temurin
-          cache: gradle
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-overwrite-existing: true
 
       - name: Run fuzzing tests (both variants)
         run: ./gradlew testFullDebug testFossDebug -Dfuzzing=true
@@ -87,7 +87,6 @@ jobs:
             core/database/build/reports/tests/testDebugUnitTest
 
   compile-test:
-    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -96,14 +95,17 @@ jobs:
         with:
           java-version: "21"
           distribution: temurin
-          cache: gradle
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-overwrite-existing: true
       - name: Compile (assemble both flavors)
         run: ./gradlew assembleDebug
+      - name: Validate bundled Help guide and packaged assets
+        run: ./gradlew :app:validateHelpGuide
 
-  # Coverage instrumented run (single config) — gated behind compile-test.
+  # Coverage instrumented run (single config) — gated behind all verification jobs.
   coverage-instrumented:
-    needs: compile-test
+    needs: [lint, unit-tests, compile-test]
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: 36
@@ -114,21 +116,24 @@ jobs:
       include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit
 
-  # Compatibility instrumented fan-out (API x form-factor) — gated behind compile-test.
-  # Note: API 36 / medium_phone overlaps with coverage-instrumented above; redundancy left intentionally.
+  # Compatibility coverage across APIs and form factors. AndroidJUnitRunner automatically
+  # distributes discovered tests over two shards, so newly added test classes are included.
+  # API 36 / medium_phone overlaps with the full coverage run above intentionally.
   compatibility-instrumented:
-    needs: compile-test
+    needs: [lint, unit-tests, compile-test]
     strategy:
       fail-fast: false
       matrix:
         api-level: [28, 36]
         profile: [medium_phone, medium_tablet]
+        shard-index: ["0", "1"]
     uses: ./.github/workflows/instrumentedTests.yml
     with:
       api-level: ${{ matrix.api-level }}
       profile: ${{ matrix.profile }}
       gradle-task: connectedFullDebugAndroidTest
       coverage: false
-      artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }}
+      test-shard-index: ${{ matrix.shard-index }}
+      artifact-name: Test reports ${{ matrix.profile }} ${{ matrix.api-level }} shard ${{ matrix.shard-index }}
       include-app-logs: ${{ inputs.include-app-logs || false }}
     secrets: inherit

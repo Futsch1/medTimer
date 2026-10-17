@@ -15,5 +15,11 @@ class AppIntroRobot(private val ui: ComposeUi, private val menus: MenuRobot) {
         assertDisplayed(com.github.appintro.R.id.description, ui.getString(descriptionRes))
     }
 
+    fun next() = clickOn(com.github.appintro.R.id.next)
+
+    fun done() = clickOn(com.github.appintro.R.id.done)
+
+    fun openGettingStarted() = clickOn(com.github.appintro.R.id.description)
+
     fun skip() = clickOn(com.github.appintro.R.id.skip)
 }

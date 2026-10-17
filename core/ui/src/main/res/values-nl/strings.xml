@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Help</string>
+    <string name="help_english_only">De help is momenteel alleen beschikbaar in het Engels.</string>
     <string name="continuous_from">Continu interval vanaf %1$s</string>
     <string name="continuous_interval_reminder">Continue interval herinnering</string>
-    <string name="continuous_interval_reminder_help">Start een herinnering op basis van een tijdsinterval (bijv. elke 6 uur) vanaf een bepaald moment. Dit patroon is continu, negeert de beperkingen van de tijd van de dag, totdat het handmatig wordt gedeactiveerd.</string>
+    <string name="continuous_interval_reminder_help">Herhaal na een vaste tijdsduur vanaf een startmoment, bijvoorbeeld elke 6 uur.</string>
     <string name="cycle_reminder">Cyclische herinnering</string>
     <string name="cycle_start_date">Start eerste cyclus</string>
     <string name="daily_from_to">Dagelijks interval van %1$s tot %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Overgeslagen</string>
     <string name="taken">Ingenomen</string>
     <string name="time_based_reminder">Herinnering op basis van tijd</string>
-    <string name="time_based_reminder_help">Stel specifieke tijden in (bijv. 8:00 uur) and configureer een terugkerend patroon. Dit maakt nauwkeurige controle over specifieke weekdagen, dagen van de maand of complexe periodieke schema\'s (zoals \'elke 3 dagen\') mogelijk.</string>
+    <string name="time_based_reminder_help">Herinner op geselecteerde tijdstippen, bijvoorbeeld elke dag om 8:00 uur.</string>
     <string name="weekday_limited">Beperkt tot sommige dagen van de week</string>
     <string name="windowed_interval_reminder">Herinnering met interval binnen een tijdvenster</string>
-    <string name="windowed_interval_reminder_help">Definieer een dagelijks actief venster (bijv. 9:00 uur tot 21:00 uur) waarbij de eerste herinnering altijd op de starttijd valt. Volgende herinneringen worden met vaste intervallen geactiveerd totdat de eindtijd is bereikt. Het volledige patroon wordt elke dag gereset.</string>
+    <string name="windowed_interval_reminder_help">Herhaal met intervallen binnen een dagelijks tijdvenster, bijvoorbeeld van 9:00 tot 21:00 uur.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dagen</item>
@@ -165,11 +167,12 @@
     <string name="edit_event">Herinnering bewerken</string>
     <string name="intro_welcome">Welkom bij MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is een gratis en open source behandelingherinneringsapp met een focus op privacy.\n\nHet vereist toestemming om meldingen voor behandelingherinneringen te tonen.</string>
-    <string name="intro_medicine_description">Gebruik het tabblad \'Medicijnen\' om de medicijnen aan te maken die u gebruikt en waarvoor u een herinnering wilt ontvangen. U kunt tags aan medicijnen toewijzen en de voorraad ervan configureren.</string>
-    <string name="intro_reminder_description">Selecteer een medicijn om de details te bewerken en herinneringen te maken voor de verschillende doses die u moet innemen.\n\nHerinneringen kunnen tijd- of intervalgebaseerd zijn en kunnen worden beperkt tot specifieke dagen.</string>
-    <string name="intro_notification_description">Zodra er een herinnering is, verschijnt er een melding die je de mogelijkheid geeft om een dosis te markeren als ingenomen (door op de knop \"INGENOMEN\" te klikken), overgeslagen (door de melding te negeren) of na enige tijd opnieuw te worden herinnerd (\"SNOOZEN\").</string>
-    <string name="intro_overview_description">Op het overzichtsscherm zie je de aankomende herinneringen en de laatste herinneringen. Herinneringen kunnen worden bewerkt door ze naar rechts te vegen.\n\nVerder kun je handmatig extra doses van een van de geconfigureerde behandelingen of een aangepast behandeling registreren.</string>
-    <string name="intro_analysis_description">De app slaat alle herinneringsgebeurtenissen op. Je kunt je eerdere doseringen analyseren in het analysescherm en je geschiedenis exporteren via het kebabmenu (drie puntjes). De geschiedenis blijft bewaard, zelfs als behandelingen of herinneringen worden verwijderd of een andere naam krijgen.</string>
+<string name="intro_setup">Stel je eerste herinnering in</string>
+<string name="intro_setup_description">Voeg eerst een medicijn toe en voeg er daarna een herinnering voor toe. MedTimer bewaart deze informatie op je apparaat en stuurt je medicatiegegevens nergens naartoe.\n\nLees Aan de slag voor alle stappen voor het instellen.</string>
+<string name="intro_getting_started_link">Aan de slag</string>
+<string name="intro_overview_orientation_description">Het overzicht toont herinneringen voor de geselecteerde dag. Selecteer een dag in de weekrij. Het statuspictogram naast elke herinnering geeft aan of deze in behandeling is, gemeld is, ingenomen is, overgeslagen is of tot thuiskomst is uitgesteld. Je kunt erop drukken om de status van de herinnering te wijzigen.</string>
+<string name="intro_notifications">Meldingsmachtiging</string>
+<string name="intro_notifications_description">MedTimer heeft toestemming voor meldingen nodig om je te waarschuwen wanneer een herinnering moet worden uitgevoerd. Je kunt de introductie overslaan en kiezen of je meldingen wilt toestaan; je kunt dit later wijzigen in de Android-instellingen.</string>
     <string name="show_intro">Toon app intro</string>
     <string name="are_you_sure_delete_reminder_event">Weet je zeker dat je de herinneringsgebeurtenis wilt verwijderen?</string>
     <string name="notification_importance">Prioriteit melding</string>
@@ -239,6 +242,7 @@
     <string name="disable_widget_summary">Voorkom dat widgets gevoelige medicatie-informatie weergeven op het startscherm</string>
     <string name="re_raise_event">De gebeurtenis opnieuw activeren</string>
     <string name="notification_reminder_settings">Instellingen voor meldingen en herinneringen</string>
+    <string name="notifications_missing_or_late">Meldingen ontbreken of komen te laat</string>
     <string name="display_settings">Weergave-instellingen</string>
     <string name="use_relative_date_time_summary">Toon relatieve datum/tijd voor herinneringen</string>
     <string name="use_relative_date_time">Relatieve datum/tijd</string>
@@ -365,4 +369,8 @@
     <string name="pk_unit_conflict">%1$s wordt niet getoond omdat de doses verschillende eenheden gebruiken: %2$s. Pas de hoeveelheden aan zodat ze allemaal dezelfde eenheid gebruiken.</string>
     <string name="pk_no_unit">geen eenheid</string>
     <string name="custom_range">Aangepast</string>
+    <string name="setup_no_medicines_guidance">Voeg eerst een medicijn toe en daarna een herinnering ervoor. Een medicijn alleen plant geen meldingen in.</string>
+    <string name="setup_no_reminders_guidance">Een medicijn alleen plant geen meldingen in. Voeg een herinnering toe om meldingen in te plannen.</string>
+    <string name="setup_guidance_getting_started">Aan de slag</string>
+    <string name="reminder_types_help">Meer informatie over herinneringstypen</string>
 </resources>

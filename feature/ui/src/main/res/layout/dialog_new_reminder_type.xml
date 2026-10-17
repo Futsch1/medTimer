@@ -315,6 +315,13 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reminderTypesHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="@string/reminder_types_help" />
+
         <Button
             android:id="@+id/cancelCreateReminder"
             style="?android:attr/buttonBarButtonStyle"

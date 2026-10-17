@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Помощ</string>
+    <string name="help_english_only">Помощното съдържание в момента е налично само на английски език.</string>
     <string name="continuous_from">Непрекъснат интервал, започващ от %1$s</string>
     <string name="continuous_interval_reminder">Напомняне за непрекъснат интервал</string>
-    <string name="continuous_interval_reminder_help">Стартирайте напомняне въз основа на интервал от време (напр. на всеки 6 часа) от определен момент. Този модел е непрекъснат, като се игнорират ограниченията за времето от деня, докато не бъде деактивиран ръчно.</string>
+    <string name="continuous_interval_reminder_help">Повтаряйте след фиксирана продължителност от начален момент, например на всеки 6 часа.</string>
     <string name="cycle_reminder">Циклични напомняния</string>
     <string name="cycle_start_date">Начало на първия цикъл</string>
     <string name="daily_from_to">Дневен интервал от %1$s до %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Пропуснато</string>
     <string name="taken">Взето</string>
     <string name="time_based_reminder">Напомняне с време</string>
-    <string name="time_based_reminder_help">Задайте конкретни часове (напр. 8:00 ч.) и конфигурирайте повтарящ се модел. Това позволява прецизен контрол върху конкретни делнични дни, дни от месеца или сложни периодични графици (като \"на всеки 3 дни\").</string>
+    <string name="time_based_reminder_help">Напомняйте в избрани часове, например всеки ден в 8:00 ч.</string>
     <string name="weekday_limited">Ограничено до определени дни</string>
     <string name="windowed_interval_reminder">Напомняне за интервал в прозорец</string>
-    <string name="windowed_interval_reminder_help">Определете дневен активен прозорец (напр. от 9 до 21 ч.), в който първото напомняне винаги е в началния час. Последващите напомняния се задействат на определени интервали до достигане на крайния час. Пълният модел се нулира всеки ден.</string>
+    <string name="windowed_interval_reminder_help">Повтаряйте на интервали в рамките на дневен времеви прозорец, например от 9:00 до 21:00 ч.</string>
     <plurals name="days">
         <item quantity="one">ден</item>
         <item quantity="other">дни</item>
@@ -166,9 +168,12 @@
     <string name="edit_event">Промени събитието</string>
     <string name="intro_welcome">Добре дошли в MedTimer!</string>
     <string name="intro_welcome_description">MedTimer е безплатено приложение с отворен код за напомняне за прием на лекарства с фокус върху личното пространство.\n\nТо изисква разрешения, за да показва напомняния за лекарства.</string>
-    <string name="intro_medicine_description">Използвайте раздел „Лекарства“ за добавяне на лекарства, които приемате и за които искате да се напомня. Вие можете да добавите етикети за лекарства и да конфигурирате наличността им.</string>
-    <string name="intro_reminder_description">Изберете лекарство, за да редактирате детайлите му и създайте напомняне за различни дози на лекарствата за взимане.\n\nНапомнянията може да са по време или с интервал и може да са ограничени за определени дни.</string>
-    <string name="intro_notification_description">Когато настъпи момента за напомнянето, ще се появи известие, в което може да се отбележи дозата като взета (при натискане на бутова „ВЗЕТА“), пропусната (при затваряне на известието) или да се напомни отново след време („ОТЛОЖИ“).</string>
+<string name="intro_setup">Настройте първото си напомняне</string>
+<string name="intro_setup_description">Първо добавете лекарство, след което добавете напомняне за него. MedTimer съхранява тази информация на устройството ви и не изпраща данните за лекарствата ви никъде.\n\nЗа пълните стъпки за настройване прочетете „Първи стъпки“.</string>
+<string name="intro_getting_started_link">Първи стъпки</string>
+<string name="intro_overview_orientation_description">Екранът „Общ преглед“ показва напомнянията за избрания ден. Изберете ден от реда със седмицата. Иконата за състояние до всяко напомняне показва дали то е предстоящо, напомнено, прието, пропуснато или отложено до прибирането у дома, а чрез натискане върху нея можете да промените състоянието на напомнянето.</string>
+<string name="intro_notifications">Разрешение за известия</string>
+<string name="intro_notifications_description">MedTimer се нуждае от разрешение за известия, за да ви уведоми, когато настъпи часът за напомняне. Можете да пропуснете въведението и да изберете дали да разрешите известията; по-късно можете да промените това в настройките на Android.</string>
     <string name="show_intro">Показване на информация за приложението</string>
     <string name="are_you_sure_delete_reminder_event">Наистина ли искате да изтриете събитието?</string>
     <string name="notification_importance">Приоритет на известието</string>
@@ -233,6 +238,7 @@
     <string name="disable_widget">Деактивиране на приспособленията на началния екран</string>
     <string name="disable_widget_summary">Предотвратяване на показването на чувствителна информация за лекарства в приспособленията</string>
     <string name="notification_reminder_settings">Настройки на известията и напомнянията</string>
+    <string name="notifications_missing_or_late">Известията липсват или закъсняват</string>
     <string name="use_relative_date_time_summary">Покажи относителни време/дата за напомнянията</string>
     <string name="use_relative_date_time">Относителни време/дата</string>
     <string name="invalid_amount">Количеството трябва да има число за следене на наличните лекарства за това напомняне.</string>
@@ -246,8 +252,6 @@
     <string name="automatically_taken">Автоматично отбелязване като взети</string>
     <string name="high_and_alarm">Висок + Аларма</string>
     <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следващото меню</string>
-    <string name="intro_overview_description">На екрана за преглед може да се видят бъдещите и последните напомняния. Напомнянията могат да бъдат променени чрез плъзгане вдясно и триене - вляво.\n\nОсвен това може да се добавят допълнителни дози от конфигурираните лекарства или друго.</string>
-    <string name="intro_analysis_description">Приложението запазва всички напомняния. Може да се анализират миналите дози в екрана за анализ и да се експортира историята чрез кебаб менюто (трите точки). Историята ще остане дори при изтриване или преименуване на лекарствата или напомнянията.</string>
     <string name="reminder_threshold">Праг на напомнянията</string>
     <string name="refill_size">Размер на презареждането</string>
     <string name="refill_now">Презареди сега</string>
@@ -365,4 +369,8 @@
     <string name="pk_unit_conflict">%1$s не се показва, защото дозите му използват различни единици: %2$s. Променете количествата, така че всички да използват една и съща единица.</string>
     <string name="pk_no_unit">без единица</string>
     <string name="custom_range">Персонализиран</string>
+    <string name="setup_no_medicines_guidance">Първо добавете лекарство, а след това напомняне за него. Само лекарство не планира известия.</string>
+    <string name="setup_no_reminders_guidance">Само лекарство не планира известия. Добавете напомняне, за да планирате известия.</string>
+    <string name="setup_guidance_getting_started">Първи стъпки</string>
+    <string name="reminder_types_help">Научете повече за типовете напомняния</string>
 </resources>

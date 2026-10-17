@@ -17,6 +17,19 @@ if [[ -n ${1:-} ]]; then
 	printf 'Filtering instrumented tests to %s.\n' "$1"
 fi
 
+if [[ -n ${TEST_SHARD_INDEX:-} ]]; then
+	test_shard_count=2
+	if [[ ! ${TEST_SHARD_INDEX} =~ ^[0-9]+$ ]] || ((TEST_SHARD_INDEX >= test_shard_count)); then
+		echo "TEST_SHARD_INDEX must be between 0 and $((test_shard_count - 1))." >&2
+		exit 2
+	fi
+	gradle_args+=(
+		"-Pandroid.testInstrumentationRunnerArguments.numShards=$test_shard_count"
+		"-Pandroid.testInstrumentationRunnerArguments.shardIndex=$TEST_SHARD_INDEX"
+	)
+	printf 'Running test shard %s of %s.\n' "$((TEST_SHARD_INDEX + 1))" "$test_shard_count"
+fi
+
 logcat_pid=''
 stop_logcat() {
 	if [[ -n $logcat_pid ]]; then

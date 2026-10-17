@@ -102,5 +102,10 @@ class AppOptionsActionsImpl @AssistedInject constructor(
         context.startActivity(Intent(context, MedTimerAppIntro::class.java))
     }
 
+    override fun openHelp(topic: String?) {
+        HelpReaderDialogFragment.newInstance(topic)
+            .show(fragment.parentFragmentManager, "help")
+    }
+
     override fun onDestroy() = idlingResource.destroy()
 }

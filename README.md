@@ -96,10 +96,8 @@ on F-Droid.
 
 ## Documentation
 
-See the [use cases documentation](docs/UseCases.md) for more details on how to use the app and
-the specific use cases it can satisfy.
-
-Some details of the reminder flow is documented in the [reminder flow documentation](docs/reminder_flow.md).
+Open the in-app offline [Help guide](docs/help/index.md) for getting started and task-oriented help.
+[More tasks](docs/help/more-tasks.md) index covers additional app features.
 
 ## Contributing
 

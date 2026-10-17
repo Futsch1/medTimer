@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Hjælp</string>
+    <string name="help_english_only">Hjælpen er i øjeblikket kun tilgængelig på engelsk.</string>
     <string name="continuous_from">Kontinuerligt interval fra %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervalpåmindelse</string>
-    <string name="continuous_interval_reminder_help">Start en påmindelse baseret på et tidsinterval (f.eks. hver 6. time) fra et bestemt tidspunkt. Dette mønster er kontinuerligt og ignorerer begrænsninger for tid på dagen, indtil det deaktiveres manuelt.</string>
+    <string name="continuous_interval_reminder_help">Gentag efter en fast varighed fra et starttidspunkt, f.eks. hver 6. time.</string>
     <string name="cycle_reminder">Gentagende påmindelse</string>
     <string name="cycle_start_date">Første cyklusstart</string>
     <string name="daily_from_to">Dagligt interval fra %1$s til %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Sprunget over</string>
     <string name="taken">Taget</string>
     <string name="time_based_reminder">Tidsbaseret påmindelse</string>
-    <string name="time_based_reminder_help">Indstil specifikke tidspunkter (f.eks. 8:00) og konfigurer et tilbagevendende mønster. Dette giver præcis kontrol over specifikke ugedage, månedsdage eller komplekse periodiske tidsplaner (som \'hver 3. dag\').</string>
+    <string name="time_based_reminder_help">Påmind på valgte tidspunkter, f.eks. hver dag kl. 8:00.</string>
     <string name="weekday_limited">Begrænset til nogle ugedage</string>
     <string name="windowed_interval_reminder">Vinduesintervalpåmindelse</string>
-    <string name="windowed_interval_reminder_help">Angiv et dagligt aktivt tidsrum (fx 09.00–21.00), hvor første påmindelse altid sendes ved starttidspunktet. Derefter udsendes påmindelser med faste intervaller frem til sluttidspunktet. Mønstret nulstilles hver dag.</string>
+    <string name="windowed_interval_reminder_help">Gentag med intervaller inden for et dagligt tidsrum, f.eks. fra kl. 9:00 til 21:00.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dage</item>
@@ -162,11 +164,12 @@
     <string name="edit_event">Rediger hændelse</string>
     <string name="intro_welcome">Velkommen til MedTimer!</string>
     <string name="intro_welcome_description">MedTimer er en gratis open source-app til medicinpåmindelser med fokus på privatliv.\n\nDen kræver tilladelse til at vise notifikationer for medicinpåmindelser.</string>
-    <string name="intro_medicine_description">Brug fanen \"Medicin\" til at oprette den medicin, du tager og vil have påmindelser om. Du kan tilføje tags og konfigurere lagerbeholdning.</string>
-    <string name="intro_reminder_description">Vælg en medicin for at redigere detaljer og oprette påmindelser for de doser, du skal tage.\n\nPåmindelser kan være tids- eller intervalbaserede og kan begrænses til bestemte dage.</string>
-    <string name="intro_notification_description">Når en påmindelse udløses, vises en notifikation, hvor du kan markere dosis som taget (ved at trykke på knappen \"TAGET\"), springe den over ved at afvise notifikationen eller få en ny påmindelse senere (\"SNOOZE\").</string>
-    <string name="intro_overview_description">På oversigtsskærmen kan du se kommende påmindelser og de seneste hændelser. Påmindelser kan redigeres ved at swipe til højre og slettes ved at swipe til venstre.\n\nDu kan også manuelt registrere ekstra doser af enten en konfigureret medicin eller en brugerdefineret.</string>
-    <string name="intro_analysis_description">Appen gemmer alle påmindelseshændelser. På analysesiden kan du gennemgå tidligere doser og eksportere historikken via menuen med tre prikker. Historikken bevares, selv hvis medicin eller påmindelser slettes eller omdøbes.</string>
+<string name="intro_setup">Konfigurer din første påmindelse</string>
+<string name="intro_setup_description">Tilføj først en medicin, og tilføj derefter en påmindelse for den. MedTimer gemmer disse oplysninger på din enhed og sender ikke dine medicinoplysninger nogen steder hen.\n\nLæs „Kom godt i gang“ for at se alle trin i opsætningen.</string>
+<string name="intro_getting_started_link">Kom godt i gang</string>
+<string name="intro_overview_orientation_description">Oversigten viser påmindelser for den valgte dag. Vælg en dag i ugerækken. Statusikonet ved siden af hver påmindelse viser, om den afventer, er påmindet, taget, sprunget over eller udsat, indtil du er hjemme. Du kan trykke på ikonet for at ændre påmindelsens status.</string>
+<string name="intro_notifications">Tilladelse til notifikationer</string>
+<string name="intro_notifications_description">MedTimer skal have tilladelse til notifikationer for at advare dig, når det er tid til en påmindelse. Du kan springe introduktionen over og vælge, om du vil tillade notifikationer; du kan ændre dette senere i Android-indstillingerne.</string>
     <string name="show_intro">Vis app-intro</string>
     <string name="are_you_sure_delete_reminder_event">Er du sikker på, at du vil slette påmindelseshændelsen?</string>
     <string name="notification_importance">Notifikationsprioritet</string>
@@ -240,6 +243,7 @@
     <string name="disable_widget_summary">Forhindre widgets i at vise følsomme medicin-oplysninger på startskærmen</string>
     <string name="re_raise_event">Genaktiver hændelse</string>
     <string name="notification_reminder_settings">Notifikations- og påmindelsesindstillinger</string>
+    <string name="notifications_missing_or_late">Manglende eller forsinkede notifikationer</string>
     <string name="display_settings">Skærmindstillinger</string>
     <string name="use_relative_date_time_summary">Vis relativ dato/tid for påmindelser</string>
     <string name="use_relative_date_time">Relativ dato/tid</string>
@@ -365,4 +369,8 @@
     <string name="pk_unit_conflict">%1$s vises ikke, fordi dens doser bruger forskellige enheder: %2$s. Ret mængderne, så de alle bruger den samme enhed.</string>
     <string name="pk_no_unit">ingen enhed</string>
     <string name="custom_range">Brugerdefineret</string>
+    <string name="setup_no_medicines_guidance">Tilføj først en medicin, og tilføj derefter en påmindelse til den. En medicin alene planlægger ikke notifikationer.</string>
+    <string name="setup_no_reminders_guidance">En medicin alene planlægger ikke notifikationer. Tilføj en påmindelse for at planlægge notifikationer.</string>
+    <string name="setup_guidance_getting_started">Kom godt i gang</string>
+    <string name="reminder_types_help">Få mere at vide om påmindelsestyper</string>
 </resources>
