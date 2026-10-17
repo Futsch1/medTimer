@@ -134,6 +134,7 @@ private fun DialogContent(
             Header(
                 state = state,
                 modifier = Modifier.padding(horizontal = 24.dp),
+                onStepBack = onStepBack
             )
             HorizontalDivider(
                 modifier = Modifier.padding(top = 20.dp),
@@ -246,7 +247,7 @@ private fun DialogContent(
 }
 
 @Composable
-private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
+private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStepBack: () -> Unit) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -274,7 +275,30 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
                     ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
                     ManualDoseStep.TIME -> stringResource(R.string.time)
                 }
-                HeaderStepItem(Modifier.weight(1f), label, current, complete, index)
+                val onClick: () -> Unit = {
+                    when (step) {
+                        ManualDoseStep.MEDICINE -> {
+                            if (state.step == ManualDoseStep.AMOUNT) {
+                                onStepBack()
+                            }
+                            if (state.step == ManualDoseStep.TIME) {
+                                onStepBack()
+                                onStepBack()
+                            }
+                        }
+
+                        ManualDoseStep.AMOUNT -> {
+                            if (state.step == ManualDoseStep.TIME) {
+                                onStepBack()
+                            }
+                        }
+
+                        ManualDoseStep.TIME -> {
+                            // No action
+                        }
+                    }
+                }
+                HeaderStepItem(Modifier.weight(1f), label, current, complete, index, onClick)
             }
         }
         if (state.step == ManualDoseStep.AMOUNT) {
@@ -288,7 +312,14 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun HeaderStepItem(modifier: Modifier, label: String, current: Boolean, complete: Boolean, index: Int) {
+private fun HeaderStepItem(
+    modifier: Modifier,
+    label: String,
+    current: Boolean,
+    complete: Boolean,
+    index: Int,
+    onClick: () -> Unit
+) {
     Surface(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
@@ -297,6 +328,7 @@ private fun HeaderStepItem(modifier: Modifier, label: String, current: Boolean, 
             complete -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceContainerHighest
         },
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
