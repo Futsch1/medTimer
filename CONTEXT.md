@@ -82,6 +82,12 @@ filters by a single selected medicine instead.
 
 ### Stock and simulation
 
+**Dose amount**:
+The quantity recorded for a medicine dose, expressed in the user's chosen unit (for example, mg or capsules). For a given medicine, stock is tracked in that same unit and reduced by the dose amount; the app does not convert between units or track physical packaging separately. A missing unit is unspecified, not interchangeable with a named unit. When a dose includes an explanatory amount, only its primary quantity affects the stock decrement.
+
+**Stock**:
+The remaining dose-equivalent quantity of a medicine, expressed in the same unit as its dose amounts. It is not inherently a count of tablets, capsules, or packages; users may choose one of those as the dose unit when that matches how they record doses.
+
 **Stock run-out date**:
 The predicted date a medicine's remaining stock reaches zero, derived from the scheduling simulation.
 Exposed as `SimulatedRemindersRepository.stockRunOutDates: StateFlow<Map<Int, LocalDate?>>`. A `null`
