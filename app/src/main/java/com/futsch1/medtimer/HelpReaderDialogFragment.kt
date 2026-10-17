@@ -112,13 +112,7 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
                 webViewDestroyed = true
                 dismissAllowingStateLoss()
             },
-            openExternalLink = ::openExternalLink,
-            pageFinished = { url ->
-                // WebView can finish about:blank as well; ignore it instead of clearing the selected topic.
-                helpTopicFromUrl(url)?.let { topic ->
-                    toolbar.setTag(R.id.help_reader_topic, topic)
-                }
-            }
+            openExternalLink = ::openExternalLink
         )
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

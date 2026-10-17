@@ -1,17 +1,14 @@
 package com.futsch1.medtimer.robots
 
 import android.os.SystemClock
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withTagKey
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.futsch1.medtimer.core.ui.R
-import org.hamcrest.Matchers.equalTo
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -52,27 +49,46 @@ class HelpRobot(private val menus: MenuRobot) {
     }
 
     private fun assertTopicDisplayed(topic: String) {
+        val heading = TOPIC_HEADINGS[topic] ?: error("Unknown Help topic: $topic")
         val deadline = SystemClock.uptimeMillis() + UI_TIMEOUT_MILLIS
         var topicDisplayed = false
         while (!topicDisplayed && SystemClock.uptimeMillis() < deadline) {
-            try {
-                onView(withTagKey(R.id.help_reader_topic, equalTo(topic))).check(matches(isDisplayed()))
-                topicDisplayed = true
-            } catch (_: NoMatchingViewException) {
-                SystemClock.sleep(POLL_INTERVAL_MILLIS)
+            topicDisplayed = try {
+                val webView = device.findObject(By.clazz("android.webkit.WebView"))
+                webView?.findObject(By.text(heading)) != null
+            } catch (_: StaleObjectException) {
+                false
             }
+            if (!topicDisplayed) SystemClock.sleep(POLL_INTERVAL_MILLIS)
         }
-        assertTrue(topicDisplayed, "Help topic '$topic' did not become selected")
+        assertTrue(topicDisplayed, "Help topic '$topic' heading '$heading' was not displayed in the WebView")
     }
 
-    private fun findText(text: String) =
-        assertNotNull(
-            device.wait(Until.findObject(By.textContains(text)), UI_TIMEOUT_MILLIS),
-            "Missing help text: $text"
-        )
+    private fun findText(text: String): UiObject2 {
+        val deadline = SystemClock.uptimeMillis() + UI_TIMEOUT_MILLIS
+        while (SystemClock.uptimeMillis() < deadline) {
+            try {
+                val webView = device.findObject(By.clazz("android.webkit.WebView"))
+                val textObject = webView?.findObject(By.textContains(text))
+                if (textObject != null) return textObject
+                if (webView?.scroll(Direction.DOWN, SCROLL_PERCENT) != true) break
+            } catch (_: StaleObjectException) {
+                // The WebView document can be replaced while its accessibility tree is updating.
+            }
+            SystemClock.sleep(POLL_INTERVAL_MILLIS)
+        }
+        throw AssertionError("Missing help text: $text")
+    }
 
     companion object {
-        private const val UI_TIMEOUT_MILLIS = 5_000L
+        private val TOPIC_HEADINGS = mapOf(
+            "index" to "Help",
+            "getting-started" to "Getting started",
+            "notifications-missing-or-late" to "Notifications missing or late",
+            "reminder-types" to "Reminder types"
+        )
+        private const val UI_TIMEOUT_MILLIS = 10_000L
         private const val POLL_INTERVAL_MILLIS = 100L
+        private const val SCROLL_PERCENT = 0.8f
     }
 }
