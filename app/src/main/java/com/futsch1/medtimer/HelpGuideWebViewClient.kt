@@ -26,7 +26,8 @@ internal class HelpGuideWebViewClient(
         assetLoader.shouldInterceptRequest(request.url)
 
     override fun onPageFinished(view: WebView, url: String) {
-        pageFinished(url)
+        // WebView may finish a previous page after navigation; only expose the current document.
+        if (view.url == url) pageFinished(url)
     }
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
