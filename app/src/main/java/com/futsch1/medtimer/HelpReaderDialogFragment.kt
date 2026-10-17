@@ -18,7 +18,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.net.toUri
 import androidx.webkit.WebViewAssetLoader
 import com.futsch1.medtimer.core.ui.R
 import java.util.Locale
@@ -67,13 +66,18 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
             text = getString(R.string.help_english_only)
             textSize = 12f
             setTextColor(TypedValue().let { value ->
-                requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, value, true)
+                requireContext().theme.resolveAttribute(
+                    com.google.android.material.R.attr.colorOnSurfaceVariant,
+                    value,
+                    true
+                )
                 value.data
             })
             val horizontalPadding = (16 * resources.displayMetrics.density).roundToInt()
             val verticalPadding = (4 * resources.displayMetrics.density).roundToInt()
             setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-            visibility = if (resources.configuration.locales[0].language == Locale.ENGLISH.language) View.GONE else View.VISIBLE
+            visibility =
+                if (resources.configuration.locales[0].language == Locale.ENGLISH.language) View.GONE else View.VISIBLE
         }
         webViewDestroyed = false
         webView = WebView(requireContext()).apply {
@@ -110,11 +114,10 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
             },
             openExternalLink = ::openExternalLink,
             pageFinished = { url ->
-                val topic = url.toUri().path
-                    ?.removePrefix(ASSET_PATH)
-                    ?.removeSuffix(".html")
-                    ?.takeIf(TOPIC_PATTERN::matches)
-                toolbar.setTag(R.id.help_reader_topic, topic)
+                // WebView can finish about:blank as well; ignore it instead of clearing the selected topic.
+                helpTopicFromUrl(url)?.let { topic ->
+                    toolbar.setTag(R.id.help_reader_topic, topic)
+                }
             }
         )
 
@@ -162,10 +165,9 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
 
     companion object {
         private const val ARG_TOPIC = "topic"
-        private const val ASSET_HOST = "appassets.androidplatform.net"
-        private const val ASSET_PATH = "/assets/"
+        private const val ASSET_PATH = HELP_GUIDE_ASSET_PATH
         private const val CONTENTS_PAGE = "index.html"
-        private const val ASSET_ORIGIN = "https://$ASSET_HOST"
+        private const val ASSET_ORIGIN = "https://$HELP_GUIDE_ASSET_HOST"
         private val TOPIC_PATTERN = Regex("[a-z0-9-]+")
 
         fun newInstance(topic: String? = null) = HelpReaderDialogFragment().apply {
