@@ -56,6 +56,19 @@ class NotificationShadeRobot {
         assertNull(await(text, timeoutMillis), "A notification contains '$text' but should not")
     }
 
+    /**
+     * Waits for the notification containing [text] to be withdrawn. The app stores processed events before it
+     * withdraws their notification, so it can still be posted for a moment. Asks the posted notifications, not
+     * the shade, which can drop a notification for a moment while it is updated.
+     */
+    fun assertRemoved(text: String, timeoutMillis: Long = DEFAULT_TIMEOUT) {
+        val deadline = SystemClock.uptimeMillis() + timeoutMillis
+        while (postedIdOrNull(text) != null && SystemClock.uptimeMillis() < deadline) {
+            SystemClock.sleep(POLL_INTERVAL)
+        }
+        assertNull(postedIdOrNull(text), "Notification containing '$text' was not withdrawn. Posted: ${postedDescriptions()}")
+    }
+
     /** The shade is not inspectable after the fact - failures have to carry its contents themselves. */
     private fun shadeTexts(): List<String> =
         device.findObjects(By.pkg("com.android.systemui")).mapNotNull {
