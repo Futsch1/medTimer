@@ -71,7 +71,8 @@ class HelpRobot(private val menus: MenuRobot) {
                 val webView = device.findObject(By.clazz("android.webkit.WebView"))
                 val textObject = webView?.findObject(By.textContains(text))
                 if (textObject != null) return textObject
-                if (webView?.scroll(Direction.DOWN, SCROLL_PERCENT) != true) break
+                // A non-scrollable WebView may still be loading its accessibility tree; keep polling.
+                if (webView?.isScrollable == true) webView.scroll(Direction.DOWN, SCROLL_PERCENT)
             } catch (_: StaleObjectException) {
                 // The WebView document can be replaced while its accessibility tree is updating.
             }
