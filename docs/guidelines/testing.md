@@ -108,10 +108,11 @@ Conventions:
 - **UIAutomator** for cross-app interactions (notifications, settings screens) where Espresso can't reach.
 - Name tests for the user-visible behavior, not the Fragment class name.
 - Keep instrumented tests **independent** — each test sets up its own state via repository or intent, doesn't rely on test order.
+- **Prefer merging closely related scenarios into an existing instrumented test method** when they share setup and form one coherent user-visible flow; this avoids repeating emulator and app setup. Keep the method focused, and don't combine unrelated behaviors just to reduce the test count.
 - **Arrange through `seed`, not through the UI.**
   `MedTimerTestBase.seed` (see `harness/Seed.kt`) writes the fixture straight into the repositories, exactly as the UI would;
   the app schedules and redraws off that write like any other.
-  Only a test that *owns* a creation flow clicks through it — everything else seeds.
+  Only a test that _owns_ a creation flow clicks through it — everything else seeds.
   Removing the last UI coverage of a flow is not a speed-up — move it to the test that owns it instead.
 - **Never make a test depend on what today is.** Derive times from now — `laterToday()`, `aboutToFire()`, `earlierToday()` on `MedTimerTestBase` — and
   dates from `LocalDate.now()`. A literal like `LocalTime.of(20, 0)` only means "in the future" on a device whose clock happens to cooperate, and the

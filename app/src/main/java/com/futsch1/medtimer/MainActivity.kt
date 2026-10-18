@@ -26,6 +26,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.di.IsDebugBuild
 import com.futsch1.medtimer.core.common.helpers.hasBiometrics
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -79,6 +80,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var commandBus: ReminderCommandBus
 
     @Inject
+    @JvmField
+    @IsDebugBuild
+    var isDebugBuild: Boolean = false
+
+    @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
@@ -107,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showIntro() {
-        if (!persistentDataDataSource.data.value.introShown && !BuildConfig.DEBUG) {
+        if (!persistentDataDataSource.data.value.introShown && !isDebugBuild) {
             Log.d(LogTags.MAIN, "Show MedTimer intro")
             startActivity(Intent(applicationContext, MedTimerAppIntro::class.java))
             persistentDataDataSource.setIntroShown(true)

@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Ajuda</string>
+    <string name="help_english_only">A ajuda está atualmente disponível apenas em inglês.</string>
     <string name="continuous_from">Intervalo contínuo a partir de %1$s</string>
     <string name="continuous_interval_reminder">Lembrete de intervalo contínuo</string>
-    <string name="continuous_interval_reminder_help">Inicie um lembrete com base em um intervalo de tempo (por exemplo, a cada 6 horas) a partir de um momento especificado. Este padrão é contínuo, ignorando as restrições de horário do dia, até ser desativado manualmente.</string>
+    <string name="continuous_interval_reminder_help">Repetir após um período fixo a partir de um momento inicial, por exemplo, a cada 6 horas.</string>
     <string name="cycle_reminder">Lembrete cíclico</string>
     <string name="cycle_start_date">Início do primeiro ciclo</string>
     <string name="daily_from_to">Intervalo diário de %1$s a %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Pulado</string>
     <string name="taken">Tomado</string>
     <string name="time_based_reminder">Lembrete baseado em horário</string>
-    <string name="time_based_reminder_help">Defina horários específicos (por exemplo, 8:00) e configure um padrão recorrente. Isso permite um controle preciso sobre dias específicos da semana, dias do mês ou programações periódicas complexas (como \'a cada 3 dias\').</string>
+    <string name="time_based_reminder_help">Lembrar nos horários escolhidos, por exemplo, todos os dias às 8:00.</string>
     <string name="weekday_limited">Limitado a alguns dias da semana</string>
     <string name="windowed_interval_reminder">Lembrete de intervalo com janela</string>
-    <string name="windowed_interval_reminder_help">Defina uma janela ativa diária (por exemplo, das 9h às 21h) em que o primeiro lembrete é sempre no horário de início. Os lembretes subsequentes são disparados em intervalos fixos até que o horário de término seja alcançado. O padrão completo é redefinido todos os dias.</string>
+    <string name="windowed_interval_reminder_help">Repetir em intervalos durante uma janela diária, por exemplo, das 9:00 às 21:00.</string>
     <plurals name="days" tools:ignore="UnusedQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">dia</item>
         <item quantity="other">dias</item>
@@ -159,7 +161,6 @@
     <string name="event_data">Registro dos eventos</string>
     <string name="backup">Backup</string>
     <string name="intro_welcome">Bem-vindo ao MedTimer!</string>
-    <string name="intro_analysis_description">O aplicativo armazena todos os eventos de lembrete. Você pode analisar suas doses anteriores na tela de análise e exportar seu histórico através do menu kebab (três pontos). O histórico permanecerá mesmo que medicamentos ou lembretes sejam excluídos ou renomeados.</string>
     <string name="show_intro">Mostrar introdução do aplicativo</string>
     <string name="notification_importance">Prioridade da notificação</string>
     <string name="notification_settings_default">Prioridade padrão das configurações de notificação</string>
@@ -211,8 +212,8 @@
     <string name="generate_test_data">Gerar dados de teste</string>
     <string name="minutes_15">15 minutos</string>
     <string name="notification_reminder_settings">Configurações de notificações e lembretes</string>
+    <string name="notifications_missing_or_late">Notificações em falta ou atrasadas</string>
     <string name="time_between_repetitions">Tempo entre repetições</string>
-    <string name="intro_reminder_description">Selecione um medicamento para editar seus detalhes e criar lembretes para as diferentes doses que você precisa tomar.\n\nOs lembretes podem ser baseados em tempo ou intervalo e podem ser limitados a dias específicos.</string>
     <string name="edit_event">Editar evento</string>
     <string name="are_you_sure_delete_reminder_event">Tem certeza de que deseja excluir este evento de lembrete?</string>
     <string name="period_end">Ativo até</string>
@@ -239,13 +240,16 @@
     <string name="days_abbr">d</string>
     <string name="weeks_abbr">s</string>
     <string name="intro_welcome_description">O MedTimer é um aplicativo de lembrete de medicamentos gratuito e de código aberto com foco na privacidade.\n\nEle requer permissão de exibir notificações para criar lembretes de medicamentos.</string>
+<string name="intro_setup">Configure o seu primeiro lembrete</string>
+<string name="intro_setup_description">Adicione primeiro um medicamento e, em seguida, adicione um lembrete para ele. O MedTimer mantém estas informações no seu dispositivo e não envia os seus dados de medicação para lado nenhum.\n\nPara consultar todos os passos de configuração, leia Introdução.</string>
+<string name="intro_getting_started_link">Introdução</string>
+<string name="intro_overview_orientation_description">A visão geral mostra os lembretes do dia selecionado. Selecione um dia na linha da semana. O ícone de estado junto a cada lembrete mostra se está pendente, se foi emitido um lembrete, tomado, ignorado ou adiado até chegar a casa. Pode premir o ícone para alterar o estado do lembrete.</string>
+<string name="intro_notifications">Permissão para notificações</string>
+<string name="intro_notifications_description">O MedTimer precisa de permissão para enviar notificações e avisar quando chegar a hora de um lembrete. Pode ignorar a introdução e escolher se pretende permitir notificações; pode alterar esta opção mais tarde nas definições do Android.</string>
     <string name="number_of_repetitions">Número de repetições</string>
-    <string name="intro_notification_description">Quando o horário de um lembrete chegar, uma notificação aparecerá oferecendo-lhe a opção de marcar a dose como tomada (clicando no botão \"TOMADO\"), pular (descartando a notificação) ou ser lembrado novamente após algum tempo (\"ADIAR\").</string>
     <string name="enable_dnd_dialog">Para permitir que os sons de notificação sejam sempre reproduzidos, ative o acesso ao Não perturbe pelo MedTimer no menu a seguir</string>
-    <string name="intro_overview_description">Na tela de visão geral, você pode ver os próximos lembretes e os últimos eventos de lembrete. Os eventos de lembrete podem ser editados deslizando para a direita e excluídos deslizando para a esquerda.\n\nAlém disso, você pode registrar manualmente doses adicionais de um dos medicamentos configurados ou de um personalizado.</string>
     <string name="invalid_input">Entrada inválida</string>
     <string name="login">Faça login no MedTimer usando autenticação biométrica</string>
-    <string name="intro_medicine_description">Use a aba \"Medicamento\" para adicionar o medicamento que você está tomando e deseja lembrar. Você pode atribuir etiquetas aos medicamentos e configurar seus estoques.</string>
     <string name="unit">Unidade</string>
     <string name="app_authentication">Exigir autenticação para abrir o aplicativo</string>
     <string name="variable_amount">Inserir a dosagem ao tomar</string>
@@ -371,4 +375,8 @@
     <string name="pk_unit_conflict">%1$s não é mostrado porque as suas doses usam unidades diferentes: %2$s. Altere as quantidades para que usem todas a mesma unidade.</string>
     <string name="pk_no_unit">sem unidade</string>
     <string name="custom_range">Personalizado</string>
+    <string name="setup_no_medicines_guidance">Adicione primeiro um medicamento e, em seguida, um lembrete para ele. Um medicamento por si só não agenda notificações.</string>
+    <string name="setup_no_reminders_guidance">Um medicamento por si só não agenda notificações. Adicione um lembrete para agendar notificações.</string>
+    <string name="setup_guidance_getting_started">Primeiros passos</string>
+    <string name="reminder_types_help">Saiba mais sobre os tipos de lembrete</string>
 </resources>

@@ -9,7 +9,7 @@ import org.junit.Test
 class ExportBackupTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
-    fun testTriggerExport() {
+    fun exportsAndBackupCanBeTriggered() {
         menus.clickAppOption(R.string.generate_test_data)
 
         navigation.toMedicines()
@@ -19,12 +19,6 @@ class ExportBackupTest : MedTimerTestBase() {
         export.export(R.string.export_events_pdf)
         export.export(R.string.export_medicines_csv)
         export.export(R.string.export_medicines_pdf)
-    }
-
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun testTriggerBackup() {
-        menus.clickAppOption(R.string.generate_test_data)
 
         menus.clickAppOption(R.string.backup)
 

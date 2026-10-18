@@ -35,12 +35,39 @@ class ExactRemindersWarningTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun enableExactRemindersFromWarning() {
         assertFalse(preferencesDataSource.preferences.value.exactReminders)
+        appIntro.skip()
 
         navigation.toOverview()
         overview.assertWarningShown(R.string.exact_reminders_warning_title)
-        overview.clickWarningButton(R.string.enable)
+        overview.clickWarningButton(R.string.exact_reminders_warning_title, R.string.enable)
 
         overview.assertWarningGone(R.string.exact_reminders_warning_title)
         assertTrue(pollUntil { preferencesDataSource.preferences.value.exactReminders })
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun notificationHelpRemainsAvailableAfterWarningsAreDismissed() {
+        appIntro.skip()
+        navigation.toOverview()
+        overview.assertWarningShown(R.string.exact_reminders_warning_title)
+
+        repeat(2) {
+            if (overview.isWarningShown(R.string.exact_reminders_warning_title)) {
+                overview.clickWarningButton(R.string.exact_reminders_warning_title, R.string.ok)
+            }
+        }
+        overview.assertWarningGone(R.string.exact_reminders_warning_title)
+
+        repeat(2) {
+            if (overview.isWarningShown(R.string.battery_optimization_warning_title)) {
+                overview.clickWarningButton(R.string.battery_optimization_warning_title, R.string.ok)
+            }
+        }
+        overview.assertWarningGone(R.string.battery_optimization_warning_title)
+
+        navigation.toMedicines()
+        navigation.toOverview()
+        overview.assertWarningGone(R.string.exact_reminders_warning_title)
     }
 }

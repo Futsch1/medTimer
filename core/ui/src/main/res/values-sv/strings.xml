@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Hjälp</string>
+    <string name="help_english_only">Hjälpen är för närvarande endast tillgänglig på engelska.</string>
     <string name="continuous_from">Kontinuerligt intervall från %1$s</string>
     <string name="continuous_interval_reminder">Kontinuerlig intervallpåminnelse</string>
-    <string name="continuous_interval_reminder_help">Starta en påminnelse baserad på ett tidsintervall (t.ex. var 6:e timme) från ett angivet ögonblick. Detta mönster är kontinuerligt och ignorerar tid på dygnet-begränsningar tills det avaktiveras manuellt.</string>
+    <string name="continuous_interval_reminder_help">Upprepa efter en fast tidslängd från en starttidpunkt, till exempel var 6:e timme.</string>
     <string name="cycle_reminder">Återkommande påminnelser</string>
     <string name="cycle_start_date">Första cykelstart</string>
     <string name="daily_from_to">Dagligen intervall från %1$s till %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Överhoppad</string>
     <string name="taken">Tagen</string>
     <string name="time_based_reminder">Tidsbaserad påminnelse</string>
-    <string name="time_based_reminder_help">Ställ in specifika tider (t.ex. 08:00) och konfigurera ett återkommande mönster. Detta möjliggör exakt kontroll över specifika veckodagar, dagar i månaden eller komplexa periodiska scheman (som \"var tredje dag\").</string>
+    <string name="time_based_reminder_help">Påminn vid valda klockslag, till exempel varje dag klockan 08:00.</string>
     <string name="weekday_limited">Begränsad till vissa veckodagar</string>
     <string name="windowed_interval_reminder">Fönsterintervallpåminnelse</string>
-    <string name="windowed_interval_reminder_help">Definiera ett bestämd tidsintervall per dag (t.ex. 09:00 till 21:00) där den första påminnelsen alltid kommer vid starttiden. Senare påminnelser kommer med bestämda intervall fram till sluttiden. Mönstret börjar om varje dag.</string>
+    <string name="windowed_interval_reminder_help">Upprepa med intervall under ett dagligt tidsintervall, till exempel 09:00–21:00.</string>
     <plurals name="days">
         <item quantity="one">dag</item>
         <item quantity="other">dagar</item>
@@ -170,11 +172,12 @@
     <string name="edit_event">Ändra händelse</string>
     <string name="intro_welcome">Välkommen till MedTimer!</string>
     <string name="intro_welcome_description">MedTimer är en gratis app med öppen källkod för påminnelser för intag av läkemdel med fokus på integritet.\n\nDet krävs tillstånd för att visa meddelanden om medicinpåminnelser.</string>
-    <string name="intro_medicine_description">Använd fliken Läkemedel för att skapa det läkemedel du tar och vill få en påminnelse om. Du kan tilldela taggar till läkemedel och konfigurera hur mycket du har i lager.</string>
-    <string name="intro_reminder_description">Välj ett läkemedel för att redigera dess detaljer och skapa påminnelser för de olika doserna av läkemedlet som du behöver ta.\n\nPåminnelser kan vara tids- eller intervallbaserade och kan begränsas till specifika dagar.</string>
-    <string name="intro_notification_description">När det är dags för en påminnelse visas ett meddelande som ger dig möjlighet att markera en dos som tagen (genom att klicka på knappen ”TAGEN”), hoppa över (genom att avvisa meddelandet) eller bli påmind igen efter en tid (”SNOOZA”).</string>
-    <string name="intro_overview_description">På översiktsskärmen kan du se kommande påminnelser och de senaste händelsepåminnelserna. Dessa kan redigeras genom att svepa åt höger och raderas genom att svepa åt vänster.\n\nDessutom kan du manuellt logga extra doser av ett läkemedel.</string>
-    <string name="intro_analysis_description">Appen lagrar alla händelsepåminnelserna. Du kan analysera dina tidigare doser på analysskärmen och exportera din historik via kebabmenyn (tre prickar). Historiken finns kvar även om läkemedel eller påminnelser raderas eller byter namn.</string>
+<string name="intro_setup">Konfigurera din första påminnelse</string>
+<string name="intro_setup_description">Lägg först till ett läkemedel och lägg sedan till en påminnelse för det. MedTimer sparar denna information på din enhet och skickar inte dina läkemedelsuppgifter någonstans.\n\nLäs Kom igång för fullständiga konfigurationssteg.</string>
+<string name="intro_getting_started_link">Kom igång</string>
+<string name="intro_overview_orientation_description">Översikten visar påminnelser för den valda dagen. Välj en dag i veckoraden. Statusikonen bredvid varje påminnelse visar om den väntar, har påmint, har tagits, hoppats över eller snoozats tills du är hemma. Tryck på ikonen för att ändra påminnelsens status.</string>
+<string name="intro_notifications">Aviseringsbehörighet</string>
+<string name="intro_notifications_description">MedTimer behöver aviseringsbehörighet för att meddela dig när det är dags för en påminnelse. Du kan hoppa över introduktionen och välja om du vill tillåta aviseringar. Du kan ändra detta senare i Androids inställningar.</string>
     <string name="show_intro">Visa appintroduktion</string>
     <string name="are_you_sure_delete_reminder_event">Är du säker på att du vill ta bort händelsepåminnelsen?</string>
     <string name="notification_importance">Aviseringsprioritet</string>
@@ -239,6 +242,7 @@
     <string name="disable_widget_summary">Förhindra widgets från att visa känslig läkemedelsinformation på startskärmen</string>
     <string name="re_raise_event">Återskapa händelse</string>
     <string name="notification_reminder_settings">Inställningar för aviseringar och påminnelser</string>
+    <string name="notifications_missing_or_late">Aviseringar saknas eller kommer sent</string>
     <string name="display_settings">Displayinställningar</string>
     <string name="use_relative_date_time_summary">Visa relativ datum/tid för påminnelser</string>
     <string name="use_relative_date_time">Relativ datum/tid</string>
@@ -365,4 +369,8 @@
     <string name="pk_unit_conflict">%1$s visas inte eftersom dess doser använder olika enheter: %2$s. Ändra mängderna så att alla använder samma enhet.</string>
     <string name="pk_no_unit">ingen enhet</string>
     <string name="custom_range">Anpassad</string>
+    <string name="setup_no_medicines_guidance">Lägg först till ett läkemedel och sedan en påminnelse för det. Ett läkemedel i sig schemalägger inga aviseringar.</string>
+    <string name="setup_no_reminders_guidance">Ett läkemedel i sig schemalägger inga aviseringar. Lägg till en påminnelse för att schemalägga aviseringar.</string>
+    <string name="setup_guidance_getting_started">Kom igång</string>
+    <string name="reminder_types_help">Läs mer om påminnelsetyper</string>
 </resources>

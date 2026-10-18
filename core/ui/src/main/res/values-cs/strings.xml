@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">Nápověda</string>
+    <string name="help_english_only">Nápověda je v současné době dostupná pouze v angličtině.</string>
     <string name="continuous_from">Nepřerušovaný interval začínající v %1$s</string>
     <string name="continuous_interval_reminder">Připomenutí v nepřerušovaném intervalu</string>
-    <string name="continuous_interval_reminder_help">Spustí přípomenutí na základě časového intervalu (např. každých 6 hodin) od určitého momentu. Tento režim je nepřerušovaný, ignoruje časová omezení v rámci dne, dokud není ručně deaktivován.</string>
+    <string name="continuous_interval_reminder_help">Opakovat po pevně stanovené době od počátečního okamžiku, například každých 6 hodin.</string>
     <string name="cycle_reminder">Opakované připomenutí</string>
     <string name="cycle_start_date">Začátek prvního cyklu</string>
     <string name="daily_from_to">Denní interval od %1$s do %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Přeskočeno</string>
     <string name="taken">Užito</string>
     <string name="time_based_reminder">Připomenutí založené na čase</string>
-    <string name="time_based_reminder_help">Nastavte specifické časy (např. 8 ráno) a nastavte režim opakování. To umožňuje přesnou kontrolu nad konkrétními dny v týdnu, dny v měsící nebo složitějšími plány (jako \"každé 3 dny\").</string>
+    <string name="time_based_reminder_help">Připomínat ve vybraných časech, například každý den v 8:00.</string>
     <string name="weekday_limited">Omezeno na určité dny v týdnu</string>
     <string name="windowed_interval_reminder">Intervalové připomenutí v rámci rozsahu</string>
-    <string name="windowed_interval_reminder_help">Definuje denní aktivní rozsah časů (např. od 9 ráno do 9 večer), kde je první připomenutí vždy v počáteční čas. Následná připomenutí se spustí v pevné intervaly, dokud není dosaženo koncového času. Další den začíná odznova.</string>
+    <string name="windowed_interval_reminder_help">Opakovat v intervalech během denního časového okna, například od 9:00 do 21:00.</string>
     <plurals name="days">
         <item quantity="one">den</item>
         <item quantity="few">dny</item>
@@ -178,11 +180,12 @@
     <string name="edit_event">Upravit událost</string>
     <string name="intro_welcome">Vítejte v MedTimer!</string>
     <string name="intro_welcome_description">MedTimer je svobodná a open source aplikace pro připomínání léků se zaměřením na soukromí.\n\nPro připomínání léků vyžaduje oprávnění pro zobrazení notifikací.</string>
-    <string name="intro_medicine_description">Použijte záložku \"Léky\" pro vytvoření léku, který užíváte a který chcete připomínat. Můžete přiřadit k lékům štítky a nastavit jejich zásoby.</string>
-    <string name="intro_reminder_description">Vyberte lék k úpravě jeho detailů a vytvořte připomenutí pro různé dávky léku, který potřebujete užít.\n\nPřipomenutí mohou být založeny na čase nebo intervalu a mohou být omezeny na určité dny.</string>
-    <string name="intro_notification_description">Jakmile je čas připomenutí, vyskočí notifikace, která vám umožní označit dávku jako užitou (kliknutím na tlačítko \"UŽITO\"), přeskočena (zrušením notifikace) nebo znovu připomenout po nějaké době (\"ODLOŽIT\").</string>
-    <string name="intro_overview_description">Na obrazovce přehledu můžete zkontrolovat nadcházející připomenutí nebo poslední události připomenutí. Události připomenutí mohou být upraveny tažením doprava a smazány tažením doleva.\n\nDále můžete ručně vložit mimořádné dávky jednoho z nastavených léků nebo jakéhokoliv dalšího.</string>
-    <string name="intro_analysis_description">Aplikace ukládá všechny události připomenutí. Můžete analyzovat vaše minulé dávky na obrazovce analýza a exportovat vaši historii prostřednictvím kebab menu (tři tečky). Historie zůstává i v případě, že jsou léky nebo připomenutí smazány nebo přejmenovány.</string>
+<string name="intro_setup">Nastavte si první připomínku</string>
+<string name="intro_setup_description">Nejprve přidejte lék a poté k němu přidejte připomínku. MedTimer uchovává tyto informace ve vašem zařízení a nikam neodesílá údaje o vašich lécích.\n\nÚplný postup nastavení najdete v části „Začínáme“.</string>
+<string name="intro_getting_started_link">Začínáme</string>
+<string name="intro_overview_orientation_description">Přehled zobrazuje připomínky pro vybraný den. Vyberte den v řádku s týdnem. Ikona stavu vedle každé připomínky ukazuje, zda čeká na vyřízení, bylo na ni upozorněno, byla užita, přeskočena nebo odložena, dokud nebudete doma. Klepnutím na ikonu můžete stav připomínky změnit.</string>
+<string name="intro_notifications">Povolení oznámení</string>
+<string name="intro_notifications_description">MedTimer potřebuje povolení oznámení, aby vás upozornil, že nastal čas připomínky. Úvod můžete přeskočit a zvolit, zda chcete oznámení povolit; toto nastavení můžete později změnit v nastavení systému Android.</string>
     <string name="show_intro">Zobrazit intro aplikace</string>
     <string name="are_you_sure_delete_reminder_event">Opravdu smazat tuto událost připomenutí?</string>
     <string name="notification_importance">Priorita notifikací</string>
@@ -252,6 +255,7 @@
     <string name="disable_widget_summary">Zabránit widgetům zobrazovat citlivé informace o léčivech na domovské obrazovce</string>
     <string name="re_raise_event">Znovu vyvolat událost</string>
     <string name="notification_reminder_settings">Nastavení notifikací a připomenutí</string>
+    <string name="notifications_missing_or_late">Chybějící nebo opožděná oznámení</string>
     <string name="display_settings">Nastavení zobrazení</string>
     <string name="use_relative_date_time_summary">Zobrazit relativní datum/čas pro připomenutí</string>
     <string name="use_relative_date_time">Relativní datum/čas</string>
@@ -377,4 +381,8 @@
     <string name="pk_unit_conflict">%1$s se nezobrazuje, protože jeho dávky používají různé jednotky: %2$s. Upravte množství tak, aby všechna používala stejnou jednotku.</string>
     <string name="pk_no_unit">bez jednotky</string>
     <string name="custom_range">Vlastní</string>
+    <string name="setup_no_medicines_guidance">Nejprve přidejte lék a potom k němu připomenutí. Samotný lék neplánuje oznámení.</string>
+    <string name="setup_no_reminders_guidance">Samotný lék neplánuje oznámení. Přidejte připomenutí, abyste naplánovali oznámení.</string>
+    <string name="setup_guidance_getting_started">Začínáme</string>
+    <string name="reminder_types_help">Další informace o typech připomenutí</string>
 </resources>

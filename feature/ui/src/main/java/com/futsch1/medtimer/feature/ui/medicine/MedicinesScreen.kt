@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.ui.medicine
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -66,14 +68,16 @@ fun MedicinesScreen(
     onMedicineAdd: () -> Unit,
     onMedicineDelete: (id: Int) -> Unit,
     onMedicineEdit: (id: Int) -> Unit,
-    onMedicineMove: (id: Int, newPosition: Int) -> Unit
+    onMedicineMove: (id: Int, newPosition: Int) -> Unit,
+    onOpenHelp: () -> Unit = {}
 ) {
     MedicinesScreen(
         medicinesScreenViewModel.state,
         onMedicineAdd,
         onMedicineDelete,
         onMedicineEdit,
-        onMedicineMove
+        onMedicineMove,
+        onOpenHelp
     )
 }
 
@@ -83,7 +87,8 @@ fun MedicinesScreen(
     onMedicineAdd: () -> Unit = {},
     onMedicineDelete: (id: Int) -> Unit = {},
     onMedicineEdit: (id: Int) -> Unit = {},
-    onMedicineMove: (id: Int, newPosition: Int) -> Unit = { _, _ -> }
+    onMedicineMove: (id: Int, newPosition: Int) -> Unit = { _, _ -> },
+    onOpenHelp: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val reorderableMedicines = rememberReorderableMedicines(listState, state.medicines, onMedicineMove)
@@ -115,6 +120,15 @@ fun MedicinesScreen(
                 bottom = paddingValues.calculateBottomPadding() + 80.dp
             )
         ) {
+            if (state.setupGuidance == SetupGuidance.ADD_MEDICINE) {
+                item(key = "add_medicine_guidance") {
+                    SetupGuidanceCard(
+                        message = stringResource(R.string.setup_no_medicines_guidance),
+                        onContinue = onMedicineAdd,
+                        onOpenHelp = onOpenHelp,
+                    )
+                }
+            }
             items(reorderableMedicines.medicines, key = { it.id }) { medicine ->
                 ReorderableItem(reorderableMedicines.reorderState, key = medicine.id) { isDragging ->
                     SwipeToDeleteContainer(medicine, onMedicineDelete) {
@@ -255,8 +269,27 @@ private fun SwipeToDeleteContainer(
     }
 }
 
+@Composable
+private fun SetupGuidanceCard(
+    message: String,
+    onContinue: () -> Unit,
+    onOpenHelp: () -> Unit,
+) {
+    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Column(Modifier.padding(16.dp)) {
+            Text(message, style = MaterialTheme.typography.bodyMedium)
+            TextButton(
+                modifier = Modifier.testTag(MedicineTestTags.SETUP_ADD_MEDICINE),
+                onClick = onContinue
+            ) { Text(stringResource(R.string.add_medicine)) }
+            TextButton(onClick = onOpenHelp) { Text(stringResource(R.string.setup_guidance_getting_started)) }
+        }
+    }
+}
+
 object MedicineTestTags {
     const val MEDICINE_LIST = "medicine_list"
+    const val SETUP_ADD_MEDICINE = "setup_add_medicine"
     const val MEDICINE_ITEM = "medicine_item"
     const val MEDICINE_NAME = "medicine_name"
     const val ADD_MEDICINE = "add_medicine"

@@ -58,6 +58,13 @@ class OverviewRobot(private val ui: ComposeUi) {
         list.nodeAt(EVENT_CARD, index).performClick()
     }
 
+    fun clickEventStateContaining(substring: String) {
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
+        val index = currentIndexOf(substring)
+        assertTrue(index != null, "No Overview event contains '$substring': ${eventTexts()}")
+        stateButton(index).performClick()
+    }
+
     fun longClickEvent(index: Int) {
         scrollToEvent(index)
         eventCardAtEvent(index).performTouchInput { longClick() }
@@ -112,12 +119,32 @@ class OverviewRobot(private val ui: ComposeUi) {
     fun assertActionAbsent(@StringRes labelRes: Int) =
         actionMenu.assertAbsent(hasText(ui.getString(labelRes)))
 
+    fun assertActionAbsentForEventContaining(substring: String, @StringRes labelRes: Int) {
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
+        val index = currentIndexOf(substring)
+        assertTrue(index != null, "No Overview event contains '$substring': ${eventTexts()}")
+        stateButton(index).performClick()
+        assertActionAbsent(labelRes)
+        closeActionMenu()
+    }
+
     /** The warning cards above the event list, found by their title. */
     fun assertWarningShown(@StringRes titleRes: Int) = screen.assertDisplayed(hasText(ui.getString(titleRes)))
 
-    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !screen.exists(hasText(ui.getString(titleRes))) }
+    fun isWarningShown(@StringRes titleRes: Int) = screen.exists(hasText(ui.getString(titleRes)))
 
-    fun clickWarningButton(@StringRes labelRes: Int) = screen.click(hasText(ui.getString(labelRes)))
+    fun assertWarningGone(@StringRes titleRes: Int) = screen.await { !isWarningShown(titleRes) }
+
+    fun clickWarningButton(@StringRes titleRes: Int, @StringRes labelRes: Int) =
+        warning(titleRes).click(hasText(ui.getString(labelRes)))
+
+    private fun warning(@StringRes titleRes: Int) = screen.scope(
+        when (titleRes) {
+            CoreUiR.string.battery_optimization_warning_title -> OverviewTestTags.BATTERY_WARNING
+            CoreUiR.string.exact_reminders_warning_title -> OverviewTestTags.EXACT_REMINDERS_WARNING
+            else -> error("Unknown Overview warning title resource: $titleRes")
+        }
+    )
 
     fun logManualDose() = screen.click(hasTestTag(OverviewTestTags.LOG_MANUAL_DOSE))
 

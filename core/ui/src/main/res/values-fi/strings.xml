@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="help">Ohje</string>
+    <string name="help_english_only">Ohje on tällä hetkellä saatavilla vain englanniksi.</string>
     <string name="continuous_from">Jatkuva väli alkaen %1$s</string>
     <string name="continuous_interval_reminder">Jatkuva intervallimuistutus</string>
-    <string name="continuous_interval_reminder_help">Käynnistä muistutus aikavälin perusteella (esim. 6 tunnin välein) tietystä hetkestä. Tämä malli on jatkuva, ja se jättää huomiotta vuorokaudenajan rajoitukset, kunnes se poistetaan manuaalisesti käytöstä.</string>
+    <string name="continuous_interval_reminder_help">Toista kiinteän ajan kuluttua aloitushetkestä, esimerkiksi 6 tunnin välein.</string>
     <string name="cycle_reminder">Kiertävät muistutukset</string>
     <string name="cycle_start_date">Ensimmäisen kierroksen alku</string>
     <string name="daily_from_to">Päivittäinen väli %1$s – %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Ohitettu</string>
     <string name="taken">Otettu</string>
     <string name="time_based_reminder">Aikapohjainen muistutus</string>
-    <string name="time_based_reminder_help">Aseta tietyt ajat (esim. klo 8.00) ja määritä toistuva kaava. Tämä mahdollistaa tarkan hallinnan tietyille viikonpäiville, kuukauden päiville tai monimutkaisille jaksollisille aikatauluille (kuten \"joka 3. päivä\").</string>
+    <string name="time_based_reminder_help">Muistuta valittuina kellonaikoina, esimerkiksi joka päivä klo 8.00.</string>
     <string name="weekday_limited">Rajoitettu joihinkin viikonpäiviin</string>
     <string name="windowed_interval_reminder">Ikkunallinen intervallimuistutus</string>
-    <string name="windowed_interval_reminder_help">Määritä päivittäinen aktiivinen ikkuna (esim. klo 9–21), jossa ensimmäinen muistutus on aina aloitusajankohtana. Seuraavat muistutukset laukeavat kiintein väliajoin, kunnes päättymisaika saavutetaan. Koko kuvio nollautuu joka päivä.</string>
+    <string name="windowed_interval_reminder_help">Toista aikavälein päivittäisen aikaikkunan aikana, esimerkiksi klo 9.00–21.00.</string>
     <plurals name="days">
         <item quantity="one">päivä</item>
         <item quantity="other">päivää</item>
@@ -166,11 +168,12 @@
     <string name="edit_event">Muokkaa tapahtumaa</string>
     <string name="intro_welcome">Tervetuloa MedTimeriin!</string>
     <string name="intro_welcome_description">MedTimer on ilmainen ja avoimen lähdekoodin lääkemuistutussovellus, joka keskittyy yksityisyyteen.\n\nSe vaatii luvan näyttää ilmoituksia lääkemuistutuksille.</string>
-    <string name="intro_medicine_description">Käytä \"Lääkkeet\"-välilehteä lisätäksesi käytettävän lääkkeen jolle haluat muistutuksen. Voit asettaa tunnisteita lääkkeille ja määrittää niiden varastoja.</string>
-    <string name="intro_reminder_description">Valitse lääke muokataksesi sen tietoja ja luodaksesi muistutuksia eri annoksille otettaville lääkkeille.\n\nMuistutukset voivat olla aika- tai aikaväliperusteisia ja ne voidaan rajoittaa tiettyihin päiviin.</string>
-    <string name="intro_notification_description">Kun muistutus erääntyy, ilmestyvästä ilmoituksesta voit merkitä annoksen otetuksi (napsauttamalla \"OTETTU\"-painiketta), ohitetuksi (hylkäämällä ilmoituksen) tai muistuttaa uudelleen jonkin ajan kuluttua (\"TORKUTA\").</string>
-    <string name="intro_overview_description">Yleiskatsausnäytössä näet tulevat muistutukset ja viimeisimmät muistutustapahtumat. Muistutustapahtumia voidaan muokata pyyhkäisemällä oikealle ja poistaa pyyhkäisemällä vasemmalle.\n\nLisäksi voit manuaalisesti kirjata lisäannoksia määritettyä tai mukautettua lääkettä.</string>
-    <string name="intro_analysis_description">Sovellus tallentaa kaikki muistutustapahtumat. Voit analysoida menneitä annoksiasi analyysinäytössä ja viedä historiasi kebab-valikon (kolme pistettä) kautta. Historia säilyy, vaikka lääkkeitä tai muistutuksia poistettaisiin tai nimettäisiin uudelleen.</string>
+<string name="intro_setup">Määritä ensimmäinen muistutuksesi</string>
+<string name="intro_setup_description">Lisää ensin lääke ja sen jälkeen sille muistutus. MedTimer säilyttää nämä tiedot laitteellasi eikä lähetä lääkitystietojasi mihinkään.\n\nLue täydelliset määritysohjeet kohdasta ”Aloittaminen”.</string>
+<string name="intro_getting_started_link">Aloittaminen</string>
+<string name="intro_overview_orientation_description">Yleiskatsaus näyttää valitun päivän muistutukset. Valitse päivä viikon riviltä. Kunkin muistutuksen vieressä oleva tilakuvake näyttää, onko muistutus odottava, muistutettu, otettu, ohitettu tai torkutettu siihen asti, kunnes olet kotona. Voit muuttaa muistutuksen tilaa painamalla kuvaketta.</string>
+<string name="intro_notifications">Ilmoituslupa</string>
+<string name="intro_notifications_description">MedTimer tarvitsee ilmoitusluvan ilmoittaakseen, kun muistutuksen aika on. Voit ohittaa esittelyn ja valita, sallitaanko ilmoitukset. Voit muuttaa tätä myöhemmin Androidin asetuksissa.</string>
     <string name="show_intro">Näytä sovelluksen esittely</string>
     <string name="are_you_sure_delete_reminder_event">Haluatko varmasti poistaa muistutustapahtuman?</string>
     <string name="notification_importance">Ilmoituksen prioriteetti</string>
@@ -240,6 +243,7 @@
     <string name="disable_widget_summary">Estä widgettejä näyttämästä arkaluonteisia lääketietoja aloitusnäytöllä</string>
     <string name="re_raise_event">Nosta tapahtuma uudelleen</string>
     <string name="notification_reminder_settings">Ilmoitus- ja muistutusasetukset</string>
+    <string name="notifications_missing_or_late">Ilmoitukset puuttuvat tai saapuvat myöhässä</string>
     <string name="display_settings">Näyttöasetukset</string>
     <string name="use_relative_date_time_summary">Näytä suhteellinen päivämäärä/aika muistutuksille</string>
     <string name="use_relative_date_time">Suhteellinen päivämäärä/aika</string>
@@ -365,4 +369,8 @@
     <string name="pk_unit_conflict">%1$s ei näy, koska sen annoksissa käytetään eri yksiköitä: %2$s. Muuta määrät niin, että kaikissa käytetään samaa yksikköä.</string>
     <string name="pk_no_unit">ei yksikköä</string>
     <string name="custom_range">Mukautettu</string>
+    <string name="setup_no_medicines_guidance">Lisää ensin lääke ja lisää sitten sille muistutus. Pelkkä lääke ei ajasta ilmoituksia.</string>
+    <string name="setup_no_reminders_guidance">Pelkkä lääke ei ajasta ilmoituksia. Lisää muistutus ajastaaksesi ilmoitukset.</string>
+    <string name="setup_guidance_getting_started">Aloittaminen</string>
+    <string name="reminder_types_help">Lue lisää muistutustyypeistä</string>
 </resources>

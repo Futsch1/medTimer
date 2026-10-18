@@ -2,12 +2,14 @@
 <resources>
     <string name="continuous_from">Continuous interval starting from %1$s</string>
     <string name="continuous_interval_reminder">Continuous interval reminder</string>
-    <string name="continuous_interval_reminder_help">Start a reminder based on a time interval (e.g., every 6 hours) from a specified moment. This pattern is continuous, ignoring time of day constraints, until manually deactivated.</string>
+    <string name="continuous_interval_reminder_help">Repeat after a fixed duration, such as every 6 hours, from a starting moment.</string>
     <string name="cycle_reminder">Cyclic reminder</string>
     <string name="cycle_start_date">First cycle start</string>
     <string name="daily_from_to">Daily interval from %1$s to %2$s</string>
     <string name="day_of_month_limited">Limited to some days of the month</string>
     <string name="every_day">Every day</string>
+    <string name="help">Help</string>
+    <string name="help_english_only">Help is currently available in English only.</string>
     <string name="every_interval">Every %s</string>
     <string name="expiration_date">Expiration date</string>
     <string name="expiration_date_reminder_help">Reminds when the medicine\'s expiration date is reached or a configurable time before that date.</string>
@@ -24,10 +26,10 @@
     <string name="skipped">Skipped</string>
     <string name="taken">Taken</string>
     <string name="time_based_reminder">Time based reminder</string>
-    <string name="time_based_reminder_help">Set specific times (e.g., 8:00 AM) and configure a recurring pattern. This allows precise control over specific weekdays, days of the month, or complex periodic schedules (like \'every 3 days\').</string>
+    <string name="time_based_reminder_help">Remind at selected clock times, such as 8:00 AM every day.</string>
     <string name="weekday_limited">Limited to some weekdays</string>
     <string name="windowed_interval_reminder">Windowed interval reminder</string>
-    <string name="windowed_interval_reminder_help">Define a daily active window (e.g., 9:00 AM to 9:00 PM) where the first reminder is always at the start time. Subsequent reminders fire at fixed intervals until the end time is reached. The full pattern resets every day.</string>
+    <string name="windowed_interval_reminder_help">Repeat at intervals during a daily time window, such as 9:00 AM to 9:00 PM.</string>
     <plurals name="days">
         <item quantity="one">day</item>
         <item quantity="other">days</item>
@@ -80,6 +82,10 @@
     <string name="tab_medicine">Medicine</string>
     <string name="add_medicine">Add medicine</string>
     <string name="add_reminder">Add reminder</string>
+    <string name="setup_no_medicines_guidance">Add a medicine first, then add a reminder for it. A medicine by itself does not schedule notifications.</string>
+    <string name="setup_no_reminders_guidance">A medicine by itself does not schedule notifications. Add a reminder to schedule notifications.</string>
+    <string name="setup_guidance_getting_started">Getting started</string>
+    <string name="reminder_types_help">Learn more about reminder types</string>
     <string name="delete">Delete</string>
     <string name="time">Time</string>
     <string name="dosage">Dosage</string>
@@ -177,11 +183,12 @@
     <string name="edit_event">Edit event</string>
     <string name="intro_welcome">Welcome to MedTimer!</string>
     <string name="intro_welcome_description">MedTimer is a free and open source medication reminder app with a focus on privacy.\n\nIt requires permission to show notifications for medication reminders.</string>
-    <string name="intro_medicine_description">Use the \"Medicine\" tab to create the medicine you are taking and want to be reminded. You can assign tags to medicines and configure their stocks.</string>
-    <string name="intro_reminder_description">Select a medicine to edit its details and create reminders for the different doses of the medicine you need to take.\n\nReminders can be time or interval based and can be constrained to specific days.</string>
-    <string name="intro_notification_description">Once a reminder is due, a notification will appear that provides you the option to mark a dose as taken (by clicking the \"TAKEN\" button), skipped (by dismissing the notification) or be reminded again after some time (\"SNOOZE\").</string>
-    <string name="intro_overview_description">On the overview screen, you can see upcoming reminders and the last reminder events. Reminder events can be edited by swiping right and deleted by swiping left.\n\nFurthermore, you can manually log additional doses of either one of the configured medicine or a custom one.</string>
-    <string name="intro_analysis_description">The app stores all reminder events. You can analyze your past doses in the analysis screen and export your history via the kebab (three dots) menu. The history will stay even if medicines or reminders are deleted or renamed.</string>
+    <string name="intro_setup">Set up your first reminder</string>
+    <string name="intro_setup_description">Add a medicine first, then add a reminder for it. MedTimer keeps this information on your device and does not send your medication data anywhere.\n\nFor the complete setup steps, read Getting started.</string>
+    <string name="intro_getting_started_link">Getting started</string>
+    <string name="intro_overview_orientation_description">The Overview shows reminders for the selected day. Select a day from the week row. The state icon beside each reminder shows whether it is pending, reminded, taken, skipped, or snoozed until home, and you can press it to change the reminder state.</string>
+    <string name="intro_notifications">Notification permission</string>
+    <string name="intro_notifications_description">MedTimer needs notification permission to alert you when a reminder is due. You can skip the intro and choose whether to allow notifications; you can change this later in Android settings.</string>
     <string name="show_intro">Show app intro</string>
     <string name="are_you_sure_delete_reminder_event">Are you sure to delete the reminder event?</string>
     <string name="notification_importance">Notification priority</string>
@@ -254,6 +261,7 @@
     <string name="disable_widget_summary">Prevent widgets from displaying sensitive medication information on the home screen</string>
     <string name="re_raise_event">Re-raise event</string>
     <string name="notification_reminder_settings">Notification and reminder settings</string>
+    <string name="notifications_missing_or_late">Notifications missing or late</string>
     <string name="snooze_settings">Snooze settings</string>
     <string name="home_location">Home location</string>
     <string name="home_location_not_set">Not set</string>

@@ -19,6 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ fun Warnings(
                 titleRes = CoreUiR.string.battery_optimization_warning_title,
                 summaryRes = CoreUiR.string.battery_optimization_warning_summary,
                 onDismiss = onDismissBatteryWarning,
+                testTag = OverviewTestTags.BATTERY_WARNING,
             )
         }
         AnimatedVisibility(
@@ -54,6 +56,7 @@ fun Warnings(
                 titleRes = CoreUiR.string.exact_reminders_warning_title,
                 summaryRes = CoreUiR.string.exact_reminders_warning_summary,
                 onDismiss = onDismissExactRemindersWarning,
+                testTag = OverviewTestTags.EXACT_REMINDERS_WARNING,
                 action = WarningAction(CoreUiR.string.enable, onEnableExactReminders),
             )
         }
@@ -79,13 +82,15 @@ private fun WarningCard(
     summaryRes: Int,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    testTag: String,
     action: WarningAction? = null,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .testTag(testTag),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),

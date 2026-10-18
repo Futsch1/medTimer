@@ -11,7 +11,7 @@ import org.junit.Test
 class CalendarTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
-    fun calendarTest() {
+    fun calendarShowsEventsAndOmitsDeletedOnes() {
         menus.clickAppOption(R.string.generate_test_data)
 
         overview.take(GINSENG)
@@ -25,23 +25,17 @@ class CalendarTest : MedTimerTestBase() {
         statistics.selectView(StatisticFragment.CALENDAR)
         statistics.assertCalendarDayEventsContain(OMEGA_3)
         statistics.assertCalendarDayEventsContain(GINSENG)
-    }
 
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun testDeletedEventNotInCalendarView() {
-        manualDose.logCustom("Test")
-
-        overview.assertEventContains("Test")
-
-        overview.clickEventState(0)
+        navigation.toOverview()
+        manualDose.logCustom("Temporary dose")
+        overview.assertEventContains("Temporary dose")
+        overview.clickEventStateContaining("Temporary dose")
         overview.clickAction(R.string.delete)
         dialogs.confirm()
-        overview.assertEventCount(0)
 
         navigation.toAnalysis()
         statistics.selectView(StatisticFragment.CALENDAR)
-        statistics.assertNoCalendarDayEventContains("Test")
+        statistics.assertNoCalendarDayEventContains("Temporary dose")
     }
 
     companion object {

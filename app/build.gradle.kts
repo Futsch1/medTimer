@@ -1,3 +1,5 @@
+import com.futsch1.build.GenerateHelpGuideTask
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.triplet.play)
@@ -133,6 +135,67 @@ android {
     }
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        val taskName = "generate${variant.name.replaceFirstChar(Char::uppercase)}HelpGuideAssets"
+        val generateHelpGuideAssets = tasks.register<GenerateHelpGuideTask>(taskName) {
+            description = "Generate assets for the help guide"
+            group = "Help"
+            guideDirectory.set(rootProject.layout.projectDirectory.dir("docs/help"))
+            outputDirectory.set(layout.buildDirectory.dir("generated/assets/$taskName"))
+        }
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            generateHelpGuideAssets,
+            GenerateHelpGuideTask::outputDirectory
+        )
+    }
+}
+
+val helpGuideValidatorTests = tasks.register<Exec>("testHelpGuideValidator") {
+    description = "Run unit tests for the offline Help guide validator"
+    group = "Help"
+    commandLine(
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        rootProject.file("tools").absolutePath,
+        "-p",
+        "test_validate_help_guide.py"
+    )
+}
+
+tasks.register<Exec>("validateHelpGuide") {
+    description = "Validate generated Help references, app destinations, and assembled debug APKs for both flavors"
+    group = "Help"
+    dependsOn(
+        "generateFullDebugHelpGuideAssets",
+        "generateFossDebugHelpGuideAssets",
+        helpGuideValidatorTests
+    )
+    commandLine(
+        "python3",
+        rootProject.file("tools/validate_help_guide.py").absolutePath,
+        "--generated",
+        layout.buildDirectory.dir("generated/assets/generateFullDebugHelpGuideAssets").get().asFile.absolutePath,
+        "--generated",
+        layout.buildDirectory.dir("generated/assets/generateFossDebugHelpGuideAssets").get().asFile.absolutePath,
+        "--source",
+        rootProject.file("app/src/main").absolutePath,
+        "--source",
+        rootProject.file("app/src/full").absolutePath,
+        "--source",
+        rootProject.file("app/src/foss").absolutePath,
+        "--source",
+        rootProject.file("feature/ui/src/main").absolutePath,
+        "--apk",
+        layout.buildDirectory.file("outputs/apk/full/debug/MedTimer-full-debug.apk").get().asFile.absolutePath,
+        "--apk",
+        layout.buildDirectory.file("outputs/apk/foss/debug/MedTimer-foss-debug.apk").get().asFile.absolutePath
+    )
+}
+
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:database"))
@@ -152,6 +215,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.webkit)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

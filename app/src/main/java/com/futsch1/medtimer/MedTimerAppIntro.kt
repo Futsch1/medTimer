@@ -4,7 +4,13 @@ import android.Manifest.permission
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.TypedValue
+import android.view.View
+import android.widget.TextView
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
@@ -41,33 +47,21 @@ class MedTimerAppIntro : AppIntro() {
         )
 
         addSlide(
-            getString(R.string.tab_medicine),
-            getString(R.string.intro_medicine_description),
+            getString(R.string.intro_setup),
+            getString(R.string.intro_setup_description),
             R.drawable.intro_medicine
         )
 
         addSlide(
-            getString(R.string.reminders),
-            getString(R.string.intro_reminder_description),
-            R.drawable.intro_reminder
-        )
-
-        addSlide(
-            getString(R.string.show_notifications),
-            getString(R.string.intro_notification_description),
-            R.drawable.intro_notification
-        )
-
-        addSlide(
             getString(R.string.tab_overview),
-            getString(R.string.intro_overview_description),
+            getString(R.string.intro_overview_orientation_description),
             R.drawable.intro_overview
         )
 
         addSlide(
-            getString(R.string.analysis),
-            getString(R.string.intro_analysis_description),
-            R.drawable.intro_analysis
+            getString(R.string.intro_notifications),
+            getString(R.string.intro_notifications_description),
+            R.drawable.intro_notification
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -139,6 +133,40 @@ class MedTimerAppIntro : AppIntro() {
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         finish()
+    }
+
+    override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
+        super.onSlideChanged(oldFragment, newFragment)
+        val description = newFragment?.view?.findViewById<TextView>(com.github.appintro.R.id.description) ?: return
+        description.post {
+            val linkText = getString(R.string.intro_getting_started_link)
+            val start = description.text.indexOf(linkText)
+            if (start < 0 || (description.text as? Spanned)
+                    ?.getSpans(0, description.length(), ClickableSpan::class.java)
+                    ?.isNotEmpty() == true
+            ) {
+                return@post
+            }
+
+            description.text = SpannableString(description.text).apply {
+                setSpan(
+                    object : ClickableSpan() {
+                        override fun onClick(widget: View) = openGettingStarted()
+                    },
+                    start,
+                    start + linkText.length,
+                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            description.movementMethod = LinkMovementMethod.getInstance()
+            description.highlightColor = Color.TRANSPARENT
+            description.setOnClickListener { openGettingStarted() }
+        }
+    }
+
+    private fun openGettingStarted() {
+        HelpReaderDialogFragment.newInstance("getting-started")
+            .show(supportFragmentManager, "help")
     }
 
     override fun onSkipPressed(currentFragment: Fragment?) {

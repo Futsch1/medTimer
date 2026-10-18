@@ -141,45 +141,16 @@ class NotificationTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun variableAmount() {
-        settings.click(R.string.display_settings, R.string.combine_notifications)
-
-        seed.medicine(TEST_MED) { reminder("1", laterToday()) }
-
-        medicines.clickItem(0)
-        reminders.inSettingsOf(0) { toggleVariableAmount() }
-        menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
-
-        medicines.clickItem(1)
-        medicineEditor.rename(SECOND_ONE)
-
-        navigation.toAnalysis()
-
-        notifications.inShade {
-            scheduleRemindersNow()
-            assertShows(TEST_MED)
-            clickAction(R.string.taken)
-        }
-
-        enterVariableAmount(TEST_MED, TEST_VARIABLE_AMOUNT)
-        enterVariableAmount(SECOND_ONE, TEST_ANOTHER_VARIABLE_AMOUNT)
-
-        navigation.toOverview()
-        overview.assertEventContains(TEST_VARIABLE_AMOUNT)
-        overview.assertEventContains(TEST_ANOTHER_VARIABLE_AMOUNT)
-    }
-
-    @Test
-    @AllowFlaky(attempts = 3)
     fun variableAmountBigButton() {
         settings.inSection(R.string.display_settings) {
             preferences.click(R.string.big_notifications)
             preferences.click(R.string.combine_notifications)
         }
 
-        val medicineId = seed.medicine(TEST_MED) { reminder("1", laterToday(), variableAmount = true) }
+        val medicineId = seed.medicine(TEST_MED) { reminder("1", laterToday()) }
 
         medicines.clickItem(0)
+        reminders.inSettingsOf(0) { toggleVariableAmount() }
         menus.clickEditMedicineOption(R.string.duplicate_including_reminders)
         seed.remindersOf(medicineId) { reminder("Not variable", laterToday()) }
 

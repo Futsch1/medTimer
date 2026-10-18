@@ -48,7 +48,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun medicineCannotBeSkippedTest() {
+    fun skippedActionIsUnavailableForRestrictedReminders() {
         settings.inSection(R.string.notification_reminder_settings) {
             preferences.click(R.string.dismiss_notification_action)
             dialogs.clickItem(R.string.snooze)
@@ -58,48 +58,26 @@ class MedicineHandlingTest : MedTimerTestBase() {
             cannotBeSkipped()
             intervalReminder("1", intervalWithinToday(2.hours))
         }
+        assertSkippedActionUnavailable(TEST_MED_1)
 
-        notifications.inShade {
-            assertShows(TEST_MED_1)
-            assertShowsAction(R.string.taken)
-            assertNoAction(R.string.snooze)
-            assertNoAction(R.string.skipped)
-            dismiss(TEST_MED_1)
-        }
-
-        navigation.toOverview()
-        overview.clickEventState(0)
-        overview.assertActionAbsent(R.string.skipped)
-        overview.closeActionMenu()
-        overview.clickEventState(1)
-        overview.assertActionAbsent(R.string.skipped)
-        overview.closeActionMenu()
-    }
-
-
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun medicineCannotBeSkippedPreferenceTest() {
         settings.inSection(R.string.notification_reminder_settings) {
             preferences.click(R.string.reminders_cannot_be_skipped)
         }
 
-        seed.medicine(TEST_MED_1) { intervalReminder("1", intervalWithinToday(2.hours)) }
+        seed.medicine(TEST_MED_2) { intervalReminder("1", intervalWithinToday(2.hours)) }
+        assertSkippedActionUnavailable(TEST_MED_2)
+    }
 
+    private fun assertSkippedActionUnavailable(medicineName: String) {
         notifications.inShade {
-            assertShows(TEST_MED_1)
+            assertShows(medicineName)
             assertShowsAction(R.string.taken)
             assertNoAction(R.string.snooze)
             assertNoAction(R.string.skipped)
-            dismiss(TEST_MED_1)
+            dismiss(medicineName)
         }
 
         navigation.toOverview()
-        overview.clickEventState(0)
-        overview.assertActionAbsent(R.string.skipped)
-        overview.closeActionMenu()
-        overview.clickEventState(1)
-        overview.assertActionAbsent(R.string.skipped)
-        overview.closeActionMenu()
+        overview.assertActionAbsentForEventContaining(medicineName, R.string.skipped)
     }
 }

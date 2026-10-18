@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="help">مساعدة</string>
+    <string name="help_english_only">المساعدة متاحة حاليًا باللغة الإنجليزية فقط.</string>
     <string name="continuous_from">فاصل مستمر يبدأ من %1$s</string>
     <string name="continuous_interval_reminder">تذكير بفاصل زمني مستمر</string>
-    <string name="continuous_interval_reminder_help">ابدأ تذكيرًا بناءً على فاصل زمني (على سبيل المثال، كل 6 ساعات) من لحظة محددة. هذا النمط مستمر، ويتجاهل قيود الوقت من اليوم، حتى يتم إلغاء تنشيطه يدويًا.</string>
+    <string name="continuous_interval_reminder_help">كرّر التذكير بعد مدة ثابتة من وقت البدء، مثل كل 6 ساعات.</string>
     <string name="cycle_reminder">تذكيرات دورية</string>
     <string name="cycle_start_date">بداية الدورة الأولى</string>
     <string name="daily_from_to">فاصل يومي من %1$s إلى %2$s</string>
@@ -24,10 +26,10 @@
     <string name="skipped">تم التخطي</string>
     <string name="taken">تم التناول</string>
     <string name="time_based_reminder">تذكير قائم على الوقت</string>
-    <string name="time_based_reminder_help">عيّن أوقاتًا محددة (على سبيل المثال، 8:00 صباحًا) وقم بتكوين نمط متكرر. يتيح ذلك التحكم الدقيق في أيام الأسبوع المحددة أو أيام الشهر أو الجداول الدورية المعقدة (مثل \"كل 3 أيام\").</string>
+    <string name="time_based_reminder_help">ذكّر في الأوقات المحددة، مثل كل يوم عند الساعة 8:00 صباحًا.</string>
     <string name="weekday_limited">مقيد بأيام معينة من الأسبوع</string>
     <string name="windowed_interval_reminder">تذكير بفاصل زمني محدد</string>
-    <string name="windowed_interval_reminder_help">حدد نافذة نشطة يومية (على سبيل المثال، من 9:00 صباحًا إلى 9:00 مساءً) حيث يكون التذكير الأول دائمًا في وقت البدء. يتم إطلاق التذكيرات اللاحقة على فترات زمنية ثابتة حتى يتم الوصول إلى وقت الانتهاء. يتم إعادة تعيين النمط الكامل كل يوم.</string>
+    <string name="windowed_interval_reminder_help">كرّر التذكير على فترات خلال نافذة زمنية يومية، مثل من 9:00 صباحًا إلى 9:00 مساءً.</string>
     <plurals name="days">
         <item quantity="zero">يوم</item>
         <item quantity="one">يوم</item>
@@ -189,11 +191,12 @@
     <string name="edit_event">عدّل الحدث</string>
     <string name="intro_welcome">مرحباً بك في منبه الدواء!</string>
     <string name="intro_welcome_description">منبه الدواء هو تطبيق مجاني ومفتوح المصدر لتذكير الأدوية مع التركيز على الخصوصية.\n\nيتطلب إذنًا لعرض إشعارات تذكيرات الأدوية.</string>
-    <string name="intro_medicine_description">استخدم علامة التبويب الأدوية لإنشاء الدواء الذي تتناوله وتريد أن يتم تذكيرك به. يمكنك تعيين علامات للأدوية وتكوين مخزونها.</string>
-    <string name="intro_reminder_description">حدد دواءً لتعديل تفاصيله وإنشاء تذكيرات للجرعات المختلفة من الدواء الذي تحتاج إلى تناوله.\n\nيمكن أن تكون التذكيرات قائمة على الوقت أو الفاصل الزمني ويمكن تقييدها بأيام محددة.</string>
-    <string name="intro_notification_description">بمجرد حلول موعد التذكير، سيظهر إشعار يوفر لك خيار وضع علامة على الجرعة ك \"أخذته\" (بالنقر على زر \"أخذته\")، أو تخطيه (بتجاهل الإشعار)، أو تذكيرك مرة أخرى بعد بعض الوقت (اغفُ).</string>
-    <string name="intro_overview_description">في شاشة النظرة العامة، يمكنك رؤية التذكيرات القادمة وأحداث التذكير الأخيرة. يمكن تعديل أحداث التذكير عن طريق التمرير إلى اليمين وحذفها عن طريق التمرير إلى اليسار.\n\nعلاوة على ذلك، يمكنك تسجيل جرعات إضافية يدويًا لأي من الأدوية المكونة أو دواء مخصص.</string>
-    <string name="intro_analysis_description">يقوم التطبيق بتخزين جميع أحداث التذكير. يمكنك تحليل جرعاتك السابقة في شاشة التحليل وتصدير سجلاتك عبر قائمة الكباب (الثلاث نقاط). سيبقى السجل حتى لو تم حذف الأدوية أو التذكيرات أو إعادة تسميتها.</string>
+<string name="intro_setup">إعداد أول تذكير لك</string>
+<string name="intro_setup_description">أضف دواءً أولًا، ثم أضف تذكيرًا له. يحتفظ MedTimer بهذه المعلومات على جهازك ولا يرسل بيانات أدويتك إلى أي مكان.\n\nللاطلاع على خطوات الإعداد الكاملة، اقرأ «بدء الاستخدام».</string>
+<string name="intro_getting_started_link">بدء الاستخدام</string>
+<string name="intro_overview_orientation_description">تعرض «نظرة عامة» التذكيرات لليوم المحدد. اختر يومًا من صف الأسبوع. يوضح رمز الحالة بجانب كل تذكير ما إذا كان قيد الانتظار أو تم التذكير به أو تم تناوله أو تخطيه أو تأجيله حتى تصل إلى المنزل، ويمكنك الضغط عليه لتغيير حالة التذكير.</string>
+<string name="intro_notifications">إذن الإشعارات</string>
+<string name="intro_notifications_description">يحتاج MedTimer إلى إذن الإشعارات لتنبيهك عند حلول موعد التذكير. يمكنك تخطي المقدمة واختيار السماح بالإشعارات من عدمه، ويمكنك تغيير ذلك لاحقًا في إعدادات Android.</string>
     <string name="show_intro">اعرض مقدمة التطبيق</string>
     <string name="are_you_sure_delete_reminder_event">هل أنت متأكد من حذف حدث التذكير؟</string>
     <string name="notification_importance">أولوية الإشعار</string>
@@ -266,6 +269,7 @@
     <string name="disable_widget_summary">منع الأدوات من عرض معلومات الدواء الحساسة على الشاشة الرئيسية</string>
     <string name="re_raise_event">أعد إظهار الحدث</string>
     <string name="notification_reminder_settings">إعدادات الإشعارات والتذكيرات</string>
+    <string name="notifications_missing_or_late">الإشعارات مفقودة أو متأخرة</string>
     <string name="display_settings">إعدادات العرض</string>
     <string name="use_relative_date_time_summary">عرض التاريخ/الوقت النسبي للتذكيرات</string>
     <string name="use_relative_date_time">التاريخ/الوقت النسبي</string>
@@ -389,4 +393,8 @@
     <string name="pk_unit_conflict">لا يُعرض %1$s لأن جرعاته تستخدم وحدات مختلفة: %2$s. عدّل الكميات بحيث تستخدم جميعها الوحدة نفسها.</string>
     <string name="pk_no_unit">بدون وحدة</string>
     <string name="custom_range">مخصّص</string>
+    <string name="setup_no_medicines_guidance">أضف دواءً أولاً، ثم أضف تذكيرًا له. الدواء وحده لا يجدول الإشعارات.</string>
+    <string name="setup_no_reminders_guidance">الدواء وحده لا يجدول الإشعارات. أضف تذكيرًا لجدولة الإشعارات.</string>
+    <string name="setup_guidance_getting_started">البدء</string>
+    <string name="reminder_types_help">مزيد من المعلومات حول أنواع التذكيرات</string>
 </resources>
