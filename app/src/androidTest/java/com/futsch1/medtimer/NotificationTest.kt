@@ -3,6 +3,7 @@ package com.futsch1.medtimer
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.Interval
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.assertSecondaryAlarmAfter
@@ -69,6 +70,23 @@ class NotificationTest : MedTimerTestBase() {
         overview.assertEventContains(TEST_MED)
         navigation.assertOverviewShown()
         overview.assertDaySelected(today)
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun tappingNotificationRevealsReminderHiddenByFilterAndScroll() {
+        seed.takenDoses("Medicine B", 20)
+        seed.medicine(TEST_MED) { reminder("1", aboutToFire()) }
+
+        overview.toggleFilter(OverviewFilter.TAKEN)
+        navigation.toMedicines()
+
+        scheduleRemindersNow()
+        notifications.inShade { open(TEST_MED) }
+
+        // The harness turns off scrolling to the open event, so only scrolling to the target brings it below the doses into view.
+        overview.assertEventInView(TEST_MED)
+        overview.assertFilterOff(OverviewFilter.TAKEN)
     }
 
     @Test

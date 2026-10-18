@@ -16,8 +16,8 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 /**
- * Handles a tap on a reminder notification: requests the overview day of its reminders and drops reminders that were
- * deleted in the meantime from the notification.
+ * Handles a tap on a reminder notification: requests the overview day of its reminders, to be shown with them in view,
+ * and drops reminders that were deleted in the meantime from the notification.
  */
 class ReminderNotificationTapHandler @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
@@ -37,7 +37,7 @@ class ReminderNotificationTapHandler @Inject constructor(
             reminderEventIds.mapNotNull { id -> reminderEventRepository.fetch(id)?.takeIf { it.status != ReminderEvent.ReminderStatus.DELETED } }
         }
         val remindedInstant = existingEvents.minOfOrNull { it.remindedTimestamp } ?: fallbackRemindedInstant
-        overviewDayRequests.request(remindedInstant.toLocalDate())
+        overviewDayRequests.request(OverviewDayRequest(remindedInstant.toLocalDate(), existingEvents))
 
         val deletedEventIds = reminderEventIds - existingEvents.map { it.reminderEventId }.toSet()
         if (deletedEventIds.isNotEmpty() && notificationId != -1) {

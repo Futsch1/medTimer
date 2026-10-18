@@ -6,6 +6,7 @@ import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.di.TimeFormatterEntryPoint
@@ -51,6 +52,9 @@ abstract class MedTimerTestBase {
     @Inject
     lateinit var reminderRepository: ReminderRepository
 
+    @Inject
+    lateinit var reminderEventRepository: ReminderEventRepository
+
     private val harness = MedTimerTestHarness(this.javaClass.name)
 
     @get:Rule
@@ -68,7 +72,7 @@ abstract class MedTimerTestBase {
     protected val baristaRule get() = harness.baristaRule
 
     /** A test's starting data, written past the editor - see [Seed]. */
-    protected val seed by lazy { Seed(medicineRepository, reminderRepository, timeAccess) }
+    protected val seed by lazy { Seed(medicineRepository, reminderRepository, reminderEventRepository, timeAccess) }
 
     private val robots by lazy { Robots(harness.composeTestRule) }
 

@@ -54,6 +54,7 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.google.gson.Gson
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -111,6 +112,7 @@ fun OverviewScreen(
         },
         onEventClick = onEventClick,
         onAction = onAction,
+        onScrolledToTarget = viewModel::onScrolledToTarget,
         onLogManualDose = onLogManualDose,
         topBarActions = topBarActions,
         modifier = modifier,
@@ -143,6 +145,7 @@ fun OverviewScreen(
     onEnterSelectionMode: (OverviewEvent) -> Unit,
     onEventClick: (OverviewEvent) -> Unit,
     onAction: (Button, List<OverviewEvent>) -> Unit,
+    onScrolledToTarget: () -> Unit,
     onLogManualDose: () -> Unit,
     topBarActions: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
@@ -264,6 +267,9 @@ fun OverviewScreen(
                         onEventClick = onEventClick,
                         onEnterSelectionMode = onEnterSelectionMode,
                         onAction = { button, event -> onAction(button, listOf(event)) },
+                        // The day sliding out keeps its list until the transition ends; only the selected day scrolls.
+                        scrollTargetEventIds = if (content == state.day) state.scrollTargetEventIds else persistentSetOf(),
+                        onScrolledToTarget = onScrolledToTarget,
                         modifier = Modifier.padding(end = 8.dp),
                     )
                 }
@@ -366,6 +372,7 @@ private fun OverviewScreenPreview() {
                 onEnterSelectionMode = {},
                 onEventClick = {},
                 onAction = { _, _ -> },
+                onScrolledToTarget = {},
                 onLogManualDose = {},
                 topBarActions = {},
             )

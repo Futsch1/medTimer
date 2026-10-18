@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,8 +56,11 @@ import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
+import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.google.gson.Gson
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,6 +91,8 @@ fun OverviewEventList(
     onEnterSelectionMode: (OverviewEvent) -> Unit,
     onAction: (Button, OverviewEvent) -> Unit,
     modifier: Modifier = Modifier,
+    scrollTargetEventIds: ImmutableSet<Int> = persistentSetOf(),
+    onScrolledToTarget: () -> Unit = {},
 ) {
     val railColor = MaterialTheme.colorScheme.primary
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
@@ -96,19 +103,7 @@ fun OverviewEventList(
     } else {
         rememberLazyListState()
     }
-    var scrolledToNow by remember { mutableStateOf(false) }
-
-    LaunchedEffect(events) {
-        if (!overviewEventListScrollToNowEnabled || scrolledToNow || events.isEmpty()) {
-            return@LaunchedEffect
-        }
-
-        scrolledToNow = true
-        val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
-        if (index >= 0) {
-            listState.scrollToItem(index)
-        }
-    }
+    InitialScrollEffect(listState, events, scrollTargetEventIds, onScrolledToTarget)
 
     LazyColumn(
         state = listState,
@@ -148,6 +143,44 @@ fun OverviewEventList(
                     .animateItem(),
                 onRailAnchor = { railAnchors[event.id] = it },
             )
+        }
+    }
+}
+
+/**
+ * Scrolls the list once: to the first of [scrollTargetEventIds] when there are any, otherwise to the first open event.
+ *
+ * A target is only found once its day's events have arrived, and it wins over the open event even when the list has
+ * already scrolled to that. The target is a one-off request, so it is reported as consumed from the effect.
+ */
+@Composable
+private fun InitialScrollEffect(
+    listState: LazyListState,
+    events: ImmutableList<OverviewEvent>,
+    scrollTargetEventIds: ImmutableSet<Int>,
+    onScrolledToTarget: () -> Unit,
+) {
+    val currentOnScrolledToTarget by rememberUpdatedState(onScrolledToTarget)
+    var scrolled by remember { mutableStateOf(false) }
+
+    LaunchedEffect(events, scrollTargetEventIds) {
+        if (scrollTargetEventIds.isNotEmpty()) {
+            val index = events.indexOfFirst { it is PastReminderEvent && it.id in scrollTargetEventIds }
+            if (index >= 0) {
+                scrolled = true
+                listState.scrollToItem(index)
+                currentOnScrolledToTarget()
+            }
+            return@LaunchedEffect
+        }
+
+        if (!overviewEventListScrollToNowEnabled || scrolled || events.isEmpty()) {
+            return@LaunchedEffect
+        }
+        scrolled = true
+        val index = events.indexOfFirst { it.state == OverviewState.PENDING || it.state == OverviewState.RAISED }
+        if (index >= 0) {
+            listState.scrollToItem(index)
         }
     }
 }
