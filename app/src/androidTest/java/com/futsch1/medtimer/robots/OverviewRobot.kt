@@ -112,6 +112,15 @@ class OverviewRobot(private val ui: ComposeUi) {
     fun assertActionAbsent(@StringRes labelRes: Int) =
         actionMenu.assertAbsent(hasText(ui.getString(labelRes)))
 
+    fun assertActionAbsentForEventContaining(substring: String, @StringRes labelRes: Int) {
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
+        val index = currentIndexOf(substring)
+        assertTrue(index != null, "No Overview event contains '$substring': ${eventTexts()}")
+        stateButton(index).performClick()
+        assertActionAbsent(labelRes)
+        closeActionMenu()
+    }
+
     /** The warning cards above the event list, found by their title. */
     fun assertWarningShown(@StringRes titleRes: Int) = screen.assertDisplayed(hasText(ui.getString(titleRes)))
 

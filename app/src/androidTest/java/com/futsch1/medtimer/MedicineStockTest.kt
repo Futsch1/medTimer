@@ -7,7 +7,6 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
-import java.time.LocalDate
 import java.util.Calendar
 import kotlin.time.Duration.Companion.minutes
 
@@ -123,43 +122,33 @@ class MedicineStockTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun bigStockAmounts() {
+    fun stockAmountsAndRunOutEstimates() {
         seed.medicine("Test")
 
         medicines.clickItem(0)
 
         medicineEditor.setStock(amount = "", refillSize = "")
         medicineEditor.setStock(amount = "10005", unit = "pills")
-
         medicineEditor.inStockSettings {
             preferences.assertSummary(R.string.amount, MedicineHelper.formatAmount(10005.0, "pills"))
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
-                timeFormatter().localDateToString(LocalDate.now().plusDays(365))
+                timeFormatter().localDateToString(frozenToday().plusDays(365))
             )
         }
-    }
 
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun runOutDate() {
-        seed.medicine("Test") {
-            reminder("3", earlierToday())
-        }
-
-        medicines.clickItem(0)
-
+        medicineEditor.addReminder("3", earlierToday())
         medicineEditor.inStockSettings {
             preferences.setValue(R.string.amount, "10")
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
-                timeFormatter().localDateToString(LocalDate.now().plusDays(4))
+                timeFormatter().localDateToString(frozenToday().plusDays(4))
             )
 
             preferences.setValue(R.string.amount, "13")
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
-                timeFormatter().localDateToString(LocalDate.now().plusDays(5))
+                timeFormatter().localDateToString(frozenToday().plusDays(5))
             )
         }
     }
@@ -304,35 +293,23 @@ class MedicineStockTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun dailyStockReminderTest() {
+    fun dailyStockReminderCanBePaused() {
         val notificationTitle =
             InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
 
         seed.medicine("Test")
-
         medicines.clickItem(0)
-
         medicineEditor.setStock(amount = amount(10.5))
         medicineEditor.addDailyStockReminder(threshold = "14", time = laterToday())
 
         notifications.inShade { assertHidden(notificationTitle) }
         scheduleRemindersNow()
         notifications.inShade { assertShows(notificationTitle) }
-    }
 
-    @Test
-    @AllowFlaky(attempts = 3)
-    fun pausedDailyStockReminderTest() {
-        val notificationTitle =
-            InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
-
-        seed.medicine("Test") {
-            stock(10.5)
-            dailyStockReminder(threshold = 14.0, at = laterToday())
-        }
-
+        navigation.toMedicines()
         medicines.clickItem(0)
         reminders.inSettingsOf(0) { toggleEnabled() }
+        notifications.inShade { dismiss(notificationTitle) }
 
         scheduleRemindersNow()
         notifications.inShade { assertHidden(notificationTitle) }
