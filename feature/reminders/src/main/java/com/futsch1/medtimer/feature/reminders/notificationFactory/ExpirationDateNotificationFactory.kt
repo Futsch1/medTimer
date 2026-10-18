@@ -35,7 +35,7 @@ class ExpirationDateNotificationFactory @AssistedInject constructor(
     ) {
 
     init {
-        val contentIntent = getStartAppIntent()
+        val contentIntent = getShowReminderDayPendingIntent(reminderNotification)
         val medicine = reminderNotification.reminderNotificationParts[0].medicine
 
         val medicineNameString = MedicineHelper.getMedicineName(medicine, true, preferencesDataSource.preferences.value)

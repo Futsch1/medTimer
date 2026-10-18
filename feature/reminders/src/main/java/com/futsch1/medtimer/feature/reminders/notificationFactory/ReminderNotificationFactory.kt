@@ -12,7 +12,6 @@ import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.alarm.ReminderAlarmActivity
-import com.futsch1.medtimer.feature.reminders.getShowReminderDayIntent
 import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
 import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.notificationData.channelForHighestImportance
@@ -46,7 +45,7 @@ abstract class ReminderNotificationFactory(
         )
 
     init {
-        val contentIntent: PendingIntent = getShowReminderDayPendingIntent()
+        val contentIntent: PendingIntent = getShowReminderDayPendingIntent(reminderNotification)
 
         builder.setSmallIcon(R.drawable.capsule)
         builder.setContentTitle(context.getString(R.string.notification_title))
@@ -67,17 +66,6 @@ abstract class ReminderNotificationFactory(
         if (reminderNotification.reminderNotificationParts.any { it.effectiveShowAsAlarm() }) {
             addFullScreenIntent()
         }
-    }
-
-    private fun getShowReminderDayPendingIntent(): PendingIntent {
-        val remindedInstant = reminderNotification.reminderNotificationParts.minOfOrNull { it.reminderEvent.remindedTimestamp }
-            ?: reminderNotification.reminderNotificationData.remindInstant
-        return PendingIntent.getActivity(
-            context,
-            notificationId,
-            getShowReminderDayIntent(context, reminderNotification.reminderNotificationData, remindedInstant),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
     }
 
     @SuppressLint("FullScreenIntentPolicy")

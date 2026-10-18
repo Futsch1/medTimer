@@ -8,9 +8,9 @@ delivered a notification or that a dose was taken.
 
 ## Open a reminder from its notification
 
-Tap a reminder notification to open **Overview** on the day the reminder was scheduled for. A reminder that was snoozed
-past midnight still opens on its original day. If the reminder's event was deleted in the meantime, tapping the
-notification removes it.
+Tap a reminder notification, including an out-of-stock or expiration date notification, to open **Overview** on the day the reminder was scheduled for.
+A reminder that was snoozed past midnight still opens on its original day.
+If the reminder's event was deleted in the meantime, tapping the notification removes it.
 
 ## Correct a recorded event
 
