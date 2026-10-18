@@ -58,6 +58,13 @@ class OverviewRobot(private val ui: ComposeUi) {
         list.nodeAt(EVENT_CARD, index).performClick()
     }
 
+    fun clickEventStateContaining(substring: String) {
+        list.scrollUntilText(EVENT_CARD, EVENT_TEXT, substring)
+        val index = currentIndexOf(substring)
+        assertTrue(index != null, "No Overview event contains '$substring': ${eventTexts()}")
+        stateButton(index).performClick()
+    }
+
     fun longClickEvent(index: Int) {
         scrollToEvent(index)
         eventCardAtEvent(index).performTouchInput { longClick() }

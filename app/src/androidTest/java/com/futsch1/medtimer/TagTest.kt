@@ -62,40 +62,6 @@ class TagTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun medicineVisibility() {
-        seed.medicine("Test")
-        medicines.clickItem(0)
-        tags.inMedicineTags { add("Tag1") }
-
-        seed.medicine("Else")
-        medicines.clickItem(1)
-        tags.inMedicineTags { add("Tag2") }
-
-        medicines.assertNameContains("Test")
-        medicines.assertNameContains("Else")
-
-        tags.inFilter {
-            toggle("Tag1")
-            assertChecked("Tag1")
-            assertNotChecked("Tag2")
-        }
-
-        medicines.assertNameContains("Test")
-        medicines.assertNameNotContains("Else")
-
-        tags.inFilter {
-            toggle("Tag1")
-            toggle("Tag2")
-            assertNotChecked("Tag1")
-            assertChecked("Tag2")
-        }
-
-        medicines.assertNameNotContains("Test")
-        medicines.assertNameContains("Else")
-    }
-
-    @Test
-    @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
         // Tag before any dose is raised: a reminder event keeps the tags its medicine had when it was raised.
         val test = seed.medicine("Test")
@@ -109,8 +75,28 @@ class TagTest : MedTimerTestBase() {
         seed.remindersOf(test) { intervalReminder("Amount1", 1.hours) }
         seed.remindersOf(other) { intervalReminder("Amount2", 1.hours) }
 
-        // First, deactivate all of Test
         medicines.showList()
+        tags.inFilter {
+            toggle("Tag1")
+            assertChecked("Tag1")
+            assertNotChecked("Tag2")
+        }
+        medicines.assertNameContains("Test")
+        medicines.assertNameNotContains("Else")
+
+        tags.inFilter {
+            toggle("Tag1")
+            toggle("Tag2")
+            assertNotChecked("Tag1")
+            assertChecked("Tag2")
+        }
+        medicines.assertNameNotContains("Test")
+        medicines.assertNameContains("Else")
+        tags.inFilter { toggle("Tag2") }
+        medicines.assertNameContains("Test")
+        medicines.assertNameContains("Else")
+
+        // Deactivating a tag also deactivates only its medicines.
         tags.inFilter { toggle("Tag1") }
 
         menus.clickMedicinesOption(R.string.deactivate_all)
