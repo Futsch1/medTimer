@@ -64,6 +64,7 @@ class OverviewViewModel @AssistedInject constructor(
     private val reminderEventFactory: PastReminderEvent.Factory,
     private val simulatedReminderEventFactory: SimulatedReminderEvent.Factory,
     private val powerManager: PowerManager,
+    overviewDayRequests: OverviewDayRequests,
     @param:ApplicationContext private val context: Context,
     @param:IsDebugBuild private val isDebugBuild: Boolean,
     @Dispatcher(MedTimerDispatchers.Default) defaultDispatcher: CoroutineDispatcher,
@@ -89,14 +90,29 @@ class OverviewViewModel @AssistedInject constructor(
 
     var initializedDay: LocalDate = LocalDate.now()
 
+    private var showsRequestedDay = false
+
     private val filterState = MutableStateFlow(FilterState(emptySet(), LocalDate.now(), 0L))
 
     // Expands from default 6-day window to Instant.EPOCH when user scrolls into past
     private val queryStart = MutableStateFlow(Instant.now().minus(Duration.of(6, ChronoUnit.DAYS)))
 
     fun selectDay(value: LocalDate) {
+        showsRequestedDay = false
+        setDay(value)
+    }
+
+    private fun setDay(value: LocalDate) {
         state.day = value
         filterState.update { it.copy(day = value) }
+    }
+
+    /** A requested day is a one-off: once the app goes to the background, the overview returns to today on the next resume. */
+    fun onAppStopped() {
+        if (showsRequestedDay) {
+            showsRequestedDay = false
+            initializedDay = LocalDate.MIN
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -157,6 +173,14 @@ class OverviewViewModel @AssistedInject constructor(
             .launchIn(viewModelScope)
 
         setFilters(persistentDataDataSource.data.value.checkedFilters)
+
+        viewModelScope.launch {
+            overviewDayRequests.requests.collect { day ->
+                setDay(day)
+                initializedDay = LocalDate.now()
+                showsRequestedDay = true
+            }
+        }
 
         viewModelScope.launch {
             simulatedRemindersRepository.simulatedReminders.collect { reminders ->

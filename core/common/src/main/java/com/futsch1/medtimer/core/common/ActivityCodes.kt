@@ -8,9 +8,11 @@ object ActivityCodes {
     const val EXTRA_REMINDER_EVENT_ID_LIST: String = "com.futsch1.medtimer.REMINDER_EVENT_ID_LIST"
     const val EXTRA_REMINDER_ID_LIST: String = "com.futsch1.medtimer.REMINDER_ID_LIST"
     const val EXTRA_REMIND_INSTANT: String = "com.futsch1.medtimer.REMIND_INSTANT"
+    const val EXTRA_REMINDED_INSTANT: String = "com.futsch1.medtimer.REMINDED_INSTANT"
 
     const val VARIABLE_AMOUNT_ACTIVITY: String = "com.futsch1.medtimer.VARIABLE_AMOUNT_ACTIVITY"
     const val CUSTOM_SNOOZE_ACTIVITY: String = "com.futsch1.medtimer.CUSTOM_SNOOZE_ACTIVITY"
+    const val SHOW_REMINDER_DAY_ACTIVITY: String = "com.futsch1.medtimer.SHOW_REMINDER_DAY_ACTIVITY"
 }
 
 enum class ProcessorCode(val action: String) {

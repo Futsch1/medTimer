@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.getBoundsInRoot
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -124,6 +126,36 @@ class OverviewWeekSelectorTest {
         val captured = renderAndClick(today.minusWeeks(1), CoreUiR.string.next_week)
 
         assertEquals(today, captured)
+    }
+
+    /**
+     * The overview is recreated with a day requested while it was gone (a tapped reminder notification), but the strip
+     * restores the week it showed before. That week does not contain the selection, which must not move the selection
+     * to its edge before the strip has scrolled to the requested day.
+     */
+    @Test
+    fun `keeps a selection that lies outside the restored week`() {
+        val today = LocalDate.now()
+        var selectedDay = today.minusWeeks(1)
+        val selections = mutableListOf<LocalDate>()
+        val restorationTester = StateRestorationTester(composeTestRule)
+        restorationTester.setContent {
+            MedTimerTheme {
+                OverviewWeekSelector(
+                    selectedDay = selectedDay,
+                    rangeEnd = today.plusDays(28),
+                    onDaySelected = { selections += it },
+                )
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        selectedDay = today
+        restorationTester.emulateSavedInstanceStateRestore()
+        composeTestRule.waitForIdle()
+
+        assertEquals(emptyList(), selections)
+        composeTestRule.onNodeWithTag(OverviewTestTags.day(today)).assertIsSelected()
     }
 
     private fun getString(@StringRes textRes: Int): String =

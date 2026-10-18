@@ -27,6 +27,9 @@ interface ReminderCommandBus {
 
     suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus)
 
+    /** Re-posts the notification without the given events, or cancels it when none are left. */
+    suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>)
+
     suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long): Double?
 
     suspend fun processRefill(medicineId: Int)

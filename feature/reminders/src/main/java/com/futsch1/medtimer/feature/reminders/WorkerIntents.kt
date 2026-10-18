@@ -7,6 +7,7 @@ import com.futsch1.medtimer.core.common.ProcessorCode
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
 import com.futsch1.medtimer.feature.reminders.api.notificationData.writeReminderEventIds
 import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
+import java.time.Instant
 import kotlin.time.Duration
 
 /**
@@ -64,6 +65,20 @@ fun getCustomSnoozeActionIntent(context: Context, reminderNotificationData: Remi
     actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     reminderNotificationData.writeTo(actionIntent)
     return actionIntent
+}
+
+/**
+ * Creates an [Intent] that opens the overview on the day of the notification's reminders.
+ *
+ * @param remindedInstant The earliest scheduled time of the notification's reminders; used when none of them exist anymore.
+ */
+fun getShowReminderDayIntent(context: Context, reminderNotificationData: ReminderNotificationData, remindedInstant: Instant): Intent {
+    val intent = Intent(ActivityCodes.SHOW_REMINDER_DAY_ACTIVITY)
+    intent.setClassName(context, "com.futsch1.medtimer.MainActivity")
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    reminderNotificationData.writeTo(intent)
+    intent.putExtra(ActivityCodes.EXTRA_REMINDED_INSTANT, remindedInstant.epochSecond)
+    return intent
 }
 
 fun getTakenActionIntent(context: Context, reminderEventIds: List<Int>): Intent {
