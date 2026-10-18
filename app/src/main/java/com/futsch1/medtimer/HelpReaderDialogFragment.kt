@@ -1,13 +1,11 @@
 package com.futsch1.medtimer
 
-import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -15,9 +13,12 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.webkit.WebViewAssetLoader
 import com.futsch1.medtimer.core.ui.R
 import java.util.Locale
@@ -33,17 +34,6 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         isCancelable = false
         setStyle(STYLE_NORMAL, R.style.Theme_MedTimer)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = super.onCreateDialog(savedInstanceState).apply {
-        setOnKeyListener { _, keyCode, event ->
-            if (keyCode != KeyEvent.KEYCODE_BACK) {
-                false
-            } else {
-                if (event.action == KeyEvent.ACTION_UP) navigateBack()
-                true
-            }
-        }
     }
 
     override fun onCreateView(
@@ -93,6 +83,13 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
         return LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(surfaceColor)
+            ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+                val safeInsets = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+                )
+                view.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom)
+                insets
+            }
             addView(toolbar, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             addView(languageNotice, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             addView(webView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
@@ -115,7 +112,9 @@ class HelpReaderDialogFragment : AppCompatDialogFragment() {
             openExternalLink = ::openExternalLink
         )
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+        // A full-screen Dialog has its own dispatcher, including for predictive back gestures.
+        val dialogBackDispatcher = (requireDialog() as OnBackPressedDispatcherOwner).onBackPressedDispatcher
+        dialogBackDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = navigateBack()
         })
 
