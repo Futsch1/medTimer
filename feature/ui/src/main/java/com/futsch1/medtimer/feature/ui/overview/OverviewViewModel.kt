@@ -27,6 +27,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineDispatcher
@@ -99,7 +100,26 @@ class OverviewViewModel @AssistedInject constructor(
 
     fun selectDay(value: LocalDate) {
         showsRequestedDay = false
+        state.scrollTargetEventIds = persistentSetOf()
         setDay(value)
+    }
+
+    fun onScrolledToTarget() {
+        state.scrollTargetEventIds = persistentSetOf()
+    }
+
+    /** Scrolls the list to the first of [reminderEvents], clearing all filters when any of them would be hidden. */
+    private fun bringIntoView(reminderEvents: List<ReminderEvent>) {
+        val activeFilters = filterState.value.activeFilters
+        val anyHidden = reminderEvents.any {
+            !isListedWithFilters(reminderEventFactory.create(it).state, activeFilters) || tagFilterViewModel.filterEvents(listOf(it)).isEmpty()
+        }
+        if (anyHidden) {
+            setFilters(emptySet())
+            persistentDataDataSource.setCheckedFilters(emptySet())
+            tagFilterViewModel.clearTagFilter()
+        }
+        state.scrollTargetEventIds = reminderEvents.map { it.reminderEventId }.toPersistentSet()
     }
 
     private fun setDay(value: LocalDate) {
@@ -175,10 +195,11 @@ class OverviewViewModel @AssistedInject constructor(
         setFilters(persistentDataDataSource.data.value.checkedFilters)
 
         viewModelScope.launch {
-            overviewDayRequests.requests.collect { day ->
-                setDay(day)
+            overviewDayRequests.requests.collect { request ->
+                setDay(request.day)
                 initializedDay = LocalDate.now()
                 showsRequestedDay = true
+                bringIntoView(request.reminderEvents)
             }
         }
 
@@ -298,14 +319,16 @@ class OverviewViewModel @AssistedInject constructor(
     private fun isOverviewEventVisible(
         overviewEvent: OverviewEvent,
         filterState: FilterState
-    ): Boolean {
-        return filterState.activeFilters.isEmpty() || when (overviewEvent.state) {
-            OverviewState.PENDING -> OverviewFilter.SCHEDULED
-            OverviewState.RAISED, OverviewState.LOCATION -> OverviewFilter.RAISED
-            OverviewState.TAKEN -> OverviewFilter.TAKEN
-            OverviewState.SKIPPED -> OverviewFilter.SKIPPED
-        } in filterState.activeFilters
-    }
+    ): Boolean = isListedWithFilters(overviewEvent.state, filterState.activeFilters)
 
     private fun Instant.epochDay(): Long = atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay()
 }
+
+/** Whether an event in [state] is listed while [activeFilters] are checked; no checked filter lists every event. */
+internal fun isListedWithFilters(state: OverviewState, activeFilters: Set<OverviewFilter>): Boolean =
+    activeFilters.isEmpty() || when (state) {
+        OverviewState.PENDING -> OverviewFilter.SCHEDULED
+        OverviewState.RAISED, OverviewState.LOCATION -> OverviewFilter.RAISED
+        OverviewState.TAKEN -> OverviewFilter.TAKEN
+        OverviewState.SKIPPED -> OverviewFilter.SKIPPED
+    } in activeFilters

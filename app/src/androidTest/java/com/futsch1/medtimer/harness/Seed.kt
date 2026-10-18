@@ -3,8 +3,10 @@ package com.futsch1.medtimer.harness
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
+import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import kotlinx.coroutines.runBlocking
 import java.time.LocalTime
@@ -24,6 +26,7 @@ import kotlin.time.Duration
 class Seed(
     private val medicineRepository: MedicineRepository,
     private val reminderRepository: ReminderRepository,
+    private val reminderEventRepository: ReminderEventRepository,
     private val timeAccess: TimeAccess
 ) {
 
@@ -37,6 +40,24 @@ class Seed(
         create(seed.reminders, medicineId)
 
         medicineId
+    }
+
+    /**
+     * [count] doses of [medicineName] already taken today, a minute apart from the start of the day, for a list that
+     * has to be longer than the screen. They belong to no reminder, the way additional doses do.
+     */
+    fun takenDoses(medicineName: String, count: Int) = runBlocking {
+        val startOfDay = timeAccess.localDate().atStartOfDay(timeAccess.systemZone()).toInstant()
+        reminderEventRepository.createMany((0 until count).map { minute ->
+            val taken = startOfDay.plusSeconds(minute * 60L)
+            ReminderEvent.default().copy(
+                medicineName = medicineName,
+                amount = "1",
+                status = ReminderEvent.ReminderStatus.TAKEN,
+                remindedTimestamp = taken,
+                processedTimestamp = taken,
+            )
+        })
     }
 
     /** Adds reminders to a medicine that is already there - for state a test builds up in steps. */

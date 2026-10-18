@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
@@ -88,6 +89,9 @@ class OverviewRobot(private val ui: ComposeUi) {
         list.await { allEventTexts().any { it.contains(substring) } }
     }
 
+    /** Unlike [assertEventContains], does not scroll the list: the event has to be in view where the list stands. */
+    fun assertEventInView(substring: String) = list.assertDisplayed(hasText(substring, substring = true))
+
     fun assertNoEventContains(substring: String) {
         list.self().assertExists()
         list.waitForIdle()
@@ -160,6 +164,10 @@ class OverviewRobot(private val ui: ComposeUi) {
     }
 
     fun toggleFilter(filter: OverviewFilter) = screen.click(hasTestTag(OverviewTestTags.filter(filter)))
+
+    fun assertFilterOff(filter: OverviewFilter) {
+        screen.node(hasTestTag(OverviewTestTags.filter(filter))).assertIsOff()
+    }
 
     fun assertDaySelected(date: LocalDate) {
         screen.node(hasTestTag(OverviewTestTags.day(date))).assertIsSelected()

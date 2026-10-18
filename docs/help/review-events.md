@@ -8,8 +8,9 @@ delivered a notification or that a dose was taken.
 
 ## Open a reminder from its notification
 
-Tap a reminder notification, including an out-of-stock or expiration date notification, to open **Overview** on the day the reminder was scheduled for.
+Tap a reminder notification, including an out-of-stock or expiration date notification, to open **Overview** on the day the reminder was scheduled for, scrolled to the reminder.
 A reminder that was snoozed past midnight still opens on its original day.
+If the active filters or the tag filter would hide the reminder, they are cleared.
 If the reminder's event was deleted in the meantime, tapping the notification removes it.
 
 ## Correct a recorded event

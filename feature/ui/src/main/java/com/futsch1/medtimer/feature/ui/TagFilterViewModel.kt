@@ -31,7 +31,7 @@ class TagFilterViewModel @Inject constructor(
     val tagFilterStore = TagFilterStore(persistentDataDataSource, _validTagIds)
 
     fun clearTagFilter() {
-        _validTagIds.value = setOf()
+        tagFilterStore.selectedTags = emptySet()
     }
 
     val tagsSelected: StateFlow<Boolean> =

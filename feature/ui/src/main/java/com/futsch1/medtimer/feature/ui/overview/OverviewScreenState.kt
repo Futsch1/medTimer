@@ -18,6 +18,9 @@ interface OverviewScreenState {
     val combineNotifications: Boolean
     val events: ImmutableList<OverviewEvent>
     val warnings: OverviewWarnings
+
+    /** Events of [day] the list scrolls to once they are listed; empty when there is nothing to scroll to. */
+    val scrollTargetEventIds: ImmutableSet<Int>
 }
 
 class MutableOverviewScreenState : OverviewScreenState {
@@ -27,4 +30,5 @@ class MutableOverviewScreenState : OverviewScreenState {
     override var combineNotifications by mutableStateOf(false)
     override var events by mutableStateOf<ImmutableList<OverviewEvent>>(persistentListOf())
     override val warnings = MutableOverviewWarnings()
+    override var scrollTargetEventIds by mutableStateOf<ImmutableSet<Int>>(persistentSetOf())
 }

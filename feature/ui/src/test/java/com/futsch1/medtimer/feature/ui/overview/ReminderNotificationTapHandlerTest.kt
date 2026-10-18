@@ -41,7 +41,7 @@ class ReminderNotificationTapHandlerTest {
 
         handler.handle(NOTIFICATION_ID, listOf(1), at(lastWeek, 8))
 
-        assertEquals(yesterday, overviewDayRequests.requests.first())
+        assertEquals(yesterday, overviewDayRequests.requests.first().day)
         verify(commandBus, never()).removeRemindersFromNotification(any(), any())
     }
 
@@ -52,7 +52,7 @@ class ReminderNotificationTapHandlerTest {
 
         handler.handle(NOTIFICATION_ID, listOf(1, 2), at(lastWeek, 8))
 
-        assertEquals(yesterday, overviewDayRequests.requests.first())
+        assertEquals(yesterday, overviewDayRequests.requests.first().day)
     }
 
     @Test
@@ -63,7 +63,9 @@ class ReminderNotificationTapHandlerTest {
 
         handler.handle(NOTIFICATION_ID, listOf(1, 2, 3), at(lastWeek, 8))
 
-        assertEquals(yesterday, overviewDayRequests.requests.first())
+        val request = overviewDayRequests.requests.first()
+        assertEquals(yesterday, request.day)
+        assertEquals(listOf(3), request.reminderEvents.map { it.reminderEventId })
         verify(commandBus).removeRemindersFromNotification(NOTIFICATION_ID, listOf(1, 2))
     }
 
@@ -74,7 +76,9 @@ class ReminderNotificationTapHandlerTest {
 
         handler.handle(NOTIFICATION_ID, listOf(1, 2), at(lastWeek, 8))
 
-        assertEquals(lastWeek, overviewDayRequests.requests.first())
+        val request = overviewDayRequests.requests.first()
+        assertEquals(lastWeek, request.day)
+        assertEquals(emptyList<ReminderEvent>(), request.reminderEvents)
         verify(commandBus).removeRemindersFromNotification(NOTIFICATION_ID, listOf(1, 2))
     }
 
