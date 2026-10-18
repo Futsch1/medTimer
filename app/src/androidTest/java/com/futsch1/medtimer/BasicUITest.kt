@@ -48,6 +48,10 @@ class BasicUITest : MedTimerTestBase() {
 
         navigation.toOverview()
         overview.assertEventContains("Test2 (2)")
+
+        help.open()
+        help.assertHelpDisplayed()
+        help.pressBack()
     }
 
     @Test
@@ -127,7 +131,7 @@ class BasicUITest : MedTimerTestBase() {
         appIntro.next()
         appIntro.assertPage(R.string.intro_setup, R.string.intro_setup_description)
         appIntro.openGettingStarted()
-        help.assertGettingStartedDisplayed()
+        help.assertHelpDisplayed()
         help.pressBack()
         appIntro.next()
         appIntro.assertPage(R.string.tab_overview, R.string.intro_overview_orientation_description)

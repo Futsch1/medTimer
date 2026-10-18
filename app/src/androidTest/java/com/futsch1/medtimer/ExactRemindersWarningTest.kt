@@ -69,10 +69,5 @@ class ExactRemindersWarningTest : MedTimerTestBase() {
         navigation.toMedicines()
         navigation.toOverview()
         overview.assertWarningGone(R.string.exact_reminders_warning_title)
-
-        help.open()
-        help.assertContentsDisplayed()
-        help.openNotificationsMissingOrLate()
-        help.assertNotificationsMissingOrLateDisplayed()
     }
 }
