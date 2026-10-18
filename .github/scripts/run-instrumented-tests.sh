@@ -58,7 +58,6 @@ printf 'Pinned emulator clock to %s before running tests.\n' "$emulator_time"
 adb logcat -c
 logcat_filters=(
 	TestRunner:V
-	AndroidJUnitRunner:V
 	AndroidRuntime:E
 )
 case "${INCLUDE_APP_LOGS:-false}" in
