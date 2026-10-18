@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +38,10 @@ import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.time.currentLocale
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders.Companion.DEFAULT_SIMULATION_DAYS
 import com.kizitonwose.calendar.compose.WeekCalendar
+import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.WeekDay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -52,37 +60,15 @@ fun OverviewWeekSelector(
     onDaySelected: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val rangeStart = remember { LocalDate.now().minusYears(3) }
-    val effectiveRangeEnd = maxOf(rangeEnd, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
     val firstDayOfWeek = remember { LocalDate.now().minusDays(3).dayOfWeek }
-    val state = rememberWeekCalendarState(
-        startDate = rangeStart,
-        endDate = effectiveRangeEnd,
-        firstVisibleWeekDate = selectedDay,
-        firstDayOfWeek = firstDayOfWeek,
-    )
+    val state = rememberOverviewWeekCalendarState(selectedDay, rangeEnd, firstDayOfWeek)
+    KeepSelectionInVisibleWeekEffect(state, selectedDay, onDaySelected)
+
     val scope = rememberCoroutineScope()
-
-    // rememberWeekCalendarState only reads endDate on first composition.
-    LaunchedEffect(effectiveRangeEnd) {
-        state.endDate = effectiveRangeEnd
-    }
-
-    LaunchedEffect(selectedDay) {
-        state.animateScrollToWeek(selectedDay)
-    }
-
-    LaunchedEffect(state.firstVisibleWeek) {
-        val dates = state.firstVisibleWeek.days.map { it.date }
-        if (selectedDay in dates) return@LaunchedEffect
-        val today = LocalDate.now()
-        onDaySelected(
-            when {
-                today in dates -> today
-                dates.last() < selectedDay -> dates.last()
-                else -> dates.first()
-            }
-        )
+    fun selectAdjacentWeek(weeks: Long) {
+        val target = adjacentWeekTarget(selectedDay, firstDayOfWeek, weeks, LocalDate.now())
+        scope.launch { state.animateScrollToWeek(target) }
+        onDaySelected(target)
     }
 
     Row(
@@ -92,20 +78,7 @@ fun OverviewWeekSelector(
             .widthIn(max = 400.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(
-            onClick = {
-                val previousWeekStart = weekStart(selectedDay, firstDayOfWeek).minusWeeks(1)
-                val previousWeekEnd = previousWeekStart.plusDays(6)
-                val target = LocalDate.now().takeIf { it in previousWeekStart..previousWeekEnd } ?: previousWeekEnd
-                scope.launch { state.animateScrollToWeek(target) }
-                onDaySelected(target)
-            },
-        ) {
-            Icon(
-                painter = painterResource(CoreUiR.drawable.chevron_left),
-                contentDescription = stringResource(CoreUiR.string.previous_week),
-            )
-        }
+        WeekArrow(CoreUiR.drawable.chevron_left, CoreUiR.string.previous_week) { selectAdjacentWeek(-1) }
         WeekCalendar(
             state = state,
             modifier = Modifier.weight(1f),
@@ -117,20 +90,83 @@ fun OverviewWeekSelector(
                 )
             },
         )
-        IconButton(
-            onClick = {
-                val nextWeekStart = weekStart(selectedDay, firstDayOfWeek).plusWeeks(1)
-                val nextWeekEnd = nextWeekStart.plusDays(6)
-                val target = LocalDate.now().takeIf { it in nextWeekStart..nextWeekEnd } ?: nextWeekStart
-                scope.launch { state.animateScrollToWeek(target) }
-                onDaySelected(target)
-            },
-        ) {
-            Icon(
-                painter = painterResource(CoreUiR.drawable.chevron_right),
-                contentDescription = stringResource(CoreUiR.string.next_week),
-            )
+        WeekArrow(CoreUiR.drawable.chevron_right, CoreUiR.string.next_week) { selectAdjacentWeek(1) }
+    }
+}
+
+@Composable
+private fun rememberOverviewWeekCalendarState(selectedDay: LocalDate, rangeEnd: LocalDate, firstDayOfWeek: DayOfWeek): WeekCalendarState {
+    val rangeStart = remember { LocalDate.now().minusYears(3) }
+    val effectiveRangeEnd = maxOf(rangeEnd, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
+    val state = rememberWeekCalendarState(
+        startDate = rangeStart,
+        endDate = effectiveRangeEnd,
+        firstVisibleWeekDate = selectedDay,
+        firstDayOfWeek = firstDayOfWeek,
+    )
+
+    // rememberWeekCalendarState only reads endDate on first composition.
+    LaunchedEffect(effectiveRangeEnd) {
+        state.endDate = effectiveRangeEnd
+    }
+    return state
+}
+
+/**
+ * Scrolls the strip to [selectedDay], and moves the selection into the week the user scrolls to.
+ *
+ * The strip restores its saved week, which can predate the selection, so the visible week only moves the selection
+ * once the scroll to the selection has settled or the user interrupted it. [WeekCalendar] reports no settled swipe,
+ * so the parent is notified from the effect watching the visible week rather than from an event handler.
+ */
+@Composable
+private fun KeepSelectionInVisibleWeekEffect(state: WeekCalendarState, selectedDay: LocalDate, onDaySelected: (LocalDate) -> Unit) {
+    val currentSelectedDay by rememberUpdatedState(selectedDay)
+    val currentOnDaySelected by rememberUpdatedState(onDaySelected)
+    var scrollingToSelection by remember { mutableStateOf(true) }
+
+    LaunchedEffect(selectedDay) {
+        scrollingToSelection = true
+        try {
+            state.animateScrollToWeek(selectedDay)
+        } finally {
+            // Not when the next selection's scroll replaced this one; it owns the flag now.
+            if (isActive) {
+                scrollingToSelection = false
+            }
         }
+    }
+
+    LaunchedEffect(state.firstVisibleWeek, scrollingToSelection) {
+        if (scrollingToSelection) return@LaunchedEffect
+        val dates = state.firstVisibleWeek.days.map { it.date }
+        selectionForVisibleWeek(dates, currentSelectedDay, LocalDate.now())?.let(currentOnDaySelected)
+    }
+}
+
+/** The day to select once [dates] are the visible week, or null when [selectedDay] is already among them. */
+internal fun selectionForVisibleWeek(dates: List<LocalDate>, selectedDay: LocalDate, today: LocalDate): LocalDate? =
+    when {
+        selectedDay in dates -> null
+        today in dates -> today
+        dates.last() < selectedDay -> dates.last()
+        else -> dates.first()
+    }
+
+/** The day an arrow selects [weeks] away from [selectedDay]'s week: today when it is in that week, otherwise its edge nearest to the selection. */
+internal fun adjacentWeekTarget(selectedDay: LocalDate, firstDayOfWeek: DayOfWeek, weeks: Long, today: LocalDate): LocalDate {
+    val targetWeekStart = weekStart(selectedDay, firstDayOfWeek).plusWeeks(weeks)
+    val targetWeekEnd = targetWeekStart.plusDays(6)
+    return today.takeIf { it in targetWeekStart..targetWeekEnd } ?: if (weeks < 0) targetWeekEnd else targetWeekStart
+}
+
+@Composable
+private fun WeekArrow(@DrawableRes iconRes: Int, @StringRes descriptionRes: Int, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = stringResource(descriptionRes),
+        )
     }
 }
 

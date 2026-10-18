@@ -31,11 +31,11 @@ class ReminderCommandBusImpl @Inject constructor(
 ) : ReminderCommandBus {
 
     /**
-     * Marking events reads the shown notification and re-posts it without the processed events.
+     * Marking or removing events reads the shown notification and re-posts it without those events.
      * Concurrent calls would each start from the same notification and the last re-post would win,
      * bringing back events another call already processed.
      */
-    private val markReminderEventsMutex = Mutex()
+    private val notificationUpdateMutex = Mutex()
 
     override suspend fun scheduleNextNotification() {
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
@@ -65,10 +65,16 @@ class ReminderCommandBusImpl @Inject constructor(
     }
 
     override suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {
-        markReminderEventsMutex.withLock {
+        notificationUpdateMutex.withLock {
             notificationProcessor.processReminderEventsInNotification(reminderEventIds, status)
         }
         scheduleNextReminderNotificationProcessor.scheduleNextReminder()
+    }
+
+    override suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
+        notificationUpdateMutex.withLock {
+            notificationProcessor.removeRemindersFromNotification(notificationId, reminderEventIds)
+        }
     }
 
     override suspend fun processStockHandling(amount: Double, medicineId: Int, processedEpochSeconds: Long): Double? =

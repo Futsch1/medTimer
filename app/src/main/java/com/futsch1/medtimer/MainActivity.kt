@@ -37,6 +37,7 @@ import com.futsch1.medtimer.feature.reminders.ReminderSchedulerService
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.futsch1.medtimer.feature.ui.overview.OverviewFragment
+import com.futsch1.medtimer.feature.ui.overview.ReminderNotificationTapHandler
 import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -46,6 +47,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var navHostFragment: NavHostFragment? = null
+    private var showOverviewWhenContentBound = false
 
     @Inject
     lateinit var autostartService: AutostartService
@@ -63,6 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var customSnoozeHandler: CustomSnoozeHandler
+
+    @Inject
+    lateinit var reminderNotificationTapHandler: ReminderNotificationTapHandler
 
     @Inject
     lateinit var biometricsFactory: Biometrics.Factory
@@ -188,6 +193,10 @@ class MainActivity : AppCompatActivity() {
     private fun onContentBound(navHostFragment: NavHostFragment) {
         this.navHostFragment = navHostFragment
         updateCurrentTab(navHostFragment)
+        if (showOverviewWhenContentBound) {
+            showOverviewWhenContentBound = false
+            navigateToTab(navHostFragment.navController, com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+        }
     }
 
     private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
@@ -199,18 +208,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNavItemClick(navController: NavController, destinationId: Int) {
-        val currentDestination = navController.currentDestination
+        val reselected = navigateToTab(navController, destinationId)
+        if (reselected && destinationId == com.futsch1.medtimer.feature.ui.R.id.overviewFragment) {
+            navHostFragment?.childFragmentManager?.fragments
+                ?.filterIsInstance<OverviewFragment>()
+                ?.lastOrNull()
+                ?.jumpToToday()
+        }
+    }
+
+    /** Shows the tab's root, keeping the other tabs' back stacks; returns whether the tab was already the current one. */
+    private fun navigateToTab(navController: NavController, destinationId: Int): Boolean {
         if (currentTabId == destinationId) {
-            if (currentDestination?.id != destinationId) {
+            if (navController.currentDestination?.id != destinationId) {
                 navController.popBackStack(destinationId, false)
             }
-            if (destinationId == com.futsch1.medtimer.feature.ui.R.id.overviewFragment) {
-                navHostFragment?.childFragmentManager?.fragments
-                    ?.filterIsInstance<OverviewFragment>()
-                    ?.lastOrNull()
-                    ?.jumpToToday()
-            }
-            return
+            return true
         }
 
         navController.popBackStack(com.futsch1.medtimer.feature.ui.R.id.preferencesFragment, true)
@@ -220,6 +233,16 @@ class MainActivity : AppCompatActivity() {
             .setPopUpTo(navController.graph.startDestinationId, inclusive = false, saveState = true)
             .build()
         navController.navigate(destinationId, null, options)
+        return false
+    }
+
+    private fun showOverviewTab() {
+        val navController = navHostFragment?.navController
+        if (navController == null) {
+            showOverviewWhenContentBound = true
+        } else {
+            navigateToTab(navController, com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+        }
     }
 
     private suspend fun checkForceStopped() {
@@ -256,6 +279,11 @@ class MainActivity : AppCompatActivity() {
 
             ActivityCodes.CUSTOM_SNOOZE_ACTIVITY -> {
                 customSnoozeHandler.show(this, intent)
+            }
+
+            ActivityCodes.SHOW_REMINDER_DAY_ACTIVITY -> {
+                reminderNotificationTapHandler.handle(intent)
+                showOverviewTab()
             }
         }
     }

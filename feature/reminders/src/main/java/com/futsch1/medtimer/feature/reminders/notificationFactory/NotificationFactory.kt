@@ -4,13 +4,14 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.feature.reminders.ReminderNotificationChannelManager
+import com.futsch1.medtimer.feature.reminders.getShowReminderDayIntent
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -69,15 +70,14 @@ abstract class NotificationFactory(
         return color
     }
 
-    fun getStartAppIntent(): PendingIntent {
-        val startApp = Intent().setClassName(context, "com.futsch1.medtimer.MainActivity").apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-
+    /** Opens the overview on the day of [reminderNotification]'s reminders. */
+    fun getShowReminderDayPendingIntent(reminderNotification: ReminderNotification): PendingIntent {
+        val remindedInstant = reminderNotification.reminderNotificationParts.minOfOrNull { it.reminderEvent.remindedTimestamp }
+            ?: reminderNotification.reminderNotificationData.remindInstant
         return PendingIntent.getActivity(
             context,
             notificationId,
-            startApp,
+            getShowReminderDayIntent(context, reminderNotification.reminderNotificationData, remindedInstant),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }

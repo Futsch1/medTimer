@@ -7,6 +7,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
+import java.time.LocalDate
 import java.util.Calendar
 import kotlin.time.Duration.Companion.minutes
 
@@ -75,6 +76,34 @@ class MedicineStockTest : MedTimerTestBase() {
         medicines.assertNameContains(MedicineHelper.formatAmount(10.8, "pills"))
         medicines.assertNameNotContains("⚠")
         medicines.assertNameContains("pills")
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun tappingOutOfStockNotificationOpensOverviewOnItsDay() {
+        val notificationTitle = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
+
+        seed.medicine("TestMed") {
+            stock(amount = 120.0, unit = "pills", refillSize = 100.0)
+            intervalReminder("So many pills - 130", 10.minutes)
+            stockReminder(threshold = 0.0)
+        }
+
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.clickAction(R.string.taken)
+        notifications.inShade { assertShows(notificationTitle.substring(0, 30)) }
+
+        val today = LocalDate.now()
+        overview.selectDay(today.minusDays(7))
+        navigation.toMedicines()
+
+        notifications.inShade { open(notificationTitle.substring(0, 30)) }
+
+        // Day selection lands asynchronously; the events only appear once the overview shows today.
+        overview.assertEventContains("TestMed")
+        navigation.assertOverviewShown()
+        overview.assertDaySelected(today)
     }
 
     @Test

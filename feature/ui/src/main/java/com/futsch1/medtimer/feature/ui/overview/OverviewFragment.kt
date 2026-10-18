@@ -11,6 +11,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
@@ -59,9 +61,18 @@ class OverviewFragment : Fragment() {
 
     private val manualDoseViewModel: ManualDoseViewModel by viewModels()
 
+    private val appStoppedObserver = object : DefaultLifecycleObserver {
+        override fun onStop(owner: LifecycleOwner) {
+            if (!requireActivity().isChangingConfigurations) {
+                overviewViewModel.onAppStopped()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appOptionsActions = appOptionsActionsFactory.create(this)
+        requireActivity().lifecycle.addObserver(appStoppedObserver)
     }
 
     override fun onCreateView(
@@ -137,6 +148,7 @@ class OverviewFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        requireActivity().lifecycle.removeObserver(appStoppedObserver)
         appOptionsActions.onDestroy()
     }
 

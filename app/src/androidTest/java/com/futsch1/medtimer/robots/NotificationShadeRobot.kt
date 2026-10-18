@@ -180,6 +180,19 @@ class NotificationShadeRobot {
         return button
     }
 
+    /** Taps the body of the notification containing [text], which opens the app. */
+    fun open(text: String) {
+        repeat(OPEN_ATTEMPTS) {
+            try {
+                assertShows(text).click()
+                return
+            } catch (_: StaleObjectException) {
+                // The shade re-renders a notification that was just posted or updated; find it again
+            }
+        }
+        assertShows(text).click()
+    }
+
     fun dismiss(text: String) {
         val notification = await(text) ?: return
         try {
@@ -197,5 +210,6 @@ class NotificationShadeRobot {
     companion object {
         const val DEFAULT_TIMEOUT = 2_000L
         private const val POLL_INTERVAL = 100L
+        private const val OPEN_ATTEMPTS = 5
     }
 }

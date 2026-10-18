@@ -55,6 +55,24 @@ class NotificationTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun tappingNotificationOpensOverviewOnReminderDay() {
+        seed.medicine(TEST_MED) { reminder("1", aboutToFire()) }
+
+        val today = LocalDate.now()
+        overview.selectDay(today.minusDays(7))
+        navigation.toMedicines()
+
+        scheduleRemindersNow()
+        notifications.inShade { open(TEST_MED) }
+
+        // Day selection lands asynchronously; the event only appears once the overview shows today.
+        overview.assertEventContains(TEST_MED)
+        navigation.assertOverviewShown()
+        overview.assertDaySelected(today)
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun actionOnDismissedNotification() {
         // Skip reminder on dismiss
         settings.inSection(R.string.notification_reminder_settings) {

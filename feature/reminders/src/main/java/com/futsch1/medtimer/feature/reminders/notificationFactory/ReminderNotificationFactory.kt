@@ -45,7 +45,7 @@ abstract class ReminderNotificationFactory(
         )
 
     init {
-        val contentIntent: PendingIntent = getStartAppIntent()
+        val contentIntent: PendingIntent = getShowReminderDayPendingIntent(reminderNotification)
 
         builder.setSmallIcon(R.drawable.capsule)
         builder.setContentTitle(context.getString(R.string.notification_title))
