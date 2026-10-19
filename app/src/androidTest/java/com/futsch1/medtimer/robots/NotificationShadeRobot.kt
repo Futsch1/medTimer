@@ -7,6 +7,8 @@ import android.os.Build
 import android.os.SystemClock
 import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
+import androidx.test.ext.truth.app.NotificationActionSubject.notificationActions
+import androidx.test.ext.truth.app.NotificationSubject.notifications
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Direction
@@ -15,6 +17,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.futsch1.medtimer.utilities.closeNotification
+import com.google.common.truth.Truth.assertWithMessage
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -55,6 +58,54 @@ class NotificationShadeRobot {
     fun assertHidden(text: String, timeoutMillis: Long = DEFAULT_TIMEOUT) {
         assertNull(await(text, timeoutMillis), "A notification contains '$text' but should not")
     }
+
+    /**
+     * Waits for a posted notification containing [text] (and [title], if given). Asks the posted notifications,
+     * so it works without the shade being open.
+     */
+    fun assertPosted(text: String, title: String? = null, timeoutMillis: Long = DEFAULT_TIMEOUT) {
+        val deadline = SystemClock.uptimeMillis() + timeoutMillis
+        var match = findPosted(text, title)
+        while (match == null && SystemClock.uptimeMillis() < deadline) {
+            SystemClock.sleep(POLL_INTERVAL)
+            match = findPosted(text, title)
+        }
+        val notification = assertNotNull(match, "No posted notification contains '$text'${titleClause(title)}. Posted: ${postedDescriptions()}").notification
+        if (title != null) {
+            assertWithMessage("Posted: ${postedDescriptions()}").about(notifications()).that(notification)
+                .extras().string(Notification.EXTRA_TITLE).contains(title)
+        }
+    }
+
+    /** Watches the posted notifications for the whole [timeoutMillis]; a match at any point fails. */
+    fun assertNotPosted(text: String, title: String? = null, timeoutMillis: Long = DEFAULT_TIMEOUT) {
+        val deadline = SystemClock.uptimeMillis() + timeoutMillis
+        do {
+            assertNull(findPosted(text, title), "A posted notification contains '$text'${titleClause(title)} but should not. Posted: ${postedDescriptions()}")
+            SystemClock.sleep(POLL_INTERVAL)
+        } while (SystemClock.uptimeMillis() < deadline)
+    }
+
+    /** Watches the posted notifications for the whole [timeoutMillis]; any action labelled [textRes] fails. */
+    fun assertNoPostedAction(@StringRes textRes: Int, timeoutMillis: Long = DEFAULT_TIMEOUT) {
+        val label = actionLabel(textRes)
+        val deadline = SystemClock.uptimeMillis() + timeoutMillis
+        do {
+            activeNotifications().flatMap { it.notification.actions.orEmpty().toList() }.forEach {
+                assertWithMessage("Action '$label' is posted but should not be. Posted: ${postedDescriptions()}")
+                    .about(notificationActions()).that(it).title().isNotEqualTo(label)
+            }
+            SystemClock.sleep(POLL_INTERVAL)
+        } while (SystemClock.uptimeMillis() < deadline)
+    }
+
+    private fun findPosted(text: String, title: String?): StatusBarNotification? =
+        activeNotifications().firstOrNull { posted ->
+            posted.notification.textsOf().any { it.contains(text) } &&
+                    (title == null || posted.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.contains(title) == true)
+        }
+
+    private fun titleClause(title: String?) = title?.let { " with title '$it'" }.orEmpty()
 
     /**
      * Waits for the notification containing [text] to be withdrawn. The app stores processed events before it

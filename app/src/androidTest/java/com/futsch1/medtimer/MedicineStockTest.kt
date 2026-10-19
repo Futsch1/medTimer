@@ -35,25 +35,23 @@ class MedicineStockTest : MedTimerTestBase() {
         overview.clickAction(R.string.taken)
         overview.assertEventContains(MedicineHelper.formatAmount(10.5, "pills"))
         overview.assertEventContains(MedicineHelper.formatAmount(7.0, "pills"))
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
 
         // Mark reminder as skipped (10.5 left)
         overview.clickEventState(0)
         overview.clickAction(R.string.skipped)
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
 
         // Mark reminder as taken again, no out of stock reminder expected (7 left)
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
 
         // Mark next instance as taken, out of stock reminder expected (3.5 left)
         overview.clickEventState(1)
         overview.clickAction(R.string.taken)
-        notifications.inShade {
-            assertShows(notificationTitle)
-            assertShows(amount(3.5))
-        }
+        notifications.assertPosted(notificationTitle)
+        notifications.assertPosted(amount(3.5), title = notificationTitle)
 
         navigation.toMedicines()
 
@@ -92,7 +90,7 @@ class MedicineStockTest : MedTimerTestBase() {
         navigation.toOverview()
         overview.clickEventState(0)
         overview.clickAction(R.string.taken)
-        notifications.inShade { assertShows(notificationTitle.substring(0, 30)) }
+        notifications.assertPosted(notificationTitle)
 
         val today = LocalDate.now()
         overview.selectDay(today.minusDays(7))
@@ -227,7 +225,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         navigation.toOverview()
 
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -253,7 +251,7 @@ class MedicineStockTest : MedTimerTestBase() {
         overview.clickAction(R.string.delete)
         dialogs.confirm()
 
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
         overview.assertEventCount(0)
     }
 
@@ -331,9 +329,9 @@ class MedicineStockTest : MedTimerTestBase() {
         medicineEditor.setStock(amount = amount(10.5))
         medicineEditor.addDailyStockReminder(threshold = "14", time = laterToday())
 
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
         scheduleRemindersNow()
-        notifications.inShade { assertShows(notificationTitle) }
+        notifications.assertPosted(notificationTitle)
 
         navigation.toMedicines()
         medicines.clickItem(0)
@@ -341,6 +339,6 @@ class MedicineStockTest : MedTimerTestBase() {
         notifications.inShade { dismiss(notificationTitle) }
 
         scheduleRemindersNow()
-        notifications.inShade { assertHidden(notificationTitle) }
+        notifications.assertNotPosted(notificationTitle)
     }
 }
