@@ -14,19 +14,13 @@ fun UiDevice.grantAppPermission(permission: String) {
 }
 
 fun UiDevice.closeNotification() {
-    if (waitForAppInForeground(this)) {
-        Log.d(TAG, "App is in foreground, skipping notification close")
-        return
-    }
-
-    // Swipe to close the notification shade
-    Log.d(TAG, "Swipe to close notification shade")
-    swipe(displayWidth / 2, displayHeight, displayWidth / 2, displayHeight / 2, 20)
+    Log.d(TAG, "Collapsing notification shade")
+    executeShellCommand("cmd statusbar collapse")
     if (waitForAppInForeground(this)) {
         return
     }
 
-    Log.d(TAG, "App is not in foreground after swipe, pressing back to dismiss")
+    Log.d(TAG, "App is not in foreground after collapse, pressing back to dismiss")
     pressBack()
     waitForAppInForeground(this)
 }
