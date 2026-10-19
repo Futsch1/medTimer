@@ -194,7 +194,7 @@ class NotificationTest : MedTimerTestBase() {
         notifications.inShade {
             scheduleRemindersNow()
             assertShows(TEST_MED)
-            clickAction(R.string.taken)
+            clickAction(TEST_MED, R.string.taken)
         }
 
         enterVariableAmount(TEST_MED, TEST_VARIABLE_AMOUNT)
@@ -274,10 +274,10 @@ class NotificationTest : MedTimerTestBase() {
         notifications.inShade {
             awaitShade()
             assertShows(TEST_MED)
-            assertShowsAction(R.string.skipped)
+            assertShowsAction(TEST_MED, R.string.skipped)
             assertNoAction(R.string.taken)
-            assertShowsAction(R.string.snooze)
-            clickAction(R.string.snooze)
+            assertShowsAction(TEST_MED, R.string.snooze)
+            clickAction(TEST_MED, R.string.snooze)
         }
 
         dialogs.awaitInput()
@@ -309,7 +309,7 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED)
-            expandFor(actionLabel(R.string.taken))
+            expandFor(TEST_MED, actionLabel(R.string.taken))
             assertShowsButton("takenButton")
             assertShowsButton("skippedButton")
             assertShowsButton("snoozeButton")
@@ -332,7 +332,7 @@ class NotificationTest : MedTimerTestBase() {
             scheduleRemindersNow()
             assertShows(TEST_MED)
             assertShows(SECOND_ONE)
-            clickAction(R.string.taken)
+            clickAction(TEST_MED, R.string.taken)
         }
 
         navigation.toOverview()
@@ -450,8 +450,8 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED)
-            assertShowsAction(R.string.taken)
-            assertShowsAction(R.string.snooze)
+            assertShowsAction(TEST_MED, R.string.taken)
+            assertShowsAction(TEST_MED, R.string.snooze)
             assertNoAction(R.string.skipped)
             dismiss(TEST_MED)
         }
@@ -468,7 +468,7 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED_2)
-            expandFor(actionLabel(R.string.taken))
+            expandFor(TEST_MED_2, actionLabel(R.string.taken))
             assertShowsButton("takenButton")
             assertNoButton("skippedButton")
             assertShowsButton("snoozeButton")

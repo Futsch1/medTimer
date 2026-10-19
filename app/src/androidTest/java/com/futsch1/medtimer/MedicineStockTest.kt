@@ -125,7 +125,7 @@ class MedicineStockTest : MedTimerTestBase() {
             await(context.getString(R.string.out_of_stock_notification_title).substring(0, 30))
             assertShows("T******")
             assertHidden("TestMed")
-            clickAction(R.string.refill_amount, MedicineHelper.formatAmount(100.0, "pills"))
+            clickAction("T******", R.string.refill_amount, MedicineHelper.formatAmount(100.0, "pills"))
         }
 
         navigation.toMedicines()
@@ -195,7 +195,7 @@ class MedicineStockTest : MedTimerTestBase() {
         scheduleRemindersNow()
         notifications.inShade {
             assertShows(TEST_MED, timeoutMillis = 5_000)
-            clickAction(R.string.taken)
+            clickAction(TEST_MED, R.string.taken)
         }
 
         medicines.clickItem(0)

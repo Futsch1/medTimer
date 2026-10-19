@@ -38,7 +38,7 @@ class ScreenshotsTest : MedTimerTestBase() {
         overview.skip(B12)
 
         notifications.inShade {
-            expandFor(actionLabel(R.string.taken))
+            expandFor(SELEN, actionLabel(R.string.taken))
             Screengrab.screenshot("5")
         }
 

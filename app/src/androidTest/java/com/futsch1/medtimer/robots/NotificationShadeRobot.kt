@@ -3,7 +3,6 @@ package com.futsch1.medtimer.robots
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import android.os.SystemClock
 import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
@@ -11,6 +10,7 @@ import androidx.test.ext.truth.app.NotificationActionSubject.notificationActions
 import androidx.test.ext.truth.app.NotificationSubject.notifications
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
@@ -18,6 +18,7 @@ import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.futsch1.medtimer.utilities.closeNotification
 import com.google.common.truth.Truth.assertWithMessage
+import java.util.regex.Pattern
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -43,11 +44,8 @@ class NotificationShadeRobot {
         }
     }
 
-    /** Notification action labels are upper-cased by the platform up to API 28. */
-    fun actionLabel(@StringRes textRes: Int, vararg args: Any): String {
-        val text = InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes, *args)
-        return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) text.uppercase() else text
-    }
+    fun actionLabel(@StringRes textRes: Int, vararg args: Any): String =
+        InstrumentationRegistry.getInstrumentation().targetContext.getString(textRes, *args)
 
     fun await(text: String, timeoutMillis: Long = DEFAULT_TIMEOUT): UiObject2? =
         device.wait(Until.findObject(By.textContains(text)), timeoutMillis)
@@ -173,15 +171,15 @@ class NotificationShadeRobot {
     ).map { it.toString() } + (extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)?.map { it.toString() }
         ?: emptyList())
 
-    fun assertShowsAction(@StringRes textRes: Int, vararg args: Any) {
+    fun assertShowsAction(content: String, @StringRes textRes: Int, vararg args: Any) {
         val label = actionLabel(textRes, *args)
-        expandFor(label)
-        assertNotNull(device.findObject(By.text(label)), "Notification action '$label' is missing. Shade shows: ${shadeTexts()}")
+        expandFor(content, label)
+        assertNotNull(device.findObject(labelSelector(label)), "Notification action '$label' is missing. Shade shows: ${shadeTexts()}")
     }
 
     fun assertNoAction(@StringRes textRes: Int, vararg args: Any) {
         val label = actionLabel(textRes, *args)
-        assertNull(device.findObject(By.text(label)), "Notification action '$label' is present but should not be")
+        assertNull(device.findObject(labelSelector(label)), "Notification action '$label' is present but should not be")
     }
 
     /** Asserts on a big-notification button, which is a custom view identified by its id. */
@@ -193,28 +191,32 @@ class NotificationShadeRobot {
         assertNull(device.findObject(By.res(appPackage, id)), "Notification button '$id' is present but should not be")
     }
 
-    fun clickAction(@StringRes textRes: Int, vararg args: Any) {
+    fun clickAction(content: String, @StringRes textRes: Int, vararg args: Any) {
         val label = actionLabel(textRes, *args)
-        assertTrue(clickActionIfPresent(label), "Notification action '$label' is missing. Shade shows: ${shadeTexts()}")
+        assertTrue(clickActionIfPresent(content, label), "Notification action '$label' is missing. Shade shows: ${shadeTexts()}")
     }
 
-    fun clickActionIfPresent(label: String): Boolean {
-        val button = expandFor(label)
+    fun clickActionIfPresent(content: String, label: String): Boolean {
+        val button = expandFor(content, label)
         button?.click()
         return button != null
     }
 
+    /** Platform versions differ in the case they render action labels in. */
+    private fun labelSelector(label: String): BySelector =
+        By.text(Pattern.compile(Pattern.quote(label), Pattern.CASE_INSENSITIVE))
+
     /**
      * Collapsed notifications hide their actions, and which one is collapsed varies, so this expands
-     * them one at a time until the wanted label shows up.
+     * them one at a time until the wanted label shows up. When the expand button does not do it, the
+     * notification containing [content] is pulled down instead.
      */
-    fun expandFor(label: String): UiObject2? {
+    fun expandFor(content: String, label: String): UiObject2? {
         var buttonIndex = 0
         var tries = 10
-        var button: UiObject2? = null
+        var button = device.findObject(labelSelector(label))
         while (tries-- > 0 && button == null) {
-            val expandButtons = device.findObjects(By.res("android:id/expand_button")) +
-                    device.findObjects(By.descContains("Expand"))
+            val expandButtons = device.findObjects(By.res("android:id/expand_button"))
             if (expandButtons.size > buttonIndex) {
                 try {
                     expandButtons[buttonIndex].click()
@@ -224,9 +226,15 @@ class NotificationShadeRobot {
                     // Ignore
                 }
             } else {
+                try {
+                    device.findObject(By.textContains(content))?.swipe(Direction.DOWN, 0.5f)
+                    device.waitForIdle(1_000)
+                } catch (_: StaleObjectException) {
+                    // Ignore
+                }
                 Thread.sleep(200)
             }
-            button = device.findObject(By.text(label))
+            button = device.findObject(labelSelector(label))
         }
         return button
     }
