@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">帮助</string>
     <string name="help_english_only">帮助目前仅提供英文版本。</string>
@@ -161,12 +161,12 @@
     <string name="edit_event">编辑服药记录</string>
     <string name="intro_welcome">欢迎使用 MedTimer!</string>
     <string name="intro_welcome_description">MedTimer 注重隐私、开源免费，提醒你按时服药。\n\n请授予权限以显示服药提醒通知。</string>
-<string name="intro_setup">设置您的第一个提醒</string>
-<string name="intro_setup_description">请先添加一种药物，然后为其添加提醒。MedTimer 会将这些信息保存在您的设备上，不会将您的用药数据发送到任何地方。\n\n如需查看完整的设置步骤，请阅读“入门指南”。</string>
-<string name="intro_getting_started_link">入门指南</string>
-<string name="intro_overview_orientation_description">“概览”会显示所选日期的提醒。从星期栏中选择一天。每个提醒旁边的状态图标会显示提醒是待处理、已提醒、已服用、已跳过，还是已推迟到回家后。您可以按下该图标来更改提醒状态。</string>
-<string name="intro_notifications">通知权限</string>
-<string name="intro_notifications_description">MedTimer 需要通知权限，以便在提醒到期时通知您。您可以跳过介绍，并选择是否允许通知；之后可以在 Android 设置中更改此选项。</string>
+    <string name="intro_setup">设置您的第一个提醒</string>
+    <string name="intro_setup_description">请先添加一种药物，然后为其添加提醒。MedTimer 会将这些信息保存在您的设备上，不会将您的用药数据发送到任何地方。\n\n如需查看完整的设置步骤，请阅读“入门指南”。</string>
+    <string name="intro_getting_started_link">入门指南</string>
+    <string name="intro_overview_orientation_description">“概览”会显示所选日期的提醒。从星期栏中选择一天。每个提醒旁边的状态图标会显示提醒是待处理、已提醒、已服用、已跳过，还是已推迟到回家后。您可以按下该图标来更改提醒状态。</string>
+    <string name="intro_notifications">通知权限</string>
+    <string name="intro_notifications_description">MedTimer 需要通知权限，以便在提醒到期时通知您。您可以跳过介绍，并选择是否允许通知；之后可以在 Android 设置中更改此选项。</string>
     <string name="show_intro">查看使用说明</string>
     <string name="are_you_sure_delete_reminder_event">您确定要删除该服药记录吗？</string>
     <string name="notification_importance">通知优先级</string>
@@ -366,4 +366,5 @@
     <string name="setup_no_reminders_guidance">仅添加药品不会安排通知。添加提醒以安排通知。</string>
     <string name="setup_guidance_getting_started">入门</string>
     <string name="reminder_types_help">详细了解提醒类型</string>
+    <string name="notifications_missing_or_late">通知缺失或迟到</string>
 </resources>
