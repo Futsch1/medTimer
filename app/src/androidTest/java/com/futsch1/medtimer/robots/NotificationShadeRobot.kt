@@ -57,10 +57,7 @@ class NotificationShadeRobot {
         assertNull(await(text, timeoutMillis), "A notification contains '$text' but should not")
     }
 
-    /**
-     * Waits for a posted notification containing [text] (and [title], if given). Asks the posted notifications,
-     * so it works without the shade being open.
-     */
+    /** Waits for a posted notification containing [text] (and [title], if given); works without the shade open. */
     fun assertPosted(text: String, title: String? = null, timeoutMillis: Long = DEFAULT_TIMEOUT) {
         val deadline = SystemClock.uptimeMillis() + timeoutMillis
         var match = findPosted(text, title)
@@ -214,6 +211,7 @@ class NotificationShadeRobot {
     fun expandFor(content: String, label: String): UiObject2? {
         var buttonIndex = 0
         var tries = 10
+        var pulledDown = false
         var button = device.findObject(labelSelector(label))
         while (tries-- > 0 && button == null) {
             val expandButtons = device.findObjects(By.res("android:id/expand_button"))
@@ -225,18 +223,28 @@ class NotificationShadeRobot {
                 } catch (_: StaleObjectException) {
                     // Ignore
                 }
-            } else {
+            } else if (!pulledDown) {
                 try {
-                    device.findObject(By.textContains(content))?.swipe(Direction.DOWN, 0.5f)
+                    pulledDown = pullDown(content)
                     device.waitForIdle(1_000)
                 } catch (_: StaleObjectException) {
                     // Ignore
                 }
+            } else {
                 Thread.sleep(200)
             }
             button = device.findObject(labelSelector(label))
         }
         return button
+    }
+
+    /** A second pull-down on an already expanded row can collapse or dismiss it, so callers pull once. */
+    private fun pullDown(content: String): Boolean {
+        val row = device.findObject(By.res("com.android.systemui", "expandableNotificationRow").hasDescendant(By.textContains(content)))
+            ?: device.findObject(By.textContains(content))
+            ?: return false
+        row.swipe(Direction.DOWN, 0.5f)
+        return true
     }
 
     /** Taps the body of the notification containing [text], which opens the app. */
