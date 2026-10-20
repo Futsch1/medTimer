@@ -151,11 +151,9 @@ class NotificationTest : MedTimerTestBase() {
 
         scheduleRemindersNow()
 
-        notifications.inShade {
-            assertShows(TEST_MED)
-            assertShows(FIRST_REMINDER)
-            assertShows(SECOND_REMINDER)
-        }
+        notifications.assertPosted(TEST_MED)
+        notifications.assertPosted(FIRST_REMINDER)
+        notifications.assertPosted(SECOND_REMINDER)
         navigation.toOverview()
 
         // Read before the repeat is armed, after which it can land at any moment.
@@ -168,11 +166,9 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.awaitRaisedAgain(SECOND_REMINDER, firstRaise, timeoutMillis = REPEAT_TIMEOUT_MILLIS)
 
-        notifications.inShade {
-            assertShows(TEST_MED)
-            assertHidden(FIRST_REMINDER)
-            assertShows(SECOND_REMINDER)
-        }
+        notifications.assertPosted(TEST_MED)
+        notifications.assertNotPosted(FIRST_REMINDER)
+        notifications.assertPosted(SECOND_REMINDER)
     }
 
     @Test
@@ -198,7 +194,7 @@ class NotificationTest : MedTimerTestBase() {
         notifications.inShade {
             scheduleRemindersNow()
             assertShows(TEST_MED)
-            clickAction(R.string.taken)
+            clickAction(TEST_MED, R.string.taken)
         }
 
         enterVariableAmount(TEST_MED, TEST_VARIABLE_AMOUNT)
@@ -278,10 +274,10 @@ class NotificationTest : MedTimerTestBase() {
         notifications.inShade {
             awaitShade()
             assertShows(TEST_MED)
-            assertShowsAction(R.string.skipped)
+            assertShowsAction(TEST_MED, R.string.skipped)
             assertNoAction(R.string.taken)
-            assertShowsAction(R.string.snooze)
-            clickAction(R.string.snooze)
+            assertShowsAction(TEST_MED, R.string.snooze)
+            clickAction(TEST_MED, R.string.snooze)
         }
 
         dialogs.awaitInput()
@@ -301,7 +297,7 @@ class NotificationTest : MedTimerTestBase() {
         seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
         medicines.assertNameContains(TEST_MED)
 
-        notifications.inShade { assertShows("T*******") }
+        notifications.assertPosted("T*******")
     }
 
     @Test
@@ -313,7 +309,7 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED)
-            expandFor(actionLabel(R.string.taken))
+            expandFor(TEST_MED, actionLabel(R.string.taken))
             assertShowsButton("takenButton")
             assertShowsButton("skippedButton")
             assertShowsButton("snoozeButton")
@@ -336,7 +332,7 @@ class NotificationTest : MedTimerTestBase() {
             scheduleRemindersNow()
             assertShows(TEST_MED)
             assertShows(SECOND_ONE)
-            clickAction(R.string.taken)
+            clickAction(TEST_MED, R.string.taken)
         }
 
         navigation.toOverview()
@@ -362,11 +358,9 @@ class NotificationTest : MedTimerTestBase() {
             reminder(SECOND_ONE, notificationTime)
         }
 
-        notifications.inShade {
-            scheduleRemindersNow()
-            assertShows(TEST_MED)
-            assertShows(SECOND_ONE)
-        }
+        scheduleRemindersNow()
+        notifications.assertPosted(TEST_MED)
+        notifications.assertPosted(SECOND_ONE)
 
         navigation.toOverview()
         // A long click selects both doses of the combined notification
@@ -394,7 +388,7 @@ class NotificationTest : MedTimerTestBase() {
         scheduleRemindersNow()
         overview.assertEventState(0, R.string.taken)
 
-        notifications.inShade { assertHidden(actionLabel(R.string.taken)) }
+        notifications.assertNoPostedAction(R.string.taken)
     }
 
     @Test
@@ -443,7 +437,7 @@ class NotificationTest : MedTimerTestBase() {
 
         pickers.pickTime(earlierToday())
 
-        notifications.inShade { assertShows(TEST_MED) }
+        notifications.assertPosted(TEST_MED)
     }
 
     @Test
@@ -456,8 +450,8 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED)
-            assertShowsAction(R.string.taken)
-            assertShowsAction(R.string.snooze)
+            assertShowsAction(TEST_MED, R.string.taken)
+            assertShowsAction(TEST_MED, R.string.snooze)
             assertNoAction(R.string.skipped)
             dismiss(TEST_MED)
         }
@@ -474,7 +468,7 @@ class NotificationTest : MedTimerTestBase() {
 
         notifications.inShade {
             assertShows(TEST_MED_2)
-            expandFor(actionLabel(R.string.taken))
+            expandFor(TEST_MED_2, actionLabel(R.string.taken))
             assertShowsButton("takenButton")
             assertNoButton("skippedButton")
             assertShowsButton("snoozeButton")

@@ -71,7 +71,7 @@ class MedicineHandlingTest : MedTimerTestBase() {
     private fun assertSkippedActionUnavailable(medicineName: String) {
         notifications.inShade {
             assertShows(medicineName)
-            assertShowsAction(R.string.taken)
+            assertShowsAction(medicineName, R.string.taken)
             assertNoAction(R.string.snooze)
             assertNoAction(R.string.skipped)
             dismiss(medicineName)
