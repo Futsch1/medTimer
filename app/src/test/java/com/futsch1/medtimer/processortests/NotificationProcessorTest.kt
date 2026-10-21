@@ -26,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
@@ -207,6 +208,41 @@ class NotificationProcessorTest {
         verify(testReminderContext.notificationManagerFake.mock, times(1)).notify(eq(1), any())
         // First reminder still raised
         assertEquals(ReminderEventEntity.ReminderEntityStatus.RAISED, testReminderContext.repositoryFakes.reminderEvents[0].status)
+    }
+
+    @Test
+    fun refreshRebuildsPostedNotificationInPlaceWithoutRepeat() {
+        testReminderContext.instant = Instant.ofEpochSecond(10)
+        testReminderContext.userPreferences = testReminderContext.userPreferences.copy(repeatReminders = true)
+        testReminderContext.notificationId = 2
+        fillWithTwoReminders(testReminderContext)
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[1].notificationId = 1
+        testReminderContext.repositoryFakes.reminderEvents[0].remainingRepeats = 2
+        testReminderContext.notificationManagerFake.add(1, intArrayOf(1, 2), intArrayOf(1, 2))
+
+        runBlocking {
+            notificationProcessor.refreshNotification(1)
+        }
+
+        // Same notification updated, not removed
+        verify(testReminderContext.notificationManagerFake.mock, times(1)).notify(eq(1), any())
+        verify(testReminderContext.notificationManagerFake.mock, never()).cancel(1)
+        // Repeat alarms keep running as they are, no new repeat is scheduled
+        verify(testReminderContext.alarmManagerMock, never()).setExactAndAllowWhileIdle(anyInt(), anyLong(), any())
+        assertEquals(2, testReminderContext.repositoryFakes.reminderEvents[0].remainingRepeats)
+    }
+
+    @Test
+    fun refreshOfNotPostedNotificationDoesNothing() {
+        fillWithOneReminder(testReminderContext)
+
+        runBlocking {
+            notificationProcessor.refreshNotification(7)
+        }
+
+        verify(testReminderContext.notificationManagerFake.mock, never()).notify(anyInt(), any())
+        verify(testReminderContext.notificationManagerFake.mock, never()).cancel(anyInt())
     }
 
     @Test
