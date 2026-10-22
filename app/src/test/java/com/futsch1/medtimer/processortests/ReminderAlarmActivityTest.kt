@@ -45,6 +45,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.android.controller.ActivityController
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
@@ -160,23 +161,45 @@ class ReminderAlarmActivityTest {
     }
 
     @Test
-    fun `should show the reminders of the arriving alarm when it reaches the running alarm screen`() {
-        seedReminders()
+    fun `should keep the alarm on screen when another reminder arrives in front of the user`() {
+        val controller = startedAlarm()
 
-        val context = RuntimeEnvironment.getApplication()
-        val controller = Robolectric.buildActivity(
-            ReminderAlarmActivity::class.java,
-            ReminderAlarmActivity.getIntent(context, alarmData(reminderId = 1, reminderEventId = 1))
-        ).setup()
+        controller.newIntent(alarmIntent(reminderId = 2, reminderEventId = 2))
 
         assertTrue(awaitAlarmTitle(controller.get(), FIRST_MEDICINE))
-
-        controller.newIntent(ReminderAlarmActivity.getIntent(context, alarmData(reminderId = 2, reminderEventId = 2)))
-
-        assertTrue(awaitAlarmTitle(controller.get(), SECOND_MEDICINE))
-        // The screen of the alarm that arrived stays up
+        assertFalse(title(controller.get()).contains(SECOND_MEDICINE))
         assertFalse(controller.get().isFinishing)
     }
+
+    @Test
+    fun `should show the arriving alarm when the screen is not in front`() {
+        val controller = startedAlarm()
+
+        controller.newIntent(alarmIntent(reminderId = 2, reminderEventId = 2))
+        controller.pause()
+
+        assertTrue(awaitAlarmTitle(controller.get(), SECOND_MEDICINE))
+        assertFalse(controller.get().isFinishing)
+    }
+
+    private fun startedAlarm(): ActivityController<ReminderAlarmActivity> {
+        seedReminders()
+        val controller = Robolectric.buildActivity(
+            ReminderAlarmActivity::class.java,
+            alarmIntent(reminderId = 1, reminderEventId = 1)
+        ).setup()
+        assertTrue(awaitAlarmTitle(controller.get(), FIRST_MEDICINE))
+        return controller
+    }
+
+    private fun alarmIntent(reminderId: Int, reminderEventId: Int) =
+        ReminderAlarmActivity.getIntent(
+            RuntimeEnvironment.getApplication(),
+            alarmData(reminderId, reminderEventId)
+        )
+
+    private fun title(activity: ReminderAlarmActivity): String =
+        activity.findViewById<TextView>(RemindersR.id.notificationTitle).text?.toString().orEmpty()
 
     private fun seedReminders() {
         val repositoryFakes = testReminderContext.repositoryFakes

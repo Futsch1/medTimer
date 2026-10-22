@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -47,6 +48,13 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    /**
+     * A reminder that arrives while this screen is in front. Applying it immediately would
+     * retarget the button the user is about to press. API 28 delivers that intent while the
+     * screen is resumed; API 36 does not. It is shown once the screen moves to the background.
+     */
+    private var alarmIntentWhileResumed: Intent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,23 +76,17 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     /**
      * The alarm activity is single instance, so the full screen intent of a following alarm is
-     * delivered here instead of [onCreate]. Show the reminders of that alarm, otherwise the screen
-     * keeps showing the reminders of the alarm before.
+     * delivered here instead of [onCreate]. Show that alarm when this screen is not in front.
+     * While it is in front, keep the alarm the user is confirming and show the new one once
+     * the screen is no longer resumed.
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
-
-        val extras = intent.extras ?: return
-        val alarmFragment =
-            supportFragmentManager.findFragmentById(R.id.alarmFragmentContainer) as? AlarmFragment
-        if (alarmFragment == null) {
-            addAlarmFragment(intent)
-        } else {
-            // Showing it in the running fragment keeps the alarm open; removing the fragment would
-            // close it through its onDestroyView
-            alarmFragment.showReminderNotificationData(extras)
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            alarmIntentWhileResumed = intent
+            return
         }
+        showArrivingAlarm(intent)
     }
 
     override fun onResume() {
@@ -95,9 +97,30 @@ class ReminderAlarmActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        val arrivingAlarm = alarmIntentWhileResumed
+        alarmIntentWhileResumed = null
+        // Dismissing the screen finishes the activity. Leave the button the user pressed
+        // pointed at the alarm that was on screen.
+        if (arrivingAlarm != null && !isFinishing) {
+            showArrivingAlarm(arrivingAlarm)
+        }
         super.onPause()
         lifecycleScope.launch(alarmExecutor) {
             pauseAlarm()
+        }
+    }
+
+    private fun showArrivingAlarm(intent: Intent) {
+        setIntent(intent)
+        val extras = intent.extras ?: return
+        val alarmFragment =
+            supportFragmentManager.findFragmentById(R.id.alarmFragmentContainer) as? AlarmFragment
+        if (alarmFragment == null) {
+            addAlarmFragment(intent)
+        } else {
+            // Updating the running fragment keeps the alarm open. Removing it would close
+            // the screen through its onDestroyView.
+            alarmFragment.showReminderNotificationData(extras)
         }
     }
 

@@ -32,6 +32,9 @@ class AlarmFragment(
 ) : Fragment() {
     lateinit var reminderNotificationData: ReminderNotificationData
 
+    /** Drops a text update that finished after a newer alarm was shown. */
+    private var showGeneration = 0
+
     @Inject
     lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
 
@@ -74,6 +77,7 @@ class AlarmFragment(
     }
 
     private fun showReminderNotification(view: View, reminderNotificationData: ReminderNotificationData) {
+        val generation = ++showGeneration
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
                 val reminderNotification = reminderNotificationFactory.create(
@@ -91,6 +95,7 @@ class AlarmFragment(
                 val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {
+                    if (generation != showGeneration) return@withContext
                     setupTexts(
                         view,
                         notificationStrings,
