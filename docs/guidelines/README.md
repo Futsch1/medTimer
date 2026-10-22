@@ -15,7 +15,7 @@ Guidelines are written in **English**.
 | ---------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
 | [documentation-guidelines.md](documentation-guidelines.md) | All contributors | How to write and organize docs, including the bundled Help maintenance and screenshot workflow |
 | [kotlin-android.md](kotlin-android.md)                     | All contributors | Kotlin + Android conventions: MVVM, Hilt, Room, Coroutines/Flow, multi-module, flavors         |
-| [jetpack-compose.md](jetpack-compose.md)                   | All contributors | Jetpack Compose conventions (target standard — Compose not yet adopted)                        |
+| [jetpack-compose.md](jetpack-compose.md)                   | All contributors | Jetpack Compose conventions (live standard, Compose is in use)                                 |
 | [testing.md](testing.md)                                   | All contributors | JVM unit, instrumented, fuzz, and Compose testing patterns and what to prioritize              |
 
 AI hygiene (boundaries, secrets, privacy, attribution) lives in [`AGENTS.md`](../../AGENTS.md#ai-hygiene) rather than in this directory — it's short enough to

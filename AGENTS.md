@@ -8,7 +8,7 @@ When this file and the guidelines disagree, the guidelines win; flag the drift i
 
 ## Project Overview
 
-medTimer is an Android medication reminder app (Kotlin, `compileSdk = 36`, `minSdk = 28`, JDK 21).
+medTimer is an Android medication reminder app (Kotlin, `compileSdk = 37`, `targetSdk = 36`, `minSdk = 28`, JDK 21).
 Package: `com.futsch1.medtimer`.
 
 ## Build Variants
@@ -20,12 +20,13 @@ The app has two product flavors on the `distribution` dimension:
 | `full` | Google Play Store     | Yes (`play-services-location`) |
 | `foss` | FOSS app repositories | No                             |
 
-Flavor-specific source sets:
+Only `:app`, `:core:location`, `:feature:reminders` and `:feature:ui` have flavors. The split itself lives in `:core:location`:
 
-- `app/src/full/` — GMS implementations (`GmsGeofenceRegistrar`, `GmsLocationProvider`, `GeofenceBroadcastReceiver`) and the flavor manifest (location
-  permissions + broadcast receiver).
-- `app/src/foss/` — No-op stubs (`NoOpGeofenceRegistrar`, `NoOpLocationProvider`).
-- `app/src/testFull/` — Unit tests that import GMS classes (`GeofenceRegistrarTest`, `GeofenceBroadcastReceiverTest`).
+- `core/location/src/main/`: the interfaces `GeofenceRegistrar` and `LocationProvider`.
+- `core/location/src/full/`: GMS implementations (`GmsGeofenceRegistrar`, `GmsLocationProvider`, `GeofenceBroadcastReceiver`), the flavor manifest and the flavor `LocationModule`.
+- `core/location/src/foss/`: No-op stubs (`NoOpGeofenceRegistrar`, `NoOpLocationProvider`) and the no-op `LocationModule`.
+- `app/src/full/`: the flavor manifest only. There is no `app/src/foss/`.
+- `app/src/testFull/`: Unit tests that import GMS classes (`GeofenceRegistrarTest`, `GeofenceBroadcastReceiverTest`).
 
 See [`docs/guidelines/kotlin-android.md`](docs/guidelines/kotlin-android.md#flavor-split--full-vs-foss) for the discipline.
 
@@ -37,8 +38,10 @@ core/common/          Pure-Kotlin utilities
 core/domain/          Domain models + repository interfaces (no Android deps)
 core/database/        Room entities, DAOs, repository impls, entity↔model mappers
 core/datastore/       DataStore preferences
-core/ui/              Shared resources (strings, drawables, themes, navigation graphs); Compose theme will live here too
+core/ui/              Shared resources (strings, drawables, themes, navigation graphs), MedTimerTheme, reusable composables
+core/location/        Geofencing and location abstraction; holds the full-versus-foss flavor split
 feature/reminders/    Reminder scheduling, notification processing
+feature/reminders/api/ Pure scheduling and notification-data contracts (ReminderScheduler, SchedulingSimulator, ReminderCommandBus)
 feature/ui/           Overview UI
 app/schemas/          Room database migration schemas
 ```
@@ -78,7 +81,7 @@ See [`docs/guidelines/testing.md`](docs/guidelines/testing.md) for testing conve
   `apk-full`, and `apk-foss` artifacts; creates GitHub releases (AAB + both APKs) on version tags.
 - **`test.yml`** — runs on every push and PR to `main`; runs fuzzing unit tests on both flavors (`testFullDebug testFossDebug -Dfuzzing=true`), FOSS unit
   tests (`testFossDebugUnitTest`), instrumented tests on an API 36 emulator via `JacocoDebugCodeCoverage` (full flavor), and lint.
-- **`compatibilityTest.yml`** — runs instrumented tests (`connectedFullDebugAndroidTest`) on API 28 and 36 emulators in a matrix.
+- **`instrumentedTests.yml`** — reusable workflow that runs the instrumented tests (`connectedFullDebugAndroidTest`) on an emulator of the API level its caller passes in.
 - Other workflows: `monkeyTest`, `firebaseTest`, `codeql`, `scorecard`, `storeListing`.
 
 The build must pass `assembleDebug` and `lint` before merging.
@@ -95,7 +98,7 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#enforcement-source-of-truth)
 - **Architecture:** MVVM + Hilt; `Flow` / `StateFlow` / `SharedFlow` (no LiveData); Navigation component with Safe Args. → [
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#architecture--mvvm--hilt)
-- **Compose:** target standard for new UI, not yet adopted; per-screen migration via `ComposeView`. → [`jetpack-compose.md`](docs/guidelines/jetpack-compose.md)
+- **Compose:** the standard for new UI and in use (`buildFeatures.compose = true`, `MedTimerTheme` and shared composables in `:core:ui`); remaining screens migrate one at a time via `ComposeView`. → [`jetpack-compose.md`](docs/guidelines/jetpack-compose.md)
 - **Testing:** prefer JVM unit tests over instrumented; test-driven for bug fixes and features. → [`testing.md`](docs/guidelines/testing.md)
 - **Translations:** consider all locales when changing strings; escape `'` as `\'`; use `\n` for newline. → [
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#translations)

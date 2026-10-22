@@ -1,8 +1,6 @@
 # Coding Guidelines — Jetpack Compose
 
-**Audience:** all contributors. **Status:** Compose is the **agreed target** for new UI in medTimer, but it is **not yet
-in the codebase**. This document defines the conventions so the first Compose PR — and the migration that follows —
-lands on a shared baseline.
+**Audience:** all contributors. **Status:** Compose is the standard for new UI in medTimer and is in use: `buildFeatures.compose = true`, `MedTimerTheme` and shared composables such as `SortableTable` in `:core:ui`, and Compose screens such as the Overview and Statistics. The conventions below are live rules for every Compose change and for the migration of the remaining XML screens.
 
 For the general Kotlin/Android conventions Compose code must also obey, see [kotlin-android.md](kotlin-android.md); for
 testing, see [testing.md](testing.md).
