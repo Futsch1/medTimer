@@ -16,7 +16,7 @@ Order of preference:
 2. **JVM unit tests with Robolectric** when an Android framework class is genuinely needed (Context, Resources, Looper).
    Still fast, still no emulator.
 3. **Instrumented tests** (`app/src/androidTest/`) as a last resort.
-   They're slow, flaky, and run in CI (`compatibilityTest.yml` on API 28 and 36, plus `JacocoDebugCodeCoverage` in `test.yml`).
+   They're slow, flaky, and run in CI (the reusable `instrumentedTests.yml` workflow, plus `JacocoDebugCodeCoverage` in `test.yml`).
    **When you add or change an instrumented test, run that specific test locally** against an emulator before pushing — relying on CI alone wastes a slow
    round-trip when the test fails for an obvious reason.
    **Do not run the full instrumented suite locally** — it takes too long; let CI handle the broader matrix.
@@ -120,7 +120,7 @@ Conventions:
   backwards inside the same day. Reaching a day outside the week on screen goes through `OverviewRobot.selectDay`, not `clickDay`.
 - **Run a new or changed instrumented test locally before pushing** (e.g.
   `./gradlew :app:connectedFullDebugAndroidTest --tests com.futsch1.medtimer.DeleteTest.shouldDeleteMedicineAndReminder`) — this catches obvious failures
-  without burning a CI cycle. **Do not run the full suite locally**; CI covers the broader matrix (`compatibilityTest.yml`, `test.yml`).
+  without burning a CI cycle. **Do not run the full suite locally**; CI covers the broader matrix (`instrumentedTests.yml`, `test.yml`).
 - **Method names must not contain spaces.** DEX 040 (which permits spaces in `SimpleName`) requires `minSdk = 30`, and this project's `minSdk = 28`. Use
   `camelCase` for instrumented test functions (e.g. `shouldDeleteMedicineAndReminder`); the backtick form is reserved for JVM unit tests only.
 

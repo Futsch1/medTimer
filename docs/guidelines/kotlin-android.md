@@ -48,7 +48,9 @@ graph LR
     app[":app"]
     fui[":feature:ui"]
     fr[":feature:reminders"]
+    fra[":feature:reminders:api"]
     cui[":core:ui"]
+    cloc[":core:location"]
     cds[":core:datastore"]
     cdb[":core:database"]
     cc[":core:common"]
@@ -58,16 +60,25 @@ graph LR
     app --> cdb
     app --> cui
     app --> cds
-    fui --> fr
+    app --> cloc
+    fui --> fra
     fui --> cui
     fui --> cds
+    fui --> cloc
     fui --> cc
+    fr --> fra
     fr --> cui
     fr --> cds
+    fr --> cloc
     fr --> cc
+    fra --> cds
+    fra --> cc
     cui --> cds
     cui --> cc
+    cloc --> cds
+    cloc --> cc
     cds --> cc
+    cdb --> cc
     cdb --> cd
     cc --> cd
 ```
@@ -82,7 +93,7 @@ graph LR
   implementations into Hilt at the binding site.
   This is what enforces the no-entity-leakage rule below.
 - **Feature → feature dependencies are rare and one-directional.**
-  Today only `:feature:ui` → `:feature:reminders` exists (the overview consumes reminder scheduling components).
+  Today both `:feature:ui` and `:feature:reminders` depend on `:feature:reminders:api`, the pure contracts of the reminder feature. `:feature:ui` does not depend on the `:feature:reminders` implementation.
   Before adding another, consider whether the shared code belongs in a `:core:*` module instead — feature-to-feature edges multiply quickly and turn into
   cycles.
 
@@ -107,8 +118,7 @@ Map at the boundary using the `toModel/` / `toEntity/` helpers in `:core:databas
   - `DatabaseModule` — singleton Room database + `MedicineRepository`.
   - `DispatchersModule` — `@Dispatcher(MedTimerDispatchers.X)` qualified `CoroutineDispatcher` providers.
   - `CoroutineScopesModule` — `@ApplicationScope CoroutineScope`.
-- Flavor-specific bindings (full vs foss `LocationModule`, `GeofenceRegistrar`) live in the flavor source sets under `app/src/full/.../di/` and
-  `app/src/foss/.../di/`.
+- Flavor-specific bindings (full vs foss `LocationModule`, `GeofenceRegistrar`) live in the flavor source sets of `:core:location`, under `core/location/src/full/` and `core/location/src/foss/`.
 - New code injects via constructor (`@Inject`) on ViewModels and via field-injection (`@Inject lateinit var`) only on Android framework classes (Fragments,
   Receivers, Services) where Hilt can't reach the constructor.
 
@@ -146,7 +156,9 @@ The current layout:
 | `:core:database`     | Room database, entities, repository implementations, mappers                                                                                                                                                                                                                      |
 | `:core:datastore`    | DataStore-based preferences                                                                                                                                                                                                                                                       |
 | `:core:ui`           | Shared **resources** (strings, drawables, themes, navigation graphs, XML layouts that cross features). Compose theme (`MedTimerTheme`) and reusable composables (`SortableTable`, `TagEventFilter`, `@MedTimerPreview`) live here — see [jetpack-compose.md](jetpack-compose.md). |
+| `:core:location`     | Geofencing and location abstraction. Holds the full-versus-foss flavor split                                                                                                                                                                                                      |
 | `:feature:reminders` | Reminder scheduling, notification processing                                                                                                                                                                                                                                      |
+| `:feature:reminders:api` | Pure scheduling and notification-data contracts (`ReminderScheduler`, scheduling strategies, `SchedulingSimulator`, `ReminderCommandBus`). JVM-testable; new scheduling rules go here |
 | `:feature:ui`        | Overview UI                                                                                                                                                                                                                                                                       |
 
 ### When to add a new module
@@ -180,15 +192,15 @@ The `distribution` product-flavor dimension produces two builds:
 
 | Flavor | GMS?                           | Source sets                                                              |
 | ------ | ------------------------------ | ------------------------------------------------------------------------ |
-| `full` | Yes (`play-services-location`) | `app/src/full/`, `app/src/testFull/`, plus `feature:reminders/src/full/` |
-| `foss` | No                             | `app/src/foss/` with no-op stubs                                         |
+| `full` | Yes (`play-services-location`) | `core/location/src/full/` (GMS implementations), `app/src/full/` (manifest only), `app/src/testFull/` |
+| `foss` | No                             | `core/location/src/foss/` with no-op stubs                                                             |
 
 Discipline:
 
-- The shared `app/src/main/` must compile against **both** flavors.
+- The shared `src/main/` of every flavored module must compile against **both** flavors.
   Don't import GMS classes from `main/`; introduce an interface in `main/` (e.g. `GeofenceRegistrar`) and bind the implementation per flavor (
   `GmsGeofenceRegistrar` in `full/`, `NoOpGeofenceRegistrar` in `foss/`).
-- Flavor-specific Hilt bindings go in `app/src/<flavor>/.../di/`.
+- Flavor-specific Hilt bindings go in `core/location/src/<flavor>/`, beside the implementations they bind.
 - JVM unit tests that depend on GMS classes go in `app/src/testFull/` so they only run for the full flavor.
   Tests in `app/src/test/` must compile for both.
 - `assembleDebug` builds **both** flavors — if it fails, your change broke one of them.
