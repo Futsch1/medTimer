@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Derived from the application ID, so a debug build with an ID suffix installs beside the release app. -->
     <permission android:name="${applicationId}.NOTIFICATION_PROCESSED" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />

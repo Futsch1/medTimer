@@ -24,7 +24,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
             val forward = Intent(ProcessorCode.GeofenceEntered.action)
                 .setClassName(context.packageName, REMINDER_RECEIVER_CLASS)
-            // Mirrors ReminderProcessorBroadcastReceiver.receiverPermission, which this module cannot depend on.
             context.sendBroadcast(forward, "${context.packageName}.NOTIFICATION_PROCESSED")
         }
     }

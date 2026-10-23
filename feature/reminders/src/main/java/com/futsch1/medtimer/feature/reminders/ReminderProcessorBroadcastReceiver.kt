@@ -99,11 +99,6 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        /**
-         * Guards the reminder broadcasts. Derived from the package name, like the manifest's
-         * `${applicationId}` placeholder, so that a debug build with an ID suffix installs beside the
-         * release app instead of clashing with its permission.
-         */
         fun receiverPermission(context: Context) = "${context.packageName}.NOTIFICATION_PROCESSED"
 
         /**
