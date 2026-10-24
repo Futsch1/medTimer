@@ -4,6 +4,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performTextInput
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /** Drives the Compose manual-dose dialog while keeping the test-facing picker vocabulary. */
 class ManualDoseRobot(
@@ -29,11 +30,12 @@ class ManualDoseRobot(
         confirmTime()
     }
 
-    /** Logs a dose for a medicine that does not exist, typing its name and leaving amount blank. */
+    /** Logs a custom medicine dose at the current time, leaving the amount blank. */
     fun logCustom(name: String) = inPicker {
         chooseCustom(name)
         enterAmount("")
-        confirmTime()
+        dialog.click(hasText(ui.getString(CoreUiR.string.use_current_time)))
+        dialog.awaitGone()
     }
 
     /** Chooses the dialog's Custom medicine action and enters the supplied name. */
@@ -55,8 +57,6 @@ class ManualDoseRobot(
         dialog.click(hasTestTag(ManualDoseTestTags.ENTER_TIME))
         pickers.confirmTime()
     }
-
-    fun cancel() = dialog.click(hasTestTag(ManualDoseTestTags.CANCEL))
 
     fun assertRecentDoseOffered(medicine: String, amount: String) {
         dialog.assertDisplayed(recentDoseMatcher(medicine, amount))
@@ -88,7 +88,9 @@ class ManualDoseRobot(
     }
 
     fun assertMedicinesOffered(vararg labels: String) {
-        medicineList.await { medicineList.textsUnder(hasTestTag(ManualDoseTestTags.MEDICINE_ENTRY)).sorted() == labels.sorted() }
+        medicineList.await {
+            medicineList.textsUnder(hasTestTag(ManualDoseTestTags.MEDICINE_ENTRY)).sorted() == labels.sorted()
+        }
     }
 
     fun selectMedicine(label: String) {
@@ -116,5 +118,5 @@ class ManualDoseRobot(
 
     private fun recentDoseMatcher(medicine: String, amount: String) =
         hasTestTag(ManualDoseTestTags.RECENT_DOSE) and hasText(medicine, substring = true) and
-            hasText(amount, substring = true)
+                hasText(amount, substring = true)
 }
