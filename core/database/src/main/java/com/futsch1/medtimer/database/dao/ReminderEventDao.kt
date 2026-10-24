@@ -37,6 +37,9 @@ interface ReminderEventDao {
     @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId AND remindedTimestamp = :remindedTimestamp")
     suspend fun fetch(reminderId: Int, remindedTimestamp: Long): ReminderEventEntity?
 
+    @Query("SELECT * FROM ReminderEvent WHERE reminderId = :reminderId AND remindedTimestamp >= :fromTimestamp AND status = 'RAISED' ORDER BY remindedTimestamp")
+    suspend fun getOpenFrom(reminderId: Int, fromTimestamp: Long): List<ReminderEventEntity>
+
     @Insert
     suspend fun create(reminderEvent: ReminderEventEntity): Long
 

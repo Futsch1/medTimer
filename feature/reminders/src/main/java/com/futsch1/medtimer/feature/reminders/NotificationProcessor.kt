@@ -70,21 +70,47 @@ class NotificationProcessor @Inject constructor(
         }
     }
 
-    suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>) {
+    suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>, silent: Boolean = false) {
         Log.d(LogTags.REMINDER, "Remove reminders from notification nID $notificationId")
-        for (notification in notificationManager.activeNotifications) {
-            if (notification.id == notificationId) {
-                val reminderNotificationData = notification.notification.extras.toReminderNotificationData()
-                reminderNotificationData.notificationId = notificationId
-                Log.d(LogTags.REMINDER, "Remove reIDs $reminderEventIds from notification nID $notificationId")
-                updateNotification(reminderNotificationData, reminderEventIds)
-            }
+        val reminderNotificationData = findPostedNotificationData(notificationId) ?: return
+        Log.d(LogTags.REMINDER, "Remove reIDs $reminderEventIds from notification nID $notificationId")
+        updateNotification(reminderNotificationData, reminderEventIds, silent)
+    }
+
+    /**
+     * Rebuilds a posted notification in place from the current event rows, without sound and without touching the
+     * repeat and snooze alarms of its events. Used after a reminder edit changed the details or the time of a dose.
+     */
+    suspend fun refreshNotification(notificationId: Int) {
+        val reminderNotificationData = findPostedNotificationData(notificationId) ?: return
+        Log.d(LogTags.REMINDER, "Refresh notification nID $notificationId")
+        val closedReminderEventIds = reminderNotificationData.reminderEventIds.filter { isClosed(it) }
+        val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(closedReminderEventIds)
+        // A retimed dose shows its new time when it is alone in the notification or all doses share the time
+        val remindedTimestamps = newReminderNotificationData.reminderEventIds
+            .mapNotNull { reminderEventRepository.fetch(it)?.remindedTimestamp }.distinct()
+        if (remindedTimestamps.size == 1) {
+            newReminderNotificationData.remindInstant = remindedTimestamps[0]
         }
+        val reminderNotification = reminderNotificationFactory.create(newReminderNotificationData)
+        if (reminderNotification != null) {
+            notifications.showNotification(reminderNotification, notificationId, silent = true)
+        } else {
+            cancelNotification(notificationId)
+        }
+    }
+
+    private fun findPostedNotificationData(notificationId: Int): ReminderNotificationData? {
+        val notification = notificationManager.activeNotifications.firstOrNull { it.id == notificationId } ?: return null
+        val reminderNotificationData = notification.notification.extras.toReminderNotificationData()
+        reminderNotificationData.notificationId = notificationId
+        return reminderNotificationData
     }
 
     private suspend fun updateNotification(
         reminderNotificationData: ReminderNotificationData,
-        reminderEventIds: List<Int>
+        reminderEventIds: List<Int>,
+        silent: Boolean
     ) {
         // The shown notification can predate an update that is still being posted, so also drop
         // the events that are no longer open.
@@ -92,7 +118,7 @@ class NotificationProcessor @Inject constructor(
         val newReminderNotificationData = reminderNotificationData.removeReminderEventIds(reminderEventIds + closedReminderEventIds)
         val reminderNotification = reminderNotificationFactory.create(newReminderNotificationData)
         if (reminderNotification != null) {
-            notifications.showNotification(reminderNotification, reminderNotificationData.notificationId)
+            notifications.showNotification(reminderNotification, reminderNotificationData.notificationId, silent)
             rescheduleRepeat(newReminderNotificationData)
         } else {
             cancelNotification(reminderNotificationData.notificationId)

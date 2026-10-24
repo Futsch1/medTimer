@@ -7,7 +7,7 @@ import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
-import com.futsch1.medtimer.feature.reminders.api.scheduling.CyclesHelper
+import com.futsch1.medtimer.feature.reminders.api.scheduling.withSnapshotFields
 import java.time.Instant
 import java.time.LocalDate
 
@@ -45,30 +45,25 @@ suspend fun buildReminderEvent(
         0
     }
 
-    return ReminderEvent(
+    // Name, color, icon, tags, askForAmount, cannotBeSkipped and the amount of regular doses come from
+    // withSnapshotFields, the list that reminder edits refresh as well.
+    return ReminderEvent.default().copy(
         reminderEventId = 0,
         reminderId = reminder.id,
-        medicineName = medicine.name + CyclesHelper.getCycleCountString(reminder),
         amount = amount,
-        color = medicine.color,
-        useColor = medicine.useColor,
         status = ReminderEvent.ReminderStatus.RAISED,
         remindedTimestamp = remindedInstant,
         processedTimestamp = Instant.EPOCH,
         notificationId = 0,
-        iconId = medicine.iconId,
         remainingRepeats = remainingRepeats,
         notes = "",
         reminderType = reminder.reminderType,
         stockHandled = false,
-        askForAmount = reminder.variableAmount,
-        tags = medicine.tags.map { it.name },
         lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
         stockBefore = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
         stockAfter = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
-        stockUnit = medicine.unit,
-        cannotBeSkipped = medicine.cannotBeSkipped
-    )
+        stockUnit = medicine.unit
+    ).withSnapshotFields(medicine, reminder)
 }
 
 private suspend fun getLastReminderEventTimeInMinutes(

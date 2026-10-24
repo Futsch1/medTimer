@@ -24,7 +24,8 @@ class Notifications @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource,
     private val persistentDataDataSource: PersistentDataDataSource
 ) {
-    fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1): Int {
+    /** Posts [reminderNotification]. With [silent], an update in place does not alert again. */
+    fun showNotification(reminderNotification: ReminderNotification, notificationId: Int = -1, silent: Boolean = false): Int {
         var notificationId = notificationId
         if (notificationId == -1) {
             notificationId = this.nextNotificationId
@@ -36,6 +37,9 @@ class Notifications @Inject constructor(
             reminderNotification.isExpirationDateNotification() -> expirationDateNotificationFactory.create(reminderNotification)
             preferencesDataSource.preferences.value.bigNotifications -> bigReminderNotificationFactory.create(reminderNotification)
             else -> simpleReminderNotificationFactory.create(reminderNotification)
+        }
+        if (silent) {
+            factory.builder.setSilent(true)
         }
 
         notify(notificationId, factory.create())

@@ -15,6 +15,8 @@ interface ReminderEventRepository {
     suspend fun getAllWithoutDeletedAndAcknowledged(): List<ReminderEvent>
     suspend fun getLastDays(days: Int): List<ReminderEvent>
     suspend fun getForScheduling(medicines: List<Medicine>): List<ReminderEvent>
+    /** Open (RAISED) events of [reminderId] due at or after [startInstant], with no end date. */
+    suspend fun getOpenFrom(reminderId: Int, startInstant: Instant): List<ReminderEvent>
     suspend fun getLast(reminderId: Int): ReminderEvent?
     suspend fun create(reminderEvent: ReminderEvent): ReminderEvent
     suspend fun createMany(reminderEvents: List<ReminderEvent>)

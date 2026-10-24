@@ -7,10 +7,12 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.LogTags
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +25,9 @@ class ReminderSchedulerService : LifecycleService() {
     lateinit var commandBus: ReminderCommandBus
 
     @Inject
+    lateinit var reminderEditProcessor: ReminderEditProcessor
+
+    @Inject
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
@@ -30,7 +35,7 @@ class ReminderSchedulerService : LifecycleService() {
         super.onCreate()
 
         lifecycleScope.launch {
-            medicineRepository.getAllFlow().collect { updateMedicine() }
+            medicineRepository.getAllFlow().collect { updateMedicine(it) }
         }
 
         Log.i(LogTags.SCHEDULER, "Scheduler service created")
@@ -53,8 +58,11 @@ class ReminderSchedulerService : LifecycleService() {
         Log.i(LogTags.SCHEDULER, "Scheduler service destroyed")
     }
 
-    fun updateMedicine() {
-        scheduleRequest()
+    fun updateMedicine(medicines: List<Medicine>) {
+        // Undispatched, so the edit processor sees the medicine lists in the order they were emitted
+        applicationScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            reminderEditProcessor.onMedicinesChanged(medicines)
+        }
     }
 
     private fun scheduleRequest() {
