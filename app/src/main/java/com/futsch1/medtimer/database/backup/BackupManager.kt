@@ -30,7 +30,9 @@ import com.google.gson.JsonSyntaxException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -49,6 +51,7 @@ class BackupManager @AssistedInject constructor(
     @param:Dispatcher(MedTimerDispatchers.Main) private val mainDispatcher: CoroutineDispatcher
 ) {
     private var directorySelectionHandled = false
+    private var automaticBackupJob: Job? = null
 
     @AssistedFactory
     fun interface Factory {
@@ -282,44 +285,56 @@ class BackupManager @AssistedInject constructor(
                 return
             }
 
-            lifecycleOwner.lifecycleScope.launch {
-                performAutoBackup(directoryUri)
+            if (automaticBackupJob?.isActive == true) return
+
+            automaticBackupJob = lifecycleOwner.lifecycleScope.launch {
+                val success = performAutoBackup(directoryUri)
+                withContext(mainDispatcher) {
+                    if (success) {
+                        Toast.makeText(
+                            context,
+                            context.getString(
+                                com.futsch1.medtimer.core.ui.R.string.backup_successful_to,
+                                ExportBackupPath.backupFilename
+                            ),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        requestDirectorySelection()
+                    }
+                }
             }
         }
     }
 
-    private suspend fun performAutoBackup(directoryUri: Uri) {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val jsonObject = JsonObject()
-        jsonObject.add(
-            MEDICINE_KEY, createBackup(
-                JSONMedicineBackup(backupRepository),
-                backupRepository.getMedicineBackup()
+    private suspend fun performAutoBackup(directoryUri: Uri): Boolean = withContext(ioDispatcher) {
+        try {
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val jsonObject = JsonObject()
+            jsonObject.add(
+                MEDICINE_KEY, createBackup(
+                    JSONMedicineBackup(backupRepository),
+                    backupRepository.getMedicineBackup()
+                )
             )
-        )
-        jsonObject.add(
-            EVENT_KEY, createBackup(
-                JSONReminderEventBackup(backupRepository),
-                backupRepository.getReminderEventBackup()
+            jsonObject.add(
+                EVENT_KEY, createBackup(
+                    JSONReminderEventBackup(backupRepository),
+                    backupRepository.getReminderEventBackup()
+                )
             )
-        )
-        jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
+            jsonObject.add(SETTINGS_KEY, JSONSettingsBackup(preferencesDataSource).createBackup())
 
-        val json = gson.toJson(jsonObject)
-        val filename = ExportBackupPath.backupFilename
-        val success = saveToDirectory(directoryUri, filename, json)
-
-        lifecycleOwner.lifecycleScope.launch(mainDispatcher) {
+            val success = saveToDirectory(directoryUri, ExportBackupPath.backupFilename, gson.toJson(jsonObject))
             if (success) {
                 persistentDataDataSource.setLastAutomaticBackup(LocalDate.now())
-                Toast.makeText(
-                    context,
-                    context.getString(com.futsch1.medtimer.core.ui.R.string.backup_successful_to, filename),
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                requestDirectorySelection()
             }
+            success
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(LogTags.BACKUP, "Auto backup failed", e)
+            false
         }
     }
 
@@ -357,9 +372,8 @@ class BackupManager @AssistedInject constructor(
             val root = DocumentFile.fromTreeUri(context, directoryUri)
             val file = root?.createFile("application/json", filename)
             if (file != null) {
-                context.contentResolver.openOutputStream(file.uri)?.use { outputStream ->
-                    outputStream.write(content.toByteArray())
-                }
+                val outputStream = context.contentResolver.openOutputStream(file.uri) ?: return false
+                outputStream.use { it.write(content.toByteArray()) }
                 true
             } else {
                 false
