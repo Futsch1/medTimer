@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <permission android:name="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
+    <permission android:name="${applicationId}.NOTIFICATION_PROCESSED" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
@@ -12,7 +12,7 @@
     <uses-permission
         android:name="android.permission.INTERNET"
         tools:node="remove" />
-    <uses-permission android:name="com.futsch1.medtimer.NOTIFICATION_PROCESSED" />
+    <uses-permission android:name="${applicationId}.NOTIFICATION_PROCESSED" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission
         android:name="android.permission.USE_FULL_SCREEN_INTENT"
@@ -78,7 +78,7 @@
         </receiver>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.futsch1.medtimer.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -55,6 +55,8 @@ android {
             )
         }
         debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
         }

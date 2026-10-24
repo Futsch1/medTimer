@@ -99,7 +99,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val RECEIVER_PERMISSION = "com.futsch1.medtimer.NOTIFICATION_PROCESSED"
+        fun receiverPermission(context: Context) = "${context.packageName}.NOTIFICATION_PROCESSED"
 
         /**
          * Test-only seam: configures [AlarmProcessor]'s debug delay/repeat globals and fires a
@@ -109,7 +109,7 @@ class ReminderProcessorBroadcastReceiver : BroadcastReceiver() {
             armNextAlarmsForTests(delay, repeats)
 
             val intent = getRequestScheduleIntent(context)
-            context.sendBroadcast(intent, RECEIVER_PERMISSION)
+            context.sendBroadcast(intent, receiverPermission(context))
         }
 
         /**
