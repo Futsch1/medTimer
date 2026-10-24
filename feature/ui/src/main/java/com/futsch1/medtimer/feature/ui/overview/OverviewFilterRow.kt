@@ -2,8 +2,8 @@ package com.futsch1.medtimer.feature.ui.overview
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +27,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,11 +35,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.inset
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
@@ -56,6 +68,9 @@ private val BUTTON_SIZE = 40.dp
 private const val HIGHLIGHT_ANIMATION_MILLIS = 250
 
 private val ROW_SHAPE = RoundedCornerShape(BUTTON_SIZE * 0.4f)
+private val OUTLINE_WIDTH = 1.dp
+private val LABEL_START = 12.dp
+private val LABEL_GAP_PADDING = 4.dp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -65,11 +80,55 @@ fun OverviewFilterRow(
     modifier: Modifier = Modifier,
 ) {
     val buttonShape = MaterialShapes.Square.toShape()
+    val labelStyle = MaterialTheme.typography.labelSmall
+    val labelHalfHeight = with(LocalDensity.current) { labelStyle.lineHeight.toDp() / 2 }
+    val outlineColor = MaterialTheme.colorScheme.outlineVariant
+    var labelWidthPx by remember { mutableIntStateOf(0) }
 
+    // The label sits in a gap cut into the top edge of the outline, like an outlined text field. The gap is clipped out of
+    // the stroke rather than painted over, so it works on any container color.
+    Box(modifier = modifier.semantics { isTraversalGroup = true }) {
+        Text(
+            text = stringResource(CoreUiR.string.filter),
+            style = labelStyle,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            modifier = Modifier
+                .padding(start = LABEL_START)
+                .onSizeChanged { labelWidthPx = it.width }
+                .padding(horizontal = LABEL_GAP_PADDING),
+        )
+        FilterToggles(
+            activeFilters = activeFilters,
+            onToggleFilter = onToggleFilter,
+            buttonShape = buttonShape,
+            modifier = Modifier
+                .padding(top = labelHalfHeight)
+                .drawBehind {
+                    val stroke = OUTLINE_WIDTH.toPx()
+                    val gapStart = LABEL_START.toPx()
+                    val gapLeft = if (layoutDirection == LayoutDirection.Ltr) gapStart else size.width - gapStart - labelWidthPx
+                    inset(stroke / 2) {
+                        clipRect(gapLeft, -stroke, gapLeft + labelWidthPx, labelHalfHeight.toPx(), ClipOp.Difference) {
+                            drawOutline(ROW_SHAPE.createOutline(size, layoutDirection, this), outlineColor, style = Stroke(stroke))
+                        }
+                    }
+                }
+                .padding(5.dp),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterToggles(
+    activeFilters: Set<OverviewFilter>,
+    onToggleFilter: (OverviewFilter) -> Unit,
+    buttonShape: Shape,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, ROW_SHAPE)
-            .padding(5.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
