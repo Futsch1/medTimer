@@ -21,15 +21,19 @@ Order of preference:
    round-trip when the test fails for an obvious reason.
    **Do not run the full instrumented suite locally** — it takes too long; let CI handle the broader matrix.
 
-## Test-driven where possible
+## Add tests for value, not volume
 
-A test-first approach is preferred for both bug fixes and new features:
+Add a test when it protects important behavior, covers meaningful logic or risk, or is likely to catch a future regression. Tests have a maintenance cost, so do not add them merely to increase test count or coverage.
+A feature or change does not automatically require a test for every path.
 
-- **Bug fixes:** write a failing test that reproduces the bug before the fix.
-  This proves the fix works and prevents regression.
-- **Features:** write tests alongside the code, not after.
-  If a feature ships without tests, capture _why_ in the PR (e.g. "UI-only change, manually verified on emulator").
-- Pure refactors and translation-only PRs are exempt — the existing tests are what protect the refactor.
+Prioritize logic-intensive and boundary-sensitive functionality, especially core medication-reminder behavior. Test observable outcomes and meaningful edge cases. Do not spend tests on straightforward code, trivial getters/setters, obvious wiring, or behavior that is simpler and more reliably validated another way.
+Coverage is a signal, not a target; see [Coverage](#coverage).
+
+Use test-first development when it helps establish the expected behavior:
+
+- **Bug fixes:** add a failing regression test when the bug involves meaningful logic and the failure can be reproduced reliably in a test. For trivial fixes or issues that cannot usefully be represented in a test, don't force one.
+- **Features:** add focused tests for the important behavior and risks introduced, not mechanically for every branch or UI detail.
+- Pure refactors and translation-only changes usually need no new tests when existing tests sufficiently protect the behavior.
 
 ## Test behavior, not implementation (black box)
 
@@ -59,9 +63,12 @@ Test where the risk and logic are:
 
 Don't write tests for:
 
+- Straightforward or obvious code whose behavior is already clear and carries little regression risk.
 - Trivial wiring (`@HiltViewModel` plumbing, manifest declarations).
 - Logicless data classes (`data class` with `val`s only).
 - Generated code.
+
+Before adding a test, ask whether it exercises meaningful behavior or protects against a plausible regression, whether its assertions will remain useful through refactoring, and whether that value justifies its ongoing maintenance. If not, leave it out.
 
 ## Structure and naming
 

@@ -99,7 +99,8 @@ Full detail is in [`docs/guidelines/`](docs/guidelines/README.md). The one-liner
 - **Architecture:** MVVM + Hilt; `Flow` / `StateFlow` / `SharedFlow` (no LiveData); Navigation component with Safe Args. → [
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#architecture--mvvm--hilt)
 - **Compose:** the standard for new UI and in use (`buildFeatures.compose = true`, `MedTimerTheme` and shared composables in `:core:ui`); remaining screens migrate one at a time via `ComposeView`. → [`jetpack-compose.md`](docs/guidelines/jetpack-compose.md)
-- **Testing:** prefer JVM unit tests over instrumented; test-driven for bug fixes and features. → [`testing.md`](docs/guidelines/testing.md)
+- **Testing:** add focused tests for meaningful, logic-intensive behavior and regression risks; don't test trivial code or chase coverage. Prefer JVM unit tests over instrumented. → [`testing.md`](docs/guidelines/testing.md)
+- **Comments:** keep them minimal; explain only non-obvious intent, constraints, or behavior not clear from the code. → [`kotlin-android.md`](docs/guidelines/kotlin-android.md#comments)
 - **Translations:** consider all locales when changing strings; escape `'` as `\'`; use `\n` for newline. → [
   `kotlin-android.md`](docs/guidelines/kotlin-android.md#translations)
 
