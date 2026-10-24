@@ -5,6 +5,7 @@ import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
 import android.util.AttributeSet
+import androidx.core.content.withStyledAttributes
 import androidx.preference.DialogPreference
 import androidx.preference.Preference
 
@@ -33,17 +34,19 @@ class RingtonePreference @JvmOverloads constructor(
         }
 
     init {
-        context.obtainStyledAttributes(
+        // TypedArray implements AutoCloseable only from API 31, so the stdlib use {} crashes below that. withStyledAttributes recycles on every API.
+        context.withStyledAttributes(
             attrs,
             intArrayOf(android.R.attr.ringtoneType, android.R.attr.showDefault, android.R.attr.showSilent)
-        ).use { typedArray ->
-            ringtoneType = typedArray.getInt(0, RingtoneManager.TYPE_ALARM)
-            showDefault = typedArray.getBoolean(1, true)
-            showSilent = typedArray.getBoolean(2, false)
+        ) {
+            ringtoneType = getInt(0, RingtoneManager.TYPE_ALARM)
+            showDefault = getBoolean(1, true)
+            showSilent = getBoolean(2, false)
         }
         summaryProvider = SummaryProvider<Preference> { preference ->
             (preference as RingtonePreference).ringtone?.let {
-                RingtoneManager.getRingtone(context, it)?.getTitle(context)
+                // A stale or vendor-specific ringtone URI must not take the settings screen down.
+                runCatching { RingtoneManager.getRingtone(context, it)?.getTitle(context) }.getOrNull()
             }
                 ?: context.getString(android.R.string.unknownName)
         }
