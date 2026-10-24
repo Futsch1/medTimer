@@ -120,17 +120,19 @@ fun OverviewEventItem(
                         .weight(1f)
                         .testTag(OverviewTestTags.EVENT_TEXT),
                 )
-                val iconFadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
-                val iconSizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
-                AnimatedContent(
-                    targetState = icon to color,
-                    transitionSpec = {
-                        fadeIn(iconFadeSpec) togetherWith fadeOut(iconFadeSpec) using
-                                SizeTransform(clip = false) { _, _ -> iconSizeSpec }
-                    },
-                    label = "medicine_swatch",
-                ) { (animatedIcon, animatedColor) ->
-                    MedicineSwatch(icon = animatedIcon, color = animatedColor)
+                if (icon != null && color != null) {
+                    val iconFadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
+                    val iconSizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
+                    AnimatedContent(
+                        targetState = icon to color,
+                        transitionSpec = {
+                            fadeIn(iconFadeSpec) togetherWith fadeOut(iconFadeSpec) using
+                                    SizeTransform(clip = false) { _, _ -> iconSizeSpec }
+                        },
+                        label = "medicine_swatch",
+                    ) { (animatedIcon, animatedColor) ->
+                        MedicineSwatch(icon = animatedIcon, color = animatedColor)
+                    }
                 }
             }
         }
