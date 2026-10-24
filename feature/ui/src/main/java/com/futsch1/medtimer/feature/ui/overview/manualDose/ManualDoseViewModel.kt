@@ -88,7 +88,7 @@ class ManualDoseViewModel @Inject constructor(
         if (medicine == null) {
             emptyList()
         } else {
-            reminders.map { it.amount }.distinct()
+            reminders.filter { !it.isOutOfStockOrExpirationReminder }.map { it.amount }.distinct()
         }
     }
 
