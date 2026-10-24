@@ -30,6 +30,12 @@ A windowed interval also has daily start and end times. It schedules within that
 may fall in a later window. Review the generated dates in the Overview or medicine calendar. The scheduled entries are
 previews, not confirmation that notifications were delivered.
 
+## Understand weekend mode
+
+On selected days, weekend mode postpones reminders scheduled within the interval from the start time up to (but not
+including) the end time. Reminders in that interval are moved to the end time. For example, if the interval is 1:00 to
+9:00, a reminder scheduled for 8:00 is postponed to 9:00, but a reminder at 0:30 is still raised at 0:30.
+
 ## Add a reminder linked to another
 
 In Advanced settings, choose **Add reminder for following dose** to add a linked reminder. Its timing is relative to the
