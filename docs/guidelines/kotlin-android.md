@@ -21,6 +21,11 @@ The rules below are mechanically checked — CI runs the same gates locally and 
   All new files are Kotlin.
   Existing Java is migrated opportunistically when touched substantially, not as an out-of-scope refactor.
 
+## Comments
+
+Keep comments to a minimum. Add one only when it explains non-obvious intent, a constraint, or behavior that cannot be readily inferred from the code; don't narrate what the code already says.
+Prefer clear names and straightforward code over explanatory comments.
+
 ## Naming
 
 Follow [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html), with these project-specific rules layered on top:
