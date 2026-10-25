@@ -29,11 +29,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
-object EditMedicineTestTags {
-    /** Scopes the entries to this menu; each one is then selected by its own label. */
-    const val MENU = "edit_medicine_menu"
-}
-
 /** Actions on the medicine being edited: sub-screen links, bulk activation, duplication, deletion. */
 class EditMedicineActions @AssistedInject constructor(
     @Assisted private val medicine: Medicine,

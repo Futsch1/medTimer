@@ -53,10 +53,9 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     init {
         combine(
             medicines,
-            liveMedicines,
             simulatedRemindersRepository.stockRunOutDates
-        ) { medicines, allMedicines, stockRunOutDates ->
-            setupGuidance(allMedicines) to medicines.map { medicine ->
+        ) { medicines, stockRunOutDates ->
+            medicines.map { medicine ->
                 MedicineScreenItem(
                     medicine.id,
                     medicine.name,
@@ -78,8 +77,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
                     medicine.reminders.isNotEmpty() && medicine.reminders.none { it.active }
                 )
             }
-        }.flowOn(ioDispatcher).onEach { (guidance, medicines) ->
-            state.setupGuidance = guidance
+        }.flowOn(ioDispatcher).onEach { medicines ->
             state.medicines = medicines.toImmutableList()
         }.launchIn(viewModelScope)
     }

@@ -120,10 +120,12 @@ fun MedicinesScreen(
                 bottom = paddingValues.calculateBottomPadding() + 80.dp
             )
         ) {
-            if (state.setupGuidance == SetupGuidance.ADD_MEDICINE) {
+            if (reorderableMedicines.medicines.isEmpty()) {
                 item(key = "add_medicine_guidance") {
                     SetupGuidanceCard(
                         message = stringResource(R.string.setup_no_medicines_guidance),
+                        testTag = MedicineTestTags.SETUP_ADD_MEDICINE,
+                        buttonText = stringResource(R.string.add_medicine),
                         onContinue = onMedicineAdd,
                         onOpenHelp = onOpenHelp,
                     )
@@ -131,7 +133,7 @@ fun MedicinesScreen(
             }
             items(reorderableMedicines.medicines, key = { it.id }) { medicine ->
                 ReorderableItem(reorderableMedicines.reorderState, key = medicine.id) { isDragging ->
-                    SwipeToDeleteContainer(medicine, onMedicineDelete) {
+                    SwipeToDeleteContainer( { onMedicineDelete(medicine.id) }) {
                         MedicineCard(
                             medicine = medicine,
                             onMedicineEdit = onMedicineEdit,
@@ -193,9 +195,8 @@ private fun rememberReorderableMedicines(
 }
 
 @Composable
-private fun SwipeToDeleteContainer(
-    medicine: MedicineScreenItem,
-    onMedicineDelete: (id: Int) -> Unit,
+fun SwipeToDeleteContainer(
+    onItemDelete: () -> Unit,
     content: @Composable () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -219,7 +220,7 @@ private fun SwipeToDeleteContainer(
             confirmButton = {
                 TextButton(onClick = {
                     showDeleteDialog = false
-                    onMedicineDelete(medicine.id)
+                    onItemDelete()
                 }) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
@@ -266,24 +267,6 @@ private fun SwipeToDeleteContainer(
         }
     ) {
         content()
-    }
-}
-
-@Composable
-private fun SetupGuidanceCard(
-    message: String,
-    onContinue: () -> Unit,
-    onOpenHelp: () -> Unit,
-) {
-    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Column(Modifier.padding(16.dp)) {
-            Text(message, style = MaterialTheme.typography.bodyMedium)
-            TextButton(
-                modifier = Modifier.testTag(MedicineTestTags.SETUP_ADD_MEDICINE),
-                onClick = onContinue
-            ) { Text(stringResource(R.string.add_medicine)) }
-            TextButton(onClick = onOpenHelp) { Text(stringResource(R.string.setup_guidance_getting_started)) }
-        }
     }
 }
 

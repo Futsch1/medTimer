@@ -96,6 +96,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     private lateinit var appOptionsActions: AppOptionsActions
     private lateinit var fragmentView: View
     private var fragmentReady = false
+
     // Assigned once the medicine has loaded; the bar renders its actions only from that point on.
     private var editMedicineActions by mutableStateOf<EditMedicineActions?>(null)
     private var medicineName by mutableStateOf("")
@@ -140,7 +141,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
             withContext(mainDispatcher) {
                 medicineName = medicine.name
-                editMedicineActions = editMedicineActionsFactory.create(medicine, this@EditMedicineFragment, navController)
+                editMedicineActions =
+                    editMedicineActionsFactory.create(medicine, this@EditMedicineFragment, navController)
 
                 // Signal that entity was loaded
                 onMedicineLoaded(medicine)
@@ -206,7 +208,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             reminderRepository.getAllFlow(getMedicineId()).collect {
                 sortAndSubmitList(it)
                 fragmentView.findViewById<View>(R.id.setupReminderGuidance).visibility =
-                    if (setupGuidance(listOf(medicine.copy(reminders = it)), medicine.id) == SetupGuidance.ADD_REMINDER) {
+                    if (medicine.reminders.isEmpty()) {
                         View.VISIBLE
                     } else {
                         View.GONE
