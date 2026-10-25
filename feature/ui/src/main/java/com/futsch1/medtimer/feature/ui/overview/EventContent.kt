@@ -85,21 +85,14 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
                     )
                 }
                 OptionalDetail(time, modifier = Modifier.weight(1.0f, fill = false)) { Text(it) }
-                OptionalDetail(takenTime, modifier = Modifier.weight(1.0f)) { animatedTakenTime ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        if (content.time != null) {
-                            Icon(
-                                painter = painterResource(CoreUiR.drawable.arrow_right),
-                                contentDescription = null,
-                                modifier = Modifier.size(DETAIL_ICON_SIZE),
-                            )
-                        }
-                        Text(animatedTakenTime)
-                    }
+                if (content.time != null && content.takenTime != null) {
+                    Icon(
+                        painter = painterResource(CoreUiR.drawable.arrow_right),
+                        contentDescription = null,
+                        modifier = Modifier.size(DETAIL_ICON_SIZE),
+                    )
                 }
+                OptionalDetail(takenTime, modifier = Modifier.weight(1.0f, fill = false)) { Text(it) }
             }
             OptionalDetail(interval) { Text(it) }
             OptionalDetail(expirationDate) { Text(it) }
