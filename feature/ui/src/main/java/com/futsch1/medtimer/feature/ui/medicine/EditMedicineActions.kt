@@ -16,71 +16,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /** Actions on the medicine being edited: sub-screen links, bulk activation, duplication, deletion. */
 class EditMedicineActions @AssistedInject constructor(
-    @Assisted private val medicine: Medicine,
+    @Assisted private val editMedicineScreenViewModel: EditMedicineScreenViewModel,
     @Assisted private val fragment: EditMedicineFragment,
     @Assisted private val navController: NavController,
-    private val medicineRepository: MedicineRepository,
-    private val reminderRepository: ReminderRepository,
-    private val tagRepository: TagRepository,
     private val editMedicineSubmenusFactory: EditMedicineSubmenus.Factory,
 ) {
 
     @AssistedFactory
     fun interface Factory {
         fun create(
-            medicine: Medicine,
+            editMedicineScreenViewModel: EditMedicineScreenViewModel,
             fragment: EditMedicineFragment,
             navController: NavController
         ): EditMedicineActions
     }
 
-    private val submenus by lazy { editMedicineSubmenusFactory.create(fragment, medicine) }
+    private val submenus by lazy {
+        editMedicineSubmenusFactory.create(
+            fragment,
+            editMedicineScreenViewModel.medicineId
+        )
+    }
 
     fun open(submenu: EditMedicineSubmenus.Submenu) = submenus.open(submenu, navController)
 
     fun setRemindersActive(active: Boolean) {
-        fragment.lifecycleScope.launch {
-            val reminders = reminderRepository.getAll(medicine.id)
-            com.futsch1.medtimer.core.common.helpers.setRemindersActive(
-                reminders,
-                reminderRepository,
-                active
-            )
-        }
+        editMedicineScreenViewModel.setRemindersActive(active)
     }
 
     fun duplicate() {
-        // Navigate up only once the copy is stored: leaving the screen cancels lifecycleScope.
-        fragment.lifecycleScope.launch {
-            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-            assignTags(medicine.id, newMedicineId)
-            navController.navigateUp()
-        }
+        editMedicineScreenViewModel.duplicate { navController.navigateUp() }
     }
 
     fun duplicateIncludingReminders() {
-        fragment.lifecycleScope.launch {
-            val fullMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
-            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-            reminderRepository.createMany(fullMedicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
-            assignTags(medicine.id, newMedicineId)
-            navController.navigateUp()
-        }
+        editMedicineScreenViewModel.duplicateIncludingReminders { navController.navigateUp() }
     }
 
     fun delete() {
@@ -88,22 +66,12 @@ class EditMedicineActions @AssistedInject constructor(
             navController.context,
             CoreUiR.string.are_you_sure_delete_medicine,
             {
-                fragment.lifecycleScope.launch {
-                    medicineRepository.delete(medicine.id)
+                editMedicineScreenViewModel.delete {
                     navController.navigateUp()
                 }
             },
             { }
         )
-    }
-
-    private fun copyName(name: String) = fragment.getString(CoreUiR.string.duplicate_name, name)
-
-    private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.fetch(oldMedicineId) ?: return
-        for (oldTag in oldFullMedicine.tags) {
-            tagRepository.addMedicineTag(newMedicineId, oldTag.id)
-        }
     }
 }
 
@@ -157,7 +125,11 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
 
             HorizontalDivider()
             item(CoreUiR.string.duplicate, CoreUiR.drawable.copy, actions::duplicate)
-            item(CoreUiR.string.duplicate_including_reminders, CoreUiR.drawable.copy, actions::duplicateIncludingReminders)
+            item(
+                CoreUiR.string.duplicate_including_reminders,
+                CoreUiR.drawable.copy,
+                actions::duplicateIncludingReminders
+            )
             item(CoreUiR.string.delete, CoreUiR.drawable.trash, actions::delete)
         }
     }

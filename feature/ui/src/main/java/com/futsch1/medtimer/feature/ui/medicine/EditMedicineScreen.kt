@@ -28,7 +28,8 @@ fun EditMedicineScreen(
     onReminderEdit: (id: Int) -> Unit,
     onEditAmount: (id: Int, amount: String) -> Unit,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
-    onOpenHelp: () -> Unit
+    onOpenHelp: () -> Unit,
+    onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit
 ) {
     EditMedicineScreen(
         editMedicineScreenViewModel.state,
@@ -37,7 +38,8 @@ fun EditMedicineScreen(
         onReminderEdit,
         onEditAmount,
         onEditTime,
-        onOpenHelp
+        onOpenHelp,
+        onOpenSubmenu
     )
 }
 
@@ -49,7 +51,8 @@ fun EditMedicineScreen(
     onReminderEdit: (id: Int) -> Unit = {},
     onEditAmount: (id: Int, amount: String) -> Unit = { _, _ -> },
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit = { _, _ -> },
-    onOpenHelp: () -> Unit = {}
+    onOpenHelp: () -> Unit = {},
+    onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -92,7 +95,7 @@ fun EditMedicineScreen(
                 }
             }
             items(editMedicineScreenState.reminders, key = { it.id }) { reminder ->
-                SwipeToDeleteContainer( { onReminderDelete(reminder.id) }) {
+                SwipeToDeleteContainer({ onReminderDelete(reminder.id) }) {
                     ReminderCard(
                         reminder = reminder,
                         onReminderEdit = onReminderEdit,

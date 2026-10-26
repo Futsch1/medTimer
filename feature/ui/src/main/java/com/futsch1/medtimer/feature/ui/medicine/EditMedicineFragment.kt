@@ -141,8 +141,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
             withContext(mainDispatcher) {
                 medicineName = medicine.name
-                editMedicineActions =
-                    editMedicineActionsFactory.create(medicine, this@EditMedicineFragment, navController)
+                //editMedicineActions =
+                //    editMedicineActionsFactory.create(medicine, this@EditMedicineFragment, navController)
 
                 // Signal that entity was loaded
                 onMedicineLoaded(medicine)
@@ -190,9 +190,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
             setText(medicine.name)
         }
 
-        val subMenus = editMedicineSubmenusFactory.create(this, medicine)
+        val subMenus = editMedicineSubmenusFactory.create(this, medicine.id)
 
-        selectIconButton.setIcon(medicineIcons.getIconDrawable(iconId))
+        selectIconButton.icon = medicineIcons.getIconDrawable(iconId)
 
         setupMedicineSettings(subMenus)
         setupNotesButton(subMenus)
