@@ -49,7 +49,7 @@ uiautomator = "2.4.0"
 barista = "4.3.0"
 
 # Build
-commonmark = "0.30.1"
+commonmark = "0.31.0"
 desugar-jdk = "2.1.5"
 documentfile = "1.1.0"
 
