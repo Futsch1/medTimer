@@ -59,11 +59,19 @@ class ManualDoseRobot(
     }
 
     fun assertRecentDoseOffered(medicine: String, amount: String) {
+        ensureRecentDoseVisible(medicine, amount)
         dialog.assertDisplayed(recentDoseMatcher(medicine, amount))
     }
 
     fun selectRecentDose(medicine: String, amount: String) {
+        ensureRecentDoseVisible(medicine, amount)
         dialog.click(recentDoseMatcher(medicine, amount))
+    }
+
+    private fun ensureRecentDoseVisible(medicine: String, amount: String) {
+        if (!dialog.exists(recentDoseMatcher(medicine, amount))) {
+            medicineList.scrollToIndex(0)
+        }
     }
 
     private fun selectMedicineIfPresent(label: String): Boolean {
