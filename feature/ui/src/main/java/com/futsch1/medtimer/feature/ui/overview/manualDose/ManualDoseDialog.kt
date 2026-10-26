@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -145,29 +147,38 @@ private fun DialogContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .then(
+                        if (state.step == ManualDoseStep.MEDICINE) {
+                            Modifier.verticalScroll(rememberScrollState())
+                        } else {
+                            Modifier
+                        },
+                    )
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 when (state.step) {
                     ManualDoseStep.MEDICINE -> {
-                        SectionLabel(R.string.medicine)
-                        if (state.showSearch) {
-                            MedicineSearchField(searchQuery, onSearch)
-                        }
-                        MedicineList(
-                            medicineEntries = state.medicineEntries,
-                            modifier = Modifier.weight(1f, fill = false),
-                            onSelectMedicineEntry = onSelectMedicineEntry,
-                        )
-                        RecentDoses(
-                            doses = state.lastCustomDoses,
-                            onSelectMedicineEntry = onSelectMedicineEntry,
-                            onSelectAmount = onSelectAmount,
-                            onLogManualDose = onLogManualDose,
-                            onDismissDialog = onDismissDialog,
-                        )
-                        CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
-                            onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
+                        Column {
+                            RecentDoses(
+                                doses = state.lastCustomDoses,
+                                onSelectMedicineEntry = onSelectMedicineEntry,
+                                onSelectAmount = onSelectAmount,
+                                onLogManualDose = onLogManualDose,
+                                onDismissDialog = onDismissDialog,
+                            )
+                            SectionLabel(R.string.medicine)
+                            if (state.showSearch) {
+                                MedicineSearchField(searchQuery, onSearch)
+                            }
+                            CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
+                                onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
+                            }
+                            MedicineList(
+                                medicineEntries = state.medicineEntries,
+                                modifier = Modifier.heightIn(max = 300.dp),
+                                onSelectMedicineEntry = onSelectMedicineEntry,
+                            )
                         }
                     }
 
@@ -521,7 +532,6 @@ fun MedicineList(
 ) {
     LazyColumn(
         modifier = modifier
-            .heightIn(max = 300.dp)
             .testTag(ManualDoseTestTags.MEDICINE_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
