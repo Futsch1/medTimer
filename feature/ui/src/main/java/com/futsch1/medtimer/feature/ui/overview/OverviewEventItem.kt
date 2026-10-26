@@ -120,7 +120,7 @@ fun OverviewEventItem(
                         .weight(1f)
                         .testTag(OverviewTestTags.EVENT_TEXT),
                 )
-                if (icon != null && color != null) {
+                if (icon != null || color != null) {
                     val iconFadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()
                     val iconSizeSpec = MaterialTheme.motionScheme.slowSpatialSpec<IntSize>()
                     AnimatedContent(
