@@ -15,8 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -28,7 +29,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -147,42 +147,38 @@ private fun DialogContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .then(
+                        if (state.step == ManualDoseStep.MEDICINE) {
+                            Modifier.verticalScroll(rememberScrollState())
+                        } else {
+                            Modifier
+                        },
+                    )
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 when (state.step) {
                     ManualDoseStep.MEDICINE -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .testTag(ManualDoseTestTags.MEDICINE_LIST),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            if (state.lastCustomDoses.any { it.label.isNotBlank() }) {
-                                item(key = "recent_doses_header") { SectionLabel(R.string.recent_doses) }
-                                item(key = "recent_doses") {
-                                    RecentDoses(
-                                        doses = state.lastCustomDoses,
-                                        onSelectMedicineEntry = onSelectMedicineEntry,
-                                        onSelectAmount = onSelectAmount,
-                                        onLogManualDose = onLogManualDose,
-                                        onDismissDialog = onDismissDialog,
-                                    )
-                                }
-                            }
-                            item(key = "custom_medicine") {
-                                CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
-                                    onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
-                                }
-                            }
-                            item(key = "medicine_header") { SectionLabel(R.string.medicine) }
+                        Column {
+                            RecentDoses(
+                                doses = state.lastCustomDoses,
+                                onSelectMedicineEntry = onSelectMedicineEntry,
+                                onSelectAmount = onSelectAmount,
+                                onLogManualDose = onLogManualDose,
+                                onDismissDialog = onDismissDialog,
+                            )
+                            SectionLabel(R.string.medicine)
                             if (state.showSearch) {
-                                item(key = "medicine_search") { MedicineSearchField(searchQuery, onSearch) }
+                                MedicineSearchField(searchQuery, onSearch)
                             }
-                            items(state.medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
-                                MedicineEntryCard(entry, onSelectMedicineEntry)
+                            CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
+                                onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
                             }
+                            MedicineList(
+                                medicineEntries = state.medicineEntries,
+                                modifier = Modifier.heightIn(max = 300.dp),
+                                onSelectMedicineEntry = onSelectMedicineEntry,
+                            )
                         }
                     }
 
@@ -445,40 +441,47 @@ private fun RecentDoses(
     onLogManualDose: (LocalTime) -> Unit,
     onDismissDialog: () -> Unit
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        doses.forEach { dose ->
-            if (dose.label.isNotBlank()) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(ManualDoseTestTags.RECENT_DOSE)
-                        .clickable {
-                            onSelectMedicineEntry(ManualDoseMedicineEntry(dose.label, dose.medicine))
-                            onSelectAmount(dose.amount)
-                            onLogManualDose(LocalTime.now())
-                            onDismissDialog()
-                        },
-                    shape = MaterialTheme.shapes.medium,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+    if (doses.isNotEmpty()) {
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                text = stringResource(R.string.recent_doses),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            doses.forEach { dose ->
+                if (dose.label.isNotBlank()) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(ManualDoseTestTags.RECENT_DOSE)
+                            .clickable {
+                                onSelectMedicineEntry(ManualDoseMedicineEntry(dose.label, dose.medicine))
+                                onSelectAmount(dose.amount)
+                                onLogManualDose(LocalTime.now())
+                                onDismissDialog()
+                            },
+                        shape = MaterialTheme.shapes.medium,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                     ) {
-                        Text(
-                            text = dose.label,
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        )
-                        if (dose.amount.isNotBlank()) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Text(
-                                text = dose.amount,
-                                modifier = Modifier.padding(start = 12.dp),
-                                style = MaterialTheme.typography.bodyMedium,
+                                text = dose.label,
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
+                            if (dose.amount.isNotBlank()) {
+                                Text(
+                                    text = dose.amount,
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                )
+                            }
                         }
                     }
                 }
@@ -522,39 +525,6 @@ private fun MedicineSearchField(query: String, onSearch: (String) -> Unit) {
 }
 
 @Composable
-private fun MedicineEntryCard(
-    entry: ManualDoseMedicineEntry,
-    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
-) {
-    OutlinedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(ManualDoseTestTags.MEDICINE_ENTRY)
-            .clickable { onSelectMedicineEntry(entry) },
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            entry.medicine?.let { medicine ->
-                MedicineSwatch(
-                    icon = rememberMedicineIcon(medicine.iconId),
-                    color = medicine.color.takeIf { medicine.useColor },
-                    modifier = Modifier.padding(end = 12.dp),
-                )
-            }
-            Text(
-                text = entry.label,
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        }
-    }
-}
-
-@Composable
 fun MedicineList(
     medicineEntries: ImmutableList<ManualDoseMedicineEntry>,
     modifier: Modifier = Modifier,
@@ -562,12 +532,36 @@ fun MedicineList(
 ) {
     LazyColumn(
         modifier = modifier
-            .heightIn(max = 300.dp)
             .testTag(ManualDoseTestTags.MEDICINE_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
-            MedicineEntryCard(entry, onSelectMedicineEntry)
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ManualDoseTestTags.MEDICINE_ENTRY)
+                    .clickable { onSelectMedicineEntry(entry) },
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    entry.medicine?.let { medicine ->
+                        MedicineSwatch(
+                            icon = rememberMedicineIcon(medicine.iconId),
+                            color = medicine.color.takeIf { medicine.useColor },
+                            modifier = Modifier.padding(end = 12.dp),
+                        )
+                    }
+                    Text(
+                        text = entry.label,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
         }
     }
 }
