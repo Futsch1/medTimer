@@ -25,8 +25,10 @@ class MedicineStockTest : MedTimerTestBase() {
                 "Of the pills ${amount(3.5)} are to be taken",
                 intervalWithinToday(10.minutes)
             )
-            stockReminder(threshold = 4.0)
         }
+
+        medicines.clickItem(0)
+        medicineEditor.addStockReminder(threshold = "4")
 
         navigation.toOverview()
 
@@ -136,15 +138,13 @@ class MedicineStockTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
-    fun reminderAmountWarningTest() {
+    fun invalidReminderInputTest() {
         seed.medicine("Test")
 
         medicines.clickItem(0)
 
         medicineEditor.setStock(amount = amount(10.5), unit = "pills")
-        medicineEditor.addStockReminder(threshold = "4")
-
-        medicineEditor.assertAmountRejected("something", R.string.invalid_amount)
+        medicineEditor.assertInvalidExpirationDaysRejected("something")
     }
 
     @Test
@@ -189,9 +189,11 @@ class MedicineStockTest : MedTimerTestBase() {
             stock(amount = 10.0)
             reminder("3", laterToday())
             reminder("2", laterToday())
-            dailyStockReminder(threshold = 12.0, at = laterToday())
         }
 
+        medicines.clickItem(0)
+        medicineEditor.addDailyStockReminder(threshold = "12", time = laterToday())
+        navigation.toOverview()
         scheduleRemindersNow()
         notifications.inShade {
             assertShows(TEST_MED, timeoutMillis = 5_000)

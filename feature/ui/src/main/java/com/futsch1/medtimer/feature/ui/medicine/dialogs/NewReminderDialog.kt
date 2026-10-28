@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,11 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import com.futsch1.medtimer.core.ui.R as CoreUiR
+
+object NewReminderTestTags {
+    const val DIALOG = "new_reminder_dialog"
+    const val HELP_BUTTON = "new_reminder_help_button"
+}
 
 private val creationTypes = listOf(
     ReminderType.TIME_BASED,
@@ -83,6 +89,7 @@ fun NewReminderFlowDialog(
 
     val type = selectedType
     AlertDialog(
+        modifier = Modifier.testTag(NewReminderTestTags.DIALOG),
         onDismissRequest = onDismiss,
         title = { Text(stringResource(type?.let(::titleFor) ?: CoreUiR.string.add_reminder)) },
         text = {
@@ -129,7 +136,10 @@ fun NewReminderFlowDialog(
         },
         confirmButton = {
             if (type == null) {
-                TextButton(onClick = onOpenHelp) { Text(stringResource(CoreUiR.string.reminder_types_help)) }
+                TextButton(
+                    onClick = onOpenHelp,
+                    modifier = Modifier.testTag(NewReminderTestTags.HELP_BUTTON),
+                ) { Text(stringResource(CoreUiR.string.reminder_types_help)) }
             } else {
                 TextButton(onClick = {
                     val result = createReminderData(

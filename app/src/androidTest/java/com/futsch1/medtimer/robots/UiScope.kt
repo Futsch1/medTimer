@@ -11,6 +11,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performScrollToIndex
@@ -68,7 +69,9 @@ class UiScope internal constructor(
      */
     fun click(matcher: SemanticsMatcher) {
         awaitExists(matcher)
-        node(matcher).performClick()
+        val target = node(matcher)
+        runCatching { target.performScrollTo() }
+        target.performClick()
         settle()
     }
 

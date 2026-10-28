@@ -4,15 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasTestTag
 import androidx.test.espresso.Espresso.pressBack
-import com.adevinta.android.barista.assertion.BaristaErrorAssertions.assertErrorDisplayed
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
-import com.adevinta.android.barista.interaction.BaristaScrollInteractions.safelyScrollTo
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.utilities.awaitToast
+import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
+import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTestTags
 import java.time.LocalTime
 import kotlin.time.Duration
 
@@ -31,19 +25,23 @@ class MedicineEditorRobot(
     fun assertTitle(expected: String) =
         ui.scope(com.futsch1.medtimer.core.ui.ScreenTestTags.TOP_APP_BAR).assertDisplayed(hasText(expected))
 
-    fun assertReminderSetupGuidanceDisplayed() = editorScope().assertDisplayed(hasTestTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.SETUP_ADD_REMINDER))
+    fun assertReminderSetupGuidanceDisplayed() = editorScope().assertDisplayed(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
 
-    fun assertReminderSetupGuidanceAbsent() = editorScope().assertAbsent(hasTestTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.SETUP_ADD_REMINDER))
+    fun assertReminderSetupGuidanceAbsent() = editorScope().assertAbsent(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
 
     fun openGettingStartedFromGuidance() = editorScope().click(hasText(ui.getString(R.string.setup_guidance_getting_started)))
 
-    fun openAddReminderFromGuidance() = editorScope().click(hasTestTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.SETUP_ADD_REMINDER))
+    fun openAddReminderFromGuidance() = editorScope().click(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
 
     fun closeReminderTypeChooser() = pressBack()
 
+    fun assertReminderTypeDisplayed(@StringRes type: Int) =
+        dialogScope().assertDisplayed(hasText(ui.getString(type)))
+
     fun openReminderTypesHelp() {
-        safelyScrollTo(com.futsch1.medtimer.feature.ui.R.id.reminderTypesHelp)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.reminderTypesHelp)
+        val helpButton = ui.scope(NewReminderTestTags.HELP_BUTTON)
+        helpButton.awaitSelfExists()
+        helpButton.clickSelf()
     }
 
     fun rename(name: String) = editValue(R.string.medicine_name, name)
@@ -54,30 +52,23 @@ class MedicineEditorRobot(
 
     private fun editValue(@StringRes label: Int, value: String) {
         editorScope().click(hasText(ui.getString(label)))
-        val dialog = ui.scope(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.EDIT_VALUE_DIALOG)
-        dialog.replaceText(hasTestTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.EDIT_VALUE_INPUT), value)
+        val dialog = ui.scope(EditMedicineTestTags.EDIT_VALUE_DIALOG)
+        dialog.replaceText(hasTestTag(EditMedicineTestTags.EDIT_VALUE_INPUT), value)
         dialog.click(hasText(ui.getString(R.string.ok)))
     }
 
     private fun editorScope() = ui.scope(com.futsch1.medtimer.core.ui.ScreenTestTags.MEDICINES)
 
     fun addReminder(amount: String, time: LocalTime? = null) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
-        writeTo(AMOUNT, amount)
-        closeKeyboard()
-
-        if (time != null) {
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
-            pickers.pickTime(time)
-        }
-        closeKeyboard()
-
+        openType(R.string.time_based_reminder)
+        setInput(R.string.dosage, amount)
+        time?.let { setTime(R.string.time, it) }
         create()
     }
 
     fun addHourlyIntervalReminder(amount: String, interval: Duration) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.continuousIntervalCard)
-        writeTo(AMOUNT, amount)
+        openType(R.string.continuous_interval_reminder)
+        setInput(R.string.dosage, amount)
         setIntervalHours(interval)
         create()
     }
@@ -89,49 +80,43 @@ class MedicineEditorRobot(
         windowEnd: LocalTime,
         interval: Duration,
     ) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.windowedIntervalCard)
-        writeTo(AMOUNT, amount)
-        closeKeyboard()
-
-        pickers.openTimePickerFrom(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyStartTime)
-        pickers.pickTime(windowStart)
-        pickers.openTimePickerFrom(com.futsch1.medtimer.feature.ui.R.id.editIntervalDailyEndTime)
-        pickers.pickTime(windowEnd)
-
+        openType(R.string.windowed_interval_reminder)
+        setInput(R.string.dosage, amount)
+        setTime(R.string.daily_start_time, windowStart)
+        setTime(R.string.daily_end_time, windowEnd)
         setIntervalHours(interval)
         create()
     }
 
     fun addStockReminder(threshold: String) {
-        openStockReminderCard(threshold)
+        openType(R.string.out_of_stock_reminder)
+        setInput(R.string.reminder_threshold, threshold)
         create()
     }
 
     /** A stock reminder that fires at [time] on every day the stock is below the threshold. */
     fun addDailyStockReminder(threshold: String, time: LocalTime) {
-        openStockReminderCard(threshold)
-        clickOn(R.string.daily_below_threshold)
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
-        pickers.pickTime(time)
+        openType(R.string.out_of_stock_reminder)
+        setInput(R.string.reminder_threshold, threshold)
+        dialogScope().click(hasText(ui.getString(R.string.daily_below_threshold)))
+        setTime(R.string.time, time)
         create()
     }
 
     /** An expiration reminder that fires at [time] each day; defaults to the dialog's own default time. */
     fun addExpirationReminder(daysBefore: String, time: LocalTime? = null) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.expirationDateReminderCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editExpirationDaysBefore, daysBefore)
-        if (time != null) {
-            clickOn(com.futsch1.medtimer.feature.ui.R.id.editReminderTime)
-            pickers.pickTime(time)
-        }
+        openType(R.string.expiration_reminder)
+        setInput(R.string.remind_days_before_expiration, daysBefore)
+        time?.let { setTime(R.string.time, it) }
         create()
     }
 
-    /** Types [amount] into a new time-based reminder and asserts it is rejected, leaving the card open. */
-    fun assertAmountRejected(amount: String, @StringRes errorRes: Int) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
-        writeTo(AMOUNT, amount)
-        assertErrorDisplayed(AMOUNT, errorRes)
+    /** Invalid expiration days cannot be converted into reminder data, so the flow must remain open. */
+    fun assertInvalidExpirationDaysRejected(value: String) {
+        openType(R.string.expiration_reminder)
+        setInput(R.string.remind_days_before_expiration, value)
+        dialogScope().click(hasText(ui.getString(R.string.create_reminder)))
+        dialogScope().assertDisplayed(hasText(ui.getString(R.string.invalid_input)))
     }
 
     /** Opens the stock settings, runs [block] there and returns to the editor. */
@@ -158,31 +143,38 @@ class MedicineEditorRobot(
     fun assertRefillSize(expected: String) =
         inStockSettings { preferences.assertSummary(R.string.refill_size, expected) }
 
-    private fun openStockReminderCard(threshold: String) {
-        openCard(com.futsch1.medtimer.feature.ui.R.id.stockReminderCard)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editStockThreshold, threshold)
+    private fun openType(@StringRes type: Int) {
+        editorScope().click(hasTestTag(EditMedicineTestTags.ADD_REMINDER))
+        dialogScope().click(hasText(ui.getString(type)))
     }
 
-    /** On a short screen - a tablet in landscape - the card sits below the dialog's fold. */
-    private fun openCard(cardId: Int) {
-        editorScope().click(hasTestTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.ADD_REMINDER))
-        safelyScrollTo(cardId)
-        clickOn(cardId)
+    private fun setInput(@StringRes label: Int, value: String) {
+        dialogScope().click(hasText(ui.getString(label)))
+        val editor = ui.scope(EditMedicineTestTags.EDIT_VALUE_DIALOG)
+        editor.replaceText(hasTestTag(EditMedicineTestTags.EDIT_VALUE_INPUT), value)
+        editor.click(hasText(ui.getString(R.string.ok)))
+    }
+
+    private fun setTime(@StringRes label: Int, time: LocalTime) {
+        dialogScope().click(hasText(ui.getString(label)))
+        pickers.pickSystemTime(time)
     }
 
     private fun setIntervalHours(interval: Duration) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalHours)
-        writeTo(com.futsch1.medtimer.feature.ui.R.id.editIntervalTime, interval.inWholeHours.toString())
-        closeKeyboard()
+        dialogScope().click(hasText(ui.getString(R.string.interval)))
+        com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn(com.futsch1.medtimer.feature.ui.R.id.intervalHours)
+        com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo(
+            com.futsch1.medtimer.feature.ui.R.id.editIntervalTime,
+            interval.inWholeHours.toString()
+        )
+        com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard()
+        com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn(android.R.id.button1)
     }
 
-    /** The button sits below the dialog's fold on a short screen, same as the cards. */
     private fun create() {
-        safelyScrollTo(com.futsch1.medtimer.feature.ui.R.id.createReminder)
-        awaitToast(ui.getString(R.string.successfully_created_reminder)) { clickOn(com.futsch1.medtimer.feature.ui.R.id.createReminder) }
+        dialogScope().click(hasText(ui.getString(R.string.create_reminder)))
+        dialogScope().awaitGone()
     }
 
-    private companion object {
-        val AMOUNT = com.futsch1.medtimer.feature.ui.R.id.editAmount
-    }
+    private fun dialogScope() = ui.scope(NewReminderTestTags.DIALOG)
 }

@@ -3,6 +3,7 @@ package com.futsch1.medtimer.robots
 import android.text.format.DateFormat
 import android.view.View
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
@@ -29,6 +30,14 @@ import kotlin.test.fail
 class MaterialPickers {
 
     fun pickTime(time: LocalTime) = enterTime(time.hour, time.minute, isDuration = false)
+
+    /** The new-reminder Compose flow uses the platform TimePickerDialog rather than MaterialTimePicker. */
+    fun pickSystemTime(time: LocalTime) {
+        val timePicker = ViewMatchers.withClassName(Matchers.equalTo(android.widget.TimePicker::class.java.name))
+        awaitView(timePicker)
+        onView(timePicker).perform(PickerActions.setTime(time.hour, time.minute))
+        clickOn(android.R.id.button1)
+    }
 
     fun pickDuration(hours: Int, minutes: Int) = enterTime(hours, minutes, isDuration = true)
 

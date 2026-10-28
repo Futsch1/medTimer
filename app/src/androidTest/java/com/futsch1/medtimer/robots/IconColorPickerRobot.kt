@@ -21,7 +21,7 @@ class IconColorPickerRobot {
     }
 
     fun selectIcon(position: Int) {
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.selectIcon)
+        onView(withResourceName("selectIcon")).perform(ViewActions.click())
         onView(withResourceName("icd_rcv_icon_list")).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(position, ViewActions.click())
         )
