@@ -2,7 +2,6 @@ package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
-import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import dagger.assisted.Assisted
@@ -25,7 +24,6 @@ class EditMedicineSubmenus @AssistedInject constructor(
 
     enum class Submenu {
         SETTINGS,
-        NOTES,
         TAGS,
         STOCK_TRACKING,
         CALENDAR
@@ -45,7 +43,6 @@ class EditMedicineSubmenus @AssistedInject constructor(
                 }
             }
 
-            Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
                 val tagDataFromMedicine =
                     tagDataFromMedicineFactory.create(editMedicineFragment, medicineId)

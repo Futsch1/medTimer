@@ -4,27 +4,27 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.core.common.di.Dispatcher
-import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
+import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.yield
 import javax.inject.Inject
 
+@HiltViewModel
 class EditMedicineScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val medicineRepository: MedicineRepository,
@@ -33,13 +33,13 @@ class EditMedicineScreenViewModel @Inject constructor(
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     private val linkedReminderAlgorithms: LinkedReminderAlgorithms,
     @param:ApplicationContext private val context: Context,
-    @Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     val medicineId: Int = checkNotNull(savedStateHandle["medicineId"])
     val medicine = medicineRepository.getFlow(medicineId)
 
-    private val reminderSummaries: MutableSharedFlow<Map<Int, String>> = MutableSharedFlow()
+    private val editMutex = Mutex()
 
     val state: EditMedicineScreenState
         field = MutableEditMedicineScreenState()
@@ -49,29 +49,23 @@ class EditMedicineScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            medicine.collect {
-                if (it != null) {
-                    val summaries: MutableMap<Int, String> = mutableMapOf()
-                    for (reminder in it.reminders) {
-                        summaries[reminder.id] = reminderSummaryFormatter.formatReminderSummary(reminder)
+            medicine.collect { medicine ->
+                fragmentState.medicine = medicine
+                if (medicine != null) {
+                    val summaries = medicine.reminders.associate { reminder ->
+                        reminder.id to reminderSummaryFormatter.formatReminderSummary(reminder)
                     }
-                    reminderSummaries.emit(summaries)
+                    setupState(medicine, summaries)
                 }
-                fragmentState.medicine = it
             }
         }
-
-        combine(medicine, reminderSummaries) { medicine, summaries ->
-            if (medicine == null) return@combine
-            setupState(medicine, summaries)
-        }.launchIn(viewModelScope)
     }
 
     private fun setupState(medicine: Medicine, summaries: Map<Int, String>) {
         state.id = medicine.id
         state.icon = medicine.iconId
         state.name = medicine.name
-        state.color = medicine.color
+        state.color = if (medicine.useColor) medicine.color else null
 
         state.reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders).map { reminder ->
             ReminderItem(
@@ -87,108 +81,64 @@ class EditMedicineScreenViewModel @Inject constructor(
         }.toImmutableList()
     }
 
-    fun setRemindersActive(active: Boolean) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val reminders = reminderRepository.getAll(medicineId)
-                setRemindersActive(
-                    reminders,
-                    reminderRepository,
-                    active
-                )
-            }
+    fun setRemindersActive(active: Boolean) = enqueueEdit {
+        setRemindersActive(reminderRepository.getAll(medicineId), reminderRepository, active)
+    }
+
+    fun duplicate(finishCallback: () -> Unit = {}) = enqueueEdit(finishCallback) {
+        val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
+        val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
+        assignTags(medicineId, newMedicineId)
+    }
+
+    fun duplicateIncludingReminders(finishCallback: () -> Unit = {}) = enqueueEdit(finishCallback) {
+        val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
+        val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
+        reminderRepository.createMany(medicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
+        assignTags(medicineId, newMedicineId)
+    }
+
+    fun delete(finishCallback: () -> Unit = {}) = enqueueEdit(finishCallback) {
+        medicineRepository.delete(medicineId)
+    }
+
+    fun deleteReminder(id: Int) = enqueueEdit { reminderRepository.delete(id) }
+
+    fun editName(name: String) = enqueueEdit {
+        val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
+        medicineRepository.update(medicine.copy(name = name))
+    }
+
+    fun editReminderAmount(id: Int, amount: String) = enqueueEdit {
+        val reminder = reminderRepository.fetch(id) ?: return@enqueueEdit
+        reminderRepository.update(reminder.copy(amount = amount))
+    }
+
+    fun editReminderTime(id: Int, timeMinutesOfDay: Int) = enqueueEdit {
+        val reminder = reminderRepository.fetch(id) ?: return@enqueueEdit
+        if (timeMinutesOfDay >= 0 && reminder.usesTimeInMinutes) {
+            reminderRepository.update(reminder.copy(time = reminder.time.copy(minutes = timeMinutesOfDay)))
         }
     }
 
-    fun duplicate(finishCallback: () -> Unit = {}) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
-                val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-                assignTags(medicineId, newMedicineId)
-            }
-            finishCallback()
-        }
+    fun editIcon(iconId: Int) = enqueueEdit {
+        val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
+        medicineRepository.update(medicine.copy(iconId = iconId))
     }
 
-    fun duplicateIncludingReminders(finishCallback: () -> Unit = {}) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
-                val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-                reminderRepository.createMany(medicine.reminders.map {
-                    it.copy(
-                        id = 0,
-                        medicineRelId = newMedicineId
-                    )
-                })
-                assignTags(medicineId, newMedicineId)
-            }
-            finishCallback()
-        }
+    fun editNotes(notes: String) = enqueueEdit {
+        val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
+        medicineRepository.update(medicine.copy(notes = notes))
     }
 
-    fun delete(finishCallback: () -> Unit = {}) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                medicineRepository.delete(medicineId)
+    private fun enqueueEdit(onComplete: () -> Unit = {}, block: suspend () -> Unit) {
+        applicationScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            editMutex.withLock {
+                // Acquire in call order, then leave the caller thread before running the edit.
+                yield()
+                block()
             }
-            finishCallback()
-        }
-    }
-
-    fun deleteReminder(id: Int) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                reminderRepository.delete(id)
-            }
-        }
-    }
-
-    fun editName(name: String) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
-                medicineRepository.update(medicine.copy(name = name))
-            }
-        }
-    }
-
-    fun editReminderAmount(id: Int, amount: String) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val reminder = reminderRepository.fetch(id) ?: return@withContext
-                reminderRepository.update(reminder.copy(amount = amount))
-            }
-        }
-    }
-
-    fun editReminderTime(id: Int, timeMinutesOfDay: Int) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val reminder = reminderRepository.fetch(id) ?: return@withContext
-                if (timeMinutesOfDay >= 0 && reminder.usesTimeInMinutes) {
-                    reminderRepository.update(reminder.copy(time = ReminderTime(timeMinutesOfDay)))
-                }
-            }
-        }
-    }
-
-    fun editIcon(iconId: Int) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
-                medicineRepository.update(medicine.copy(iconId = iconId))
-            }
-        }
-    }
-
-    fun editNotes(notes: String) {
-        viewModelScope.launch {
-            withContext(ioDispatcher) {
-                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
-                medicineRepository.update(medicine.copy(notes = notes))
-            }
+            viewModelScope.launch { onComplete() }
         }
     }
 

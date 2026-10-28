@@ -29,12 +29,29 @@ import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
+import com.maltaisn.icondialog.IconDialog
+import com.maltaisn.icondialog.IconDialogSettings
+import com.maltaisn.icondialog.data.Icon
+import com.maltaisn.icondialog.pack.IconPack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditMedicineFragment : Fragment() {
+class EditMedicineFragment : Fragment(), IconDialog.Callback {
+    override val iconDialogIconPack: IconPack get() = medicineIcons.getIconPack()
+
+    override fun onIconDialogIconsSelected(dialog: IconDialog, icons: List<Icon>) {
+        icons.firstOrNull()?.let { editMedicineScreenViewModel.editIcon(it.id) }
+    }
+
+    private fun openIconDialog() {
+        if (childFragmentManager.isStateSaved || childFragmentManager.findFragmentByTag("medicine_icon") != null) return
+        IconDialog.newInstance(IconDialogSettings()).apply {
+            selectedIconIds = listOf(editMedicineScreenViewModel.state.icon)
+        }.show(childFragmentManager, "medicine_icon")
+    }
+
     @Inject
     @Dispatcher(MedTimerDispatchers.IO)
     lateinit var ioDispatcher: CoroutineDispatcher
@@ -143,7 +160,7 @@ class EditMedicineFragment : Fragment() {
                             },
                             onEditReminderAmount = editMedicineScreenViewModel::editReminderAmount,
                             onEditReminderTime = editMedicineScreenViewModel::editReminderTime,
-                            onEditIcon = editMedicineScreenViewModel::editIcon,
+                            onSelectIcon = ::openIconDialog,
                             onEditNotes = editMedicineScreenViewModel::editNotes,
                             onOpenSubmenu = { submenu ->
                                 editMedicineActions.open(submenu)

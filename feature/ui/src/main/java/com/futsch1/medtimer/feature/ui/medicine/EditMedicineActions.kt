@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
+import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -46,6 +48,10 @@ class EditMedicineActions @AssistedInject constructor(
             editMedicineScreenViewModel.medicineId
         )
     }
+
+    val notes: String? get() = editMedicineScreenViewModel.fragmentState.medicine?.notes
+
+    fun saveNotes(notes: String) = editMedicineScreenViewModel.editNotes(notes)
 
     fun open(submenu: EditMedicineSubmenus.Submenu) = submenus.open(submenu, navController)
 
@@ -78,6 +84,11 @@ class EditMedicineActions @AssistedInject constructor(
 @Composable
 fun EditMedicineMenu(actions: EditMedicineActions) {
     var expanded by remember { mutableStateOf(false) }
+    var showNotes by rememberSaveable { mutableStateOf(false) }
+    val notes = actions.notes
+    if (showNotes && notes != null) {
+        NotesDialog(notes = notes, onSave = actions::saveNotes, onDismiss = { showNotes = false })
+    }
 
     Box {
         IconButton(onClick = { expanded = true }) {
@@ -106,8 +117,8 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
             item(CoreUiR.string.medicine_settings, CoreUiR.drawable.gear) {
                 actions.open(EditMedicineSubmenus.Submenu.SETTINGS)
             }
-            item(CoreUiR.string.notes, CoreUiR.drawable.journal_text) {
-                actions.open(EditMedicineSubmenus.Submenu.NOTES)
+            if (notes != null) {
+                item(CoreUiR.string.notes, CoreUiR.drawable.journal_text) { showNotes = true }
             }
             item(CoreUiR.string.tags, CoreUiR.drawable.tag) {
                 actions.open(EditMedicineSubmenus.Submenu.TAGS)

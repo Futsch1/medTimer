@@ -12,19 +12,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,11 +43,6 @@ fun ReminderCard(
 ) {
     val context = LocalContext.current
     var showTypeHelp by rememberSaveable(reminder.id) { mutableStateOf(false) }
-    var amount by rememberSaveable(reminder.id) { mutableStateOf(reminder.amount) }
-    var amountFocused by rememberSaveable(reminder.id) { mutableStateOf(false) }
-    LaunchedEffect(reminder.amount, amountFocused) {
-        if (!amountFocused) amount = reminder.amount
-    }
 
     if (showTypeHelp) {
         AlertDialog(
@@ -62,7 +54,9 @@ fun ReminderCard(
         )
     }
 
-    ElevatedCard(Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 5.dp)) {
+    ElevatedCard(Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 5.dp)) {
         Column(Modifier.padding(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { showTypeHelp = true }) {
@@ -81,27 +75,34 @@ fun ReminderCard(
                     val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
                     else DateFormat.getTimeFormat(context).format(calendar.time)
                     val hint = reminder.timeHint?.let { stringResource(it) }
-                    OutlinedButton(
+                    EditValueButton(
+                        label = stringResource(reminder.timeLabel),
+                        value = timeText,
                         onClick = {
-                            TimePickerDialog(context, { _, hour, minute -> onEditTime(reminder.id, hour * 60 + minute) },
-                                minutes / 60, minutes % 60, reminder.timeHint != null || DateFormat.is24HourFormat(context)
+                            TimePickerDialog(
+                                context,
+                                { _, hour, minute ->
+                                    val selectedMinutes = hour * 60 + minute
+                                    if (selectedMinutes != minutes) onEditTime(reminder.id, selectedMinutes)
+                                },
+                                minutes / 60,
+                                minutes % 60,
+                                reminder.timeHint != null || DateFormat.is24HourFormat(context)
                             ).apply { if (hint != null) setTitle(hint) }.show()
                         },
-                        modifier = Modifier.weight(1f).padding(4.dp),
-                    ) {
-                        Column {
-                            Text(stringResource(reminder.timeLabel))
-                            Text(timeText)
-                        }
-                    }
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                    )
                 }
                 if (reminder.type != ReminderType.OUT_OF_STOCK && reminder.type != ReminderType.EXPIRATION_DATE) {
-                    OutlinedTextField(
-                        value = amount,
-                        onValueChange = { amount = it; onEditAmount(reminder.id, it) },
-                        label = { Text(stringResource(R.string.dosage)) },
-                        singleLine = true,
-                        modifier = Modifier.weight(1f).padding(4.dp).onFocusChanged { amountFocused = it.isFocused },
+                    EditTextButton(
+                        label = stringResource(R.string.dosage),
+                        value = reminder.amount,
+                        onConfirm = { onEditAmount(reminder.id, it) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp),
                     )
                 }
             }
@@ -109,7 +110,7 @@ fun ReminderCard(
                 Icon(painterResource(R.drawable.gear), contentDescription = null)
                 Text(stringResource(R.string.advanced_settings), modifier = Modifier.padding(start = 8.dp))
             }
-            Text(reminder.summary)
+            Text(reminder.summary, style = MaterialTheme.typography.bodySmall)
         }
     }
 }

@@ -1,8 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine.dialogs
 
-import android.app.Dialog
-import android.view.ViewGroup
-import android.widget.Button
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
@@ -18,9 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R as CoreUiR
-import com.futsch1.medtimer.feature.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.EditMedicineFragment
-import com.google.android.material.textfield.TextInputEditText
 
 @Composable
 fun NotesDialog(notes: String, onSave: (String) -> Unit, onDismiss: () -> Unit) {
