@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R as CoreUiR
@@ -20,6 +21,7 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 fun NotesDialog(notes: String, onSave: (String) -> Unit, onDismiss: () -> Unit) {
     var draft by rememberSaveable { mutableStateOf(notes) }
     AlertDialog(
+        modifier = Modifier.testTag(com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags.NOTES_DIALOG),
         onDismissRequest = onDismiss,
         text = {
             OutlinedTextField(

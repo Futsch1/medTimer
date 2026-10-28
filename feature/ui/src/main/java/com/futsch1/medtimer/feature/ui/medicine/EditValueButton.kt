@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
@@ -80,6 +81,7 @@ private fun EditTextDialog(label: String, initialValue: String, onDismiss: () ->
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
     AlertDialog(
+        modifier = Modifier.testTag(EditMedicineTestTags.EDIT_VALUE_DIALOG),
         onDismissRequest = onDismiss,
         title = { Text(label) },
         text = {
@@ -88,7 +90,10 @@ private fun EditTextDialog(label: String, initialValue: String, onDismiss: () ->
                 onValueChange = { draft = it },
                 label = { Text(label) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .testTag(EditMedicineTestTags.EDIT_VALUE_INPUT),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = { onConfirm(draft.text) }),
             )

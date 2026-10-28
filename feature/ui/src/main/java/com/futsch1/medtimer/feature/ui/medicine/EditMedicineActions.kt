@@ -91,10 +91,13 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
     }
 
     Box {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(
+            modifier = Modifier.testTag(EditMedicineTestTags.MENU_BUTTON),
+            onClick = { expanded = true },
+        ) {
             Icon(
                 painter = painterResource(CoreUiR.drawable.three_dots_vertical),
-                contentDescription = stringResource(CoreUiR.string.more_options),
+                contentDescription = stringResource(CoreUiR.string.medicine),
             )
         }
         DropdownMenu(

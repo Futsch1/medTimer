@@ -254,5 +254,10 @@ object EditMedicineTestTags {
     const val ADD_REMINDER = "edit_medicine_add_reminder"
     const val REMINDER_LIST = "edit_medicine_reminder_list"
     const val SETUP_ADD_REMINDER = "edit_medicine_setup_add_reminder"
+    const val REMINDER_CARD = "edit_medicine_reminder_card"
+    const val EDIT_VALUE_DIALOG = "edit_medicine_value_dialog"
+    const val EDIT_VALUE_INPUT = "edit_medicine_value_input"
+    const val NOTES_DIALOG = "edit_medicine_notes_dialog"
     const val MENU = "edit_medicine_menu"
+    const val MENU_BUTTON = "edit_medicine_menu_button"
 }
