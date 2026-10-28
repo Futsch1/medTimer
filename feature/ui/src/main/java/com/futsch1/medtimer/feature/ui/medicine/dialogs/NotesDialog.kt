@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R as CoreUiR
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 
 @Composable
 fun NotesDialog(notes: String, onSave: (String) -> Unit, onDismiss: () -> Unit) {
@@ -37,4 +39,16 @@ fun NotesDialog(notes: String, onSave: (String) -> Unit, onDismiss: () -> Unit) 
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(CoreUiR.string.cancel)) } },
     )
+}
+
+@MedTimerPreview
+@Composable
+private fun NotesDialogPreview() {
+    MedTimerTheme {
+        NotesDialog(
+            notes = "Take with food.\n\nKeep refrigerated after opening.",
+            onSave = {},
+            onDismiss = {},
+        )
+    }
 }

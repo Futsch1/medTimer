@@ -36,6 +36,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 
 @Composable
 fun EditValueButton(label: String, value: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -52,6 +54,14 @@ fun EditValueButton(label: String, value: String, onClick: () -> Unit, modifier:
                 Text(value, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
+    }
+}
+
+@MedTimerPreview
+@Composable
+private fun EditValueButtonPreview() {
+    MedTimerTheme {
+        EditValueButton(label = "Dosage", value = "1 tablet", onClick = {})
     }
 }
 
