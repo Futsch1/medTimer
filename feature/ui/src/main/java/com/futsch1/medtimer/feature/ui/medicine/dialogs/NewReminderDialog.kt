@@ -70,8 +70,9 @@ fun NewReminderFlowDialog(
     onCreate: (NewReminderData) -> Unit,
     onDismiss: () -> Unit,
     onOpenHelp: () -> Unit,
+    initialType: ReminderType? = null,
 ) {
-    var selectedType by rememberSaveable { mutableStateOf<ReminderType?>(null) }
+    var selectedType by rememberSaveable(initialType) { mutableStateOf(initialType) }
     var amount by rememberSaveable { mutableStateOf("") }
     var time by rememberSaveable { mutableStateOf("08:00") }
     var interval by rememberSaveable { mutableStateOf("12") }
@@ -162,7 +163,9 @@ fun NewReminderFlowDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = if (type == null) onDismiss else ({ selectedType = null; invalid = false })) {
+            TextButton(
+                onClick = if (type == null || initialType != null) onDismiss else ({ selectedType = null; invalid = false }),
+            ) {
                 Text(stringResource(CoreUiR.string.cancel))
             }
         },
