@@ -1,21 +1,20 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,27 +23,29 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class EditMedicineScreenViewModel @AssistedInject constructor(
-    @Assisted val medicineId: Int,
+class EditMedicineScreenViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val medicineRepository: MedicineRepository,
     private val reminderRepository: ReminderRepository,
     private val tagRepository: TagRepository,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
+    private val linkedReminderAlgorithms: LinkedReminderAlgorithms,
     @param:ApplicationContext private val context: Context,
     @Dispatcher(MedTimerDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    @AssistedFactory
-    fun interface Factory {
-        fun create(medicineId: Int): EditMedicineScreenViewModel
-    }
-
+    val medicineId: Int = checkNotNull(savedStateHandle["medicineId"])
     val medicine = medicineRepository.getFlow(medicineId)
+
     private val reminderSummaries: MutableSharedFlow<Map<Int, String>> = MutableSharedFlow()
 
     val state: EditMedicineScreenState
         field = MutableEditMedicineScreenState()
+
+    val fragmentState: EditMedicineFragmentState
+        field = MutableEditMedicineFragmentState()
 
     init {
         viewModelScope.launch {
@@ -56,6 +57,7 @@ class EditMedicineScreenViewModel @AssistedInject constructor(
                     }
                     reminderSummaries.emit(summaries)
                 }
+                fragmentState.medicine = it
             }
         }
 
@@ -70,7 +72,8 @@ class EditMedicineScreenViewModel @AssistedInject constructor(
         state.icon = medicine.iconId
         state.name = medicine.name
         state.color = medicine.color
-        state.reminders = medicine.reminders.map { reminder ->
+
+        state.reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders).map { reminder ->
             ReminderItem(
                 id = reminder.id,
                 timeVisible = reminder.usesTimeInMinutes,
@@ -131,6 +134,52 @@ class EditMedicineScreenViewModel @AssistedInject constructor(
                 medicineRepository.delete(medicineId)
             }
             finishCallback()
+        }
+    }
+
+    fun deleteReminder(id: Int) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                reminderRepository.delete(id)
+            }
+        }
+    }
+
+    fun editAmount(id: Int, amount: String) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                val reminder = reminderRepository.fetch(id) ?: return@withContext
+                reminderRepository.update(reminder.copy(amount = amount))
+            }
+        }
+    }
+
+    fun editTime(id: Int, timeMinutesOfDay: Int) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                val reminder = reminderRepository.fetch(id) ?: return@withContext
+                if (timeMinutesOfDay >= 0 && reminder.usesTimeInMinutes) {
+                    reminderRepository.update(reminder.copy(time = ReminderTime(timeMinutesOfDay)))
+                }
+            }
+        }
+    }
+
+    fun editIcon(iconId: Int) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
+                medicineRepository.update(medicine.copy(iconId = iconId))
+            }
+        }
+    }
+
+    fun editNotes(notes: String) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
+                medicineRepository.update(medicine.copy(notes = notes))
+            }
         }
     }
 

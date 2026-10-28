@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
 
 @Composable
@@ -25,9 +26,11 @@ fun EditMedicineScreen(
     editMedicineScreenViewModel: EditMedicineScreenViewModel,
     onReminderAdd: () -> Unit,
     onReminderDelete: (id: Int) -> Unit,
-    onReminderEdit: (id: Int) -> Unit,
+    onReminderEdit: (id: Int, type: ReminderType) -> Unit,
     onEditAmount: (id: Int, amount: String) -> Unit,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
+    onEditIcon: (iconId: Int) -> Unit,
+    onEditNotes: (notes: String) -> Unit = {},
     onOpenHelp: () -> Unit,
     onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit
 ) {
@@ -38,6 +41,8 @@ fun EditMedicineScreen(
         onReminderEdit,
         onEditAmount,
         onEditTime,
+        onEditIcon,
+        onEditNotes,
         onOpenHelp,
         onOpenSubmenu
     )
@@ -48,9 +53,11 @@ fun EditMedicineScreen(
     editMedicineScreenState: EditMedicineScreenState,
     onReminderAdd: () -> Unit = {},
     onReminderDelete: (id: Int) -> Unit = {},
-    onReminderEdit: (id: Int) -> Unit = {},
+    onReminderEdit: (id: Int, type: ReminderType) -> Unit = { _, _ -> },
     onEditAmount: (id: Int, amount: String) -> Unit = { _, _ -> },
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit = { _, _ -> },
+    onEditIcon: (iconId: Int) -> Unit = {},
+    onEditNotes: (notes: String) -> Unit = {},
     onOpenHelp: () -> Unit = {},
     onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit = {}
 ) {
