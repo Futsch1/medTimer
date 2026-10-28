@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine.dialogs
 
-import android.app.TimePickerDialog
-import android.text.format.DateFormat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,6 +42,7 @@ import com.futsch1.medtimer.feature.ui.medicine.EditValueButton
 import com.futsch1.medtimer.feature.ui.medicine.NewReminderData
 import com.futsch1.medtimer.feature.ui.medicine.NewReminderExpirationFrequency
 import com.futsch1.medtimer.feature.ui.medicine.NewReminderStockFrequency
+import com.futsch1.medtimer.feature.ui.medicine.showMaterialTimePicker
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.EditIntervalDialog
 import java.time.Instant
 import java.time.LocalDate
@@ -448,19 +447,13 @@ private fun TimeField(label: Int, value: String, onValueChange: (String) -> Unit
         label = stringResource(label),
         value = value,
         onClick = {
-            TimePickerDialog(
-                context,
-                { _, hour, minute ->
-                    onValueChange(
-                        "${hour.toString().padStart(2, '0')}:${
-                            minute.toString().padStart(2, '0')
-                        }"
-                    )
-                },
-                time.hour,
-                time.minute,
-                DateFormat.is24HourFormat(context),
-            ).show()
+            showMaterialTimePicker(context, time) { selectedTime ->
+                onValueChange(
+                    "${selectedTime.hour.toString().padStart(2, '0')}:${
+                        selectedTime.minute.toString().padStart(2, '0')
+                    }"
+                )
+            }
         },
         modifier = Modifier.fillMaxWidth(),
     )

@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
-import android.app.TimePickerDialog
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +32,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.getHelp
 import com.futsch1.medtimer.core.ui.getIcon
 import com.futsch1.medtimer.core.ui.getTitle
+import java.time.LocalTime
 import java.util.Calendar
 
 @Composable
@@ -76,21 +76,19 @@ fun ReminderCard(
                     }
                     val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
                     else DateFormat.getTimeFormat(context).format(calendar.time)
-                    val hint = reminder.timeHint?.let { stringResource(it) }
                     EditValueButton(
                         label = stringResource(reminder.timeLabel),
                         value = timeText,
                         onClick = {
-                            TimePickerDialog(
-                                context,
-                                { _, hour, minute ->
-                                    val selectedMinutes = hour * 60 + minute
-                                    if (selectedMinutes != minutes) onEditTime(reminder.id, selectedMinutes)
-                                },
-                                minutes / 60,
-                                minutes % 60,
-                                reminder.timeHint != null || DateFormat.is24HourFormat(context)
-                            ).apply { if (hint != null) setTitle(hint) }.show()
+                            showMaterialTimePicker(
+                                context = context,
+                                time = LocalTime.of(minutes / 60, minutes % 60),
+                                titleText = reminder.timeHint,
+                                force24Hour = reminder.timeHint != null,
+                            ) { selectedTime ->
+                                val selectedMinutes = selectedTime.hour * 60 + selectedTime.minute
+                                if (selectedMinutes != minutes) onEditTime(reminder.id, selectedMinutes)
+                            }
                         },
                         modifier = Modifier
                             .weight(1f)

@@ -157,7 +157,7 @@ class MedicineEditorRobot(
 
     private fun setTime(@StringRes label: Int, time: LocalTime) {
         dialogScope().click(hasText(ui.getString(label)))
-        pickers.pickSystemTime(time)
+        pickers.pickTime(time)
     }
 
     private fun setIntervalHours(interval: Duration) {
