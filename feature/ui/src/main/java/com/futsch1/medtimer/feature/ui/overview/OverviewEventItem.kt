@@ -61,7 +61,6 @@ internal val RAIL_PILL_RESTING_HEIGHT = RAIL_PILL_WIDTH * 2
 internal val RAIL_INSET =
     (EVENT_SPACING + EVENT_STATE_BUTTON_MARGIN * 2 - RAIL_PILL_RESTING_HEIGHT) / 2
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 @SuppressWarnings("kotlin:S107")
 fun OverviewEventItem(

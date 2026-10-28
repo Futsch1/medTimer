@@ -42,17 +42,10 @@ fun ReminderCard(
     onEditAmount: (id: Int, amount: String) -> Unit,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit
 ) {
-    val context = LocalContext.current
     var showTypeHelp by rememberSaveable(reminder.id) { mutableStateOf(false) }
 
     if (showTypeHelp) {
-        AlertDialog(
-            onDismissRequest = { showTypeHelp = false },
-            icon = { Icon(painterResource(reminder.type.getIcon()), contentDescription = null) },
-            title = { Text(stringResource(reminder.type.getTitle())) },
-            text = { Text(stringResource(reminder.type.getHelp())) },
-            confirmButton = { TextButton(onClick = { showTypeHelp = false }) { Text(stringResource(R.string.ok)) } },
-        )
+        ReminderTypeHelpDialog(reminder) { showTypeHelp = false }
     }
 
     ElevatedCard(Modifier
@@ -69,31 +62,7 @@ fun ReminderCard(
                     )
                 }
                 if (reminder.timeVisible) {
-                    val minutes = reminder.timeMinutesOfDay
-                    val calendar = Calendar.getInstance().apply {
-                        set(Calendar.HOUR_OF_DAY, minutes / 60)
-                        set(Calendar.MINUTE, minutes % 60)
-                    }
-                    val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
-                    else DateFormat.getTimeFormat(context).format(calendar.time)
-                    EditValueButton(
-                        label = stringResource(reminder.timeLabel),
-                        value = timeText,
-                        onClick = {
-                            showMaterialTimePicker(
-                                context = context,
-                                time = LocalTime.of(minutes / 60, minutes % 60),
-                                titleText = reminder.timeHint,
-                                force24Hour = reminder.timeHint != null,
-                            ) { selectedTime ->
-                                val selectedMinutes = selectedTime.hour * 60 + selectedTime.minute
-                                if (selectedMinutes != minutes) onEditTime(reminder.id, selectedMinutes)
-                            }
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(4.dp),
-                    )
+                    ReminderTimeField(reminder, onEditTime, Modifier.weight(1f).padding(4.dp))
                 }
                 if (reminder.type != ReminderType.OUT_OF_STOCK && reminder.type != ReminderType.EXPIRATION_DATE) {
                     EditTextButton(
@@ -113,4 +82,47 @@ fun ReminderCard(
             Text(reminder.summary, style = MaterialTheme.typography.bodySmall)
         }
     }
+}
+
+@Composable
+private fun ReminderTypeHelpDialog(reminder: ReminderItem, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(painterResource(reminder.type.getIcon()), contentDescription = null) },
+        title = { Text(stringResource(reminder.type.getTitle())) },
+        text = { Text(stringResource(reminder.type.getHelp())) },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ok)) } },
+    )
+}
+
+@Composable
+private fun ReminderTimeField(
+    reminder: ReminderItem,
+    onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val minutes = reminder.timeMinutesOfDay
+    val calendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, minutes / 60)
+        set(Calendar.MINUTE, minutes % 60)
+    }
+    val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
+    else DateFormat.getTimeFormat(context).format(calendar.time)
+    EditValueButton(
+        label = stringResource(reminder.timeLabel),
+        value = timeText,
+        onClick = {
+            showMaterialTimePicker(
+                context = context,
+                time = LocalTime.of(minutes / 60, minutes % 60),
+                titleText = reminder.timeHint,
+                force24Hour = reminder.timeHint != null,
+            ) { selectedTime ->
+                val selectedMinutes = selectedTime.hour * 60 + selectedTime.minute
+                if (selectedMinutes != minutes) onEditTime(reminder.id, selectedMinutes)
+            }
+        },
+        modifier = modifier,
+    )
 }

@@ -199,6 +199,7 @@ private fun ReminderTypeChooser(onSelect: (ReminderType) -> Unit) {
     }
 }
 
+@SuppressWarnings("kotlin:S107")
 @Composable
 private fun ReminderDetailsFields(
     type: ReminderType,
@@ -304,6 +305,7 @@ private fun ExpirationReminderFields(
     TimeField(CoreUiR.string.time, time, onTimeChange)
 }
 
+@SuppressWarnings("kotlin:S107")
 @Composable
 private fun ScheduledReminderFields(
     type: ReminderType,

@@ -198,7 +198,6 @@ private object WindowOriginPositionProvider : PopupPositionProvider {
  * The arc's visual content,
  * factored out from [ArcActionMenu] so previews can render it fully revealed without going through the popup/stagger lifecycle.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun ArcActionButtons(
     buttons: List<Button>,

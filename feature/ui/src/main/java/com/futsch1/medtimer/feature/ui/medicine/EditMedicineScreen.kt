@@ -50,6 +50,7 @@ import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderFlowDialog
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import kotlinx.collections.immutable.persistentListOf
 
+@SuppressWarnings("kotlin:S107")
 @Composable
 fun EditMedicineScreen(
     editMedicineScreenViewModel: EditMedicineScreenViewModel,
@@ -79,6 +80,7 @@ fun EditMedicineScreen(
     )
 }
 
+@SuppressWarnings("kotlin:S107")
 @Composable
 fun EditMedicineScreen(
     editMedicineScreenState: EditMedicineScreenState,
@@ -247,6 +249,7 @@ private fun MedicineDetailsCard(
     }
 }
 
+@SuppressWarnings("kotlin:S107")
 @Composable
 private fun ReminderList(
     state: EditMedicineScreenState,

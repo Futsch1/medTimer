@@ -76,7 +76,7 @@ internal class JSONReminderEventBackupUnitTest {
     ) {
         assertEquals(expected.size, actual.size)
         for (i in actual.indices) {
-            compareReminderEvent(actual.get(i), expected.get(i))
+            compareReminderEvent(actual[i], expected[i])
         }
     }
 

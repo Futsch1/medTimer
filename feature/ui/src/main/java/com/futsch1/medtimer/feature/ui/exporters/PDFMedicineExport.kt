@@ -31,7 +31,6 @@ class PDFMedicineExport @AssistedInject constructor(
         fun create(medicines: List<Medicine>, fragmentManager: FragmentManager): PDFMedicineExport
     }
 
-    @OptIn(ExperimentalTime::class)
     override suspend fun exportInternal(file: File) {
         val simplyPdfDocument: SimplyPdfDocument = getDocument(context, file)
 

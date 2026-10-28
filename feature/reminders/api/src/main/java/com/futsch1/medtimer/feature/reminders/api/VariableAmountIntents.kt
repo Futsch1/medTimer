@@ -10,6 +10,6 @@ fun getVariableAmountActivityIntent(context: Context, reminderNotificationData: 
     val intent = Intent(ActivityCodes.VARIABLE_AMOUNT_ACTIVITY)
     intent.setClassName(context, "com.futsch1.medtimer.MainActivity")
     reminderNotificationData.writeTo(intent)
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
     return intent
 }

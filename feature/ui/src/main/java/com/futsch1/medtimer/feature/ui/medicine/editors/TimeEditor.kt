@@ -89,11 +89,4 @@ class TimeEditor @AssistedInject constructor(
         }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
     }
 
-    fun getMinutes(): Int {
-        if (durationHintText != null) {
-            return TimeHelper.durationStringToMinutes(timeEdit.getText().toString())
-        }
-        return timeFormatter.timeStringToMinutes(timeEdit.getText().toString())
-    }
-
 }

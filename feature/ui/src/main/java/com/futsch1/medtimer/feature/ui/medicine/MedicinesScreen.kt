@@ -3,7 +3,6 @@ package com.futsch1.medtimer.feature.ui.medicine
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -133,7 +131,7 @@ fun MedicinesScreen(
             }
             items(reorderableMedicines.medicines, key = { it.id }) { medicine ->
                 ReorderableItem(reorderableMedicines.reorderState, key = medicine.id) { isDragging ->
-                    SwipeToDeleteContainer( { onMedicineDelete(medicine.id) }) {
+                    SwipeToDeleteContainer({ onMedicineDelete(medicine.id) }) {
                         MedicineCard(
                             medicine = medicine,
                             onMedicineEdit = onMedicineEdit,
@@ -300,7 +298,11 @@ fun MedicinesScreenPreview() {
                 tags = persistentListOf("Tag"),
                 stockState = StockState("5 left", true, "08/01/25"),
                 color = Color.LightGray.toArgb(),
-                icon = ResourcesCompat.getDrawable(LocalResources.current, R.drawable.capsule, LocalContext.current.theme)
+                icon = ResourcesCompat.getDrawable(
+                    LocalResources.current,
+                    R.drawable.capsule,
+                    LocalContext.current.theme
+                )
                     ?.toBitmap()
             ),
         )

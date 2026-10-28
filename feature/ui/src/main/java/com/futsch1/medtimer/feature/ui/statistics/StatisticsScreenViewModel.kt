@@ -64,11 +64,11 @@ class StatisticsScreenViewModel @Inject constructor(
     // Seed the screen state from persistence at construction time. Doing this in the constructor
     // (rather than defaulting to the fallback and mutating in init) avoids a race where the charts'
     // snapshotFlow reads the default range before the persisted value is visible across dispatchers.
-    private val _state = MutableStatisticsScreenState(
-        activeView = persistentDataDataSource.data.value.activeStatisticsFragment,
-        analysisDays = persistentDataDataSource.data.value.analysisDays,
-    )
-    val state: StatisticsScreenState get() = _state
+    val state: StatisticsScreenState
+        field = MutableStatisticsScreenState(
+            activeView = persistentDataDataSource.data.value.activeStatisticsFragment,
+            analysisDays = persistentDataDataSource.data.value.analysisDays,
+        )
 
     // Search input lives on a flow so the field updates instantly while only the (potentially heavy)
     // row scan is debounced and pushed off the main thread.
@@ -94,7 +94,7 @@ class StatisticsScreenViewModel @Inject constructor(
         // off the main thread. Each slice writes only its own property, so one input recomputes one slice.
         combine(
             reminderEvents,
-            snapshotFlow { _state.analysisDays },
+            snapshotFlow { state.analysisDays },
             medicineRepository.getAllFlow(),
         ) { events, days, medicines ->
             val data = statisticsProvider.aggregate(events, days)
@@ -106,21 +106,21 @@ class StatisticsScreenViewModel @Inject constructor(
             chartsPresenter.present(data, medicineColorsByName, days)
         }
             .flowOn(ioDispatcher)
-            .onEach { _state.charts = it }
+            .onEach { state.charts = it }
             .launchIn(viewModelScope)
 
         // Estimated levels share the Analysis range with the charts, but only medicines with half-life and time to peak set appear.
         // The curve is split at the current time, so it is also recomputed periodically while the screen is open.
         combine(
             reminderEvents,
-            snapshotFlow { _state.analysisDays },
+            snapshotFlow { state.analysisDays },
             medicineRepository.getAllFlow(),
             levelsClock,
         ) { events, days, medicines, _ ->
             levelsPresenter.present(events, medicines, days)
         }
             .flowOn(ioDispatcher)
-            .onEach { _state.levels = it }
+            .onEach { state.levels = it }
             .launchIn(viewModelScope)
 
         // All taken/skipped events, tag-filtered, then presented as rows. The in-screen text filter is
@@ -134,7 +134,7 @@ class StatisticsScreenViewModel @Inject constructor(
             reminderTablePresenter.present(tagEventFilter.filter(events, selectedTagIds, tags))
         }
             .flowOn(ioDispatcher)
-            .onEach { _state.tableRows = it }
+            .onEach { state.tableRows = it }
             .launchIn(viewModelScope)
 
         // The provider re-reads its own time window on each emission of the shared event flow, so the
@@ -143,7 +143,7 @@ class StatisticsScreenViewModel @Inject constructor(
             .structuredEventsFlow(ALL_MEDICINES, CALENDAR_PAST_MONTHS)
             .map { it.toImmutableMap() }
             .flowOn(ioDispatcher)
-            .onEach { _state.calendarDayEvents = it }
+            .onEach { state.calendarDayEvents = it }
             .launchIn(viewModelScope)
 
         // Table text filter: the field reflects every keystroke immediately via `query`, while only
@@ -151,31 +151,31 @@ class StatisticsScreenViewModel @Inject constructor(
         // history can't jank typing. Wired last so the first scan sees the table rows the combine
         // above already produced.
         searchTextFlow
-            .onEach { _state.query = it }
+            .onEach { state.query = it }
             .launchIn(viewModelScope)
 
         searchTextFlow
             .debounce(SEARCH_DEBOUNCE_MILLIS.milliseconds)
-            .onEach { _state.debouncedQuery = ReminderRowFilter.normalizeQuery(it) }
+            .onEach { state.debouncedQuery = ReminderRowFilter.normalizeQuery(it) }
             .launchIn(viewModelScope)
 
-        snapshotFlow { ReminderRowFilterInputs(_state.tableRows, _state.debouncedQuery) }
+        snapshotFlow { ReminderRowFilterInputs(state.tableRows, state.debouncedQuery) }
             .filteredRows(filterDispatcher)
-            .onEach { _state.filteredRows = it }
+            .onEach { state.filteredRows = it }
             .launchIn(viewModelScope)
     }
 
     // Write-through selections: skip a redundant persist when unchanged, then update Compose state.
     fun onSelectView(view: StatisticFragment) {
-        if (view == _state.activeView) return
+        if (view == state.activeView) return
         persistentDataDataSource.setActiveStatisticsFragment(view)
-        _state.activeView = view
+        state.activeView = view
     }
 
     fun onSelectRange(days: Int) {
-        if (days == _state.analysisDays) return
+        if (days == state.analysisDays) return
         persistentDataDataSource.setAnalysisDays(days)
-        _state.analysisDays = days
+        state.analysisDays = days
     }
 
     fun onSearchQueryChange(query: String) {

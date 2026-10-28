@@ -76,7 +76,7 @@ class StatisticsProvider @Inject constructor() {
                 IntArray(days).also { array ->
                     events.forEach { event ->
                         val daysInThePast = getDaysInThePast(event.remindedTimestamp)
-                        if (daysInThePast in 0 until array.size) {
+                        if (daysInThePast in array.indices) {
                             array[daysInThePast]++
                         }
                     }

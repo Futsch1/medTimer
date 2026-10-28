@@ -38,7 +38,6 @@ val ANALYSIS_RANGES: List<Pair<Int, Int>> = listOf(
  * Chip-styled dropdown for picking the Analysis time range (drives the Charts and Levels views). [custom] shows a custom label
  * instead of the selected preset, e.g. after the Levels chart was pinch-zoomed.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RangeDropdown(days: Int, onSelectRange: (Int) -> Unit, modifier: Modifier = Modifier, custom: Boolean = false) {
     var expanded by remember { mutableStateOf(false) }

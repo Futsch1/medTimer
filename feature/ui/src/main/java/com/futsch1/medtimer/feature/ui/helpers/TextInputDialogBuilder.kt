@@ -8,12 +8,12 @@ import androidx.annotation.StringRes
 import androidx.core.view.setPadding
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.BuildConfig
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlin.math.roundToInt
-import com.futsch1.medtimer.core.ui.R
 
 class TextInputDialogBuilder(
     private val context: Context
@@ -63,7 +63,7 @@ class TextInputDialogBuilder(
             id = android.R.id.input
             this@TextInputDialogBuilder.hint?.let { setHint(it) }
             this@TextInputDialogBuilder.initialText?.let { setText(it) }
-            this@TextInputDialogBuilder.inputType?.let { setInputType(it) }
+            this@TextInputDialogBuilder.inputType?.let { inputType = it }
 
             if (!BuildConfig.DEBUG) {
                 postDelayed({

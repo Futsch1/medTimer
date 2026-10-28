@@ -6,6 +6,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
@@ -13,8 +14,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import androidx.compose.ui.unit.dp
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -104,6 +103,6 @@ class SortableTableTest {
 
         val sorted = sortRows(byNumericSortValue, sortColumn = 0, sortDirection = SortDirection.DESCENDING)
 
-        assertTrue(sorted.map { it.cells[0].text } == listOf("thirty", "ten", "two"))
+        assertEquals(listOf("thirty", "ten", "two"), sorted.map { it.cells[0].text })
     }
 }

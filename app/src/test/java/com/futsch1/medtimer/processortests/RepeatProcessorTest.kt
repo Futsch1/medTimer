@@ -2,6 +2,7 @@ package com.futsch1.medtimer.processortests
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import com.futsch1.medtimer.core.datastore.di.DatastoreModule
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -15,7 +16,6 @@ import com.futsch1.medtimer.database.dao.ReminderEventDao
 import com.futsch1.medtimer.database.dao.TagDao
 import com.futsch1.medtimer.database.di.DatabaseModule
 import com.futsch1.medtimer.feature.reminders.RepeatProcessor
-import com.futsch1.medtimer.core.common.di.TimeAccessModule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -69,20 +69,24 @@ class RepeatProcessorTest {
     val boundReminderRepository: ReminderRepository = reminderContext.repositoryFakes.reminderRepositoryMock
 
     @BindValue
-    val boundReminderEventRepository: ReminderEventRepository = reminderContext.repositoryFakes.reminderEventRepositoryMock
+    val boundReminderEventRepository: ReminderEventRepository =
+        reminderContext.repositoryFakes.reminderEventRepositoryMock
 
     @BindValue
-    val boundPreferencesDataSource: com.futsch1.medtimer.core.datastore.PreferencesDataSource = reminderContext.preferencesDataSourceMock
+    val boundPreferencesDataSource: com.futsch1.medtimer.core.datastore.PreferencesDataSource =
+        reminderContext.preferencesDataSourceMock
 
     @BindValue
-    val boundPersistentDataDataSource: com.futsch1.medtimer.core.datastore.PersistentDataDataSource = reminderContext.persistentDataDataSourceMock
+    val boundPersistentDataDataSource: com.futsch1.medtimer.core.datastore.PersistentDataDataSource =
+        reminderContext.persistentDataDataSourceMock
 
     @BindValue
-    val boundTimeAccess: com.futsch1.medtimer.core.common.time.TimeAccess = object : com.futsch1.medtimer.core.common.time.TimeAccess {
-        override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
-        override fun localDate(): java.time.LocalDate = reminderContext.localDate
-        override fun now(): java.time.Instant = reminderContext.instant
-    }
+    val boundTimeAccess: com.futsch1.medtimer.core.common.time.TimeAccess =
+        object : com.futsch1.medtimer.core.common.time.TimeAccess {
+            override fun systemZone(): java.time.ZoneId = java.time.ZoneId.of("UTC")
+            override fun localDate(): java.time.LocalDate = reminderContext.localDate
+            override fun now(): java.time.Instant = reminderContext.instant
+        }
 
     @BindValue
     val boundMedicineRoomDatabase: MedicineRoomDatabase = mock()
@@ -127,8 +131,8 @@ class RepeatProcessorTest {
             repeatProcessor.processRepeat(reminderNotificationData, 10.seconds)
         }
 
-        assertEquals(reminderContext.repositoryFakes.reminderEvents[0].remainingRepeats, -1)
-        assertEquals(reminderContext.repositoryFakes.reminderEvents[1].remainingRepeats, -1)
+        assertEquals(-1, reminderContext.repositoryFakes.reminderEvents[0].remainingRepeats)
+        assertEquals(-1, reminderContext.repositoryFakes.reminderEvents[1].remainingRepeats)
         verify(reminderContext.alarmManagerMock, times(1)).setAndAllowWhileIdle(anyInt(), eq(10_000L), any())
     }
 }

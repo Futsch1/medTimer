@@ -9,8 +9,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-// Mirrors the app's XML Theme.Material3.DynamicColors: dynamic color on API 31+, static fallback below.
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MedTimerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

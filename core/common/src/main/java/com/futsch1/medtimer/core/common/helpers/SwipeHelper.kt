@@ -13,7 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int, icon: Int) : ItemTouchHelper.SimpleCallback(dragDirs, SWIPE_DIRS) {
+abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int, icon: Int) :
+    ItemTouchHelper.SimpleCallback(dragDirs, SWIPE_DIRS) {
     private val intrinsicWidth: Int
     private val intrinsicHeight: Int
 
@@ -41,14 +42,20 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         val isCanceled = (dX == 0f) && !isCurrentlyActive
 
         if (isCanceled) {
-            clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
+            clearCanvas(
+                c,
+                itemView.right + dX,
+                itemView.top.toFloat(),
+                itemView.right.toFloat(),
+                itemView.bottom.toFloat()
+            )
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, false)
             return
         }
 
         if (dX < 0) {
             val itemHeight = itemView.bottom - itemView.top
-            
+
             drawSwipeBar(c, dX, itemView, itemHeight)
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -69,7 +76,7 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
         val alpha = getAlpha(itemView)
 
         swipeIcon.alpha = alpha
-        background.setAlpha(alpha)
+        background.alpha = alpha
         swipeIcon.bounds = itemBounds
         background.draw(c)
         swipeIcon.draw(c)
@@ -112,12 +119,22 @@ abstract class SwipeHelper protected constructor(context: Context, dragDirs: Int
     }
 
     companion object {
-        private const val DRAG_DIRS = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END
+        private const val DRAG_DIRS =
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END
         private const val SWIPE_DIRS = ItemTouchHelper.LEFT
 
-        fun createSwipeHelper(context: Context, swipedCallback: SwipedCallback, movedCallback: MovedCallback?): ItemTouchHelper {
-            val swipeHelper: SwipeHelper = object : SwipeHelper(context, if (movedCallback != null) DRAG_DIRS else 0, android.R.drawable.ic_menu_delete) {
-                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        fun createSwipeHelper(
+            context: Context,
+            swipedCallback: SwipedCallback,
+            movedCallback: MovedCallback?
+        ): ItemTouchHelper {
+            val swipeHelper: SwipeHelper = object :
+                SwipeHelper(context, if (movedCallback != null) DRAG_DIRS else 0, android.R.drawable.ic_menu_delete) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
                     return if (movedCallback != null) {
                         this.toPosition = target.getBindingAdapterPosition()
                         movedCallback.onMoved(viewHolder.getBindingAdapterPosition(), this.toPosition)

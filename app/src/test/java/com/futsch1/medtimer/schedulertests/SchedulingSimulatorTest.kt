@@ -1,12 +1,12 @@
 package com.futsch1.medtimer.schedulertests
 
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
-import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.feature.reminders.api.scheduling.SchedulingSimulator
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import com.futsch1.medtimer.schedulertests.TestHelper.assertRemindedAtIndex
@@ -385,17 +385,17 @@ class SchedulingSimulatorTest {
             simulatedReminders.add(simulatedReminder)
             if (simulatedReminders.size == 1) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(simulatedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(120 * 60))
+                assertEquals(Instant.ofEpochSecond(120 * 60), simulatedReminder.scheduledReminder.timestamp)
             }
             if (simulatedReminders.size == 2) {
                 assertEquals(LocalDate.EPOCH, localDate)
-                assertEquals(simulatedReminder.scheduledReminder.timestamp, Instant.ofEpochSecond(600 * 60))
+                assertEquals(Instant.ofEpochSecond(600 * 60), simulatedReminder.scheduledReminder.timestamp)
             }
             if (simulatedReminders.size == 3) {
                 assertEquals(LocalDate.EPOCH.plusDays(1), localDate)
                 assertEquals(
-                    simulatedReminder.scheduledReminder.timestamp,
-                    Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60)
+                    Instant.ofEpochSecond(120 * 60 + 24 * 60 * 60),
+                    simulatedReminder.scheduledReminder.timestamp
                 )
             }
             simulatedReminders.size < 3
@@ -431,7 +431,7 @@ class SchedulingSimulatorTest {
                 assertEquals(LocalDate.EPOCH.plusDays(2), localDate)
                 assertEquals(6.0, simulatedReminder.stockBefore)
                 assertEquals(6.0, simulatedReminder.stockAfter)
-                assertEquals(simulatedReminder.scheduledReminder.reminder.reminderType, ReminderType.OUT_OF_STOCK)
+                assertEquals(ReminderType.OUT_OF_STOCK, simulatedReminder.scheduledReminder.reminder.reminderType)
             }
             simulatedReminders.size < 3
         }

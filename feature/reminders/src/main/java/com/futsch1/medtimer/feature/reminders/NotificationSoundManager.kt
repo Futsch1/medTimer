@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Manages notification sound settings and "Do Not Disturb" overrides for reminders.
@@ -27,7 +28,7 @@ class NotificationSoundManager @Inject constructor(
     private val overrideDnd = preferencesDataSource.preferences.value.overrideDnd
 
     init {
-        if (notificationManager.isNotificationPolicyAccessGranted() && overrideDnd) {
+        if (notificationManager.isNotificationPolicyAccessGranted && overrideDnd) {
             loadPendingRingerMode(audioManager, notificationManager)
         }
     }
@@ -74,7 +75,7 @@ class NotificationSoundManager @Inject constructor(
             if (pending) {
                 restoreJob?.cancel()
                 restoreJob = scope.launch {
-                    delay(5000)
+                    delay(5000.milliseconds)
                     performRestore(audioManager)
                 }
             }

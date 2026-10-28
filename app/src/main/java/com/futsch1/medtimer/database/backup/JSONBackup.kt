@@ -70,7 +70,7 @@ abstract class JSONBackup<T> protected constructor(private val contentClass: Cla
             for (f in fields) {
                 try {
                     if (f[pojo] == null) {
-                        throw JsonParseException("Missing field in JSON: " + f.getName())
+                        throw JsonParseException("Missing field in JSON: " + f.name)
                     }
                 } catch (e: IllegalArgumentException) {
                     Log.e(LogTags.BACKUP, "Internal error: ${e.message}")
