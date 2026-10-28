@@ -4,30 +4,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-interface EditMedicineFragmentState {
-    val medicine: Medicine?
-}
-
-class MutableEditMedicineFragmentState : EditMedicineFragmentState {
-    override var medicine by mutableStateOf<Medicine?>(null)
-}
-
 interface EditMedicineScreenState {
-    val id: Int
+    val id: Int?
+    val amount: Double
+    val unit: String
     val name: String
+    val notes: String?
     val color: Int?
     val icon: Int
     val reminders: ImmutableList<ReminderItem>
 }
 
 class MutableEditMedicineScreenState : EditMedicineScreenState {
-    override var id by mutableIntStateOf(0)
+    override var id by mutableStateOf<Int?>(null)
+    override var amount by mutableStateOf(0.0)
+    override var unit by mutableStateOf("")
     override var name by mutableStateOf("")
+    override var notes by mutableStateOf<String?>(null)
     override var color by mutableStateOf<Int?>(null)
     override var icon by mutableIntStateOf(0)
     override var reminders by mutableStateOf<ImmutableList<ReminderItem>>(persistentListOf())

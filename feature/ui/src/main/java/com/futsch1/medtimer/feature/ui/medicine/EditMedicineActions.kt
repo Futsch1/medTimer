@@ -49,7 +49,7 @@ class EditMedicineActions @AssistedInject constructor(
         )
     }
 
-    val notes: String? get() = editMedicineScreenViewModel.fragmentState.medicine?.notes
+    val notes: String? get() = editMedicineScreenViewModel.state.notes
 
     fun saveNotes(notes: String) = editMedicineScreenViewModel.editNotes(notes)
 

@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.testTag
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -24,10 +23,6 @@ import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
-import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
-import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
-import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTypeDialog
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
@@ -67,9 +62,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var linkedReminderHandlingFactory: LinkedReminderHandling.Factory
 
     @Inject
-    lateinit var newReminderTypeDialogFactory: NewReminderTypeDialog.Factory
-
-    @Inject
     lateinit var editMedicineSubmenusFactory: EditMedicineSubmenus.Factory
 
     @Inject
@@ -92,8 +84,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private lateinit var appOptionsActions: AppOptionsActions
     private val editMedicineScreenViewModel: EditMedicineScreenViewModel by viewModels()
-    private val appOptionsViewModel: AppOptionsViewModel by viewModels()
-    private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,33 +105,17 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                 MedTimerTheme {
                     Column(Modifier.testTag(ScreenTestTags.MEDICINES)) {
                         MedTimerTopAppBar(
-                            title = editMedicineScreenViewModel.fragmentState.medicine?.name ?: "...",
+                            title = editMedicineScreenViewModel.state.name.ifEmpty { "..." },
                             actions = {
                                 EditMedicineMenu(editMedicineActions)
-                                AppOptionsMenuHost(
-                                    fragment = this@EditMedicineFragment,
-                                    actions = appOptionsActions,
-                                    optionsViewModel = appOptionsViewModel,
-                                    tagFilterViewModel = tagFilterViewModel,
-                                    tagsFragmentFactory = tagsFragmentFactory,
-                                )
                             },
                         )
                         EditMedicineScreen(
                             editMedicineScreenViewModel = editMedicineScreenViewModel,
                             onEditName = editMedicineScreenViewModel::editName,
-                            onReminderAdd = {
-                                val medicine =
-                                    editMedicineScreenViewModel.fragmentState.medicine ?: return@EditMedicineScreen
-
-                                newReminderTypeDialogFactory.create(
-                                    requireActivity(),
-                                    medicine,
-                                    appOptionsActions
-                                )
-                            },
+                            onCreateReminder = editMedicineScreenViewModel::createReminder,
                             onReminderDelete = editMedicineScreenViewModel::deleteReminder,
-                            onReminderEdit = { id, type ->
+                            onReminderEdit = { id: Int, type: ReminderType ->
                                 val action =
                                     if (type == ReminderType.OUT_OF_STOCK || type == ReminderType.EXPIRATION_DATE) {
                                         EditMedicineFragmentDirections.actionEditMedicineFragmentToAdvancedReminderPreferencesStockExpirationFragment(
@@ -162,7 +136,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                             onEditReminderTime = editMedicineScreenViewModel::editReminderTime,
                             onSelectIcon = ::openIconDialog,
                             onEditNotes = editMedicineScreenViewModel::editNotes,
-                            onOpenSubmenu = { submenu ->
+                            onOpenSubmenu = { submenu: EditMedicineSubmenus.Submenu ->
                                 editMedicineActions.open(submenu)
                             },
                             onOpenHelp = { appOptionsActions.openHelp("getting-started") }
