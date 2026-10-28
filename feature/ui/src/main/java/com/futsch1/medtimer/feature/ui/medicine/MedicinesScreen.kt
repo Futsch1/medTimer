@@ -197,6 +197,7 @@ private fun rememberReorderableMedicines(
 @Composable
 fun SwipeToDeleteContainer(
     onItemDelete: () -> Unit,
+    confirmationMessage: Int = R.string.are_you_sure_delete_medicine,
     content: @Composable () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -216,7 +217,7 @@ fun SwipeToDeleteContainer(
                 scope.launch { dismissState.snapTo(SwipeToDismissBoxValue.Settled) }
             },
             title = { Text(stringResource(R.string.confirm)) },
-            text = { Text(stringResource(R.string.are_you_sure_delete_medicine)) },
+            text = { Text(stringResource(confirmationMessage)) },
             confirmButton = {
                 TextButton(onClick = {
                     showDeleteDialog = false

@@ -112,6 +112,7 @@ class EditMedicineFragment : Fragment() {
                         )
                         EditMedicineScreen(
                             editMedicineScreenViewModel = editMedicineScreenViewModel,
+                            onEditName = editMedicineScreenViewModel::editName,
                             onReminderAdd = {
                                 val medicine =
                                     editMedicineScreenViewModel.fragmentState.medicine ?: return@EditMedicineScreen
@@ -140,8 +141,8 @@ class EditMedicineFragment : Fragment() {
                                     // Intentionally empty (monkey test can cause this to fail)
                                 }
                             },
-                            onEditAmount = editMedicineScreenViewModel::editAmount,
-                            onEditTime = editMedicineScreenViewModel::editTime,
+                            onEditReminderAmount = editMedicineScreenViewModel::editReminderAmount,
+                            onEditReminderTime = editMedicineScreenViewModel::editReminderTime,
                             onEditIcon = editMedicineScreenViewModel::editIcon,
                             onEditNotes = editMedicineScreenViewModel::editNotes,
                             onOpenSubmenu = { submenu ->

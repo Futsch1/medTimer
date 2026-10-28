@@ -3,36 +3,42 @@ package com.futsch1.medtimer.feature.ui.medicine.dialogs
 import android.app.Dialog
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.ui.R as CoreUiR
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.EditMedicineFragment
 import com.google.android.material.textfield.TextInputEditText
 
-class NotesDialog(
-    val editMedicineFragment: EditMedicineFragment
-) {
-    private val dialog: Dialog = Dialog(editMedicineFragment.requireContext())
-    private val notesEditText: TextInputEditText
-
-    init {
-        dialog.setContentView(R.layout.dialog_fragment_notes)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        notesEditText = dialog.findViewById(R.id.notes)
-        notesEditText.setText(editMedicineFragment.notes)
-
-        setupButtons()
-        dialog.show()
-    }
-
-    private fun setupButtons() {
-        dialog.findViewById<Button>(R.id.cancelSaveNotes)
-            .setOnClickListener { _ -> dialog.dismiss() }
-        dialog.findViewById<Button>(R.id.confirmSaveNotes).setOnClickListener {
-            editMedicineFragment.notes = notesEditText.getText().toString()
-            dialog.dismiss()
-        }
-    }
+@Composable
+fun NotesDialog(notes: String, onSave: (String) -> Unit, onDismiss: () -> Unit) {
+    var draft by rememberSaveable { mutableStateOf(notes) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        text = {
+            OutlinedTextField(
+                value = draft,
+                onValueChange = { draft = it },
+                label = { Text(stringResource(CoreUiR.string.notes)) },
+                minLines = 15,
+                modifier = Modifier.fillMaxWidth().heightIn(max = 500.dp),
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { onSave(draft); onDismiss() }) { Text(stringResource(CoreUiR.string.ok)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(CoreUiR.string.cancel)) } },
+    )
 }

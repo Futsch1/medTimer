@@ -145,7 +145,16 @@ class EditMedicineScreenViewModel @Inject constructor(
         }
     }
 
-    fun editAmount(id: Int, amount: String) {
+    fun editName(name: String) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                val medicine = medicineRepository.fetch(medicineId) ?: return@withContext
+                medicineRepository.update(medicine.copy(name = name))
+            }
+        }
+    }
+
+    fun editReminderAmount(id: Int, amount: String) {
         viewModelScope.launch {
             withContext(ioDispatcher) {
                 val reminder = reminderRepository.fetch(id) ?: return@withContext
@@ -154,7 +163,7 @@ class EditMedicineScreenViewModel @Inject constructor(
         }
     }
 
-    fun editTime(id: Int, timeMinutesOfDay: Int) {
+    fun editReminderTime(id: Int, timeMinutesOfDay: Int) {
         viewModelScope.launch {
             withContext(ioDispatcher) {
                 val reminder = reminderRepository.fetch(id) ?: return@withContext
