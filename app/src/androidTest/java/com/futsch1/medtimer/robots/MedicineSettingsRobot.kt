@@ -19,14 +19,12 @@ class MedicineSettingsRobot(
         pressBack()
     }
 
-    /** Selecting the icon closes the settings screen, so this ends on the editor. */
-    fun setColorAndIcon(hex: String, iconPosition: Int) {
+    fun setColor(hex: String) {
         open()
         preferences.click(CoreUiR.string.color)
         preferences.click(CoreUiR.string.select_color)
         pickers.enterHex(hex)
         pressBack()
-        pickers.selectIcon(iconPosition)
     }
 
     fun setNotificationImportance(@StringRes importanceRes: Int) {

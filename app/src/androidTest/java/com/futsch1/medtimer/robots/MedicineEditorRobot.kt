@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.robots
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasTestTag
 import androidx.test.espresso.Espresso.pressBack
@@ -20,6 +21,7 @@ class MedicineEditorRobot(
     private val menus: MenuRobot,
     private val preferences: PreferenceScreenRobot,
     private val pickers: MaterialPickers,
+    private val iconPicker: IconColorPickerRobot,
 ) {
 
     fun assertTitle(expected: String) =
@@ -48,7 +50,16 @@ class MedicineEditorRobot(
 
     fun setAmount(amount: String) = editValue(R.string.dosage, amount)
 
-    fun assertAmount(expected: String) = editorScope().assertDisplayed(hasText(expected))
+    fun assertAmount(expected: String) {
+        val editor = editorScope()
+        editor.scrollUntilText(hasTestTag(EditMedicineTestTags.REMINDER_CARD), hasText(expected), expected)
+        editor.assertDisplayed(hasText(expected))
+    }
+
+    fun selectIcon(position: Int) {
+        editorScope().click(hasContentDescription(ui.getString(R.string.icon)))
+        iconPicker.selectIcon(position)
+    }
 
     private fun editValue(@StringRes label: Int, value: String) {
         editorScope().click(hasText(ui.getString(label)))

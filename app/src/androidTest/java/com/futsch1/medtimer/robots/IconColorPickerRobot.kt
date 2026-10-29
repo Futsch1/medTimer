@@ -21,7 +21,6 @@ class IconColorPickerRobot {
     }
 
     fun selectIcon(position: Int) {
-        onView(withResourceName("selectIcon")).perform(ViewActions.click())
         onView(withResourceName("icd_rcv_icon_list")).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(position, ViewActions.click())
         )

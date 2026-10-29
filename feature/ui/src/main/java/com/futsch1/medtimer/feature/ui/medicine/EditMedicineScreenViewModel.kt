@@ -161,12 +161,12 @@ class EditMedicineScreenViewModel @Inject constructor(
 
     fun editName(name: String) = enqueueEdit {
         val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit
-        medicineRepository.update(medicine.copy(name = name))
+        medicineRepository.update(medicine.copy(name = name.trim()))
     }
 
     fun editReminderAmount(id: Int, amount: String) = enqueueEdit {
         val reminder = reminderRepository.fetch(id) ?: return@enqueueEdit
-        reminderRepository.update(reminder.copy(amount = amount))
+        reminderRepository.update(reminder.copy(amount = amount.trim()))
     }
 
     fun editReminderTime(id: Int, timeMinutesOfDay: Int) = enqueueEdit {
