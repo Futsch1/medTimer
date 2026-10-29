@@ -106,11 +106,18 @@ fun OverviewFilterRow(
                 .padding(top = labelHalfHeight)
                 .drawBehind {
                     val stroke = OUTLINE_WIDTH.toPx()
+                    if (size.width < stroke || size.height < stroke) return@drawBehind
+
                     val gapStart = LABEL_START.toPx()
-                    val gapLeft = if (layoutDirection == LayoutDirection.Ltr) gapStart else size.width - gapStart - labelWidthPx
+                    val gapLeft =
+                        if (layoutDirection == LayoutDirection.Ltr) gapStart else size.width - gapStart - labelWidthPx
                     inset(stroke / 2) {
                         clipRect(gapLeft, -stroke, gapLeft + labelWidthPx, labelHalfHeight.toPx(), ClipOp.Difference) {
-                            drawOutline(ROW_SHAPE.createOutline(size, layoutDirection, this), outlineColor, style = Stroke(stroke))
+                            drawOutline(
+                                ROW_SHAPE.createOutline(size, layoutDirection, this),
+                                outlineColor,
+                                style = Stroke(stroke)
+                            )
                         }
                     }
                 }
