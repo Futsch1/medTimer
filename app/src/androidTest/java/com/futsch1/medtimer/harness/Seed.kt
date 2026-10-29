@@ -42,6 +42,21 @@ class Seed(
         medicineId
     }
 
+    /** Adds a custom manual dose for today, not linked to a reminder. */
+    fun manualDose(medicineName: String, amount: String = "") = runBlocking {
+        val now = timeAccess.now()
+        reminderEventRepository.create(
+            ReminderEvent.default().copy(
+                reminderId = -1,
+                medicineName = medicineName,
+                amount = amount,
+                status = ReminderEvent.ReminderStatus.TAKEN,
+                remindedTimestamp = now,
+                processedTimestamp = now,
+            )
+        )
+    }
+
     /**
      * [count] doses of [medicineName] already taken today, a minute apart from the start of the day, for a list that
      * has to be longer than the screen. They belong to no reminder, the way additional doses do.
@@ -147,17 +162,6 @@ class Seed(
                 newReminder().copy(
                     outOfStockThreshold = threshold,
                     outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-                )
-            )
-        }
-
-        /** Fires at [at] on every day the stock sits below [threshold]. */
-        fun dailyStockReminder(threshold: Double, at: LocalTime) {
-            add(
-                newReminder().copy(
-                    time = ReminderTime(at),
-                    outOfStockThreshold = threshold,
-                    outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
                 )
             )
         }
