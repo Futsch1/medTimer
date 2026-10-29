@@ -19,6 +19,7 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.ScreenTestTags
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
@@ -71,6 +72,9 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var medicineIcons: MedicineIcons
 
     @Inject
+    lateinit var timeFormatter: TimeFormatter
+
+    @Inject
     lateinit var linkedReminderAlgorithms: LinkedReminderAlgorithms
 
     @Inject
@@ -112,6 +116,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                         )
                         EditMedicineScreen(
                             editMedicineScreenViewModel = editMedicineScreenViewModel,
+                            timeFormatter = timeFormatter,
                             onEditName = editMedicineScreenViewModel::editName,
                             onCreateReminder = editMedicineScreenViewModel::createReminder,
                             onReminderDelete = editMedicineScreenViewModel::deleteReminder,

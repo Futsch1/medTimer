@@ -86,6 +86,25 @@ class TimeHelperTest {
     }
 
     @Test
+    fun `should round-trip locale-formatted time values`() {
+        val context = RuntimeEnvironment.getApplication()
+        val preferences = MutableStateFlow(UserPreferences.default())
+        Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
+        val timeFormatter = TimeFormatter(context, mockPreferenceDataSource)
+        val minutes = 13 * 60 + 45
+
+        context.resources.configuration.setLocales(LocaleList(Locale.US))
+        val usTime = timeFormatter.minutesToTimeString(minutes)
+
+        assertEquals(minutes, timeFormatter.timeStringToMinutes(usTime))
+
+        context.resources.configuration.setLocales(LocaleList(Locale.GERMAN))
+        val germanTime = timeFormatter.minutesToTimeString(minutes)
+
+        assertEquals(minutes, timeFormatter.timeStringToMinutes(germanTime))
+    }
+
+    @Test
     fun testLocaleDateRoundTrip() {
         val context = RuntimeEnvironment.getApplication()
         context.resources.configuration.setLocales(LocaleList(Locale.US, Locale.GERMAN))

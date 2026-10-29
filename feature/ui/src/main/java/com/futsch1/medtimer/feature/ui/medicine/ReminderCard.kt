@@ -1,6 +1,5 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
-import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,15 +28,16 @@ import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.getHelp
 import com.futsch1.medtimer.core.ui.getIcon
 import com.futsch1.medtimer.core.ui.getTitle
 import java.time.LocalTime
-import java.util.Calendar
 
 @Composable
 fun ReminderCard(
     reminder: ReminderItem,
+    timeFormatter: TimeFormatter,
     onReminderEdit: (id: Int, type: ReminderType) -> Unit,
     onEditAmount: (id: Int, amount: String) -> Unit,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit
@@ -62,7 +62,7 @@ fun ReminderCard(
                     )
                 }
                 if (reminder.timeVisible) {
-                    ReminderTimeField(reminder, onEditTime, Modifier.weight(1f).padding(4.dp))
+                    ReminderTimeField(reminder, timeFormatter, onEditTime, Modifier.weight(1f).padding(4.dp))
                 }
                 if (reminder.type != ReminderType.OUT_OF_STOCK && reminder.type != ReminderType.EXPIRATION_DATE) {
                     EditTextButton(
@@ -98,17 +98,14 @@ private fun ReminderTypeHelpDialog(reminder: ReminderItem, onDismiss: () -> Unit
 @Composable
 private fun ReminderTimeField(
     reminder: ReminderItem,
+    timeFormatter: TimeFormatter,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val minutes = reminder.timeMinutesOfDay
-    val calendar = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, minutes / 60)
-        set(Calendar.MINUTE, minutes % 60)
-    }
     val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
-    else DateFormat.getTimeFormat(context).format(calendar.time)
+    else timeFormatter.minutesToTimeString(minutes)
     EditValueButton(
         label = stringResource(reminder.timeLabel),
         value = timeText,

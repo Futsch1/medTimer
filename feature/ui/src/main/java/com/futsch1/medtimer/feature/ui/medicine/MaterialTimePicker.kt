@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
+import com.futsch1.medtimer.core.common.helpers.DatePickerDialogFactory
 import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.google.android.material.timepicker.TimeFormat
+import java.time.LocalDate
 import java.time.LocalTime
 
 internal fun showMaterialTimePicker(
@@ -27,6 +29,17 @@ internal fun showMaterialTimePicker(
     }
     val activity = context.findFragmentActivity()
     picker.show(activity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+}
+
+internal fun showMaterialDatePicker(
+    context: Context,
+    date: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
+) {
+    val picker = DatePickerDialogFactory().create(date) { selectedEpochDay ->
+        onDateSelected(LocalDate.ofEpochDay(selectedEpochDay))
+    }
+    picker.show(context.findFragmentActivity().supportFragmentManager, DatePickerDialogFactory.DIALOG_TAG)
 }
 
 private tailrec fun Context.findFragmentActivity(): FragmentActivity = when (this) {

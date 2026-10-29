@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -54,6 +55,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun EditMedicineScreen(
     editMedicineScreenViewModel: EditMedicineScreenViewModel,
+    timeFormatter: TimeFormatter,
     onEditName: (name: String) -> Unit,
     onReminderDelete: (id: Int) -> Unit,
     onReminderEdit: (id: Int, type: ReminderType) -> Unit,
@@ -67,6 +69,7 @@ fun EditMedicineScreen(
 ) {
     EditMedicineScreen(
         editMedicineScreenViewModel.state,
+        timeFormatter,
         onEditName,
         onReminderDelete,
         onReminderEdit,
@@ -84,6 +87,7 @@ fun EditMedicineScreen(
 @Composable
 fun EditMedicineScreen(
     editMedicineScreenState: EditMedicineScreenState,
+    timeFormatter: TimeFormatter,
     onEditName: (name: String) -> Unit,
     onReminderDelete: (id: Int) -> Unit = {},
     onReminderEdit: (id: Int, type: ReminderType) -> Unit = { _, _ -> },
@@ -103,6 +107,7 @@ fun EditMedicineScreen(
             medicineId = editMedicineScreenState.id!!,
             medicineAmount = editMedicineScreenState.amount,
             medicineUnit = editMedicineScreenState.unit,
+            timeFormatter = timeFormatter,
             onCreate = { reminder ->
                 onCreateReminder(reminder)
                 showNewReminder = false
@@ -158,6 +163,7 @@ fun EditMedicineScreen(
                     onReminderEdit = onReminderEdit,
                     onEditAmount = onEditReminderAmount,
                     onEditTime = onEditReminderTime,
+                    timeFormatter = timeFormatter,
                     onOpenHelp = onOpenHelp,
                     modifier = Modifier.weight(3f),
                 )
@@ -171,6 +177,7 @@ fun EditMedicineScreen(
                 onReminderEdit = onReminderEdit,
                 onEditAmount = onEditReminderAmount,
                 onEditTime = onEditReminderTime,
+                timeFormatter = timeFormatter,
                 onOpenHelp = onOpenHelp,
                 modifier = Modifier
                     .fillMaxSize()
@@ -259,6 +266,7 @@ private fun ReminderList(
     onReminderEdit: (Int, ReminderType) -> Unit,
     onEditAmount: (Int, String) -> Unit,
     onEditTime: (Int, Int) -> Unit,
+    timeFormatter: TimeFormatter,
     onOpenHelp: () -> Unit,
     modifier: Modifier = Modifier,
     header: (@Composable () -> Unit)? = null,
@@ -289,7 +297,7 @@ private fun ReminderList(
         }
         items(state.reminders, key = { it.id }) { reminder ->
             SwipeToDeleteContainer({ onReminderDelete(reminder.id) }, R.string.are_you_sure_delete_reminder) {
-                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime)
+                ReminderCard(reminder, timeFormatter, onReminderEdit, onEditAmount, onEditTime)
             }
         }
     }
@@ -342,6 +350,7 @@ private fun EditMedicineScreenPreview() {
     MedTimerTheme {
         EditMedicineScreen(
             editMedicineScreenState = state,
+            timeFormatter = rememberPreviewTimeFormatter(),
             onEditName = {},
         )
     }
