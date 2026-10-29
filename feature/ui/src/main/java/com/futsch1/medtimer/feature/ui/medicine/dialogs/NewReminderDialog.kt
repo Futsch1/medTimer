@@ -290,7 +290,7 @@ private fun ExpirationReminderFields(
 ) {
     EditTextButton(
         label = stringResource(CoreUiR.string.remind_days_before_expiration),
-        value = "$days ${stringResource(CoreUiR.string.days_string)}",
+        value = days,
         onConfirm = onDaysChange,
         modifier = Modifier.fillMaxWidth(),
     )
