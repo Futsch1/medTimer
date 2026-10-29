@@ -1,11 +1,20 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -36,6 +45,23 @@ class OverviewFilterRowLabelTest {
         val label = composeTestRule.onNodeWithText(filterLabel).getBoundsInRoot()
         val toggle = composeTestRule.onNodeWithTag(OverviewTestTags.filter(OverviewFilter.TAKEN)).getBoundsInRoot()
         assertTrue(label.top < toggle.top, "Expected the label above the toggles")
+    }
+
+    @Test
+    fun `should draw safely when bounds are narrower than the outline stroke`() {
+        composeTestRule.setContent {
+            MedTimerTheme {
+                CompositionLocalProvider(LocalDensity provides Density(2f)) {
+                    OverviewFilterRow(
+                        activeFilters = emptySet(),
+                        onToggleFilter = {},
+                        modifier = Modifier.width(0.5.dp).height(100.dp),
+                    )
+                }
+            }
+        }
+
+        composeTestRule.onNode(isRoot()).captureToImage()
     }
 
     @Test
