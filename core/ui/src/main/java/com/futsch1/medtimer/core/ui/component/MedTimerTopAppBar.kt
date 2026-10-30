@@ -24,7 +24,6 @@ import com.futsch1.medtimer.core.ui.ScreenTestTags
  * The app shell pads the top system-bar inset for the whole content area, so the bar must not pad it
  * again — hence the fixed empty [WindowInsets].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedTimerTopAppBar(
     title: String,

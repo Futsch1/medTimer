@@ -15,7 +15,6 @@ import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
@@ -183,20 +182,11 @@ class StockSettingsFragment : MedicinePreferences(
     }
 
     private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {
-        val reminder = Reminder.default().copy(
-            medicineRelId = dataStore.modelData.id,
-            outOfStockThreshold = if (dataStore.modelData.amount > 0.0) dataStore.modelData.amount else 1.0,
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        )
-        newReminderStockDialogFactory.create(activity, dataStore.modelData, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.modelData, true)
     }
 
     private fun showCreateNewReminderExpirationDateDialog(activity: FragmentActivity) {
-        val reminder = Reminder.default().copy(
-            medicineRelId = dataStore.modelData.id,
-            expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        )
-        newReminderStockDialogFactory.create(activity, dataStore.modelData, reminder)
+        newReminderStockDialogFactory.create(activity, dataStore.modelData, false)
     }
 }
 

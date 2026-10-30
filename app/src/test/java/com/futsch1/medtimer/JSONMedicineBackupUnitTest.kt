@@ -145,7 +145,7 @@ internal class JSONMedicineBackupUnitTest {
     ) {
         assertEquals(expected.size, actual.size)
         for (i in actual.indices) {
-            compareFullMedicine(actual.get(i), expected.get(i))
+            compareFullMedicine(actual[i], expected[i])
         }
     }
 
@@ -159,8 +159,8 @@ internal class JSONMedicineBackupUnitTest {
         )
         for (i in medicineWithReminders.reminders.indices) {
             compareReminder(
-                medicineWithReminders.reminders.get(i),
-                medicineWithReminders1.reminders.get(i)
+                medicineWithReminders.reminders[i],
+                medicineWithReminders1.reminders[i]
             )
         }
         assertEquals(

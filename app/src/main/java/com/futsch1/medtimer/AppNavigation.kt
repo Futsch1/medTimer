@@ -91,21 +91,21 @@ private data class TopLevelNavItem(
 // Tab order for the bar and rail. Destination ids come from the nav graph in :feature:ui.
 private val NAV_ITEMS = listOf(
     TopLevelNavItem(
-        FeatureUiR.id.overviewFragment,
+        FeatureUiR.id.overviewTab,
         CoreUiR.drawable.calendar_event,
         CoreUiR.string.tab_overview,
         CoreUiR.string.overview_tab_description,
         NavTestTags.OVERVIEW
     ),
     TopLevelNavItem(
-        FeatureUiR.id.medicinesFragment,
+        FeatureUiR.id.medicinesTab,
         CoreUiR.drawable.capsule,
         CoreUiR.string.tab_medicine,
         CoreUiR.string.medicines_tab_description,
         NavTestTags.MEDICINES
     ),
     TopLevelNavItem(
-        FeatureUiR.id.statisticsFragment,
+        FeatureUiR.id.statisticsTab,
         CoreUiR.drawable.bar_chart,
         CoreUiR.string.analysis,
         CoreUiR.string.statistics_tab_description,

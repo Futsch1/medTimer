@@ -3,7 +3,6 @@ package com.futsch1.medtimer.feature.ui.medicine
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -120,10 +118,12 @@ fun MedicinesScreen(
                 bottom = paddingValues.calculateBottomPadding() + 80.dp
             )
         ) {
-            if (state.setupGuidance == SetupGuidance.ADD_MEDICINE) {
+            if (state.isLoaded && state.medicines.isEmpty()) {
                 item(key = "add_medicine_guidance") {
                     SetupGuidanceCard(
                         message = stringResource(R.string.setup_no_medicines_guidance),
+                        testTag = MedicineTestTags.SETUP_ADD_MEDICINE,
+                        buttonText = stringResource(R.string.add_medicine),
                         onContinue = onMedicineAdd,
                         onOpenHelp = onOpenHelp,
                     )
@@ -131,7 +131,7 @@ fun MedicinesScreen(
             }
             items(reorderableMedicines.medicines, key = { it.id }) { medicine ->
                 ReorderableItem(reorderableMedicines.reorderState, key = medicine.id) { isDragging ->
-                    SwipeToDeleteContainer(medicine, onMedicineDelete) {
+                    SwipeToDeleteContainer({ onMedicineDelete(medicine.id) }) {
                         MedicineCard(
                             medicine = medicine,
                             onMedicineEdit = onMedicineEdit,
@@ -193,9 +193,9 @@ private fun rememberReorderableMedicines(
 }
 
 @Composable
-private fun SwipeToDeleteContainer(
-    medicine: MedicineScreenItem,
-    onMedicineDelete: (id: Int) -> Unit,
+fun SwipeToDeleteContainer(
+    onItemDelete: () -> Unit,
+    confirmationMessage: Int = R.string.are_you_sure_delete_medicine,
     content: @Composable () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -215,11 +215,11 @@ private fun SwipeToDeleteContainer(
                 scope.launch { dismissState.snapTo(SwipeToDismissBoxValue.Settled) }
             },
             title = { Text(stringResource(R.string.confirm)) },
-            text = { Text(stringResource(R.string.are_you_sure_delete_medicine)) },
+            text = { Text(stringResource(confirmationMessage)) },
             confirmButton = {
                 TextButton(onClick = {
                     showDeleteDialog = false
-                    onMedicineDelete(medicine.id)
+                    onItemDelete()
                 }) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
@@ -269,24 +269,6 @@ private fun SwipeToDeleteContainer(
     }
 }
 
-@Composable
-private fun SetupGuidanceCard(
-    message: String,
-    onContinue: () -> Unit,
-    onOpenHelp: () -> Unit,
-) {
-    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Column(Modifier.padding(16.dp)) {
-            Text(message, style = MaterialTheme.typography.bodyMedium)
-            TextButton(
-                modifier = Modifier.testTag(MedicineTestTags.SETUP_ADD_MEDICINE),
-                onClick = onContinue
-            ) { Text(stringResource(R.string.add_medicine)) }
-            TextButton(onClick = onOpenHelp) { Text(stringResource(R.string.setup_guidance_getting_started)) }
-        }
-    }
-}
-
 object MedicineTestTags {
     const val MEDICINE_LIST = "medicine_list"
     const val SETUP_ADD_MEDICINE = "setup_add_medicine"
@@ -316,7 +298,11 @@ fun MedicinesScreenPreview() {
                 tags = persistentListOf("Tag"),
                 stockState = StockState("5 left", true, "08/01/25"),
                 color = Color.LightGray.toArgb(),
-                icon = ResourcesCompat.getDrawable(LocalResources.current, R.drawable.capsule, LocalContext.current.theme)
+                icon = ResourcesCompat.getDrawable(
+                    LocalResources.current,
+                    R.drawable.capsule,
+                    LocalContext.current.theme
+                )
                     ?.toBitmap()
             ),
         )

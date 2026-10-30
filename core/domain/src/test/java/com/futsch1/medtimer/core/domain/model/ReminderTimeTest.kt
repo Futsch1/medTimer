@@ -42,17 +42,17 @@ class ReminderTimeTest {
 
     @Test
     fun `compareTo returns positive when first is later`() {
-        assertTrue(ReminderTime(500).compareTo(ReminderTime(480)) > 0)
+        assertTrue(ReminderTime(500) > ReminderTime(480))
     }
 
     @Test
     fun `compareTo returns negative when first is earlier`() {
-        assertTrue(ReminderTime(480).compareTo(ReminderTime(500)) < 0)
+        assertTrue(ReminderTime(480) < ReminderTime(500))
     }
 
     @Test
     fun `compareTo at boundaries`() {
-        assertTrue(ReminderTime(0).compareTo(ReminderTime(1439)) < 0)
-        assertTrue(ReminderTime(1439).compareTo(ReminderTime(0)) > 0)
+        assertTrue(ReminderTime(0) < ReminderTime(1439))
+        assertTrue(ReminderTime(1439) > ReminderTime(0))
     }
 }

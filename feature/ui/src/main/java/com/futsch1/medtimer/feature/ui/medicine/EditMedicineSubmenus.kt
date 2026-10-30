@@ -2,8 +2,6 @@ package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
-import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromMedicine
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import dagger.assisted.Assisted
@@ -12,7 +10,7 @@ import dagger.assisted.AssistedInject
 
 class EditMedicineSubmenus @AssistedInject constructor(
     @Assisted private val editMedicineFragment: EditMedicineFragment,
-    @Assisted private val medicine: Medicine,
+    @Assisted private val medicineId: Int,
     private val tagDataFromMedicineFactory: TagDataFromMedicine.Factory,
     private val tagsFragmentFactory: TagsFragment.Factory
 ) {
@@ -20,13 +18,12 @@ class EditMedicineSubmenus @AssistedInject constructor(
     fun interface Factory {
         fun create(
             editMedicineFragment: EditMedicineFragment,
-            medicine: Medicine
+            medicineId: Int
         ): EditMedicineSubmenus
     }
 
     enum class Submenu {
         SETTINGS,
-        NOTES,
         TAGS,
         STOCK_TRACKING,
         CALENDAR
@@ -37,7 +34,7 @@ class EditMedicineSubmenus @AssistedInject constructor(
             Submenu.SETTINGS -> {
                 val action =
                     EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineSettingsFragment(
-                        medicine.id
+                        medicineId
                     )
                 try {
                     navController.navigate(action)
@@ -46,10 +43,9 @@ class EditMedicineSubmenus @AssistedInject constructor(
                 }
             }
 
-            Submenu.NOTES -> NotesDialog(editMedicineFragment)
             Submenu.TAGS -> {
                 val tagDataFromMedicine =
-                    tagDataFromMedicineFactory.create(editMedicineFragment, medicine.id)
+                    tagDataFromMedicineFactory.create(editMedicineFragment, medicineId)
                 val dialog: DialogFragment = tagsFragmentFactory.create(tagDataFromMedicine)
                 dialog.show(editMedicineFragment.getParentFragmentManager(), "tags")
             }
@@ -57,7 +53,7 @@ class EditMedicineSubmenus @AssistedInject constructor(
             Submenu.STOCK_TRACKING -> {
                 val action =
                     EditMedicineFragmentDirections.actionEditMedicineFragmentToStockSettingsFragment(
-                        medicine.id
+                        medicineId
                     )
                 try {
                     navController.navigate(action)
@@ -69,7 +65,7 @@ class EditMedicineSubmenus @AssistedInject constructor(
             Submenu.CALENDAR -> {
                 val action =
                     EditMedicineFragmentDirections.actionEditMedicineFragmentToMedicineCalendarFragment(
-                        medicine.id, 1, 9
+                        medicineId, 1, 9
                     )
                 try {
                     navController.navigate(action)

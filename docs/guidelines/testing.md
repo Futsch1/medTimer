@@ -147,13 +147,14 @@ When Compose lands (see [jetpack-compose.md](jetpack-compose.md)), Compose tests
 
 ## Robot pattern
 
-Instrumented tests read as user intent; how the UI is driven lives in a robot under `app/src/androidTest/.../robots/`.
+Instrumented tests read as user intent; UI interactions are implemented through robots under `app/src/androidTest/.../robots/`.
 
 - **No test file imports Espresso, Barista, UIAutomator, or any `R.id`.** `@AllowFlaky` is the one exception — it is a JUnit rule, not an interaction.
-- **Robot methods name outcomes, not taps.** A dialog raised on the way to an outcome belongs to the robot that opened it; `DialogRobot` is for the tests where
-  the dialog itself is the subject.
+- **Keep the flow visible in the test when its sequence or an intermediate state is under test.** The test should orchestrate the actions and assertions in order; robots provide reusable navigation, focused actions, and focused assertions.
+  Avoid scenario-specific helpers that hide a sequence the test is meant to verify (for example, a helper that opens a form, enters a value, submits, and asserts the resulting error).
+- **Task-level robot helpers are fine for routine flows whose individual steps are not the behavior under test.** A dialog raised during such a helper belongs to the robot that owns the surrounding screen; use `DialogRobot` when the dialog itself is the subject.
 - **A robot method leaves you where it found you.** Navigation depth is never a test's concern, so `pressBack()` does not appear in a test file.
-- **`inX { }` when the caller has to stay on an inner screen** — the block runs with the screen up and the robot still owns entry and exit.
+- **`inX { }` when the test needs to stay on an inner screen** — the helper can own entering and leaving that screen, while the block keeps the test's interactions visible.
 - `Robots` builds the graph; `MedTimerTestBase` exposes it and holds nothing that touches the UI.
 
 ## Selectors in instrumented tests

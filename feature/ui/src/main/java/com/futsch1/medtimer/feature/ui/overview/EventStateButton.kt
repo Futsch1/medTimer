@@ -80,7 +80,6 @@ internal fun EventStateButton(
  * The button's visual only, with no click handling, so [ArcActionMenu] can restate it on top of
  * the scrim while the real button sits dimmed underneath in the host window.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun EventStateButtonFace(state: OverviewState, modifier: Modifier = Modifier) {
     val context = LocalContext.current

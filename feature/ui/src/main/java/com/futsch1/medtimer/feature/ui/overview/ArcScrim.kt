@@ -26,7 +26,6 @@ internal val ARC_SCRIM_BLEED = 32.dp
  * A composable of its own so that its per-frame alpha animation invalidates only itself, rather
  * than the scope hosting the buttons' own transitions.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun ArcScrim(expanded: Boolean) {
     val scrimColor = MaterialTheme.colorScheme.scrim

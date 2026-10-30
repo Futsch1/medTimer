@@ -65,7 +65,7 @@ object FileHelper {
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val intentShareFile = Intent(Intent.ACTION_SEND)
 
-        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.getName()))
+        intentShareFile.setDataAndType(uri, URLConnection.guessContentTypeFromName(file.name))
         // Allow sharing apps to read the file Uri
         intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         // Pass the file Uri instead of the path

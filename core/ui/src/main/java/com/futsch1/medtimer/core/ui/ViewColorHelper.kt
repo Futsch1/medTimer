@@ -23,7 +23,10 @@ object ViewColorHelper {
         val cardDefaultBackground = SurfaceColors.getColorForElevation(view.context, view.elevation)
         val contrastBackground = ColorUtils.calculateContrast(cardDefaultBackground, backgroundColor or -0x1000000)
 
-        setTextColor(textViews, if (contrastTextView < contrastBackground) cardDefaultBackground else defaultTextViewColor)
+        setTextColor(
+            textViews,
+            if (contrastTextView < contrastBackground) cardDefaultBackground else defaultTextViewColor
+        )
         if (view is MaterialCardView) {
             view.setCardBackgroundColor(backgroundColor)
         } else if (view.background is GradientDrawable) {
@@ -49,9 +52,9 @@ object ViewColorHelper {
             val iconDrawable = medicineIcons.getIconDrawable(iconId)
             setDrawableTint(view, iconDrawable)
             imageView.setImageDrawable(iconDrawable)
-            imageView.setVisibility(View.VISIBLE)
+            imageView.visibility = View.VISIBLE
         } else {
-            imageView.setVisibility(View.GONE)
+            imageView.visibility = View.GONE
         }
     }
 

@@ -54,7 +54,6 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 private val DETAIL_ICON_SIZE = 16.dp
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Modifier) {
     val time = content.time?.let { rememberFormattedTime(it, content.useRelativeTime) }
@@ -133,7 +132,6 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
  * it reveals downwards and hides upwards, so a part that wraps onto another line still reads as a vertical change.
  * The last non-null value is kept, so the exit animation has something to draw.
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun <T : Any> OptionalDetail(value: T?, modifier: Modifier = Modifier, content: @Composable (T) -> Unit) {
     val fadeSpec = MaterialTheme.motionScheme.slowEffectsSpec<Float>()

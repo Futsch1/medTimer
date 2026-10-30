@@ -11,81 +11,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.repository.MedicineRepository
-import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
+import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.launch
 import com.futsch1.medtimer.core.ui.R as CoreUiR
-
-object EditMedicineTestTags {
-    /** Scopes the entries to this menu; each one is then selected by its own label. */
-    const val MENU = "edit_medicine_menu"
-}
 
 /** Actions on the medicine being edited: sub-screen links, bulk activation, duplication, deletion. */
 class EditMedicineActions @AssistedInject constructor(
-    @Assisted private val medicine: Medicine,
+    @Assisted private val editMedicineScreenViewModel: EditMedicineScreenViewModel,
     @Assisted private val fragment: EditMedicineFragment,
     @Assisted private val navController: NavController,
-    private val medicineRepository: MedicineRepository,
-    private val reminderRepository: ReminderRepository,
-    private val tagRepository: TagRepository,
     private val editMedicineSubmenusFactory: EditMedicineSubmenus.Factory,
 ) {
 
     @AssistedFactory
     fun interface Factory {
         fun create(
-            medicine: Medicine,
+            editMedicineScreenViewModel: EditMedicineScreenViewModel,
             fragment: EditMedicineFragment,
             navController: NavController
         ): EditMedicineActions
     }
 
-    private val submenus by lazy { editMedicineSubmenusFactory.create(fragment, medicine) }
+    private val submenus by lazy {
+        editMedicineSubmenusFactory.create(
+            fragment,
+            editMedicineScreenViewModel.medicineId
+        )
+    }
+
+    val notes: String? get() = editMedicineScreenViewModel.state.notes
+
+    fun saveNotes(notes: String) = editMedicineScreenViewModel.editNotes(notes)
 
     fun open(submenu: EditMedicineSubmenus.Submenu) = submenus.open(submenu, navController)
 
     fun setRemindersActive(active: Boolean) {
-        fragment.lifecycleScope.launch {
-            val reminders = reminderRepository.getAll(medicine.id)
-            com.futsch1.medtimer.core.common.helpers.setRemindersActive(
-                reminders,
-                reminderRepository,
-                active
-            )
-        }
+        editMedicineScreenViewModel.setRemindersActive(active)
     }
 
     fun duplicate() {
-        // Navigate up only once the copy is stored: leaving the screen cancels lifecycleScope.
-        fragment.lifecycleScope.launch {
-            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-            assignTags(medicine.id, newMedicineId)
-            navController.navigateUp()
-        }
+        editMedicineScreenViewModel.duplicate { navController.navigateUp() }
     }
 
     fun duplicateIncludingReminders() {
-        fragment.lifecycleScope.launch {
-            val fullMedicine = medicineRepository.fetch(medicine.id) ?: return@launch
-            val newMedicineId = medicineRepository.create(duplicateOf(medicine, ::copyName))
-            reminderRepository.createMany(fullMedicine.reminders.map { it.copy(id = 0, medicineRelId = newMedicineId) })
-            assignTags(medicine.id, newMedicineId)
-            navController.navigateUp()
-        }
+        editMedicineScreenViewModel.duplicateIncludingReminders { navController.navigateUp() }
     }
 
     fun delete() {
@@ -93,34 +72,32 @@ class EditMedicineActions @AssistedInject constructor(
             navController.context,
             CoreUiR.string.are_you_sure_delete_medicine,
             {
-                fragment.lifecycleScope.launch {
-                    medicineRepository.delete(medicine.id)
+                editMedicineScreenViewModel.delete {
                     navController.navigateUp()
                 }
             },
             { }
         )
     }
-
-    private fun copyName(name: String) = fragment.getString(CoreUiR.string.duplicate_name, name)
-
-    private suspend fun assignTags(oldMedicineId: Int, newMedicineId: Int) {
-        val oldFullMedicine = medicineRepository.fetch(oldMedicineId) ?: return
-        for (oldTag in oldFullMedicine.tags) {
-            tagRepository.addMedicineTag(newMedicineId, oldTag.id)
-        }
-    }
 }
 
 @Composable
 fun EditMedicineMenu(actions: EditMedicineActions) {
     var expanded by remember { mutableStateOf(false) }
+    var showNotes by rememberSaveable { mutableStateOf(false) }
+    val notes = actions.notes
+    if (showNotes && notes != null) {
+        NotesDialog(notes = notes, onSave = actions::saveNotes, onDismiss = { showNotes = false })
+    }
 
     Box {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(
+            modifier = Modifier.testTag(EditMedicineTestTags.MENU_BUTTON),
+            onClick = { expanded = true },
+        ) {
             Icon(
-                painter = painterResource(CoreUiR.drawable.three_dots_vertical),
-                contentDescription = stringResource(CoreUiR.string.more_options),
+                painter = painterResource(CoreUiR.drawable.capsule),
+                contentDescription = stringResource(CoreUiR.string.medicine),
             )
         }
         DropdownMenu(
@@ -143,8 +120,8 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
             item(CoreUiR.string.medicine_settings, CoreUiR.drawable.gear) {
                 actions.open(EditMedicineSubmenus.Submenu.SETTINGS)
             }
-            item(CoreUiR.string.notes, CoreUiR.drawable.journal_text) {
-                actions.open(EditMedicineSubmenus.Submenu.NOTES)
+            if (notes != null) {
+                item(CoreUiR.string.notes, CoreUiR.drawable.journal_text) { showNotes = true }
             }
             item(CoreUiR.string.tags, CoreUiR.drawable.tag) {
                 actions.open(EditMedicineSubmenus.Submenu.TAGS)
@@ -162,7 +139,11 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
 
             HorizontalDivider()
             item(CoreUiR.string.duplicate, CoreUiR.drawable.copy, actions::duplicate)
-            item(CoreUiR.string.duplicate_including_reminders, CoreUiR.drawable.copy, actions::duplicateIncludingReminders)
+            item(
+                CoreUiR.string.duplicate_including_reminders,
+                CoreUiR.drawable.copy,
+                actions::duplicateIncludingReminders
+            )
             item(CoreUiR.string.delete, CoreUiR.drawable.trash, actions::delete)
         }
     }

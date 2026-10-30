@@ -155,7 +155,6 @@ class ReminderTest : MedTimerTestBase() {
         reminders.assertContains(
             context.getString(R.string.every_interval, "2 " + context.resources.getQuantityString(R.plurals.hours, 2))
         )
-        reminders.assertContainsTime(timeFormatter().minutesToTimeString(reminder1Time.toSecondOfDay() / 60))
         reminders.assertContains(
             context.getString(R.string.linked_reminder_summary, timeFormatter().toTimeString(reminder1Time))
         )

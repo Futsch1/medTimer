@@ -20,18 +20,19 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.futsch1.medtimer.core.common.helpers.getMaterialColor
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.RequestPostNotificationPermission
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import com.futsch1.medtimer.core.ui.R
 
 @AndroidEntryPoint
 class MedTimerAppIntro : AppIntro() {
     @Inject
     lateinit var persistentDataDataSource: PersistentDataDataSource
-    private val requestNotificationPermission = RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
+    private val requestNotificationPermission =
+        RequestPostNotificationPermission(this) { persistentDataDataSource.setShowNotifications(false) }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,7 +125,7 @@ class MedTimerAppIntro : AppIntro() {
 
     private fun getColorRes(colorAttributeResInt: Int): Int {
         val typedValue = TypedValue()
-        if (this.getTheme().resolveAttribute(colorAttributeResInt, typedValue, true)) {
+        if (this.theme.resolveAttribute(colorAttributeResInt, typedValue, true)) {
             return typedValue.resourceId
         }
         return 0

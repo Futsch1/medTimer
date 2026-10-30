@@ -42,7 +42,8 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         medicines.clickItem(0)
-        medicineSettings.setColorAndIcon(hex = "deadbe", iconPosition = 1)
+        medicineSettings.setColor(hex = "deadbe")
+        medicineEditor.selectIcon(position = 1)
 
         navigation.toOverview()
 

@@ -3,8 +3,6 @@ package com.futsch1.medtimer.core.domain.model
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalTime
 
 class ReminderTest {
 
@@ -47,7 +45,11 @@ class ReminderTest {
     fun `reminderType is OUT_OF_STOCK for all out of stock variants`() {
         for (type in Reminder.OutOfStockReminderType.entries) {
             if (type == Reminder.OutOfStockReminderType.OFF) continue
-            assertEquals("ONCE variant", ReminderType.OUT_OF_STOCK, reminderOf(outOfStockReminderType = type).reminderType)
+            assertEquals(
+                "ONCE variant",
+                ReminderType.OUT_OF_STOCK,
+                reminderOf(outOfStockReminderType = type).reminderType
+            )
         }
     }
 
@@ -55,7 +57,11 @@ class ReminderTest {
     fun `reminderType is EXPIRATION_DATE for all expiration variants`() {
         for (type in Reminder.ExpirationReminderType.entries) {
             if (type == Reminder.ExpirationReminderType.OFF) continue
-            assertEquals("ONCE variant", ReminderType.EXPIRATION_DATE, reminderOf(expirationReminderType = type).reminderType)
+            assertEquals(
+                "ONCE variant",
+                ReminderType.EXPIRATION_DATE,
+                reminderOf(expirationReminderType = type).reminderType
+            )
         }
     }
 
@@ -122,12 +128,16 @@ class ReminderTest {
         assertEquals(false, reminderOf(linkedReminderId = 5).isInterval)
         assertEquals(true, reminderOf(intervalStart = Instant.EPOCH.plusSeconds(3600)).isInterval)
         assertEquals(true, reminderOf(windowedInterval = true).isInterval)
-        assertEquals(false, reminderOf(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
-        ).isInterval)
-        assertEquals(false, reminderOf(
-            expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        ).isInterval)
+        assertEquals(
+            false, reminderOf(
+                outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
+            ).isInterval
+        )
+        assertEquals(
+            false, reminderOf(
+                expirationReminderType = Reminder.ExpirationReminderType.ONCE
+            ).isInterval
+        )
     }
 
     @Test
@@ -136,26 +146,37 @@ class ReminderTest {
         assertEquals(true, reminderOf(linkedReminderId = 5).isLinkedOrTimeBased)
         assertEquals(false, reminderOf(intervalStart = Instant.EPOCH.plusSeconds(3600)).isLinkedOrTimeBased)
         assertEquals(false, reminderOf(windowedInterval = true).isLinkedOrTimeBased)
-        assertEquals(false, reminderOf(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
-        ).isLinkedOrTimeBased)
-        assertEquals(false, reminderOf(
-            expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        ).isLinkedOrTimeBased)
+        assertEquals(
+            false, reminderOf(
+                outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
+            ).isLinkedOrTimeBased
+        )
+        assertEquals(
+            false, reminderOf(
+                expirationReminderType = Reminder.ExpirationReminderType.ONCE
+            ).isLinkedOrTimeBased
+        )
     }
 
     @Test
     fun `isOutOfStockOrExpirationReminder is true only for OUT_OF_STOCK and EXPIRATION_DATE`() {
         assertEquals(false, reminderOf().isOutOfStockOrExpirationReminder)
         assertEquals(false, reminderOf(linkedReminderId = 5).isOutOfStockOrExpirationReminder)
-        assertEquals(false, reminderOf(intervalStart = Instant.EPOCH.plusSeconds(3600)).isOutOfStockOrExpirationReminder)
+        assertEquals(
+            false,
+            reminderOf(intervalStart = Instant.EPOCH.plusSeconds(3600)).isOutOfStockOrExpirationReminder
+        )
         assertEquals(false, reminderOf(windowedInterval = true).isOutOfStockOrExpirationReminder)
-        assertEquals(true, reminderOf(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
-        ).isOutOfStockOrExpirationReminder)
-        assertEquals(true, reminderOf(
-            expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        ).isOutOfStockOrExpirationReminder)
+        assertEquals(
+            true, reminderOf(
+                outOfStockReminderType = Reminder.OutOfStockReminderType.ALWAYS
+            ).isOutOfStockOrExpirationReminder
+        )
+        assertEquals(
+            true, reminderOf(
+                expirationReminderType = Reminder.ExpirationReminderType.ONCE
+            ).isOutOfStockOrExpirationReminder
+        )
     }
 
     @Test
@@ -164,14 +185,20 @@ class ReminderTest {
         assertEquals(true, reminderOf(linkedReminderId = 5).usesTimeInMinutes)
         assertEquals(false, reminderOf(intervalStart = Instant.EPOCH.plusSeconds(3600)).usesTimeInMinutes)
         assertEquals(false, reminderOf(windowedInterval = true).usesTimeInMinutes)
-        assertEquals(true, reminderOf(
-            expirationReminderType = Reminder.ExpirationReminderType.ONCE
-        ).usesTimeInMinutes)
-        assertEquals(true, reminderOf(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
-        ).usesTimeInMinutes)
-        assertEquals(false, reminderOf(
-            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
-        ).usesTimeInMinutes)
+        assertEquals(
+            true, reminderOf(
+                expirationReminderType = Reminder.ExpirationReminderType.ONCE
+            ).usesTimeInMinutes
+        )
+        assertEquals(
+            true, reminderOf(
+                outOfStockReminderType = Reminder.OutOfStockReminderType.DAILY
+            ).usesTimeInMinutes
+        )
+        assertEquals(
+            false, reminderOf(
+                outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE
+            ).usesTimeInMinutes
+        )
     }
 }

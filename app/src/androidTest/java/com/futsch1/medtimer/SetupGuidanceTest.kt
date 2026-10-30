@@ -1,6 +1,5 @@
 package com.futsch1.medtimer
 
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
@@ -25,11 +24,11 @@ class SetupGuidanceTest : MedTimerTestBase() {
         medicineEditor.assertReminderSetupGuidanceDisplayed()
 
         medicineEditor.openAddReminderFromGuidance()
-        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
+        medicineEditor.assertReminderTypeDisplayed(com.futsch1.medtimer.core.ui.R.string.time_based_reminder)
         medicineEditor.openReminderTypesHelp()
         help.assertHelpDisplayed()
         help.pressBack()
-        assertDisplayed(com.futsch1.medtimer.feature.ui.R.id.timeBasedCard)
+        medicineEditor.assertReminderTypeDisplayed(com.futsch1.medtimer.core.ui.R.string.time_based_reminder)
         medicineEditor.closeReminderTypeChooser()
         medicineEditor.addReminder("1", laterToday())
         medicineEditor.assertReminderSetupGuidanceAbsent()

@@ -30,7 +30,11 @@ fun getReminderAction(context: Context): Intent {
  * @param reminderNotificationData The data of the reminder to be snoozed.
  * @param snoozeDuration The duration for which the reminder should be snoozed.
  */
-fun getSnoozeIntent(context: Context, reminderNotificationData: ReminderNotificationData, snoozeDuration: Duration): Intent {
+fun getSnoozeIntent(
+    context: Context,
+    reminderNotificationData: ReminderNotificationData,
+    snoozeDuration: Duration
+): Intent {
     val snoozeIntent = Intent(ProcessorCode.Snooze.action)
     reminderNotificationData.writeTo(snoozeIntent)
     snoozeIntent.putExtra(ActivityCodes.EXTRA_SNOOZE_TIME_SECONDS, snoozeDuration.inWholeSeconds)
@@ -62,7 +66,7 @@ private fun buildActionIntent(context: Context, reminderEventIds: List<Int>, act
 fun getCustomSnoozeActionIntent(context: Context, reminderNotificationData: ReminderNotificationData): Intent {
     val actionIntent = Intent(ActivityCodes.CUSTOM_SNOOZE_ACTIVITY)
     actionIntent.setClassName(context, "com.futsch1.medtimer.MainActivity")
-    actionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    actionIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
     reminderNotificationData.writeTo(actionIntent)
     return actionIntent
 }
@@ -72,10 +76,14 @@ fun getCustomSnoozeActionIntent(context: Context, reminderNotificationData: Remi
  *
  * @param remindedInstant The earliest scheduled time of the notification's reminders; used when none of them exist anymore.
  */
-fun getShowReminderDayIntent(context: Context, reminderNotificationData: ReminderNotificationData, remindedInstant: Instant): Intent {
+fun getShowReminderDayIntent(
+    context: Context,
+    reminderNotificationData: ReminderNotificationData,
+    remindedInstant: Instant
+): Intent {
     val intent = Intent(ActivityCodes.SHOW_REMINDER_DAY_ACTIVITY)
     intent.setClassName(context, "com.futsch1.medtimer.MainActivity")
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
     reminderNotificationData.writeTo(intent)
     intent.putExtra(ActivityCodes.EXTRA_REMINDED_INSTANT, remindedInstant.epochSecond)
     return intent

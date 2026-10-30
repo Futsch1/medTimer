@@ -26,8 +26,10 @@ class MenuRobot(private val ui: ComposeUi) {
     fun clickMedicinesOption(@StringRes labelRes: Int) =
         open(CoreUiR.string.tab_medicine, MedicinesMenuTestTags.MENU).click(label(labelRes))
 
-    fun clickEditMedicineOption(@StringRes labelRes: Int) =
-        open(CoreUiR.string.more_options, EditMedicineTestTags.MENU).click(label(labelRes))
+    fun clickEditMedicineOption(@StringRes labelRes: Int): Unit {
+        topBar.click(androidx.compose.ui.test.hasTestTag(EditMedicineTestTags.MENU_BUTTON))
+        ui.scope(EditMedicineTestTags.MENU).click(label(labelRes))
+    }
 
     fun openTagFilter() = topBar.click(hasContentDescription(ui.getString(CoreUiR.string.filter)))
 

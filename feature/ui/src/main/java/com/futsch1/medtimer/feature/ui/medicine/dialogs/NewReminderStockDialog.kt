@@ -1,230 +1,77 @@
 package com.futsch1.medtimer.feature.ui.medicine.dialogs
 
-import android.app.Dialog
-import android.text.InputType
-import android.text.method.DigitsKeyListener
-import android.util.Log
-import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
-import com.futsch1.medtimer.core.common.LogTags
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import androidx.lifecycle.ViewModelProvider
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.model.Reminder
-import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.core.domain.repository.ReminderRepository
-import com.futsch1.medtimer.feature.ui.R
-import com.futsch1.medtimer.feature.ui.medicine.editors.TimeEditor
-import com.futsch1.medtimer.feature.ui.medicine.medicineSettings.addDoubleValidator
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.util.Locale
 
 class NewReminderStockDialog @AssistedInject constructor(
     @Assisted private val activity: FragmentActivity,
     @Assisted private val medicine: Medicine,
-    @Assisted private val reminder: Reminder,
-    private val reminderRepository: ReminderRepository,
-    private val timeEditorFactory: TimeEditor.Factory
+    @Assisted private val isOutOfStockReminder: Boolean
 ) {
     @AssistedFactory
     fun interface Factory {
         fun create(
             activity: FragmentActivity,
             medicine: Medicine,
-            reminder: Reminder
+            isOutOfStockReminder: Boolean
         ): NewReminderStockDialog
     }
 
-    private val dialog: Dialog = Dialog(activity)
+    private val host = ComposeView(activity).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+    }
+    private val root = activity.window.decorView as ViewGroup
+    private val newReminderViewModel = ViewModelProvider(activity)[NewReminderViewModel::class.java]
 
     init {
-        dialog.setContentView(R.layout.dialog_new_reminder_stock)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+        newReminderViewModel.startNewReminder(
+            medicineId = medicine.id,
+            amount = medicine.amount
         )
-
-        setupCreateReminder()
-        setupVisibilities()
-        dialog.findViewById<MaterialButton>(R.id.cancelCreateReminder).setOnClickListener {
-            dialog.dismiss()
-        }
-
-        setupEditStockThreshold()
-        setupEditExpirationDaysBefore()
-        setupStockReminderType()
-
-        dialog.show()
-    }
-
-    private fun setupEditExpirationDaysBefore() {
-        val textInputLayout =
-            dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout)
-        textInputLayout.suffixText =
-            activity.getString(com.futsch1.medtimer.core.ui.R.string.days_string)
-    }
-
-    private fun setupEditStockThreshold() {
-        val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.editStockThresholdLayout)
-        textInputLayout.suffixText = medicine.unit
-
-        val textInputEditText = dialog.findViewById<TextInputEditText>(R.id.editStockThreshold)
-
-        textInputEditText.setText(MedicineHelper.formatAmount(medicine.amount, ""))
-
-        textInputEditText.inputType =
-            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        textInputEditText.addDoubleValidator()
-        textInputEditText.keyListener =
-            DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
-    }
-
-    private fun setupStockReminderType() {
-        dialog.findViewById<RadioGroup>(R.id.stockReminderType)
-            .setOnCheckedChangeListener { _, checkedId ->
-                dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
-                    if (checkedId == R.id.daily) {
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
+        newReminderViewModel.updateDraft(
+            newReminderViewModel.state.draft.copy(
+                selectedType = if (isOutOfStockReminder) ReminderType.OUT_OF_STOCK else ReminderType.EXPIRATION_DATE,
+                threshold = if (medicine.amount > 0.0) medicine.amount.toInt().toString() else "1",
+            )
+        )
+        root.addView(host, ViewGroup.LayoutParams(1, 1))
+        host.setContent {
+            MedTimerTheme {
+                NewReminderFlowDialog(
+                    state = newReminderViewModel.state,
+                    medicineUnit = medicine.unit,
+                    onCreate = {
+                        if (newReminderViewModel.createReminder()) reminderCreated()
+                    },
+                    onDraftChange = newReminderViewModel::updateDraft,
+                    onDismiss = ::dismiss,
+                    onOpenHelp = ::dismiss,
+                )
             }
+        }
     }
 
-    private fun setupVisibilities() {
-        val outOfStockVisibility = if (reminder.reminderType == ReminderType.OUT_OF_STOCK) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-        val expirationDateVisibility = if (reminder.reminderType == ReminderType.EXPIRATION_DATE) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-
-        dialog.findViewById<TextInputLayout>(R.id.editStockThresholdLayout).visibility =
-            outOfStockVisibility
-        dialog.findViewById<RadioGroup>(R.id.stockReminderType).visibility = outOfStockVisibility
-
-        dialog.findViewById<TextInputLayout>(R.id.editExpirationDaysBeforeLayout).visibility =
-            expirationDateVisibility
-        dialog.findViewById<RadioGroup>(R.id.expirationReminderType).visibility =
-            expirationDateVisibility
-        dialog.findViewById<TextInputLayout>(R.id.editReminderTimeLayout).visibility =
-            expirationDateVisibility
-    }
-
-    private fun setupCreateReminder(
-    ) {
-        val timeEditor = timeEditorFactory.create(
+    private fun reminderCreated() {
+        Toast.makeText(
             activity,
-            dialog.findViewById(R.id.editReminderTime),
-            reminder.time.minutes,
-            { _ -> },
-            null
-        )
-
-        setupOnClickCreateReminder(
-            timeEditor
-        )
+            com.futsch1.medtimer.core.ui.R.string.successfully_created_reminder,
+            Toast.LENGTH_LONG,
+        ).show()
+        dismiss()
     }
 
-    private fun setupOnClickCreateReminder(
-        timeEditor: TimeEditor
-    ) {
-        dialog.findViewById<MaterialButton>(R.id.createReminder).setOnClickListener {
-            activity.lifecycleScope.launch {
-                var updatedReminder = reminder.copy(
-                    time = ReminderTime(timeEditor.getMinutes())
-                )
-                var canCreate = true
-
-                if (reminder.reminderType == ReminderType.OUT_OF_STOCK) {
-                    val result = fillOutOfStockReminder(updatedReminder)
-                    canCreate = result.first
-                    updatedReminder = result.second
-                }
-                if (reminder.reminderType == ReminderType.EXPIRATION_DATE) {
-                    val result = fillExpirationReminder(updatedReminder)
-                    canCreate = result.first
-                    updatedReminder = result.second
-                }
-
-                if (!canCreate) {
-                    Log.e(LogTags.REMINDER, "Invalid input, cannot create reminder")
-                    Toast.makeText(
-                        activity,
-                        com.futsch1.medtimer.core.ui.R.string.invalid_input,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    reminderRepository.create(updatedReminder)
-                    Toast.makeText(
-                        activity,
-                        com.futsch1.medtimer.core.ui.R.string.successfully_created_reminder,
-                        Toast.LENGTH_LONG
-                    ).show()
-                    dialog.dismiss()
-                }
-            }
-        }
-    }
-
-    private fun fillExpirationReminder(reminder: Reminder): Pair<Boolean, Reminder> {
-        return try {
-            val expirationReminderType =
-                when (dialog.findViewById<RadioGroup>(R.id.expirationReminderType).checkedRadioButtonId) {
-                    R.id.onceExpiration -> Reminder.ExpirationReminderType.ONCE
-                    R.id.dailyExpiration -> Reminder.ExpirationReminderType.DAILY
-                    else -> Reminder.ExpirationReminderType.OFF
-                }
-            val daysBefore =
-                dialog.findViewById<TextInputEditText>(R.id.editExpirationDaysBefore).text.toString()
-                    .toLong()
-            Pair(
-                true, reminder.copy(
-                    expirationReminderType = expirationReminderType,
-                    periodStart = LocalDate.ofEpochDay(daysBefore)
-                )
-            )
-        } catch (_: NumberFormatException) {
-            Pair(false, reminder)
-        }
-    }
-
-    private fun fillOutOfStockReminder(reminder: Reminder): Pair<Boolean, Reminder> {
-        return try {
-            val threshold =
-                dialog.findViewById<TextInputEditText>(R.id.editStockThreshold).text.toString()
-                    .toDouble()
-            val outOfStockReminderType =
-                when (dialog.findViewById<RadioGroup>(R.id.stockReminderType).checkedRadioButtonId) {
-                    R.id.once -> Reminder.OutOfStockReminderType.ONCE
-                    R.id.always -> Reminder.OutOfStockReminderType.ALWAYS
-                    R.id.daily -> Reminder.OutOfStockReminderType.DAILY
-                    else -> Reminder.OutOfStockReminderType.OFF
-                }
-            Pair(
-                true,
-                reminder.copy(
-                    outOfStockThreshold = threshold,
-                    outOfStockReminderType = outOfStockReminderType
-                )
-            )
-        } catch (_: NumberFormatException) {
-            Pair(false, reminder)
-        }
+    private fun dismiss() {
+        root.removeView(host)
     }
 }

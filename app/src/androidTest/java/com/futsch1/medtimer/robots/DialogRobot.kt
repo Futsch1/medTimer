@@ -11,7 +11,6 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.futsch1.medtimer.robots.DialogRobot.Companion.DIALOG_TIMEOUT
 import com.futsch1.medtimer.utilities.awaitView
 import com.futsch1.medtimer.utilities.pollUntil
 import org.hamcrest.Matchers
@@ -58,7 +57,7 @@ class DialogRobot(private val ui: ComposeUi) {
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
-    fun clickItem(text: String) = item(text).perform(ViewActions.click())
+    fun clickItem(text: String): ViewInteraction? = item(text).perform(ViewActions.click())
 
     fun clickItem(@StringRes textRes: Int) = clickItem(ui.getString(textRes))
 
@@ -68,12 +67,12 @@ class DialogRobot(private val ui: ComposeUi) {
         }
     }
 
-    fun assertItemChecked(text: String) =
+    fun assertItemChecked(text: String): ViewInteraction? =
         item(text).check(ViewAssertions.matches(ViewMatchers.isChecked()))
 
     fun assertItemChecked(@StringRes textRes: Int) = assertItemChecked(ui.getString(textRes))
 
-    fun assertItemNotChecked(text: String) =
+    fun assertItemNotChecked(text: String): ViewInteraction? =
         item(text).check(ViewAssertions.matches(ViewMatchers.isNotChecked()))
 
     fun assertItemNotChecked(@StringRes textRes: Int) = assertItemNotChecked(ui.getString(textRes))

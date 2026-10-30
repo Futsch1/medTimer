@@ -1,41 +1,35 @@
 package com.futsch1.medtimer.robots
 
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasSetTextAction
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.R as CoreUiR
+import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
 
 /** The medicine's notes editor, opened from the edit-medicine menu. */
-class MedicineNotesRobot(private val menus: MenuRobot) {
+class MedicineNotesRobot(private val menus: MenuRobot, private val ui: ComposeUi) {
 
     fun save(text: String) {
-        open()
-        writeTo(NOTES, text)
-        closeKeyboard()
-        clickOn(com.futsch1.medtimer.feature.ui.R.id.confirmSaveNotes)
+        val dialog = open()
+        dialog.replaceText(hasText(ui.getString(CoreUiR.string.notes)) and hasSetTextAction(), text)
+        dialog.click(hasText(ui.getString(R.string.ok)))
     }
 
     /** Clears the notes and leaves without saving, so the stored text has to survive. */
     fun clearAndDiscard() {
-        open()
-        clearText(NOTES)
-        closeKeyboard()
-        cancel()
+        val dialog = open()
+        dialog.replaceText(hasText(ui.getString(CoreUiR.string.notes)) and hasSetTextAction(), "")
+        dialog.click(hasText(ui.getString(R.string.cancel)))
     }
 
     fun assertContains(expected: String) {
-        open()
-        assertDisplayed(NOTES, expected)
-        cancel()
+        val dialog = open()
+        dialog.assertDisplayed(hasText(expected, substring = true))
+        dialog.click(hasText(ui.getString(R.string.cancel)))
     }
 
-    private fun open() = menus.clickEditMedicineOption(CoreUiR.string.notes)
-
-    private fun cancel() = clickOn(com.futsch1.medtimer.feature.ui.R.id.cancelSaveNotes)
-
-    private companion object {
-        val NOTES = com.futsch1.medtimer.feature.ui.R.id.notes
+    private fun open(): UiScope {
+        menus.clickEditMedicineOption(CoreUiR.string.notes)
+        return ui.scope(EditMedicineTestTags.NOTES_DIALOG)
     }
 }
