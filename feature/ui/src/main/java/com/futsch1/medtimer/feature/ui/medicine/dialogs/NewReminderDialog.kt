@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.medicine.dialogs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -25,6 +26,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
@@ -69,50 +72,70 @@ fun NewReminderFlowDialog(
 ) {
     val draft = state.draft
     val type = draft.selectedType
-    AlertDialog(
-        modifier = Modifier.testTag(NewReminderTestTags.DIALOG),
+    Dialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(type?.let(::titleFor) ?: CoreUiR.string.add_reminder)) },
-        text = {
-            Column(
-                Modifier
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        Box(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Surface(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                    .testTag(NewReminderTestTags.DIALOG),
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                tonalElevation = 6.dp,
             ) {
-                if (type == null) {
-                    ReminderTypeChooser(onSelect = { onDraftChange(draft.copy(selectedType = it)) })
-                } else {
-                    ReminderDetailsFields(
-                        type = type,
-                        medicineUnit = medicineUnit,
-                        state = state,
-                        draft = draft,
-                        onDraftChange = onDraftChange,
+                Column(Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(type?.let(::titleFor) ?: CoreUiR.string.add_reminder),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 16.dp),
                     )
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f, fill = false)
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        if (type == null) {
+                            ReminderTypeChooser(onSelect = { onDraftChange(draft.copy(selectedType = it)) })
+                        } else {
+                            ReminderDetailsFields(
+                                type = type,
+                                medicineUnit = medicineUnit,
+                                state = state,
+                                draft = draft,
+                                onDraftChange = onDraftChange,
+                            )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        TextButton(onClick = onDismiss) {
+                            Text(stringResource(CoreUiR.string.cancel))
+                        }
+                        if (type == null) {
+                            TextButton(
+                                onClick = onOpenHelp,
+                                modifier = Modifier.testTag(NewReminderTestTags.HELP_BUTTON),
+                            ) { Text(stringResource(CoreUiR.string.reminder_types_help)) }
+                        } else {
+                            TextButton(onClick = onCreate) {
+                                Text(stringResource(CoreUiR.string.create_reminder))
+                            }
+                        }
+                    }
                 }
             }
-        },
-        confirmButton = {
-            if (type == null) {
-                TextButton(
-                    onClick = onOpenHelp,
-                    modifier = Modifier.testTag(NewReminderTestTags.HELP_BUTTON),
-                ) { Text(stringResource(CoreUiR.string.reminder_types_help)) }
-            } else {
-                TextButton(onClick = onCreate) {
-                    Text(stringResource(CoreUiR.string.create_reminder))
-                }
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = onDismiss
-            ) {
-                Text(stringResource(CoreUiR.string.cancel))
-            }
-        },
-    )
+        }
+    }
 }
 
 @Composable
