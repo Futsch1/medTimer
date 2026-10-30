@@ -76,6 +76,9 @@ A record that a scheduled reminder reached a terminal state for a given medicine
 The two Reminder Event states the Analysis feature aggregates and visualizes.
 _Avoid_: done/dismissed, completed/missed.
 
+**Open dose edit rules**:
+All rules for how an edit of a reminder or its medicine changes open (RAISED) doses due today or later (Keep, Refresh, Retime, Drop) live in one file, `feature/reminders/api/.../scheduling/ReminderEditRules.kt`. Do not add such rules elsewhere.
+
 **Tag filter**:
 A global filter on medicines by tag. The Reminder Table respects it; Charts do not; the Calendar
 filters by a single selected medicine instead.

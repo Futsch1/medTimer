@@ -104,6 +104,29 @@ class SchedulingSimulatorTest {
     }
 
     @Test
+    fun simulatesTodayAtNewTimeAfterRaisedEventDropped() = runBlocking {
+        // Reminder edited from 01:00 to 02:00 after the 01:00 dose was raised today
+        val medicines = listOf(TestHelper.buildTestMedicine(0, "Test"))
+        medicines[0].reminders.add(TestHelper.buildReminder(0, 1, "1", 120, 1))
+        val raisedEvent = TestHelper.buildReminderEvent(1, on(1, 60))
+
+        val withRaisedEvent = mutableListOf<SimulatedReminder>()
+        buildSchedulingSimulator(medicines, listOf(raisedEvent)).simulate { simulatedReminder, _ ->
+            withRaisedEvent.add(simulatedReminder)
+            false
+        }
+        // The raised dose blocks today
+        assertReminded(withRaisedEvent, on(2, 120), medicines[0].toMedicine(), medicines[0].reminders[0])
+
+        val afterDrop = mutableListOf<SimulatedReminder>()
+        buildSchedulingSimulator(medicines, emptyList()).simulate { simulatedReminder, _ ->
+            afterDrop.add(simulatedReminder)
+            false
+        }
+        assertReminded(afterDrop, on(1, 120), medicines[0].toMedicine(), medicines[0].reminders[0])
+    }
+
+    @Test
     fun interval() = runBlocking {
         val medicines = listOf(
             TestHelper.buildTestMedicine(0, "Test")

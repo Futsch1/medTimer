@@ -61,6 +61,10 @@ class ReminderEventRepositoryImpl(
         return lastReminderEvents
     }
 
+    override suspend fun getOpenFrom(reminderId: Int, startInstant: Instant): List<ReminderEvent> {
+        return reminderEventDao.getOpenFrom(reminderId, startInstant.epochSecond).map { it.toModel() }
+    }
+
     override suspend fun getLast(reminderId: Int): ReminderEvent? {
         return reminderEventDao.getLast(reminderId)?.toModel()
     }

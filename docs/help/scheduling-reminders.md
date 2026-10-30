@@ -42,4 +42,8 @@ In Advanced settings, choose **Add reminder for following dose** to add a linked
 earlier reminder event being processed. Linked reminders can be chained, and each delay is limited to 24 hours. Review
 the resulting schedule after changing the earlier reminder or its processing status.
 
+## Change a reminder that already has open doses
+
+When you change a reminder or its medicine, MedTimer updates every dose of that reminder that is still open and due today or later. Doses that you already marked as taken or skipped do not change. Missed doses from earlier days do not change either, so your history stays as it was. A dose that you moved with Reschedule keeps the time you picked, but it shows the new amount and name.
+
 [More tasks](more-tasks.md) · [Help contents](index.md)
