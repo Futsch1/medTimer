@@ -10,6 +10,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 interface EditMedicineScreenState {
+    val isLoaded: Boolean
     val id: Int?
     val amount: Double
     val unit: String
@@ -21,6 +22,7 @@ interface EditMedicineScreenState {
 }
 
 class MutableEditMedicineScreenState : EditMedicineScreenState {
+    override var isLoaded by mutableStateOf(false)
     override var id by mutableStateOf<Int?>(null)
     override var amount by mutableDoubleStateOf(0.0)
     override var unit by mutableStateOf("")

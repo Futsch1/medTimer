@@ -41,18 +41,20 @@ class MedicinesScreenViewModel @AssistedInject constructor(
     }
 
     private val liveMedicines = medicineRepository.getAllFlow()
-
-    val medicines: StateFlow<List<Medicine>> =
+    private val filteredMedicines =
         combine(liveMedicines, tagFilterViewModel.validTagIds) { medicines, tagIds ->
             tagFilterViewModel.getFiltered(medicines, tagIds ?: emptySet())
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        }
+
+    val medicines: StateFlow<List<Medicine>> =
+        filteredMedicines.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val state: MedicineScreenState
         field = MutableMedicineScreenState()
 
     init {
         combine(
-            medicines,
+            filteredMedicines,
             simulatedRemindersRepository.stockRunOutDates
         ) { medicines, stockRunOutDates ->
             medicines.map { medicine ->
@@ -79,6 +81,7 @@ class MedicinesScreenViewModel @AssistedInject constructor(
             }
         }.flowOn(ioDispatcher).onEach { medicines ->
             state.medicines = medicines.toImmutableList()
+            state.isLoaded = true
         }.launchIn(viewModelScope)
     }
 }

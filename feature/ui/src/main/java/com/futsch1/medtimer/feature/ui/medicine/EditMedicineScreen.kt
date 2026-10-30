@@ -51,7 +51,6 @@ import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import kotlinx.collections.immutable.persistentListOf
 
 // When reselected, overview is highlighted
-// Flicker when opened, also on MedicineScreen
 // Two menus, same as on MedicineScreen
 
 @SuppressWarnings("kotlin:S107")
@@ -302,7 +301,7 @@ private fun ReminderList(
                 style = MaterialTheme.typography.titleSmall,
             )
         }
-        if (state.reminders.isEmpty()) {
+        if (state.isLoaded && state.reminders.isEmpty()) {
             item(key = "add_medicine_guidance") {
                 SetupGuidanceCard(
                     message = stringResource(R.string.setup_no_reminders_guidance),
@@ -337,6 +336,7 @@ object EditMedicineTestTags {
 @Composable
 private fun EditMedicineScreenPreview() {
     val state = MutableEditMedicineScreenState().apply {
+        isLoaded = true
         id = 1
         amount = 1.0
         unit = "tablet"

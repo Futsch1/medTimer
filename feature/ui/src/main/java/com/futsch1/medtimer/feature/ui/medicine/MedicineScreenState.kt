@@ -9,10 +9,12 @@ import kotlinx.collections.immutable.persistentListOf
 
 
 interface MedicineScreenState {
+    val isLoaded: Boolean
     val medicines: ImmutableList<MedicineScreenItem>
 }
 
 class MutableMedicineScreenState : MedicineScreenState {
+    override var isLoaded by mutableStateOf(false)
     override var medicines by mutableStateOf<ImmutableList<MedicineScreenItem>>(persistentListOf())
 }
 

@@ -61,6 +61,7 @@ class EditMedicineScreenViewModel @Inject constructor(
                     }
                     setupState(medicine, summaries)
                 }
+                state.isLoaded = true
             }
         }
     }

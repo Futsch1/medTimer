@@ -118,7 +118,7 @@ fun MedicinesScreen(
                 bottom = paddingValues.calculateBottomPadding() + 80.dp
             )
         ) {
-            if (reorderableMedicines.medicines.isEmpty()) {
+            if (state.isLoaded && state.medicines.isEmpty()) {
                 item(key = "add_medicine_guidance") {
                     SetupGuidanceCard(
                         message = stringResource(R.string.setup_no_medicines_guidance),
