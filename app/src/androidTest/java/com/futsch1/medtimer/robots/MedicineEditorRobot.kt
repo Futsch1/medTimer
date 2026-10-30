@@ -72,14 +72,14 @@ class MedicineEditorRobot(
 
     fun addReminder(amount: String, time: LocalTime? = null) {
         openType(R.string.time_based_reminder)
-        setInput(R.string.dosage, amount)
+        setReminderInput(R.string.dosage, amount)
         time?.let { setTime(R.string.time, it) }
         create()
     }
 
     fun addHourlyIntervalReminder(amount: String, interval: Duration) {
         openType(R.string.continuous_interval_reminder)
-        setInput(R.string.dosage, amount)
+        setReminderInput(R.string.dosage, amount)
         setIntervalHours(interval)
         create()
     }
@@ -92,7 +92,7 @@ class MedicineEditorRobot(
         interval: Duration,
     ) {
         openType(R.string.windowed_interval_reminder)
-        setInput(R.string.dosage, amount)
+        setReminderInput(R.string.dosage, amount)
         setTime(R.string.daily_start_time, windowStart)
         setTime(R.string.daily_end_time, windowEnd)
         setIntervalHours(interval)
@@ -101,14 +101,14 @@ class MedicineEditorRobot(
 
     fun addStockReminder(threshold: String) {
         openType(R.string.out_of_stock_reminder)
-        setInput(R.string.reminder_threshold, threshold)
+        setReminderInput(R.string.reminder_threshold, threshold)
         create()
     }
 
     /** A stock reminder that fires at [time] on every day the stock is below the threshold. */
     fun addDailyStockReminder(threshold: String, time: LocalTime) {
         openType(R.string.out_of_stock_reminder)
-        setInput(R.string.reminder_threshold, threshold)
+        setReminderInput(R.string.reminder_threshold, threshold)
         dialogScope().click(hasText(ui.getString(R.string.daily_below_threshold)))
         setTime(R.string.time, time)
         create()
@@ -117,18 +117,27 @@ class MedicineEditorRobot(
     /** An expiration reminder that fires at [time] each day; defaults to the dialog's own default time. */
     fun addExpirationReminder(daysBefore: String, time: LocalTime? = null) {
         openType(R.string.expiration_reminder)
-        setInput(R.string.remind_days_before_expiration, daysBefore)
+        setReminderInput(R.string.remind_days_before_expiration, daysBefore)
         time?.let { setTime(R.string.time, it) }
         create()
     }
 
-    /** Invalid expiration days cannot be converted into reminder data, so the flow must remain open. */
-    fun assertInvalidExpirationDaysRejected(value: String) {
-        openType(R.string.expiration_reminder)
-        setInput(R.string.remind_days_before_expiration, value)
-        dialogScope().click(hasText(ui.getString(R.string.create_reminder)))
-        dialogScope().assertDisplayed(hasText(ui.getString(R.string.invalid_input)))
+    fun openAddReminderDialog() = editorScope().click(hasTestTag(EditMedicineTestTags.ADD_REMINDER))
+
+    fun selectReminderType(@StringRes type: Int) = dialogScope().click(hasText(ui.getString(type)))
+
+    fun setReminderInput(@StringRes label: Int, value: String) {
+        dialogScope().click(hasText(ui.getString(label)))
+        val editor = ui.scope(EditMedicineTestTags.EDIT_VALUE_DIALOG)
+        editor.replaceText(hasTestTag(EditMedicineTestTags.EDIT_VALUE_INPUT), value)
+        editor.click(hasText(ui.getString(R.string.ok)))
     }
+
+    fun clickCreateReminder() = dialogScope().click(hasText(ui.getString(R.string.create_reminder)))
+
+    fun assertInvalidInputDisplayed() = dialogScope().assertDisplayed(hasText(ui.getString(R.string.invalid_input)))
+
+    fun cancelReminderDialog() = dialogScope().click(hasText(ui.getString(R.string.cancel)))
 
     /** Opens the stock settings, runs [block] there and returns to the editor. */
     fun inStockSettings(block: () -> Unit) {
@@ -155,15 +164,8 @@ class MedicineEditorRobot(
         inStockSettings { preferences.assertSummary(R.string.refill_size, expected) }
 
     private fun openType(@StringRes type: Int) {
-        editorScope().click(hasTestTag(EditMedicineTestTags.ADD_REMINDER))
-        dialogScope().click(hasText(ui.getString(type)))
-    }
-
-    private fun setInput(@StringRes label: Int, value: String) {
-        dialogScope().click(hasText(ui.getString(label)))
-        val editor = ui.scope(EditMedicineTestTags.EDIT_VALUE_DIALOG)
-        editor.replaceText(hasTestTag(EditMedicineTestTags.EDIT_VALUE_INPUT), value)
-        editor.click(hasText(ui.getString(R.string.ok)))
+        openAddReminderDialog()
+        selectReminderType(type)
     }
 
     private fun setTime(@StringRes label: Int, time: LocalTime) {
@@ -183,7 +185,7 @@ class MedicineEditorRobot(
     }
 
     private fun create() {
-        dialogScope().click(hasText(ui.getString(R.string.create_reminder)))
+        clickCreateReminder()
         dialogScope().awaitGone()
     }
 

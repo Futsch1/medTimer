@@ -52,8 +52,7 @@ class NewReminderStockDialog @AssistedInject constructor(
                     state = newReminderViewModel.state,
                     medicineUnit = medicine.unit,
                     onCreate = {
-                        newReminderViewModel.createReminder()
-                        reminderCreated()
+                        if (newReminderViewModel.createReminder()) reminderCreated()
                     },
                     onDraftChange = newReminderViewModel::updateDraft,
                     onDismiss = ::dismiss,

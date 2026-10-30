@@ -144,7 +144,28 @@ class MedicineStockTest : MedTimerTestBase() {
         medicines.clickItem(0)
 
         medicineEditor.setStock(amount = amount(10.5), unit = "pills")
-        medicineEditor.assertInvalidExpirationDaysRejected("something")
+
+        medicineEditor.openAddReminderDialog()
+        medicineEditor.selectReminderType(R.string.expiration_reminder)
+        medicineEditor.setReminderInput(R.string.remind_days_before_expiration, "something")
+        medicineEditor.clickCreateReminder()
+        medicineEditor.assertInvalidInputDisplayed()
+        medicineEditor.cancelReminderDialog()
+
+        medicineEditor.openAddReminderDialog()
+        medicineEditor.selectReminderType(R.string.expiration_reminder)
+        medicineEditor.setReminderInput(R.string.remind_days_before_expiration, "")
+        medicineEditor.clickCreateReminder()
+        medicineEditor.assertInvalidInputDisplayed()
+        medicineEditor.cancelReminderDialog()
+
+        medicineEditor.inStockSettings {
+            preferences.click(R.string.create_expiration_date_reminder)
+            medicineEditor.setReminderInput(R.string.remind_days_before_expiration, "")
+            medicineEditor.clickCreateReminder()
+            medicineEditor.assertInvalidInputDisplayed()
+            medicineEditor.cancelReminderDialog()
+        }
     }
 
     @Test

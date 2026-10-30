@@ -49,17 +49,18 @@ class NewReminderViewModel @Inject constructor(
         mutableState.invalid = false
     }
 
-    fun createReminder() {
+    fun createReminder(): Boolean {
         val reminder = mutableState.draft.toReminder(medicineId)
         if (reminder == null) {
             mutableState.invalid = true
-            return
+            return false
         }
 
         viewModelScope.launch {
             reminderRepository.create(reminder)
             mutableState.created = true
         }
+        return true
     }
 }
 
