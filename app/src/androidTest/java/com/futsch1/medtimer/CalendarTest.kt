@@ -25,19 +25,20 @@ class CalendarTest : MedTimerTestBase() {
         statistics.assertCalendarDayEventsContain(GINSENG)
 
         navigation.toOverview()
-        seed.manualDose("Temporary dose")
-        overview.assertEventContains("Temporary dose")
-        overview.clickEventStateContaining("Temporary dose")
+        seed.manualDose(TEMPORARY_DOSE)
+        overview.assertEventContains(TEMPORARY_DOSE)
+        overview.clickEventStateContaining(TEMPORARY_DOSE)
         overview.clickAction(R.string.delete)
         dialogs.confirm()
 
         navigation.toAnalysis()
         statistics.selectView(StatisticFragment.CALENDAR)
-        statistics.assertNoCalendarDayEventContains("Temporary dose")
+        statistics.assertNoCalendarDayEventContains(TEMPORARY_DOSE)
     }
 
     companion object {
         private const val OMEGA_3 = "Omega 3 (EPA/DHA 500mg)"
         private const val GINSENG = "Ginseng (200mg)"
+        private const val TEMPORARY_DOSE = "Temporary dose"
     }
 }
