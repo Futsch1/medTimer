@@ -48,10 +48,9 @@ class MutableNewReminderState(private val timeFormatter: TimeFormatter) : NewRem
         get() = timeFormatter.minutesToTimeString(draft.time.toMinuteOfDay())
 
     override val intervalStartText: String
-        get() = listOf(
-            timeFormatter.localDateToString(draft.intervalStart.toLocalDate()),
-            timeFormatter.minutesToTimeString(draft.intervalStart.toLocalTime().toMinuteOfDay()),
-        ).joinToString(" | ")
+        get() =
+            timeFormatter.localDateToString(draft.intervalStart.toLocalDate()) + " " +
+                    timeFormatter.minutesToTimeString(draft.intervalStart.toLocalTime().toMinuteOfDay())
 
     override val dailyStartText: String
         get() = timeFormatter.minutesToTimeString(draft.dailyStart.toMinuteOfDay())
