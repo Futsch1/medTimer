@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.feature.ui.statistics.levels
 
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
+import com.futsch1.medtimer.core.common.helpers.UnitCount
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.ui.TimeFormatter
@@ -152,7 +154,6 @@ class LevelsPresenterTest {
         val state = present(events)
 
         assertEquals(2, state.ignoredDoses)
-        assertTrue(state.amountConflicts.isEmpty())
         assertTrue(state.unitConflicts.isEmpty())
         assertEquals(present(counted).series, state.series)
     }
@@ -192,43 +193,34 @@ class LevelsPresenterTest {
     }
 
     @Test
-    fun `a medicine with amounts containing several numbers is not estimated but reported`() {
-        val medicineB = Medicine.default().copy(name = "Medicine B", halfLifeHours = 10.0, timeToPeakHours = 1.0)
+    fun `explanatory amounts use the primary number and unit for the estimate`() {
+        val first = Instant.parse("2026-03-09T06:00:00Z")
+        val second = Instant.parse("2026-03-10T06:00:00Z")
         val events = listOf(
-            taken("Medicine A", Instant.parse("2026-03-09T06:00:00Z"), "2mg"),
-            taken("Medicine A", Instant.parse("2026-03-09T16:00:00Z"), " 1-2 tablets "),
-            taken("Medicine A", Instant.parse("2026-03-09T14:00:00Z"), "2 x 5mg"),
-            taken("Medicine A", Instant.parse("2026-03-09T17:00:00Z"), "?"),
-            taken("Medicine B", Instant.parse("2026-03-09T08:00:00Z"), "1 tablet"),
+            taken("Medicine A", first, "Take 1 capsule (25 mg)"),
+            taken("Medicine A", second, "2 capsule (25 mg)"),
         )
-        val state = present(events, listOf(medicineA, medicineB))
+        val state = present(events)
+        val expected = present(listOf(taken("Medicine A", first, "1 capsule"), taken("Medicine A", second, "2 capsule")))
 
-        assertEquals(listOf("Medicine B"), state.series.map { it.medicineName })
-        // The most recent offending amount is shown, so it can be found and corrected
-        assertEquals(listOf(AmountConflict("Medicine A", "1-2 tablets", AmountProblem.SEVERAL_NUMBERS)), state.amountConflicts)
+        assertSameCurve(expected.series.single(), state.series.single())
+        assertEquals(events.map { it.amount }, state.series.single().doses.map { it.label })
         assertTrue(state.unitConflicts.isEmpty())
-        // The unreadable dose of the hidden medicine is not reported separately
         assertEquals(0, state.ignoredDoses)
     }
 
     @Test
-    fun `a medicine with numbers that cannot be read completely is not estimated but reported`() {
-        val events = listOf(
-            taken("Medicine A", Instant.parse("2026-03-09T06:00:00Z"), "2mg"),
-            // Whatever the decimal separator, the number format stops at the separator after it
-            taken("Medicine A", Instant.parse("2026-03-09T08:00:00Z"), "1.5,5.5 mg"),
-            taken("Medicine A", Instant.parse("2026-03-09T09:00:00Z"), "2 x 5mg"),
-        )
-        val state = present(events)
+    fun `partially parsed numbers use the same numeric result as stock`() {
+        val first = Instant.parse("2026-03-09T06:00:00Z")
+        val second = Instant.parse("2026-03-10T06:00:00Z")
+        val text = "1.5,5.5 mg"
+        val amount = checkNotNull(DoseAmountParser.parseAmount(text))
+        val state = present(listOf(taken("Medicine A", first, text), taken("Medicine A", second, "2 mg")))
+        val expected = present(listOf(taken("Medicine A", first, "$amount mg"), taken("Medicine A", second, "2 mg")))
 
-        assertTrue(state.series.isEmpty())
-        assertEquals(
-            listOf(
-                AmountConflict("Medicine A", "1.5,5.5 mg", AmountProblem.INCOMPLETE_NUMBER),
-                AmountConflict("Medicine A", "2 x 5mg", AmountProblem.SEVERAL_NUMBERS),
-            ),
-            state.amountConflicts.sortedBy { it.problem.ordinal }.reversed(),
-        )
+        assertSameCurve(expected.series.single(), state.series.single())
+        assertTrue(state.unitConflicts.isEmpty())
+        assertEquals(0, state.ignoredDoses)
     }
 
     @Test

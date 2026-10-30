@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences
 
 import android.content.Context
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Reminder
@@ -123,7 +124,7 @@ class ReminderDataStore @AssistedInject constructor(
                 ?.takeIf { it >= 0 }
                 ?.let { modelData = modelData.copy(intervalEndTimeOfDay = LocalTime.ofSecondOfDay(it * 60L)) }
 
-            "stock_threshold" -> MedicineHelper.parseAmount(value)
+            "stock_threshold" -> DoseAmountParser.parseAmount(value)
                 ?.let { modelData = modelData.copy(outOfStockThreshold = it) }
 
             "stock_reminder" -> value?.toIntOrNull()?.let {

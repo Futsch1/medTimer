@@ -22,7 +22,7 @@ import com.futsch1.medtimer.feature.ui.statistics.levels.LevelCurve
 import com.futsch1.medtimer.feature.ui.statistics.levels.LevelSeries
 import com.futsch1.medtimer.feature.ui.statistics.levels.LevelsState
 import com.futsch1.medtimer.feature.ui.statistics.levels.UnitConflict
-import com.futsch1.medtimer.feature.ui.statistics.levels.UnitCount
+import com.futsch1.medtimer.core.common.helpers.UnitCount
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule

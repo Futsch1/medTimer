@@ -1,6 +1,7 @@
 package com.futsch1.medtimer
 
 import android.content.Context
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -18,59 +19,13 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.text.NumberFormat
 import java.time.LocalDate
-import java.util.Locale
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import com.futsch1.medtimer.core.ui.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class MedicineHelperTest {
-    @Test
-    fun `parseAmount with requireComplete only accepts numbers the locale reads completely`() {
-        val us = NumberFormat.getNumberInstance(Locale.US)
-        val hungarian = NumberFormat.getNumberInstance(Locale.forLanguageTag("hu-HU"))
-        val german = NumberFormat.getNumberInstance(Locale.GERMANY)
-
-        // Without requireComplete, the number format silently stops at a character it cannot use
-        assertEquals(10.0, MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = false))
-        assertNull(MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = true))
-        assertEquals(10.5, MedicineHelper.parseAmount("10,5 mg", hungarian, requireComplete = true))
-        assertEquals(10.5, MedicineHelper.parseAmount("10.5mg", us, requireComplete = true))
-        assertNull(MedicineHelper.parseAmount("1.2.3", us, requireComplete = true))
-        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5", us, requireComplete = true))
-        // A separator at the end of the number is not part of it
-        assertEquals(5.0, MedicineHelper.parseAmount("5. mg", us, requireComplete = true))
-        assertEquals(5.0, MedicineHelper.parseAmount("5, then", us, requireComplete = true))
-        // Read completely, but as a thousands separator; this cannot be detected
-        assertEquals(125.0, MedicineHelper.parseAmount("12.5", german, requireComplete = true))
-        assertNull(MedicineHelper.parseAmount("no number", us, requireComplete = true))
-    }
-
-    @Test
-    fun testParse() {
-        assertEquals(3.5, MedicineHelper.parseAmount("3.5"))
-        assertEquals(5.0, MedicineHelper.parseAmount("5"))
-        assertEquals(0.5, MedicineHelper.parseAmount(".5"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50000"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50,000"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50 000"))
-        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5"))
-        assertEquals(1000000.42, MedicineHelper.parseAmount("1 000 000.42"))
-        assertEquals(3.566, MedicineHelper.parseAmount("3.566 pills"))
-        assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills"))
-        assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills at 5 o'clock"))
-        assertEquals(null, MedicineHelper.parseAmount(".."))
-        assertEquals(null, MedicineHelper.parseAmount("There is no number here. Only some ,. and spaces."))
-        assertEquals(4.0, MedicineHelper.parseAmount("Many. 4 to be specific."))
-        assertNull(MedicineHelper.parseAmount("Take pills"))
-        var amount = 5.0
-        MedicineHelper.parseAmount("No string")?.let { amount = it }
-        assertEquals(5.0, amount)
-    }
-
     @Test
     fun testFormat() {
         assertEquals("3.5", MedicineHelper.formatAmount(3.5, ""))
@@ -82,7 +37,7 @@ class MedicineHelperTest {
         val amount = 123456.0
         val unit = "pills"
         val formatted = MedicineHelper.formatAmount(amount, unit)
-        val parsed = MedicineHelper.parseAmount(formatted)
+        val parsed = DoseAmountParser.parseAmount(formatted)
         assertEquals(amount, parsed)
     }
 

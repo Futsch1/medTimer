@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.statistics.levels
 
 import androidx.compose.runtime.Immutable
+import com.futsch1.medtimer.core.common.helpers.UnitCount
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -12,7 +13,6 @@ import kotlinx.collections.immutable.persistentListOf
  *
  * @param peakProjectionDays days of the projection shown initially: enough to show the peak of a dose taken now
  * @param ignoredDoses taken doses in the window that are left out because their amount cannot be read
- * @param amountConflicts medicines that are not estimated because some dose amounts would only be partially read
  * @param unitConflicts medicines that are not estimated because their doses use different units
  * @param nowHours position of the current time on the x-axis, where the projection starts
  * @param midnightLabels date label of each midnight from the window start up to and including the window end
@@ -26,7 +26,6 @@ data class LevelsState(
     val peakProjectionDays: Int = projectionDays,
     val ignoredDoses: Int,
     val unitConflicts: ImmutableList<UnitConflict>,
-    val amountConflicts: ImmutableList<AmountConflict> = persistentListOf(),
     val nowHours: Double,
     val midnightLabels: ImmutableList<String>,
 ) {
@@ -71,23 +70,6 @@ data class DoseMarker(
 data class UnitConflict(
     val medicineName: String,
     val units: ImmutableList<UnitCount>,
-)
-
-/** Why a dose amount cannot be read as one number. */
-enum class AmountProblem {
-    /** Further numbers follow the amount, like "2 x 5mg". */
-    SEVERAL_NUMBERS,
-
-    /** The number format cannot read the whole number, like "10.5" where "," is the decimal separator. */
-    INCOMPLETE_NUMBER,
-}
-
-/** A medicine left out of the estimate because some doses have the [problem], the most recent being [example]. */
-@Immutable
-data class AmountConflict(
-    val medicineName: String,
-    val example: String,
-    val problem: AmountProblem,
 )
 
 @Immutable

@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -66,11 +67,11 @@ class MedicineDataStore @AssistedInject constructor(
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            "amount" -> MedicineHelper.parseAmount(value)
+            "amount" -> DoseAmountParser.parseAmount(value)
                 ?.let { modelData = modelData.copy(amount = it) }
 
             "stock_unit" -> modelData = modelData.copy(unit = value!!)
-            "stock_refill_size" -> MedicineHelper.parseAmount(value)
+            "stock_refill_size" -> DoseAmountParser.parseAmount(value)
                 ?.let { modelData = modelData.copy(refillSize = it) }
 
             "half_life_hours" -> modelData = modelData.copy(halfLifeHours = parseOptionalHours(value))
@@ -96,7 +97,7 @@ class MedicineDataStore @AssistedInject constructor(
     // 0 means "not set" for the level estimate parameters; an empty input clears them
     private fun formatOptionalHours(hours: Double): String = if (hours > 0.0) MedicineHelper.formatAmount(hours, "") else ""
 
-    private fun parseOptionalHours(value: String?): Double = MedicineHelper.parseAmount(value)?.coerceAtLeast(0.0) ?: 0.0
+    private fun parseOptionalHours(value: String?): Double = DoseAmountParser.parseAmount(value)?.coerceAtLeast(0.0) ?: 0.0
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {

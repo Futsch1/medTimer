@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -203,7 +204,7 @@ fun EditText.addDoubleValidator() {
         override fun afterTextChanged(s: Editable?) {
             if (s == null || s.toString().isEmpty()) return
 
-            val parsed: Double? = MedicineHelper.parseAmount(s.toString())
+            val parsed: Double? = DoseAmountParser.parseAmount(s.toString())
             if (parsed == null || parsed.isNaN() || parsed < 0.0) {
                 // If the input is not a valid double, remove the last character
                 s.delete(s.length - 1, s.length)
