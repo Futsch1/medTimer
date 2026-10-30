@@ -18,10 +18,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,29 +25,24 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.Interval
-import com.futsch1.medtimer.core.ui.IntervalUnit
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.medicine.EditTextButton
 import com.futsch1.medtimer.feature.ui.medicine.EditValueButton
-import com.futsch1.medtimer.feature.ui.medicine.NewReminderData
-import com.futsch1.medtimer.feature.ui.medicine.NewReminderExpirationFrequency
-import com.futsch1.medtimer.feature.ui.medicine.NewReminderStockFrequency
-import com.futsch1.medtimer.feature.ui.medicine.rememberPreviewTimeFormatter
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderDraft
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderExpirationReminderType
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderState
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderStockReminderType
+import com.futsch1.medtimer.feature.ui.medicine.PreviewNewReminderState
+import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.EditIntervalDialog
 import com.futsch1.medtimer.feature.ui.medicine.showMaterialDatePicker
 import com.futsch1.medtimer.feature.ui.medicine.showMaterialTimePicker
-import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.EditIntervalDialog
-import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
 import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 object NewReminderTestTags {
@@ -69,33 +60,15 @@ private val creationTypes = listOf(
 
 @Composable
 fun NewReminderFlowDialog(
-    medicineId: Int,
-    medicineAmount: Double,
+    state: NewReminderState,
     medicineUnit: String,
-    timeFormatter: TimeFormatter,
-    onCreate: (NewReminderData) -> Unit,
+    onCreate: () -> Unit,
+    onDraftChange: (draft: NewReminderDraft) -> Unit,
     onDismiss: () -> Unit,
-    onOpenHelp: () -> Unit,
-    initialType: ReminderType? = null,
+    onOpenHelp: () -> Unit
 ) {
-    var selectedType by rememberSaveable(initialType) { mutableStateOf(initialType) }
-    val defaultTime = timeFormatter.minutesToTimeString(ReminderTime.DEFAULT_TIME)
-    var amount by rememberSaveable { mutableStateOf("") }
-    var time by rememberSaveable { mutableStateOf(defaultTime) }
-    var interval by rememberSaveable { mutableStateOf("12") }
-    var intervalUnit by rememberSaveable { mutableStateOf(IntervalUnit.HOURS) }
-    var intervalStartsFromProcessed by rememberSaveable { mutableStateOf(false) }
-    val defaultDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(ReminderTime.DEFAULT_TIME / 60, 0))
-    var startDateTime by rememberSaveable { mutableStateOf(formatLocalDateTime(defaultDateTime, timeFormatter)) }
-    var dailyStart by rememberSaveable { mutableStateOf(defaultTime) }
-    var dailyEnd by rememberSaveable { mutableStateOf(timeFormatter.minutesToTimeString(23 * 60)) }
-    var threshold by rememberSaveable(medicineId) { mutableStateOf(MedicineHelper.formatAmount(medicineAmount, "")) }
-    var stockRule by rememberSaveable { mutableStateOf(NewReminderStockFrequency.ONCE) }
-    var expirationDays by rememberSaveable { mutableStateOf("0") }
-    var expirationRule by rememberSaveable { mutableStateOf(NewReminderExpirationFrequency.ONCE) }
-    var invalid by rememberSaveable { mutableStateOf(false) }
-
-    val type = selectedType
+    val draft = state.draft
+    val type = draft.selectedType
     AlertDialog(
         modifier = Modifier.testTag(NewReminderTestTags.DIALOG),
         onDismissRequest = onDismiss,
@@ -108,37 +81,14 @@ fun NewReminderFlowDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if (type == null) {
-                    ReminderTypeChooser(onSelect = { selectedType = it })
+                    ReminderTypeChooser(onSelect = { onDraftChange(draft.copy(selectedType = it)) })
                 } else {
                     ReminderDetailsFields(
                         type = type,
                         medicineUnit = medicineUnit,
-                        timeFormatter = timeFormatter,
-                        amount = amount,
-                        onAmountChange = { amount = it },
-                        time = time,
-                        onTimeChange = { time = it },
-                        interval = interval,
-                        onIntervalChange = { interval = it },
-                        intervalUnit = intervalUnit,
-                        onIntervalUnitChange = { intervalUnit = it },
-                        intervalStartsFromProcessed = intervalStartsFromProcessed,
-                        onIntervalStartsFromProcessedChange = { intervalStartsFromProcessed = it },
-                        startDateTime = startDateTime,
-                        onStartDateTimeChange = { startDateTime = it },
-                        dailyStart = dailyStart,
-                        onDailyStartChange = { dailyStart = it },
-                        dailyEnd = dailyEnd,
-                        onDailyEndChange = { dailyEnd = it },
-                        threshold = threshold,
-                        onThresholdChange = { threshold = it },
-                        stockRule = stockRule,
-                        onStockRuleChange = { stockRule = it },
-                        expirationDays = expirationDays,
-                        onExpirationDaysChange = { expirationDays = it },
-                        expirationRule = expirationRule,
-                        onExpirationRuleChange = { expirationRule = it },
-                        invalid = invalid,
+                        state = state,
+                        draft = draft,
+                        onDraftChange = onDraftChange,
                     )
                 }
             }
@@ -150,31 +100,14 @@ fun NewReminderFlowDialog(
                     modifier = Modifier.testTag(NewReminderTestTags.HELP_BUTTON),
                 ) { Text(stringResource(CoreUiR.string.reminder_types_help)) }
             } else {
-                TextButton(onClick = {
-                    val result = createReminderData(
-                        type = type,
-                        medicineId = medicineId,
-                        timeFormatter = timeFormatter,
-                        amount = amount,
-                        time = time,
-                        interval = interval,
-                        intervalUnit = intervalUnit,
-                        intervalStartsFromProcessed = intervalStartsFromProcessed,
-                        startDateTime = startDateTime,
-                        dailyStart = dailyStart,
-                        dailyEnd = dailyEnd,
-                        threshold = threshold,
-                        stockRule = stockRule,
-                        expirationDays = expirationDays,
-                        expirationRule = expirationRule,
-                    )
-                    if (result != null) onCreate(result) else invalid = true
-                }) { Text(stringResource(CoreUiR.string.create_reminder)) }
+                TextButton(onClick = onCreate) {
+                    Text(stringResource(CoreUiR.string.create_reminder))
+                }
             }
         },
         dismissButton = {
             TextButton(
-                onClick = if (type == null || initialType != null) onDismiss else ({ selectedType = null; invalid = false }),
+                onClick = onDismiss
             ) {
                 Text(stringResource(CoreUiR.string.cancel))
             }
@@ -209,150 +142,113 @@ private fun ReminderTypeChooser(onSelect: (ReminderType) -> Unit) {
     }
 }
 
-@SuppressWarnings("kotlin:S107")
 @Composable
 private fun ReminderDetailsFields(
     type: ReminderType,
     medicineUnit: String,
-    timeFormatter: TimeFormatter,
-    amount: String,
-    onAmountChange: (String) -> Unit,
-    time: String,
-    onTimeChange: (String) -> Unit,
-    interval: String,
-    onIntervalChange: (String) -> Unit,
-    intervalUnit: IntervalUnit,
-    onIntervalUnitChange: (IntervalUnit) -> Unit,
-    intervalStartsFromProcessed: Boolean,
-    onIntervalStartsFromProcessedChange: (Boolean) -> Unit,
-    startDateTime: String,
-    onStartDateTimeChange: (String) -> Unit,
-    dailyStart: String,
-    onDailyStartChange: (String) -> Unit,
-    dailyEnd: String,
-    onDailyEndChange: (String) -> Unit,
-    threshold: String,
-    onThresholdChange: (String) -> Unit,
-    stockRule: NewReminderStockFrequency,
-    onStockRuleChange: (NewReminderStockFrequency) -> Unit,
-    expirationDays: String,
-    onExpirationDaysChange: (String) -> Unit,
-    expirationRule: NewReminderExpirationFrequency,
-    onExpirationRuleChange: (NewReminderExpirationFrequency) -> Unit,
-    invalid: Boolean,
+    state: NewReminderState,
+    draft: NewReminderDraft,
+    onDraftChange: (NewReminderDraft) -> Unit,
 ) {
     when (type) {
-        ReminderType.OUT_OF_STOCK -> StockReminderFields(
-            medicineUnit, threshold, onThresholdChange, stockRule, onStockRuleChange, time, onTimeChange, timeFormatter,
-        )
-
-        ReminderType.EXPIRATION_DATE -> ExpirationReminderFields(
-            expirationDays, onExpirationDaysChange, expirationRule, onExpirationRuleChange, time, onTimeChange, timeFormatter,
-        )
-
-        else -> ScheduledReminderFields(
-            type, amount, onAmountChange, time, onTimeChange, interval, onIntervalChange,
-            intervalUnit, onIntervalUnitChange, intervalStartsFromProcessed,
-            onIntervalStartsFromProcessedChange, startDateTime, onStartDateTimeChange,
-            dailyStart, onDailyStartChange, dailyEnd, onDailyEndChange, timeFormatter,
-        )
+        ReminderType.OUT_OF_STOCK -> StockReminderFields(medicineUnit, state, draft, onDraftChange)
+        ReminderType.EXPIRATION_DATE -> ExpirationReminderFields(state, draft, onDraftChange)
+        else -> ScheduledReminderFields(type, state, draft, onDraftChange)
     }
-    if (invalid) Text(stringResource(CoreUiR.string.invalid_input), color = MaterialTheme.colorScheme.error)
+    if (state.invalid) Text(stringResource(CoreUiR.string.invalid_input), color = MaterialTheme.colorScheme.error)
 }
 
 @Composable
 private fun StockReminderFields(
     medicineUnit: String,
-    threshold: String,
-    onThresholdChange: (String) -> Unit,
-    rule: NewReminderStockFrequency,
-    onRuleChange: (NewReminderStockFrequency) -> Unit,
-    time: String,
-    onTimeChange: (String) -> Unit,
-    timeFormatter: TimeFormatter,
+    state: NewReminderState,
+    draft: NewReminderDraft,
+    onDraftChange: (NewReminderDraft) -> Unit,
 ) {
     EditTextButton(
         label = stringResource(CoreUiR.string.reminder_threshold),
-        value = "$threshold $medicineUnit",
-        onConfirm = onThresholdChange,
+        value = "${draft.threshold} $medicineUnit",
+        onConfirm = { onDraftChange(draft.copy(threshold = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
     RadioChoiceGroup {
-        RadioChoice(stringResource(CoreUiR.string.once_below_threshold), rule == NewReminderStockFrequency.ONCE) {
-            onRuleChange(NewReminderStockFrequency.ONCE)
+        RadioChoice(
+            stringResource(CoreUiR.string.once_below_threshold),
+            draft.stockReminderType == NewReminderStockReminderType.ONCE
+        ) {
+            onDraftChange(draft.copy(stockReminderType = NewReminderStockReminderType.ONCE))
         }
-        RadioChoice(stringResource(CoreUiR.string.always_below_threshold), rule == NewReminderStockFrequency.ALWAYS) {
-            onRuleChange(NewReminderStockFrequency.ALWAYS)
+        RadioChoice(
+            stringResource(CoreUiR.string.always_below_threshold),
+            draft.stockReminderType == NewReminderStockReminderType.ALWAYS
+        ) {
+            onDraftChange(draft.copy(stockReminderType = NewReminderStockReminderType.ALWAYS))
         }
-        RadioChoice(stringResource(CoreUiR.string.daily_below_threshold), rule == NewReminderStockFrequency.DAILY) {
-            onRuleChange(NewReminderStockFrequency.DAILY)
+        RadioChoice(
+            stringResource(CoreUiR.string.daily_below_threshold),
+            draft.stockReminderType == NewReminderStockReminderType.DAILY
+        ) {
+            onDraftChange(draft.copy(stockReminderType = NewReminderStockReminderType.DAILY))
         }
     }
-    if (rule == NewReminderStockFrequency.DAILY) TimeField(CoreUiR.string.time, time, onTimeChange, timeFormatter)
+    if (draft.stockReminderType == NewReminderStockReminderType.DAILY) {
+        TimeField(CoreUiR.string.time, draft.time, state.timeText) { onDraftChange(draft.copy(time = it)) }
+    }
 }
 
 @Composable
 private fun ExpirationReminderFields(
-    days: String,
-    onDaysChange: (String) -> Unit,
-    rule: NewReminderExpirationFrequency,
-    onRuleChange: (NewReminderExpirationFrequency) -> Unit,
-    time: String,
-    onTimeChange: (String) -> Unit,
-    timeFormatter: TimeFormatter,
+    state: NewReminderState,
+    draft: NewReminderDraft,
+    onDraftChange: (NewReminderDraft) -> Unit,
 ) {
     EditTextButton(
         label = stringResource(CoreUiR.string.remind_days_before_expiration),
-        value = days,
-        onConfirm = onDaysChange,
+        value = draft.expirationDays,
+        onConfirm = { onDraftChange(draft.copy(expirationDays = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
     RadioChoiceGroup {
-        RadioChoice(stringResource(CoreUiR.string.once), rule == NewReminderExpirationFrequency.ONCE) {
-            onRuleChange(NewReminderExpirationFrequency.ONCE)
+        RadioChoice(
+            stringResource(CoreUiR.string.once),
+            draft.expirationReminderType == NewReminderExpirationReminderType.ONCE
+        ) {
+            onDraftChange(draft.copy(expirationReminderType = NewReminderExpirationReminderType.ONCE))
         }
-        RadioChoice(stringResource(CoreUiR.string.daily), rule == NewReminderExpirationFrequency.DAILY) {
-            onRuleChange(NewReminderExpirationFrequency.DAILY)
+        RadioChoice(
+            stringResource(CoreUiR.string.daily),
+            draft.expirationReminderType == NewReminderExpirationReminderType.DAILY
+        ) {
+            onDraftChange(draft.copy(expirationReminderType = NewReminderExpirationReminderType.DAILY))
         }
     }
-    TimeField(CoreUiR.string.time, time, onTimeChange, timeFormatter)
+    TimeField(CoreUiR.string.time, draft.time, state.timeText) { onDraftChange(draft.copy(time = it)) }
 }
 
-@SuppressWarnings("kotlin:S107")
 @Composable
 private fun ScheduledReminderFields(
     type: ReminderType,
-    amount: String,
-    onAmountChange: (String) -> Unit,
-    time: String,
-    onTimeChange: (String) -> Unit,
-    interval: String,
-    onIntervalChange: (String) -> Unit,
-    intervalUnit: IntervalUnit,
-    onIntervalUnitChange: (IntervalUnit) -> Unit,
-    startsFromProcessed: Boolean,
-    onStartsFromProcessedChange: (Boolean) -> Unit,
-    startDateTime: String,
-    onStartDateTimeChange: (String) -> Unit,
-    dailyStart: String,
-    onDailyStartChange: (String) -> Unit,
-    dailyEnd: String,
-    onDailyEndChange: (String) -> Unit,
-    timeFormatter: TimeFormatter,
+    state: NewReminderState,
+    draft: NewReminderDraft,
+    onDraftChange: (NewReminderDraft) -> Unit,
 ) {
     EditTextButton(
         label = stringResource(CoreUiR.string.dosage),
-        value = amount,
-        onConfirm = onAmountChange,
+        value = draft.amount,
+        onConfirm = { onDraftChange(draft.copy(amount = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
     when (type) {
-        ReminderType.TIME_BASED -> TimeField(CoreUiR.string.time, time, onTimeChange, timeFormatter)
+        ReminderType.TIME_BASED -> TimeField(CoreUiR.string.time, draft.time, state.timeText) {
+            onDraftChange(draft.copy(time = it))
+        }
+
         ReminderType.CONTINUOUS_INTERVAL, ReminderType.WINDOWED_INTERVAL -> {
             val context = LocalContext.current
             val maxIntervalMinutes =
                 if (type == ReminderType.WINDOWED_INTERVAL) 24 * 60 else Interval.MAX_INTERVAL_MINUTES
-            val intervalMinutes = interval.toIntOrNull()?.let { Interval(it, intervalUnit).minutesValue } ?: (12 * 60)
+            val intervalMinutes = draft.interval.toIntOrNull()
+                ?.let { Interval(it, draft.intervalUnit).minutesValue } ?: (12 * 60)
             EditValueButton(
                 label = stringResource(CoreUiR.string.interval),
                 value = Interval(intervalMinutes, maxIntervalMinutes).toTranslatedString(context),
@@ -363,24 +259,24 @@ private fun ScheduledReminderFields(
                     )
                     EditIntervalDialog(context, reminder) { updatedMinutes ->
                         val updatedInterval = Interval(updatedMinutes, maxIntervalMinutes)
-                        onIntervalChange(updatedInterval.getValue().toString())
-                        onIntervalUnitChange(updatedInterval.getUnit())
+                        onDraftChange(
+                            draft.copy(
+                                interval = updatedInterval.getValue().toString(),
+                                intervalUnit = updatedInterval.getUnit(),
+                            ),
+                        )
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
             if (type == ReminderType.CONTINUOUS_INTERVAL) {
-                val dateTime = runCatching {
-                    LocalDateTimeParser.parseLocalDateTime(startDateTime, timeFormatter)
-                }.getOrElse { LocalDateTime.now() }
                 EditValueButton(
                     label = stringResource(CoreUiR.string.interval_start_time),
-                    value = formatLocalDateTime(startDateTime, timeFormatter),
+                    value = state.intervalStartText,
                     onClick = {
-                        showMaterialDatePicker(context, dateTime.toLocalDate()) { selectedDate ->
-                            showMaterialTimePicker(context, dateTime.toLocalTime()) { selectedTime ->
-                                val selectedDateTime = LocalDateTime.of(selectedDate, selectedTime)
-                                onStartDateTimeChange(formatLocalDateTime(selectedDateTime, timeFormatter))
+                        showMaterialDatePicker(context, draft.intervalStart.toLocalDate()) { selectedDate ->
+                            showMaterialTimePicker(context, draft.intervalStart.toLocalTime()) { selectedTime ->
+                                onDraftChange(draft.copy(intervalStart = LocalDateTime.of(selectedDate, selectedTime)))
                             }
                         }
                     },
@@ -389,16 +285,20 @@ private fun ScheduledReminderFields(
                 RadioChoiceGroup {
                     RadioChoice(
                         stringResource(CoreUiR.string.interval_start_reminded),
-                        !startsFromProcessed
-                    ) { onStartsFromProcessedChange(false) }
+                        !draft.intervalStartsFromProcessed,
+                    ) { onDraftChange(draft.copy(intervalStartsFromProcessed = false)) }
                     RadioChoice(
                         stringResource(CoreUiR.string.interval_start_processed),
-                        startsFromProcessed
-                    ) { onStartsFromProcessedChange(true) }
+                        draft.intervalStartsFromProcessed,
+                    ) { onDraftChange(draft.copy(intervalStartsFromProcessed = true)) }
                 }
             } else {
-                TimeField(CoreUiR.string.daily_start_time, dailyStart, onDailyStartChange, timeFormatter)
-                TimeField(CoreUiR.string.daily_end_time, dailyEnd, onDailyEndChange, timeFormatter)
+                TimeField(CoreUiR.string.daily_start_time, draft.dailyStart, state.dailyStartText) {
+                    onDraftChange(draft.copy(dailyStart = it))
+                }
+                TimeField(CoreUiR.string.daily_end_time, draft.dailyEnd, state.dailyEndText) {
+                    onDraftChange(draft.copy(dailyEnd = it))
+                }
             }
         }
 
@@ -406,89 +306,13 @@ private fun ScheduledReminderFields(
     }
 }
 
-@SuppressWarnings("kotlin:S107")
-private fun createReminderData(
-    type: ReminderType,
-    medicineId: Int,
-    amount: String,
-    time: String,
-    interval: String,
-    intervalUnit: IntervalUnit,
-    intervalStartsFromProcessed: Boolean,
-    startDateTime: String,
-    dailyStart: String,
-    dailyEnd: String,
-    threshold: String,
-    stockRule: NewReminderStockFrequency,
-    expirationDays: String,
-    expirationRule: NewReminderExpirationFrequency,
-    timeFormatter: TimeFormatter,
-): NewReminderData? = runCatching {
-    val timeMinutes = parseTime(time, timeFormatter)
-    when (type) {
-        ReminderType.TIME_BASED -> NewReminderData(medicineId, type, amount.trim(), timeMinutes)
-        ReminderType.CONTINUOUS_INTERVAL -> NewReminderData(
-            medicineId = medicineId,
-            type = type,
-            amount = amount.trim(),
-            timeMinutes = timeMinutes,
-            intervalMinutes = intervalMinutes(interval, intervalUnit, Interval.MAX_INTERVAL_MINUTES),
-            intervalStart = LocalDateTimeParser.parse(startDateTime, timeFormatter),
-            intervalStartsFromProcessed = intervalStartsFromProcessed,
-        )
-
-        ReminderType.WINDOWED_INTERVAL -> NewReminderData(
-            medicineId = medicineId,
-            type = type,
-            amount = amount.trim(),
-            timeMinutes = timeMinutes,
-            intervalMinutes = intervalMinutes(interval, intervalUnit, 24 * 60),
-            dailyStartTime = localTimeFromString(dailyStart, timeFormatter),
-            dailyEndTime = localTimeFromString(dailyEnd, timeFormatter),
-        )
-
-        ReminderType.OUT_OF_STOCK -> NewReminderData(
-            medicineId = medicineId,
-            type = type,
-            amount = "",
-            timeMinutes = timeMinutes,
-            stockThreshold = MedicineHelper.parseAmount(threshold) ?: error("threshold"),
-            stockFrequency = stockRule,
-        )
-
-        ReminderType.EXPIRATION_DATE -> NewReminderData(
-            medicineId = medicineId,
-            type = type,
-            amount = "",
-            timeMinutes = timeMinutes,
-            expirationDaysBefore = expirationDays.toLong(),
-            expirationFrequency = expirationRule,
-        )
-
-        else -> error("Unsupported reminder type")
-    }
-}.getOrNull()
-
 @Composable
-private fun TimeField(label: Int, value: String, onValueChange: (String) -> Unit, timeFormatter: TimeFormatter) {
+private fun TimeField(label: Int, time: LocalTime, displayValue: String, onValueChange: (LocalTime) -> Unit) {
     val context = LocalContext.current
-    val minutes = timeFormatter.timeStringToMinutes(value)
-    val time = if (minutes >= 0) {
-        LocalTime.of(minutes / 60, minutes % 60)
-    } else {
-        LocalTime.of(ReminderTime.DEFAULT_TIME / 60, ReminderTime.DEFAULT_TIME % 60)
-    }
-    val displayValue = if (minutes >= 0) timeFormatter.minutesToTimeString(minutes) else value
     EditValueButton(
         label = stringResource(label),
         value = displayValue,
-        onClick = {
-            showMaterialTimePicker(context, time) { selectedTime ->
-                onValueChange(
-                    timeFormatter.minutesToTimeString(selectedTime.hour * 60 + selectedTime.minute)
-                )
-            }
-        },
+        onClick = { showMaterialTimePicker(context, time, onTimeSelected = onValueChange) },
         modifier = Modifier.fillMaxWidth(),
     )
 }
@@ -540,48 +364,18 @@ private fun helpFor(type: ReminderType) = when (type) {
     else -> CoreUiR.string.expiration_date_reminder_help
 }
 
-private fun parseTime(value: String, timeFormatter: TimeFormatter): Int =
-    timeFormatter.timeStringToMinutes(value).also { require(it >= 0) }
-
-private fun localTimeFromString(value: String, timeFormatter: TimeFormatter): LocalTime {
-    val minutes = parseTime(value, timeFormatter)
-    return LocalTime.of(minutes / 60, minutes % 60)
-}
-
-private fun formatLocalDateTime(value: String, timeFormatter: TimeFormatter): String = runCatching {
-    formatLocalDateTime(LocalDateTimeParser.parseLocalDateTime(value, timeFormatter), timeFormatter)
-}.getOrDefault(value)
-
-private fun formatLocalDateTime(value: LocalDateTime, timeFormatter: TimeFormatter): String =
-    "${timeFormatter.localDateToString(value.toLocalDate())} | ${timeFormatter.minutesToTimeString(value.hour * 60 + value.minute)}"
-
-private fun intervalMinutes(value: String, unit: IntervalUnit, maxMinutes: Int): Int {
-    val amount = value.toInt().coerceAtLeast(1)
-    return Interval(amount, unit).minutesValue.coerceAtMost(maxMinutes)
-}
-
-private object LocalDateTimeParser {
-    fun parse(value: String, timeFormatter: TimeFormatter): Instant =
-        parseLocalDateTime(value, timeFormatter).atZone(ZoneId.systemDefault()).toInstant()
-
-    fun parseLocalDateTime(value: String, timeFormatter: TimeFormatter): LocalDateTime {
-        val components = value.split(" | ", limit = 2)
-        require(components.size == 2)
-        val date = timeFormatter.stringToLocalDate(components[0]) ?: error("date")
-        val time = localTimeFromString(components[1], timeFormatter)
-        return LocalDateTime.of(date, time)
-    }
-}
 
 @MedTimerPreview
 @Composable
 private fun NewReminderFlowDialogPreview() {
+    val state = PreviewNewReminderState().apply {
+        draft = NewReminderDraft(selectedType = ReminderType.TIME_BASED, amount = "1")
+    }
     MedTimerTheme {
         NewReminderFlowDialog(
-            medicineId = 1,
-            medicineAmount = 1.0,
+            state = state,
             medicineUnit = "tablet",
-            timeFormatter = rememberPreviewTimeFormatter(),
+            onDraftChange = { state.draft = it },
             onCreate = {},
             onDismiss = {},
             onOpenHelp = {},

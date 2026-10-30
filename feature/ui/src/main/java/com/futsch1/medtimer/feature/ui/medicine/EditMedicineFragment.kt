@@ -88,6 +88,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
 
     private lateinit var appOptionsActions: AppOptionsActions
     private val editMedicineScreenViewModel: EditMedicineScreenViewModel by viewModels()
+    private val newReminderViewModel: NewReminderViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,9 +117,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                         )
                         EditMedicineScreen(
                             editMedicineScreenViewModel = editMedicineScreenViewModel,
-                            timeFormatter = timeFormatter,
+                            newReminderViewModel = newReminderViewModel,
                             onEditName = editMedicineScreenViewModel::editName,
-                            onCreateReminder = editMedicineScreenViewModel::createReminder,
                             onReminderDelete = editMedicineScreenViewModel::deleteReminder,
                             onReminderEdit = { id: Int, type: ReminderType ->
                                 val action =
@@ -144,7 +144,15 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                             onOpenSubmenu = { submenu: EditMedicineSubmenus.Submenu ->
                                 editMedicineActions.open(submenu)
                             },
-                            onOpenHelp = { appOptionsActions.openHelp("getting-started") }
+                            onOpenHelp = { appOptionsActions.openHelp("getting-started") },
+                            onStartCreatingReminder = {
+                                newReminderViewModel.startNewReminder(
+                                    medicineId = editMedicineScreenViewModel.medicineId,
+                                    amount = editMedicineScreenViewModel.state.amount
+                                )
+                            },
+                            onUpdateReminderDraft = newReminderViewModel::updateDraft,
+                            onCreateReminder = newReminderViewModel::createReminder
                         )
                     }
                 }

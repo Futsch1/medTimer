@@ -5,16 +5,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.domain.model.Reminder
-import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.core.domain.repository.TagRepository
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
+import com.futsch1.medtimer.core.ui.TimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.toImmutableList
@@ -24,8 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
-import java.time.Instant
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +34,7 @@ class EditMedicineScreenViewModel @Inject constructor(
     private val tagRepository: TagRepository,
     private val reminderSummaryFormatter: ReminderSummaryFormatter,
     private val linkedReminderAlgorithms: LinkedReminderAlgorithms,
+    private val timeFormatter: TimeFormatter,
     @param:ApplicationContext private val context: Context,
     @param:ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
@@ -77,6 +76,8 @@ class EditMedicineScreenViewModel @Inject constructor(
                 timeLabel = if (reminder.reminderType != ReminderType.LINKED) R.string.time else R.string.delay,
                 timeHint = if (reminder.reminderType == ReminderType.LINKED) R.string.linked_reminder_delay else null,
                 timeMinutesOfDay = reminder.time.minutes,
+                timeText = if (reminder.reminderType == ReminderType.LINKED) TimeHelper.minutesToDurationString(reminder.time.minutes)
+                else timeFormatter.minutesToTimeString(reminder.time.minutes),
                 amount = reminder.amount,
                 type = reminder.reminderType,
                 summary = summaries[reminder.id] ?: "?"
@@ -106,58 +107,6 @@ class EditMedicineScreenViewModel @Inject constructor(
     }
 
     fun deleteReminder(id: Int) = enqueueEdit { reminderRepository.delete(id) }
-
-    fun createReminder(data: NewReminderData) = enqueueEdit {
-        val base = Reminder.default().copy(
-            medicineRelId = data.medicineId,
-            createdTime = Instant.now(),
-            cycleStartDay = LocalDate.now().plusDays(1),
-            instructions = "",
-        )
-        val reminder = when (data.type) {
-            ReminderType.TIME_BASED -> base.copy(
-                amount = data.amount,
-                time = ReminderTime(data.timeMinutes),
-            )
-
-            ReminderType.CONTINUOUS_INTERVAL -> base.copy(
-                amount = data.amount,
-                time = ReminderTime(checkNotNull(data.intervalMinutes), isDuration = true),
-                intervalStart = checkNotNull(data.intervalStart),
-                intervalStartsFromProcessed = data.intervalStartsFromProcessed,
-            )
-
-            ReminderType.WINDOWED_INTERVAL -> base.copy(
-                amount = data.amount,
-                time = ReminderTime(checkNotNull(data.intervalMinutes), isDuration = true),
-                windowedInterval = true,
-                intervalStartTimeOfDay = checkNotNull(data.dailyStartTime),
-                intervalEndTimeOfDay = checkNotNull(data.dailyEndTime),
-            )
-
-            ReminderType.OUT_OF_STOCK -> base.copy(
-                outOfStockThreshold = checkNotNull(data.stockThreshold),
-                outOfStockReminderType = when (checkNotNull(data.stockFrequency)) {
-                    NewReminderStockFrequency.ONCE -> Reminder.OutOfStockReminderType.ONCE
-                    NewReminderStockFrequency.ALWAYS -> Reminder.OutOfStockReminderType.ALWAYS
-                    NewReminderStockFrequency.DAILY -> Reminder.OutOfStockReminderType.DAILY
-                },
-                time = ReminderTime(data.timeMinutes),
-            )
-
-            ReminderType.EXPIRATION_DATE -> base.copy(
-                expirationReminderType = when (checkNotNull(data.expirationFrequency)) {
-                    NewReminderExpirationFrequency.ONCE -> Reminder.ExpirationReminderType.ONCE
-                    NewReminderExpirationFrequency.DAILY -> Reminder.ExpirationReminderType.DAILY
-                },
-                periodStart = LocalDate.ofEpochDay(checkNotNull(data.expirationDaysBefore)),
-                time = ReminderTime(data.timeMinutes),
-            )
-
-            ReminderType.LINKED, ReminderType.REFILL -> error("Unsupported new reminder type: ${data.type}")
-        }
-        reminderRepository.create(reminder)
-    }
 
     fun editName(name: String) = enqueueEdit {
         val medicine = medicineRepository.fetch(medicineId) ?: return@enqueueEdit

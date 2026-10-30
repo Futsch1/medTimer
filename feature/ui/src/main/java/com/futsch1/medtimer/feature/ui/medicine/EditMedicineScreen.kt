@@ -43,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -51,11 +50,15 @@ import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderFlowDialog
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import kotlinx.collections.immutable.persistentListOf
 
+// When reselected, overview is highlighted
+// Flicker when opened, also on MedicineScreen
+// Two menus, same as on MedicineScreen
+
 @SuppressWarnings("kotlin:S107")
 @Composable
 fun EditMedicineScreen(
     editMedicineScreenViewModel: EditMedicineScreenViewModel,
-    timeFormatter: TimeFormatter,
+    newReminderViewModel: NewReminderViewModel,
     onEditName: (name: String) -> Unit,
     onReminderDelete: (id: Int) -> Unit,
     onReminderEdit: (id: Int, type: ReminderType) -> Unit,
@@ -65,11 +68,13 @@ fun EditMedicineScreen(
     onEditNotes: (notes: String) -> Unit = {},
     onOpenHelp: () -> Unit,
     onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit,
-    onCreateReminder: (NewReminderData) -> Unit = {},
+    onStartCreatingReminder: (medicineId: Int) -> Unit,
+    onCreateReminder: () -> Unit,
+    onUpdateReminderDraft: (draft: NewReminderDraft) -> Unit
 ) {
     EditMedicineScreen(
         editMedicineScreenViewModel.state,
-        timeFormatter,
+        newReminderViewModel.state,
         onEditName,
         onReminderDelete,
         onReminderEdit,
@@ -79,39 +84,49 @@ fun EditMedicineScreen(
         onEditNotes,
         onOpenHelp,
         onOpenSubmenu,
+        onStartCreatingReminder,
         onCreateReminder,
+        onUpdateReminderDraft
     )
 }
 
 @SuppressWarnings("kotlin:S107")
 @Composable
-fun EditMedicineScreen(
+private fun EditMedicineScreen(
     editMedicineScreenState: EditMedicineScreenState,
-    timeFormatter: TimeFormatter,
+    newReminderState: NewReminderState,
     onEditName: (name: String) -> Unit,
-    onReminderDelete: (id: Int) -> Unit = {},
-    onReminderEdit: (id: Int, type: ReminderType) -> Unit = { _, _ -> },
-    onEditReminderAmount: (id: Int, amount: String) -> Unit = { _, _ -> },
-    onEditReminderTime: (id: Int, timeMinutesOfDay: Int) -> Unit = { _, _ -> },
-    onSelectIcon: () -> Unit = {},
-    onEditNotes: (notes: String) -> Unit = {},
-    onOpenHelp: () -> Unit = {},
-    onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit = {},
-    onCreateReminder: (NewReminderData) -> Unit = {},
+    onReminderDelete: (id: Int) -> Unit,
+    onReminderEdit: (id: Int, type: ReminderType) -> Unit,
+    onEditReminderAmount: (id: Int, amount: String) -> Unit,
+    onEditReminderTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
+    onSelectIcon: () -> Unit,
+    onEditNotes: (notes: String) -> Unit,
+    onOpenHelp: () -> Unit,
+    onOpenSubmenu: (submenu: EditMedicineSubmenus.Submenu) -> Unit,
+    onStartCreatingReminder: (medicineId: Int) -> Unit,
+    onCreateReminder: () -> Unit,
+    onUpdateReminderDraft: (draft: NewReminderDraft) -> Unit
 ) {
     val listState = rememberLazyListState()
     var showNotes by rememberSaveable { mutableStateOf(false) }
     var showNewReminder by rememberSaveable { mutableStateOf(false) }
-    if (showNewReminder && editMedicineScreenState.id != null) {
+    val openNewReminder: () -> Unit = {
+        val medicineId = editMedicineScreenState.id
+        if (medicineId != null) {
+            onStartCreatingReminder(medicineId)
+            showNewReminder = true
+        }
+    }
+    if (newReminderState.created) {
+        showNewReminder = false
+    }
+    if (showNewReminder) {
         NewReminderFlowDialog(
-            medicineId = editMedicineScreenState.id!!,
-            medicineAmount = editMedicineScreenState.amount,
+            state = newReminderState,
             medicineUnit = editMedicineScreenState.unit,
-            timeFormatter = timeFormatter,
-            onCreate = { reminder ->
-                onCreateReminder(reminder)
-                showNewReminder = false
-            },
+            onCreate = onCreateReminder,
+            onDraftChange = onUpdateReminderDraft,
             onDismiss = { showNewReminder = false },
             onOpenHelp = onOpenHelp,
         )
@@ -124,7 +139,7 @@ fun EditMedicineScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.testTag(EditMedicineTestTags.ADD_REMINDER),
-                onClick = { showNewReminder = editMedicineScreenState.id != null },
+                onClick = openNewReminder,
                 icon = { Icon(painterResource(R.drawable.plus_circle), contentDescription = null) },
                 text = { Text(stringResource(R.string.add_reminder)) },
             )
@@ -139,13 +154,17 @@ fun EditMedicineScreen(
             bottom = paddingValues.calculateBottomPadding(),
         )
         if (landscape) {
-            Row(Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .padding(horizontal = 16.dp)) {
-                Column(Modifier
-                    .weight(2f)
-                    .verticalScroll(rememberScrollState())) {
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Column(
+                    Modifier
+                        .weight(2f)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     MedicineDetailsCard(
                         editMedicineScreenState,
                         onEditName,
@@ -158,12 +177,11 @@ fun EditMedicineScreen(
                 ReminderList(
                     state = editMedicineScreenState,
                     listState = listState,
-                    onAddReminder = { showNewReminder = editMedicineScreenState.id != null },
+                    onAddReminder = openNewReminder,
                     onReminderDelete = onReminderDelete,
                     onReminderEdit = onReminderEdit,
                     onEditAmount = onEditReminderAmount,
                     onEditTime = onEditReminderTime,
-                    timeFormatter = timeFormatter,
                     onOpenHelp = onOpenHelp,
                     modifier = Modifier.weight(3f),
                 )
@@ -172,12 +190,11 @@ fun EditMedicineScreen(
             ReminderList(
                 state = editMedicineScreenState,
                 listState = listState,
-                onAddReminder = { showNewReminder = editMedicineScreenState.id != null },
+                onAddReminder = openNewReminder,
                 onReminderDelete = onReminderDelete,
                 onReminderEdit = onReminderEdit,
                 onEditAmount = onEditReminderAmount,
                 onEditTime = onEditReminderTime,
-                timeFormatter = timeFormatter,
                 onOpenHelp = onOpenHelp,
                 modifier = Modifier
                     .fillMaxSize()
@@ -206,9 +223,11 @@ private fun MedicineDetailsCard(
     onOpenNotes: () -> Unit,
     onOpenSubmenu: (EditMedicineSubmenus.Submenu) -> Unit,
 ) {
-    ElevatedCard(Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
+    ElevatedCard(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         Column(Modifier.padding(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val icon = rememberMedicineIcon(state.icon)
@@ -266,7 +285,6 @@ private fun ReminderList(
     onReminderEdit: (Int, ReminderType) -> Unit,
     onEditAmount: (Int, String) -> Unit,
     onEditTime: (Int, Int) -> Unit,
-    timeFormatter: TimeFormatter,
     onOpenHelp: () -> Unit,
     modifier: Modifier = Modifier,
     header: (@Composable () -> Unit)? = null,
@@ -297,7 +315,7 @@ private fun ReminderList(
         }
         items(state.reminders, key = { it.id }) { reminder ->
             SwipeToDeleteContainer({ onReminderDelete(reminder.id) }, R.string.are_you_sure_delete_reminder) {
-                ReminderCard(reminder, timeFormatter, onReminderEdit, onEditAmount, onEditTime)
+                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime)
             }
         }
     }
@@ -331,6 +349,7 @@ private fun EditMedicineScreenPreview() {
                 timeLabel = R.string.time,
                 timeHint = null,
                 timeMinutesOfDay = 8 * 60,
+                timeText = "8:00",
                 amount = "1 tablet",
                 type = ReminderType.TIME_BASED,
                 summary = "Daily at 08:00",
@@ -341,17 +360,31 @@ private fun EditMedicineScreenPreview() {
                 timeLabel = R.string.time,
                 timeHint = null,
                 timeMinutesOfDay = 20 * 60,
+                timeText = "20:00",
                 amount = "1 tablet",
                 type = ReminderType.TIME_BASED,
                 summary = "Daily at 20:00",
             ),
         )
     }
+    val reminderState = PreviewNewReminderState()
+
     MedTimerTheme {
         EditMedicineScreen(
             editMedicineScreenState = state,
-            timeFormatter = rememberPreviewTimeFormatter(),
+            newReminderState = reminderState,
             onEditName = {},
+            onReminderDelete = {},
+            onReminderEdit = { _, _ -> },
+            onEditReminderAmount = { _, _ -> },
+            onEditReminderTime = { _, _ -> },
+            onSelectIcon = {},
+            onEditNotes = {},
+            onOpenHelp = {},
+            onOpenSubmenu = { _ -> },
+            onStartCreatingReminder = { _ -> },
+            onCreateReminder = {},
+            onUpdateReminderDraft = { _ -> },
         )
     }
 }

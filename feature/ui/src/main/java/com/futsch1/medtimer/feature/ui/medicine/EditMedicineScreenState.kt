@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,7 +22,7 @@ interface EditMedicineScreenState {
 
 class MutableEditMedicineScreenState : EditMedicineScreenState {
     override var id by mutableStateOf<Int?>(null)
-    override var amount by mutableStateOf(0.0)
+    override var amount by mutableDoubleStateOf(0.0)
     override var unit by mutableStateOf("")
     override var name by mutableStateOf("")
     override var notes by mutableStateOf<String?>(null)
@@ -36,6 +37,7 @@ data class ReminderItem(
     val timeLabel: Int,
     val timeHint: Int?,
     val timeMinutesOfDay: Int,
+    val timeText: String,
     val amount: String,
     val type: ReminderType,
     val summary: String

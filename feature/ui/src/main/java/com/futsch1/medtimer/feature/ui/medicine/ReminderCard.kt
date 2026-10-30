@@ -25,10 +25,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.core.ui.getHelp
 import com.futsch1.medtimer.core.ui.getIcon
 import com.futsch1.medtimer.core.ui.getTitle
@@ -37,7 +35,6 @@ import java.time.LocalTime
 @Composable
 fun ReminderCard(
     reminder: ReminderItem,
-    timeFormatter: TimeFormatter,
     onReminderEdit: (id: Int, type: ReminderType) -> Unit,
     onEditAmount: (id: Int, amount: String) -> Unit,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit
@@ -48,10 +45,12 @@ fun ReminderCard(
         ReminderTypeHelpDialog(reminder) { showTypeHelp = false }
     }
 
-    ElevatedCard(Modifier
-        .testTag(EditMedicineTestTags.REMINDER_CARD)
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 5.dp)) {
+    ElevatedCard(
+        Modifier
+            .testTag(EditMedicineTestTags.REMINDER_CARD)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 5.dp)
+    ) {
         Column(Modifier.padding(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { showTypeHelp = true }) {
@@ -62,7 +61,11 @@ fun ReminderCard(
                     )
                 }
                 if (reminder.timeVisible) {
-                    ReminderTimeField(reminder, timeFormatter, onEditTime, Modifier.weight(1f).padding(4.dp))
+                    ReminderTimeField(
+                        reminder, onEditTime, Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                    )
                 }
                 if (reminder.type != ReminderType.OUT_OF_STOCK && reminder.type != ReminderType.EXPIRATION_DATE) {
                     EditTextButton(
@@ -98,17 +101,14 @@ private fun ReminderTypeHelpDialog(reminder: ReminderItem, onDismiss: () -> Unit
 @Composable
 private fun ReminderTimeField(
     reminder: ReminderItem,
-    timeFormatter: TimeFormatter,
     onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val minutes = reminder.timeMinutesOfDay
-    val timeText = if (reminder.timeHint != null) TimeHelper.minutesToDurationString(minutes)
-    else timeFormatter.minutesToTimeString(minutes)
     EditValueButton(
         label = stringResource(reminder.timeLabel),
-        value = timeText,
+        value = reminder.timeText,
         onClick = {
             showMaterialTimePicker(
                 context = context,
