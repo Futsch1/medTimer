@@ -34,6 +34,9 @@ class BasicUITest : MedTimerTestBase() {
         medicineEditor.setAmount(" 2 ")
 
         medicines.clickItem(0)
+        navigation.toOverview()
+        navigation.toMedicines()
+        navigation.assertMedicinesShown()
         medicineEditor.assertAmount("2")
         reminders.duplicate(0)
 

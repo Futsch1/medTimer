@@ -17,8 +17,11 @@ class NavigationRobot(private val ui: ComposeUi) {
 
     fun toAnalysis() = ui.scope(NavTestTags.STATISTICS).clickSelf()
 
-    /** The Overview tab being selected is what distinguishes it from any other screen. */
     fun assertOverviewShown() {
         ui.scope(NavTestTags.OVERVIEW).self().assertIsSelected()
+    }
+
+    fun assertMedicinesShown() {
+        ui.scope(NavTestTags.MEDICINES).self().assertIsSelected()
     }
 }

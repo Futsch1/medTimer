@@ -21,7 +21,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.futsch1.medtimer.core.common.ActivityCodes
 import com.futsch1.medtimer.core.common.LogTags
@@ -195,11 +197,11 @@ class MainActivity : AppCompatActivity() {
         updateCurrentTab(navHostFragment)
         if (showOverviewWhenContentBound) {
             showOverviewWhenContentBound = false
-            navigateToTab(navHostFragment.navController, com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+            navigateToTab(navHostFragment.navController, com.futsch1.medtimer.feature.ui.R.id.overviewTab)
         }
     }
 
-    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewFragment
+    private var currentTabId = com.futsch1.medtimer.feature.ui.R.id.overviewTab
 
     private fun updateCurrentTab(navHostFragment: NavHostFragment) {
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -209,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onNavItemClick(navController: NavController, destinationId: Int) {
         val reselected = navigateToTab(navController, destinationId)
-        if (reselected && destinationId == com.futsch1.medtimer.feature.ui.R.id.overviewFragment) {
+        if (reselected && destinationId == com.futsch1.medtimer.feature.ui.R.id.overviewTab) {
             navHostFragment?.childFragmentManager?.fragments
                 ?.filterIsInstance<OverviewFragment>()
                 ?.lastOrNull()
@@ -220,8 +222,10 @@ class MainActivity : AppCompatActivity() {
     /** Shows the tab's root, keeping the other tabs' back stacks; returns whether the tab was already the current one. */
     private fun navigateToTab(navController: NavController, destinationId: Int): Boolean {
         if (currentTabId == destinationId) {
-            if (navController.currentDestination?.id != destinationId) {
-                navController.popBackStack(destinationId, false)
+            val tabStartDestinationId =
+                (navController.graph.findNode(destinationId) as? NavGraph)?.findStartDestination()?.id ?: destinationId
+            if (navController.currentDestination?.id != tabStartDestinationId) {
+                navController.popBackStack(tabStartDestinationId, false)
             }
             return true
         }
@@ -230,7 +234,7 @@ class MainActivity : AppCompatActivity() {
         val options = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setRestoreState(true)
-            .setPopUpTo(navController.graph.startDestinationId, inclusive = false, saveState = true)
+            .setPopUpTo(navController.graph.findStartDestination().id, inclusive = false, saveState = true)
             .build()
         navController.navigate(destinationId, null, options)
         return false
@@ -241,7 +245,7 @@ class MainActivity : AppCompatActivity() {
         if (navController == null) {
             showOverviewWhenContentBound = true
         } else {
-            navigateToTab(navController, com.futsch1.medtimer.feature.ui.R.id.overviewFragment)
+            navigateToTab(navController, com.futsch1.medtimer.feature.ui.R.id.overviewTab)
         }
     }
 
