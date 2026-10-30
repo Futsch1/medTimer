@@ -96,7 +96,7 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
             onClick = { expanded = true },
         ) {
             Icon(
-                painter = painterResource(CoreUiR.drawable.three_dots_vertical),
+                painter = painterResource(CoreUiR.drawable.capsule),
                 contentDescription = stringResource(CoreUiR.string.medicine),
             )
         }

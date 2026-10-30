@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.testTag
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.core.common.di.Dispatcher
@@ -24,6 +25,9 @@ import com.futsch1.medtimer.core.ui.component.MedTimerTopAppBar
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
+import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
+import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
+import com.futsch1.medtimer.feature.ui.TagFilterViewModel
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
@@ -87,6 +91,8 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     lateinit var tagsFragmentFactory: TagsFragment.Factory
 
     private lateinit var appOptionsActions: AppOptionsActions
+    private val appOptionsViewModel: AppOptionsViewModel by viewModels()
+    private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
     private val editMedicineScreenViewModel: EditMedicineScreenViewModel by viewModels()
     private val newReminderViewModel: NewReminderViewModel by viewModels()
 
@@ -113,6 +119,14 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                             title = editMedicineScreenViewModel.state.name.ifEmpty { "..." },
                             actions = {
                                 EditMedicineMenu(editMedicineActions)
+                                AppOptionsMenuHost(
+                                    fragment = this@EditMedicineFragment,
+                                    actions = appOptionsActions,
+                                    optionsViewModel = appOptionsViewModel,
+                                    tagFilterViewModel = tagFilterViewModel,
+                                    tagsFragmentFactory = tagsFragmentFactory,
+                                    showTagFilter = false
+                                )
                             },
                         )
                         EditMedicineScreen(

@@ -50,9 +50,6 @@ import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderFlowDialog
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NotesDialog
 import kotlinx.collections.immutable.persistentListOf
 
-// When reselected, overview is highlighted
-// Two menus, same as on MedicineScreen
-
 @SuppressWarnings("kotlin:S107")
 @Composable
 fun EditMedicineScreen(
