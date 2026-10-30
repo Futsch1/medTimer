@@ -234,6 +234,16 @@ class NotificationTest : MedTimerTestBase() {
             dialogs.assertContains("120")
             dialogs.confirm()
         }
+
+        seed.medicine(TEST_MED) { intervalReminder("1", 2.hours) }
+
+        navigation.toAnalysis()
+        val snoozed = Instant.now()
+        notifications.inShade {
+            assertShows(TEST_MED)
+            clickAction(TEST_MED, R.string.snooze)
+        }
+        assertSecondaryAlarmAfter(snoozed, 120.minutes)
     }
 
     @Test
