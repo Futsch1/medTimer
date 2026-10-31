@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.ManualDose
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -182,7 +183,7 @@ class ManualDoseViewModel @Inject constructor(
                 tags = medicine.tags.map { tag -> tag.name },
                 stockBefore = stockAmount,
                 stockAfter = stockAmount,
-                stockUnit = medicine.unit
+                stockUnit = MedicineHelper.getUnit(medicine)
             )
         }
 

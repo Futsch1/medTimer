@@ -194,35 +194,53 @@ class ReminderHelperTest {
     @Test
     fun testFormatScheduledReminderStockAndExpiration() {
         val instant = Instant.ofEpochSecond(0)
-        val reminder = Reminder.default().copy(amount = "5")
+        val reminder = Reminder.default().copy(amount = "5 tablets")
 
         // No stock management (amount == 0.0) → no expected stock text
-        var medicine = Medicine.default().copy(name = "Test")
+        var medicine = Medicine.default().copy(name = "Test", reminders = listOf(reminder))
         assertEquals(
-            "  1:00 AM\nTest (5)",
-            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 0.0, 0.0))
+            "  1:00 AM\nTest (5 tablets)",
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(
+                    ScheduledReminder(medicine, reminder, instant),
+                    0.0,
+                    0.0
+                )
+            )
                 .toString()
         )
 
         // Stock unchanged (scheduler path) → show stockBefore only
-        medicine = medicine.copy(amount = 9.0, unit = "tablets")
+        medicine = medicine.copy(amount = 9.0)
         assertEquals(
-            "  1:00 AM,   9 tablets\nTest (5)",
-            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 9.0))
+            "  1:00 AM,   9 tablets\nTest (5 tablets)",
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(
+                    ScheduledReminder(medicine, reminder, instant),
+                    9.0,
+                    9.0
+                )
+            )
                 .toString()
         )
 
         // Stock depleted (simulator path) → show stockBefore ➡ stockAfter
         assertEquals(
-            "  1:00 AM,   9 tablets ➡ 4 tablets\nTest (5)",
-            formatter.formatSimulatedReminder(SimulatedReminder(ScheduledReminder(medicine, reminder, instant), 9.0, 4.0))
+            "  1:00 AM,   9 tablets ➡ 4 tablets\nTest (5 tablets)",
+            formatter.formatSimulatedReminder(
+                SimulatedReminder(
+                    ScheduledReminder(medicine, reminder, instant),
+                    9.0,
+                    4.0
+                )
+            )
                 .toString()
         )
 
         // Variable amount with active stock → no expected stock text
         val variableReminder = reminder.copy(variableAmount = true)
         assertEquals(
-            "  1:00 AM\nTest (5)",
+            "  1:00 AM\nTest (5 tablets)",
             formatter.formatSimulatedReminder(
                 SimulatedReminder(ScheduledReminder(medicine, variableReminder, instant), 9.0, 9.0)
             ).toString()

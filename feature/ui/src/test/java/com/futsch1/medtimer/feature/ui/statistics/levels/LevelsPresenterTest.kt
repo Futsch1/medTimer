@@ -3,6 +3,7 @@ package com.futsch1.medtimer.feature.ui.statistics.levels
 import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.UnitCount
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import kotlinx.collections.immutable.persistentListOf
@@ -173,7 +174,7 @@ class LevelsPresenterTest {
 
     @Test
     fun `doses without a unit are labeled with the stock unit`() {
-        val withStockUnit = medicineA.copy(unit = "mg")
+        val withStockUnit = medicineA.copy(reminders = listOf(Reminder.default().copy(amount = "1 mg")))
         val events = listOf(
             taken("Medicine A", Instant.parse("2026-03-09T08:00:00Z"), "12.5"),
             taken("Medicine A", Instant.parse("2026-03-10T08:00:00Z"), "10"),
@@ -186,7 +187,7 @@ class LevelsPresenterTest {
 
     @Test
     fun `a unit in the dose is not replaced by the stock unit`() {
-        val withStockUnit = medicineA.copy(unit = "IU")
+        val withStockUnit = medicineA.copy(reminders = listOf(Reminder.default().copy(amount = "1 IU")))
         val events = listOf(taken("Medicine A", Instant.parse("2026-03-09T08:00:00Z"), "2 mg"))
 
         assertEquals(listOf("2 mg"), present(events, listOf(withStockUnit)).series.single().doses.map { it.label })

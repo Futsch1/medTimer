@@ -55,7 +55,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         settingsActions.reminder = modelData
 
         findPreference<Preference>("stock_threshold")?.summary =
-            MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
+            medicine?.let { MedicineHelper.formatAmount(modelData.outOfStockThreshold, it) } ?: ""
     }
 
     override fun customSetup(modelData: Reminder) {
@@ -78,7 +78,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
             val medicine = medicineRepository.fetch(modelData.medicineRelId) ?: return@launch
             this.launch(mainDispatcher) {
                 findPreference<Preference>("medicine_stock")?.summary =
-                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+                    MedicineHelper.formatAmount(medicine.amount, medicine)
                 findPreference<Preference>("medicine_expiration_date")?.summary =
                     if (medicine.expirationDate != LocalDate.EPOCH) {
                         timeFormatter.localDateToString(medicine.expirationDate)

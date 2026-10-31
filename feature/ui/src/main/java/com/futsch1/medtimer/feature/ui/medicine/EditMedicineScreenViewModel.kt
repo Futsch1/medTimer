@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.setRemindersActive
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -52,7 +53,7 @@ class EditMedicineScreenViewModel @Inject constructor(
             medicine.collect { medicine ->
                 state.id = medicine?.id
                 state.amount = medicine?.amount ?: 0.0
-                state.unit = medicine?.unit.orEmpty()
+                state.unit = medicine?.let { MedicineHelper.getUnit(it) } ?: ""
                 state.name = medicine?.name.orEmpty()
                 state.notes = medicine?.notes
                 if (medicine != null) {

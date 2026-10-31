@@ -8,6 +8,7 @@ import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.schedulertests.TestHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.LocalDate
 import kotlin.test.assertEquals
-import com.futsch1.medtimer.core.ui.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
@@ -62,11 +62,13 @@ class MedicineHelperTest {
                 "${invocation.getArgument(1, String::class.java)} left"
             }
 
-        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
+        val reminder = TestHelper.buildReminder(1, 1, "1 pills", 480, 1).copy(
             outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
             outOfStockThreshold = 15.0
         )
-        val baseMedicine = Medicine.default().copy(name = "test", unit = "pills")
+        val doseReminder = TestHelper.buildReminder(1, 2, "1 pills", 600, 1)
+
+        val baseMedicine = Medicine.default().copy(name = "test")
 
         // Standard case without stock
         assertEquals(
@@ -77,25 +79,40 @@ class MedicineHelperTest {
         // Expired case
         assertEquals(
             "test (\uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(expirationDate = LocalDate.now().minusDays(1))).toString()
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(expirationDate = LocalDate.now().minusDays(1)))
+                .toString()
         )
 
         // Standard case with stock
         assertEquals(
             "test (12 pills left)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0)).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(
+                    amount = 12.0,
+                    reminders = listOf(doseReminder)
+                )
+            ).toString()
         )
 
         // Out of stock case
         assertEquals(
             "test (12 pills left ⚠)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder))).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(amount = 12.0, reminders = listOf(doseReminder, reminder))
+            )
+                .toString()
         )
 
         // Out of stock and expired case
         assertEquals(
             "test (12 pills left ⚠ \uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder), expirationDate = LocalDate.now().minusDays(1))).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(
+                    amount = 12.0,
+                    reminders = listOf(doseReminder, reminder),
+                    expirationDate = LocalDate.now().minusDays(1)
+                )
+            ).toString()
         )
     }
 

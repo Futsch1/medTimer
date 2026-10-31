@@ -38,7 +38,7 @@ class StockSettingsFragment : MedicinePreferences(
     ),
     mapOf(
     ),
-    listOf("stock_unit")
+    listOf()
 ) {
     @Inject
     lateinit var simulatedRemindersRepository: SimulatedReminders
@@ -112,9 +112,9 @@ class StockSettingsFragment : MedicinePreferences(
         super.onModelDataUpdated(modelData)
 
         findPreference<EditTextPreference>("amount")!!.summary =
-            MedicineHelper.formatAmount(modelData.amount, modelData.unit)
+            MedicineHelper.formatAmount(modelData.amount, modelData)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary =
-            MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
+            MedicineHelper.formatAmount(modelData.refillSize, modelData)
         if (modelData.isOutOfStock()) {
             findPreference<EditTextPreference>("amount")!!.setIcon(com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill)
         } else {

@@ -10,6 +10,7 @@ import java.util.regex.Pattern
 
 object MedicineHelper {
     private val CYCLIC_COUNT: Pattern = Pattern.compile(" (\\(\\d+/\\d+)\\)")
+
     // NumberFormat is not thread-safe; ThreadLocal gives each thread its own instance at zero per-call cost
     private val numberFormat: ThreadLocal<NumberFormat> = ThreadLocal.withInitial { NumberFormat.getNumberInstance() }
 
@@ -51,6 +52,15 @@ object MedicineHelper {
         }
         return builder
     }
+
+    fun getUnit(medicine: Medicine): String {
+        val doseAmounts = medicine.reminders
+            .filter { it.active && !it.isOutOfStockOrExpirationReminder }
+            .map { it.amount }
+        return DoseAmountParser.summarize(doseAmounts).unit ?: ""
+    }
+
+    fun formatAmount(amount: Double, medicine: Medicine): String = formatAmount(amount, getUnit(medicine))
 
     fun formatAmount(amount: Double, unit: String): String {
         val fmt = numberFormat.get() ?: return ""

@@ -12,6 +12,7 @@ data class UnitCount(val unit: String, val count: Int)
 
 data class DoseUnitSummary(val units: List<UnitCount>, val unreadable: Int) {
     val consistent: Boolean get() = units.size <= 1
+    val unit: String? get() = if (units.size == 1) units[0].unit else if (units.isEmpty()) "" else null
 }
 
 /** Locale-aware primary-amount parsing and unit recovery, without unit conversion. */

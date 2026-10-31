@@ -4,9 +4,6 @@
         app:key="amount"
         app:title="@string/amount" />
     <EditTextPreference
-        app:key="stock_unit"
-        app:title="@string/unit" />
-    <EditTextPreference
         app:key="stock_run_out_date"
         app:selectable="false"
         app:title="@string/estimated_run_out_date" />

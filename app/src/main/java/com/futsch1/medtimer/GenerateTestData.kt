@@ -32,12 +32,12 @@ class GenerateTestData @AssistedInject constructor(
     }
 
     suspend fun generateTestMedicine() {
-        val testReminderOmega3 = TestReminderTimeBased("1", 9 * 60, 1, 0, "")
+        val testReminderOmega3 = TestReminderTimeBased("1 pills", 9 * 60, 1, 0, "")
         val testMedicines = arrayOf(
             TestMedicine(
                 "Omega 3 (EPA/DHA 500mg)", null, 1, 10.0, arrayOf(
                     testReminderOmega3,
-                    TestReminderLinked("1", 9 * 60 + 30, testReminderOmega3),
+                    TestReminderLinked("1 pills", 9 * 60 + 30, testReminderOmega3),
                     TestReminderOutOfStock(12.0),
                     TestReminderExpirationDate(10 * 60, 10)
                 ), arrayOf("Supplements")
@@ -54,8 +54,8 @@ class GenerateTestData @AssistedInject constructor(
             ),
             TestMedicine(
                 "Selen (200 µg)", null, 0, 0.0, arrayOf(
-                    TestReminderTimeBased("2", 9 * 60, 1, 0, "", withEvents),
-                    TestReminderIntervalBased("1", 36 * 60)
+                    TestReminderTimeBased("2 tablets", 9 * 60, 1, 0, "", withEvents),
+                    TestReminderIntervalBased("1 tablets", 36 * 60)
                 ), arrayOf("Supplements")
             )
         )
@@ -128,7 +128,6 @@ class GenerateTestData @AssistedInject constructor(
                 iconId = iconId,
                 amount = stock,
                 refillSize = if (stock > 0) 20.0 else 0.0,
-                unit = if (stock > 0) "pills" else "",
                 notes = if (stock > 0) "Some note\nabout this medicine" else "",
                 showNotificationAsAlarm = false,
                 productionDate = LocalDate.now(),

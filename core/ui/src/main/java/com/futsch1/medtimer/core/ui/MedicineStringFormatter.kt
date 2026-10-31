@@ -86,7 +86,7 @@ class MedicineStringFormatter @Inject constructor(
     fun getStockText(medicine: Medicine): String {
         return context.getString(
             R.string.medicine_stock_string,
-            MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+            MedicineHelper.formatAmount(medicine.amount, medicine)
         )
     }
 
@@ -97,6 +97,7 @@ class MedicineStringFormatter @Inject constructor(
                 R.string.stock_after_simulation_end,
                 timeFormatter.localDateToString(simulatedThrough)
             )
+
             else -> timeFormatter.localDateToString(runOutDate)
         }
     }
