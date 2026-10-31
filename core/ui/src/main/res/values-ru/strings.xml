@@ -230,6 +230,7 @@
     <string name="invalid_input">Недопустимый ввод</string>
     <string name="medicine_stock">Запас медикаментов</string>
     <string name="amount">Сумма</string>
+    <string name="remaining_stock">Остаток запаса</string>
     <string name="reminder_threshold">Порог напоминания</string>
     <string name="refill_size">Размер заправки</string>
     <string name="refill_now">Пополнить сейчас</string>

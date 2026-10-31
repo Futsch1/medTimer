@@ -235,6 +235,7 @@
     <string name="invalid_input">Neplatný vstup</string>
     <string name="medicine_stock">Zásoba léků</string>
     <string name="amount">Množství</string>
+    <string name="remaining_stock">Zbývající zásoba</string>
     <string name="reminder_threshold">Mez připomenutí</string>
     <string name="refill_size">Doplněné množství</string>
     <string name="refill_now">Doplnit teď</string>

@@ -228,6 +228,7 @@
     <string name="invalid_input">Некоректне значення</string>
     <string name="medicine_stock">Запас медикаментів</string>
     <string name="amount">В наявності</string>
+    <string name="remaining_stock">Залишок запасу</string>
     <string name="reminder_threshold">Поріг нагадування</string>
     <string name="refill_size">Додати</string>
     <string name="refill_now">Поповнити</string>

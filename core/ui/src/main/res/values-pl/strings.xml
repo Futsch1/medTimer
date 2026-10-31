@@ -230,6 +230,7 @@
     <string name="repeat_reminders_summary">Automatyczne powtarza przypomnienie, dopóki nie zostanie oznaczone jako przyjęto lub pominięto</string>
     <string name="delete_re_raise_event">Czy chcesz usunąć to zdarzenie i ponownie wysłać powiadomienie?</string>
     <string name="amount">Ilość</string>
+    <string name="remaining_stock">Pozostały zapas</string>
     <string name="interval_based_reminder">Przypomnienie oparte na odstępach czasu</string>
     <string name="tags">Tagi</string>
     <string name="friday">Piątek</string>

@@ -223,6 +223,7 @@
     <string name="invalid_input">Virheellinen syöte</string>
     <string name="medicine_stock">Lääkevarasto</string>
     <string name="amount">Määrä</string>
+    <string name="remaining_stock">Varastossa jäljellä</string>
     <string name="reminder_threshold">Muistutusraja</string>
     <string name="refill_size">Täydennyskoko</string>
     <string name="refill_now">Täydennä nyt</string>

@@ -222,6 +222,7 @@
     <string name="invalid_input">Geçersiz giriş</string>
     <string name="medicine_stock">İlaç stoğu</string>
     <string name="amount">Miktar</string>
+    <string name="remaining_stock">Kalan stok</string>
     <string name="reminder_threshold">Hatırlatma eşiği</string>
     <string name="refill_size">Dolum boyutu</string>
     <string name="refill_now">Şimdi doldurun</string>

@@ -228,6 +228,7 @@
     <string name="invalid_input">Entrée non valide</string>
     <string name="medicine_stock">Réserve de médicaments</string>
     <string name="amount">Nombre</string>
+    <string name="remaining_stock">Stock restant</string>
     <string name="reminder_threshold">Seuil de rappel</string>
     <string name="refill_size">Taille de la recharge</string>
     <string name="refill_now">Rechargez maintenant</string>

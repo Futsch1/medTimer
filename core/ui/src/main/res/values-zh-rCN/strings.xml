@@ -216,6 +216,7 @@
     <string name="invalid_input">无效输入</string>
     <string name="medicine_stock">药品余量</string>
     <string name="amount">数量</string>
+    <string name="remaining_stock">剩余库存</string>
     <string name="reminder_threshold">触发提醒数值</string>
     <string name="refill_size">每份药量规格(例如每盒x片)</string>
     <string name="refill_now">添加余量</string>

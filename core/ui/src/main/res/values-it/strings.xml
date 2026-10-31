@@ -228,6 +228,7 @@
     <string name="invalid_input">Inserimento non valido</string>
     <string name="medicine_stock">Scorta del farmaco</string>
     <string name="amount">Quantità</string>
+    <string name="remaining_stock">Scorte rimanenti</string>
     <string name="reminder_threshold">Soglia del promemoria</string>
     <string name="refill_size">Quantità della ricarica</string>
     <string name="refill_now">Ricarica</string>

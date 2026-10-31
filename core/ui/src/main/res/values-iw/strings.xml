@@ -229,6 +229,7 @@
     <string name="invalid_input">קלט לא חוקי</string>
     <string name="medicine_stock">מלאי תרופות</string>
     <string name="amount">כמות</string>
+    <string name="remaining_stock">המלאי שנותר</string>
     <string name="reminder_threshold">סף תזכורת</string>
     <string name="refill_size">גודל מילוי</string>
     <string name="refill_now">מלאו עכשיו</string>

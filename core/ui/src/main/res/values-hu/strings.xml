@@ -223,6 +223,7 @@
     <string name="invalid_input">Érvénytelen érték</string>
     <string name="medicine_stock">Gyógyszerkészlet</string>
     <string name="amount">Mennyiség</string>
+    <string name="remaining_stock">Fennmaradó készlet</string>
     <string name="reminder_threshold">Figyelmeztetési mennyiség</string>
     <string name="refill_size">Újratöltés mennyisége</string>
     <string name="refill_now">Újratöltés most</string>

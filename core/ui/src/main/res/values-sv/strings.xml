@@ -225,6 +225,7 @@
     <string name="invalid_input">Ogiltig inmatning</string>
     <string name="medicine_stock">Lager av läkemedel</string>
     <string name="amount">Mängd</string>
+    <string name="remaining_stock">Återstående lager</string>
     <string name="reminder_threshold">Påminnelse tröskelvärde</string>
     <string name="refill_size">Refillstorlek</string>
     <string name="refill_now">Fyll på nu</string>

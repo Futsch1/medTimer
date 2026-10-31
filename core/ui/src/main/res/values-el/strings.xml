@@ -222,6 +222,7 @@
     <string name="invalid_input">Μη έγκυρη καταχώριση</string>
     <string name="medicine_stock">Απόθεμα φαρμάκου</string>
     <string name="amount">Ποσότητα</string>
+    <string name="remaining_stock">Υπόλοιπο αποθέματος</string>
     <string name="reminder_threshold">Όριο αποθέματος για ενεργοποίηση υπενθύμισης</string>
     <string name="refill_size">Μονάδες αναπλήρωσης</string>
     <string name="refill_now">Αναπλήρωση τώρα</string>

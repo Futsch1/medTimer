@@ -223,6 +223,7 @@
     <string name="time">Tid</string>
     <string name="medicine_stock">Medicinbeholdning</string>
     <string name="amount">Mængde</string>
+    <string name="remaining_stock">Resterende lager</string>
     <string name="reminder_threshold">Påmindelsesgrænse</string>
     <string name="refill_size">Genopfyldningsmængde</string>
     <string name="refill_now">Genopfyld nu</string>

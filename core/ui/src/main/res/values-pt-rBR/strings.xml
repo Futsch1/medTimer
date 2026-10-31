@@ -190,6 +190,7 @@
     <string name="interval_start_processed">O intervalo começa ao marcar como tomado ou pulado</string>
     <string name="medicine_stock">Estoque de medicamentos</string>
     <string name="amount">Quantia</string>
+    <string name="remaining_stock">Estoque restante</string>
     <string name="refill_size">Quantidade da reposição</string>
     <string name="refill_now">Repor agora</string>
     <string name="are_you_sure_delete_tag">Tem certeza de que deseja excluir esta etiqueta?</string>

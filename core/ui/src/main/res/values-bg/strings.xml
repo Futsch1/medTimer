@@ -223,6 +223,7 @@
     <string name="invalid_input">Невалиден вход</string>
     <string name="medicine_stock">Запас от лекарство</string>
     <string name="amount">Количество</string>
+    <string name="remaining_stock">Оставаща наличност</string>
     <string name="variable_amount">Въведете доза при прием</string>
     <string name="tags">Етикети</string>
     <string name="add_tag">Добавяне на етикет</string>

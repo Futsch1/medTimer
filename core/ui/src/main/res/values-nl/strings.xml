@@ -222,6 +222,7 @@
     <string name="invalid_input">Ongeldige invoer</string>
     <string name="medicine_stock">Behandelingsvoorraad</string>
     <string name="amount">Hoeveelheid</string>
+    <string name="remaining_stock">Resterende voorraad</string>
     <string name="reminder_threshold">Herinnering drempel</string>
     <string name="refill_size">Navulformaat</string>
     <string name="refill_now">Nu bijvullen</string>

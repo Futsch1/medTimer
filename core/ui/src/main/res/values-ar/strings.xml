@@ -249,6 +249,7 @@
     <string name="sticky_on_lockscreen_summary">لا يمكن تجاهل التذكيرات من شاشة القفل، فقط من درج الإشعارات\nملاحظة: بعض الساعات الذكية قد لا تعرض الإشعارات إذا فُعِّل</string>
     <string name="big_notifications">أزرار إشعار كبيرة</string>
     <string name="amount">الكمية</string>
+    <string name="remaining_stock">المخزون المتبقي</string>
     <string name="reminder_threshold">حد التذكير</string>
     <string name="refill_size">حجم التعبئة</string>
     <string name="refill_now">أعد التعبئة الآن</string>

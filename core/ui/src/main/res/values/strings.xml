@@ -240,6 +240,7 @@
     <string name="invalid_input">Invalid input</string>
     <string name="medicine_stock">Medicine stock</string>
     <string name="amount">Amount</string>
+    <string name="remaining_stock">Remaining stock</string>
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>

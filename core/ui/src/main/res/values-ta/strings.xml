@@ -222,6 +222,7 @@
     <string name="invalid_input">தவறான உள்ளீடு</string>
     <string name="medicine_stock">மருந்து பங்கு</string>
     <string name="amount">தொகை</string>
+    <string name="remaining_stock">மீதமுள்ள இருப்பு</string>
     <string name="reminder_threshold">நினைவூட்டல் வாசல்</string>
     <string name="refill_size">மறு நிரப்பல் அளவு</string>
     <string name="refill_now">இப்போது மீண்டும் நிரப்பவும்</string>
