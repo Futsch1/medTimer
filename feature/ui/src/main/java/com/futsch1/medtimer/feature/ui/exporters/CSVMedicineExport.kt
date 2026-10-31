@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import com.futsch1.medtimer.core.common.di.Dispatcher
 import com.futsch1.medtimer.core.common.di.MedTimerDispatchers
 import com.futsch1.medtimer.core.domain.model.Medicine
-import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.ReminderSummaryFormatter
 import com.futsch1.medtimer.feature.ui.medicine.LinkedReminderAlgorithms
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -66,7 +66,7 @@ class CSVMedicineExport @AssistedInject constructor(
                 "%s;%s;%s\n",
                 medicine.name,
                 if (reminder.variableAmount) context.getString(R.string.variable_amount) else reminder.amount,
-                reminderSummaryFormatter.formatExportReminderSummary(reminder)
+                reminderSummaryFormatter.formatExportReminderSummary(reminder, medicine)
             )
             withContext(ioDispatcher) {
                 csvFile.write(line)

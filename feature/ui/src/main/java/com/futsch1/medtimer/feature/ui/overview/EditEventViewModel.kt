@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
@@ -169,8 +169,8 @@ class EditEventViewModel @Inject constructor(
      */
     private suspend fun correctStock(original: ReminderEvent, edited: ReminderEvent): ReminderEvent {
         val medicineId = reminderRepository.fetch(original.reminderId)?.medicineRelId ?: return edited
-        val deducted = if (original.stockHandled) MedicineHelper.parseAmount(original.amount) ?: 0.0 else 0.0
-        val toDeduct = if (edited.status == ReminderEvent.ReminderStatus.TAKEN) MedicineHelper.parseAmount(edited.amount) else null
+        val deducted = if (original.stockHandled) DoseAmountParser.parseAmount(original.amount) ?: 0.0 else 0.0
+        val toDeduct = if (edited.status == ReminderEvent.ReminderStatus.TAKEN) DoseAmountParser.parseAmount(edited.amount) else null
         val correction = (toDeduct ?: 0.0) - deducted
         val corrected = edited.copy(stockHandled = toDeduct != null)
         if (correction == 0.0) {

@@ -10,8 +10,8 @@ import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.ui.MedicineIcons
 import com.futsch1.medtimer.core.ui.R
-import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import com.futsch1.medtimer.feature.reminders.api.notificationData.writeTo
+import com.futsch1.medtimer.feature.reminders.notificationData.ReminderNotification
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,7 +41,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         val notificationMessage = context.getString(
             R.string.out_of_stock_notification,
             medicineNameString,
-            formatAmount(medicine.amount, medicine.unit)
+            formatAmount(medicine.amount, medicine)
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
@@ -55,7 +55,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
             .setDeleteIntent(intentBuilder.pendingAcknowledged)
             .addAction(
                 R.drawable.cart2,
-                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine.unit)),
+                context.getString(R.string.refill_amount, formatAmount(medicine.refillSize, medicine)),
                 intentBuilder.pendingRefill
             )
     }

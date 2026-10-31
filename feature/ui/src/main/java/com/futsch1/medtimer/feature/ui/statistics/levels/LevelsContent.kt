@@ -64,7 +64,6 @@ import com.patrykandpatrick.vico.compose.common.vicoTheme
 import com.patrykandpatrick.vico.compose.m3.common.rememberM3VicoTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.text.DecimalFormatSymbols
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -86,7 +85,7 @@ fun LevelsContent(
         ) {
             if (state.series.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.Center) {
-                    if (state.unitConflicts.isEmpty() && state.amountConflicts.isEmpty()) {
+                    if (state.unitConflicts.isEmpty()) {
                         Text(
                             text = stringResource(R.string.pk_empty),
                             style = MaterialTheme.typography.bodyMedium,
@@ -123,28 +122,11 @@ fun LevelsContent(
     }
 }
 
-/**
- * One warning per medicine left out of the estimate because of its recorded doses: amounts that would only be partially read,
- * showing the most recent one, or different units, listing each unit with its dose count.
- */
+/** One warning per medicine whose recorded doses use different units, listing each unit with its dose count. */
 @Composable
 private fun BlockedMedicineWarnings(state: LevelsState, style: TextStyle, textAlign: TextAlign) {
     val noUnit = stringResource(R.string.pk_no_unit)
-    val decimalSeparator = remember { DecimalFormatSymbols.getInstance().decimalSeparator.toString() }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        state.amountConflicts.forEach { conflict ->
-            Text(
-                text = when (conflict.problem) {
-                    AmountProblem.SEVERAL_NUMBERS -> stringResource(R.string.pk_extra_numbers, conflict.medicineName, conflict.example)
-                    AmountProblem.INCOMPLETE_NUMBER ->
-                        stringResource(R.string.pk_incomplete_number, conflict.medicineName, conflict.example, decimalSeparator)
-                },
-                style = style,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = textAlign,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
         state.unitConflicts.forEach { conflict ->
             val units = conflict.units.joinToString(", ") { "${it.unit.ifEmpty { noUnit }} (${it.count})" }
             Text(

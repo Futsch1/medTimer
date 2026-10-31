@@ -8,7 +8,7 @@ class DuplicateMedicineTest {
 
     @Test
     fun `should mark the duplicate's name as a copy and keep everything else`() {
-        val original = Medicine.default().copy(id = 4, name = "Vitamin X 500 mg", amount = 30.0, unit = "pills")
+        val original = Medicine.default().copy(id = 4, name = "Vitamin X 500 mg", amount = 30.0)
 
         val duplicate = duplicateOf(original) { "$it (copy)" }
 

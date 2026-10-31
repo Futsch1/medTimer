@@ -230,6 +230,7 @@
     <string name="invalid_input">Недопустимый ввод</string>
     <string name="medicine_stock">Запас медикаментов</string>
     <string name="amount">Сумма</string>
+    <string name="remaining_stock">Остаток запаса</string>
     <string name="reminder_threshold">Порог напоминания</string>
     <string name="refill_size">Размер заправки</string>
     <string name="refill_now">Пополнить сейчас</string>
@@ -375,10 +376,13 @@
     <string name="pk_extra_numbers">%1$s не отображается, так как некоторые дозы содержат в количестве больше одного числа, например \"%2$s\". Измените их на одно количество.</string>
     <string name="pk_incomplete_number">%1$s не отображается, так как некоторые количества не удаётся полностью прочитать в числовом формате телефона, например \"%2$s\". Записывайте дробную часть через \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s не отображается, так как его дозы указаны в разных единицах: %2$s. Измените количества, чтобы все они использовали одну единицу.</string>
+    <string name="inconclusive_dose_units_warning">Единицы доз указаны неоднозначно: %1$s. Отслеживание запасов и оценка уровня могут быть неточными.</string>
     <string name="pk_no_unit">без единицы</string>
     <string name="custom_range">Пользовательский</string>
     <string name="setup_no_medicines_guidance">Сначала добавьте лекарство, а затем напоминание для него. Одно лекарство не планирует уведомления.</string>
     <string name="setup_no_reminders_guidance">Одно лекарство не планирует уведомления. Добавьте напоминание, чтобы запланировать уведомления.</string>
     <string name="setup_guidance_getting_started">Начало работы</string>
     <string name="reminder_types_help">Подробнее о типах напоминаний</string>
+    <string name="stock_decrement_preview">Запас уменьшится на %1$s.</string>
+    <string name="stock_decrement_unreadable">Не удалось определить уменьшение запаса: указано недопустимое количество.</string>
 </resources>

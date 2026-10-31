@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.domain.model.ManualDose
@@ -182,7 +183,7 @@ class ManualDoseViewModel @Inject constructor(
                 tags = medicine.tags.map { tag -> tag.name },
                 stockBefore = stockAmount,
                 stockAfter = stockAmount,
-                stockUnit = medicine.unit
+                stockUnit = MedicineHelper.getUnit(medicine)
             )
         }
 
@@ -190,7 +191,7 @@ class ManualDoseViewModel @Inject constructor(
             val event = reminderEventRepository.create(reminderEvent)
 
             selectedEntry.medicine?.let {
-                val amount = MedicineHelper.parseAmount(reminderEvent.amount)
+                val amount = DoseAmountParser.parseAmount(reminderEvent.amount)
                 if (amount != null && it.isStockManagementActive()) {
                     commandBus.processStockHandling(amount, it.id, doseInstant.epochSecond)
                         ?.let { stockAfter ->

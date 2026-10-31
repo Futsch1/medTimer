@@ -228,6 +228,7 @@
     <string name="invalid_input">Некоректне значення</string>
     <string name="medicine_stock">Запас медикаментів</string>
     <string name="amount">В наявності</string>
+    <string name="remaining_stock">Залишок запасу</string>
     <string name="reminder_threshold">Поріг нагадування</string>
     <string name="refill_size">Додати</string>
     <string name="refill_now">Поповнити</string>
@@ -379,10 +380,13 @@
     <string name="pk_extra_numbers">%1$s не відображається, оскільки деякі дози містять у кількості більше одного числа, наприклад \"%2$s\". Змініть їх на одну кількість.</string>
     <string name="pk_incomplete_number">%1$s не відображається, оскільки деякі кількості неможливо повністю прочитати в числовому форматі телефону, наприклад \"%2$s\". Записуйте дробову частину через \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s не відображається, оскільки його дози вказано в різних одиницях: %2$s. Змініть кількості, щоб усі вони використовували ту саму одиницю.</string>
+    <string name="inconclusive_dose_units_warning">Одиниці доз неоднозначні: %1$s. Відстеження запасу та оцінка рівня можуть бути неточними.</string>
     <string name="pk_no_unit">без одиниці</string>
     <string name="custom_range">Користувацьке</string>
     <string name="setup_no_medicines_guidance">Спочатку додайте ліки, а потім нагадування для них. Самі ліки не планують сповіщення.</string>
     <string name="setup_no_reminders_guidance">Самі ліки не планують сповіщення. Додайте нагадування, щоб запланувати сповіщення.</string>
     <string name="setup_guidance_getting_started">Початок роботи</string>
     <string name="reminder_types_help">Докладніше про типи нагадувань</string>
+    <string name="stock_decrement_preview">Запас зменшиться на %1$s.</string>
+    <string name="stock_decrement_unreadable">Не вдалося визначити зменшення запасу, оскільки вказано неприпустиму кількість.</string>
 </resources>

@@ -22,7 +22,7 @@ suspend fun buildReminderEvent(
     val remindedInstant = Instant.ofEpochSecond(remindedTimeStamp)
     val amount = when (reminder.reminderType) {
         ReminderType.OUT_OF_STOCK -> {
-            MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+            MedicineHelper.formatAmount(medicine.amount, medicine)
         }
 
         ReminderType.EXPIRATION_DATE -> {
@@ -66,7 +66,7 @@ suspend fun buildReminderEvent(
         lastIntervalReminderTimeInMinutes = lastIntervalReminderTimeInMinutes,
         stockBefore = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
         stockAfter = if (medicine.isStockManagementActive()) medicine.amount else -1.0,
-        stockUnit = medicine.unit,
+        stockUnit = MedicineHelper.getUnit(medicine),
         cannotBeSkipped = medicine.cannotBeSkipped
     )
 }

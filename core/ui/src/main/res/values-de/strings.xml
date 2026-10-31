@@ -167,12 +167,12 @@
     <string name="edit_event">Ereignis bearbeiten</string>
     <string name="intro_welcome">Willkommen bei MedTimer!</string>
     <string name="intro_welcome_description">MedTimer ist eine kostenlose und quelloffene App zur Erinnerung an die Einnahme von Medikamenten mit Schwerpunkt auf Datenschutz.\n\nDie App benötigt die Berechtigung zur Anzeige von Benachrichtigungen, um an Medikamente zu erinnern.</string>
-<string name="intro_setup">Erste Erinnerung einrichten</string>
-<string name="intro_setup_description">Füge zuerst ein Medikament und anschließend eine Erinnerung dafür hinzu. MedTimer speichert diese Informationen auf deinem Gerät und sendet deine Medikamentendaten nirgendwohin.\n\nEine vollständige Anleitung zur Einrichtung findest du unter „Erste Schritte“.</string>
-<string name="intro_getting_started_link">Erste Schritte</string>
-<string name="intro_overview_orientation_description">Die Übersicht zeigt Erinnerungen für den ausgewählten Tag. Wähle einen Tag aus der Wochenzeile aus. Das Statussymbol neben jeder Erinnerung zeigt an, ob sie aussteht, bereits gemeldet, eingenommen oder übersprungen wurde oder bis zu deiner Rückkehr nach Hause schlummert. Du kannst darauf drücken, um den Status der Erinnerung zu ändern.</string>
-<string name="intro_notifications">Benachrichtigungsberechtigung</string>
-<string name="intro_notifications_description">MedTimer benötigt die Berechtigung für Benachrichtigungen, um dich zu benachrichtigen, wenn eine Erinnerung fällig ist. Du kannst die Einführung überspringen und festlegen, ob Benachrichtigungen erlaubt werden sollen. Dies kannst du später in den Android-Einstellungen ändern.</string>
+    <string name="intro_setup">Erste Erinnerung einrichten</string>
+    <string name="intro_setup_description">Füge zuerst ein Medikament und anschließend eine Erinnerung dafür hinzu. MedTimer speichert diese Informationen auf deinem Gerät und sendet deine Medikamentendaten nirgendwohin.\n\nEine vollständige Anleitung zur Einrichtung findest du unter „Erste Schritte“.</string>
+    <string name="intro_getting_started_link">Erste Schritte</string>
+    <string name="intro_overview_orientation_description">Die Übersicht zeigt Erinnerungen für den ausgewählten Tag. Wähle einen Tag aus der Wochenzeile aus. Das Statussymbol neben jeder Erinnerung zeigt an, ob sie aussteht, bereits gemeldet, eingenommen oder übersprungen wurde oder bis zu deiner Rückkehr nach Hause schlummert. Du kannst darauf drücken, um den Status der Erinnerung zu ändern.</string>
+    <string name="intro_notifications">Benachrichtigungsberechtigung</string>
+    <string name="intro_notifications_description">MedTimer benötigt die Berechtigung für Benachrichtigungen, um dich zu benachrichtigen, wenn eine Erinnerung fällig ist. Du kannst die Einführung überspringen und festlegen, ob Benachrichtigungen erlaubt werden sollen. Dies kannst du später in den Android-Einstellungen ändern.</string>
     <string name="show_intro">App-Intro anzeigen</string>
     <string name="are_you_sure_delete_reminder_event">Ereignis wirklich löschen?</string>
     <string name="notification_importance">Benachrichtigungspriorität</string>
@@ -222,6 +222,7 @@
     <string name="invalid_input">Ungültige Eingabe</string>
     <string name="medicine_stock">Medikamentenvorrat</string>
     <string name="amount">Anzahl</string>
+    <string name="remaining_stock">Verbleibender Vorrat</string>
     <string name="reminder_threshold">Warnschwelle</string>
     <string name="refill_size">Packungsgröße</string>
     <string name="refill_now">Jetzt nachfüllen</string>
@@ -367,10 +368,13 @@
     <string name="pk_extra_numbers">%1$s wird nicht angezeigt, weil einige Dosen mehr als eine Zahl in der Menge enthalten, wie \"%2$s\". Ändere sie in eine einzelne Menge.</string>
     <string name="pk_incomplete_number">%1$s wird nicht angezeigt, weil einige Mengen mit dem Zahlenformat deines Telefons nicht vollständig gelesen werden können, wie \"%2$s\". Schreibe Dezimalstellen mit \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s wird nicht angezeigt, weil seine Dosen unterschiedliche Einheiten verwenden: %2$s. Ändere die Mengen so, dass alle dieselbe Einheit verwenden.</string>
+    <string name="inconclusive_dose_units_warning">Die Dosiseinheiten sind uneindeutig: %1$s. Vorratsverfolgung und Spiegelschätzungen können ungenau sein.</string>
     <string name="pk_no_unit">keine Einheit</string>
     <string name="custom_range">Benutzerdefiniert</string>
     <string name="setup_no_medicines_guidance">Füge zuerst ein Medikament und danach eine Erinnerung dafür hinzu. Ein Medikament allein erzeugt keine Benachrichtigungen.</string>
     <string name="setup_no_reminders_guidance">Ein Medikament allein erzeugt keine Benachrichtigungen. Füge eine Erinnerung hinzu, um Benachrichtigungen zu planen.</string>
     <string name="setup_guidance_getting_started">Erste Schritte</string>
     <string name="reminder_types_help">Mehr über Erinnerungstypen</string>
+    <string name="stock_decrement_preview">Der Vorrat wird um %1$s verringert.</string>
+    <string name="stock_decrement_unreadable">Der Vorratsverbrauch kann nicht bestimmt werden, da diese Menge ungültig ist.</string>
 </resources>

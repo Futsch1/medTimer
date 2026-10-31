@@ -229,6 +229,7 @@
     <string name="invalid_input">קלט לא חוקי</string>
     <string name="medicine_stock">מלאי תרופות</string>
     <string name="amount">כמות</string>
+    <string name="remaining_stock">המלאי שנותר</string>
     <string name="reminder_threshold">סף תזכורת</string>
     <string name="refill_size">גודל מילוי</string>
     <string name="refill_now">מלאו עכשיו</string>
@@ -373,10 +374,13 @@
     <string name="pk_extra_numbers">%1$s אינה מוצגת כי חלק מהמנות מכילות יותר ממספר אחד בכמות, כמו \"%2$s\". שנה אותן לכמות אחת.</string>
     <string name="pk_incomplete_number">%1$s אינה מוצגת כי לא ניתן לקרוא חלק מהכמויות במלואן בתבנית המספרים של הטלפון, כמו \"%2$s\". כתוב שברים עשרוניים עם \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s אינה מוצגת כי המנות שלה משתמשות ביחידות שונות: %2$s. שנה את הכמויות כך שכולן ישתמשו באותה יחידה.</string>
+    <string name="inconclusive_dose_units_warning">יחידות המנות אינן ברורות: %1$s. מעקב אחר המלאי והערכת רמה עלולים להיות לא מדויקים.</string>
     <string name="pk_no_unit">ללא יחידה</string>
     <string name="custom_range">מותאם אישית</string>
     <string name="setup_no_medicines_guidance">הוסיפו תחילה תרופה ולאחר מכן תזכורת עבורה. תרופה לבדה אינה מתזמנת התראות.</string>
     <string name="setup_no_reminders_guidance">תרופה לבדה אינה מתזמנת התראות. הוסיפו תזכורת כדי לתזמן התראות.</string>
     <string name="setup_guidance_getting_started">תחילת העבודה</string>
     <string name="reminder_types_help">מידע נוסף על סוגי התזכורות</string>
+    <string name="stock_decrement_preview">המלאי יפחת ב־%1$s.</string>
+    <string name="stock_decrement_unreadable">לא ניתן לקבוע את הירידה במלאי כי הכמות הזו אינה תקינה.</string>
 </resources>

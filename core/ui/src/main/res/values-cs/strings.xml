@@ -235,6 +235,7 @@
     <string name="invalid_input">Neplatný vstup</string>
     <string name="medicine_stock">Zásoba léků</string>
     <string name="amount">Množství</string>
+    <string name="remaining_stock">Zbývající zásoba</string>
     <string name="reminder_threshold">Mez připomenutí</string>
     <string name="refill_size">Doplněné množství</string>
     <string name="refill_now">Doplnit teď</string>
@@ -379,10 +380,13 @@
     <string name="pk_extra_numbers">%1$s se nezobrazuje, protože některé dávky obsahují v množství více než jedno číslo, například \"%2$s\". Změňte je na jedno množství.</string>
     <string name="pk_incomplete_number">%1$s se nezobrazuje, protože některá množství nelze s formátem čísel vašeho telefonu přečíst celá, například \"%2$s\". Desetinná místa pište s \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s se nezobrazuje, protože jeho dávky používají různé jednotky: %2$s. Upravte množství tak, aby všechna používala stejnou jednotku.</string>
+    <string name="inconclusive_dose_units_warning">Jednotky dávek nejsou jednoznačné: %1$s. Sledování zásob a odhad hladiny mohou být nepřesné.</string>
     <string name="pk_no_unit">bez jednotky</string>
     <string name="custom_range">Vlastní</string>
     <string name="setup_no_medicines_guidance">Nejprve přidejte lék a potom k němu připomenutí. Samotný lék neplánuje oznámení.</string>
     <string name="setup_no_reminders_guidance">Samotný lék neplánuje oznámení. Přidejte připomenutí, abyste naplánovali oznámení.</string>
     <string name="setup_guidance_getting_started">Začínáme</string>
     <string name="reminder_types_help">Další informace o typech připomenutí</string>
+    <string name="stock_decrement_preview">Zásoba se sníží o %1$s.</string>
+    <string name="stock_decrement_unreadable">Snížení zásoby nelze určit, protože toto množství není platné.</string>
 </resources>

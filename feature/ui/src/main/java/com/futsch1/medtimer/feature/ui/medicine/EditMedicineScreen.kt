@@ -1,8 +1,9 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,8 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledIconButton
@@ -33,16 +36,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -104,6 +110,8 @@ private fun EditMedicineScreen(
     onCreateReminder: () -> Unit,
     onUpdateReminderDraft: (draft: NewReminderDraft) -> Unit
 ) {
+    if (!editMedicineScreenState.isLoaded || editMedicineScreenState.id == null) return
+
     val listState = rememberLazyListState()
     var showNotes by rememberSaveable { mutableStateOf(false) }
     var showNewReminder by rememberSaveable { mutableStateOf(false) }
@@ -121,6 +129,7 @@ private fun EditMedicineScreen(
         NewReminderFlowDialog(
             state = newReminderState,
             medicineUnit = editMedicineScreenState.unit,
+            showStockEffect = editMedicineScreenState.stockTrackingActive,
             onCreate = onCreateReminder,
             onDraftChange = onUpdateReminderDraft,
             onDismiss = { showNewReminder = false },
@@ -227,17 +236,23 @@ private fun MedicineDetailsCard(
         Column(Modifier.padding(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val icon = rememberMedicineIcon(state.icon)
-                FilledIconButton(onClick = onSelectIcon) {
-                    if (icon != null) {
-                        Image(
-                            bitmap = icon,
-                            contentDescription = stringResource(R.string.icon),
-                            colorFilter = ColorFilter.tint(state.color?.let { Color(it) }
-                                ?: MaterialTheme.colorScheme.onPrimary),
-                            modifier = Modifier.size(24.dp),
-                        )
+                val iconDescription = stringResource(R.string.icon)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .clickable(onClick = onSelectIcon, role = Role.Button)
+                        .semantics { contentDescription = iconDescription },
+                ) {
+                    if (icon != null || state.color != null) {
+                        MedicineSwatch(icon = icon, color = state.color, size = 40.dp)
                     } else {
-                        Icon(painterResource(R.drawable.capsule), stringResource(R.string.icon), Modifier.size(24.dp))
+                        Icon(
+                            painterResource(R.drawable.capsule),
+                            iconDescription,
+                            Modifier.size(24.dp),
+                        )
                     }
                 }
                 EditTextButton(
@@ -291,6 +306,38 @@ private fun ReminderList(
         contentPadding = PaddingValues(bottom = 80.dp),
     ) {
         if (header != null) item(key = "medicine") { header() }
+        if (state.showDoseUnitWarning) {
+            item(key = "dose_unit_warning") {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    ),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.exclamation_triangle_fill),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Text(
+                            stringResource(
+                                R.string.inconclusive_dose_units_warning,
+                                state.doseUnits.joinToString(),
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                }
+            }
+        }
         item(key = "reminders_heading") {
             Text(
                 stringResource(R.string.reminders),
@@ -311,7 +358,7 @@ private fun ReminderList(
         }
         items(state.reminders, key = { it.id }) { reminder ->
             SwipeToDeleteContainer({ onReminderDelete(reminder.id) }, R.string.are_you_sure_delete_reminder) {
-                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime)
+                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime, state.stockTrackingActive)
             }
         }
     }

@@ -36,4 +36,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.espresso.idling.resource)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    testImplementation(libs.junit4)
 }

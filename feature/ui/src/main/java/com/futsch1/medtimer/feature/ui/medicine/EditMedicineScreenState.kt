@@ -13,6 +13,9 @@ interface EditMedicineScreenState {
     val isLoaded: Boolean
     val id: Int?
     val amount: Double
+    val stockTrackingActive: Boolean
+    val showDoseUnitWarning: Boolean
+    val doseUnits: ImmutableList<String>
     val unit: String
     val name: String
     val notes: String?
@@ -25,6 +28,9 @@ class MutableEditMedicineScreenState : EditMedicineScreenState {
     override var isLoaded by mutableStateOf(false)
     override var id by mutableStateOf<Int?>(null)
     override var amount by mutableDoubleStateOf(0.0)
+    override var stockTrackingActive by mutableStateOf(false)
+    override var showDoseUnitWarning by mutableStateOf(false)
+    override var doseUnits by mutableStateOf<ImmutableList<String>>(persistentListOf())
     override var unit by mutableStateOf("")
     override var name by mutableStateOf("")
     override var notes by mutableStateOf<String?>(null)

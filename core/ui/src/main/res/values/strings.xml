@@ -240,6 +240,7 @@
     <string name="invalid_input">Invalid input</string>
     <string name="medicine_stock">Medicine stock</string>
     <string name="amount">Amount</string>
+    <string name="remaining_stock">Remaining stock</string>
     <string name="reminder_threshold">Reminder threshold</string>
     <string name="refill_size">Refill size</string>
     <string name="refill_now">Refill now</string>
@@ -274,6 +275,8 @@
     <string name="use_relative_date_time_summary">Show relative date/time for reminders</string>
     <string name="use_relative_date_time">Relative date/time</string>
     <string name="invalid_amount">The amount has to contain a number to enable medicine stock tracking for this reminder.</string>
+    <string name="stock_decrement_preview">Stock will decrease by %1$s.</string>
+    <string name="stock_decrement_unreadable">Stock decrement cannot be determined because this amount is invalid.</string>
     <string name="sticky_on_lockscreen">Persistent reminders on lock screen</string>
     <string name="sticky_on_lockscreen_summary">Reminders cannot be dismissed from the lock screen, only from the notifications drawer\nNote: Some smartwatches may no display notifications if enabled</string>
     <string name="big_notifications">Big notification buttons</string>
@@ -377,6 +380,7 @@
     <string name="pk_extra_numbers">%1$s is not shown because some doses contain more than one number in the amount, like \"%2$s\". Change them to a single amount.</string>
     <string name="pk_incomplete_number">%1$s is not shown because some amounts cannot be read completely with your phone\'s number format, like \"%2$s\". Write decimals with \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s is not shown because its doses use different units: %2$s. Change the amounts so they all use the same unit.</string>
+    <string name="inconclusive_dose_units_warning">Dose units are inconclusive: %1$s. Stock tracking and level estimates may be inaccurate.</string>
     <string name="pk_no_unit">no unit</string>
     <string name="custom_range">Custom</string>
 </resources>

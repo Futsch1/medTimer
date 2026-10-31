@@ -9,7 +9,7 @@ on:
         type: boolean
         default: false
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
     branches: [main]
 
@@ -120,6 +120,7 @@ jobs:
   # distributes discovered tests over two shards, so newly added test classes are included.
   # API 36 / medium_phone overlaps with the full coverage run above intentionally.
   compatibility-instrumented:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     needs: [lint, unit-tests, compile-test]
     strategy:
       fail-fast: false

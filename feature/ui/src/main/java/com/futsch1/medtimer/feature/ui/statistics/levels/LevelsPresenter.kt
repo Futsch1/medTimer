@@ -1,5 +1,7 @@
 package com.futsch1.medtimer.feature.ui.statistics.levels
 
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
+import com.futsch1.medtimer.core.common.helpers.DoseUnitSummary
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
@@ -17,11 +19,11 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 /**
- * Estimates the level of every medicine with half-life and time to peak set from its taken doses over the last [days] days (including
+ * Estimates the level of every medicine with half-life and time to peak set from its taken doses over the last [kotlin.time.Duration.Companion.days] days (including
  * today, matching the Charts' bar chart). Doses are matched to medicines by normalized name, like the other analysis views, since
  * manual doses carry no reminder. The unit of the doses does not matter as each curve is normalized, but a medicine whose doses use
- * different units, or with amounts that would only be partially read (e.g. "2 x 5mg"), is not estimated at all and reported in
- * [LevelsState.unitConflicts] or [LevelsState.amountConflicts] instead. Other doses whose amount cannot be read are
+ * different units is not estimated and is reported in [LevelsState.unitConflicts]. The first parsed number weights each dose,
+ * just as it determines stock consumption. Doses whose amount cannot be read are
  * left out and counted in [LevelsState.ignoredDoses].
  */
 class LevelsPresenter @Inject constructor(
@@ -42,30 +44,30 @@ class LevelsPresenter @Inject constructor(
         val classifiedByName = takenByName.mapValues { (_, taken) -> classifyDoses(taken) }
         val dosesByName = classifiedByName.mapValues { (_, classified) -> classified.labelled.map { it.first } }
 
-        // Each curve is normalized, so any unit works, but only if all doses of a medicine share it. Amounts with several numbers
-        // cannot be read as one dose either; estimating without them would misrepresent the level, so neither is shown at all.
+        // Each curve is normalized, so any unit works, but only if all doses of a medicine share it.
         val (modelled, blocked) = medicines
             .mapNotNull { medicine -> medicine.pharmacokineticModel()?.let { medicine to it } }
             .distinctBy { it.first.name }
-            .partition { (medicine, _) -> classifiedByName[medicine.name]?.let { it.units.consistent && it.partial.isEmpty() } ?: true }
+            .partition { (medicine, _) -> classifiedByName[medicine.name]?.units?.consistent ?: true }
         val unitConflicts = blocked.map { classifiedByName.getValue(it.first.name) to it.first.name }
             .filter { (classified, _) -> !classified.units.consistent }
             .map { (classified, name) -> UnitConflict(name, classified.units.units.toImmutableList()) }
-        // One warning per kind of problem, with the most recent affected amount so it can be found and corrected
-        val amountConflicts = blocked.flatMap { (medicine, _) ->
-            classifiedByName.getValue(medicine.name).partial.entries.map { (problem, events) ->
-                AmountConflict(medicine.name, events.last().amount.trim(), problem)
-            }
-        }
         // A dose taken just now has not raised the level yet, so project far enough ahead to show its peak
-        val peakProjectionDays = modelled.maxOfOrNull { ceil(it.second.effectiveTimeToPeakHours / LevelsState.HOURS_PER_DAY).toInt() } ?: 0
+        val peakProjectionDays =
+            modelled.maxOfOrNull { ceil(it.second.effectiveTimeToPeakHours / LevelsState.HOURS_PER_DAY).toInt() } ?: 0
         // The chart can also be scrolled further into the future, until the last dose of every medicine has practically decayed
         val endOfToday = today.plusDays(1).atStartOfDay(zone).toInstant()
         val relevantUntil = modelled.mapNotNull { (medicine, model) ->
-            dosesByName[medicine.name]?.maxOfOrNull { it.time }?.plusSeconds((model.relevanceHours * SECONDS_PER_HOUR).toLong())
+            dosesByName[medicine.name]?.maxOfOrNull { it.time }
+                ?.plusSeconds((model.relevanceHours * SECONDS_PER_HOUR).toLong())
         }.maxOrNull()
         val relevanceDays = relevantUntil?.takeIf { it.isAfter(endOfToday) }
-            ?.let { ceil(Duration.between(endOfToday, it).toMillis() / (SECONDS_PER_HOUR * 1000.0 * LevelsState.HOURS_PER_DAY)).toInt() }
+            ?.let {
+                ceil(
+                    Duration.between(endOfToday, it)
+                        .toMillis() / (SECONDS_PER_HOUR * 1000.0 * LevelsState.HOURS_PER_DAY)
+                ).toInt()
+            }
             ?: 0
         val projectionDays = maxOf(peakProjectionDays, relevanceDays).coerceAtMost(MAX_PROJECTION_DAYS)
 
@@ -82,7 +84,8 @@ class LevelsPresenter @Inject constructor(
         val visibleHours = (days + peakProjectionDays) * LevelsState.HOURS_PER_DAY
         val ignoredDoses = modelled.sumOf { (medicine, _) ->
             classifiedByName[medicine.name]?.unreadable.orEmpty().count { event ->
-                event.doseTime().atZone(zone).toLocalDateTime().let { !it.isBefore(windowStart) && it.isBefore(windowEnd) }
+                event.doseTime().atZone(zone).toLocalDateTime()
+                    .let { !it.isBefore(windowStart) && it.isBefore(windowEnd) }
             }
         }
 
@@ -101,7 +104,7 @@ class LevelsPresenter @Inject constructor(
                     DoseMarker(
                         localHoursBetween(windowStart, dose.time, zone),
                         if (max > 0.0) level / max * 100.0 else 0.0,
-                        withStockUnit(label, medicine.unit),
+                        withStockUnit(label, MedicineHelper.getUnit(medicine)),
                     )
                 }
             LevelSeries(
@@ -121,9 +124,9 @@ class LevelsPresenter @Inject constructor(
             peakProjectionDays = peakProjectionDays.coerceAtMost(projectionDays),
             ignoredDoses = ignoredDoses,
             unitConflicts = unitConflicts.toImmutableList(),
-            amountConflicts = amountConflicts.toImmutableList(),
             nowHours = localHoursBetween(windowStart, now, zone),
-            midnightLabels = (0..historyDays + projectionDays).map { dayLabel(firstDay.plusDays(it.toLong())) }.toImmutableList(),
+            midnightLabels = (0..historyDays + projectionDays).map { dayLabel(firstDay.plusDays(it.toLong())) }
+                .toImmutableList(),
         )
     }
 
@@ -136,13 +139,15 @@ class LevelsPresenter @Inject constructor(
     /** Keeps the grid resolution of the visible span constant, however long the scrollable history is. */
     private fun gridPoints(from: Instant, to: Instant, visibleHours: Double): Int {
         val hours = Duration.between(from, to).toMillis() / (SECONDS_PER_HOUR * 1000.0)
-        return ceil(PharmacokineticModel.DEFAULT_GRID_POINTS * hours / visibleHours).toInt().coerceIn(2, MAX_GRID_POINTS)
+        return ceil(PharmacokineticModel.DEFAULT_GRID_POINTS * hours / visibleHours).toInt()
+            .coerceIn(2, MAX_GRID_POINTS)
     }
 
-    private fun toCurve(samples: List<Pair<Instant, Double>>, max: Double, windowStart: LocalDateTime, zone: ZoneId) = LevelCurve(
-        hours = samples.map { localHoursBetween(windowStart, it.first, zone) }.toImmutableList(),
-        percent = samples.map { if (max > 0.0) it.second / max * 100.0 else 0.0 }.toImmutableList(),
-    )
+    private fun toCurve(samples: List<Pair<Instant, Double>>, max: Double, windowStart: LocalDateTime, zone: ZoneId) =
+        LevelCurve(
+            hours = samples.map { localHoursBetween(windowStart, it.first, zone) }.toImmutableList(),
+            percent = samples.map { if (max > 0.0) it.second / max * 100.0 else 0.0 }.toImmutableList(),
+        )
 
     private fun dayLabel(date: LocalDate): String = timeFormatter.daysSinceEpochToDateString(date.toEpochDay())
 
@@ -151,33 +156,28 @@ class LevelsPresenter @Inject constructor(
         if (stockUnit.isNotBlank() && DoseAmountParser.parse(label)?.unit?.isEmpty() == true) "$label ${stockUnit.trim()}" else label
 
     /** @param labelled readable doses with their amount as recorded, for labeling */
-    /**
-     * @param partial doses whose amount would only be partially read, by problem, in chronological order
-     * @param unreadable the other doses whose amount cannot be read
-     */
     private class ClassifiedDoses(
         val units: DoseUnitSummary,
         val labelled: List<Pair<Dose, String>>,
-        val partial: Map<AmountProblem, List<ReminderEvent>>,
         val unreadable: List<ReminderEvent>,
     )
 
     private fun classifyDoses(taken: List<ReminderEvent>): ClassifiedDoses {
         val labelled = mutableListOf<Pair<Dose, String>>()
-        val partial = mutableMapOf<AmountProblem, MutableList<ReminderEvent>>()
         val unreadable = mutableListOf<ReminderEvent>()
         for (event in taken) {
-            when (val reading = DoseAmountParser.read(event.amount)) {
-                is DoseReading.Amount -> labelled.add(Dose(event.doseTime(), reading.dose.amount) to event.amount.trim())
-                DoseReading.SeveralNumbers -> partial.getOrPut(AmountProblem.SEVERAL_NUMBERS) { mutableListOf() }.add(event)
-                DoseReading.IncompleteNumber -> partial.getOrPut(AmountProblem.INCOMPLETE_NUMBER) { mutableListOf() }.add(event)
-                DoseReading.Unreadable -> unreadable.add(event)
+            val dose = DoseAmountParser.parse(event.amount)
+            if (dose != null) {
+                labelled.add(Dose(event.doseTime(), dose.amount) to event.amount.trim())
+            } else {
+                unreadable.add(event)
             }
         }
-        return ClassifiedDoses(DoseUnits.summarize(taken.map { it.amount }), labelled, partial, unreadable)
+        return ClassifiedDoses(DoseAmountParser.summarize(taken.map { it.amount }), labelled, unreadable)
     }
 
-    private fun ReminderEvent.doseTime(): Instant = if (processedTimestamp != Instant.EPOCH) processedTimestamp else remindedTimestamp
+    private fun ReminderEvent.doseTime(): Instant =
+        if (processedTimestamp != Instant.EPOCH) processedTimestamp else remindedTimestamp
 
     companion object {
         private const val MAX_HISTORY_DAYS = 365

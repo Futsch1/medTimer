@@ -65,6 +65,7 @@ private val creationTypes = listOf(
 fun NewReminderFlowDialog(
     state: NewReminderState,
     medicineUnit: String,
+    showStockEffect: Boolean = false,
     onCreate: () -> Unit,
     onDraftChange: (draft: NewReminderDraft) -> Unit,
     onDismiss: () -> Unit,
@@ -105,6 +106,7 @@ fun NewReminderFlowDialog(
                             ReminderDetailsFields(
                                 type = type,
                                 medicineUnit = medicineUnit,
+                                showStockEffect = showStockEffect,
                                 state = state,
                                 draft = draft,
                                 onDraftChange = onDraftChange,
@@ -169,6 +171,7 @@ private fun ReminderTypeChooser(onSelect: (ReminderType) -> Unit) {
 private fun ReminderDetailsFields(
     type: ReminderType,
     medicineUnit: String,
+    showStockEffect: Boolean,
     state: NewReminderState,
     draft: NewReminderDraft,
     onDraftChange: (NewReminderDraft) -> Unit,
@@ -176,7 +179,7 @@ private fun ReminderDetailsFields(
     when (type) {
         ReminderType.OUT_OF_STOCK -> StockReminderFields(medicineUnit, state, draft, onDraftChange)
         ReminderType.EXPIRATION_DATE -> ExpirationReminderFields(state, draft, onDraftChange)
-        else -> ScheduledReminderFields(type, state, draft, onDraftChange)
+        else -> ScheduledReminderFields(type, showStockEffect, state, draft, onDraftChange)
     }
     if (state.invalid) Text(stringResource(CoreUiR.string.invalid_input), color = MaterialTheme.colorScheme.error)
 }
@@ -251,6 +254,7 @@ private fun ExpirationReminderFields(
 @Composable
 private fun ScheduledReminderFields(
     type: ReminderType,
+    showStockEffect: Boolean,
     state: NewReminderState,
     draft: NewReminderDraft,
     onDraftChange: (NewReminderDraft) -> Unit,
@@ -260,6 +264,7 @@ private fun ScheduledReminderFields(
         value = draft.amount,
         onConfirm = { onDraftChange(draft.copy(amount = it)) },
         modifier = Modifier.fillMaxWidth(),
+        showStockEffect = showStockEffect,
     )
     when (type) {
         ReminderType.TIME_BASED -> TimeField(CoreUiR.string.time, draft.time, state.timeText) {

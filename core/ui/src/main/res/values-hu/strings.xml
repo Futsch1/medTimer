@@ -223,6 +223,7 @@
     <string name="invalid_input">Érvénytelen érték</string>
     <string name="medicine_stock">Gyógyszerkészlet</string>
     <string name="amount">Mennyiség</string>
+    <string name="remaining_stock">Fennmaradó készlet</string>
     <string name="reminder_threshold">Figyelmeztetési mennyiség</string>
     <string name="refill_size">Újratöltés mennyisége</string>
     <string name="refill_now">Újratöltés most</string>
@@ -367,10 +368,13 @@
     <string name="pk_extra_numbers">A(z) %1$s nem jelenik meg, mert egyes adagok mennyisége egynél több számot tartalmaz, például \"%2$s\". Módosítsa őket egyetlen mennyiségre.</string>
     <string name="pk_incomplete_number">A(z) %1$s nem jelenik meg, mert egyes mennyiségek nem olvashatók be teljesen a telefon számformátumával, például \"%2$s\". A tizedeseket \"%3$s\" jellel írja.</string>
     <string name="pk_unit_conflict">A(z) %1$s nem jelenik meg, mert az adagjai különböző mértékegységeket használnak: %2$s. Módosítsa a mennyiségeket, hogy mind ugyanazt a mértékegységet használja.</string>
+    <string name="inconclusive_dose_units_warning">Az adagok mértékegységei nem egyértelműek: %1$s. A készlet nyomon követése és a szintbecslés pontatlan lehet.</string>
     <string name="pk_no_unit">nincs mértékegység</string>
     <string name="custom_range">Egyedi</string>
     <string name="setup_no_medicines_guidance">Először adj hozzá egy gyógyszert, majd egy emlékeztetőt hozzá. A gyógyszer önmagában nem ütemez értesítéseket.</string>
     <string name="setup_no_reminders_guidance">A gyógyszer önmagában nem ütemez értesítéseket. Adj hozzá emlékeztetőt az értesítések ütemezéséhez.</string>
     <string name="setup_guidance_getting_started">Első lépések</string>
     <string name="reminder_types_help">További információ az emlékeztetőtípusokról</string>
+    <string name="stock_decrement_preview">A készlet %1$s értékkel csökken.</string>
+    <string name="stock_decrement_unreadable">Az érvénytelen mennyiség miatt a készletcsökkenés nem határozható meg.</string>
 </resources>

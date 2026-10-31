@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -50,7 +51,7 @@ class NewReminderStockDialog @AssistedInject constructor(
             MedTimerTheme {
                 NewReminderFlowDialog(
                     state = newReminderViewModel.state,
-                    medicineUnit = medicine.unit,
+                    medicineUnit = MedicineHelper.getUnit(medicine),
                     onCreate = {
                         if (newReminderViewModel.createReminder()) reminderCreated()
                     },

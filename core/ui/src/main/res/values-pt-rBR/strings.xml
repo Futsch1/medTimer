@@ -190,6 +190,7 @@
     <string name="interval_start_processed">O intervalo começa ao marcar como tomado ou pulado</string>
     <string name="medicine_stock">Estoque de medicamentos</string>
     <string name="amount">Quantia</string>
+    <string name="remaining_stock">Estoque restante</string>
     <string name="refill_size">Quantidade da reposição</string>
     <string name="refill_now">Repor agora</string>
     <string name="are_you_sure_delete_tag">Tem certeza de que deseja excluir esta etiqueta?</string>
@@ -378,4 +379,6 @@
     <string name="setup_no_reminders_guidance">Um medicamento sozinho não agenda notificações. Adicione um lembrete para agendar notificações.</string>
     <string name="setup_guidance_getting_started">Primeiros passos</string>
     <string name="reminder_types_help">Saiba mais sobre os tipos de lembrete</string>
+    <string name="stock_decrement_preview">O estoque diminuirá em %1$s.</string>
+    <string name="stock_decrement_unreadable">Não é possível determinar a redução do estoque porque esta quantidade é inválida.</string>
 </resources>
