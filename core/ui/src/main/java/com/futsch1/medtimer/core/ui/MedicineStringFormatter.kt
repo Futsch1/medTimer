@@ -110,7 +110,7 @@ class MedicineStringFormatter @Inject constructor(
                 .map { linkedReminderSummaryString(medicine, it) })
             addAll(reminders.filter { it.isInterval }.map { intervalBasedReminderString(it) })
             addAll(reminders.filter { it.reminderType == ReminderType.OUT_OF_STOCK }
-                .map { outOfStockReminderString(it) })
+                .map { outOfStockReminderString(it, medicine) })
             addAll(reminders.filter { it.reminderType == ReminderType.EXPIRATION_DATE }
                 .map { context.getString(R.string.expiration_date) })
         }
@@ -134,10 +134,10 @@ class MedicineStringFormatter @Inject constructor(
         else "$base + ${delays.reversed().joinToString(" + ")}"
     }
 
-    private fun outOfStockReminderString(reminder: Reminder): String {
+    private fun outOfStockReminderString(reminder: Reminder, medicine: Medicine): String {
         return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
             reminder.outOfStockThreshold,
-            ""
+            medicine
         )
     }
 

@@ -60,7 +60,7 @@ class EditMedicineScreenViewModel @Inject constructor(
                 state.notes = medicine?.notes
                 if (medicine != null) {
                     val summaries = medicine.reminders.associate { reminder ->
-                        reminder.id to reminderSummaryFormatter.formatReminderSummary(reminder)
+                        reminder.id to reminderSummaryFormatter.formatReminderSummary(reminder, medicine)
                     }
                     setupState(medicine, summaries)
                 }
@@ -76,7 +76,7 @@ class EditMedicineScreenViewModel @Inject constructor(
             medicine.reminders.filter { it.active && !it.isOutOfStockOrExpirationReminder }.map { it.amount }
         )
         state.showDoseUnitWarning = (medicine.isStockManagementActive() || medicine.pharmacokineticModel() != null) &&
-            !doseUnitSummary.consistent
+                !doseUnitSummary.consistent
         state.doseUnits = doseUnitSummary.units.map { it.unit.ifBlank { context.getString(R.string.pk_no_unit) } }
             .toImmutableList()
 

@@ -63,7 +63,7 @@ class ShowMedicineViewModel @Inject constructor(
                 _uiState.value = ShowMedicineUiState.NotFound
                 return@launch
             }
-            val summaryText = reminderSummaryFormatter.formatReminderSummary(reminder)
+            val summaryText = reminderSummaryFormatter.formatReminderSummary(reminder, medicine)
             _uiState.value = ShowMedicineUiState.Loaded(
                 medicine = medicine,
                 reminder = reminder,
