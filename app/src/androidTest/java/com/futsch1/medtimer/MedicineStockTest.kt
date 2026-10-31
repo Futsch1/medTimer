@@ -20,11 +20,8 @@ class MedicineStockTest : MedTimerTestBase() {
         val notificationTitle = context.getString(R.string.out_of_stock_notification_title)
 
         seed.medicine("Test") {
-            stock(amount = 10.5, unit = "pills", refillSize = 10.8)
-            intervalReminder(
-                "Of the pills ${amount(3.5)} are to be taken",
-                intervalWithinToday(10.minutes)
-            )
+            stock(amount = 10.5, refillSize = 10.8)
+            intervalReminder("${amount(3.5)} pills", intervalWithinToday(10.minutes))
         }
 
         medicines.clickItem(0)
@@ -84,8 +81,8 @@ class MedicineStockTest : MedTimerTestBase() {
         val notificationTitle = InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.out_of_stock_notification_title)
 
         seed.medicine("TestMed") {
-            stock(amount = 120.0, unit = "pills", refillSize = 100.0)
-            intervalReminder("So many pills - 130", 10.minutes)
+            stock(amount = 120.0, refillSize = 100.0)
+            intervalReminder("130 pills", 10.minutes)
             stockReminder(threshold = 0.0)
         }
 
@@ -114,8 +111,8 @@ class MedicineStockTest : MedTimerTestBase() {
         settings.click(R.string.privacy_settings, R.string.hide_med_name)
 
         seed.medicine("TestMed") {
-            stock(amount = 120.0, unit = "pills", refillSize = 100.0)
-            intervalReminder("So many pills - 130", 10.minutes)
+            stock(amount = 120.0, refillSize = 100.0)
+            intervalReminder("130 pills", 10.minutes)
             stockReminder(threshold = 0.0)
         }
 
@@ -143,7 +140,7 @@ class MedicineStockTest : MedTimerTestBase() {
 
         medicines.clickItem(0)
 
-        medicineEditor.setStock(amount = amount(10.5), unit = "pills")
+        medicineEditor.setStock(amount = amount(10.5))
 
         medicineEditor.openAddReminderDialog()
         medicineEditor.selectReminderType(R.string.expiration_reminder)
@@ -176,24 +173,26 @@ class MedicineStockTest : MedTimerTestBase() {
         medicines.clickItem(0)
 
         medicineEditor.setStock(amount = "", refillSize = "")
-        medicineEditor.setStock(amount = "10005", unit = "pills")
+        medicineEditor.setStock(amount = "10005")
         medicineEditor.inStockSettings {
-            preferences.assertSummary(R.string.amount, MedicineHelper.formatAmount(10005.0, "pills"))
+            preferences.assertSummary(R.string.remaining_stock, amount(10005.0))
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
                 timeFormatter().localDateToString(frozenToday().plusDays(365))
             )
         }
 
-        medicineEditor.addReminder("3", earlierToday())
+        medicineEditor.addReminder("3 pills", earlierToday())
         medicineEditor.inStockSettings {
-            preferences.setValue(R.string.amount, "10")
+            preferences.assertSummary(R.string.remaining_stock, MedicineHelper.formatAmount(10005.0, "pills"))
+            preferences.setValue(R.string.remaining_stock, "10")
+            preferences.assertSummary(R.string.remaining_stock, MedicineHelper.formatAmount(10.0, "pills"))
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
                 timeFormatter().localDateToString(frozenToday().plusDays(4))
             )
 
-            preferences.setValue(R.string.amount, "13")
+            preferences.setValue(R.string.remaining_stock, "13")
             preferences.assertSummary(
                 R.string.estimated_run_out_date,
                 timeFormatter().localDateToString(frozenToday().plusDays(5))
@@ -282,8 +281,8 @@ class MedicineStockTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun undoStockOnDeleteTest() {
         seed.medicine("Test") {
-            stock(amount = 10.0, unit = "pills")
-            reminder("2", laterToday())
+            stock(amount = 10.0)
+            reminder("2 pills", laterToday())
         }
 
         navigation.toOverview()
@@ -309,8 +308,8 @@ class MedicineStockTest : MedTimerTestBase() {
     @AllowFlaky(attempts = 3)
     fun stockFollowsEventChangesTest() {
         seed.medicine("Test") {
-            stock(amount = 10.0, unit = "pills")
-            reminder("2", laterToday())
+            stock(amount = 10.0)
+            reminder("2 pills", laterToday())
         }
 
         navigation.toOverview()
@@ -319,7 +318,7 @@ class MedicineStockTest : MedTimerTestBase() {
         overview.clickAction(R.string.taken)
         assertStock(8.0)
 
-        eventEditor.forEvent(0) { setAmount("3") }
+        eventEditor.forEvent(0) { setAmount("3 pills") }
         assertStock(7.0)
 
         eventEditor.forEvent(0) { markSkipped() }

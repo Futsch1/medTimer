@@ -106,8 +106,8 @@ class Seed(
         internal var medicine: Medicine = Medicine.default()
         internal val reminders = mutableListOf<Pair<Reminder, Int?>>()
 
-        fun stock(amount: Double, unit: String = "", refillSize: Double = 0.0) {
-            medicine = medicine.copy(amount = amount, unit = unit, refillSize = refillSize)
+        fun stock(amount: Double, refillSize: Double = 0.0) {
+            medicine = medicine.copy(amount = amount, refillSize = refillSize)
         }
 
         fun cannotBeSkipped() {

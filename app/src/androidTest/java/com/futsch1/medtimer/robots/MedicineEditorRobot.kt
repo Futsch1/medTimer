@@ -147,10 +147,9 @@ class MedicineEditorRobot(
     }
 
     /** Only the values given are written; an empty string clears the field. */
-    fun setStock(amount: String? = null, unit: String? = null, refillSize: String? = null) {
+    fun setStock(amount: String? = null, refillSize: String? = null) {
         inStockSettings {
-            amount?.let { preferences.setValue(R.string.amount, it) }
-            unit?.let { preferences.setValue(R.string.unit, it) }
+            amount?.let { preferences.setValue(R.string.remaining_stock, it) }
             refillSize?.let { preferences.setValue(R.string.refill_size, it) }
         }
     }
@@ -158,7 +157,7 @@ class MedicineEditorRobot(
     fun refillNow() = inStockSettings { preferences.click(R.string.refill_now) }
 
     fun assertStockAmount(expected: String) =
-        inStockSettings { preferences.assertSummary(R.string.amount, expected) }
+        inStockSettings { preferences.assertSummary(R.string.remaining_stock, expected) }
 
     fun assertRefillSize(expected: String) =
         inStockSettings { preferences.assertSummary(R.string.refill_size, expected) }
