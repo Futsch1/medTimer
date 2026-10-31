@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">A gyógyszer önmagában nem ütemez értesítéseket. Adj hozzá emlékeztetőt az értesítések ütemezéséhez.</string>
     <string name="setup_guidance_getting_started">Első lépések</string>
     <string name="reminder_types_help">További információ az emlékeztetőtípusokról</string>
+    <string name="stock_decrement_preview">A készlet %1$s értékkel csökken.</string>
+    <string name="stock_decrement_unreadable">Az érvénytelen mennyiség miatt a készletcsökkenés nem határozható meg.</string>
 </resources>

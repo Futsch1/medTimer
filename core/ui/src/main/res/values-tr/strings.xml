@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Tek başına bir ilaç bildirimleri planlamaz. Bildirimleri planlamak için hatırlatıcı ekleyin.</string>
     <string name="setup_guidance_getting_started">Başlarken</string>
     <string name="reminder_types_help">Hatırlatıcı türleri hakkında daha fazla bilgi</string>
+    <string name="stock_decrement_preview">Stok %1$s azalacak.</string>
+    <string name="stock_decrement_unreadable">Bu miktar geçersiz olduğu için stok azalması belirlenemiyor.</string>
 </resources>

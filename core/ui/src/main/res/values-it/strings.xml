@@ -380,4 +380,6 @@
     <string name="setup_no_reminders_guidance">Un medicinale da solo non pianifica notifiche. Aggiungi un promemoria per pianificare le notifiche.</string>
     <string name="setup_guidance_getting_started">Per iniziare</string>
     <string name="reminder_types_help">Scopri di più sui tipi di promemoria</string>
+    <string name="stock_decrement_preview">Le scorte diminuiranno di %1$s.</string>
+    <string name="stock_decrement_unreadable">Impossibile determinare la riduzione delle scorte perché questa quantità non è valida.</string>
 </resources>

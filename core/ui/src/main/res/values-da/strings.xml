@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">En medicin alene planlægger ikke notifikationer. Tilføj en påmindelse for at planlægge notifikationer.</string>
     <string name="setup_guidance_getting_started">Kom godt i gang</string>
     <string name="reminder_types_help">Få mere at vide om påmindelsestyper</string>
+    <string name="stock_decrement_preview">Lageret reduceres med %1$s.</string>
+    <string name="stock_decrement_unreadable">Lagerreduktionen kan ikke beregnes, fordi denne mængde er ugyldig.</string>
 </resources>

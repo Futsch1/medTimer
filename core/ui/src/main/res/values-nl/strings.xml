@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Een medicijn alleen plant geen meldingen in. Voeg een herinnering toe om meldingen in te plannen.</string>
     <string name="setup_guidance_getting_started">Aan de slag</string>
     <string name="reminder_types_help">Meer informatie over herinneringstypen</string>
+    <string name="stock_decrement_preview">De voorraad neemt af met %1$s.</string>
+    <string name="stock_decrement_unreadable">De voorraadvermindering kan niet worden bepaald omdat deze hoeveelheid ongeldig is.</string>
 </resources>

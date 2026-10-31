@@ -367,4 +367,6 @@
     <string name="setup_no_reminders_guidance">只有藥物不會排程通知。新增提醒以排程通知。</string>
     <string name="setup_guidance_getting_started">開始使用</string>
     <string name="reminder_types_help">進一步了解提醒類型</string>
+    <string name="stock_decrement_preview">庫存將減少 %1$s。</string>
+    <string name="stock_decrement_unreadable">此數量無效，無法判斷庫存減少量。</string>
 </resources>

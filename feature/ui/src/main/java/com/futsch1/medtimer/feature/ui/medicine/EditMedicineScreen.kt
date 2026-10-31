@@ -121,6 +121,7 @@ private fun EditMedicineScreen(
         NewReminderFlowDialog(
             state = newReminderState,
             medicineUnit = editMedicineScreenState.unit,
+            showStockEffect = editMedicineScreenState.stockTrackingActive,
             onCreate = onCreateReminder,
             onDraftChange = onUpdateReminderDraft,
             onDismiss = { showNewReminder = false },
@@ -311,7 +312,7 @@ private fun ReminderList(
         }
         items(state.reminders, key = { it.id }) { reminder ->
             SwipeToDeleteContainer({ onReminderDelete(reminder.id) }, R.string.are_you_sure_delete_reminder) {
-                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime)
+                ReminderCard(reminder, onReminderEdit, onEditAmount, onEditTime, state.stockTrackingActive)
             }
         }
     }

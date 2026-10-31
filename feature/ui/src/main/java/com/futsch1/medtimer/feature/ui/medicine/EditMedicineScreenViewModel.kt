@@ -53,6 +53,7 @@ class EditMedicineScreenViewModel @Inject constructor(
             medicine.collect { medicine ->
                 state.id = medicine?.id
                 state.amount = medicine?.amount ?: 0.0
+                state.stockTrackingActive = medicine?.isStockManagementActive() ?: false
                 state.unit = medicine?.let { MedicineHelper.getUnit(it) } ?: ""
                 state.name = medicine?.name.orEmpty()
                 state.notes = medicine?.notes

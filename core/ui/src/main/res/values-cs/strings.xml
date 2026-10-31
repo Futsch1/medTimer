@@ -386,4 +386,6 @@
     <string name="setup_no_reminders_guidance">Samotný lék neplánuje oznámení. Přidejte připomenutí, abyste naplánovali oznámení.</string>
     <string name="setup_guidance_getting_started">Začínáme</string>
     <string name="reminder_types_help">Další informace o typech připomenutí</string>
+    <string name="stock_decrement_preview">Zásoba se sníží o %1$s.</string>
+    <string name="stock_decrement_unreadable">Snížení zásoby nelze určit, protože toto množství není platné.</string>
 </resources>

@@ -379,4 +379,6 @@
     <string name="setup_no_reminders_guidance">Um medicamento sozinho não agenda notificações. Adicione um lembrete para agendar notificações.</string>
     <string name="setup_guidance_getting_started">Primeiros passos</string>
     <string name="reminder_types_help">Saiba mais sobre os tipos de lembrete</string>
+    <string name="stock_decrement_preview">O estoque diminuirá em %1$s.</string>
+    <string name="stock_decrement_unreadable">Não é possível determinar a redução do estoque porque esta quantidade é inválida.</string>
 </resources>

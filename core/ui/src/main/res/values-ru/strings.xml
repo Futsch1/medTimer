@@ -382,4 +382,6 @@
     <string name="setup_no_reminders_guidance">Одно лекарство не планирует уведомления. Добавьте напоминание, чтобы запланировать уведомления.</string>
     <string name="setup_guidance_getting_started">Начало работы</string>
     <string name="reminder_types_help">Подробнее о типах напоминаний</string>
+    <string name="stock_decrement_preview">Запас уменьшится на %1$s.</string>
+    <string name="stock_decrement_unreadable">Не удалось определить уменьшение запаса: указано недопустимое количество.</string>
 </resources>

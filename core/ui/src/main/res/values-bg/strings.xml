@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Само лекарство не планира известия. Добавете напомняне, за да планирате известия.</string>
     <string name="setup_guidance_getting_started">Първи стъпки</string>
     <string name="reminder_types_help">Научете повече за типовете напомняния</string>
+    <string name="stock_decrement_preview">Наличността ще намалее с %1$s.</string>
+    <string name="stock_decrement_unreadable">Намалението на наличността не може да се определи, защото това количество е невалидно.</string>
 </resources>

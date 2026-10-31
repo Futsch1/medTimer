@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Pelkkä lääke ei ajasta ilmoituksia. Lisää muistutus ajastaaksesi ilmoitukset.</string>
     <string name="setup_guidance_getting_started">Aloittaminen</string>
     <string name="reminder_types_help">Lue lisää muistutustyypeistä</string>
+    <string name="stock_decrement_preview">Varasto vähenee määrällä %1$s.</string>
+    <string name="stock_decrement_unreadable">Varaston vähennystä ei voida määrittää, koska tämä määrä ei ole kelvollinen.</string>
 </resources>

@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Ett läkemedel i sig schemalägger inga aviseringar. Lägg till en påminnelse för att schemalägga aviseringar.</string>
     <string name="setup_guidance_getting_started">Kom igång</string>
     <string name="reminder_types_help">Läs mer om påminnelsetyper</string>
+    <string name="stock_decrement_preview">Lagret minskar med %1$s.</string>
+    <string name="stock_decrement_unreadable">Lagerförbrukningen kan inte beräknas eftersom mängden är ogiltig.</string>
 </resources>

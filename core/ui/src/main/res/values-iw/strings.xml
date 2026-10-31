@@ -380,4 +380,6 @@
     <string name="setup_no_reminders_guidance">תרופה לבדה אינה מתזמנת התראות. הוסיפו תזכורת כדי לתזמן התראות.</string>
     <string name="setup_guidance_getting_started">תחילת העבודה</string>
     <string name="reminder_types_help">מידע נוסף על סוגי התזכורות</string>
+    <string name="stock_decrement_preview">המלאי יפחת ב־%1$s.</string>
+    <string name="stock_decrement_unreadable">לא ניתן לקבוע את הירידה במלאי כי הכמות הזו אינה תקינה.</string>
 </resources>

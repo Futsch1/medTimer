@@ -380,4 +380,6 @@
     <string name="setup_no_reminders_guidance">Un medicamento por sí solo no programa notificaciones. Añade un recordatorio para programar notificaciones.</string>
     <string name="setup_guidance_getting_started">Primeros pasos</string>
     <string name="reminder_types_help">Más información sobre los tipos de recordatorio</string>
+    <string name="stock_decrement_preview">El stock disminuirá en %1$s.</string>
+    <string name="stock_decrement_unreadable">No se puede determinar la disminución del stock porque esta cantidad no es válida.</string>
 </resources>

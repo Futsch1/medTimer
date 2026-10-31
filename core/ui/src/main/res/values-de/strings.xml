@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Ein Medikament allein erzeugt keine Benachrichtigungen. Füge eine Erinnerung hinzu, um Benachrichtigungen zu planen.</string>
     <string name="setup_guidance_getting_started">Erste Schritte</string>
     <string name="reminder_types_help">Mehr über Erinnerungstypen</string>
+    <string name="stock_decrement_preview">Der Vorrat wird um %1$s verringert.</string>
+    <string name="stock_decrement_unreadable">Der Vorratsverbrauch kann nicht bestimmt werden, da diese Menge ungültig ist.</string>
 </resources>

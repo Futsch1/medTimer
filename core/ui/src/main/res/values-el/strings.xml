@@ -374,4 +374,6 @@
     <string name="setup_no_reminders_guidance">Ένα φάρμακο από μόνο του δεν προγραμματίζει ειδοποιήσεις. Προσθέστε μια υπενθύμιση για να προγραμματίσετε ειδοποιήσεις.</string>
     <string name="setup_guidance_getting_started">Ξεκινώντας</string>
     <string name="reminder_types_help">Μάθετε περισσότερα για τους τύπους υπενθυμίσεων</string>
+    <string name="stock_decrement_preview">Το απόθεμα θα μειωθεί κατά %1$s.</string>
+    <string name="stock_decrement_unreadable">Δεν είναι δυνατός ο υπολογισμός της μείωσης του αποθέματος, επειδή αυτή η ποσότητα δεν είναι έγκυρη.</string>
 </resources>

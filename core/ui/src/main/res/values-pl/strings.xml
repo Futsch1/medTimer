@@ -386,4 +386,6 @@
     <string name="setup_no_reminders_guidance">Sam lek nie zaplanuje powiadomień. Dodaj przypomnienie, aby zaplanować powiadomienia.</string>
     <string name="setup_guidance_getting_started">Pierwsze kroki</string>
     <string name="reminder_types_help">Dowiedz się więcej o typach przypomnień</string>
+    <string name="stock_decrement_preview">Zapas zmniejszy się o %1$s.</string>
+    <string name="stock_decrement_unreadable">Nie można określić ubytku zapasu, ponieważ ta ilość jest nieprawidłowa.</string>
 </resources>

@@ -398,4 +398,6 @@
     <string name="setup_no_reminders_guidance">الدواء وحده لا يجدول الإشعارات. أضف تذكيرًا لجدولة الإشعارات.</string>
     <string name="setup_guidance_getting_started">البدء</string>
     <string name="reminder_types_help">مزيد من المعلومات حول أنواع التذكيرات</string>
+    <string name="stock_decrement_preview">سينخفض المخزون بمقدار %1$s.</string>
+    <string name="stock_decrement_unreadable">تعذّر تحديد مقدار انخفاض المخزون لأن هذه الكمية غير صالحة.</string>
 </resources>
