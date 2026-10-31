@@ -7,7 +7,7 @@ import java.util.Locale
 /** A parsed primary amount and its unit as written ("" if none could be recovered). */
 data class DoseAmount(val amount: Double, val unit: String)
 
-/** [unit] uses the most recent spelling; an empty string means no unit. */
+/** [unit] uses a comparison spelling; an empty string means no unit. */
 data class UnitCount(val unit: String, val count: Int)
 
 data class DoseUnitSummary(val units: List<UnitCount>, val unreadable: Int) {
@@ -28,7 +28,7 @@ object DoseAmountParser {
     /**
      * Reads the first number anywhere in [text], accepting zero and however much the locale can parse.
      * Later numbers do not affect the amount. The unit is the following text up to another number or an
-     * opening parenthesis, so "1 capsule (25 mg)" is read as one capsule. No unit equivalences are guessed.
+     * opening parenthesis, so "1 capsule (25 mg)" is read as one capsule. No unit conversions are guessed.
      */
     fun parse(text: String?, format: NumberFormat? = null): DoseAmount? {
         val input = text ?: return null
@@ -44,17 +44,32 @@ object DoseAmountParser {
         return DoseAmount(parsed.toDouble(), unit)
     }
 
-    /** Units are compared ignoring case, without guessing equivalences. */
+    /** Units are compared ignoring case. */
     fun key(unit: String): String = unit.lowercase(Locale.ROOT)
 
     /** Summarizes [amounts] in chronological order, most-used units first and ties in first-seen order. */
     fun summarize(amounts: List<String>): DoseUnitSummary {
         val parsed = amounts.map { parse(it) }
-        val units = parsed.filterNotNull()
-            .groupBy { key(it.unit) }
-            .values
-            .sortedByDescending { it.size }
-            .map { uses -> UnitCount(uses.last().unit, uses.size) }
-        return DoseUnitSummary(units, parsed.count { it == null })
+        val units = mutableListOf<MutableUnitCount>()
+        for (dose in parsed.filterNotNull()) {
+            val existing = units.firstOrNull { group ->
+                group.forms.any { DoseUnitComparator.compare(it, dose.unit) != null }
+            }
+            if (existing == null) {
+                units += MutableUnitCount(dose.unit, mutableListOf(dose.unit), 1)
+            } else {
+                existing.unit = DoseUnitComparator.compare(existing.unit, dose.unit)
+                    ?: existing.forms.firstNotNullOfOrNull { DoseUnitComparator.compare(it, dose.unit) }
+                    ?: existing.unit
+                existing.forms += dose.unit
+                existing.count++
+            }
+        }
+        return DoseUnitSummary(
+            units.sortedByDescending { it.count }.map { UnitCount(it.unit, it.count) },
+            parsed.count { it == null }
+        )
     }
+
+    private data class MutableUnitCount(var unit: String, val forms: MutableList<String>, var count: Int)
 }

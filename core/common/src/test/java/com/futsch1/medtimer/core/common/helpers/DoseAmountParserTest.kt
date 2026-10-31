@@ -72,10 +72,18 @@ class DoseAmountParserTest {
     }
 
     @Test
-    fun `consistent units ignore case and use the latest spelling`() {
+    fun `consistent units ignore case and use lowercase spelling`() {
         val summary = DoseAmountParser.summarize(listOf("5mg", "5 MG", " 7 mG "))
 
-        assertEquals(listOf(UnitCount("mG", 3)), summary.units)
+        assertEquals(listOf(UnitCount("mg", 3)), summary.units)
+        assertTrue(summary.consistent)
+    }
+
+    @Test
+    fun `singular and plural forms are summarized together`() {
+        val summary = DoseAmountParser.summarize(listOf("1 tablet", "2 tablets", "1 TABLET"))
+
+        assertEquals(listOf(UnitCount("tablets", 3)), summary.units)
         assertTrue(summary.consistent)
     }
 
@@ -105,10 +113,10 @@ class DoseAmountParserTest {
     }
 
     @Test
-    fun `equally frequent units keep their first seen order without conversion`() {
+    fun `equally frequent units keep their first seen order`() {
         val summary = DoseAmountParser.summarize(listOf("1 capsule", "1 capsules", "5mg", "5 MG"))
 
-        assertEquals(listOf(UnitCount("MG", 2), UnitCount("capsule", 1), UnitCount("capsules", 1)), summary.units)
+        assertEquals(listOf(UnitCount("capsules", 2), UnitCount("mg", 2)), summary.units)
         assertFalse(summary.consistent)
     }
 

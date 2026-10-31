@@ -247,12 +247,13 @@ class LevelsPresenterTest {
         val time = Instant.parse("2026-03-09T08:00:00Z")
         val inMg = present(listOf(taken("Medicine A", time, "2mg"), taken("Medicine A", time.plusSeconds(7200), "4mg")))
         val unitless = present(listOf(taken("Medicine A", time, "2"), taken("Medicine A", time.plusSeconds(7200), "4")))
-        val tablets = present(listOf(taken("Medicine A", time, "1 tablets"), taken("Medicine A", time.plusSeconds(7200), "2 tablets")))
+        val tablets = present(listOf(taken("Medicine A", time, "1 tablet"), taken("Medicine A", time.plusSeconds(7200), "2 tablets")))
 
         // Normalization removes the unit's scale, so all three give the same curve
         assertSameCurve(inMg.series.single(), unitless.series.single())
         assertSameCurve(inMg.series.single(), tablets.series.single())
         assertEquals(0, tablets.ignoredDoses)
+        assertTrue(tablets.unitConflicts.isEmpty())
     }
 
     @Test
