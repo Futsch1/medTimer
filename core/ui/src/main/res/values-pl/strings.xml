@@ -380,6 +380,7 @@
     <string name="pk_extra_numbers">%1$s nie jest wyświetlany, ponieważ niektóre dawki zawierają w ilości więcej niż jedną liczbę, np. \"%2$s\". Zmień je na jedną ilość.</string>
     <string name="pk_incomplete_number">%1$s nie jest wyświetlany, ponieważ niektórych ilości nie można w pełni odczytać w formacie liczb telefonu, np. \"%2$s\". Wpisuj miejsca dziesiętne ze znakiem \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s nie jest wyświetlany, ponieważ jego dawki używają różnych jednostek: %2$s. Zmień ilości tak, aby wszystkie używały tej samej jednostki.</string>
+    <string name="inconclusive_dose_units_warning">Jednostki dawek są niejednoznaczne: %1$s. Śledzenie zapasów i szacowanie poziomu mogą być niedokładne.</string>
     <string name="pk_no_unit">brak jednostki</string>
     <string name="custom_range">Niestandardowe</string>
     <string name="setup_no_medicines_guidance">Najpierw dodaj lek, a następnie przypomnienie do niego. Sam lek nie zaplanuje powiadomień.</string>

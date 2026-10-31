@@ -368,6 +368,7 @@
     <string name="pk_extra_numbers">%1$s gösterilmiyor çünkü bazı dozların miktarında birden fazla sayı var, örneğin \"%2$s\". Bunları tek bir miktara değiştirin.</string>
     <string name="pk_incomplete_number">%1$s gösterilmiyor çünkü bazı miktarlar telefonunuzun sayı biçimiyle tam olarak okunamıyor, örneğin \"%2$s\". Ondalıkları \"%3$s\" ile yazın.</string>
     <string name="pk_unit_conflict">%1$s gösterilmiyor çünkü dozları farklı birimler kullanıyor: %2$s. Miktarları hepsi aynı birimi kullanacak şekilde değiştirin.</string>
+    <string name="inconclusive_dose_units_warning">Doz birimleri belirsiz: %1$s. Stok takibi ve düzey tahmini hatalı olabilir.</string>
     <string name="pk_no_unit">birim yok</string>
     <string name="custom_range">Özel</string>
     <string name="setup_no_medicines_guidance">Önce bir ilaç, ardından onun için bir hatırlatıcı ekleyin. Tek başına bir ilaç bildirimleri planlamaz.</string>

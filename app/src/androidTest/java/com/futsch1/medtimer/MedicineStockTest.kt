@@ -198,6 +198,9 @@ class MedicineStockTest : MedTimerTestBase() {
                 timeFormatter().localDateToString(frozenToday().plusDays(5))
             )
         }
+
+        medicineEditor.addReminder("2 mg", laterToday())
+        medicineEditor.assertDoseUnitWarningDisplayed("pills", "mg")
     }
 
     @Test

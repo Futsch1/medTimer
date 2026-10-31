@@ -368,6 +368,7 @@
     <string name="pk_extra_numbers">%1$s ei näy, koska joidenkin annosten määrässä on useampi kuin yksi luku, kuten \"%2$s\". Muuta ne yhdeksi määräksi.</string>
     <string name="pk_incomplete_number">%1$s ei näy, koska joitakin määriä ei voi lukea kokonaan puhelimen numeromuodolla, kuten \"%2$s\". Kirjoita desimaalit merkillä \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s ei näy, koska sen annoksissa käytetään eri yksiköitä: %2$s. Muuta määrät niin, että kaikissa käytetään samaa yksikköä.</string>
+    <string name="inconclusive_dose_units_warning">Annosten yksiköt ovat epäselvät: %1$s. Varaston seuranta ja pitoisuusarvio voivat olla epätarkkoja.</string>
     <string name="pk_no_unit">ei yksikköä</string>
     <string name="custom_range">Mukautettu</string>
     <string name="setup_no_medicines_guidance">Lisää ensin lääke ja lisää sitten sille muistutus. Pelkkä lääke ei ajasta ilmoituksia.</string>

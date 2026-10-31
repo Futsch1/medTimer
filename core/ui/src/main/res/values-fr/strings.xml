@@ -374,6 +374,7 @@
     <string name="pk_extra_numbers">%1$s n\'est pas affiché car certaines doses contiennent plus d\'un nombre dans la quantité, comme « %2$s ». Remplacez-les par une seule quantité.</string>
     <string name="pk_incomplete_number">%1$s n\'est pas affiché car certaines quantités ne peuvent pas être lues entièrement avec le format numérique de votre téléphone, comme « %2$s ». Écrivez les décimales avec « %3$s ».</string>
     <string name="pk_unit_conflict">%1$s n\'est pas affiché car ses doses utilisent des unités différentes : %2$s. Modifiez les quantités pour qu\'elles utilisent toutes la même unité.</string>
+    <string name="inconclusive_dose_units_warning">Les unités des doses sont ambiguës : %1$s. Le suivi du stock et l’estimation du niveau peuvent être imprécis.</string>
     <string name="pk_no_unit">sans unité</string>
     <string name="custom_range">Personnalisé</string>
     <string name="setup_no_medicines_guidance">Ajoutez d’abord un médicament, puis un rappel pour celui-ci. Un médicament seul ne programme pas de notifications.</string>

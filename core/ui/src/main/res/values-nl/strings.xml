@@ -368,6 +368,7 @@
     <string name="pk_extra_numbers">%1$s wordt niet getoond omdat sommige doses meer dan één getal in de hoeveelheid bevatten, zoals \"%2$s\". Wijzig ze in één hoeveelheid.</string>
     <string name="pk_incomplete_number">%1$s wordt niet getoond omdat sommige hoeveelheden niet volledig kunnen worden gelezen met de getalnotatie van je telefoon, zoals \"%2$s\". Schrijf decimalen met \"%3$s\".</string>
     <string name="pk_unit_conflict">%1$s wordt niet getoond omdat de doses verschillende eenheden gebruiken: %2$s. Pas de hoeveelheden aan zodat ze allemaal dezelfde eenheid gebruiken.</string>
+    <string name="inconclusive_dose_units_warning">De doseereenheden zijn onduidelijk: %1$s. De voorraad bijhouden en de spiegelschatting kunnen onnauwkeurig zijn.</string>
     <string name="pk_no_unit">geen eenheid</string>
     <string name="custom_range">Aangepast</string>
     <string name="setup_no_medicines_guidance">Voeg eerst een medicijn toe en daarna een herinnering ervoor. Een medicijn alleen plant geen meldingen in.</string>

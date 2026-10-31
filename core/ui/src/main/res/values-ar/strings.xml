@@ -392,6 +392,7 @@
     <string name="pk_extra_numbers">لا يُعرض %1$s لأن بعض الجرعات تحتوي على أكثر من رقم في الكمية، مثل \"%2$s\". غيّرها إلى كمية واحدة.</string>
     <string name="pk_incomplete_number">لا يُعرض %1$s لأن بعض الكميات لا يمكن قراءتها بالكامل بتنسيق الأرقام في هاتفك، مثل \"%2$s\". اكتب الكسور العشرية باستخدام \"%3$s\".</string>
     <string name="pk_unit_conflict">لا يُعرض %1$s لأن جرعاته تستخدم وحدات مختلفة: %2$s. عدّل الكميات بحيث تستخدم جميعها الوحدة نفسها.</string>
+    <string name="inconclusive_dose_units_warning">وحدات الجرعات غير واضحة: %1$s. قد يكون تتبع المخزون وتقدير المستوى غير دقيقين.</string>
     <string name="pk_no_unit">بدون وحدة</string>
     <string name="custom_range">مخصّص</string>
     <string name="setup_no_medicines_guidance">أضف دواءً أولاً، ثم أضف تذكيرًا له. الدواء وحده لا يجدول الإشعارات.</string>

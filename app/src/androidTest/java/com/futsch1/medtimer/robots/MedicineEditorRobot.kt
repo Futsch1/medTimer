@@ -9,6 +9,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTestTags
 import java.time.LocalTime
+import java.util.Locale
 import kotlin.time.Duration
 
 /**
@@ -30,6 +31,10 @@ class MedicineEditorRobot(
     fun assertReminderSetupGuidanceDisplayed() = editorScope().assertDisplayed(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
 
     fun assertReminderSetupGuidanceAbsent() = editorScope().assertAbsent(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
+
+    fun assertDoseUnitWarningDisplayed(vararg units: String) = editorScope().assertDisplayed(
+        hasText(String.format(Locale.ROOT, ui.getString(R.string.inconclusive_dose_units_warning), units.joinToString()))
+    )
 
     fun openGettingStartedFromGuidance() = editorScope().click(hasText(ui.getString(R.string.setup_guidance_getting_started)))
 

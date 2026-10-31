@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.setRemindersActive
@@ -71,6 +72,13 @@ class EditMedicineScreenViewModel @Inject constructor(
     private fun setupState(medicine: Medicine, summaries: Map<Int, String>) {
         state.icon = medicine.iconId
         state.color = if (medicine.useColor) medicine.color else null
+        val doseUnitSummary = DoseAmountParser.summarize(
+            medicine.reminders.filter { it.active && !it.isOutOfStockOrExpirationReminder }.map { it.amount }
+        )
+        state.showDoseUnitWarning = (medicine.isStockManagementActive() || medicine.pharmacokineticModel() != null) &&
+            !doseUnitSummary.consistent
+        state.doseUnits = doseUnitSummary.units.map { it.unit.ifBlank { context.getString(R.string.pk_no_unit) } }
+            .toImmutableList()
 
         state.reminders = linkedReminderAlgorithms.sortRemindersList(medicine.reminders).map { reminder ->
             ReminderItem(
