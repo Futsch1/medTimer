@@ -30,6 +30,13 @@ class MedicineHelperTest {
     fun testFormat() {
         assertEquals("3.5", MedicineHelper.formatAmount(3.5, ""))
         assertEquals("5 pills", MedicineHelper.formatAmount(5.0, "pills"))
+        assertEquals("1 pill", MedicineHelper.formatAmount(1.0, "pills"))
+        assertEquals("2 pills", MedicineHelper.formatAmount(2.0, "pill"))
+        assertEquals("0 pills", MedicineHelper.formatAmount(0.0, "pill"))
+        assertEquals("1.5 pills", MedicineHelper.formatAmount(1.5, "pill"))
+        assertEquals("1 Tablette", MedicineHelper.formatAmount(1.0, "Tabletten"))
+        assertEquals("2 Tabletten", MedicineHelper.formatAmount(2.0, "Tablette"))
+        assertEquals("5 mg", MedicineHelper.formatAmount(5.0, "mg"))
     }
 
     @Test

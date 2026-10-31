@@ -3,9 +3,9 @@ package com.futsch1.medtimer.core.common.helpers
 import java.util.Locale
 
 object DoseUnitComparator {
-    private data class UnitFamily(val singulars: Set<String>, val plurals: Set<String>)
+    internal data class UnitFamily(val singulars: Set<String>, val plurals: Set<String>)
 
-    private val families = listOf(
+    internal val families = listOf(
         family(listOf("tablet"), listOf("tablets")),
         family(listOf("tablette"), listOf("tabletten")),
         family(listOf("tablette"), listOf("tablettes")),

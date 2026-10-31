@@ -66,6 +66,7 @@ object MedicineHelper {
         val fmt = numberFormat.get() ?: return ""
         fmt.minimumFractionDigits = 0
         fmt.maximumFractionDigits = 2
-        return fmt.format(amount) + if (unit.isEmpty()) "" else " $unit"
+        val displayUnit = DoseUnitInflector.inflect(unit, amount)
+        return fmt.format(amount) + if (displayUnit.isEmpty()) "" else " $displayUnit"
     }
 }
