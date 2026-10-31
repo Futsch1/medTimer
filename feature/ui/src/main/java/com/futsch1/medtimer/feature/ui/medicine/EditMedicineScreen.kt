@@ -110,6 +110,8 @@ private fun EditMedicineScreen(
     onCreateReminder: () -> Unit,
     onUpdateReminderDraft: (draft: NewReminderDraft) -> Unit
 ) {
+    if (!editMedicineScreenState.isLoaded || editMedicineScreenState.id == null) return
+
     val listState = rememberLazyListState()
     var showNotes by rememberSaveable { mutableStateOf(false) }
     var showNewReminder by rememberSaveable { mutableStateOf(false) }
