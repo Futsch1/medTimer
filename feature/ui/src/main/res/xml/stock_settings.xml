@@ -24,6 +24,10 @@
             app:key="stock_refill_now"
             app:title="@string/refill_now" />
     </PreferenceCategory>
+    <Preference
+        app:icon="@drawable/question_circle"
+        app:key="stock_tracking_help"
+        app:title="@string/help" />
     <PreferenceCategory app:title="@string/expiration_settings">
         <Preference
             app:key="production_date"

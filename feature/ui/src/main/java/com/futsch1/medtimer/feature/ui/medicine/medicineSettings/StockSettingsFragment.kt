@@ -20,6 +20,7 @@ import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
@@ -40,6 +41,9 @@ class StockSettingsFragment : MedicinePreferences(
     ),
     listOf()
 ) {
+    @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
     @Inject
     lateinit var simulatedRemindersRepository: SimulatedReminders
 
@@ -65,6 +69,7 @@ class StockSettingsFragment : MedicinePreferences(
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
+            "stock_tracking_help" to { _, _ -> appOptionsActionsFactory.create(this).openHelp("stock-handling") },
             "stock_refill_now" to { _, _ -> refillNow() },
             "production_date" to { activity, preference ->
                 dateEditHandler.show(

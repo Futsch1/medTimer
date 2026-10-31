@@ -159,8 +159,8 @@ Keep technical terms and identifiers in English even when discussing localizatio
 - **No secrets or real user data in docs** — same rule as code (see [
   `AGENTS.md` → AI hygiene](../../AGENTS.md#ai-hygiene)).
   Reference config keys by name, never paste real values.
-- Each guide carries a `_Last reviewed: YYYY-MM-DD._` footer; bump it when you revisit the content and re-confirm the
-  linked sources.
+- Contributor-facing guides may carry a `_Last reviewed: YYYY-MM-DD._` footer; bump it when you revisit the content
+  and re-confirm the linked sources. Do not add internal review-date footers to bundled user-facing Help topics.
 
 ## Sources
 
