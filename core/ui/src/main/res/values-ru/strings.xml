@@ -232,7 +232,7 @@
     <string name="amount">Сумма</string>
     <string name="remaining_stock">Остаток запаса</string>
     <string name="reminder_threshold">Порог напоминания</string>
-    <string name="refill_size">Размер заправки</string>
+    <string name="refill_size">Количество пополнения</string>
     <string name="refill_now">Пополнить сейчас</string>
     <string name="variable_amount">Укажите дозировку при приеме</string>
     <string name="tags">Теги</string>
@@ -261,7 +261,7 @@
     <string name="big_notifications">Большие кнопки уведомлений</string>
     <string name="reminded">Напомнили</string>
     <string name="estimated_run_out_date">Предполагаемая дата окончания</string>
-    <string name="create_calendar_entry">Создать запись в календаре</string>
+    <string name="create_calendar_entry">Добавить предполагаемую дату окончания запаса в календарь</string>
     <string name="notes">Заметки</string>
     <string name="automatically_taken">Автоматически помечайте как принятые</string>
     <string name="sort">Сортировать</string>

@@ -224,7 +224,7 @@
     <string name="amount">Ποσότητα</string>
     <string name="remaining_stock">Υπόλοιπο αποθέματος</string>
     <string name="reminder_threshold">Όριο αποθέματος για ενεργοποίηση υπενθύμισης</string>
-    <string name="refill_size">Μονάδες αναπλήρωσης</string>
+    <string name="refill_size">Ποσότητα αναπλήρωσης</string>
     <string name="refill_now">Αναπλήρωση τώρα</string>
     <string name="tags">Σημάνσεις</string>
     <string name="add_tag">Προσθήκη σήμανσης</string>
@@ -252,7 +252,7 @@
     <string name="big_notifications">Μεγεθυμένα πλήκτρα ειδοποιήσεων</string>
     <string name="reminded">Έγινε υπενθύμιση</string>
     <string name="estimated_run_out_date">Εκτιμώμενη ημερομηνία εξάντλησης αποθέματος</string>
-    <string name="create_calendar_entry">Δημιουργία καταχώρησης στο ημερολόγιο</string>
+    <string name="create_calendar_entry">Προσθήκη εκτιμώμενης ημερομηνίας εξάντλησης στο ημερολόγιο</string>
     <string name="variable_amount">Χειροκίνητη καταχώρηση της δόσης με τη λήψη της</string>
     <string name="notes">Σημειώσεις</string>
     <string name="automatically_taken">Αυτόματη σήμανση ως ληφθείσα</string>

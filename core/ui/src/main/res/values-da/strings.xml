@@ -254,7 +254,7 @@
     <string name="big_notifications">Store notifikationsknapper</string>
     <string name="reminded">Påmindet</string>
     <string name="estimated_run_out_date">Estimeret udløbsdato for lager</string>
-    <string name="create_calendar_entry">Opret kalenderbegivenhed</string>
+    <string name="create_calendar_entry">Føj den estimerede dato for opbrug til kalenderen</string>
     <string name="notes">Noter</string>
     <string name="automatically_taken">Markér automatisk som taget</string>
     <string name="high_and_alarm">Høj + Alarm</string>

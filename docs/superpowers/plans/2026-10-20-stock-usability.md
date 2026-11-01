@@ -33,8 +33,9 @@ issue #1776 are deferred. The stock shortcut's icon/menu treatment is also defer
   Keep invalid input visibly identified.
 - Infer the stock unit from **active, dose-taking reminder configurations only**. Do not infer it from recorded dose
   history. Exclude inactive reminders and stock/expiration alerts.
-- Trim unit text and compare case-insensitively; otherwise require exact text. Do not guess unit equivalences or
-  convert. Thus `mg` and `MG` match, while `capsule` and `capsules` differ.
+- Trim unit text and compare case-insensitively. Recognize explicitly supported singular/plural forms as equivalent
+  (for example, `capsule` and `capsules`); otherwise require exact text. Do not infer broader semantic equivalence or
+  convert between units. The supported inflections are a bounded, maintained list, not general language morphology.
 - A missing unit is unspecified. It conflicts with a named unit unless the retained legacy unit supplies the fallback
   for that unitless dose. All-unitless reminders remain unitless.
 - Show a warning panel above reminders in the Compose Edit Medicine screen when active dose reminders disagree. The
@@ -65,14 +66,14 @@ issue #1776 are deferred. The stock shortcut's icon/menu treatment is also defer
 
 - Derive a medicine's effective unit from its active dose-taking reminder amounts. Apply the legacy-unit fallback only
   to unitless reminder amounts; ignore recorded-dose history for stock-unit inference.
-- Treat disagreement between explicit units, or between an unspecified unit and a named unit, as a conflict. Apply the
-  agreed trim/case-insensitive comparison without conversion or singular/plural guessing.
+- Treat disagreement between explicit units, or between an unspecified unit and a named unit, as a conflict. Apply
+  trimmed, case-insensitive comparison and the explicitly supported singular/plural equivalences; do not convert units.
 - Add a warning panel directly above the reminder list in the Compose Edit Medicine screen. Identify the conflicting
   units and explain that stock uses the first parsed number with no unit conversion.
 - Keep the warning non-blocking. Continue all stock updates and forecasts; omit the unit from stock balances while a
   conflict exists.
 - Test active versus inactive reminders, stock/expiration alerts, missing and legacy-fallback units, explicit unit
-  conflicts, and case-only differences.
+  conflicts, case-only differences, and supported singular/plural equivalences.
 
 ### 3. Clarify stock settings and stock displays
 
@@ -112,6 +113,32 @@ Document:
 - The stock settings no longer ask users to set a separate unit, and the field/action labels explain their outcomes.
 - No Room migration is introduced. The Compose migration and PR #1796 merge dependencies are respected.
 - Update English strings and follow the project's translation workflow for all changed user-facing text.
+
+## Implementation review and hand-off findings
+
+The current branch implements the shared parser, configured-unit summary, warning panel, reminder amount previews,
+stock-setting/help entry point, and most stock display changes. The following plan/implementation differences and open
+questions remain for a follow-up session:
+
+- **Legacy-unit fallback is unresolved.** This plan requires the persisted `Medicine.unit` to supply a fallback for
+  unitless configured doses. The branch removes `unit` from the domain model and mapper, and `MedicineHelper.getUnit()`
+  derives units from active dose reminders only. Decide whether to implement the fallback or revise this plan and
+  ADR 0006 to remove it. No database migration was added.
+- **Dose previews are not yet present in every planned input.** They are shown in the Compose reminder creation and
+  reminder amount-edit dialogs. Confirm whether manual-dose and reminder-event edit inputs need previews too; their
+  calculation paths use the shared parser, but this branch does not add equivalent visible feedback there.
+- **Stock-settings labels are now updated.** The refill and calendar action labels have been changed (with locale
+  resources); the planned concise in-place explanations of what the stock and refill amounts mean remain open.
+- **Conflict guidance is partially aligned.** The Help topic now explains the first-number/no-conversion rule and that
+  conflicting units can make stock changes and run-out estimates unreliable. The editor warning itself still does not
+  explain the first-number/no-conversion rule.
+- **Unit equivalence is broader than equality.** The implementation recognizes a maintained list of localized
+  singular/plural forms in addition to trimmed, case-insensitive equality. This is not general morphology or unit
+  conversion. Keep the supported list, its boundaries, and its tests aligned across this plan, ADR 0006, Help, and code.
+  Review collisions/ambiguous forms and decide how unreadable active reminder amounts affect the warning; the current
+  summary reports unreadable values separately from recognized unit groups.
+- **This plan's status/preconditions are stale.** The Compose Edit Medicine screen is already implemented on this branch.
+  Reconfirm the PR #1796 dependency for the Help page and update the status before treating the plan as blocked.
 
 ## Explicitly deferred
 

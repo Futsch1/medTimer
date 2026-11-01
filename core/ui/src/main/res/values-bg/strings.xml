@@ -248,13 +248,13 @@
     <string name="big_notifications">Големи бутони в известието</string>
     <string name="reminded">Напомнено</string>
     <string name="estimated_run_out_date">Предполагаема дата на свършване</string>
-    <string name="create_calendar_entry">Създаване на запис в календара</string>
+    <string name="create_calendar_entry">Добавяне на прогнозната дата на изчерпване в календара</string>
     <string name="notes">Записки</string>
     <string name="automatically_taken">Автоматично отбелязване като взети</string>
     <string name="high_and_alarm">Висок + Аларма</string>
     <string name="enable_notification_alarm_dialog">За да разрешите показването на напомняния като аларми, активирайте това за MedTimer в следващото меню</string>
     <string name="reminder_threshold">Праг на напомнянията</string>
-    <string name="refill_size">Размер на презареждането</string>
+    <string name="refill_size">Количество за допълване</string>
     <string name="refill_now">Презареди сега</string>
     <string name="re_raise_event">Повторно събитие</string>
     <string name="privacy_settings">Настройки на конфиденциалността</string>

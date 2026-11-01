@@ -224,7 +224,7 @@
     <string name="amount">Anzahl</string>
     <string name="remaining_stock">Verbleibender Vorrat</string>
     <string name="reminder_threshold">Warnschwelle</string>
-    <string name="refill_size">Packungsgröße</string>
+    <string name="refill_size">Nachfüllmenge</string>
     <string name="refill_now">Jetzt nachfüllen</string>
     <string name="variable_amount">Dosierung bei Einnahme eingeben</string>
     <string name="tags">Tags</string>
@@ -253,7 +253,7 @@
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
     <string name="reminded">Erinnert</string>
     <string name="estimated_run_out_date">Voraussichtliches Enddatum des Vorrats</string>
-    <string name="create_calendar_entry">Kalendereintrag erstellen</string>
+    <string name="create_calendar_entry">Voraussichtliches Aufbrauchdatum zum Kalender hinzufügen</string>
     <string name="notes">Notizen</string>
     <string name="automatically_taken">Automatisch als eingenommen markieren</string>
     <string name="sort">Sortieren</string>

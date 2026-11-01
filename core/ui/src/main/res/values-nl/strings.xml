@@ -224,7 +224,7 @@
     <string name="amount">Hoeveelheid</string>
     <string name="remaining_stock">Resterende voorraad</string>
     <string name="reminder_threshold">Herinnering drempel</string>
-    <string name="refill_size">Navulformaat</string>
+    <string name="refill_size">Navulhoeveelheid</string>
     <string name="refill_now">Nu bijvullen</string>
     <string name="variable_amount">Dosering invoeren bij inname</string>
     <string name="tags">Tags</string>
@@ -253,7 +253,7 @@
     <string name="big_notifications">Grote meldingsknoppen</string>
     <string name="reminded">Herinnerd</string>
     <string name="estimated_run_out_date">Verwachte Einddatum Voorraad</string>
-    <string name="create_calendar_entry">Agenda-item maken</string>
+    <string name="create_calendar_entry">Geschatte datum van opraken aan agenda toevoegen</string>
     <string name="notes">Notities</string>
     <string name="automatically_taken">Automatisch markeren als bezet</string>
     <string name="sort">Sorteer</string>

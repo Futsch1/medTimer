@@ -231,7 +231,7 @@
     <string name="amount">כמות</string>
     <string name="remaining_stock">המלאי שנותר</string>
     <string name="reminder_threshold">סף תזכורת</string>
-    <string name="refill_size">גודל מילוי</string>
+    <string name="refill_size">כמות למילוי מחדש</string>
     <string name="refill_now">מלאו עכשיו</string>
     <string name="variable_amount">הזנו מינון כשנלקחת התרופה</string>
     <string name="tags">תיוגים</string>
@@ -262,7 +262,7 @@
     <string name="big_notifications">כפתורי התראה גדולים</string>
     <string name="reminded">הוזכר</string>
     <string name="estimated_run_out_date">תאריך משוער לגמר המלאי</string>
-    <string name="create_calendar_entry">צרו אירוע בלוח שנה</string>
+    <string name="create_calendar_entry">הוספת תאריך ההתרוקנות המשוער ליומן</string>
     <string name="notes">פתקים</string>
     <string name="automatically_taken">סמן בתור נלקח באופן אוטומטי</string>
     <string name="high_and_alarm">חשיבות גבוהה + שעון מעורר</string>

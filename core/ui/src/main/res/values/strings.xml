@@ -242,7 +242,7 @@
     <string name="amount">Amount</string>
     <string name="remaining_stock">Remaining stock</string>
     <string name="reminder_threshold">Reminder threshold</string>
-    <string name="refill_size">Refill size</string>
+    <string name="refill_size">Refill amount</string>
     <string name="refill_now">Refill now</string>
     <string name="variable_amount">Enter dosage when taken</string>
     <string name="tags">Tags</string>
@@ -282,7 +282,7 @@
     <string name="big_notifications">Big notification buttons</string>
     <string name="reminded">Reminded</string>
     <string name="estimated_run_out_date">Estimated run out date</string>
-    <string name="create_calendar_entry">Create calendar entry</string>
+    <string name="create_calendar_entry">Add estimated run-out date to calendar</string>
     <string name="notes">Notes</string>
     <string name="automatically_taken">Automatically mark as taken</string>
     <string name="high_and_alarm">High + Alarm</string>

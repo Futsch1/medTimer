@@ -237,7 +237,7 @@
     <string name="amount">Množství</string>
     <string name="remaining_stock">Zbývající zásoba</string>
     <string name="reminder_threshold">Mez připomenutí</string>
-    <string name="refill_size">Doplněné množství</string>
+    <string name="refill_size">Množství doplnění</string>
     <string name="refill_now">Doplnit teď</string>
     <string name="variable_amount">Vložit dávku při užití</string>
     <string name="tags">Štítky</string>
@@ -266,7 +266,7 @@
     <string name="big_notifications">Velká tlačítka notifikace</string>
     <string name="reminded">Připomenuto</string>
     <string name="estimated_run_out_date">Odhadované datum vyčerpání zásob</string>
-    <string name="create_calendar_entry">Vytvořit položku kalendáře</string>
+    <string name="create_calendar_entry">Přidat odhadované datum vyčerpání do kalendáře</string>
     <string name="notes">Poznámky</string>
     <string name="automatically_taken">Automaticky označit jako užité</string>
     <string name="high_and_alarm">Vysoká + Alarm</string>

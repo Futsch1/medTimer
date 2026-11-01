@@ -225,7 +225,7 @@
     <string name="amount">Määrä</string>
     <string name="remaining_stock">Varastossa jäljellä</string>
     <string name="reminder_threshold">Muistutusraja</string>
-    <string name="refill_size">Täydennyskoko</string>
+    <string name="refill_size">Täydennysmäärä</string>
     <string name="refill_now">Täydennä nyt</string>
     <string name="variable_amount">Syötä annos ottaessa</string>
     <string name="tags">Tunnisteet</string>
@@ -254,7 +254,7 @@
     <string name="big_notifications">Suuret ilmoituspainikkeet</string>
     <string name="reminded">Muistutettu</string>
     <string name="estimated_run_out_date">Arvioitu loppumispäivä</string>
-    <string name="create_calendar_entry">Luo kalenterimerkintä</string>
+    <string name="create_calendar_entry">Lisää arvioitu loppumispäivä kalenteriin</string>
     <string name="notes">Muistiinpanot</string>
     <string name="automatically_taken">Merkitse automaattisesti otetuksi</string>
     <string name="high_and_alarm">Korkea + Hälytys</string>

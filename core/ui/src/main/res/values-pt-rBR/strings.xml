@@ -191,7 +191,7 @@
     <string name="medicine_stock">Estoque de medicamentos</string>
     <string name="amount">Quantia</string>
     <string name="remaining_stock">Estoque restante</string>
-    <string name="refill_size">Quantidade da reposição</string>
+    <string name="refill_size">Quantidade de reposição</string>
     <string name="refill_now">Repor agora</string>
     <string name="are_you_sure_delete_tag">Tem certeza de que deseja excluir esta etiqueta?</string>
     <string name="add_tag">Adicionar etiqueta</string>
@@ -258,7 +258,7 @@
     <string name="reminded">Notificado</string>
     <string name="total">Total</string>
     <string name="estimated_run_out_date">Data prevista para o fim do estoque</string>
-    <string name="create_calendar_entry">Criar entrada na agenda</string>
+    <string name="create_calendar_entry">Adicionar data estimada de esgotamento ao calendário</string>
     <string name="notes">Anotações</string>
     <string name="automatically_taken">Marcar automaticamente como tomado</string>
     <string name="sort">Classificar</string>

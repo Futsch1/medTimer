@@ -247,7 +247,7 @@
     <string name="big_notifications">大型通知按鈕</string>
     <string name="reminded">已提醒</string>
     <string name="estimated_run_out_date">預估用罄日期</string>
-    <string name="create_calendar_entry">建立行事曆項目</string>
+    <string name="create_calendar_entry">將預估用罄日期加入行事曆</string>
     <string name="notes">備註</string>
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>

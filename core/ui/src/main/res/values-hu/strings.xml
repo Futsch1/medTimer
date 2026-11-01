@@ -225,7 +225,7 @@
     <string name="amount">Mennyiség</string>
     <string name="remaining_stock">Fennmaradó készlet</string>
     <string name="reminder_threshold">Figyelmeztetési mennyiség</string>
-    <string name="refill_size">Újratöltés mennyisége</string>
+    <string name="refill_size">Utántöltés mennyisége</string>
     <string name="refill_now">Újratöltés most</string>
     <string name="variable_amount">Adag megadása bevételkor</string>
     <string name="tags">Címkék</string>
@@ -254,7 +254,7 @@
     <string name="big_notifications">Nagy méretű értesítési gombok</string>
     <string name="reminded">Emlékeztetve</string>
     <string name="estimated_run_out_date">Várható elfogyási dátum</string>
-    <string name="create_calendar_entry">Naptárbejegyzés létrehozása</string>
+    <string name="create_calendar_entry">Becsült kifogyási dátum hozzáadása a naptárhoz</string>
     <string name="notes">Megjegyzések</string>
     <string name="automatically_taken">Automatikusan jelölje bevettként</string>
     <string name="high_and_alarm">Magas + Riasztás</string>

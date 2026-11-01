@@ -230,7 +230,7 @@
     <string name="amount">Quantità</string>
     <string name="remaining_stock">Scorte rimanenti</string>
     <string name="reminder_threshold">Soglia del promemoria</string>
-    <string name="refill_size">Quantità della ricarica</string>
+    <string name="refill_size">Quantità di ricarica</string>
     <string name="refill_now">Ricarica</string>
     <string name="variable_amount">Inserisci la dose al momento dell\'assunzione</string>
     <string name="tags">Etichette</string>
@@ -259,7 +259,7 @@
     <string name="big_notifications">Pulsanti di notifica grandi</string>
     <string name="reminded">Ricordato</string>
     <string name="estimated_run_out_date">Data di esaurimento stimata</string>
-    <string name="create_calendar_entry">Crea una voce di calendario</string>
+    <string name="create_calendar_entry">Aggiungi la data stimata di esaurimento al calendario</string>
     <string name="notes">Note</string>
     <string name="automatically_taken">Contrassegna automaticamente come preso</string>
     <string name="sort">Ordinamento</string>

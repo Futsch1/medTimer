@@ -230,7 +230,7 @@
     <string name="amount">Cantidad</string>
     <string name="remaining_stock">Existencias restantes</string>
     <string name="reminder_threshold">Umbral recordatorio</string>
-    <string name="refill_size">Tamaño del recargar</string>
+    <string name="refill_size">Cantidad de recarga</string>
     <string name="refill_now">Recargar ahora</string>
     <string name="variable_amount">Introduzca la dosis cuando se toma</string>
     <string name="tags">Etiquetas</string>
@@ -259,7 +259,7 @@
     <string name="big_notifications">Botones de notificación grandes</string>
     <string name="reminded">Recordado</string>
     <string name="estimated_run_out_date">Fecha estimada de agotamiento</string>
-    <string name="create_calendar_entry">Crear entrada de calendario</string>
+    <string name="create_calendar_entry">Añadir la fecha estimada de agotamiento al calendario</string>
     <string name="notes">Notas</string>
     <string name="automatically_taken">Marcar automáticamente como tomada</string>
     <string name="sort">Ordenar</string>
