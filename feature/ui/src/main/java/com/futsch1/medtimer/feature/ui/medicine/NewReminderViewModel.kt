@@ -2,7 +2,7 @@ package com.futsch1.medtimer.feature.ui.medicine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.ReminderType
@@ -94,7 +94,7 @@ internal fun NewReminderDraft.toReminder(medicineId: Int): Reminder? = runCatchi
         )
 
         ReminderType.OUT_OF_STOCK -> base.copy(
-            outOfStockThreshold = checkNotNull(MedicineHelper.parseAmount(threshold)),
+            outOfStockThreshold = checkNotNull(DoseAmountParser.parseAmount(threshold)),
             outOfStockReminderType = when (stockReminderType) {
                 NewReminderStockReminderType.ONCE -> Reminder.OutOfStockReminderType.ONCE
                 NewReminderStockReminderType.ALWAYS -> Reminder.OutOfStockReminderType.ALWAYS

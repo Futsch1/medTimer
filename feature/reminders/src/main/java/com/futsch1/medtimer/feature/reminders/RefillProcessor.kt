@@ -43,10 +43,16 @@ class RefillProcessor @Inject constructor(
         }
     }
 
-    private suspend fun processRefillInternal(medicine: Medicine, medicineRepository: MedicineRepository): ReminderEvent {
+    private suspend fun processRefillInternal(
+        medicine: Medicine,
+        medicineRepository: MedicineRepository
+    ): ReminderEvent {
         val medicine = medicine.copy(amount = medicine.amount + medicine.refillSize)
         medicineRepository.update(medicine)
-        Log.d(LogTags.STOCK_HANDLING, "Refill medicine ${medicine.name} with ${medicine.refillSize} to amount ${medicine.amount + medicine.refillSize}")
+        Log.d(
+            LogTags.STOCK_HANDLING,
+            "Refill medicine ${medicine.name} with ${medicine.refillSize} to amount ${medicine.amount + medicine.refillSize}"
+        )
 
         return buildReminderEvent(medicine)
     }
@@ -58,10 +64,10 @@ class RefillProcessor @Inject constructor(
             useColor = medicine.useColor,
             iconId = medicine.iconId,
             tags = medicine.tags.map { it.name },
-            amount = "${MedicineHelper.formatAmount(medicine.amount - medicine.refillSize, medicine.unit)} ➡ ${
+            amount = "${MedicineHelper.formatAmount(medicine.amount - medicine.refillSize, medicine)} ➡ ${
                 MedicineHelper.formatAmount(
                     medicine.amount,
-                    medicine.unit
+                    medicine
                 )
             }",
             status = ReminderEvent.ReminderStatus.ACKNOWLEDGED,

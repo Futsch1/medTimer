@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -150,7 +150,7 @@ class ActionsVisitor @Inject constructor(
 
     private suspend fun undoStock(reminderEvent: ReminderEvent) {
         if (reminderEvent.stockHandled) {
-            val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return
+            val amount = DoseAmountParser.parseAmount(reminderEvent.amount) ?: return
             val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return
             medicineRepository.decreaseStock(reminder.medicineRelId, -amount)
         }

@@ -4,6 +4,7 @@ import android.content.Context
 
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.isReminderActive
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
@@ -19,8 +20,8 @@ class ReminderSummaryFormatter @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val timeFormatter: TimeFormatter
 ) {
-    suspend fun formatExportReminderSummary(reminder: Reminder): String {
-        val reminderSummary = formatReminderSummary(reminder)
+    suspend fun formatExportReminderSummary(reminder: Reminder, medicine: Medicine): String {
+        val reminderSummary = formatReminderSummary(reminder, medicine)
         if (!reminder.usesTimeInMinutes) {
             return reminderSummary
         }
@@ -29,7 +30,7 @@ class ReminderSummaryFormatter @Inject constructor(
         return "$time, $reminderSummary"
     }
 
-    suspend fun formatReminderSummary(reminder: Reminder): String {
+    suspend fun formatReminderSummary(reminder: Reminder, medicine: Medicine): String {
         var strings: MutableList<String> = mutableListOf()
 
         if (!isReminderActive(reminder)) {
@@ -49,7 +50,7 @@ class ReminderSummaryFormatter @Inject constructor(
             }
 
             ReminderType.OUT_OF_STOCK -> {
-                strings.add(outOfStockReminderString(reminder))
+                strings.add(outOfStockReminderString(reminder, medicine))
             }
 
             ReminderType.EXPIRATION_DATE -> {
@@ -74,10 +75,10 @@ class ReminderSummaryFormatter @Inject constructor(
                 context.resources.getStringArray(R.array.expiration_reminder)[reminder.expirationReminderType.ordinal]
     }
 
-    private fun outOfStockReminderString(reminder: Reminder): String {
+    private fun outOfStockReminderString(reminder: Reminder, medicine: Medicine): String {
         return context.resources.getStringArray(R.array.stock_reminder)[reminder.outOfStockReminderType.ordinal] + " " + MedicineHelper.formatAmount(
             reminder.outOfStockThreshold,
-            ""
+            medicine
         )
     }
 

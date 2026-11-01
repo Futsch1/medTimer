@@ -3,7 +3,7 @@ package com.futsch1.medtimer.feature.reminders
 import android.app.NotificationManager
 import android.util.Log
 import com.futsch1.medtimer.core.common.LogTags
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -164,7 +164,7 @@ class NotificationProcessor @Inject constructor(
             reminderEvent.stockHandled && status == ReminderEvent.ReminderStatus.SKIPPED
         ) {
             val reminder = reminderRepository.fetch(reminderEvent.reminderId) ?: return StockHandlingResult(false, null)
-            var amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return StockHandlingResult(false, null)
+            var amount = DoseAmountParser.parseAmount(reminderEvent.amount) ?: return StockHandlingResult(false, null)
             if (status == ReminderEvent.ReminderStatus.SKIPPED) {
                 amount = -amount
             }

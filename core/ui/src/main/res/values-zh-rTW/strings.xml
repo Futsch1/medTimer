@@ -216,6 +216,7 @@
     <string name="interval_start_processed">在已服用或路過時時開始</string>
     <string name="invalid_input">輸入無效</string>
     <string name="amount">數量</string>
+    <string name="remaining_stock">剩餘庫存</string>
     <string name="medicine_stock">藥品庫存</string>
     <string name="reminder_threshold">提醒閾值</string>
     <string name="refill_size">補充數量</string>
@@ -246,7 +247,7 @@
     <string name="big_notifications">大型通知按鈕</string>
     <string name="reminded">已提醒</string>
     <string name="estimated_run_out_date">預估用罄日期</string>
-    <string name="create_calendar_entry">建立行事曆項目</string>
+    <string name="create_calendar_entry">將預估用罄日期加入行事曆</string>
     <string name="notes">備註</string>
     <string name="automatically_taken">自動標記為已服用</string>
     <string name="high_and_alarm">高優先權 + 鬧鐘</string>
@@ -366,5 +367,7 @@
     <string name="setup_no_reminders_guidance">只有藥物不會排程通知。新增提醒以排程通知。</string>
     <string name="setup_guidance_getting_started">開始使用</string>
     <string name="reminder_types_help">進一步了解提醒類型</string>
+    <string name="stock_decrement_preview">庫存將減少 %1$s。</string>
+    <string name="stock_decrement_unreadable">此數量無效，無法判斷庫存減少量。</string>
     <string name="notifications_missing_or_late">通知遺失或延遲</string>
 </resources>

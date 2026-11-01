@@ -24,11 +24,11 @@ app_apk_path="app/build/outputs/apk/full/debug/MedTimer-full-debug.apk"
 tests_apk_path="app/build/outputs/apk/androidTest/full/debug/MedTimer-full-debug-androidTest.apk"
 test_instrumentation_runner="com.futsch1.medtimer.harness.MedTimerHiltTestRunner"
 
-./gradlew assembleDebug assembleAndroidTest
+./gradlew assembleFullDebug assembleFullDebugAndroidTest
 
 for i in "${locales[@]}"; do
 	start_clean_status_bar
-	if [ "$i" == "en-US" ]; then
+	if [[ $i == "en-US" ]]; then
 		adb shell settings put system time_12_24 12
 	else
 		adb shell settings put system time_12_24 24
@@ -40,10 +40,12 @@ for i in "${locales[@]}"; do
 		--tests_apk_path="$tests_apk_path" \
 		--app_apk_path="$app_apk_path" \
 		--test_instrumentation_runner="$test_instrumentation_runner" \
+		--app_package_name=com.futsch1.medtimer.debug \
+		--tests_package_name=com.futsch1.medtimer.debug.test \
 		--exit_on_test_failure=false \
 		--use_timestamp_suffix=false \
 		--use_tests_in_classes=com.futsch1.medtimer.ScreenshotsTest
-	adb shell pm clear com.futsch1.medtimer
+	adb shell pm clear com.futsch1.medtimer.debug
 	stop_clean_status_bar
 done
 

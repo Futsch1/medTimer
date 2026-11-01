@@ -37,7 +37,8 @@ fun ReminderCard(
     reminder: ReminderItem,
     onReminderEdit: (id: Int, type: ReminderType) -> Unit,
     onEditAmount: (id: Int, amount: String) -> Unit,
-    onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit
+    onEditTime: (id: Int, timeMinutesOfDay: Int) -> Unit,
+    stockTrackingActive: Boolean,
 ) {
     var showTypeHelp by rememberSaveable(reminder.id) { mutableStateOf(false) }
 
@@ -72,6 +73,7 @@ fun ReminderCard(
                         label = stringResource(R.string.dosage),
                         value = reminder.amount,
                         onConfirm = { onEditAmount(reminder.id, it) },
+                        showStockEffect = stockTrackingActive,
                         modifier = Modifier
                             .weight(1f)
                             .padding(4.dp),

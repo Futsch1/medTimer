@@ -117,6 +117,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                     Column(Modifier.testTag(ScreenTestTags.MEDICINES)) {
                         MedTimerTopAppBar(
                             title = editMedicineScreenViewModel.state.name.ifEmpty { "..." },
+                            onNavigateUp = { navController.navigateUp() },
                             actions = {
                                 EditMedicineMenu(editMedicineActions)
                                 AppOptionsMenuHost(

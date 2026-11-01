@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -19,6 +20,7 @@ import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
@@ -37,8 +39,11 @@ class StockSettingsFragment : MedicinePreferences(
     ),
     mapOf(
     ),
-    listOf("stock_unit")
+    listOf()
 ) {
+    @Inject
+    lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
+
     @Inject
     lateinit var simulatedRemindersRepository: SimulatedReminders
 
@@ -64,6 +69,7 @@ class StockSettingsFragment : MedicinePreferences(
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
         get() = mapOf(
             "stock_run_out_to_calendar" to { _, _ -> addToCalendar() },
+            "stock_tracking_help" to { _, _ -> appOptionsActionsFactory.create(this).openHelp("stock-handling") },
             "stock_refill_now" to { _, _ -> refillNow() },
             "production_date" to { activity, preference ->
                 dateEditHandler.show(
@@ -101,8 +107,9 @@ class StockSettingsFragment : MedicinePreferences(
     }
 
     override fun customSetup(modelData: Medicine) {
-        setupAmountEdit(findPreference("amount")!!)
-        setupAmountEdit(findPreference("stock_refill_size")!!)
+        val unit = MedicineHelper.getUnit(modelData)
+        setupAmountEdit(findPreference("amount")!!, unit)
+        setupAmountEdit(findPreference("stock_refill_size")!!, unit)
 
         observeRunOutDate(modelData.id)
     }
@@ -111,9 +118,9 @@ class StockSettingsFragment : MedicinePreferences(
         super.onModelDataUpdated(modelData)
 
         findPreference<EditTextPreference>("amount")!!.summary =
-            MedicineHelper.formatAmount(modelData.amount, modelData.unit)
+            MedicineHelper.formatAmount(modelData.amount, modelData)
         findPreference<EditTextPreference>("stock_refill_size")!!.summary =
-            MedicineHelper.formatAmount(modelData.refillSize, modelData.unit)
+            MedicineHelper.formatAmount(modelData.refillSize, modelData)
         if (modelData.isOutOfStock()) {
             findPreference<EditTextPreference>("amount")!!.setIcon(com.futsch1.medtimer.core.ui.R.drawable.exclamation_triangle_fill)
         } else {
@@ -203,7 +210,7 @@ fun EditText.addDoubleValidator() {
         override fun afterTextChanged(s: Editable?) {
             if (s == null || s.toString().isEmpty()) return
 
-            val parsed: Double? = MedicineHelper.parseAmount(s.toString())
+            val parsed: Double? = DoseAmountParser.parseAmount(s.toString())
             if (parsed == null || parsed.isNaN() || parsed < 0.0) {
                 // If the input is not a valid double, remove the last character
                 s.delete(s.length - 1, s.length)
@@ -212,9 +219,10 @@ fun EditText.addDoubleValidator() {
     })
 }
 
-fun setupAmountEdit(editTextPreference: EditTextPreference) {
+fun setupAmountEdit(editTextPreference: EditTextPreference, unit: String = "") {
     editTextPreference.setOnBindEditTextListener { editText ->
         editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        editText.hint = unit.takeIf(String::isNotBlank)
         editText.addDoubleValidator()
         editText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }

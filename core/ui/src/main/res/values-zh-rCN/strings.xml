@@ -216,8 +216,9 @@
     <string name="invalid_input">无效输入</string>
     <string name="medicine_stock">药品余量</string>
     <string name="amount">数量</string>
+    <string name="remaining_stock">剩余库存</string>
     <string name="reminder_threshold">触发提醒数值</string>
-    <string name="refill_size">每份药量规格(例如每盒x片)</string>
+    <string name="refill_size">补充数量</string>
     <string name="refill_now">添加余量</string>
     <string name="variable_amount">输入服用剂量</string>
     <string name="tags">标签</string>
@@ -245,7 +246,7 @@
     <string name="big_notifications">大通知按钮</string>
     <string name="reminded">已提醒</string>
     <string name="estimated_run_out_date">预计用完日期</string>
-    <string name="create_calendar_entry">创建日历条目</string>
+    <string name="create_calendar_entry">将预计用完日期添加到日历</string>
     <string name="notes">笔记</string>
     <string name="automatically_taken">自动标记为已拍摄</string>
     <string name="sort">分类</string>
@@ -367,4 +368,6 @@
     <string name="setup_guidance_getting_started">入门</string>
     <string name="reminder_types_help">详细了解提醒类型</string>
     <string name="notifications_missing_or_late">通知缺失或迟到</string>
+    <string name="stock_decrement_preview">库存将减少 %1$s。</string>
+    <string name="stock_decrement_unreadable">此数量无效，无法确定库存减少量。</string>
 </resources>

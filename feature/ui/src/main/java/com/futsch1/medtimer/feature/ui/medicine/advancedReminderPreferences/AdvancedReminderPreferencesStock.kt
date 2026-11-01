@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -55,7 +56,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
         settingsActions.reminder = modelData
 
         findPreference<Preference>("stock_threshold")?.summary =
-            MedicineHelper.formatAmount(modelData.outOfStockThreshold, medicine?.unit ?: "")
+            medicine?.let { MedicineHelper.formatAmount(modelData.outOfStockThreshold, it) } ?: ""
     }
 
     override fun customSetup(modelData: Reminder) {
@@ -78,7 +79,10 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
             val medicine = medicineRepository.fetch(modelData.medicineRelId) ?: return@launch
             this.launch(mainDispatcher) {
                 findPreference<Preference>("medicine_stock")?.summary =
-                    MedicineHelper.formatAmount(medicine.amount, medicine.unit)
+                    MedicineHelper.formatAmount(medicine.amount, medicine)
+                findPreference<EditTextPreference>("stock_threshold")?.let {
+                    setupAmountEdit(it, MedicineHelper.getUnit(medicine))
+                }
                 findPreference<Preference>("medicine_expiration_date")?.summary =
                     if (medicine.expirationDate != LocalDate.EPOCH) {
                         timeFormatter.localDateToString(medicine.expirationDate)

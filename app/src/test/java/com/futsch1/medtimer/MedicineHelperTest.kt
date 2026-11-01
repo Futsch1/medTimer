@@ -1,12 +1,14 @@
 package com.futsch1.medtimer
 
 import android.content.Context
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.schedulertests.TestHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,63 +20,23 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.text.NumberFormat
 import java.time.LocalDate
-import java.util.Locale
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import com.futsch1.medtimer.core.ui.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class MedicineHelperTest {
     @Test
-    fun `parseAmount with requireComplete only accepts numbers the locale reads completely`() {
-        val us = NumberFormat.getNumberInstance(Locale.US)
-        val hungarian = NumberFormat.getNumberInstance(Locale.forLanguageTag("hu-HU"))
-        val german = NumberFormat.getNumberInstance(Locale.GERMANY)
-
-        // Without requireComplete, the number format silently stops at a character it cannot use
-        assertEquals(10.0, MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = false))
-        assertNull(MedicineHelper.parseAmount("10.5mg", hungarian, requireComplete = true))
-        assertEquals(10.5, MedicineHelper.parseAmount("10,5 mg", hungarian, requireComplete = true))
-        assertEquals(10.5, MedicineHelper.parseAmount("10.5mg", us, requireComplete = true))
-        assertNull(MedicineHelper.parseAmount("1.2.3", us, requireComplete = true))
-        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5", us, requireComplete = true))
-        // A separator at the end of the number is not part of it
-        assertEquals(5.0, MedicineHelper.parseAmount("5. mg", us, requireComplete = true))
-        assertEquals(5.0, MedicineHelper.parseAmount("5, then", us, requireComplete = true))
-        // Read completely, but as a thousands separator; this cannot be detected
-        assertEquals(125.0, MedicineHelper.parseAmount("12.5", german, requireComplete = true))
-        assertNull(MedicineHelper.parseAmount("no number", us, requireComplete = true))
-    }
-
-    @Test
-    fun testParse() {
-        assertEquals(3.5, MedicineHelper.parseAmount("3.5"))
-        assertEquals(5.0, MedicineHelper.parseAmount("5"))
-        assertEquals(0.5, MedicineHelper.parseAmount(".5"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50000"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50,000"))
-        assertEquals(50000.0, MedicineHelper.parseAmount("50 000"))
-        assertEquals(1000.5, MedicineHelper.parseAmount("1,000.5"))
-        assertEquals(1000000.42, MedicineHelper.parseAmount("1 000 000.42"))
-        assertEquals(3.566, MedicineHelper.parseAmount("3.566 pills"))
-        assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills"))
-        assertEquals(6.23, MedicineHelper.parseAmount("Take 6.23 pills at 5 o'clock"))
-        assertEquals(null, MedicineHelper.parseAmount(".."))
-        assertEquals(null, MedicineHelper.parseAmount("There is no number here. Only some ,. and spaces."))
-        assertEquals(4.0, MedicineHelper.parseAmount("Many. 4 to be specific."))
-        assertNull(MedicineHelper.parseAmount("Take pills"))
-        var amount = 5.0
-        MedicineHelper.parseAmount("No string")?.let { amount = it }
-        assertEquals(5.0, amount)
-    }
-
-    @Test
     fun testFormat() {
         assertEquals("3.5", MedicineHelper.formatAmount(3.5, ""))
         assertEquals("5 pills", MedicineHelper.formatAmount(5.0, "pills"))
+        assertEquals("1 pill", MedicineHelper.formatAmount(1.0, "pills"))
+        assertEquals("2 pills", MedicineHelper.formatAmount(2.0, "pill"))
+        assertEquals("0 pills", MedicineHelper.formatAmount(0.0, "pill"))
+        assertEquals("1.5 pills", MedicineHelper.formatAmount(1.5, "pill"))
+        assertEquals("1 Tablette", MedicineHelper.formatAmount(1.0, "Tabletten"))
+        assertEquals("2 Tabletten", MedicineHelper.formatAmount(2.0, "Tablette"))
+        assertEquals("5 mg", MedicineHelper.formatAmount(5.0, "mg"))
     }
 
     @Test
@@ -82,7 +44,7 @@ class MedicineHelperTest {
         val amount = 123456.0
         val unit = "pills"
         val formatted = MedicineHelper.formatAmount(amount, unit)
-        val parsed = MedicineHelper.parseAmount(formatted)
+        val parsed = DoseAmountParser.parseAmount(formatted)
         assertEquals(amount, parsed)
     }
 
@@ -107,11 +69,13 @@ class MedicineHelperTest {
                 "${invocation.getArgument(1, String::class.java)} left"
             }
 
-        val reminder = TestHelper.buildReminder(1, 1, "", 480, 1).copy(
+        val reminder = TestHelper.buildReminder(1, 1, "1 pills", 480, 1).copy(
             outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
             outOfStockThreshold = 15.0
         )
-        val baseMedicine = Medicine.default().copy(name = "test", unit = "pills")
+        val doseReminder = TestHelper.buildReminder(1, 2, "1 pills", 600, 1)
+
+        val baseMedicine = Medicine.default().copy(name = "test")
 
         // Standard case without stock
         assertEquals(
@@ -122,25 +86,40 @@ class MedicineHelperTest {
         // Expired case
         assertEquals(
             "test (\uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(expirationDate = LocalDate.now().minusDays(1))).toString()
+            formatter.getMedicineNameWithStockText(baseMedicine.copy(expirationDate = LocalDate.now().minusDays(1)))
+                .toString()
         )
 
         // Standard case with stock
         assertEquals(
             "test (12 pills left)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0)).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(
+                    amount = 12.0,
+                    reminders = listOf(doseReminder)
+                )
+            ).toString()
         )
 
         // Out of stock case
         assertEquals(
             "test (12 pills left ⚠)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder))).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(amount = 12.0, reminders = listOf(doseReminder, reminder))
+            )
+                .toString()
         )
 
         // Out of stock and expired case
         assertEquals(
             "test (12 pills left ⚠ \uD83D\uDEAB)",
-            formatter.getMedicineNameWithStockText(baseMedicine.copy(amount = 12.0, reminders = listOf(reminder), expirationDate = LocalDate.now().minusDays(1))).toString()
+            formatter.getMedicineNameWithStockText(
+                baseMedicine.copy(
+                    amount = 12.0,
+                    reminders = listOf(doseReminder, reminder),
+                    expirationDate = LocalDate.now().minusDays(1)
+                )
+            ).toString()
         )
     }
 

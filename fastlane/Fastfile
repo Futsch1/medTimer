@@ -24,8 +24,8 @@ STORE_SCREENSHOT_LOCALES = %w[
 EXPECTED_STORE_SCREENSHOTS = (1..8).map { |number| "#{number}.png" }.freeze
 SCREENSHOT_CAPTURE_OPTIONS = {
   clear_previous_screenshots: true,
-  app_package_name: 'com.futsch1.medtimer',
-  tests_package_name: 'com.futsch1.medtimer.test',
+  app_package_name: 'com.futsch1.medtimer.debug',
+  tests_package_name: 'com.futsch1.medtimer.debug.test',
   test_instrumentation_runner: 'com.futsch1.medtimer.harness.MedTimerHiltTestRunner',
   reinstall_app: true,
   use_timestamp_suffix: false

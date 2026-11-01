@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
@@ -65,6 +66,10 @@ class SimulatedReminderEvent @AssistedInject constructor(
         ) {
             return null
         }
-        return StockChange(simulatedReminder.stockBefore, simulatedReminder.stockAfter, medicine.unit)
+        return StockChange(
+            simulatedReminder.stockBefore,
+            simulatedReminder.stockAfter,
+            MedicineHelper.getUnit(medicine)
+        )
     }
 }

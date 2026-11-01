@@ -206,7 +206,7 @@
     <string name="medicine_stock">Ravimivarud</string>
     <string name="amount">Kogus</string>
     <string name="reminder_threshold">Meeldetuletuse lävend</string>
-    <string name="refill_size">Täienduse kogus</string>
+    <string name="refill_size">Täiendamise kogus</string>
     <string name="refill_now">Täienda kohe</string>
     <string name="tags">Sildid</string>
     <string name="add_tag">Lisa silt</string>
@@ -244,7 +244,7 @@
     <string name="big_notifications">Teavituste suured nupud</string>
     <string name="reminded">Meeldetuletatud</string>
     <string name="estimated_run_out_date">Hinnanguline varude lõpupäev</string>
-    <string name="create_calendar_entry">Lisa kalendrikirje</string>
+    <string name="create_calendar_entry">Lisa hinnanguline lõppemise kuupäev kalendrisse</string>
     <string name="notes">Märkmed</string>
     <string name="automatically_taken">Märgi võetuks automaatselt</string>
     <string name="same_as_medicine">Sama, kui ravimi puhul</string>

@@ -3,6 +3,7 @@ package com.futsch1.medtimer
 import android.app.AlarmManager
 import android.app.NotificationManager
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
+import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderTime
 import com.futsch1.medtimer.core.domain.model.UserPreferences
@@ -64,60 +65,67 @@ class ReminderSummaryFormatterTest {
 
     @Test
     fun testFormatReminderSummaryInactive() = runBlocking {
+        val medicine = Medicine.default()
         var reminder = Reminder.default().copy(medicineRelId = 1, active = false)
 
-        assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder))
+        assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder, medicine))
 
-        reminder = reminder.copy(active = true, periodStart = LocalDate.of(2023, 1, 2), periodEnd = LocalDate.of(2023, 1, 4))
+        reminder =
+            reminder.copy(active = true, periodStart = LocalDate.of(2023, 1, 2), periodEnd = LocalDate.of(2023, 1, 4))
         val dateBefore = LocalDate.of(2023, 1, 1)
         val dateIn = LocalDate.of(2023, 1, 2)
         val mockedLocalDate: MockedStatic<LocalDate> = mockStatic(LocalDate::class.java)
 
         mockedLocalDate.`when`<LocalDate> { LocalDate.now() }.thenReturn(dateBefore)
-        assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder))
+        assertEquals("Inactive, Every day", formatter.formatReminderSummary(reminder, medicine))
 
         mockedLocalDate.`when`<LocalDate> { LocalDate.now() }.thenReturn(dateIn)
-        assertEquals("Every day", formatter.formatReminderSummary(reminder))
+        assertEquals("Every day", formatter.formatReminderSummary(reminder, medicine))
 
         mockedLocalDate.close()
     }
 
     @Test
     fun testFormatReminderSummaryLimited() = runBlocking {
+        val medicine = Medicine.default()
         var reminder = Reminder.default().copy(days = listOf(DayOfWeek.SUNDAY))
 
-        assertEquals("Limited to some weekdays", formatter.formatReminderSummary(reminder))
+        assertEquals("Limited to some weekdays", formatter.formatReminderSummary(reminder, medicine))
 
         reminder = reminder.copy(activeDaysOfMonth = listOf(1))
         assertEquals(
             "Limited to some weekdays, Limited to some days of the month",
-            formatter.formatReminderSummary(reminder)
+            formatter.formatReminderSummary(reminder, medicine)
         )
 
         reminder = reminder.copy(days = emptyList())
         assertEquals(
             "Limited to some days of the month, Every day",
-            formatter.formatReminderSummary(reminder)
+            formatter.formatReminderSummary(reminder, medicine)
         )
     }
 
     @Test
     fun testFormatReminderSummaryCyclic() = runBlocking {
-        val reminder = Reminder.default().copy(consecutiveDays = 4, pauseDays = 5, cycleStartDay = LocalDate.of(2024, 10, 4))
+        val medicine = Medicine.default()
+        val reminder =
+            Reminder.default().copy(consecutiveDays = 4, pauseDays = 5, cycleStartDay = LocalDate.of(2024, 10, 4))
         assertEquals(
             "Cyclic reminder 4/5, first cycle start 10/4/24",
-            formatter.formatReminderSummary(reminder)
+            formatter.formatReminderSummary(reminder, medicine)
         )
     }
 
     @Test
     fun testFormatReminderSummaryInstructions() = runBlocking {
+        val medicine = Medicine.default()
         val reminder = Reminder.default().copy(active = false, instructions = "3")
-        assertEquals("Inactive, Every day, 3", formatter.formatReminderSummary(reminder))
+        assertEquals("Inactive, Every day, 3", formatter.formatReminderSummary(reminder, medicine))
     }
 
     @Test
     fun testFormatReminderSummaryLinked() {
+        val medicine = Medicine.default()
         var sourceReminder = Reminder.default()
         val sourceSourceReminder = Reminder.default()
         runBlocking {
@@ -130,7 +138,7 @@ class ReminderSummaryFormatterTest {
         val reminder = Reminder.default().copy(linkedReminderId = 2)
 
         runBlocking {
-            assertEquals("After reminder at 8:00 AM", formatter.formatReminderSummary(reminder))
+            assertEquals("After reminder at 8:00 AM", formatter.formatReminderSummary(reminder, medicine))
         }
 
         sourceReminder = sourceReminder.copy(linkedReminderId = 3, time = ReminderTime(3, isDuration = true))
@@ -138,14 +146,31 @@ class ReminderSummaryFormatterTest {
             `when`(mockReminderRepository.fetch(2)).thenReturn(sourceReminder)
         }
         runBlocking {
-            assertEquals("After reminder at 8:00 AM + 0:03", formatter.formatReminderSummary(reminder))
+            assertEquals("After reminder at 8:00 AM + 0:03", formatter.formatReminderSummary(reminder, medicine))
         }
     }
 
     @Test
-    fun testFormatReminderSummaryInterval() = runBlocking {
-        val reminder = Reminder.default().copy(time = ReminderTime(2, isDuration = true), intervalStart = Instant.ofEpochSecond(60))
+    fun testFormatReminderSummaryOutOfStockIncludesReminderUnit() = runBlocking {
+        val doseReminder = Reminder.default().copy(amount = "1 pill")
+        val medicine = Medicine.default().copy(reminders = listOf(doseReminder))
+        val reminder = Reminder.default().copy(
+            outOfStockReminderType = Reminder.OutOfStockReminderType.ONCE,
+            outOfStockThreshold = 2.0
+        )
 
-        assertEquals("Every 2 minutes, Continuous interval starting from 1/1/70 1:01 AM", formatter.formatReminderSummary(reminder))
+        assertEquals("Once when falling below threshold 2 pills", formatter.formatReminderSummary(reminder, medicine))
+    }
+
+    @Test
+    fun testFormatReminderSummaryInterval() = runBlocking {
+        val medicine = Medicine.default()
+        val reminder = Reminder.default()
+            .copy(time = ReminderTime(2, isDuration = true), intervalStart = Instant.ofEpochSecond(60))
+
+        assertEquals(
+            "Every 2 minutes, Continuous interval starting from 1/1/70 1:01 AM",
+            formatter.formatReminderSummary(reminder, medicine)
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.futsch1.medtimer.feature.ui.medicine
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
@@ -66,13 +69,20 @@ private fun EditValueButtonPreview() {
 }
 
 @Composable
-fun EditTextButton(label: String, value: String, onConfirm: (String) -> Unit, modifier: Modifier = Modifier) {
+fun EditTextButton(
+    label: String,
+    value: String,
+    onConfirm: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    showStockEffect: Boolean = false,
+) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
     EditValueButton(label = label, value = value, onClick = { showDialog = true }, modifier = modifier)
     if (showDialog) {
         EditTextDialog(
             label = label,
             initialValue = value,
+            showStockEffect = showStockEffect,
             onDismiss = { showDialog = false },
             onConfirm = {
                 if (it != value) onConfirm(it)
@@ -83,7 +93,13 @@ fun EditTextButton(label: String, value: String, onConfirm: (String) -> Unit, mo
 }
 
 @Composable
-private fun EditTextDialog(label: String, initialValue: String, onDismiss: () -> Unit, onConfirm: (String) -> Unit) {
+private fun EditTextDialog(
+    label: String,
+    initialValue: String,
+    showStockEffect: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: (String) -> Unit,
+) {
     var draft by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(initialValue, selection = TextRange(initialValue.length)))
     }
@@ -95,18 +111,37 @@ private fun EditTextDialog(label: String, initialValue: String, onDismiss: () ->
         onDismissRequest = onDismiss,
         title = { Text(label) },
         text = {
-            OutlinedTextField(
-                value = draft,
-                onValueChange = { draft = it },
-                label = { Text(label) },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .testTag(EditMedicineTestTags.EDIT_VALUE_INPUT),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { onConfirm(draft.text) }),
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                OutlinedTextField(
+                    value = draft,
+                    onValueChange = { draft = it },
+                    label = { Text(label) },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .testTag(EditMedicineTestTags.EDIT_VALUE_INPUT),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { onConfirm(draft.text) }),
+                )
+                if (showStockEffect) {
+                    val dose = DoseAmountParser.parse(draft.text)
+                    Text(
+                        text = if (dose == null) {
+                            stringResource(R.string.stock_decrement_unreadable)
+                        } else {
+                            stringResource(
+                                R.string.stock_decrement_preview,
+                                MedicineHelper.formatAmount(dose.amount, dose.unit),
+                            )
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+            }
         },
         confirmButton = { TextButton(onClick = { onConfirm(draft.text) }) { Text(stringResource(R.string.ok)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },

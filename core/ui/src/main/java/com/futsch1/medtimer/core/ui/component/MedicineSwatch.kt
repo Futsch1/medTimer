@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.futsch1.medtimer.core.ui.theme.containerMask
 import com.futsch1.medtimer.core.ui.theme.readableContentColorFor
@@ -32,6 +33,7 @@ fun MedicineSwatch(
     icon: ImageBitmap?,
     @ColorInt color: Int?,
     modifier: Modifier = Modifier,
+    size: Dp = SWATCH_SIZE,
 ) {
     if (icon == null && color == null) return
 
@@ -42,7 +44,7 @@ fun MedicineSwatch(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(SWATCH_SIZE)
+            .size(size)
             .clip(CardDefaults.shape)
             .background(background),
     ) {
@@ -51,7 +53,7 @@ fun MedicineSwatch(
                 bitmap = icon,
                 contentDescription = null,
                 tint = contentColor,
-                modifier = Modifier.size(SWATCH_ICON_SIZE),
+                modifier = Modifier.size(size * (SWATCH_ICON_SIZE / SWATCH_SIZE)),
             )
         }
     }

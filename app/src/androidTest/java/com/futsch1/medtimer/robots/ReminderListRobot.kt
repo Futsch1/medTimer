@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.robots
 
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.test.espresso.Espresso.pressBack
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.ScreenTestTags
@@ -31,15 +31,13 @@ class ReminderListRobot(
 
     fun assertContains(text: String) = screen.assertDisplayed(hasText(text, substring = true))
 
-    fun assertContainsTime(text: String) = screen.assertDisplayed(hasText(text, substring = true))
-
     fun inSettingsOf(position: Int, block: ReminderSettingsRobot.() -> Unit) {
         openSettings(position)
         settings.block()
         pressBack()
     }
 
-    fun reopenSettings(position: Int) = inSettingsOf(0) {}
+    fun reopenSettings(position: Int) = inSettingsOf(position) {}
 
     fun addLinkedReminder(position: Int, amount: String? = null, hours: Int = 0, minutes: Int) {
         openSettings(position)
@@ -66,6 +64,6 @@ class ReminderListRobot(
         require(position >= 0) { "Reminder position cannot be negative" }
         val portraitIndex = 2 + position
         if (!reminders.scrollToIndex(portraitIndex)) check(reminders.scrollToIndex(1 + position))
-        reminders.clickAt(hasText(composeUi.getString(R.string.advanced_settings)), 0)
+        reminders.clickAt(hasText(composeUi.getString(R.string.advanced_settings)), position)
     }
 }

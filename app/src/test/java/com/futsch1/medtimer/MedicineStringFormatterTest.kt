@@ -79,6 +79,16 @@ class MedicineStringFormatterTest {
     }
 
     @Test
+    fun testGetStockTextIncludesReminderUnit() {
+        val medicine = Medicine.default().copy(
+            amount = 5.0,
+            reminders = listOf(Reminder.default().copy(amount = "1 pill"))
+        )
+
+        assertEquals("5 pills left", formatter.getStockText(medicine))
+    }
+
+    @Test
     fun testGetReminderTimesInterval() {
         val reminder = Reminder.default().copy(time = ReminderTime(2, isDuration = true), intervalStart = Instant.ofEpochSecond(60))
         val reminder2 = Reminder.default().copy(time = ReminderTime(LocalTime.of(2, 0)), intervalStart = Instant.ofEpochSecond(60))

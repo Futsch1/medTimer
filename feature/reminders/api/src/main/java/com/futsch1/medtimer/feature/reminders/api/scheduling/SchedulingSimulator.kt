@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.feature.reminders.api.scheduling
 
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.Medicine
@@ -172,7 +172,7 @@ class SchedulingSimulator(
         val stockBefore = medicines[scheduledReminder.medicine.id]?.amount ?: 0.0
         return if (stockBefore > 0.0) {
             val reminderAmount: Double =
-                MedicineHelper.parseAmount(scheduledReminder.reminder.amount) ?: 0.0
+                DoseAmountParser.parseAmount(scheduledReminder.reminder.amount) ?: 0.0
             val stockAfter = (stockBefore - reminderAmount).coerceAtLeast(0.0)
 
             medicines[scheduledReminder.medicine.id] = scheduledReminder.medicine.copy(

@@ -9,6 +9,7 @@ import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.feature.ui.medicine.EditMedicineTestTags
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderTestTags
 import java.time.LocalTime
+import java.util.Locale
 import kotlin.time.Duration
 
 /**
@@ -30,6 +31,10 @@ class MedicineEditorRobot(
     fun assertReminderSetupGuidanceDisplayed() = editorScope().assertDisplayed(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
 
     fun assertReminderSetupGuidanceAbsent() = editorScope().assertAbsent(hasTestTag(EditMedicineTestTags.SETUP_ADD_REMINDER))
+
+    fun assertDoseUnitWarningDisplayed(vararg units: String) = editorScope().assertDisplayed(
+        hasText(String.format(Locale.ROOT, ui.getString(R.string.inconclusive_dose_units_warning), units.joinToString()))
+    )
 
     fun openGettingStartedFromGuidance() = editorScope().click(hasText(ui.getString(R.string.setup_guidance_getting_started)))
 
@@ -147,10 +152,9 @@ class MedicineEditorRobot(
     }
 
     /** Only the values given are written; an empty string clears the field. */
-    fun setStock(amount: String? = null, unit: String? = null, refillSize: String? = null) {
+    fun setStock(amount: String? = null, refillSize: String? = null) {
         inStockSettings {
-            amount?.let { preferences.setValue(R.string.amount, it) }
-            unit?.let { preferences.setValue(R.string.unit, it) }
+            amount?.let { preferences.setValue(R.string.remaining_stock, it) }
             refillSize?.let { preferences.setValue(R.string.refill_size, it) }
         }
     }
@@ -158,7 +162,7 @@ class MedicineEditorRobot(
     fun refillNow() = inStockSettings { preferences.click(R.string.refill_now) }
 
     fun assertStockAmount(expected: String) =
-        inStockSettings { preferences.assertSummary(R.string.amount, expected) }
+        inStockSettings { preferences.assertSummary(R.string.remaining_stock, expected) }
 
     fun assertRefillSize(expected: String) =
         inStockSettings { preferences.assertSummary(R.string.refill_size, expected) }

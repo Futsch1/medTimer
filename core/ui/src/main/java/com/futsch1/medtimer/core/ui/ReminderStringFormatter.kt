@@ -9,15 +9,14 @@ import android.text.Spanned
 import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
-
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TintedImageSpan
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ReminderType
-import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
+import com.futsch1.medtimer.core.domain.model.SimulatedReminder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -143,7 +142,7 @@ class ReminderStringFormatter @Inject constructor(
                 ReminderType.OUT_OF_STOCK -> {
                     MedicineHelper.formatAmount(
                         scheduledReminder.medicine.amount,
-                        scheduledReminder.medicine.unit
+                        scheduledReminder.medicine
                     )
                 }
 
@@ -186,13 +185,18 @@ class ReminderStringFormatter @Inject constructor(
                     Spanned.SPAN_INCLUSIVE_EXCLUSIVE
                 )
             }
-            span.append(MedicineHelper.formatAmount(simulatedReminder.stockBefore, simulatedReminder.scheduledReminder.medicine.unit))
+            span.append(
+                MedicineHelper.formatAmount(
+                    simulatedReminder.stockBefore,
+                    simulatedReminder.scheduledReminder.medicine
+                )
+            )
             if (simulatedReminder.stockAfter != simulatedReminder.stockBefore) {
                 span.append(" ➡ ")
                 span.append(
                     MedicineHelper.formatAmount(
                         simulatedReminder.stockAfter,
-                        simulatedReminder.scheduledReminder.medicine.unit
+                        simulatedReminder.scheduledReminder.medicine
                     )
                 )
             }

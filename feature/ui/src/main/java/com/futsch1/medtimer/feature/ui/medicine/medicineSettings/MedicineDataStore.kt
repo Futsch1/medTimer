@@ -1,11 +1,12 @@
 package com.futsch1.medtimer.feature.ui.medicine.medicineSettings
 
 import com.futsch1.medtimer.core.common.di.ApplicationScope
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
-import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.core.ui.preferences.ModelDataStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -48,7 +49,6 @@ class MedicineDataStore @AssistedInject constructor(
     override fun getString(key: String?, defValue: String?): String? {
         return when (key) {
             "amount" -> MedicineHelper.formatAmount(modelData.amount, "")
-            "stock_unit" -> modelData.unit
             "stock_refill_size" -> MedicineHelper.formatAmount(modelData.refillSize, "")
             "half_life_hours" -> formatOptionalHours(modelData.halfLifeHours)
             "time_to_peak_hours" -> formatOptionalHours(modelData.timeToPeakHours)
@@ -66,11 +66,10 @@ class MedicineDataStore @AssistedInject constructor(
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            "amount" -> MedicineHelper.parseAmount(value)
+            "amount" -> DoseAmountParser.parseAmount(value)
                 ?.let { modelData = modelData.copy(amount = it) }
 
-            "stock_unit" -> modelData = modelData.copy(unit = value!!)
-            "stock_refill_size" -> MedicineHelper.parseAmount(value)
+            "stock_refill_size" -> DoseAmountParser.parseAmount(value)
                 ?.let { modelData = modelData.copy(refillSize = it) }
 
             "half_life_hours" -> modelData = modelData.copy(halfLifeHours = parseOptionalHours(value))
@@ -94,9 +93,11 @@ class MedicineDataStore @AssistedInject constructor(
     }
 
     // 0 means "not set" for the level estimate parameters; an empty input clears them
-    private fun formatOptionalHours(hours: Double): String = if (hours > 0.0) MedicineHelper.formatAmount(hours, "") else ""
+    private fun formatOptionalHours(hours: Double): String =
+        if (hours > 0.0) MedicineHelper.formatAmount(hours, "") else ""
 
-    private fun parseOptionalHours(value: String?): Double = MedicineHelper.parseAmount(value)?.coerceAtLeast(0.0) ?: 0.0
+    private fun parseOptionalHours(value: String?): Double =
+        DoseAmountParser.parseAmount(value)?.coerceAtLeast(0.0) ?: 0.0
 
     override fun getInt(key: String?, defValue: Int): Int {
         return when (key) {

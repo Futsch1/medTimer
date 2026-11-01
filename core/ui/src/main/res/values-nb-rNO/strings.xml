@@ -59,6 +59,8 @@
     <string name="set_home_location_confirm">Angi hjemsted til\n%1$s, %2$s?</string>
     <string name="home_location_error">Kunne ikke bestemme gjeldende posisjon</string>
     <string name="stock_after_simulation_end">Etter %s</string>
+    <string name="refill_size">Påfyllingsmengde</string>
+    <string name="create_calendar_entry">Legg estimert dato for tomt lager til i kalenderen</string>
     <string name="minutes_abbr">m</string>
     <string name="hours_abbr">t</string>
     <string name="days_abbr">d</string>
