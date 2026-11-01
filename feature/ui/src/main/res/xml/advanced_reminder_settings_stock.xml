@@ -28,7 +28,7 @@
     <PreferenceCategory app:title="@string/medicine_stock">
         <Preference app:key="medicine_stock" app:title="@string/remaining_stock" app:selectable="false"/>
         <Preference app:key="medicine_expiration_date" app:title="@string/expiration_date" app:selectable="false"/>
-        <Preference app:key="edit_medicine_stock_settings" app:title="@string/edit_medicine_stock_settings" app:icon="@drawable/box_seam"/>
+        <Preference app:key="edit_medicine_stock_settings" app:title="@string/edit_medicine_stock_settings" app:icon="@drawable/medication_pill_bottle"/>
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

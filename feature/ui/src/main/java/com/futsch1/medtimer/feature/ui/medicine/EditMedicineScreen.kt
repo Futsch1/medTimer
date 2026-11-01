@@ -276,7 +276,7 @@ private fun MedicineDetailsCard(
                     Icon(painterResource(R.drawable.tag), stringResource(R.string.tags))
                 }
                 FilledIconButton(onClick = { onOpenSubmenu(EditMedicineSubmenus.Submenu.STOCK_TRACKING) }) {
-                    Icon(painterResource(R.drawable.box_seam), stringResource(R.string.medicine_stock))
+                    Icon(painterResource(R.drawable.medication_pill_bottle), stringResource(R.string.medicine_stock))
                 }
                 FilledIconButton(onClick = { onOpenSubmenu(EditMedicineSubmenus.Submenu.CALENDAR) }) {
                     Icon(painterResource(R.drawable.calendar_week), stringResource(R.string.calendar))

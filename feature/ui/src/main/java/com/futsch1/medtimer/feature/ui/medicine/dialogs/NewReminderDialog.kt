@@ -370,7 +370,7 @@ private fun iconFor(type: ReminderType) = when (type) {
     ReminderType.TIME_BASED -> CoreUiR.drawable.calendar_week
     ReminderType.CONTINUOUS_INTERVAL -> CoreUiR.drawable.repeat
     ReminderType.WINDOWED_INTERVAL -> CoreUiR.drawable.interval
-    ReminderType.OUT_OF_STOCK -> CoreUiR.drawable.box_seam
+    ReminderType.OUT_OF_STOCK -> CoreUiR.drawable.medication_pill_bottle
     ReminderType.EXPIRATION_DATE -> CoreUiR.drawable.ban
     else -> CoreUiR.drawable.calendar_week
 }
