@@ -1,9 +1,11 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
+import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -62,12 +64,39 @@ class PastReminderEvent @AssistedInject constructor(
         return elapsed.takeIf { !it.isNegative }
     }
 
-    private fun stockChange(reminderEvent: ReminderEvent) =
-        if (reminderEvent.stockBefore == reminderEvent.stockAfter) {
-            null
-        } else {
-            StockChange(reminderEvent.stockBefore, reminderEvent.stockAfter, reminderEvent.stockUnit)
+    private fun stockChange(reminderEvent: ReminderEvent): StockChange? {
+        if (reminderEvent.stockBefore != reminderEvent.stockAfter) {
+            return StockChange(reminderEvent.stockBefore, reminderEvent.stockAfter, reminderEvent.stockUnit)
         }
+        return plannedStockChange(reminderEvent)
+    }
+
+    /**
+     * A dose that is still pending has not taken its stock yet, so the overview shows the stock the
+     * dose plans to take, the way it shows it for the doses that are still upcoming.
+     */
+    private fun plannedStockChange(reminderEvent: ReminderEvent): StockChange? {
+        if (reminderEvent.status != ReminderEvent.ReminderStatus.RAISED ||
+            reminderEvent.stockBefore < 0 ||
+            reminderEvent.askForAmount ||
+            reminderEvent.reminderType == ReminderType.OUT_OF_STOCK ||
+            reminderEvent.reminderType == ReminderType.EXPIRATION_DATE ||
+            isInThePast(reminderEvent)
+        ) {
+            return null
+        }
+
+        val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return null
+        return StockChange(
+            reminderEvent.stockBefore,
+            (reminderEvent.stockBefore - amount).coerceAtLeast(0.0),
+            reminderEvent.stockUnit
+        )
+    }
+
+    private fun isInThePast(reminderEvent: ReminderEvent): Boolean =
+        reminderEvent.remindedTimestamp.atZone(timeAccess.systemZone()).toLocalDate()
+            .isBefore(timeAccess.localDate())
 
     private fun mapReminderEventState(reminderEvent: ReminderEvent): OverviewState {
         return when (reminderEvent.status) {
