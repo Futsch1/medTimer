@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview.model
 
-import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -86,7 +86,7 @@ class PastReminderEvent @AssistedInject constructor(
             return null
         }
 
-        val amount = MedicineHelper.parseAmount(reminderEvent.amount) ?: return null
+        val amount = DoseAmountParser.parseAmount(reminderEvent.amount) ?: return null
         return StockChange(
             reminderEvent.stockBefore,
             (reminderEvent.stockBefore - amount).coerceAtLeast(0.0),

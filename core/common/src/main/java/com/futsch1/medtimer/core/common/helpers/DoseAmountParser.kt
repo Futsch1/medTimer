@@ -51,17 +51,17 @@ object DoseAmountParser {
     fun summarize(amounts: List<String>): DoseUnitSummary {
         val parsed = amounts.map { parse(it) }
         val units = mutableListOf<MutableUnitCount>()
-        for (dose in parsed.filterNotNull()) {
+        for ((_, unit) in parsed.filterNotNull()) {
             val existing = units.firstOrNull { group ->
-                group.forms.any { DoseUnitComparator.compare(it, dose.unit) != null }
+                group.forms.any { DoseUnitComparator.compare(it, unit) != null }
             }
             if (existing == null) {
-                units += MutableUnitCount(dose.unit, mutableListOf(dose.unit), 1)
+                units += MutableUnitCount(unit, mutableListOf(unit), 1)
             } else {
-                existing.unit = DoseUnitComparator.compare(existing.unit, dose.unit)
-                    ?: existing.forms.firstNotNullOfOrNull { DoseUnitComparator.compare(it, dose.unit) }
-                    ?: existing.unit
-                existing.forms += dose.unit
+                existing.unit = DoseUnitComparator.compare(existing.unit, unit)
+                    ?: existing.forms.firstNotNullOfOrNull { DoseUnitComparator.compare(it, unit) }
+                            ?: existing.unit
+                existing.forms += unit
                 existing.count++
             }
         }
