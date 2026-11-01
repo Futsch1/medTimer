@@ -107,8 +107,9 @@ class StockSettingsFragment : MedicinePreferences(
     }
 
     override fun customSetup(modelData: Medicine) {
-        setupAmountEdit(findPreference("amount")!!)
-        setupAmountEdit(findPreference("stock_refill_size")!!)
+        val unit = MedicineHelper.getUnit(modelData)
+        setupAmountEdit(findPreference("amount")!!, unit)
+        setupAmountEdit(findPreference("stock_refill_size")!!, unit)
 
         observeRunOutDate(modelData.id)
     }
@@ -218,9 +219,10 @@ fun EditText.addDoubleValidator() {
     })
 }
 
-fun setupAmountEdit(editTextPreference: EditTextPreference) {
+fun setupAmountEdit(editTextPreference: EditTextPreference, unit: String = "") {
     editTextPreference.setOnBindEditTextListener { editText ->
         editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        editText.hint = unit.takeIf(String::isNotBlank)
         editText.addDoubleValidator()
         editText.keyListener = DigitsKeyListener.getInstance(Locale.getDefault(), false, true)
     }
