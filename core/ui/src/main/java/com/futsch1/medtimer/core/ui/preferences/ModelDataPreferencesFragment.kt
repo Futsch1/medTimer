@@ -81,12 +81,11 @@ abstract class ModelDataPreferencesFragment<T>(
 
             withContext(mainDispatcher) {
                 setPreferencesFromResource(preferencesResId, rootKey)
-                observeUserData()
                 setupLinks()
                 setupOnClick()
                 customSetup(dataStore.modelData)
 
-                startPostponedEnterTransition()
+                observeUserData()
             }
         }
     }
@@ -112,6 +111,7 @@ abstract class ModelDataPreferencesFragment<T>(
                 }
                 dataStore.modelData = modelData
                 onModelDataUpdated(modelData)
+                startPostponedEnterTransition()
                 idlingResource.setIdle()
             }
         }

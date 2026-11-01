@@ -52,7 +52,7 @@ class ScreenshotsTest : MedTimerTestBase() {
         medicines.clickItem(0)
         Screengrab.screenshot("3")
 
-        reminders.inSettingsOf(0) { Screengrab.screenshot("4") }
+        reminders.inSettingsOf(1) { Screengrab.screenshot("4") }
 
         navigation.toAnalysis()
         // Default view is Charts; no chip click needed
