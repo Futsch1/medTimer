@@ -36,14 +36,16 @@ issue #1776 are deferred. The stock shortcut's icon/menu treatment is also defer
 - Trim unit text and compare case-insensitively. Recognize explicitly supported singular/plural forms as equivalent
   (for example, `capsule` and `capsules`); otherwise require exact text. Do not infer broader semantic equivalence or
   convert between units. The supported inflections are a bounded, maintained list, not general language morphology.
-- A missing unit is unspecified. It conflicts with a named unit unless the retained legacy unit supplies the fallback
-  for that unitless dose. All-unitless reminders remain unitless.
+- A missing unit is unspecified. It conflicts with a named unit; all-unitless reminders remain unitless. Do not use
+  the persisted legacy `Medicine.unit` value as a fallback. Keeping that value active would require exposing another
+  editable unit setting, which is intentionally out of scope to keep stock setup simpler.
 - Show a warning panel above reminders in the Compose Edit Medicine screen when active dose reminders disagree. The
   warning is advisory: reminder scheduling, dose recording, stock arithmetic, and forecasts continue. While units
   conflict, show stock balances without a unit and explain that the figures may be unreliable.
-- Remove the separate stock-unit editor, but retain the saved `Medicine.unit` value as a fallback for unitless doses and
-  historical data. Do not compare it with explicit reminder units and do not remove its database column in this plan.
-  Configured reminders determine the unit when they provide one; the help page explains this transition.
+- Do not use the saved legacy `Medicine.unit` value for stock-unit inference or historical dose labeling. Configured
+  reminders determine the effective unit; unitless reminders remain unitless unless they conflict with named units.
+  Keep the database column unchanged in this plan; no schema migration is planned. Do not add a separate stock-unit
+  editor, because that would make users maintain another setting.
 - Preserve the Level Estimate's historical-data role: it can continue checking recorded doses for its own estimate, but
   recorded doses must not determine the stock unit.
 
@@ -64,16 +66,16 @@ issue #1776 are deferred. The stock shortcut's icon/menu treatment is also defer
 
 ### 2. Infer configured units and warn about conflicts
 
-- Derive a medicine's effective unit from its active dose-taking reminder amounts. Apply the legacy-unit fallback only
-  to unitless reminder amounts; ignore recorded-dose history for stock-unit inference.
+- Derive a medicine's effective unit from its active dose-taking reminder amounts only; ignore the legacy unit value
+  and recorded-dose history for stock-unit inference.
 - Treat disagreement between explicit units, or between an unspecified unit and a named unit, as a conflict. Apply
   trimmed, case-insensitive comparison and the explicitly supported singular/plural equivalences; do not convert units.
 - Add a warning panel directly above the reminder list in the Compose Edit Medicine screen. Identify the conflicting
   units and explain that stock uses the first parsed number with no unit conversion.
 - Keep the warning non-blocking. Continue all stock updates and forecasts; omit the unit from stock balances while a
   conflict exists.
-- Test active versus inactive reminders, stock/expiration alerts, missing and legacy-fallback units, explicit unit
-  conflicts, case-only differences, and supported singular/plural equivalences.
+- Test active versus inactive reminders, stock/expiration alerts, missing units, explicit unit conflicts, case-only
+  differences, and supported singular/plural equivalences. Confirm the persisted legacy unit does not affect inference.
 
 ### 3. Clarify stock settings and stock displays
 
@@ -101,7 +103,7 @@ Document:
 - Active dose reminders should use a consistent unit. Explain the advisory warning and that conflicting-unit stock
   figures/forecasts may be unreliable while calculations continue.
 - How remaining stock, refill amount, stock run-out estimates, and the calendar action relate.
-- The retained legacy unit's limited fallback role for unitless doses.
+- The legacy `Medicine.unit` value is not used for stock-unit inference; users do not need to maintain a separate unit.
 
 ## Acceptance criteria
 
@@ -120,10 +122,10 @@ The current branch implements the shared parser, configured-unit summary, warnin
 stock-setting/help entry point, and most stock display changes. The following plan/implementation differences and open
 questions remain for a follow-up session:
 
-- **Legacy-unit fallback is unresolved.** This plan requires the persisted `Medicine.unit` to supply a fallback for
-  unitless configured doses. The branch removes `unit` from the domain model and mapper, and `MedicineHelper.getUnit()`
-  derives units from active dose reminders only. Decide whether to implement the fallback or revise this plan and
-  ADR 0006 to remove it. No database migration was added.
+- **Legacy-unit fallback is intentionally rejected.** Using the persisted `Medicine.unit` would require exposing a
+  separate editable unit setting, which is deliberately avoided to keep setup simple. The branch removes `unit` from
+  the domain model and mapper, and `MedicineHelper.getUnit()` derives units from active dose reminders only. The Room
+  column remains untouched; no database migration was added. Update ADR 0006 to record this decision.
 - **Dose previews are not yet present in every planned input.** They are shown in the Compose reminder creation and
   reminder amount-edit dialogs. Confirm whether manual-dose and reminder-event edit inputs need previews too; their
   calculation paths use the shared parser, but this branch does not add equivalent visible feedback there.
@@ -144,8 +146,8 @@ questions remain for a follow-up session:
 
 - Compose migration itself (a precondition, not part of this plan).
 - Choosing/replacing the stock shortcut icon or redesigning its option menu; revisit after the Compose migration.
-- Removing the legacy `Medicine.unit` database field, comparing it to explicit reminder units, or migrating old stock
-  values.
+- Removing the legacy `Medicine.unit` database field or migrating old stock values. The field is not used for unit
+  inference; no Room schema change is planned here.
 - Physical tablet/capsule/package inventory, strength modeling, dose conversion, and conversion of recorded-dose
   history.
 - Non-stock usability changes from issue #1776.
