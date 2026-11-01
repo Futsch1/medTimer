@@ -28,7 +28,7 @@ test_instrumentation_runner="com.futsch1.medtimer.harness.MedTimerHiltTestRunner
 
 for i in "${locales[@]}"; do
 	start_clean_status_bar
-	if [[ "$i" == "en-US" ]]; then
+	if [[ $i == "en-US" ]]; then
 		adb shell settings put system time_12_24 12
 	else
 		adb shell settings put system time_12_24 24
