@@ -392,6 +392,7 @@ represent SVG `<g>` transforms, stroke styling, or clipping. For SVGs that must 
 
    Filled paths remain paths. **Do not use `transform-remove` to bake transforms**: it strips transform attributes
    without applying them to path coordinates.
+
 2. Extract the artwork paths from the exported SVG, skipping definition-only paths (for example, paths inside
    `<clipPath>`). Compose each path's ancestor transforms from outermost to innermost and apply them to its `d` data
    with Inkscape's bundled Python `inkex` library. Its extension directory is commonly
@@ -410,6 +411,7 @@ represent SVG `<g>` transforms, stroke styling, or clipping. For SVGs that must 
    If the source artwork is still in a 24-unit coordinate space after its existing transforms, apply an additional
    `scale(2/3)` to the resulting path to fit the pack's 16×16 viewport. Don't scale SVGs whose existing transforms
    already map their artwork into 16 units.
+
 3. Join the visible path data with spaces into the `<icon path="…" />` attribute; don't leave transform or stroke
    attributes behind. If clipping changes the visible artwork beyond the viewport crop, resolve the clip in Inkscape
    before extracting paths. Round coordinates only as much as needed—the 16-unit icons tolerate modest precision
