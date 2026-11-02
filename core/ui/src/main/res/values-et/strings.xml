@@ -373,4 +373,8 @@
     <string name="setup_guidance_getting_started">Esmane ülevaade</string>
     <string name="reminder_types_help">Lisateave meeldetuletuste tüüpide kohta</string>
     <string name="notifications_missing_or_late">Teavitused on puudu või on hiljaks jäänud</string>
+    <string name="remaining_stock">Varudes on alles</string>
+    <string name="stock_decrement_preview">Varude vähenemise määr: %1$s.</string>
+    <string name="stock_decrement_unreadable">Varude vähenemist ei ole võimalik kindlaks määrata, kuna see kogus on vigane.</string>
+    <string name="inconclusive_dose_units_warning">Annuse/doosi ühikud ei ole ühesed: %1$s. Varude jälgimine ja taseme hinnangud võivad olla ebatäpsed.</string>
 </resources>
