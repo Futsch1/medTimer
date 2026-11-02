@@ -45,7 +45,7 @@ class OutOfStockNotificationFactory @AssistedInject constructor(
         )
         val intentBuilder = StockIntentBuilder(context, reminderNotification)
 
-        builder.setSmallIcon(R.drawable.box_seam)
+        builder.setSmallIcon(R.drawable.medication_pill_bottle)
             .setContentTitle(context.getString(R.string.out_of_stock_notification_title))
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
             .setContentText(notificationMessage)

@@ -379,6 +379,46 @@ glyphs. Multi-`<path>` Bootstrap icons (e.g. `calendar3`) become one `<path>` el
 **Android Studio:** **New → Vector Asset → Local file** and point it at the downloaded `.svg`; the wizard writes the
 `<vector>` for you. Rename it to the underscored Bootstrap name afterwards.
 
+### Converting SVGs for the path-only icon pack
+
+The custom pack at `:core:ui/src/main/res/xml/icon_pack.xml` accepts one path-data string per `<icon>`; it cannot
+represent SVG `<g>` transforms, stroke styling, or clipping. For SVGs that must go in this file:
+
+1. Use Inkscape to convert visible strokes into filled outlines and export a plain SVG:
+
+   ```bash
+   inkscape source.svg --actions='select-all:all;object-stroke-to-path;export-plain-svg;export-filename:/tmp/outlined.svg;export-do'
+   ```
+
+   Filled paths remain paths. **Do not use `transform-remove` to bake transforms**: it strips transform attributes
+   without applying them to path coordinates.
+
+2. Extract the artwork paths from the exported SVG, skipping definition-only paths (for example, paths inside
+   `<clipPath>`). Compose each path's ancestor transforms from outermost to innermost and apply them to its `d` data
+   with Inkscape's bundled Python `inkex` library. Its extension directory is commonly
+   `/usr/share/inkscape/extensions`; add that directory to `PYTHONPATH` to import `inkex`:
+
+   ```python
+   matrix = inkex.Transform()
+   for node in reversed(list(path_element.iterancestors())):
+       if node.get("transform"):
+           matrix = matrix @ inkex.Transform(node.get("transform"))
+   if path_element.get("transform"):
+       matrix = matrix @ inkex.Transform(path_element.get("transform"))
+   path = inkex.Path(path_element.get("d")).transform(matrix)
+   ```
+
+   If the source artwork is still in a 24-unit coordinate space after its existing transforms, apply an additional
+   `scale(2/3)` to the resulting path to fit the pack's 16×16 viewport. Don't scale SVGs whose existing transforms
+   already map their artwork into 16 units.
+
+3. Join the visible path data with spaces into the `<icon path="…" />` attribute; don't leave transform or stroke
+   attributes behind. If clipping changes the visible artwork beyond the viewport crop, resolve the clip in Inkscape
+   before extracting paths. Round coordinates only as much as needed—the 16-unit icons tolerate modest precision
+   reduction, but inspect thin details after rounding.
+4. Render a 16×16 preview to check the result, validate the XML/path data, and run `./gradlew assembleDebug` to check
+   Android resource processing for both flavors.
+
 ## Testing — pointer
 
 See [testing.md](testing.md) for the full Compose testing section. In brief:

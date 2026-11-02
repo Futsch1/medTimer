@@ -173,7 +173,7 @@ class ReminderStringFormatter @Inject constructor(
                 || !simulatedReminder.scheduledReminder.medicine.isStockManagementActive()
             ) return SpannableStringBuilder()
 
-            val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
+            val drawable = ContextCompat.getDrawable(context, R.drawable.medication_pill_bottle)
             if (drawable != null) {
                 span.append(", ")
                 val iconStart = span.length
@@ -209,7 +209,7 @@ class ReminderStringFormatter @Inject constructor(
             reminderEvent.stockBefore == reminderEvent.stockAfter
         ) return SpannableStringBuilder()
         val span = SpannableStringBuilder()
-        val drawable = ContextCompat.getDrawable(context, R.drawable.box_seam)
+        val drawable = ContextCompat.getDrawable(context, R.drawable.medication_pill_bottle)
         if (drawable != null) {
             span.append(", ")
             val iconStart = span.length

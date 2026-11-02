@@ -126,7 +126,7 @@ fun EditMedicineMenu(actions: EditMedicineActions) {
             item(CoreUiR.string.tags, CoreUiR.drawable.tag) {
                 actions.open(EditMedicineSubmenus.Submenu.TAGS)
             }
-            item(CoreUiR.string.medicine_stock_settings, CoreUiR.drawable.box_seam) {
+            item(CoreUiR.string.medicine_stock_settings, CoreUiR.drawable.medication_pill_bottle) {
                 actions.open(EditMedicineSubmenus.Submenu.STOCK_TRACKING)
             }
             item(CoreUiR.string.calendar, CoreUiR.drawable.calendar_week) {

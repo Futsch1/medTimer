@@ -99,7 +99,7 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
         OptionalDetail(content.stock) { stock ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(
-                    painter = painterResource(CoreUiR.drawable.box_seam),
+                    painter = painterResource(CoreUiR.drawable.medication_pill_bottle),
                     contentDescription = null,
                     modifier = Modifier.size(DETAIL_ICON_SIZE),
                 )

@@ -9,7 +9,7 @@ fun ReminderType.getIcon(): Int {
         ReminderType.LINKED -> R.drawable.link
         ReminderType.CONTINUOUS_INTERVAL -> R.drawable.repeat
         ReminderType.WINDOWED_INTERVAL -> R.drawable.interval
-        ReminderType.OUT_OF_STOCK -> R.drawable.box_seam
+        ReminderType.OUT_OF_STOCK -> R.drawable.medication_pill_bottle
         ReminderType.EXPIRATION_DATE -> R.drawable.ban
         ReminderType.REFILL -> R.drawable.cart2
     }
