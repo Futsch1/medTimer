@@ -32,6 +32,9 @@ class AlarmFragment(
 ) : Fragment() {
     lateinit var reminderNotificationData: ReminderNotificationData
 
+    /** Drops a text update that finished after a newer alarm was shown. */
+    private var showGeneration = 0
+
     @Inject
     lateinit var notificationIntentBuilderFactory: NotificationIntentBuilder.Factory
 
@@ -47,9 +50,7 @@ class AlarmFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val bundle = requireArguments()
-
-        reminderNotificationData = bundle.toReminderNotificationData()
+        reminderNotificationData = requireArguments().toReminderNotificationData()
     }
 
     override fun onCreateView(
@@ -59,12 +60,30 @@ class AlarmFragment(
     ): View? {
         val view = inflater.inflate(R.layout.fragment_alarm, container, false)
 
+        showReminderNotification(view, reminderNotificationData)
+
+        return view
+    }
+
+    /**
+     * Shows the reminders of an alarm that reached the running alarm screen, so the screen shows the
+     * alarm that fired and not the alarm before.
+     */
+    fun showReminderNotificationData(extras: Bundle) {
+        arguments = extras
+        reminderNotificationData = extras.toReminderNotificationData()
+
+        view?.let { showReminderNotification(it, reminderNotificationData) }
+    }
+
+    private fun showReminderNotification(view: View, reminderNotificationData: ReminderNotificationData) {
+        val generation = ++showGeneration
         lifecycleScope.launch {
             withContext(ioCoroutineDispatcher) {
                 val reminderNotification = reminderNotificationFactory.create(
                     reminderNotificationData
                 )!!
-                Log.d(ALARM, "Creating fragment for raised notification $reminderNotification")
+                Log.d(ALARM, "Showing reminder notification $reminderNotification")
 
                 val notificationStrings = NotificationStringBuilder(
                     requireContext(),
@@ -76,6 +95,7 @@ class AlarmFragment(
                 val intents = notificationIntentBuilderFactory.create(reminderNotification)
 
                 withContext(mainDispatcher) {
+                    if (generation != showGeneration) return@withContext
                     setupTexts(
                         view,
                         notificationStrings,
@@ -87,9 +107,6 @@ class AlarmFragment(
                 }
             }
         }
-
-
-        return view
     }
 
     private fun setupTexts(
