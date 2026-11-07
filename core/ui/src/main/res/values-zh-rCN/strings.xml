@@ -370,4 +370,5 @@
     <string name="notifications_missing_or_late">通知缺失或迟到</string>
     <string name="stock_decrement_preview">库存将减少 %1$s。</string>
     <string name="stock_decrement_unreadable">此数量无效，无法确定库存减少量。</string>
+    <string name="inconclusive_dose_units_warning">剂量单位非确定： %1$s。存货跟踪和数量预估可能不准确。</string>
 </resources>
