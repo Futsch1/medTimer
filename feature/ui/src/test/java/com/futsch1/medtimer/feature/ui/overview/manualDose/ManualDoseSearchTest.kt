@@ -1,6 +1,7 @@
 package com.futsch1.medtimer.feature.ui.overview.manualDose
 
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
+import com.futsch1.medtimer.core.domain.model.ManualDoses
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.domain.model.PersistentData
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
@@ -49,6 +50,29 @@ class ManualDoseSearchTest {
 
         assertEquals(manyMedicines, viewModel.labels())
         assertEquals("", viewModel.searchQuery)
+    }
+
+    @Test
+    fun `should include recent dose labels without duplicating medicine names or recent labels`() = runTest {
+        val medicineRepository: MedicineRepository = mock()
+        whenever(medicineRepository.getAllFlow()).thenReturn(
+            flowOf(listOf(Medicine.default().copy(id = 1, name = "Medicine A")))
+        )
+        val persistentDataDataSource: PersistentDataDataSource = mock()
+        whenever(persistentDataDataSource.data).thenReturn(
+            MutableStateFlow(
+                PersistentData.default().copy(
+                    lastManualDoses = ManualDoses(
+                        """[{"medicineLabel":"Medicine A","medicineId":1,"amount":"1"},{"medicineLabel":"Medicine B","amount":"2"},{"medicineLabel":"Medicine B","amount":"3"}]"""
+                    ),
+                )
+            )
+        )
+        val viewModel = ManualDoseViewModel(medicineRepository, mock(), mock(), persistentDataDataSource, mock(), mock())
+
+        assertEquals(listOf("Medicine A", "Medicine B"), viewModel.labels())
+        viewModel.selectMedicineEntry(viewModel.state.first().medicineEntries.last())
+        assertEquals(listOf("2", "3"), viewModel.state.first().amounts)
     }
 
     @Test

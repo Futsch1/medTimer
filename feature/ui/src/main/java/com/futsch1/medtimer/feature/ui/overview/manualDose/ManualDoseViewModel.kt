@@ -64,11 +64,17 @@ class ManualDoseViewModel @Inject constructor(
     private data class MedicineChoices(val entries: List<ManualDoseMedicineEntry>, val showSearch: Boolean)
 
     private val manualDoseMedicines: Flow<MedicineChoices> =
-        combine(medicineList, snapshotFlow { searchQuery.trim() }) { medicines, query ->
+        combine(medicineList, snapshotFlow { searchQuery.trim() }, persistentDataDataSource.data) { medicines, query, persistentData ->
+            val entries = medicines.map { ManualDoseMedicineEntry(it.name, it) }.toMutableList()
+            persistentData.lastManualDoses.doses.forEach { dose ->
+                val label = dose.medicineLabel?.takeIf(String::isNotBlank) ?: return@forEach
+                if (entries.any { it.label.equals(label, ignoreCase = true) }) return@forEach
+                val medicine = dose.medicineId?.let { id -> medicines.find { it.id == id } }
+                entries += ManualDoseMedicineEntry(label, medicine)
+            }
             MedicineChoices(
-                entries = medicines.filter { it.name.contains(query, ignoreCase = true) }
-                    .map { ManualDoseMedicineEntry(it.name, it) },
-                showSearch = medicines.size > SEARCH_MIN_MEDICINES,
+                entries = entries.filter { it.label.contains(query, ignoreCase = true) },
+                showSearch = entries.size > SEARCH_MIN_MEDICINES,
             )
         }
 
@@ -94,17 +100,24 @@ class ManualDoseViewModel @Inject constructor(
 
     private val manualDoseAmounts: Flow<List<String>> = combine(
         _reminderList,
-        selectedManualDoseEntry
-    ) { reminders, manualDoseEntry ->
+        selectedManualDoseEntry,
+        persistentDataDataSource.data,
+    ) { reminders, manualDoseEntry, persistentData ->
         val medicine = manualDoseEntry.medicine
-        if (medicine == null) {
+        val reminderAmounts = if (medicine == null) {
             emptyList()
         } else {
             reminders.filter { !it.isOutOfStockOrExpirationReminder }
                 .map { it.amount.trim() }
                 .filter(String::isNotEmpty)
-                .distinct()
         }
+        (reminderAmounts + persistentData.lastManualDoses.doses
+            .filter { dose ->
+                dose.medicineLabel.equals(manualDoseEntry.label, ignoreCase = true) ||
+                    (medicine != null && dose.medicineId == medicine.id)
+            }
+            .mapNotNull { it.amount?.trim()?.takeIf(String::isNotEmpty) })
+            .distinct()
     }
 
     fun selectAmount(amount: String) {

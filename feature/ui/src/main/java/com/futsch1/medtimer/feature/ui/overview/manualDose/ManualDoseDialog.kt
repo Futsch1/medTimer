@@ -590,7 +590,7 @@ fun MedicineList(
             .testTag(ManualDoseTestTags.MEDICINE_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
+        items(medicineEntries, key = { entry -> entry.medicine?.id ?: entry.label }) { entry ->
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
