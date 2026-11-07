@@ -72,11 +72,10 @@
     <string name="widget_disabled_privacy">Widgets disabled for privacy — open app to view reminders</string>
     <string name="recent_events">Recent events</string>
     <string name="recent_doses">Recent doses</string>
-    <string name="quick_log">Quick log</string>
-    <string name="log_now">Log now</string>
+    <string name="quick_log">Quick log at this time</string>
     <string name="choose_medicine">Choose a medicine</string>
     <string name="no_amount">No amount</string>
-    <string name="log_at_current_time">Log at current time</string>
+    <string name="log_at_current_time">Log at this time</string>
     <string name="log_at_another_time">Log at another time</string>
     <string name="manual_dose_logged">Dose logged</string>
     <string name="manual_dose_log_failed">Could not log dose</string>

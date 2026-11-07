@@ -383,11 +383,10 @@
     <string name="reminder_types_help">Scopri di più sui tipi di promemoria</string>
     <string name="stock_decrement_preview">Le scorte diminuiranno di %1$s.</string>
     <string name="stock_decrement_unreadable">Impossibile determinare la riduzione delle scorte perché questa quantità non è valida.</string>
-    <string name="quick_log">Registrazione rapida</string>
-    <string name="log_now">Registra ora</string>
+    <string name="quick_log">Registrazione rapida a quest’ora</string>
     <string name="choose_medicine">Scegli un farmaco</string>
     <string name="no_amount">Nessuna quantità</string>
-    <string name="log_at_current_time">Registra all’ora attuale</string>
+    <string name="log_at_current_time">Registra a quest’ora</string>
     <string name="log_at_another_time">Registra a un altro orario</string>
     <string name="manual_dose_logged">Dose registrata</string>
     <string name="manual_dose_log_failed">Impossibile registrare la dose</string>

@@ -377,11 +377,10 @@
     <string name="reminder_types_help">Meer informatie over herinneringstypen</string>
     <string name="stock_decrement_preview">De voorraad neemt af met %1$s.</string>
     <string name="stock_decrement_unreadable">De voorraadvermindering kan niet worden bepaald omdat deze hoeveelheid ongeldig is.</string>
-    <string name="quick_log">Snel loggen</string>
-    <string name="log_now">Log nu</string>
+    <string name="quick_log">Snel loggen op dit tijdstip</string>
     <string name="choose_medicine">Kies een medicijn</string>
     <string name="no_amount">Geen hoeveelheid</string>
-    <string name="log_at_current_time">Log op het huidige tijdstip</string>
+    <string name="log_at_current_time">Log op dit tijdstip</string>
     <string name="log_at_another_time">Log op een ander tijdstip</string>
     <string name="manual_dose_logged">Dosis gelogd</string>
     <string name="manual_dose_log_failed">Dosis kon niet worden gelogd</string>

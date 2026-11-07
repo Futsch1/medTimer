@@ -380,11 +380,10 @@
     <string name="setup_no_reminders_guidance">Um medicamento por si só não agenda notificações. Adicione um lembrete para agendar notificações.</string>
     <string name="setup_guidance_getting_started">Primeiros passos</string>
     <string name="reminder_types_help">Saiba mais sobre os tipos de lembrete</string>
-    <string name="quick_log">Registro rápido</string>
-    <string name="log_now">Registrar agora</string>
+    <string name="quick_log">Registro rápido neste horário</string>
     <string name="choose_medicine">Escolha um medicamento</string>
     <string name="no_amount">Sem quantidade</string>
-    <string name="log_at_current_time">Registrar no horário atual</string>
+    <string name="log_at_current_time">Registrar neste horário</string>
     <string name="log_at_another_time">Registrar em outro horário</string>
     <string name="manual_dose_logged">Dose registrada</string>
     <string name="manual_dose_log_failed">Não foi possível registrar a dose</string>

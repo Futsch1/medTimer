@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -38,6 +39,7 @@ data class ManualDoseMedicineWithAmountEntry(
     val amount: String,
     val medicineId: Int? = medicine?.id,
 )
+
 data class ManualDoseSaveResult(val event: ReminderEvent?, val day: LocalDate)
 
 @HiltViewModel
@@ -149,33 +151,33 @@ class ManualDoseViewModel @Inject constructor(
         )
     }
 
-    private val selectedDay: MutableStateFlow<LocalDate> = MutableStateFlow(LocalDate.now())
+    private val selectedDateTime: MutableStateFlow<LocalDateTime> = MutableStateFlow(LocalDateTime.now())
 
-    fun selectDay(day: LocalDate) {
-        selectedDay.value = day
+    fun setSelectedDateTime(dateTime: LocalDateTime) {
+        selectedDateTime.value = dateTime
     }
 
     val state: Flow<ManualDoseState> = combine(
         availableState,
         selectedManualDoseEntry,
         selectedManualDoseAmount,
-        selectedDay,
+        selectedDateTime,
         step,
-    ) { available, selectedEntry, selectedAmount, selectedDay, step ->
+    ) { available, selectedEntry, selectedAmount, selectedDateTime, step ->
         available.copy(
             selectedMedicine = selectedEntry,
             selectedAmount = selectedAmount,
-            selectedDay = timeFormatter.localDateToString(selectedDay),
+            selectedDateTime = timeFormatter.toDateTimeString(selectedDateTime),
             step = step,
         )
     }
 
-    fun selectTimeAndLog(doseLocalTime: LocalTime, onResult: (ManualDoseSaveResult) -> Unit) {
+    fun selectTimeAndLog(doseLocalTime: LocalTime?, onResult: (ManualDoseSaveResult) -> Unit) {
+        val selectedDoseDateTime = selectedDateTime.value
         submitDose(
             selectedManualDoseEntry.value,
             selectedManualDoseAmount.value,
-            selectedDay.value,
-            doseLocalTime,
+            doseLocalTime?.let { selectedDoseDateTime.with(it) } ?: selectedDoseDateTime,
             onResult,
         )
     }
@@ -184,8 +186,7 @@ class ManualDoseViewModel @Inject constructor(
         submitDose(
             ManualDoseMedicineEntry(dose.label, dose.medicine),
             dose.amount,
-            selectedDay.value,
-            LocalTime.now(),
+            selectedDateTime.value,
             onResult,
             dose.medicineId,
         )
@@ -194,22 +195,20 @@ class ManualDoseViewModel @Inject constructor(
     private fun submitDose(
         selectedEntry: ManualDoseMedicineEntry,
         amount: String,
-        day: LocalDate,
-        localTime: LocalTime,
+        doseDateTime: LocalDateTime,
         onResult: (ManualDoseSaveResult) -> Unit,
         medicineId: Int? = selectedEntry.medicine?.id,
     ) {
         val label = selectedEntry.label.trim()
         val entry = selectedEntry.copy(label = label)
         val trimmedAmount = amount.trim()
-        val doseDateTime = day.atTime(localTime)
         val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
         val reminderEvent = createReminderEvent(entry, trimmedAmount, doseInstant)
 
         viewModelScope.launch {
             val event = reminderEventRepository.create(reminderEvent)
             persistentDataDataSource.addManualDose(ManualDose(entry.label, medicineId, trimmedAmount))
-            onResult(ManualDoseSaveResult(event, day))
+            onResult(ManualDoseSaveResult(event, doseDateTime.toLocalDate()))
             entry.medicine?.let { medicine ->
                 val parsedAmount = DoseAmountParser.parseAmount(trimmedAmount)
                 if (parsedAmount != null && medicine.isStockManagementActive()) {

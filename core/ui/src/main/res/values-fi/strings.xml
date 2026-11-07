@@ -377,11 +377,10 @@
     <string name="reminder_types_help">Lue lisää muistutustyypeistä</string>
     <string name="stock_decrement_preview">Varasto vähenee määrällä %1$s.</string>
     <string name="stock_decrement_unreadable">Varaston vähennystä ei voida määrittää, koska tämä määrä ei ole kelvollinen.</string>
-    <string name="quick_log">Pikakirjaus</string>
-    <string name="log_now">Kirjaa nyt</string>
+    <string name="quick_log">Pikakirjaus tähän aikaan</string>
     <string name="choose_medicine">Valitse lääke</string>
     <string name="no_amount">Ei määrää</string>
-    <string name="log_at_current_time">Kirjaa nykyisellä kellonajalla</string>
+    <string name="log_at_current_time">Kirjaa tähän aikaan</string>
     <string name="log_at_another_time">Kirjaa toisella kellonajalla</string>
     <string name="manual_dose_logged">Annos kirjattu</string>
     <string name="manual_dose_log_failed">Annoksen kirjaaminen epäonnistui</string>

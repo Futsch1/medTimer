@@ -377,11 +377,10 @@
     <string name="reminder_types_help">Få mere at vide om påmindelsestyper</string>
     <string name="stock_decrement_preview">Lageret reduceres med %1$s.</string>
     <string name="stock_decrement_unreadable">Lagerreduktionen kan ikke beregnes, fordi denne mængde er ugyldig.</string>
-    <string name="quick_log">Hurtig registrering</string>
-    <string name="log_now">Registrer nu</string>
+    <string name="quick_log">Hurtig registrering på dette tidspunkt</string>
     <string name="choose_medicine">Vælg et lægemiddel</string>
     <string name="no_amount">Ingen mængde</string>
-    <string name="log_at_current_time">Registrer på det aktuelle tidspunkt</string>
+    <string name="log_at_current_time">Registrer på dette tidspunkt</string>
     <string name="log_at_another_time">Registrer på et andet tidspunkt</string>
     <string name="manual_dose_logged">Dosis registreret</string>
     <string name="manual_dose_log_failed">Dosis kunne ikke registreres</string>

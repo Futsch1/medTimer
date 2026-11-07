@@ -36,8 +36,9 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.time.Instant
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManualDoseViewModelTest {
@@ -81,11 +82,18 @@ class ManualDoseViewModelTest {
         )
 
         val dose = viewModel.state.first().lastCustomDoses.single()
+        val selectedDateTime = LocalDateTime.of(2025, 3, 8, 9, 15)
+        viewModel.setSelectedDateTime(selectedDateTime)
         assertNull(dose.medicineId)
         var result: ManualDoseSaveResult? = null
         viewModel.logRecentDose(dose) { result = it }
 
         assertNotNull(result?.event)
+        assertEquals(
+            selectedDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(selectedDateTime)),
+            result?.event?.remindedTimestamp,
+        )
+        assertEquals(selectedDateTime.toLocalDate(), result?.day)
         verify(persistentDataDataSource).addManualDose(ManualDose(MEDICINE_A, null, TWO_TABLETS))
     }
 
@@ -148,7 +156,7 @@ class ManualDoseViewModelTest {
     }
 
     @Test
-    fun `should log a manual dose with the current timestamp`() = runTest {
+    fun `should log a manual dose at the timestamp captured when the dialog opened`() = runTest {
         val viewModel = ManualDoseViewModel(
             medicineRepository = mock<MedicineRepository>().also {
                 whenever(it.getAllFlow()).thenReturn(flowOf(emptyList()))
@@ -159,15 +167,15 @@ class ManualDoseViewModelTest {
             commandBus = mock<ReminderCommandBus>(),
             timeFormatter = mock<TimeFormatter>(),
         )
-        val beforeLog = Instant.now()
+        val selectedDateTime = LocalDateTime.of(2025, 3, 8, 9, 15)
+        viewModel.setSelectedDateTime(selectedDateTime)
 
         assertFalse(viewModel.selectMedicineEntry(ManualDoseMedicineEntry("  ", null)))
         assertTrue(viewModel.selectMedicineEntry(ManualDoseMedicineEntry(MEDICINE_A, null)))
         viewModel.selectAmount("  $TWO_TABLETS  ")
         var result: ManualDoseSaveResult? = null
-        viewModel.selectTimeAndLog(LocalTime.now()) { result = it }
+        viewModel.selectTimeAndLog(null) { result = it }
 
-        val afterLog = Instant.now()
         val eventCaptor = argumentCaptor<ReminderEvent>()
         verify(reminderEventRepository).create(eventCaptor.capture())
         val event = eventCaptor.firstValue
@@ -175,9 +183,41 @@ class ManualDoseViewModelTest {
         assertEquals(MEDICINE_A, event.medicineName)
         assertEquals(TWO_TABLETS, event.amount)
         assertEquals(-1, event.reminderId)
-        assertTrue(event.remindedTimestamp >= beforeLog)
-        assertTrue(event.remindedTimestamp <= afterLog)
+        assertEquals(
+            selectedDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(selectedDateTime)),
+            event.remindedTimestamp,
+        )
+        assertEquals(selectedDateTime.toLocalDate(), result?.day)
         assertEquals(event.remindedTimestamp, event.processedTimestamp)
         verify(persistentDataDataSource).addManualDose(ManualDose(MEDICINE_A, null, TWO_TABLETS))
+    }
+
+    @Test
+    fun `alternate time keeps the date captured when the dialog opened`() = runTest {
+        val viewModel = ManualDoseViewModel(
+            medicineRepository = mock<MedicineRepository>().also {
+                whenever(it.getAllFlow()).thenReturn(flowOf(emptyList()))
+            },
+            reminderRepository = mock(),
+            reminderEventRepository = reminderEventRepository,
+            persistentDataDataSource = persistentDataDataSource,
+            commandBus = mock<ReminderCommandBus>(),
+            timeFormatter = mock<TimeFormatter>(),
+        )
+        val selectedDateTime = LocalDateTime.of(2025, 3, 8, 9, 15)
+        val selectedTime = LocalTime.of(14, 30)
+        viewModel.setSelectedDateTime(selectedDateTime)
+        viewModel.selectMedicineEntry(ManualDoseMedicineEntry(MEDICINE_A, null))
+
+        var result: ManualDoseSaveResult? = null
+        viewModel.selectTimeAndLog(selectedTime) { result = it }
+
+        val event = argumentCaptor<ReminderEvent>().also { verify(reminderEventRepository).create(it.capture()) }.firstValue
+        val expectedDateTime = selectedDateTime.with(selectedTime)
+        assertEquals(
+            expectedDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(expectedDateTime)),
+            event.remindedTimestamp,
+        )
+        assertEquals(expectedDateTime.toLocalDate(), result?.day)
     }
 }

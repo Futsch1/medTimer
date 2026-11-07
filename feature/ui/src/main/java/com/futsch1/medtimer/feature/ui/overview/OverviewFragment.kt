@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -98,7 +99,7 @@ class OverviewFragment : Fragment() {
                     onLogManualDose = {
                         showManualDoseDialog.value = true
                         manualDoseViewModel.reset()
-                        manualDoseViewModel.selectDay(overviewViewModel.state.day)
+                        manualDoseViewModel.setSelectedDateTime(overviewViewModel.state.day.atTime(LocalTime.now()))
                     },
                     topBarActions = {
                         AppOptionsMenuHost(

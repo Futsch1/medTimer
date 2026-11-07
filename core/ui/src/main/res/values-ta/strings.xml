@@ -377,11 +377,10 @@
     <string name="reminder_types_help">நினைவூட்டல் வகைகள் பற்றி மேலும் அறிக</string>
     <string name="stock_decrement_preview">கையிருப்பு %1$s குறையும்.</string>
     <string name="stock_decrement_unreadable">இந்த அளவு தவறானது என்பதால் கையிருப்பு குறைவைத் தீர்மானிக்க முடியாது.</string>
-    <string name="quick_log">விரைவுப் பதிவு</string>
-    <string name="log_now">இப்போது பதிவு செய்</string>
+    <string name="quick_log">இந்த நேரத்தில் விரைவுப் பதிவு</string>
     <string name="choose_medicine">மருந்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="no_amount">அளவு இல்லை</string>
-    <string name="log_at_current_time">தற்போதைய நேரத்தில் பதிவு செய்</string>
+    <string name="log_at_current_time">இந்த நேரத்தில் பதிவு செய்</string>
     <string name="log_at_another_time">வேறு நேரத்தில் பதிவு செய்</string>
     <string name="manual_dose_logged">மருந்தளவு பதிவுசெய்யப்பட்டது</string>
     <string name="manual_dose_log_failed">மருந்தளவைப் பதிவு செய்ய முடியவில்லை</string>

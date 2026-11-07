@@ -383,11 +383,10 @@
     <string name="reminder_types_help">מידע נוסף על סוגי התזכורות</string>
     <string name="stock_decrement_preview">המלאי יפחת ב־%1$s.</string>
     <string name="stock_decrement_unreadable">לא ניתן לקבוע את הירידה במלאי כי הכמות הזו אינה תקינה.</string>
-    <string name="quick_log">רישום מהיר</string>
-    <string name="log_now">רשום עכשיו</string>
+    <string name="quick_log">רישום מהיר בשעה זו</string>
     <string name="choose_medicine">בחירת תרופה</string>
     <string name="no_amount">ללא כמות</string>
-    <string name="log_at_current_time">רישום בשעה הנוכחית</string>
+    <string name="log_at_current_time">רישום בשעה זו</string>
     <string name="log_at_another_time">רישום בשעה אחרת</string>
     <string name="manual_dose_logged">המנה נרשמה</string>
     <string name="manual_dose_log_failed">לא ניתן לרשום את המנה</string>

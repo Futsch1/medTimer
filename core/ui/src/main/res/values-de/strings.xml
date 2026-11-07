@@ -377,11 +377,10 @@
     <string name="reminder_types_help">Mehr über Erinnerungstypen</string>
     <string name="stock_decrement_preview">Der Vorrat wird um %1$s verringert.</string>
     <string name="stock_decrement_unreadable">Der Vorratsverbrauch kann nicht bestimmt werden, da diese Menge ungültig ist.</string>
-    <string name="quick_log">Schnelle Eintragung</string>
-    <string name="log_now">Jetzt eintragen</string>
+    <string name="quick_log">Schnelle Eintragung zu dieser Uhrzeit</string>
     <string name="choose_medicine">Medikament auswählen</string>
     <string name="no_amount">Keine Dosis</string>
-    <string name="log_at_current_time">Zur aktuellen Uhrzeit eintragen</string>
+    <string name="log_at_current_time">Zu dieser Uhrzeit eintragen</string>
     <string name="log_at_another_time">Zu einer anderen Uhrzeit eintragen</string>
     <string name="manual_dose_logged">Einnahme eingetragen</string>
     <string name="manual_dose_log_failed">Einnahme konnte nicht eingetragen werden</string>

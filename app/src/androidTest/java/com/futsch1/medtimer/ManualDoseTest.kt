@@ -7,6 +7,8 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.LocalDate
+import java.time.ZoneId
 
 private const val TEST_13_ = "Test (13)"
 private const val GINSENG = "Ginseng (200mg)"
@@ -58,6 +60,24 @@ class ManualDoseTest : MedTimerTestBase() {
         overview.assertEventContains(TEST_13_)
 
         navigation.toMedicines()
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun manualDoseUsesSelectedOverviewDate() {
+        val selectedDay = LocalDate.of(2025, 7, 30)
+        seed.medicine("Test")
+        navigation.toOverview()
+        overview.selectDay(selectedDay)
+
+        manualDose.logCustom("Test")
+
+        val event = runBlocking {
+            reminderEventRepository.getAllWithoutDeleted().single {
+                it.medicineName == "Test" && it.status == ReminderEvent.ReminderStatus.TAKEN
+            }
+        }
+        assertEquals(selectedDay, event.remindedTimestamp.atZone(ZoneId.systemDefault()).toLocalDate())
     }
 
     @Test

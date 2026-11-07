@@ -23,11 +23,12 @@ after saving.
 ## Record an additional dose
 
 On **Overview**, choose **Log additional dose**. Select a medicine, then choose a suggested amount, enter a custom
-amount, or select **No amount**. Choose **Log at current time** to use the selected date and current clock time, or
-choose **Log at another time** and confirm the time. MedTimer confirms when the dose is saved.
+amount, or select **No amount**. The dialog shows the selected date and the clock time captured when it opened.
+Choose **Log at this time** to use that displayed date and time, or choose **Log at another time** and confirm a
+different clock time for the selected date. MedTimer confirms when the dose is saved.
 
-**Quick log** shows your three most recently logged additional doses. Tap a row or **Log now**
-to record that medicine and amount immediately. Use the guided flow to change the amount or time.
+**Quick log at this time** shows your three most recently logged additional doses. Tap a row to record that medicine
+and amount at the date and time displayed in the dialog. Use the guided flow to change the amount or time.
 
 ## Export event history
 

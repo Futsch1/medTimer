@@ -31,7 +31,7 @@ class ManualDoseRobot(
         confirmTime()
     }
 
-    /** Logs a custom medicine dose at the current time, leaving the amount blank. */
+    /** Logs a custom medicine dose at the displayed dialog time, leaving the amount blank. */
     fun logCustom(name: String) = inPicker {
         chooseCustom(name)
         enterAmount("")
@@ -77,7 +77,7 @@ class ManualDoseRobot(
         confirm.clickSelf()
     }
 
-    /** Opens the time picker and accepts its prefilled current time. */
+    /** Opens the time picker and accepts its prefilled time captured when the dialog opened. */
     fun confirmTime() {
         dialog.click(hasTestTag(ManualDoseTestTags.ENTER_TIME))
         pickers.confirmTime()
@@ -85,6 +85,7 @@ class ManualDoseRobot(
 
     fun assertRecentDoseOffered(medicine: String, amount: String) {
         ensureRecentDoseVisible(medicine, amount)
+        dialog.assertDisplayed(hasText(ui.getString(CoreUiR.string.quick_log)))
         dialog.assertDisplayed(recentDoseMatcher(medicine, amount))
     }
 

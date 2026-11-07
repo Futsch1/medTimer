@@ -90,7 +90,7 @@ fun ManualDoseDialog(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
     onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -125,7 +125,7 @@ private fun DialogContent(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
     onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -223,7 +223,7 @@ private fun DialogContent(
                         SelectedDoseSummary(state)
                         Button(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = { onLogManualDose(LocalTime.now()) },
+                            onClick = { onLogManualDose(null) },
                         ) {
                             Text(stringResource(R.string.log_at_current_time))
                         }
@@ -286,7 +286,7 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStep
             fontWeight = FontWeight.SemiBold,
         )
         Text(
-            text = state.selectedDay.orEmpty(),
+            text = "${stringResource(R.string.time)}: ${state.selectedDateTime.orEmpty()}",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -497,12 +497,6 @@ private fun RecentDoses(
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                         )
                     }
-                    Text(
-                        text = stringResource(R.string.log_now),
-                        modifier = Modifier.padding(start = 12.dp),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
                 }
             }
         }
@@ -676,7 +670,7 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
     amounts = listOf("1 tablet", "2 tablets").toImmutableList(),
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
-    selectedDay = "08/01/2026",
+    selectedDateTime = "08/01/2026 11:30 AM",
     step = step,
 )
 
