@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.ComposeView
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
@@ -26,6 +28,7 @@ import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseDialog
+import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseSaveResult
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseViewModel
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
@@ -46,6 +49,9 @@ class OverviewFragment : Fragment() {
 
     @Inject
     lateinit var tagsFragmentFactory: TagsFragment.Factory
+
+    @Inject
+    lateinit var overviewDayRequests: OverviewDayRequests
 
     private lateinit var appOptionsActions: AppOptionsActions
     private val appOptionsViewModel: AppOptionsViewModel by viewModels()
@@ -117,8 +123,15 @@ class OverviewFragment : Fragment() {
                         onSelectAmount = {
                             manualDoseViewModel.selectAmount(it)
                         },
-                        onLogManualDose = {
-                            manualDoseViewModel.selectTimeAndLog(it)
+                        onLogManualDose = { time ->
+                            manualDoseViewModel.selectTimeAndLog(time) { result ->
+                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
+                            }
+                        },
+                        onLogRecentDose = { dose ->
+                            manualDoseViewModel.logRecentDose(dose) { result ->
+                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
+                            }
                         },
                         onStepBack = {
                             manualDoseViewModel.goOneStepBack()
@@ -129,6 +142,17 @@ class OverviewFragment : Fragment() {
                     )
                 }
             }
+        }
+    }
+
+    private fun handleManualDoseResult(result: ManualDoseSaveResult, closeDialog: () -> Unit) {
+        closeDialog()
+        val event = result.event
+        if (event == null) {
+            Toast.makeText(requireContext(), getString(R.string.manual_dose_log_failed), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.manual_dose_logged), Toast.LENGTH_SHORT).show()
+            overviewDayRequests.request(OverviewDayRequest(result.day, listOf(event)))
         }
     }
 

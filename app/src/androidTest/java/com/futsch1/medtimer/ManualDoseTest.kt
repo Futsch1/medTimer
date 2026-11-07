@@ -1,8 +1,11 @@
 package com.futsch1.medtimer
 
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 private const val TEST_13_ = "Test (13)"
@@ -16,6 +19,11 @@ class ManualDoseTest : MedTimerTestBase() {
         menus.clickAppOption(R.string.generate_test_data)
 
         navigation.toOverview()
+
+        manualDose.inPicker {
+            assertBlankCustomMedicineRejected()
+            cancelPicker()
+        }
 
         manualDose.log(GINSENG, amount = "12")
 
@@ -32,10 +40,21 @@ class ManualDoseTest : MedTimerTestBase() {
 
         overview.assertEventContains(TEST_13_)
 
+        val doseCountBeforeQuickLog = runBlocking {
+            reminderEventRepository.getAllWithoutDeleted().count {
+                it.medicineName == "Test" && it.amount == "13" && it.status == ReminderEvent.ReminderStatus.TAKEN
+            }
+        }
         manualDose.inPicker {
             assertRecentDoseOffered("Test", "13")
             selectRecentDose("Test", "13")
         }
+        val doseCountAfterQuickLog = runBlocking {
+            reminderEventRepository.getAllWithoutDeleted().count {
+                it.medicineName == "Test" && it.amount == "13" && it.status == ReminderEvent.ReminderStatus.TAKEN
+            }
+        }
+        assertEquals(doseCountBeforeQuickLog + 1, doseCountAfterQuickLog)
         overview.assertEventContains(TEST_13_)
 
         navigation.toMedicines()

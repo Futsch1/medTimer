@@ -49,11 +49,10 @@ class PersistentDataDataSource @Inject constructor(
         }
     }.stateIn(scope, started = SharingStarted.Eagerly, initialValue = getPersistentData())
 
+    @Synchronized
     fun addManualDose(manualDose: ManualDose) {
-        if (!data.value.lastManualDoses.doses.contains(manualDose)) {
-            data.value.lastManualDoses.addDose(manualDose)
-            medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSES, data.value.lastManualDoses.encode()) }
-        }
+        val doses = getCustomDoses().apply { addDose(manualDose) }
+        medTimerSharedPreferences.edit { putString(LAST_CUSTOM_DOSES, doses.encode()) }
     }
 
     fun setActiveStatisticsFragment(fragment: StatisticFragment) {

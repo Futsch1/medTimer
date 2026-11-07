@@ -32,7 +32,13 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 data class ManualDoseMedicineEntry(val label: String, val medicine: Medicine?)
-data class ManualDoseMedicineWithAmountEntry(val label: String, val medicine: Medicine?, val amount: String)
+data class ManualDoseMedicineWithAmountEntry(
+    val label: String,
+    val medicine: Medicine?,
+    val amount: String,
+    val medicineId: Int? = medicine?.id,
+)
+data class ManualDoseSaveResult(val event: ReminderEvent?, val day: LocalDate)
 
 @HiltViewModel
 class ManualDoseViewModel @Inject constructor(
@@ -67,9 +73,12 @@ class ManualDoseViewModel @Inject constructor(
     private val selectedManualDoseEntry: MutableStateFlow<ManualDoseMedicineEntry> =
         MutableStateFlow(ManualDoseMedicineEntry("", null))
 
-    fun selectMedicineEntry(manualDoseMedicineEntry: ManualDoseMedicineEntry) {
-        selectedManualDoseEntry.value = manualDoseMedicineEntry
+    fun selectMedicineEntry(manualDoseMedicineEntry: ManualDoseMedicineEntry): Boolean {
+        val label = manualDoseMedicineEntry.label.trim()
+        if (label.isEmpty()) return false
+        selectedManualDoseEntry.value = manualDoseMedicineEntry.copy(label = label)
         step.value = ManualDoseStep.AMOUNT
+        return true
     }
 
     private val _reminderList: Flow<List<Reminder>> = selectedManualDoseEntry.map {
@@ -89,7 +98,10 @@ class ManualDoseViewModel @Inject constructor(
         if (medicine == null) {
             emptyList()
         } else {
-            reminders.filter { !it.isOutOfStockOrExpirationReminder }.map { it.amount }.distinct()
+            reminders.filter { !it.isOutOfStockOrExpirationReminder }
+                .map { it.amount.trim() }
+                .filter(String::isNotEmpty)
+                .distinct()
         }
     }
 
@@ -128,12 +140,11 @@ class ManualDoseViewModel @Inject constructor(
             medicineEntries = medicines.entries.toImmutableList(),
             showSearch = medicines.showSearch,
             amounts = amounts.toImmutableList(),
-            lastCustomDoses = persistentData.lastManualDoses.doses.map {
-                ManualDoseMedicineWithAmountEntry(
-                    it.medicineLabel ?: "",
-                    it.medicineId?.let { id -> medicineList.find { medicine -> medicine.id == id } },
-                    it.amount ?: ""
-                )
+            lastCustomDoses = persistentData.lastManualDoses.doses.mapNotNull { dose ->
+                dose.medicineLabel?.takeIf(String::isNotBlank)?.let { label ->
+                    val medicine = dose.medicineId?.let { id -> medicineList.find { it.id == id } }
+                    ManualDoseMedicineWithAmountEntry(label, medicine, dose.amount ?: "", medicine?.id)
+                }
             }.toImmutableList(),
         )
     }
@@ -149,61 +160,94 @@ class ManualDoseViewModel @Inject constructor(
         selectedManualDoseEntry,
         selectedManualDoseAmount,
         selectedDay,
-        step
+        step,
     ) { available, selectedEntry, selectedAmount, selectedDay, step ->
         available.copy(
             selectedMedicine = selectedEntry,
             selectedAmount = selectedAmount,
-            selectedDay = if (selectedDay != LocalDate.now()) timeFormatter.localDateToString(selectedDay) else null,
+            selectedDay = timeFormatter.localDateToString(selectedDay),
             step = step,
         )
     }
 
-    fun selectTimeAndLog(doseLocalTime: LocalTime) {
-        val doseDateTime = selectedDay.value.atTime(doseLocalTime)
-        val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
-        logDose(selectedManualDoseEntry.value, selectedManualDoseAmount.value, doseInstant)
+    fun selectTimeAndLog(doseLocalTime: LocalTime, onResult: (ManualDoseSaveResult) -> Unit) {
+        submitDose(
+            selectedManualDoseEntry.value,
+            selectedManualDoseAmount.value,
+            selectedDay.value,
+            doseLocalTime,
+            onResult,
+        )
     }
 
-    private fun logDose(selectedEntry: ManualDoseMedicineEntry, amount: String, doseInstant: Instant) {
-        var reminderEvent = ReminderEvent.default().copy(
+    fun logRecentDose(dose: ManualDoseMedicineWithAmountEntry, onResult: (ManualDoseSaveResult) -> Unit) {
+        submitDose(
+            ManualDoseMedicineEntry(dose.label, dose.medicine),
+            dose.amount,
+            selectedDay.value,
+            LocalTime.now(),
+            onResult,
+            dose.medicineId,
+        )
+    }
+
+    private fun submitDose(
+        selectedEntry: ManualDoseMedicineEntry,
+        amount: String,
+        day: LocalDate,
+        localTime: LocalTime,
+        onResult: (ManualDoseSaveResult) -> Unit,
+        medicineId: Int? = selectedEntry.medicine?.id,
+    ) {
+        val label = selectedEntry.label.trim()
+        val entry = selectedEntry.copy(label = label)
+        val trimmedAmount = amount.trim()
+        val doseDateTime = day.atTime(localTime)
+        val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
+        val reminderEvent = createReminderEvent(entry, trimmedAmount, doseInstant)
+
+        viewModelScope.launch {
+            val event = reminderEventRepository.create(reminderEvent)
+            persistentDataDataSource.addManualDose(ManualDose(entry.label, medicineId, trimmedAmount))
+            onResult(ManualDoseSaveResult(event, day))
+            entry.medicine?.let { medicine ->
+                val parsedAmount = DoseAmountParser.parseAmount(trimmedAmount)
+                if (parsedAmount != null && medicine.isStockManagementActive()) {
+                    val stockAfter = commandBus.processStockHandling(parsedAmount, medicine.id, doseInstant.epochSecond)
+                    if (stockAfter != null) {
+                        reminderEventRepository.update(event.copy(stockAfter = stockAfter, stockHandled = true))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createReminderEvent(
+        selectedEntry: ManualDoseMedicineEntry,
+        amount: String,
+        doseInstant: Instant,
+    ): ReminderEvent {
+        var event = ReminderEvent.default().copy(
             reminderId = -1,
             status = ReminderEvent.ReminderStatus.TAKEN,
             medicineName = selectedEntry.label,
             amount = amount,
             remindedTimestamp = doseInstant,
-            processedTimestamp = doseInstant
+            processedTimestamp = doseInstant,
         )
         selectedEntry.medicine?.let { medicine ->
             val stockAmount = medicine.amount.takeIf { medicine.isStockManagementActive() } ?: -1.0
-            reminderEvent = reminderEvent.copy(
+            event = event.copy(
                 color = medicine.color,
                 useColor = medicine.useColor,
                 iconId = medicine.iconId,
                 tags = medicine.tags.map { tag -> tag.name },
                 stockBefore = stockAmount,
                 stockAfter = stockAmount,
-                stockUnit = MedicineHelper.getUnit(medicine)
+                stockUnit = MedicineHelper.getUnit(medicine),
             )
         }
-
-        viewModelScope.launch {
-            val event = reminderEventRepository.create(reminderEvent)
-
-            selectedEntry.medicine?.let {
-                val amount = DoseAmountParser.parseAmount(reminderEvent.amount)
-                if (amount != null && it.isStockManagementActive()) {
-                    commandBus.processStockHandling(amount, it.id, doseInstant.epochSecond)
-                        ?.let { stockAfter ->
-                            reminderEventRepository.update(
-                                event.copy(stockAfter = stockAfter, stockHandled = true)
-                            )
-                        }
-                }
-            }
-        }
-
-        persistentDataDataSource.addManualDose(ManualDose(selectedEntry.label, selectedEntry.medicine?.id, amount))
+        return event
     }
 
     fun reset() {

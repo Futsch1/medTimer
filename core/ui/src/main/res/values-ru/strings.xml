@@ -385,4 +385,13 @@
     <string name="reminder_types_help">Подробнее о типах напоминаний</string>
     <string name="stock_decrement_preview">Запас уменьшится на %1$s.</string>
     <string name="stock_decrement_unreadable">Не удалось определить уменьшение запаса: указано недопустимое количество.</string>
+    <string name="quick_log">Быстрая запись</string>
+    <string name="log_now">Записать сейчас</string>
+    <string name="choose_medicine">Выберите лекарство</string>
+    <string name="no_amount">Без количества</string>
+    <string name="log_at_current_time">Записать на текущее время</string>
+    <string name="log_at_another_time">Записать на другое время</string>
+    <string name="manual_dose_logged">Доза записана</string>
+    <string name="manual_dose_log_failed">Не удалось записать дозу</string>
+    <string name="medicine_name_required">Введите название лекарства</string>
 </resources>

@@ -401,4 +401,13 @@
     <string name="reminder_types_help">مزيد من المعلومات حول أنواع التذكيرات</string>
     <string name="stock_decrement_preview">سينخفض المخزون بمقدار %1$s.</string>
     <string name="stock_decrement_unreadable">تعذّر تحديد مقدار انخفاض المخزون لأن هذه الكمية غير صالحة.</string>
+    <string name="quick_log">تسجيل سريع</string>
+    <string name="log_now">سجّل الآن</string>
+    <string name="choose_medicine">اختر دواءً</string>
+    <string name="no_amount">بدون كمية</string>
+    <string name="log_at_current_time">سجّل في الوقت الحالي</string>
+    <string name="log_at_another_time">سجّل في وقت آخر</string>
+    <string name="manual_dose_logged">تم تسجيل الجرعة</string>
+    <string name="manual_dose_log_failed">تعذّر تسجيل الجرعة</string>
+    <string name="medicine_name_required">أدخل اسم الدواء</string>
 </resources>

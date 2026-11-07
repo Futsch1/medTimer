@@ -221,12 +221,12 @@
     <string name="interval_start_processed">Intervall beginnt wenn eingenommen oder übersprungen</string>
     <string name="invalid_input">Ungültige Eingabe</string>
     <string name="medicine_stock">Medikamentenvorrat</string>
-    <string name="amount">Anzahl</string>
+    <string name="amount">Dosis</string>
     <string name="remaining_stock">Verbleibender Vorrat</string>
     <string name="reminder_threshold">Warnschwelle</string>
     <string name="refill_size">Nachfüllmenge</string>
     <string name="refill_now">Jetzt nachfüllen</string>
-    <string name="variable_amount">Dosierung bei Einnahme eingeben</string>
+    <string name="variable_amount">Dosis bei Einnahme eingeben</string>
     <string name="tags">Tags</string>
     <string name="add_tag">Tag hinzufügen</string>
     <string name="are_you_sure_delete_tag">Tag wirklich löschen?</string>
@@ -247,7 +247,7 @@
     <string name="display_settings">Anzeigeeinstellungen</string>
     <string name="use_relative_date_time_summary">Relatives Datum/Uhrzeit für Erinnerungen anzeigen</string>
     <string name="use_relative_date_time">Relatives Datum/Uhrzeit</string>
-    <string name="invalid_amount">Der Betrag muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>
+    <string name="invalid_amount">Die Dosis muss eine Zahl enthalten, um die Vorratserinnerung zu aktivieren.</string>
     <string name="sticky_on_lockscreen">Dauerhafte Erinnerungen auf dem Sperrbildschirm</string>
     <string name="sticky_on_lockscreen_summary">Erinnerungen können nicht vom Sperrbildschirm, sondern nur aus der Benachrichtigungsleiste ausgeblendet werden\nHinweis: Einige Smartwatches zeigen Benachrichtigungen möglicherweise nicht mehr an</string>
     <string name="big_notifications">Große Benachrichtigungsknöpfe</string>
@@ -276,7 +276,7 @@
     <string name="end_date">Enddatum</string>
     <string name="add_linked_reminder_summary">Erstellt eine Folgeerinnerung, die eine bestimmte Zeit nach dieser Erinnerung ausgelöst wird.</string>
     <string name="cyclic_reminder_summary">Konfiguriert ein wiederkehrendes Muster von aktiven und pausierten Tagen ab einem bestimmten Datum. Die Erinnerung wird nur an aktiven Tagen ausgelöst. Dies kann für Medikamente wie die Antibabypille verwendet werden.</string>
-    <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosierung angezeigt.</string>
+    <string name="variable_amount_summary">Wenn aktiv, wird beim Bestätigen der Erinnerung ein Dialog zur Eingabe der Dosis angezeigt.</string>
     <string name="automatically_taken_summary">Wenn aktiv, wird die Erinnerung nicht als Benachrichtigung angezeigt und automatisch als eingenommen markiert (kann verwendet werden, um nur den Vorrat zu verfolgen).</string>
     <string name="reminder_status_summary">Schalter aktivieren, um das erste oder letzte Benachrichtigungsdatum festzulegen. Beide aus lassen für kein Datumslimit.</string>
     <string name="further_settings">Weitere Einstellungen</string>
@@ -377,4 +377,13 @@
     <string name="reminder_types_help">Mehr über Erinnerungstypen</string>
     <string name="stock_decrement_preview">Der Vorrat wird um %1$s verringert.</string>
     <string name="stock_decrement_unreadable">Der Vorratsverbrauch kann nicht bestimmt werden, da diese Menge ungültig ist.</string>
+    <string name="quick_log">Schnelle Eintragung</string>
+    <string name="log_now">Jetzt eintragen</string>
+    <string name="choose_medicine">Medikament auswählen</string>
+    <string name="no_amount">Keine Dosis</string>
+    <string name="log_at_current_time">Zur aktuellen Uhrzeit eintragen</string>
+    <string name="log_at_another_time">Zu einer anderen Uhrzeit eintragen</string>
+    <string name="manual_dose_logged">Einnahme eingetragen</string>
+    <string name="manual_dose_log_failed">Einnahme konnte nicht eingetragen werden</string>
+    <string name="medicine_name_required">Medikamentennamen eingeben</string>
 </resources>

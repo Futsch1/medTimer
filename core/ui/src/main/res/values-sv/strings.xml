@@ -377,4 +377,13 @@
     <string name="reminder_types_help">Läs mer om påminnelsetyper</string>
     <string name="stock_decrement_preview">Lagret minskar med %1$s.</string>
     <string name="stock_decrement_unreadable">Lagerförbrukningen kan inte beräknas eftersom mängden är ogiltig.</string>
+    <string name="quick_log">Snabbregistrering</string>
+    <string name="log_now">Logga nu</string>
+    <string name="choose_medicine">Välj ett läkemedel</string>
+    <string name="no_amount">Ingen mängd</string>
+    <string name="log_at_current_time">Logga vid aktuell tid</string>
+    <string name="log_at_another_time">Logga vid en annan tid</string>
+    <string name="manual_dose_logged">Dosen loggades</string>
+    <string name="manual_dose_log_failed">Det gick inte att logga dosen</string>
+    <string name="medicine_name_required">Ange ett läkemedelsnamn</string>
 </resources>

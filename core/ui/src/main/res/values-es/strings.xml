@@ -383,4 +383,13 @@
     <string name="reminder_types_help">Más información sobre los tipos de recordatorio</string>
     <string name="stock_decrement_preview">El stock disminuirá en %1$s.</string>
     <string name="stock_decrement_unreadable">No se puede determinar la disminución del stock porque esta cantidad no es válida.</string>
+    <string name="quick_log">Registro rápido</string>
+    <string name="log_now">Registrar ahora</string>
+    <string name="choose_medicine">Elige un medicamento</string>
+    <string name="no_amount">Sin cantidad</string>
+    <string name="log_at_current_time">Registrar a la hora actual</string>
+    <string name="log_at_another_time">Registrar a otra hora</string>
+    <string name="manual_dose_logged">Dosis registrada</string>
+    <string name="manual_dose_log_failed">No se pudo registrar la dosis</string>
+    <string name="medicine_name_required">Introduce el nombre de un medicamento</string>
 </resources>

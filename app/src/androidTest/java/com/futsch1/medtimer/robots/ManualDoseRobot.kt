@@ -2,6 +2,8 @@ package com.futsch1.medtimer.robots
 
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
 import com.futsch1.medtimer.core.ui.R as CoreUiR
@@ -10,7 +12,6 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 class ManualDoseRobot(
     private val ui: ComposeUi,
     private val overview: OverviewRobot,
-    private val dialogs: DialogRobot,
     private val pickers: MaterialPickers,
 ) {
     private val dialog get() = ui.scope(ManualDoseTestTags.DIALOG)
@@ -34,22 +35,46 @@ class ManualDoseRobot(
     fun logCustom(name: String) = inPicker {
         chooseCustom(name)
         enterAmount("")
-        dialog.click(hasText(ui.getString(CoreUiR.string.use_current_time)))
+        dialog.click(hasText(ui.getString(CoreUiR.string.log_at_current_time)))
         dialog.awaitGone()
     }
 
     /** Chooses the dialog's Custom medicine action and enters the supplied name. */
     fun chooseCustom(name: String) {
         dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
-        dialogs.enterText(name)
-        dialogs.confirm(retryIfStillVisible = false)
+        enterCustomText(name)
+        confirmCustomText()
         dialog.awaitSelfExists()
     }
+
+    fun assertBlankCustomMedicineRejected() {
+        dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
+        confirmCustomText()
+        ui.scope(ManualDoseTestTags.CUSTOM_ERROR).self().assertIsDisplayed()
+        ui.scope(ManualDoseTestTags.CUSTOM_CANCEL).clickSelf()
+    }
+
+    fun cancelPicker() = dialog.click(hasTestTag(ManualDoseTestTags.CANCEL))
 
     /** Opens Custom amount and enters [amount]. An empty value is supported for legacy tests. */
     fun enterAmount(amount: String) {
         dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
-        dialogs.enterTextAndConfirm(amount)
+        enterCustomText(amount)
+        confirmCustomText()
+    }
+
+    private fun enterCustomText(text: String) {
+        val input = ui.scope(ManualDoseTestTags.CUSTOM_INPUT)
+        input.awaitSelfExists()
+        input.self().performTextClearance()
+        if (text.isNotEmpty()) input.self().performTextInput(text)
+        input.settle()
+    }
+
+    private fun confirmCustomText() {
+        val confirm = ui.scope(ManualDoseTestTags.CUSTOM_CONFIRM)
+        confirm.awaitSelfExists()
+        confirm.clickSelf()
     }
 
     /** Opens the time picker and accepts its prefilled current time. */
@@ -66,6 +91,7 @@ class ManualDoseRobot(
     fun selectRecentDose(medicine: String, amount: String) {
         ensureRecentDoseVisible(medicine, amount)
         dialog.click(recentDoseMatcher(medicine, amount))
+        dialog.awaitGone()
     }
 
     private fun ensureRecentDoseVisible(medicine: String, amount: String) {
@@ -121,7 +147,8 @@ class ManualDoseRobot(
         }
 
         dialog.click(hasTestTag(ManualDoseTestTags.CUSTOM_BUTTON))
-        dialogs.enterTextAndConfirm(amount)
+        enterCustomText(amount)
+        confirmCustomText()
     }
 
     private fun recentDoseMatcher(medicine: String, amount: String) =

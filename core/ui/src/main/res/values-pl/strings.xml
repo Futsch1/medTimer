@@ -389,4 +389,13 @@
     <string name="reminder_types_help">Dowiedz się więcej o typach przypomnień</string>
     <string name="stock_decrement_preview">Zapas zmniejszy się o %1$s.</string>
     <string name="stock_decrement_unreadable">Nie można określić ubytku zapasu, ponieważ ta ilość jest nieprawidłowa.</string>
+    <string name="quick_log">Szybki zapis</string>
+    <string name="log_now">Zapisz teraz</string>
+    <string name="choose_medicine">Wybierz lek</string>
+    <string name="no_amount">Bez ilości</string>
+    <string name="log_at_current_time">Zapisz o bieżącej godzinie</string>
+    <string name="log_at_another_time">Zapisz o innej godzinie</string>
+    <string name="manual_dose_logged">Dawka zapisana</string>
+    <string name="manual_dose_log_failed">Nie udało się zapisać dawki</string>
+    <string name="medicine_name_required">Wpisz nazwę leku</string>
 </resources>

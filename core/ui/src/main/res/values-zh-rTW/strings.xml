@@ -370,4 +370,13 @@
     <string name="stock_decrement_preview">庫存將減少 %1$s。</string>
     <string name="stock_decrement_unreadable">此數量無效，無法判斷庫存減少量。</string>
     <string name="notifications_missing_or_late">通知遺失或延遲</string>
+    <string name="quick_log">快速記錄</string>
+    <string name="log_now">立即記錄</string>
+    <string name="choose_medicine">選擇藥物</string>
+    <string name="no_amount">無劑量</string>
+    <string name="log_at_current_time">以目前時間記錄</string>
+    <string name="log_at_another_time">以其他時間記錄</string>
+    <string name="manual_dose_logged">劑量已記錄</string>
+    <string name="manual_dose_log_failed">無法記錄劑量</string>
+    <string name="medicine_name_required">請輸入藥物名稱</string>
 </resources>
