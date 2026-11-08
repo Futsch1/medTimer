@@ -82,6 +82,16 @@ class EditEventViewModelTest {
     }
 
     @Test
+    fun `should reschedule reminders when the processed time changes`() = runTest {
+        val viewModel = viewModelFor(takenEvent())
+
+        viewModel.processedMinutes += 30
+        viewModel.updateEvent()
+
+        verify(commandBus).scheduleNextNotification()
+    }
+
+    @Test
     fun `should deduct the extra amount from stock when the amount of a taken dose is increased`() = runTest {
         val viewModel = viewModelFor(takenEvent(amount = "1"))
 

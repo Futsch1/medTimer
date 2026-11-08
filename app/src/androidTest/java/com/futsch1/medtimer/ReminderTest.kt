@@ -2,9 +2,16 @@ package com.futsch1.medtimer
 
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.domain.model.StatisticFragment
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.feature.reminders.SimulatedRemindersRepository
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.text.DateFormat
 import java.time.Instant
@@ -12,12 +19,17 @@ import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 
 @HiltAndroidTest
 class ReminderTest : MedTimerTestBase() {
+    @Inject
+    lateinit var simulatedRemindersRepository: SimulatedRemindersRepository
+
     @Test
     @AllowFlaky(attempts = 3)
     fun activeReminderTest() {
@@ -258,6 +270,76 @@ class ReminderTest : MedTimerTestBase() {
         overview.clickAction(R.string.taken)
 
         overview.assertEventContains(context.getString(R.string.interval_time, "0 min"))
+    }
+
+    @Test
+    fun editingTakenTimeReschedulesContinuousIntervalReminder() = runBlocking {
+        val interval = 60.minutes
+        val yesterday = timeAccess.now().minusSeconds(24 * 60 * 60)
+        val medicineId = seed.medicine("Test") { intervalReminder("1", interval) }
+        val reminder = reminderRepository.getAll(medicineId).single().copy(
+            intervalStart = yesterday,
+            intervalStartsFromProcessed = true
+        )
+        reminderRepository.update(reminder)
+        val raisedEvent = reminderEventRepository.create(
+            ReminderEvent.default().copy(
+                reminderId = reminder.id,
+                medicineName = "Test",
+                amount = "1",
+                status = ReminderEvent.ReminderStatus.RAISED,
+                remindedTimestamp = yesterday,
+                reminderType = ReminderType.CONTINUOUS_INTERVAL
+            )
+        )
+
+        navigation.toOverview()
+        overview.selectDay(frozenToday().minusDays(1))
+        overview.clickEventState(0)
+        overview.clickAction(R.string.taken)
+
+        val takenEvent = withTimeout(15.seconds) {
+            reminderEventRepository.getFlow(raisedEvent.reminderEventId).first {
+                it?.status == ReminderEvent.ReminderStatus.TAKEN
+            }!!
+        }
+        simulatedRemindersRepository.awaitCalculation()
+        val nextAfterTaking = takenEvent.processedTimestamp.plusSeconds(interval.inWholeSeconds)
+        assertEquals(
+            nextAfterTaking,
+            simulatedRemindersRepository.simulatedReminders.value
+                .filter { it.scheduledReminder.reminder.id == reminder.id }
+                .minOf { it.scheduledReminder.timestamp }
+        )
+
+        val editedTakenTime = takenEvent.processedTimestamp.minusSeconds(30 * 60)
+        navigation.toOverview()
+        overview.selectDay(frozenToday().minusDays(1))
+        eventEditor.forEvent(0) {
+            setTakenAt(timeFormatter().toTimeString(editedTakenTime), timeFormatter().toDateString(editedTakenTime))
+        }
+
+        val updatedEvent = withTimeout(15.seconds) {
+            reminderEventRepository.getFlow(raisedEvent.reminderEventId).first {
+                it != null && it.processedTimestamp != takenEvent.processedTimestamp
+            }!!
+        }
+        assertEquals(editedTakenTime, updatedEvent.processedTimestamp)
+        val expectedRescheduledTime = updatedEvent.processedTimestamp.plusSeconds(interval.inWholeSeconds)
+        withTimeout(15.seconds) {
+            simulatedRemindersRepository.simulatedReminders.first { reminders ->
+                reminders.any {
+                    it.scheduledReminder.reminder.id == reminder.id &&
+                        it.scheduledReminder.timestamp == expectedRescheduledTime
+                }
+            }
+        }
+        assertEquals(
+            expectedRescheduledTime,
+            simulatedRemindersRepository.simulatedReminders.value
+                .filter { it.scheduledReminder.reminder.id == reminder.id }
+                .minOf { it.scheduledReminder.timestamp }
+        )
     }
 
     @Test
