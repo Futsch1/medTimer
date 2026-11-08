@@ -223,7 +223,11 @@ private fun ColumnScope.DoseStepContent(
         ManualDoseStep.MEDICINE -> {
             Column {
                 if (state.lastCustomDoses.isNotEmpty()) {
-                    RecentDoses(doses = state.lastCustomDoses, onLogRecentDose = onLogRecentDose)
+                    RecentDoses(
+                        doses = state.lastCustomDoses,
+                        selectedDateTime = state.selectedDateTime.orEmpty(),
+                        onLogRecentDose = onLogRecentDose,
+                    )
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 6.dp),
                         color = MaterialTheme.colorScheme.outlineVariant,
@@ -265,7 +269,7 @@ private fun ColumnScope.DoseStepContent(
             )
             SelectedDoseSummary(state)
             Button(modifier = Modifier.fillMaxWidth(), onClick = { onLogManualDose(null) }) {
-                Text(stringResource(R.string.log_at_current_time))
+                Text(stringResource(R.string.log_at_current_time, state.selectedDateTime.orEmpty()))
             }
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.ENTER_TIME),
@@ -295,11 +299,6 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStep
             text = stringResource(R.string.log_additional_dose),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
-        )
-        Text(
-            text = "${stringResource(R.string.time)}: ${state.selectedDateTime.orEmpty()}",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         GuidedSteps(state, onStepBack)
         if (state.step == ManualDoseStep.AMOUNT) {
@@ -472,11 +471,12 @@ private fun SectionLabel(@StringRes label: Int) {
 @Composable
 private fun RecentDoses(
     doses: ImmutableList<ManualDoseMedicineWithAmountEntry>,
+    selectedDateTime: String,
     onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
-            text = stringResource(R.string.quick_log),
+            text = stringResource(R.string.quick_log, selectedDateTime),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary,
         )

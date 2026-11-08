@@ -389,10 +389,10 @@
     <string name="reminder_types_help">Докладніше про типи нагадувань</string>
     <string name="stock_decrement_preview">Запас зменшиться на %1$s.</string>
     <string name="stock_decrement_unreadable">Не вдалося визначити зменшення запасу, оскільки вказано неприпустиму кількість.</string>
-    <string name="quick_log">Швидкий запис на цей час</string>
+    <string name="quick_log">Швидкий запис на %1$s</string>
     <string name="choose_medicine">Виберіть ліки</string>
     <string name="no_amount">Без кількості</string>
-    <string name="log_at_current_time">Записати на цей час</string>
+    <string name="log_at_current_time">Записати на %1$s</string>
     <string name="log_at_another_time">Записати на інший час</string>
     <string name="manual_dose_logged">Дозу записано</string>
     <string name="manual_dose_log_failed">Не вдалося записати дозу</string>

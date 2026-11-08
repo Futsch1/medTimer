@@ -377,10 +377,10 @@
     <string name="reminder_types_help">Hatırlatıcı türleri hakkında daha fazla bilgi</string>
     <string name="stock_decrement_preview">Stok %1$s azalacak.</string>
     <string name="stock_decrement_unreadable">Bu miktar geçersiz olduğu için stok azalması belirlenemiyor.</string>
-    <string name="quick_log">Bu saatte hızlı kayıt</string>
+    <string name="quick_log">%1$s hızlı kayıt</string>
     <string name="choose_medicine">Bir ilaç seçin</string>
     <string name="no_amount">Miktar yok</string>
-    <string name="log_at_current_time">Bu saatte kaydet</string>
+    <string name="log_at_current_time">%1$s kaydet</string>
     <string name="log_at_another_time">Başka bir saatte kaydet</string>
     <string name="manual_dose_logged">Doz kaydedildi</string>
     <string name="manual_dose_log_failed">Doz kaydedilemedi</string>
