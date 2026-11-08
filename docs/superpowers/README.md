@@ -8,6 +8,7 @@ Design specs and implementation plans for larger, cross-cutting changes. Plans l
 - [Analysis Calendar — Landscape Tablet Layout](./plans/2026-06-03-analysis-calendar-landscape-tablet.md)
 - [Analysis Charts — Landscape Tablet Layout](./plans/2026-06-03-analysis-charts-landscape-tablet.md)
 - [Stock Usability](./plans/2026-10-20-stock-usability.md)
+- [Manual Dose Usability](./plans/2026-11-07-manual-dose-usability.md)
 
 ## Specs
 

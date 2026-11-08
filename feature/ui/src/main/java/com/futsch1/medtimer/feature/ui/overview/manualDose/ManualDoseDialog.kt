@@ -3,10 +3,12 @@ package com.futsch1.medtimer.feature.ui.overview.manualDose
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.annotation.StringRes
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,6 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,7 +56,6 @@ import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.rememberMedicineIcon
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
-import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
@@ -70,8 +75,14 @@ object ManualDoseTestTags {
     const val AMOUNT_ENTRY = "manual_dose_amount_entry"
     const val RECENT_DOSE = "manual_dose_recent_dose"
     const val CUSTOM_BUTTON = "manual_dose_custom_button"
+    const val CUSTOM_INPUT = "manual_dose_custom_input"
+    const val CUSTOM_CONFIRM = "manual_dose_custom_confirm"
+    const val CUSTOM_CANCEL = "manual_dose_custom_cancel"
+    const val CUSTOM_ERROR = "manual_dose_custom_error"
     const val SELECTED_DOSE_SUMMARY = "manual_dose_selected_summary"
     const val ENTER_TIME = "manual_dose_enter_time"
+    const val LOG_CURRENT_TIME = "manual_dose_log_current_time"
+    const val QUICK_LOG_LABEL = "manual_dose_quick_log_label"
     const val CANCEL = "manual_dose_cancel"
     const val BACK = "manual_dose_back"
 }
@@ -82,7 +93,8 @@ fun ManualDoseDialog(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
+    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
@@ -91,8 +103,7 @@ fun ManualDoseDialog(
     Dialog(
         onDismissRequest = onDismissDialog,
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
+            dismissOnBackPress = false,
             usePlatformDefaultWidth = false,
         ),
     ) {
@@ -103,6 +114,7 @@ fun ManualDoseDialog(
             onSelectMedicineEntry = onSelectMedicineEntry,
             onSelectAmount = onSelectAmount,
             onLogManualDose = onLogManualDose,
+            onLogRecentDose = onLogRecentDose,
             onStepBack = onStepBack,
             onDismissDialog = onDismissDialog,
         )
@@ -116,11 +128,14 @@ private fun DialogContent(
     onSearch: (String) -> Unit,
     onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
     onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
+    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
-    val context = LocalContext.current
+    BackHandler {
+        if (state.step == ManualDoseStep.MEDICINE) onDismissDialog() else onStepBack()
+    }
 
     Surface(
         modifier = Modifier
@@ -157,76 +172,15 @@ private fun DialogContent(
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                when (state.step) {
-                    ManualDoseStep.MEDICINE -> {
-                        Column {
-                            RecentDoses(
-                                doses = state.lastCustomDoses,
-                                onSelectMedicineEntry = onSelectMedicineEntry,
-                                onSelectAmount = onSelectAmount,
-                                onLogManualDose = onLogManualDose,
-                                onDismissDialog = onDismissDialog,
-                            )
-                            SectionLabel(R.string.medicine)
-                            if (state.showSearch) {
-                                MedicineSearchField(searchQuery, onSearch)
-                            }
-                            CustomButton(R.string.medicine_name, Modifier.fillMaxWidth()) { name ->
-                                onSelectMedicineEntry(ManualDoseMedicineEntry(name, null))
-                            }
-                            MedicineList(
-                                medicineEntries = state.medicineEntries,
-                                modifier = Modifier.heightIn(max = 300.dp),
-                                onSelectMedicineEntry = onSelectMedicineEntry,
-                            )
-                        }
-                    }
-
-                    ManualDoseStep.AMOUNT -> {
-                        SectionLabel(R.string.amount)
-                        AmountList(
-                            amounts = state.amounts,
-                            modifier = Modifier.weight(1f, fill = false),
-                            onSelectAmount = onSelectAmount,
-                        )
-                        CustomButton(R.string.amount, Modifier.fillMaxWidth(), onSelectAmount)
-                    }
-
-                    ManualDoseStep.TIME -> {
-                        Text(
-                            text = stringResource(R.string.time),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        SelectedDoseSummary(state)
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                onLogManualDose(LocalTime.now())
-                                onDismissDialog()
-                            },
-                        ) {
-                            Text(stringResource(R.string.use_current_time))
-                        }
-                        OutlinedButton(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(ManualDoseTestTags.ENTER_TIME),
-                            onClick = {
-                                val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
-                                pickerFactory.create(LocalTime.now()) { minutes ->
-                                    onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
-                                    onDismissDialog()
-                                }.show(
-                                    context.findFragmentActivity().supportFragmentManager,
-                                    TimePickerDialogFactory.DIALOG_TAG,
-                                )
-                            },
-                        ) {
-                            Text(stringResource(R.string.enter_time))
-                        }
-                    }
-                }
+                DoseStepContent(
+                    state = state,
+                    searchQuery = searchQuery,
+                    onSearch = onSearch,
+                    onSelectMedicineEntry = onSelectMedicineEntry,
+                    onSelectAmount = onSelectAmount,
+                    onLogManualDose = onLogManualDose,
+                    onLogRecentDose = onLogRecentDose,
+                )
             }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -257,6 +211,90 @@ private fun DialogContent(
 }
 
 @Composable
+private fun ColumnScope.DoseStepContent(
+    state: ManualDoseState,
+    searchQuery: String,
+    onSearch: (String) -> Unit,
+    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
+    onSelectAmount: (String) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
+    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
+) {
+    val context = LocalContext.current
+    when (state.step) {
+        ManualDoseStep.MEDICINE -> {
+            Column {
+                if (state.lastCustomDoses.isNotEmpty()) {
+                    RecentDoses(
+                        doses = state.lastCustomDoses,
+                        selectedDateTime = state.selectedDateTime.orEmpty(),
+                        onLogRecentDose = onLogRecentDose,
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 6.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
+                }
+                SectionLabel(R.string.choose_medicine)
+                if (state.showSearch) MedicineSearchField(searchQuery, onSearch)
+                CustomButton(
+                    R.string.medicine_name,
+                    Modifier.fillMaxWidth(),
+                    requireNonBlank = true,
+                ) { name -> onSelectMedicineEntry(ManualDoseMedicineEntry(name, null)) }
+                MedicineList(
+                    medicineEntries = state.medicineEntries,
+                    modifier = Modifier.heightIn(max = 300.dp),
+                    onSelectMedicineEntry = onSelectMedicineEntry,
+                )
+            }
+        }
+
+        ManualDoseStep.AMOUNT -> {
+            SectionLabel(R.string.amount)
+            OutlinedButton(onClick = { onSelectAmount("") }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.no_amount))
+            }
+            CustomButton(R.string.amount, Modifier.fillMaxWidth(), onEntered = onSelectAmount)
+            AmountList(
+                amounts = state.amounts,
+                modifier = Modifier.weight(1f, fill = false),
+                onSelectAmount = onSelectAmount,
+            )
+        }
+
+        ManualDoseStep.TIME -> {
+            Text(
+                text = stringResource(R.string.time),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            SelectedDoseSummary(state)
+            Button(
+                modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.LOG_CURRENT_TIME),
+                onClick = { onLogManualDose(null) },
+            ) {
+                Text(stringResource(R.string.log_at_current_time, state.selectedDateTime.orEmpty()))
+            }
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.ENTER_TIME),
+                onClick = {
+                    val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
+                    pickerFactory.create(LocalTime.now()) { minutes ->
+                        onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
+                    }.show(
+                        context.findFragmentActivity().supportFragmentManager,
+                        TimePickerDialogFactory.DIALOG_TAG,
+                    )
+                },
+            ) {
+                Text(stringResource(R.string.log_at_another_time))
+            }
+        }
+    }
+}
+
+@Composable
 private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStepBack: () -> Unit) {
     Column(
         modifier = modifier,
@@ -267,29 +305,7 @@ private fun Header(state: ManualDoseState, modifier: Modifier = Modifier, onStep
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
         )
-        if (state.selectedDay != null) {
-            Text(
-                text = state.selectedDay
-            )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            ManualDoseStep.entries.forEachIndexed { index, step ->
-                val current = step == state.step
-                val complete = index < state.step.ordinal
-                HeaderStepItem(
-                    modifier = Modifier.weight(1f),
-                    label = headerStepLabel(step),
-                    current = current,
-                    complete = complete,
-                    index = index,
-                    onClick = headerStepClick(step, state.step, onStepBack),
-                )
-            }
-        }
+        GuidedSteps(state, onStepBack)
         if (state.step == ManualDoseStep.AMOUNT) {
             Text(
                 text = state.selectedMedicine?.label.orEmpty(),
@@ -305,6 +321,28 @@ private fun headerStepLabel(step: ManualDoseStep): String = when (step) {
     ManualDoseStep.MEDICINE -> stringResource(R.string.medicine)
     ManualDoseStep.AMOUNT -> stringResource(R.string.amount)
     ManualDoseStep.TIME -> stringResource(R.string.time)
+}
+
+@Composable
+private fun GuidedSteps(state: ManualDoseState, onStepBack: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(bottom=4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ManualDoseStep.entries.forEachIndexed { index, step ->
+            val complete = index < state.step.ordinal
+            HeaderStepItem(
+                modifier = Modifier.weight(1f),
+                label = headerStepLabel(step),
+                current = step == state.step,
+                complete = complete,
+                index = index,
+                enabled = complete,
+                onClick = headerStepClick(step, state.step, onStepBack),
+            )
+        }
+    }
 }
 
 private fun headerStepClick(
@@ -331,6 +369,7 @@ private fun HeaderStepItem(
     current: Boolean,
     complete: Boolean,
     index: Int,
+    enabled: Boolean,
     onClick: () -> Unit
 ) {
     Surface(
@@ -341,7 +380,8 @@ private fun HeaderStepItem(
             complete -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceContainerHighest
         },
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled,
     ) {
         Column(
             modifier = Modifier
@@ -436,53 +476,43 @@ private fun SectionLabel(@StringRes label: Int) {
 @Composable
 private fun RecentDoses(
     doses: ImmutableList<ManualDoseMedicineWithAmountEntry>,
-    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
-    onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime) -> Unit,
-    onDismissDialog: () -> Unit
+    selectedDateTime: String,
+    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit
 ) {
-    if (doses.isNotEmpty()) {
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(
-                text = stringResource(R.string.recent_doses),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            doses.forEach { dose ->
-                if (dose.label.isNotBlank()) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag(ManualDoseTestTags.RECENT_DOSE)
-                            .clickable {
-                                onSelectMedicineEntry(ManualDoseMedicineEntry(dose.label, dose.medicine))
-                                onSelectAmount(dose.amount)
-                                onLogManualDose(LocalTime.now())
-                                onDismissDialog()
-                            },
-                        shape = MaterialTheme.shapes.medium,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = dose.label,
-                                modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            )
-                            if (dose.amount.isNotBlank()) {
-                                Text(
-                                    text = dose.amount,
-                                    modifier = Modifier.padding(start = 12.dp),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                )
-                            }
-                        }
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(
+            text = stringResource(R.string.quick_log, selectedDateTime),
+            modifier = Modifier.testTag(ManualDoseTestTags.QUICK_LOG_LABEL),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        doses.forEach { dose ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ManualDoseTestTags.RECENT_DOSE),
+                onClick = { onLogRecentDose(dose) },
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = dose.label,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                    if (dose.amount.isNotBlank()) {
+                        Text(
+                            text = dose.amount,
+                            modifier = Modifier.padding(start = 12.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
                     }
                 }
             }
@@ -494,19 +524,61 @@ private fun RecentDoses(
 fun CustomButton(
     @StringRes text: Int,
     modifier: Modifier = Modifier,
+    requireNonBlank: Boolean = false,
     onEntered: (String) -> Unit,
 ) {
-    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
     OutlinedButton(
         modifier = modifier.testTag(ManualDoseTestTags.CUSTOM_BUTTON),
-        onClick = {
-            TextInputDialogBuilder(context).title(R.string.log_additional_dose)
-                .hint(text)
-                .textSink(onEntered::invoke)
-                .show()
-        },
+        onClick = { value = ""; showError = false; showDialog = true },
     ) {
         Text(stringResource(R.string.custom))
+    }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(stringResource(R.string.log_additional_dose)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    OutlinedTextField(
+                        value = value,
+                        onValueChange = { value = it; showError = false },
+                        label = { Text(stringResource(text)) },
+                        isError = showError,
+                        modifier = Modifier.testTag(ManualDoseTestTags.CUSTOM_INPUT),
+                    )
+                    if (showError) {
+                        Text(
+                            text = stringResource(R.string.medicine_name_required),
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.testTag(ManualDoseTestTags.CUSTOM_ERROR),
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    modifier = Modifier.testTag(ManualDoseTestTags.CUSTOM_CONFIRM),
+                    onClick = {
+                        val entered = value.trim()
+                        if (requireNonBlank && entered.isEmpty()) {
+                            showError = true
+                        } else {
+                            onEntered(entered)
+                            showDialog = false
+                        }
+                    },
+                ) { Text(stringResource(R.string.ok)) }
+            },
+            dismissButton = {
+                TextButton(
+                    modifier = Modifier.testTag(ManualDoseTestTags.CUSTOM_CANCEL),
+                    onClick = { showDialog = false },
+                ) { Text(stringResource(R.string.cancel)) }
+            },
+        )
     }
 }
 
@@ -535,7 +607,7 @@ fun MedicineList(
             .testTag(ManualDoseTestTags.MEDICINE_LIST),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(medicineEntries, key = { entry -> entry.medicine?.id ?: "custom" }) { entry ->
+        items(medicineEntries, key = { entry -> entry.medicine?.id ?: entry.label }) { entry ->
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -559,6 +631,12 @@ fun MedicineList(
                         text = entry.label,
                         modifier = Modifier.weight(1f),
                         style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Icon(
+                        painter = painterResource(R.drawable.chevron_right),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp),
                     )
                 }
             }
@@ -609,7 +687,7 @@ fun previewState(step: ManualDoseStep): ManualDoseState = ManualDoseState(
     amounts = listOf("1 tablet", "2 tablets").toImmutableList(),
     selectedMedicine = ManualDoseMedicineEntry("Vitamin X 500 mg", Medicine.default().copy(id = 1)),
     selectedAmount = "1 tablet",
-    selectedDay = "08/01/2026",
+    selectedDateTime = "08/01/2026 11:30 AM",
     step = step,
 )
 
@@ -642,6 +720,7 @@ private fun ManualDosePreview(step: ManualDoseStep) {
                 onSelectMedicineEntry = {},
                 onSelectAmount = {},
                 onLogManualDose = {},
+                onLogRecentDose = {},
                 onStepBack = {},
                 onDismissDialog = {},
             )

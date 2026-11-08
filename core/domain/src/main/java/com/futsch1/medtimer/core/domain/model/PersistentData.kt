@@ -18,10 +18,15 @@ enum class OverviewFilter {
 data class ManualDose(val medicineLabel: String?, val medicineId: Int?, val amount: String?)
 
 class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
-    val doses: MutableList<ManualDose> = decode(encodedString).take(maxDoses).toMutableList()
+    val doses: MutableList<ManualDose> = if (maxDoses <= 0) {
+        mutableListOf()
+    } else {
+        decode(encodedString).distinctBy { it.identity() }.take(maxDoses).toMutableList()
+    }
 
     fun addDose(dose: ManualDose) {
         if (maxDoses <= 0) return
+        doses.removeAll { it.sameCombinationAs(dose) }
         doses.add(0, dose)
         while (doses.size > maxDoses) {
             doses.removeAt(doses.lastIndex)
@@ -31,6 +36,10 @@ class ManualDoses(encodedString: String, val maxDoses: Int = 3) {
     fun encode(): String {
         return Gson().toJson(doses)
     }
+
+    private fun ManualDose.sameCombinationAs(other: ManualDose): Boolean = identity() == other.identity()
+
+    private fun ManualDose.identity() = Triple(medicineLabel?.trim(), medicineId, amount?.trim())
 
     private fun decode(encodedString: String): MutableList<ManualDose> {
         return try {

@@ -3,7 +3,6 @@ package com.futsch1.medtimer.feature.ui.overview.manualDose
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-
 enum class ManualDoseStep {
     MEDICINE,
     AMOUNT,
@@ -17,7 +16,7 @@ data class ManualDoseState(
     val lastCustomDoses: ImmutableList<ManualDoseMedicineWithAmountEntry> = persistentListOf(),
     val selectedMedicine: ManualDoseMedicineEntry? = null,
     val selectedAmount: String? = null,
-    val selectedDay: String? = null,
+    val selectedDateTime: String? = null,
     val step: ManualDoseStep = ManualDoseStep.MEDICINE
 )
 

@@ -377,4 +377,12 @@
     <string name="reminder_types_help">Научете повече за типовете напомняния</string>
     <string name="stock_decrement_preview">Наличността ще намалее с %1$s.</string>
     <string name="stock_decrement_unreadable">Намалението на наличността не може да се определи, защото това количество е невалидно.</string>
+    <string name="quick_log">Бърз запис за %1$s</string>
+    <string name="choose_medicine">Изберете лекарство</string>
+    <string name="no_amount">Без количество</string>
+    <string name="log_at_current_time">Запиши за %1$s</string>
+    <string name="log_at_another_time">Запиши за друг час</string>
+    <string name="manual_dose_logged">Дозата е записана</string>
+    <string name="manual_dose_log_failed">Дозата не можа да бъде записана</string>
+    <string name="medicine_name_required">Въведете име на лекарство</string>
 </resources>

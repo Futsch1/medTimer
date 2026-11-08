@@ -8,7 +8,8 @@ delivered a notification or that a dose was taken.
 
 ## Open a reminder from its notification
 
-Tap a reminder notification, including an out-of-stock or expiration date notification, to open **Overview** on the day the reminder was scheduled for, scrolled to the reminder.
+Tap a reminder notification, including an out-of-stock or expiration date notification, to open **Overview** on the day
+the reminder was scheduled for, scrolled to the reminder.
 A reminder that was snoozed past midnight still opens on its original day.
 If the active filters or the tag filter would hide the reminder, they are cleared.
 If the reminder's event was deleted in the meantime, tapping the notification removes it.
@@ -21,8 +22,13 @@ after saving.
 
 ## Record an additional dose
 
-On **Overview**, choose **Log additional dose**, then select the medicine and enter the amount. If you have an inactive
-reminder configured with a reusable amount, it can be offered as a preset in the medicine chooser.
+On **Overview**, choose **Log additional dose**. Select a medicine, then choose a suggested amount, enter a custom
+amount, or select **No amount**. The dialog shows the selected date and the clock time captured when it opened.
+Choose **Log at this time** to use that displayed date and time, or choose **Log at another time** and confirm a
+different clock time for the selected date. MedTimer confirms when the dose is saved.
+
+**Quick log at this time** shows your three most recently logged additional doses. Tap a row to record that medicine
+and amount at the date and time displayed in the dialog. Use the guided flow to change the amount or time.
 
 ## Export event history
 

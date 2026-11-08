@@ -80,6 +80,11 @@ _Avoid_: done/dismissed, completed/missed.
 A global filter on medicines by tag. The Reminder Table respects it; Charts do not; the Calendar
 filters by a single selected medicine instead.
 
+### Manual dosing
+
+**Recent dose**:
+A distinct combination of medicine name, linked medicine (if any), and amount from a previously logged additional dose. The medicine name is required; the amount may be blank.
+
 ### Stock and simulation
 
 **Dose amount**:

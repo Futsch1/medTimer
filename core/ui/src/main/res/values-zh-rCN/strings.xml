@@ -371,4 +371,12 @@
     <string name="stock_decrement_preview">库存将减少 %1$s。</string>
     <string name="stock_decrement_unreadable">此数量无效，无法确定库存减少量。</string>
     <string name="inconclusive_dose_units_warning">剂量单位非确定： %1$s。存货跟踪和数量预估可能不准确。</string>
+    <string name="quick_log">按%1$s快速记录</string>
+    <string name="choose_medicine">选择药物</string>
+    <string name="no_amount">无剂量</string>
+    <string name="log_at_current_time">按%1$s记录</string>
+    <string name="log_at_another_time">按其他时间记录</string>
+    <string name="manual_dose_logged">剂量已记录</string>
+    <string name="manual_dose_log_failed">无法记录剂量</string>
+    <string name="medicine_name_required">请输入药物名称</string>
 </resources>

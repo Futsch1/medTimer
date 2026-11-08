@@ -389,4 +389,12 @@
     <string name="reminder_types_help">Další informace o typech připomenutí</string>
     <string name="stock_decrement_preview">Zásoby se sníží o %1$s.</string>
     <string name="stock_decrement_unreadable">Snížení zásob nelze určit, protože toto množství není platné.</string>
+    <string name="quick_log">Rychlý záznam v %1$s</string>
+    <string name="choose_medicine">Vyberte lék</string>
+    <string name="no_amount">Bez množství</string>
+    <string name="log_at_current_time">Zaznamenat v %1$s</string>
+    <string name="log_at_another_time">Zaznamenat v jiný čas</string>
+    <string name="manual_dose_logged">Dávka zaznamenána</string>
+    <string name="manual_dose_log_failed">Dávku se nepodařilo zaznamenat</string>
+    <string name="medicine_name_required">Zadejte název léku</string>
 </resources>

@@ -377,4 +377,12 @@
     <string name="reminder_types_help">Μάθετε περισσότερα για τους τύπους υπενθυμίσεων</string>
     <string name="stock_decrement_preview">Το απόθεμα θα μειωθεί κατά %1$s.</string>
     <string name="stock_decrement_unreadable">Δεν είναι δυνατός ο υπολογισμός της μείωσης του αποθέματος, επειδή αυτή η ποσότητα δεν είναι έγκυρη.</string>
+    <string name="quick_log">Γρήγορη καταχώριση %1$s</string>
+    <string name="choose_medicine">Επιλέξτε φάρμακο</string>
+    <string name="no_amount">Χωρίς ποσότητα</string>
+    <string name="log_at_current_time">Καταχώριση %1$s</string>
+    <string name="log_at_another_time">Καταχώριση με άλλη ώρα</string>
+    <string name="manual_dose_logged">Η δόση καταχωρίστηκε</string>
+    <string name="manual_dose_log_failed">Δεν ήταν δυνατή η καταχώριση της δόσης</string>
+    <string name="medicine_name_required">Εισαγάγετε όνομα φαρμάκου</string>
 </resources>

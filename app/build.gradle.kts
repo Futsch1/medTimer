@@ -17,10 +17,9 @@ android {
     defaultConfig {
         applicationId = "com.futsch1.medtimer"
         minSdk = 28
-        multiDexEnabled = true
         targetSdk = 36
-        versionCode = 191
-        versionName = "1.26.4"
+        versionCode = 192
+        versionName = "1.26.5"
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
