@@ -343,4 +343,58 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), reminderEvents)
         assertReminded(scheduledReminders, TestHelper.on(3, 5 * 60), medicine.toMedicine(), reminder)
     }
+
+    @Test
+    fun `should keep scheduling within an overnight window after midnight`() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 60, 1).copy(
+            intervalStart = Instant.ofEpochSecond(1),
+            windowedInterval = true,
+            intervalStartsFromProcessed = true,
+            intervalStartTimeOfDay = LocalTime.of(16, 40),
+            intervalEndTimeOfDay = LocalTime.of(3, 20)
+        )
+        medicine.reminders.add(reminder)
+
+        val lateProcessedEvent = TestHelper.buildReminderEvent(1, TestHelper.on(1, 23 * 60)).copy(
+            processedTimestamp = TestHelper.on(2, 90),
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
+
+        val scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), listOf(lateProcessedEvent))
+
+        assertReminded(scheduledReminders, TestHelper.on(2, 2 * 60 + 30), medicine.toMedicine(), reminder)
+    }
+
+    @Test
+    fun `should start the next overnight window when the next interval falls outside the previous window`() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 4 * 60, 1).copy(
+            intervalStart = Instant.ofEpochSecond(1),
+            windowedInterval = true,
+            intervalStartsFromProcessed = true,
+            intervalStartTimeOfDay = LocalTime.of(16, 40),
+            intervalEndTimeOfDay = LocalTime.of(3, 20)
+        )
+        medicine.reminders.add(reminder)
+
+        val lateProcessedEvent = TestHelper.buildReminderEvent(1, TestHelper.on(1, 23 * 60)).copy(
+            processedTimestamp = TestHelper.on(2, 90),
+            status = ReminderEvent.ReminderStatus.TAKEN
+        )
+
+        val scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), listOf(lateProcessedEvent))
+
+        assertReminded(scheduledReminders, TestHelper.on(2, 16 * 60 + 40), medicine.toMedicine(), reminder)
+    }
 }

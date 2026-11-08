@@ -20,15 +20,17 @@ class WindowedIntervalScheduling(
     class Interval(reminder: Reminder, private val date: LocalDate, private val timeAccess: TimeAccess) {
         val startInstant: Instant
         val endInstant: Instant
+        val isOvernightInterval: Boolean = reminder.intervalStartTimeOfDay > reminder.intervalEndTimeOfDay
 
         init {
             startInstant = calcInstant(reminder.intervalStartTimeOfDay)
-            if (reminder.intervalStartTimeOfDay <= reminder.intervalEndTimeOfDay) {
+            if (!isOvernightInterval) {
                 endInstant = calcInstant(reminder.intervalEndTimeOfDay)
             } else {
                 endInstant = calcInstant(reminder.intervalEndTimeOfDay).plus(1, ChronoUnit.DAYS)
             }
         }
+
 
         fun isInInterval(instant: Instant): Boolean {
             return instant in startInstant..endInstant
@@ -75,25 +77,20 @@ class WindowedIntervalScheduling(
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
         return if (nextTime != null) {
             val interval = Interval(reminder, timeAccess.localDate(), timeAccess)
+            val previousInterval = Interval(reminder, timeAccess.localDate().minusDays(1), timeAccess)
             // Check if we had a long pause, in this case, restart from today
             if (instant.isBefore(interval.startInstant.minus(1, ChronoUnit.DAYS))) {
                 interval.startInstant
             } else {
                 when {
+                    // If the last reminder was raised in the last interval and the next time is also in the last interval, use it
+                    previousInterval.isInInterval(lastRemindedInstant) && previousInterval.isInInterval(nextTime) -> nextTime
                     // If the last reminder was not raised in this interval, we start on the interval start
-                    !interval.isInInterval(lastRemindedInstant) -> {
-                        interval.startInstant
-                    }
-
+                    !interval.isInInterval(lastRemindedInstant) -> interval.startInstant
                     // The next reminder is in the current interval, just schedule it
-                    interval.isInInterval(nextTime) -> {
-                        nextTime
-                    }
-
+                    interval.isInInterval(nextTime) -> nextTime
                     // The next reminder must be after the current interval, so move it to the next day
-                    else -> {
-                        interval.startInstant.plus(1, ChronoUnit.DAYS)
-                    }
+                    else -> interval.startInstant.plus(1, ChronoUnit.DAYS)
                 }
             }
         } else {
