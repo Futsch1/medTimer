@@ -36,8 +36,7 @@ data class ManualDoseMedicineEntry(val label: String, val medicine: Medicine?)
 data class ManualDoseMedicineWithAmountEntry(
     val label: String,
     val medicine: Medicine?,
-    val amount: String,
-    val medicineId: Int? = medicine?.id,
+    val amount: String
 )
 
 data class ManualDoseSaveResult(val event: ReminderEvent?, val day: LocalDate)
@@ -64,7 +63,11 @@ class ManualDoseViewModel @Inject constructor(
     private data class MedicineChoices(val entries: List<ManualDoseMedicineEntry>, val showSearch: Boolean)
 
     private val manualDoseMedicines: Flow<MedicineChoices> =
-        combine(medicineList, snapshotFlow { searchQuery.trim() }, persistentDataDataSource.data) { medicines, query, persistentData ->
+        combine(
+            medicineList,
+            snapshotFlow { searchQuery.trim() },
+            persistentDataDataSource.data
+        ) { medicines, query, persistentData ->
             val entries = medicines.map { ManualDoseMedicineEntry(it.name, it) }.toMutableList()
             persistentData.lastManualDoses.doses.forEach { dose ->
                 val label = dose.medicineLabel?.takeIf(String::isNotBlank) ?: return@forEach
@@ -114,7 +117,7 @@ class ManualDoseViewModel @Inject constructor(
         (reminderAmounts + persistentData.lastManualDoses.doses
             .filter { dose ->
                 dose.medicineLabel.equals(manualDoseEntry.label, ignoreCase = true) ||
-                    (medicine != null && dose.medicineId == medicine.id)
+                        (medicine != null && dose.medicineId == medicine.id)
             }
             .mapNotNull { it.amount?.trim()?.takeIf(String::isNotEmpty) })
             .distinct()
@@ -158,7 +161,7 @@ class ManualDoseViewModel @Inject constructor(
             lastCustomDoses = persistentData.lastManualDoses.doses.mapNotNull { dose ->
                 dose.medicineLabel?.takeIf(String::isNotBlank)?.let { label ->
                     val medicine = dose.medicineId?.let { id -> medicineList.find { it.id == id } }
-                    ManualDoseMedicineWithAmountEntry(label, medicine, dose.amount ?: "", medicine?.id)
+                    ManualDoseMedicineWithAmountEntry(label, medicine, dose.amount ?: "")
                 }
             }.toImmutableList(),
         )
@@ -200,8 +203,7 @@ class ManualDoseViewModel @Inject constructor(
             ManualDoseMedicineEntry(dose.label, dose.medicine),
             dose.amount,
             selectedDateTime.value,
-            onResult,
-            dose.medicineId,
+            onResult
         )
     }
 
@@ -209,14 +211,14 @@ class ManualDoseViewModel @Inject constructor(
         selectedEntry: ManualDoseMedicineEntry,
         amount: String,
         doseDateTime: LocalDateTime,
-        onResult: (ManualDoseSaveResult) -> Unit,
-        medicineId: Int? = selectedEntry.medicine?.id,
+        onResult: (ManualDoseSaveResult) -> Unit
     ) {
         val label = selectedEntry.label.trim()
         val entry = selectedEntry.copy(label = label)
         val trimmedAmount = amount.trim()
         val doseInstant = doseDateTime.toInstant(ZoneId.systemDefault().rules.getOffset(doseDateTime))
         val reminderEvent = createReminderEvent(entry, trimmedAmount, doseInstant)
+        val medicineId = selectedEntry.medicine?.id
 
         viewModelScope.launch {
             val event = reminderEventRepository.create(reminderEvent)
