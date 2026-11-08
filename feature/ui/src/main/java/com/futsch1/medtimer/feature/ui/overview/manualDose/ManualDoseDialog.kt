@@ -81,6 +81,8 @@ object ManualDoseTestTags {
     const val CUSTOM_ERROR = "manual_dose_custom_error"
     const val SELECTED_DOSE_SUMMARY = "manual_dose_selected_summary"
     const val ENTER_TIME = "manual_dose_enter_time"
+    const val LOG_CURRENT_TIME = "manual_dose_log_current_time"
+    const val QUICK_LOG_LABEL = "manual_dose_quick_log_label"
     const val CANCEL = "manual_dose_cancel"
     const val BACK = "manual_dose_back"
 }
@@ -268,7 +270,10 @@ private fun ColumnScope.DoseStepContent(
                 fontWeight = FontWeight.SemiBold,
             )
             SelectedDoseSummary(state)
-            Button(modifier = Modifier.fillMaxWidth(), onClick = { onLogManualDose(null) }) {
+            Button(
+                modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.LOG_CURRENT_TIME),
+                onClick = { onLogManualDose(null) },
+            ) {
                 Text(stringResource(R.string.log_at_current_time, state.selectedDateTime.orEmpty()))
             }
             OutlinedButton(
@@ -477,6 +482,7 @@ private fun RecentDoses(
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
             text = stringResource(R.string.quick_log, selectedDateTime),
+            modifier = Modifier.testTag(ManualDoseTestTags.QUICK_LOG_LABEL),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary,
         )

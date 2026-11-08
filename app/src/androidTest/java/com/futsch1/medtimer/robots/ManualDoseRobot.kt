@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
-import com.futsch1.medtimer.core.ui.R as CoreUiR
 
 /** Drives the Compose manual-dose dialog while keeping the test-facing picker vocabulary. */
 class ManualDoseRobot(
@@ -35,7 +34,7 @@ class ManualDoseRobot(
     fun logCustom(name: String) = inPicker {
         chooseCustom(name)
         enterAmount("")
-        dialog.click(hasText(ui.getString(CoreUiR.string.log_at_current_time)))
+        dialog.click(hasTestTag(ManualDoseTestTags.LOG_CURRENT_TIME))
         dialog.awaitGone()
     }
 
@@ -85,7 +84,7 @@ class ManualDoseRobot(
 
     fun assertRecentDoseOffered(medicine: String, amount: String) {
         ensureRecentDoseVisible(medicine, amount)
-        dialog.assertDisplayed(hasText(ui.getString(CoreUiR.string.quick_log)))
+        dialog.assertDisplayed(hasTestTag(ManualDoseTestTags.QUICK_LOG_LABEL))
         dialog.assertDisplayed(recentDoseMatcher(medicine, amount))
     }
 
