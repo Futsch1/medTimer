@@ -84,7 +84,7 @@ class ManualDoseViewModelTest {
         val dose = viewModel.state.first().lastCustomDoses.single()
         val selectedDateTime = LocalDateTime.of(2025, 3, 8, 9, 15)
         viewModel.setSelectedDateTime(selectedDateTime)
-        assertNull(dose.medicineId)
+        assertNull(dose.medicine)
         var result: ManualDoseSaveResult? = null
         viewModel.logRecentDose(dose) { result = it }
 
