@@ -120,6 +120,11 @@ match.file_patterns = ["**/test/**", "**/androidTest/**"]
 set.ignored = true
 
 [[triage]]
+match.rules = ["radarlint-kotlin:kotlin:S107"]
+match.file_patterns = ["**/*Screen.kt", "**/*Dialog.kt", "**/*Picker.kt"]
+set.ignored = true
+
+[[triage]]
 match.rules = ["qlty:function-parameters"]
 match.file_patterns = ["**/*Screen.kt", "**/*Dialog.kt", "**/*Picker.kt"]
 set.ignored = true
