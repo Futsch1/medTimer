@@ -60,12 +60,12 @@ class ManualDosesTest {
     @Test
     fun `should deduplicate legacy entries without changing stored text`() {
         val doses =
-            ManualDoses("""[{"medicineLabel":" " + MEDICINE_A + " ","medicineId":1,"amount":"1 tablet "},{"medicineLabel":MEDICINE_A,"medicineId":1,"amount":" 1 tablet"},{"medicineLabel":MEDICINE_A,"medicineId":1,"amount":ONE_TABLET}]""")
+            ManualDoses("""[{"medicineLabel":" Medicine A ","medicineId":1,"amount":"1 tablet "},{"medicineLabel":"Medicine A","medicineId":1,"amount":" 1 tablet"},{"medicineLabel":"medicine a","medicineId":1,"amount":"1 tablet"}]""")
 
         assertEquals(
             listOf(
                 ManualDose(" $MEDICINE_A ", 1, "1 tablet "),
-                ManualDose(MEDICINE_A, 1, ONE_TABLET),
+                ManualDose("medicine a", 1, ONE_TABLET),
             ),
             doses.doses,
         )
