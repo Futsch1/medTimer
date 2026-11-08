@@ -324,7 +324,16 @@ class ReminderTest : MedTimerTestBase() {
                 it != null && it.processedTimestamp != takenEvent.processedTimestamp
             }!!
         }
+        assertEquals(editedTakenTime, updatedEvent.processedTimestamp)
         val expectedRescheduledTime = updatedEvent.processedTimestamp.plusSeconds(interval.inWholeSeconds)
+        withTimeout(15.seconds) {
+            simulatedRemindersRepository.simulatedReminders.first { reminders ->
+                reminders.any {
+                    it.scheduledReminder.reminder.id == reminder.id &&
+                        it.scheduledReminder.timestamp == expectedRescheduledTime
+                }
+            }
+        }
         assertEquals(
             expectedRescheduledTime,
             simulatedRemindersRepository.simulatedReminders.value

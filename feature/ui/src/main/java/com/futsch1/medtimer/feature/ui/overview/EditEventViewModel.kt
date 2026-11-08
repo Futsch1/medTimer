@@ -159,6 +159,13 @@ class EditEventViewModel @Inject constructor(
             )
 
             reminderEventRepository.update(correctStock(event, updatedEvent))
+            if (
+                updatedEvent.remindedTimestamp != event.remindedTimestamp ||
+                updatedEvent.processedTimestamp != event.processedTimestamp ||
+                updatedEvent.status != event.status
+            ) {
+                commandBus.scheduleNextNotification()
+            }
         }
     }
 
