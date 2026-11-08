@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -130,7 +131,6 @@ private fun DialogContent(
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
-    val context = LocalContext.current
     BackHandler {
         if (state.step == ManualDoseStep.MEDICINE) onDismissDialog() else onStepBack()
     }
@@ -170,81 +170,15 @@ private fun DialogContent(
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                when (state.step) {
-                    ManualDoseStep.MEDICINE -> {
-                        Column {
-                            if (state.lastCustomDoses.isNotEmpty()) {
-                                RecentDoses(
-                                    doses = state.lastCustomDoses,
-                                    onLogRecentDose = onLogRecentDose
-                                )
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 6.dp),
-                                    color = MaterialTheme.colorScheme.outlineVariant,
-                                )
-                            }
-                            SectionLabel(R.string.choose_medicine)
-                            if (state.showSearch) {
-                                MedicineSearchField(searchQuery, onSearch)
-                            }
-                            CustomButton(
-                                R.string.medicine_name,
-                                Modifier.fillMaxWidth(),
-                                requireNonBlank = true,
-                            ) { name -> onSelectMedicineEntry(ManualDoseMedicineEntry(name, null)) }
-                            MedicineList(
-                                medicineEntries = state.medicineEntries,
-                                modifier = Modifier.heightIn(max = 300.dp),
-                                onSelectMedicineEntry = onSelectMedicineEntry,
-                            )
-                        }
-                    }
-
-                    ManualDoseStep.AMOUNT -> {
-                        SectionLabel(R.string.amount)
-                        OutlinedButton(
-                            onClick = { onSelectAmount("") },
-                            modifier = Modifier.fillMaxWidth()
-                        ) { Text(stringResource(R.string.no_amount)) }
-                        CustomButton(R.string.amount, Modifier.fillMaxWidth(), onEntered = onSelectAmount)
-                        AmountList(
-                            amounts = state.amounts,
-                            modifier = Modifier.weight(1f, fill = false),
-                            onSelectAmount = onSelectAmount,
-                        )
-                    }
-
-                    ManualDoseStep.TIME -> {
-                        Text(
-                            text = stringResource(R.string.time),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        SelectedDoseSummary(state)
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { onLogManualDose(null) },
-                        ) {
-                            Text(stringResource(R.string.log_at_current_time))
-                        }
-                        OutlinedButton(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(ManualDoseTestTags.ENTER_TIME),
-                            onClick = {
-                                val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
-                                pickerFactory.create(LocalTime.now()) { minutes ->
-                                    onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
-                                }.show(
-                                    context.findFragmentActivity().supportFragmentManager,
-                                    TimePickerDialogFactory.DIALOG_TAG,
-                                )
-                            },
-                        ) {
-                            Text(stringResource(R.string.log_at_another_time))
-                        }
-                    }
-                }
+                DoseStepContent(
+                    state = state,
+                    searchQuery = searchQuery,
+                    onSearch = onSearch,
+                    onSelectMedicineEntry = onSelectMedicineEntry,
+                    onSelectAmount = onSelectAmount,
+                    onLogManualDose = onLogManualDose,
+                    onLogRecentDose = onLogRecentDose,
+                )
             }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -269,6 +203,83 @@ private fun DialogContent(
                         Text(stringResource(R.string.back))
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.DoseStepContent(
+    state: ManualDoseState,
+    searchQuery: String,
+    onSearch: (String) -> Unit,
+    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
+    onSelectAmount: (String) -> Unit,
+    onLogManualDose: (LocalTime?) -> Unit,
+    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
+) {
+    val context = LocalContext.current
+    when (state.step) {
+        ManualDoseStep.MEDICINE -> {
+            Column {
+                if (state.lastCustomDoses.isNotEmpty()) {
+                    RecentDoses(doses = state.lastCustomDoses, onLogRecentDose = onLogRecentDose)
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 6.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
+                }
+                SectionLabel(R.string.choose_medicine)
+                if (state.showSearch) MedicineSearchField(searchQuery, onSearch)
+                CustomButton(
+                    R.string.medicine_name,
+                    Modifier.fillMaxWidth(),
+                    requireNonBlank = true,
+                ) { name -> onSelectMedicineEntry(ManualDoseMedicineEntry(name, null)) }
+                MedicineList(
+                    medicineEntries = state.medicineEntries,
+                    modifier = Modifier.heightIn(max = 300.dp),
+                    onSelectMedicineEntry = onSelectMedicineEntry,
+                )
+            }
+        }
+
+        ManualDoseStep.AMOUNT -> {
+            SectionLabel(R.string.amount)
+            OutlinedButton(onClick = { onSelectAmount("") }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.no_amount))
+            }
+            CustomButton(R.string.amount, Modifier.fillMaxWidth(), onEntered = onSelectAmount)
+            AmountList(
+                amounts = state.amounts,
+                modifier = Modifier.weight(1f, fill = false),
+                onSelectAmount = onSelectAmount,
+            )
+        }
+
+        ManualDoseStep.TIME -> {
+            Text(
+                text = stringResource(R.string.time),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            SelectedDoseSummary(state)
+            Button(modifier = Modifier.fillMaxWidth(), onClick = { onLogManualDose(null) }) {
+                Text(stringResource(R.string.log_at_current_time))
+            }
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.ENTER_TIME),
+                onClick = {
+                    val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
+                    pickerFactory.create(LocalTime.now()) { minutes ->
+                        onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
+                    }.show(
+                        context.findFragmentActivity().supportFragmentManager,
+                        TimePickerDialogFactory.DIALOG_TAG,
+                    )
+                },
+            ) {
+                Text(stringResource(R.string.log_at_another_time))
             }
         }
     }
