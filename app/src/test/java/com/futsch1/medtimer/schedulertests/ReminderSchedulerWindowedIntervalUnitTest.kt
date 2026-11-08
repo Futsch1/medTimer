@@ -1,7 +1,7 @@
 package com.futsch1.medtimer.schedulertests
 
-import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.common.time.TimeAccess
+import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.schedulertests.TestHelper.assertReminded
 import org.junit.Test
 import org.mockito.Mockito
@@ -66,7 +66,9 @@ class ReminderSchedulerWindowedIntervalUnitTest {
         assertEquals(0, scheduledReminders.size)
 
         Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
-        reminderEventList.add(TestHelper.buildReminderEvent(1, TestHelper.on(2, 120)).copy(processedTimestamp = TestHelper.on(2, 121)))
+        reminderEventList.add(
+            TestHelper.buildReminderEvent(1, TestHelper.on(2, 120)).copy(processedTimestamp = TestHelper.on(2, 121))
+        )
         scheduledReminders = scheduler.schedule(medicineList.map { it.toMedicine() }, reminderEventList)
         assertReminded(
             scheduledReminders,
@@ -252,5 +254,93 @@ class ReminderSchedulerWindowedIntervalUnitTest {
             "An unprocessed event at the next windowed interval must block re-scheduling, " +
                     "otherwise the notification loop would fire continuously"
         )
+    }
+
+
+    @Test
+    fun scheduleIntervalAfterEnd() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 12 * 60, 1).copy(
+            intervalStart = Instant.ofEpochSecond(1),
+            windowedInterval = true,
+            intervalStartsFromProcessed = true,
+            intervalStartTimeOfDay = LocalTime.of(5, 0),
+            intervalEndTimeOfDay = LocalTime.of(23, 59)
+        )
+        medicine.reminders.add(reminder)
+
+        val processedEvents = listOf(
+            TestHelper.buildReminderEvent(1, TestHelper.on(1, 5 * 60)).copy(
+                processedTimestamp = TestHelper.on(1, 5 * 60),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            ), TestHelper.buildReminderEvent(1, TestHelper.on(2, 10)).copy(
+                processedTimestamp = TestHelper.on(2, 10),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            )
+        )
+
+        val scheduledReminders = scheduler.schedule(
+            listOf(medicine.toMedicine()),
+            processedEvents
+        )
+        assertEquals(1, scheduledReminders.size)
+        assertEquals(TestHelper.on(2, 5 * 60), scheduledReminders[0].timestamp)
+
+    }
+
+    @Test
+    fun `should continue windowed intervals after a reminder is processed after midnight`() {
+        val mockTimeAccess: TimeAccess = Mockito.mock()
+        Mockito.`when`(mockTimeAccess.systemZone()).thenReturn(ZoneId.of("Z"))
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(1))
+        val scheduler = ReminderSchedulerUnitTest.getScheduler(mockTimeAccess)
+
+        val medicine = TestHelper.buildTestMedicine(1, "Test")
+        val reminder = TestHelper.buildReminder(1, 1, "1", 12 * 60, 1).copy(
+            intervalStart = Instant.ofEpochSecond(1),
+            windowedInterval = true,
+            intervalStartsFromProcessed = true,
+            intervalStartTimeOfDay = LocalTime.of(5, 0),
+            intervalEndTimeOfDay = LocalTime.of(23, 59)
+        )
+        medicine.reminders.add(reminder)
+
+        val reminderEvents = mutableListOf(
+            TestHelper.buildReminderEvent(1, TestHelper.on(1, 5 * 60)).copy(
+                processedTimestamp = TestHelper.on(1, 5 * 60),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            ),
+            TestHelper.buildReminderEvent(1, TestHelper.on(1, 17 * 60)).copy(
+                processedTimestamp = TestHelper.on(2, 10),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            )
+        )
+
+        var scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), reminderEvents)
+        assertReminded(scheduledReminders, TestHelper.on(2, 5 * 60), medicine.toMedicine(), reminder)
+
+        reminderEvents.add(
+            TestHelper.buildReminderEvent(1, TestHelper.on(2, 5 * 60)).copy(
+                processedTimestamp = TestHelper.on(2, 5 * 60),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            )
+        )
+        scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), reminderEvents)
+        assertReminded(scheduledReminders, TestHelper.on(2, 17 * 60), medicine.toMedicine(), reminder)
+
+        reminderEvents.add(
+            TestHelper.buildReminderEvent(1, TestHelper.on(2, 17 * 60)).copy(
+                processedTimestamp = TestHelper.on(2, 17 * 60),
+                status = ReminderEvent.ReminderStatus.TAKEN
+            )
+        )
+        Mockito.`when`(mockTimeAccess.localDate()).thenReturn(LocalDate.EPOCH.plusDays(2))
+        scheduledReminders = scheduler.schedule(listOf(medicine.toMedicine()), reminderEvents)
+        assertReminded(scheduledReminders, TestHelper.on(3, 5 * 60), medicine.toMedicine(), reminder)
     }
 }

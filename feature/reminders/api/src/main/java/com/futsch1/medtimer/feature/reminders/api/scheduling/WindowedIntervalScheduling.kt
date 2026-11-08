@@ -1,8 +1,8 @@
 package com.futsch1.medtimer.feature.reminders.api.scheduling
 
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.domain.model.Reminder
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
-import com.futsch1.medtimer.core.common.time.TimeAccess
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -75,25 +75,22 @@ class WindowedIntervalScheduling(
         // If the next interval is after the end time of this reminder's end time, go to the start of the next day
         return if (nextTime != null) {
             val interval = Interval(reminder, timeAccess.localDate(), timeAccess)
-            val previousInterval = Interval(reminder, timeAccess.localDate().minusDays(1), timeAccess)
             // Check if we had a long pause, in this case, restart from today
             if (instant.isBefore(interval.startInstant.minus(1, ChronoUnit.DAYS))) {
                 interval.startInstant
             } else {
-                // If the last reminder is still in the previous interval, we are good
                 when {
-                    previousInterval.isInInterval(nextTime) -> {
-                        nextTime
-                    }
-
-                    nextTime < interval.startInstant || previousInterval.isInInterval(lastRemindedInstant) && interval.isInInterval(nextTime) -> {
+                    // If the last reminder was not raised in this interval, we start on the interval start
+                    !interval.isInInterval(lastRemindedInstant) -> {
                         interval.startInstant
                     }
 
+                    // The next reminder is in the current interval, just schedule it
                     interval.isInInterval(nextTime) -> {
                         nextTime
                     }
 
+                    // The next reminder must be after the current interval, so move it to the next day
                     else -> {
                         interval.startInstant.plus(1, ChronoUnit.DAYS)
                     }
