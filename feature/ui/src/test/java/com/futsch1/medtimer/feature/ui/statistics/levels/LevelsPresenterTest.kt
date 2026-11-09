@@ -11,6 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
+import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -216,8 +217,10 @@ class LevelsPresenterTest {
         val second = Instant.parse("2026-03-10T06:00:00Z")
         val text = "1.5,5.5 mg"
         val amount = checkNotNull(DoseAmountParser.parseAmount(text))
+        // The parser reads numbers in the default locale, so the expected text has to be written in it as well
+        val localizedAmount = NumberFormat.getNumberInstance().apply { maximumFractionDigits = 10 }.format(amount)
         val state = present(listOf(taken("Medicine A", first, text), taken("Medicine A", second, "2 mg")))
-        val expected = present(listOf(taken("Medicine A", first, "$amount mg"), taken("Medicine A", second, "2 mg")))
+        val expected = present(listOf(taken("Medicine A", first, "$localizedAmount mg"), taken("Medicine A", second, "2 mg")))
 
         assertSameCurve(expected.series.single(), state.series.single())
         assertTrue(state.unitConflicts.isEmpty())
