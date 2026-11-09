@@ -55,8 +55,7 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
 
         settingsActions.reminder = modelData
 
-        findPreference<Preference>("stock_threshold")?.summary =
-            medicine?.let { MedicineHelper.formatAmount(modelData.outOfStockThreshold, it) } ?: ""
+        setThresholdSummary()
     }
 
     override fun customSetup(modelData: Reminder) {
@@ -90,11 +89,18 @@ class AdvancedReminderPreferencesStockFragment : AdvancedReminderPreferencesFrag
                         context?.getString(com.futsch1.medtimer.core.ui.R.string.never)
                     }
                 this@AdvancedReminderPreferencesStockFragment.medicine = medicine
+                setThresholdSummary()
             }
         }
     }
 
     override val topAppBarActions: @Composable RowScope.() -> Unit =
         { AdvancedReminderSettingsMenu(settingsActions) }
+
+    private fun setThresholdSummary() {
+        findPreference<Preference>("stock_threshold")?.summary =
+            medicine?.let { MedicineHelper.formatAmount(dataStore.modelData.outOfStockThreshold, it) } ?: ""
+
+    }
 
 }
