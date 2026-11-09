@@ -77,3 +77,6 @@ internal val DarkColorScheme = darkColorScheme(
     inversePrimary = Purple40,
     scrim = Color(0xFF000000),
 )
+
+// Theme.MedTimer2's night XML theme also sets colorSurfaceContainer to background_dark.
+internal val AlternativeDarkColorScheme = DarkColorScheme.copy(surfaceContainer = Color.Black)

@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.MedTimer" parent="Theme.Material3.DynamicColors.Dark.NoActionBar">
+        <item name="medtimerDynamicColor">true</item>
         <item name="preferenceTheme">@style/MaterialPreferenceThemeOverlay</item>
     </style>
 
@@ -12,6 +13,7 @@
         <item name="android:widgetLayout">@layout/preference_widget_material_switch</item>
     </style>
     <style name="Theme.MedTimer2" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="medtimerDynamicColor">false</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@android:color/background_dark</item>
         <item name="colorSurfaceContainer">@android:color/background_dark</item>
