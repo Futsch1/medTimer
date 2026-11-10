@@ -19,7 +19,7 @@
     <string name="linked_reminder_help">Un recordatorio vinculado es un recordatorio de seguimiento que se programa una cierta cantidad de tiempo después de que se tome un recordatorio principal. Esto es útil para medicamentos que deben tomarse en secuencia, con un retraso específico entre ellos.</string>
     <string name="linked_reminder_summary">Tras recordatorio en %1$s</string>
     <string name="medicine_stock_string">%1$s restantes</string>
-    <string name="out_of_stock_reminder">Recordatorio de existencias</string>
+    <string name="out_of_stock_reminder">Recordatorio de existencias agotadas</string>
     <string name="out_of_stock_reminder_help">Recuerda cuando el medicamento se agota, ya sea después de cada recordatorio, una vez o una vez al día.</string>
     <string name="production_date">Fecha de producción</string>
     <string name="refill">Reposición de existencias</string>
@@ -308,8 +308,8 @@
     <string name="show_stock_changes_in_overview">Mostrar cambios de stock en el resumen</string>
     <string name="expiration_settings">Configuración de vencimiento</string>
     <string name="remind_days_before_expiration">Recordar días antes del vencimiento</string>
-    <string name="medicine_stock_settings">Configuración de existencias de medicamentos</string>
-    <string name="edit_medicine_stock_settings">Editar configuración de existencias de medicamentos</string>
+    <string name="medicine_stock_settings">Configuración de existencias</string>
+    <string name="edit_medicine_stock_settings">Editar configuración de existencias</string>
     <string name="clear_dates">Borrar fechas</string>
     <string name="acknowledged">Reconocido</string>
     <string name="select_all">Seleccionar todo</string>

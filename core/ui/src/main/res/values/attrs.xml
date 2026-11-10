@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="medtimerDynamicColor" format="boolean" />
+
     <declare-styleable name="WidgetAttrs">
         <attr name="medtimerWidgetPadding" format="dimension" />
         <attr name="medtimerWidgetInnerRadius" format="dimension" />

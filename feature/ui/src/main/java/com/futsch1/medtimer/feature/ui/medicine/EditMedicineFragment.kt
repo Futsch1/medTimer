@@ -159,7 +159,7 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                             onOpenSubmenu = { submenu: EditMedicineSubmenus.Submenu ->
                                 editMedicineActions.open(submenu)
                             },
-                            onOpenHelp = { appOptionsActions.openHelp("getting-started") },
+                            onOpenHelp = { appOptionsActions.openHelp("reminder-types") },
                             onStartCreatingReminder = {
                                 newReminderViewModel.startNewReminder(
                                     medicineId = editMedicineScreenViewModel.medicineId,

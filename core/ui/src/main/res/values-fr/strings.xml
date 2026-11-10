@@ -19,7 +19,7 @@
     <string name="linked_reminder_help">Un rappel lié est un rappel de suivi qui est programmé un certain temps après qu\'un rappel principal a été pris. Ceci est utile pour les médicaments qui doivent être pris en séquence, avec un délai spécifique entre eux.</string>
     <string name="linked_reminder_summary">Après le rappel à %1$s</string>
     <string name="medicine_stock_string">%1$s restants</string>
-    <string name="out_of_stock_reminder">Rappel de la réserve</string>
+    <string name="out_of_stock_reminder">Rappel de rupture de stock</string>
     <string name="out_of_stock_reminder_help">Rappelle lorsque le médicament est en rupture de stock, soit après chaque rappel, soit une fois, soit une fois par jour.</string>
     <string name="production_date">Date de production</string>
     <string name="refill">Réapprovisionnement des stocks</string>
@@ -308,15 +308,15 @@
     <string name="show_stock_changes_in_overview">Afficher les changements de stock dans l\'aperçu</string>
     <string name="expiration_settings">Paramètres d\'expiration</string>
     <string name="remind_days_before_expiration">Rappel jours avant l\'expiration</string>
-    <string name="medicine_stock_settings">Paramètres du stock de médicaments</string>
-    <string name="edit_medicine_stock_settings">Modifier les paramètres du stock de médicaments</string>
+    <string name="medicine_stock_settings">Paramètres du stock</string>
+    <string name="edit_medicine_stock_settings">Modifier les paramètres du stock</string>
     <string name="clear_dates">Effacer les dates</string>
     <string name="acknowledged">Confirmé</string>
     <string name="select_all">Tout sélectionner</string>
     <string name="by_name">Par nom</string>
     <string name="by_creation_date_ascending">Croissant par date de création</string>
     <string name="by_creation_date_descending">Décroissant par date de création</string>
-    <string name="create_out_of_stock_reminder">Créer un rappel de la réserve</string>
+    <string name="create_out_of_stock_reminder">Créer un rappel de rupture de stock</string>
     <string name="successfully_created_reminder">Nouveau rappel créé avec succès</string>
     <string name="create_expiration_date_reminder">Créer un rappel de date d\'expiration</string>
     <string name="duplicate">Dupliquer</string>
