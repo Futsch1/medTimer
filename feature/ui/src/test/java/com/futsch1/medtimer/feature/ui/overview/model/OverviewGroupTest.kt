@@ -65,4 +65,12 @@ class OverviewGroupTest {
 
         assertEquals(listOf(listOf("A", "B", "C")), groups.map { group -> group.events.map { it.content.medicineName } })
     }
+
+    @Test
+    fun `should treat taken and skipped as resolved and everything else as open`() {
+        assertEquals(
+            setOf(OverviewState.TAKEN, OverviewState.SKIPPED),
+            OverviewState.entries.filter { it.isResolved }.toSet(),
+        )
+    }
 }

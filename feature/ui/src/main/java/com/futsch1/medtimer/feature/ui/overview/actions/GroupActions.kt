@@ -2,7 +2,7 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewGroup
-import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
+import com.futsch1.medtimer.feature.ui.overview.model.isResolved
 
 /**
  * What the header of one [OverviewGroup] offers. Both actions derive from [MultipleActions], so the
@@ -12,7 +12,7 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
  */
 class GroupActions(group: OverviewGroup) {
 
-    private val unresolved = group.events.filter { it.state != OverviewState.TAKEN && it.state != OverviewState.SKIPPED }
+    private val unresolved = group.events.filterNot { it.state.isResolved }
 
     /**
      * The events that `Confirm all` marks taken: the unresolved ones, so a part-resolved group

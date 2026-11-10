@@ -1,14 +1,17 @@
 package com.futsch1.medtimer.feature.ui.overview
 
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.ui.list.SelectionListController
@@ -16,6 +19,7 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.core.ui.time.SystemDateTimeFormat
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.groupOverviewEvents
 import org.junit.Rule
 import org.junit.Test
@@ -26,6 +30,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
@@ -170,6 +175,29 @@ class OverviewEventListGroupTest {
         composeTestRule.onAllNodesWithTag(OverviewTestTags.EVENT_CARD).assertCountEquals(1)
         assertTrue(bounds(OverviewTestTags.event(0)).top == 0.dp, "The first row needs no spacing above it")
     }
+
+    @Test
+    fun `taken and skipped rows strike through the medicine name and open rows do not`() {
+        setList(
+            listOf(
+                TestOverviewEvent(id = 1, timestamp = nine, medicineName = "One", state = OverviewState.TAKEN),
+                TestOverviewEvent(id = 2, timestamp = nine, medicineName = "Two", state = OverviewState.SKIPPED),
+                TestOverviewEvent(id = 3, timestamp = nine, medicineName = "Three", state = OverviewState.RAISED),
+            ),
+        )
+
+        assertTrue(isStruckThrough("One"), "A taken row strikes its medicine name through")
+        assertTrue(isStruckThrough("Two"), "A skipped row strikes its medicine name through")
+        assertFalse(isStruckThrough("Three"), "An open row keeps its medicine name plain")
+    }
+
+    private fun isStruckThrough(medicineName: String): Boolean =
+        composeTestRule.onNode(
+            hasText(medicineName, substring = true) and hasAnyAncestor(hasTestTag(OverviewTestTags.EVENT_TEXT)),
+            useUnmergedTree = true,
+        ).fetchSemanticsNode().config[SemanticsProperties.Text]
+            .flatMap { it.spanStyles }
+            .any { it.item.textDecoration == TextDecoration.LineThrough }
 
     private fun assertHeaderTime(groupIndex: Int, timestamp: Long) {
         val expected = SystemDateTimeFormat.time(ApplicationProvider.getApplicationContext(), Instant.ofEpochSecond(timestamp))

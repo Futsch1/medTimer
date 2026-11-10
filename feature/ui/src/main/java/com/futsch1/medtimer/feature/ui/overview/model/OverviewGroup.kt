@@ -7,6 +7,9 @@ import kotlinx.collections.immutable.toPersistentList
 /** The events of one day that share one reminder time, shown as one card. */
 data class OverviewGroup(val timestamp: Long, val events: ImmutableList<OverviewEvent>)
 
+/** Taken or skipped: nothing is left to do for the event. */
+val OverviewState.isResolved: Boolean get() = this == OverviewState.TAKEN || this == OverviewState.SKIPPED
+
 /**
  * The order of the overview events: by reminder time, then by reminder, so that a row keeps its slot
  * in its group when it goes from scheduled to raised or resolved. The event id only breaks ties

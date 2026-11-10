@@ -20,6 +20,8 @@ On **Overview**, the doses that share one reminder time show together in one car
 
 The time header offers **Confirm all**, which marks every open dose of that time as taken with one tap. Doses that are already taken or skipped keep their state and time. The three-dot button next to it opens the actions for the whole group, for example **Skipped** or **Reschedule reminder**. An action that does not apply to every dose of the group does not show.
 
+Taken and skipped doses show faded, with the medicine name struck through. They stay in their place in the list.
+
 ## Correct a recorded event
 
 On **Overview**, tap the event's icon to update its status. To edit event details, tap the event's data to open its
