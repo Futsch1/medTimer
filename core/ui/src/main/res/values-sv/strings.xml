@@ -99,6 +99,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="confirm">Godkänn</string>
+    <string name="confirm_all">Godkänn alla</string>
     <string name="are_you_sure_delete_medicine">Är du säker på att du vill ta bort den här läkemedlet?</string>
     <string name="no_reminders">Inga påminnelser satta</string>
     <string name="version">Version %s</string>

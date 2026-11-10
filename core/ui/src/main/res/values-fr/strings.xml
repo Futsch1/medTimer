@@ -89,6 +89,7 @@
     <string name="ok">VALIDER</string>
     <string name="cancel">Annuler</string>
     <string name="confirm">Confirmer</string>
+    <string name="confirm_all">Tout confirmer</string>
     <string name="are_you_sure_delete_medicine">Êtes-vous sûr de supprimer le médicament ?</string>
     <string name="no_reminders">Aucun rappel défini</string>
     <string name="version">Version %s</string>

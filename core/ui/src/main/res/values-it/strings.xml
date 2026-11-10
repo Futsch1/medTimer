@@ -89,6 +89,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Annulla</string>
     <string name="confirm">Conferma</string>
+    <string name="confirm_all">Conferma tutto</string>
     <string name="are_you_sure_delete_medicine">Vuoi davvero eliminare il farmaco?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
     <string name="version">Versione %s</string>

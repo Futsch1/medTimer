@@ -84,6 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="confirm">Bestätigen</string>
+    <string name="confirm_all">Alle bestätigen</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="version">Version %s</string>

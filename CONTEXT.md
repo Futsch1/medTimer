@@ -77,7 +77,7 @@ The two Reminder Event states the Analysis feature aggregates and visualizes.
 _Avoid_: done/dismissed, completed/missed.
 
 **Reminder group**:
-The reminder events of one day that share one reminder timestamp. The Overview shows a reminder group as one card. A group of two or more events has a time header. A one-event group has no header. "Same time" means an identical timestamp, through `groupBySameTime`. There is no tolerance window. Grouping follows the `group_overview_events` setting, not `combine_notifications`. With the setting off, every event forms its own group. In code the type is `OverviewGroup`, and the events stay `ReminderEvent` and `OverviewEvent`.
+The reminder events of one day that share one reminder timestamp. The Overview shows a reminder group as one card. A group of two or more events has a time header with `Confirm all` and an overflow menu for the whole group. A one-event group has no header. "Same time" means an identical timestamp, through `groupBySameTime`. There is no tolerance window. Grouping follows the `group_overview_events` setting, not `combine_notifications`. With the setting off, every event forms its own group. In code the type is `OverviewGroup`, and the events stay `ReminderEvent` and `OverviewEvent`.
 _Avoid_: task, batch, slot.
 
 **Tag filter**:

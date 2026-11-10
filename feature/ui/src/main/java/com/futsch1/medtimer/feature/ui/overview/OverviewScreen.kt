@@ -267,7 +267,7 @@ fun OverviewScreen(
                         selection = selection,
                         onEventClick = onEventClick,
                         onEnterSelectionMode = onEnterSelectionMode,
-                        onAction = { button, event -> onAction(button, listOf(event)) },
+                        onAction = onAction,
                         // The day sliding out keeps its list until the transition ends; only the selected day scrolls.
                         scrollTargetEventIds = if (content == state.day) state.scrollTargetEventIds else persistentSetOf(),
                         onScrolledToTarget = onScrolledToTarget,

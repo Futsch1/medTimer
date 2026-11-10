@@ -30,6 +30,8 @@ object OverviewTestTags {
     const val EVENT_STATE_BUTTON = "overview_event_state"
     const val EVENT_TEXT = "overview_event_text"
     const val GROUP_TIME = "overview_group_time"
+    const val GROUP_CONFIRM_ALL = "overview_group_confirm_all"
+    const val GROUP_MENU = "overview_group_menu"
     const val BATTERY_WARNING = "overview_battery_warning"
     const val EXACT_REMINDERS_WARNING = "overview_exact_reminders_warning"
 

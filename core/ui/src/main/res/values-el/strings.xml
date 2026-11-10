@@ -84,6 +84,7 @@
     <string name="ok">Εντάξει</string>
     <string name="cancel">Άκυρο</string>
     <string name="confirm">Επιβεβαίωση</string>
+    <string name="confirm_all">Επιβεβαίωση όλων</string>
     <string name="are_you_sure_delete_medicine">Σίγουρα θέλετε να διαγράψετε αυτή την αγωγή;</string>
     <string name="no_reminders">Δεν έχουν οριστεί υπενθυμίσεις</string>
     <string name="version">Έκδοση %s</string>

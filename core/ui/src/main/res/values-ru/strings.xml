@@ -90,6 +90,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Отменить</string>
     <string name="confirm">Подтвердить</string>
+    <string name="confirm_all">Подтвердить все</string>
     <string name="are_you_sure_delete_medicine">Вы точно хотите удалить лекарство?</string>
     <string name="no_reminders">Не установлено напоминаний</string>
     <string name="version">Версия %s</string>

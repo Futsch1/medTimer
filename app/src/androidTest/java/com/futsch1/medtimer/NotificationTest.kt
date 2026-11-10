@@ -360,6 +360,28 @@ class NotificationTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun sameTimeRemindersConfirmAll() {
+        val notificationTime = aboutToFire()
+
+        seed.medicine(TEST_MED) {
+            reminder("1", notificationTime)
+            reminder(SECOND_ONE, notificationTime)
+        }
+        scheduleRemindersNow()
+
+        navigation.toOverview()
+        overview.assertGroupCount(1)
+        overview.assertEventState(0, R.string.reminded)
+        overview.assertEventState(1, R.string.reminded)
+
+        overview.confirmAll(0)
+
+        overview.assertEventState(0, R.string.taken)
+        overview.assertEventState(1, R.string.taken)
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun takingCombinedRemindersFromOverviewRemovesNotification() {
         settings.click(R.string.display_settings, R.string.combine_notifications)
 

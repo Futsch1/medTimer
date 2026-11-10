@@ -84,6 +84,7 @@
     <string name="ok">Tamam</string>
     <string name="cancel">İptal</string>
     <string name="confirm">Onayla</string>
+    <string name="confirm_all">Tümünü onayla</string>
     <string name="are_you_sure_delete_medicine">İlacı silmek istediğinizden emin misiniz?</string>
     <string name="no_reminders">Hiç hatırlatıcı ayarlanmadı</string>
     <string name="version">Versiyon %s</string>

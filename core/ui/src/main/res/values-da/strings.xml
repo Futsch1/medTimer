@@ -80,6 +80,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Annuller</string>
     <string name="confirm">Bekræft</string>
+    <string name="confirm_all">Bekræft alle</string>
     <string name="are_you_sure_delete_medicine">Er du sikker på, at du vil slette medicinen?</string>
     <string name="no_reminders">Ingen påmindelser angivet</string>
     <string name="version">Version %s</string>

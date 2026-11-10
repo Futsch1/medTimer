@@ -84,6 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Peruuta</string>
     <string name="confirm">Vahvista</string>
+    <string name="confirm_all">Vahvista kaikki</string>
     <string name="are_you_sure_delete_medicine">Haluatko varmasti poistaa lääkkeen?</string>
     <string name="no_reminders">Ei muistutuksia</string>
     <string name="version">Versio %s</string>

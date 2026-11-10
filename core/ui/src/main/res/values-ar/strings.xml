@@ -110,6 +110,7 @@
     <string name="ok">موافق</string>
     <string name="cancel">ألغِ</string>
     <string name="confirm">تأكيد</string>
+    <string name="confirm_all">تأكيد الكل</string>
     <string name="are_you_sure_delete_medicine">هل أنت متأكد من حذف الدواء؟</string>
     <string name="no_reminders">لم يتم تعيين تذكيرات</string>
     <string name="twenty_four_hours">24 ساعة</string>

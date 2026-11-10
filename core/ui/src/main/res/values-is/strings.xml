@@ -61,6 +61,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Hætta við</string>
     <string name="confirm">Staðfesta</string>
+    <string name="confirm_all">Staðfesta allt</string>
     <string name="are_you_sure_delete_medicine">Ert þú viss um að þú viljir eyða þessu lyfi?</string>
     <string name="no_reminders">Engar áminningar</string>
     <string name="version">Útgáfa %s</string>

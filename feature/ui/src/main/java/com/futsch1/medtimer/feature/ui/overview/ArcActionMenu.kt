@@ -101,6 +101,9 @@ private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
  *
  * [anchorContent] restates the anchor's own visual centred on that point and above the scrim, so
  * it keeps reading as undimmed without the scrim having to cut a hole around it; see [ArcScrim].
+ *
+ * [fanTowardsStart] fans the arc to the left of the anchor instead (to the right in RTL), for an
+ * anchor at the end edge of the screen such as a group header's overflow button.
  */
 @Composable
 internal fun ArcActionMenu(
@@ -110,6 +113,7 @@ internal fun ArcActionMenu(
     anchorContent: @Composable () -> Unit,
     onDismissRequest: () -> Unit,
     onAction: (Button) -> Unit,
+    fanTowardsStart: Boolean = false,
 ) {
     if (buttons.isEmpty()) return
 
@@ -171,6 +175,7 @@ internal fun ArcActionMenu(
                     anchorContent = anchorContent,
                     onDismissRequest = onDismissRequest,
                     onAction = onAction,
+                    fanTowardsStart = fanTowardsStart,
                 )
             }
         }
@@ -207,6 +212,7 @@ private fun ArcActionButtons(
     anchorContent: @Composable () -> Unit,
     onDismissRequest: () -> Unit,
     onAction: (Button) -> Unit,
+    fanTowardsStart: Boolean = false,
 ) {
     val density = LocalDensity.current
     val radiusXPx = with(density) { ARC_RADIUS_X.toPx() }
@@ -279,7 +285,7 @@ private fun ArcActionButtons(
                 (anchorCenter.x - scrimRadius).roundToInt(),
                 (anchorCenter.y - scrimRadius).roundToInt(),
             )
-            placeArcTargets(targets, anchorCenter, layoutDirection)
+            placeArcTargets(targets, anchorCenter, fanRight = (layoutDirection == LayoutDirection.Ltr) != fanTowardsStart)
             anchor.place(
                 (anchorCenter.x - anchor.width / 2f).roundToInt(),
                 (anchorCenter.y - anchor.height / 2f).roundToInt(),
@@ -311,17 +317,17 @@ private fun arcHalfHeight(yPositions: List<Float>, targets: List<ArcTarget>): In
 }
 
 /**
- * Places each button relative to [anchorCenter], mirroring about the anchor in RTL. `placeRelative`
- * is deliberately avoided: the container spans the whole window, so it would mirror about the
- * screen's centre rather than the anchor's.
+ * Places each button relative to [anchorCenter], to its right for [fanRight] and mirrored about
+ * the anchor otherwise. `placeRelative` is deliberately avoided: the container spans the whole
+ * window, so it would mirror about the screen's centre rather than the anchor's.
  */
 private fun Placeable.PlacementScope.placeArcTargets(
     targets: List<ArcTarget>,
     anchorCenter: Offset,
-    layoutDirection: LayoutDirection,
+    fanRight: Boolean,
 ) {
     targets.forEach { (startX, centerY, placeable) ->
-        val x = if (layoutDirection == LayoutDirection.Ltr) {
+        val x = if (fanRight) {
             anchorCenter.x + startX
         } else {
             anchorCenter.x - startX - placeable.width

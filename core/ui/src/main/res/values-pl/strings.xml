@@ -107,6 +107,7 @@
     <string name="delete">Usuń</string>
     <string name="cancel">Anuluj</string>
     <string name="confirm">Potwierdź</string>
+    <string name="confirm_all">Potwierdź wszystkie</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>
     <string name="app_version">Wersja aplikacji</string>
     <string name="are_you_sure_delete_events">Spowoduje to trwałe usunięcie całej historii leków. Tej operacji nie można cofnąć.</string>
