@@ -41,6 +41,7 @@ class JSONSettingsBackupUnitTest {
         showTakenTimeInOverview = false,
         showRemindedTimeInOverview = true,
         showStockChangesInOverview = true,
+        groupOverviewEvents = false,
         systemLocale = true,
         theme = ThemeSetting.ALTERNATIVE,
         hideMedicineName = true,
@@ -88,6 +89,7 @@ class JSONSettingsBackupUnitTest {
         verify(mockPrefs2).putBoolean(PreferencesDataSource.SHOW_TAKEN_TIME_IN_OVERVIEW, false)
         verify(mockPrefs2).putBoolean(PreferencesDataSource.SHOW_REMINDED_TIME_IN_OVERVIEW, true)
         verify(mockPrefs2).putBoolean(PreferencesDataSource.SHOW_STOCK_CHANGES_IN_OVERVIEW, true)
+        verify(mockPrefs2).putBoolean(PreferencesDataSource.GROUP_OVERVIEW_EVENTS, false)
         verify(mockPrefs2).putBoolean(PreferencesDataSource.SYSTEM_LOCALE, true)
         verify(mockPrefs2).putString(
             PreferencesDataSource.THEME,
@@ -105,6 +107,22 @@ class JSONSettingsBackupUnitTest {
         verify(mockPrefs2).setWeekendStartTime(LocalTime.of(7, 30))
         verify(mockPrefs2).setWeekendEndTime(LocalTime.of(10, 0))
         verify(mockPrefs2).putStringSet(PreferencesDataSource.WEEKEND_DAYS, setOf("1", "7"))
+    }
+
+    @Test
+    fun testBackupWithoutOverviewGroupingGroupsEvents() {
+        val mockPrefs = mock<PreferencesDataSource>()
+        whenever(mockPrefs.preferences).thenReturn(MutableStateFlow(buildPreferences()))
+        val json = Gson().toJson(JSONSettingsBackup(mockPrefs).createBackup())
+        // A backup written before the setting existed has no such field
+        val oldJson = json.replace("\"groupOverviewEvents\":false,", "")
+        assertFalse(oldJson.contains("groupOverviewEvents"))
+
+        val mockPrefs2 = mock<PreferencesDataSource>()
+        assertTrue(JSONSettingsBackup(mockPrefs2).applyBackup(oldJson))
+
+        verify(mockPrefs2).putBoolean(PreferencesDataSource.GROUP_OVERVIEW_EVENTS, true)
+        verify(mockPrefs2).putBoolean(PreferencesDataSource.COMBINE_NOTIFICATIONS, true)
     }
 
     @Test

@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -19,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -61,6 +65,28 @@ internal val RAIL_PILL_RESTING_HEIGHT = RAIL_PILL_WIDTH * 2
 internal val RAIL_INSET =
     (EVENT_SPACING + EVENT_STATE_BUTTON_MARGIN * 2 - RAIL_PILL_RESTING_HEIGHT) / 2
 
+/**
+ * Where a row sits in its group. The rows of one group stack without a gap, so each one rounds
+ * only its outer corners and the group reads as one card.
+ */
+enum class OverviewGroupPosition {
+    ONLY,
+    FIRST,
+    MIDDLE,
+    LAST;
+
+    val isGroupStart: Boolean get() = this == ONLY || this == FIRST
+
+    companion object {
+        fun of(index: Int, size: Int): OverviewGroupPosition = when {
+            size == 1 -> ONLY
+            index == 0 -> FIRST
+            index == size - 1 -> LAST
+            else -> MIDDLE
+        }
+    }
+}
+
 @Composable
 @SuppressWarnings("kotlin:S107")
 fun OverviewEventItem(
@@ -76,6 +102,7 @@ fun OverviewEventItem(
     onEnterSelectionMode: () -> Unit,
     onAction: (Button) -> Unit,
     modifier: Modifier = Modifier,
+    position: OverviewGroupPosition = OverviewGroupPosition.ONLY,
     onRailAnchor: (Float) -> Unit = {},
 ) {
     val containerColor = eventContainerColor(isSelected)
@@ -105,10 +132,17 @@ fun OverviewEventItem(
             onClick = onClick,
             onToggleSelection = onToggleSelection,
             onEnterSelectionMode = onEnterSelectionMode,
+            shape = groupRowShape(position),
             colors = CardDefaults.cardColors(containerColor = containerColor),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
         ) {
+            if (!position.isGroupStart) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp, end = 8.dp),
@@ -205,6 +239,18 @@ private fun OverviewEventItemPreviewBase(color: Int?, isSelected: Boolean, withI
                 onAction = {},
             )
         }
+    }
+}
+
+@Composable
+private fun groupRowShape(position: OverviewGroupPosition): Shape {
+    val shape = MaterialTheme.shapes.medium
+    val square = CornerSize(0.dp)
+    return when (position) {
+        OverviewGroupPosition.ONLY -> shape
+        OverviewGroupPosition.FIRST -> shape.copy(bottomStart = square, bottomEnd = square)
+        OverviewGroupPosition.MIDDLE -> RectangleShape
+        OverviewGroupPosition.LAST -> shape.copy(topStart = square, topEnd = square)
     }
 }
 

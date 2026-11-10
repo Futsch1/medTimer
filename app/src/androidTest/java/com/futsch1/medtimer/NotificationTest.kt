@@ -347,6 +347,7 @@ class NotificationTest : MedTimerTestBase() {
         }
 
         navigation.toOverview()
+        overview.assertGroupCount(1)
         overview.assertEventState(0, R.string.taken)
         overview.assertEventState(1, R.string.taken)
 

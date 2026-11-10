@@ -293,6 +293,7 @@
     <string name="show_taken_time_in_overview">在概览中显示服药时间</string>
     <string name="show_reminded_time_in_overview">在概览中显示提醒时间</string>
     <string name="show_stock_changes_in_overview">在概览中显示库存变化</string>
+    <string name="group_overview_events">在概览中按提醒时间对条目分组</string>
     <string name="expiration_settings">到期设置</string>
     <string name="remind_days_before_expiration">在到期前几天提醒</string>
     <string name="medicine_stock_settings">药品库存设置</string>

@@ -29,6 +29,7 @@ fun UserPreferences.toSettingsBackup(): SettingsBackup = SettingsBackup(
     showTakenTimeInOverview = showTakenTimeInOverview,
     showRemindedTimeInOverview = showRemindedTimeInOverview,
     showStockChangesInOverview = showStockChangesInOverview,
+    groupOverviewEvents = groupOverviewEvents,
     systemLocale = systemLocale,
     theme = theme.name,
     hideMedicineName = hideMedicineName,
@@ -78,6 +79,10 @@ fun SettingsBackup.applyTo(preferencesDataSource: PreferencesDataSource) {
     preferencesDataSource.putBoolean(
         PreferencesDataSource.SHOW_STOCK_CHANGES_IN_OVERVIEW,
         showStockChangesInOverview ?: true
+    )
+    preferencesDataSource.putBoolean(
+        PreferencesDataSource.GROUP_OVERVIEW_EVENTS,
+        groupOverviewEvents ?: true
     )
     preferencesDataSource.putBoolean(PreferencesDataSource.SYSTEM_LOCALE, systemLocale)
     preferencesDataSource.putString(

@@ -18,6 +18,7 @@ import com.futsch1.medtimer.core.ui.list.SelectionListController
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
+import com.futsch1.medtimer.feature.ui.overview.model.groupOverviewEvents
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -67,7 +68,7 @@ class OverviewEventListScrollTest {
             MedTimerTheme {
                 Box(Modifier.height(300.dp)) {
                     OverviewEventList(
-                        events = events(),
+                        groups = groupOverviewEvents(events(), groupByReminderTime = true),
                         selection = SelectionListController { it.id },
                         onEventClick = {},
                         onEnterSelectionMode = {},
