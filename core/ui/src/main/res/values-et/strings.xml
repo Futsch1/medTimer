@@ -377,4 +377,12 @@
     <string name="stock_decrement_preview">Varude vähenemise määr: %1$s.</string>
     <string name="stock_decrement_unreadable">Varude vähenemist ei ole võimalik kindlaks määrata, kuna see kogus on vigane.</string>
     <string name="inconclusive_dose_units_warning">Annuse/doosi ühikud ei ole ühesed: %1$s. Varude jälgimine ja taseme hinnangud võivad olla ebatäpsed.</string>
+    <string name="quick_log">Kiirlogi asukohas %1$s</string>
+    <string name="choose_medicine">Vali ravim</string>
+    <string name="no_amount">Kogus on puudu</string>
+    <string name="log_at_current_time">Logi asukohas %1$s</string>
+    <string name="log_at_another_time">Logi mõnes muus ajapunktis</string>
+    <string name="manual_dose_logged">Annus on logitud</string>
+    <string name="manual_dose_log_failed">Annuse logimine ei õnnestunud</string>
+    <string name="medicine_name_required">Sisesta ravimi nimi</string>
 </resources>
