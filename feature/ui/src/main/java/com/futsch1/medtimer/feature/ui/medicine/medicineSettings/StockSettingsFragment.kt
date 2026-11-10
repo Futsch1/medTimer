@@ -93,7 +93,6 @@ class StockSettingsFragment : MedicinePreferences(
                 )
             },
             "clear_dates" to { _, _ ->
-                // TODO: direct store usage in UI code; all non-UI logic should be delegated to the viewmodel
                 dataStore.putLong("production_date", 0)
                 dataStore.putLong("expiration_date", 0)
             },

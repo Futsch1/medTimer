@@ -9,10 +9,12 @@
         app:title="@string/estimated_run_out_date" />
     <Preference
         app:icon="@drawable/calendar_event"
+        app:isPreferenceVisible="false"
         app:key="stock_run_out_to_calendar"
         app:title="@string/create_calendar_entry" />
     <Preference
         app:icon="@drawable/alarm"
+        app:isPreferenceVisible="false"
         app:key="create_out_of_stock_reminder"
         app:title="@string/create_out_of_stock_reminder" />
     <PreferenceCategory app:title="@string/refill">
@@ -24,10 +26,6 @@
             app:key="stock_refill_now"
             app:title="@string/refill_now" />
     </PreferenceCategory>
-    <Preference
-        app:icon="@drawable/question_circle"
-        app:key="stock_tracking_help"
-        app:title="@string/help" />
     <PreferenceCategory app:title="@string/expiration_settings">
         <Preference
             app:key="production_date"
@@ -36,12 +34,16 @@
             app:key="expiration_date"
             app:title="@string/expiration_date" />
         <Preference
-            app:key="clear_dates"
             app:icon="@drawable/trash"
-            app:title="@string/clear_dates"/>
+            app:key="clear_dates"
+            app:title="@string/clear_dates" />
         <Preference
             app:icon="@drawable/alarm"
             app:key="create_expiration_date_reminder"
-            app:title="@string/create_expiration_date_reminder"/>
+            app:title="@string/create_expiration_date_reminder" />
     </PreferenceCategory>
+    <Preference
+        app:icon="@drawable/question_circle"
+        app:key="stock_tracking_help"
+        app:title="@string/help" />
 </androidx.preference.PreferenceScreen>
