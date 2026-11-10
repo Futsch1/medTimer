@@ -16,6 +16,10 @@ class ScheduledReminderActions(
             visibleButtons.add(Button.RESCHEDULE)
         } else {
             visibleButtons.add(Button.TAKEN)
+            // Taken asks for the amount of a variable-amount reminder, a step that a picked time would skip.
+            if (!simulatedReminderEvent.scheduledReminder.reminder.variableAmount) {
+                visibleButtons.add(Button.TAKEN_AT)
+            }
             if (!simulatedReminderEvent.cannotBeSkipped) {
                 visibleButtons.add(Button.SKIPPED)
             }

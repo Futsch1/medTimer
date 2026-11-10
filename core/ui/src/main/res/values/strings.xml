@@ -101,6 +101,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="taken_at">Taken at…</string>
+    <string name="taken_time_in_future">The taken time cannot be in the future</string>
+    <string name="taken_on_date">Taken on %1$s</string>
+    <string name="change_date">Change date</string>
     <string name="are_you_sure_delete_medicine">Are you sure to delete the medicine?</string>
     <string name="no_reminders">No reminders set</string>
     <string name="version">Version %s</string>

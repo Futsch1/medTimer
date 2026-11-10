@@ -89,6 +89,10 @@
     <string name="ok">Ok</string>
     <string name="cancel">Annulla</string>
     <string name="confirm">Conferma</string>
+    <string name="taken_at">Preso alle…</string>
+    <string name="taken_time_in_future">L’ora di assunzione non può essere nel futuro</string>
+    <string name="taken_on_date">Preso il %1$s</string>
+    <string name="change_date">Cambia data</string>
     <string name="are_you_sure_delete_medicine">Vuoi davvero eliminare il farmaco?</string>
     <string name="no_reminders">Nessun promemoria impostato</string>
     <string name="version">Versione %s</string>

@@ -79,6 +79,10 @@
     <string name="ok">完成</string>
     <string name="cancel">取消</string>
     <string name="confirm">确认</string>
+    <string name="taken_at">服用时间…</string>
+    <string name="taken_time_in_future">服用时间不能晚于当前时间</string>
+    <string name="taken_on_date">服用日期：%1$s</string>
+    <string name="change_date">更改日期</string>
     <string name="are_you_sure_delete_medicine">确定删除该药品吗？</string>
     <string name="no_reminders">未设置用药提醒</string>
     <string name="version">版本 %s</string>

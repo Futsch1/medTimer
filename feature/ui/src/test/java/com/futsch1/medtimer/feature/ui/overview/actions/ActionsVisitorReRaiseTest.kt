@@ -77,6 +77,8 @@ class ActionsVisitorReRaiseTest {
             reminderEventCreator,
             preferencesDataSource,
             commandBus,
+            mock<TakenTimePicker>(),
+            timeAccess,
             CoroutineScope(testDispatcher)
         )
     }

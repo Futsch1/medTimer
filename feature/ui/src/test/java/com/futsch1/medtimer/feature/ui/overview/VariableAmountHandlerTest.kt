@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -53,7 +54,7 @@ class VariableAmountHandlerTest {
         handler.confirmAmount(EVENT_ID, "2")
 
         verify(reminderEventRepository, never()).update(any())
-        verify(commandBus, never()).markReminderEvents(any(), any())
+        verify(commandBus, never()).markReminderEvents(any(), any(), anyOrNull())
     }
 
     @Test
@@ -96,7 +97,7 @@ class VariableAmountHandlerTest {
         val toPrompt = handler.takeDosesWithoutAmount(listOf(EVENT_ID))
 
         assertEquals(emptyList<ReminderEvent>(), toPrompt)
-        verify(commandBus, never()).markReminderEvents(any(), any())
+        verify(commandBus, never()).markReminderEvents(any(), any(), anyOrNull())
     }
 
     private companion object {

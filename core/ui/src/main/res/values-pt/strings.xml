@@ -86,6 +86,10 @@
     <string name="dosage">Dosagem</string>
     <string name="ok">OK</string>
     <string name="confirm">Confirmar</string>
+    <string name="taken_at">Tomado às…</string>
+    <string name="taken_time_in_future">A hora da toma não pode estar no futuro</string>
+    <string name="taken_on_date">Tomado em %1$s</string>
+    <string name="change_date">Alterar data</string>
     <string name="are_you_sure_delete_medicine">Tem certeza de que deseja excluir o medicamento?</string>
     <string name="add_medicine">Adicionar medicamento</string>
     <string name="delete">Excluir</string>

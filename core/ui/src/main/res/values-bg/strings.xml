@@ -84,6 +84,10 @@
     <string name="ok">ОК</string>
     <string name="cancel">Отмяна</string>
     <string name="confirm">Потвърди</string>
+    <string name="taken_at">Взето в…</string>
+    <string name="taken_time_in_future">Часът на приема не може да е в бъдещето</string>
+    <string name="taken_on_date">Взето на %1$s</string>
+    <string name="change_date">Промяна на датата</string>
     <string name="are_you_sure_delete_medicine">Наистина ли искате да изтриете лекарството?</string>
     <string name="no_reminders">Няма добавени напомняния</string>
     <string name="version">Версия %s</string>

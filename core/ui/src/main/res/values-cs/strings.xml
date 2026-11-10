@@ -94,6 +94,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Zrušit</string>
     <string name="confirm">Potvrdit</string>
+    <string name="taken_at">Užito v…</string>
+    <string name="taken_time_in_future">Čas užití nemůže být v budoucnosti</string>
+    <string name="taken_on_date">Užito dne %1$s</string>
+    <string name="change_date">Změnit datum</string>
     <string name="are_you_sure_delete_medicine">Opravdu chcete smazat lék?</string>
     <string name="no_reminders">Nenastavena žádná připomenutí</string>
     <string name="version">Verze %s</string>

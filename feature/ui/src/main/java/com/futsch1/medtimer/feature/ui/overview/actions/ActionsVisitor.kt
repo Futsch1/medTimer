@@ -6,6 +6,7 @@ import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.TimeHelper
 import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
+import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
@@ -34,6 +35,8 @@ class ActionsVisitor @Inject constructor(
     private val reminderEventCreator: ReminderEventCreator,
     private val preferencesDataSource: PreferencesDataSource,
     private val commandBus: ReminderCommandBus,
+    private val takenTimePicker: TakenTimePicker,
+    private val timeAccess: TimeAccess,
     @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private val visitScheduledReminder: MutableList<ScheduledReminder> = mutableListOf()
@@ -60,6 +63,8 @@ class ActionsVisitor @Inject constructor(
     private suspend fun complete(button: Button) {
         if (button == Button.RESCHEDULE) {
             rescheduleReminders()
+        } else if (button == Button.TAKEN_AT) {
+            pickTakenTime()
         } else {
             for (scheduledReminder in visitScheduledReminder) {
                 when (button) {
@@ -81,6 +86,9 @@ class ActionsVisitor @Inject constructor(
                             ReminderEvent.ReminderStatus.ACKNOWLEDGED
                         )
                     }
+
+                    // Both open a picker first and are handled above.
+                    Button.RESCHEDULE, Button.TAKEN_AT -> Unit
                 }
             }
         }
@@ -120,6 +128,31 @@ class ActionsVisitor @Inject constructor(
                     }
                 }
             }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
+    }
+
+    /**
+     * One picker serves every visited event, so a whole group or a whole selection records the
+     * same taken time. The visited events are copied first: a later visit clears the lists while
+     * the picker is still open.
+     */
+    private fun pickTakenTime() {
+        if (visitedPastReminderEvents.isEmpty() && visitScheduledReminder.isEmpty()) {
+            return
+        }
+        val scheduledReminders = visitScheduledReminder.toList()
+        val pastReminderEvents = visitedPastReminderEvents.toList()
+
+        takenTimePicker.pick(timeAccess.now()) { takenTime ->
+            fragmentActivity.lifecycleScope.launch {
+                val reminderEventIds = scheduledReminders.map { scheduledReminder ->
+                    reminderEventCreator.getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond)
+                        .reminderEventId
+                } + pastReminderEvents.map { it.reminderEvent.reminderEventId }
+                applicationScope.launch {
+                    commandBus.markReminderEvents(reminderEventIds, ReminderEvent.ReminderStatus.TAKEN, takenTime)
+                }
+            }
+        }
     }
 
     private fun requestShowReminders(reminderEvents: List<ReminderEvent>, remindInstant: Instant) {

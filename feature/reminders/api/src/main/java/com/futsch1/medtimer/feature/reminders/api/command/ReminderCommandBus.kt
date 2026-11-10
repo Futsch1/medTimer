@@ -2,6 +2,7 @@ package com.futsch1.medtimer.feature.reminders.api.command
 
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.feature.reminders.api.notificationData.ReminderNotificationData
+import java.time.Instant
 import kotlin.time.Duration
 
 /**
@@ -25,7 +26,15 @@ interface ReminderCommandBus {
 
     suspend fun restoreLocationSnoozes()
 
-    suspend fun markReminderEvents(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus)
+    /**
+     * Marks the reminder events with [status]. [processedTime] records when the dose really
+     * happened, for a dose logged after the fact. Without it the events record the current time.
+     */
+    suspend fun markReminderEvents(
+        reminderEventIds: List<Int>,
+        status: ReminderEvent.ReminderStatus,
+        processedTime: Instant? = null
+    )
 
     /** Re-posts the notification without the given events, or cancels it when none are left. */
     suspend fun removeRemindersFromNotification(notificationId: Int, reminderEventIds: List<Int>)
