@@ -1,7 +1,7 @@
 #!/bin/bash
 
 use_optipng=false
-if [[ "$1" = "--optipng" ]]; then
+if [[ $1 == "--optipng" ]]; then
 	use_optipng=true
 fi
 
