@@ -23,7 +23,7 @@ android {
         base.archivesName = "MedTimer"
         // Use this deprecated setting because Android Lint will not pick up androidResources.localeFilters correctly
         @Suppress("DEPRECATION")
-        resConfigs("en,ar,bg,cs,da,de,el,es,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
+        resConfigs("en,ar,bg,cs,da,de,el,es,et,fi,fr,hu,it,iw,nl,pl,pt,ru,sv,ta,tr,uk,zh-rCN,zh-rTW")
 
         testInstrumentationRunner = "com.futsch1.medtimer.harness.MedTimerHiltTestRunner"
         testInstrumentationRunnerArguments.putAll(
@@ -85,6 +85,7 @@ android {
             "de",
             "el",
             "es",
+            "et",
             "fi",
             "fr",
             "hu",
