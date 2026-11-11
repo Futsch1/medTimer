@@ -16,7 +16,7 @@ for i in "${!names[@]}"; do
 	dest_files+=("$dest")
 done
 
-locales=('ar' 'bg' 'cs-CZ' 'da-DK' 'de-DE' 'es-ES' 'el-GR' 'et-ET' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
+locales=('ar' 'bg' 'cs-CZ' 'da-DK' 'de-DE' 'es-ES' 'el-GR' 'et' 'fi-FI' 'fr-FR' 'hu-HU' 'it-IT' 'iw-IL' 'nl-NL' 'pl-PL' 'pt-BR' 'ru-RU' 'sv-SE' 'ta-IN' 'tr-TR' 'uk' 'zh-CN' 'zh-TW')
 
 for l in "${locales[@]}"; do
 	lang="${l:0:2}"
