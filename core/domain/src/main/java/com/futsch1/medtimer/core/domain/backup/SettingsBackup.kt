@@ -20,6 +20,7 @@ data class SettingsBackup(
     val showTakenTimeInOverview: Boolean,
     val showRemindedTimeInOverview: Boolean? = true,
     val showStockChangesInOverview: Boolean? = true,
+    val groupOverviewEvents: Boolean? = true,
     val systemLocale: Boolean,
     val theme: String,
     val hideMedicineName: Boolean,

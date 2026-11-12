@@ -99,6 +99,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="confirm">Godkänn</string>
+    <string name="confirm_all">Godkänn alla</string>
     <string name="are_you_sure_delete_medicine">Är du säker på att du vill ta bort den här läkemedlet?</string>
     <string name="no_reminders">Inga påminnelser satta</string>
     <string name="version">Version %s</string>
@@ -299,6 +300,7 @@
     <string name="show_taken_time_in_overview">Visa intagningstid i översikt</string>
     <string name="show_reminded_time_in_overview">Visa påminnelsetid i översikt</string>
     <string name="show_stock_changes_in_overview">Visa lagerändringar i översikt</string>
+    <string name="group_overview_events">Gruppera poster efter påminnelsetid i översikten</string>
     <string name="expiration_settings">Inställningar för utgångsdatum</string>
     <string name="remind_days_before_expiration">Påminn dagar före utgångsdatum</string>
     <string name="medicine_stock_settings">Inställningar för medicinlager</string>

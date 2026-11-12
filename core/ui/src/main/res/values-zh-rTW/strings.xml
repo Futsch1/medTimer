@@ -79,6 +79,7 @@
     <string name="dosage">劑量</string>
     <string name="cancel">取消</string>
     <string name="confirm">確定</string>
+    <string name="confirm_all">全部確定</string>
     <string name="are_you_sure_delete_medicine">您確定要刪除此藥品嗎？</string>
     <string name="no_reminders">未設定提醒</string>
     <string name="version">版本 %s</string>
@@ -293,6 +294,7 @@
     <string name="show_taken_time_in_overview">在總覽中顯示服用時間</string>
     <string name="show_reminded_time_in_overview">在總覽中顯示提醒時間</string>
     <string name="show_stock_changes_in_overview">在總覽中顯示庫存變化</string>
+    <string name="group_overview_events">在總覽中依提醒時間將項目分組</string>
     <string name="expiration_settings">到期設定</string>
     <string name="remind_days_before_expiration">在到期前幾天提醒</string>
     <string name="medicine_stock_settings">藥品庫存設定</string>

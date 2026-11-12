@@ -84,6 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="confirm">Bestätigen</string>
+    <string name="confirm_all">Alle bestätigen</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="version">Version %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">Zeit der Einnahme in der Übersicht anzeigen</string>
     <string name="show_reminded_time_in_overview">Erinnerungszeit in der Übersicht anzeigen</string>
     <string name="show_stock_changes_in_overview">Bestandsänderungen in der Übersicht anzeigen</string>
+    <string name="group_overview_events">Einträge in der Übersicht nach Erinnerungszeit gruppieren</string>
     <string name="expiration_settings">Ablauf-Einstellungen</string>
     <string name="remind_days_before_expiration">Tage vor Ablauf erinnern</string>
     <string name="medicine_stock_settings">Vorratseinstellungen</string>

@@ -3,6 +3,7 @@
     <string name="help_english_only">Hjálpin er sem stendur aðeins í boði á ensku.</string>
     <string name="show_reminded_time_in_overview">Sýna áminningartíma í yfirliti</string>
     <string name="show_stock_changes_in_overview">Sýna birgðabreytingar í yfirliti</string>
+    <string name="group_overview_events">Flokka færslur eftir áminningartíma í yfirliti</string>
     <string name="cycle_reminder">Endurteknar áminningar</string>
     <string name="cycle_start_date">Fyrsta umferð</string>
     <string name="day_of_month_limited">Takmarkað við nokkra daga mánaðar</string>
@@ -60,6 +61,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Hætta við</string>
     <string name="confirm">Staðfesta</string>
+    <string name="confirm_all">Staðfesta allt</string>
     <string name="are_you_sure_delete_medicine">Ert þú viss um að þú viljir eyða þessu lyfi?</string>
     <string name="no_reminders">Engar áminningar</string>
     <string name="version">Útgáfa %s</string>

@@ -94,6 +94,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Zrušit</string>
     <string name="confirm">Potvrdit</string>
+    <string name="confirm_all">Potvrdit vše</string>
     <string name="are_you_sure_delete_medicine">Opravdu chcete smazat lék?</string>
     <string name="no_reminders">Nenastavena žádná připomenutí</string>
     <string name="version">Verze %s</string>
@@ -311,6 +312,7 @@
     <string name="show_taken_time_in_overview">Zobrazit čas užití v přehledu</string>
     <string name="show_reminded_time_in_overview">Zobrazit čas připomenutí v přehledu</string>
     <string name="show_stock_changes_in_overview">Zobrazit změny zásob v přehledu</string>
+    <string name="group_overview_events">Seskupit položky v přehledu podle času připomenutí</string>
     <string name="tag_filter_active">Filtr štítků aktivní. Budou exportována pouze data s odpovídajícími štítky.</string>
     <string name="expiration_settings">Nastavení expirace</string>
     <string name="remind_days_before_expiration">Připomenout dny před expirací</string>

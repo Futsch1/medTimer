@@ -42,6 +42,22 @@ class OverviewRobot(private val ui: ComposeUi) {
         list.await(LONG_TIMEOUT) { eventCount() >= expected }
     }
 
+    /**
+     * Counts the composed headers of groups with two or more events, like [eventCount] counts the
+     * composed events. A one-event group has no header.
+     */
+    fun groupCount(): Int = list.count(GROUP_TIME)
+
+    fun assertGroupCount(expected: Int) {
+        list.await { groupCount() == expected }
+    }
+
+    /**
+     * Taps `Confirm all` in the header of the group at [index], the absolute group index that counts
+     * the one-event groups without a header too. The group has to be composed already.
+     */
+    fun confirmAll(index: Int) = list.scope(OverviewTestTags.group(index)).click(GROUP_CONFIRM_ALL)
+
     fun clickEventState(index: Int) {
         scrollToEvent(index)
         stateButtonAtEvent(index).performClick()
@@ -242,6 +258,8 @@ class OverviewRobot(private val ui: ComposeUi) {
         val EVENT_CARD = hasTestTag(OverviewTestTags.EVENT_CARD)
         val EVENT_STATE_BUTTON = hasTestTag(OverviewTestTags.EVENT_STATE_BUTTON)
         val EVENT_TEXT = hasTestTag(OverviewTestTags.EVENT_TEXT)
+        val GROUP_TIME = hasTestTag(OverviewTestTags.GROUP_TIME)
+        val GROUP_CONFIRM_ALL = hasTestTag(OverviewTestTags.GROUP_CONFIRM_ALL)
         val SELECTION_BAR = hasTestTag(OverviewTestTags.SELECTION_BAR)
         const val LONG_TIMEOUT = 20_000L
 

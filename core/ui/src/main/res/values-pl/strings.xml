@@ -107,6 +107,7 @@
     <string name="delete">Usuń</string>
     <string name="cancel">Anuluj</string>
     <string name="confirm">Potwierdź</string>
+    <string name="confirm_all">Potwierdź wszystkie</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>
     <string name="app_version">Wersja aplikacji</string>
     <string name="are_you_sure_delete_events">Spowoduje to trwałe usunięcie całej historii leków. Tej operacji nie można cofnąć.</string>
@@ -312,6 +313,7 @@
     <string name="show_taken_time_in_overview">Pokaż godzinę przyjęcia w przeglądzie</string>
     <string name="show_reminded_time_in_overview">Pokaż czas przypomnienia w przeglądzie</string>
     <string name="show_stock_changes_in_overview">Pokaż zmiany stanu zapasów w przeglądzie</string>
+    <string name="group_overview_events">Grupuj wpisy w przeglądzie według godziny przypomnienia</string>
     <string name="expiration_settings">Ustawienia wygaśnięcia</string>
     <string name="remind_days_before_expiration">Przypomnij dni przed wygaśnięciem</string>
     <string name="medicine_stock_settings">Ustawienia zapasów leków</string>

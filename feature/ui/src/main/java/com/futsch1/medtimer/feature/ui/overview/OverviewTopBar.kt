@@ -29,10 +29,20 @@ object OverviewTestTags {
     const val EVENT_CARD = "overview_event_card"
     const val EVENT_STATE_BUTTON = "overview_event_state"
     const val EVENT_TEXT = "overview_event_text"
+    const val GROUP_TIME = "overview_group_time"
+    const val GROUP_CONFIRM_ALL = "overview_group_confirm_all"
+    const val GROUP_MENU = "overview_group_menu"
     const val BATTERY_WARNING = "overview_battery_warning"
     const val EXACT_REMINDERS_WARNING = "overview_exact_reminders_warning"
 
+    /** [index] runs across the whole list, not within a group, so it matches the lazy list item index. */
     fun event(index: Int) = "overview_event_$index"
+
+    /**
+     * The header of the group at [index], counted over every group from the top of the list. A
+     * one-event group has no header, so the tags of the headers that exist can skip numbers.
+     */
+    fun group(index: Int) = "overview_group_$index"
 
     fun day(date: java.time.LocalDate) = "overview_day_$date"
 

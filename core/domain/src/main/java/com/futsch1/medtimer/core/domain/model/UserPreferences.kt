@@ -41,6 +41,7 @@ data class UserPreferences(
     val showTakenTimeInOverview: Boolean,
     val showRemindedTimeInOverview: Boolean,
     val showStockChangesInOverview: Boolean,
+    val groupOverviewEvents: Boolean,
     val systemLocale: Boolean,
     val theme: ThemeSetting,
     // Security settings
@@ -81,6 +82,7 @@ data class UserPreferences(
                 showTakenTimeInOverview = true,
                 showRemindedTimeInOverview = true,
                 showStockChangesInOverview = true,
+                groupOverviewEvents = true,
                 systemLocale = false,
                 theme = ThemeSetting.DEFAULT,
                 hideMedicineName = false,

@@ -199,6 +199,7 @@ class PreferencesDataSource @Inject constructor(
                 SHOW_STOCK_CHANGES_IN_OVERVIEW,
                 default.showStockChangesInOverview
             ),
+            groupOverviewEvents = sharedPreferences.getBoolean(GROUP_OVERVIEW_EVENTS, default.groupOverviewEvents),
             systemLocale = sharedPreferences.getBoolean(SYSTEM_LOCALE, default.systemLocale),
             theme = when (sharedPreferences.getString(THEME, "0")) {
                 "0" -> ThemeSetting.DEFAULT
@@ -265,6 +266,7 @@ class PreferencesDataSource @Inject constructor(
         const val SHOW_TAKEN_TIME_IN_OVERVIEW = "show_taken_time_in_overview"
         const val SHOW_REMINDED_TIME_IN_OVERVIEW = "show_reminded_time_in_overview"
         const val SHOW_STOCK_CHANGES_IN_OVERVIEW = "show_stock_changes_in_overview"
+        const val GROUP_OVERVIEW_EVENTS = "group_overview_events"
         const val STICKY_ON_LOCKSCREEN = "sticky_on_lockscreen"
         const val BIG_NOTIFICATIONS = "big_notifications"
         const val DISMISS_NOTIFICATION_ACTION = "dismiss_notification_action"
