@@ -14,6 +14,7 @@ import com.futsch1.medtimer.core.domain.model.UserPreferences
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.core.ui.TimeFormatter
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -21,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -30,6 +32,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
@@ -50,7 +54,7 @@ import kotlin.test.assertTrue
 /**
  * Coverage for Taken at: a time picker opens on the current date and time, its
  * Change date button picks another day and returns to the time picker, and one picked time applies
- * to every visited event.
+ * to every visited event. Doses that ask for the dosage go to the amount dialog with that time, in visit order.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -77,6 +81,7 @@ class ActionsVisitorTakenAtTest {
     private val timePickerDialogFactory: TimePickerDialogFactory = mock()
     private val datePickerDialogFactory: DatePickerDialogFactory = mock()
     private val timeFormatter: TimeFormatter = mock()
+    private val variableAmountHandler: VariableAmountHandler = mock()
 
     private val zone = ZoneId.of("Europe/Berlin")
     private val today = LocalDate.of(2026, 10, 19)
@@ -111,6 +116,7 @@ class ActionsVisitorTakenAtTest {
             commandBus,
             TakenTimePicker(datePickerDialogFactory, timePickerDialogFactory, activity, timeAccess, timeFormatter),
             timeAccess,
+            variableAmountHandler,
             CoroutineScope(testDispatcher)
         )
     }
@@ -335,6 +341,118 @@ class ActionsVisitorTakenAtTest {
         verifyBlocking(commandBus, never()) { markReminderEvents(any(), any(), anyOrNull()) }
     }
 
+    @Test
+    fun anUpcomingDoseAskingForTheDosageGetsItsRowOnlyOnOk() {
+        val scheduledReminder = askingScheduledReminder("Vitamin X 500 mg", at(today, 8, 30))
+        stubCreatedEvent(scheduledReminder, reminderEventId = 3)
+
+        actionsVisitor.startVisit(Button.TAKEN_AT).use {
+            actionsVisitor.visit(scheduledReminder)
+        }
+        idle()
+        confirmTime(8 * 60 + 15)
+
+        val request = amountRequests(at(today, 8, 15)).single()
+        assertEquals("Vitamin X 500 mg", request.medicineName)
+        assertEquals("2", request.initialAmount)
+        verifyBlocking(reminderEventCreator, never()) { getOrCreateReminderEvent(any(), any()) }
+
+        // The handler calls this only after OK on the amount dialog.
+        assertEquals(3, runBlocking { request.reminderEventId() })
+        verifyBlocking(reminderEventCreator) { getOrCreateReminderEvent(scheduledReminder, scheduledReminder.timestamp.epochSecond) }
+        verifyBlocking(commandBus, never()) { markReminderEvents(any(), any(), anyOrNull()) }
+    }
+
+    @Test
+    fun anUpcomingDoseAskingForTheDosageStaysUntouchedWhenTheAmountIsCancelled() {
+        val scheduledReminder = askingScheduledReminder("Vitamin X 500 mg", at(today, 8, 30))
+
+        actionsVisitor.startVisit(Button.TAKEN_AT).use {
+            actionsVisitor.visit(scheduledReminder)
+        }
+        idle()
+        // The mocked handler stands for a cancelled dialog: it never asks for the row.
+        confirmTime(8 * 60 + 15)
+
+        verifyBlocking(variableAmountHandler) { takeWithAmounts(any(), any(), anyOrNull()) }
+        verifyBlocking(reminderEventCreator, never()) { getOrCreateReminderEvent(any(), any()) }
+        verifyBlocking(commandBus, never()) { markReminderEvents(any(), any(), anyOrNull()) }
+        verifyBlocking(variableAmountHandler, never()) { cancelAmount(any()) }
+    }
+
+    @Test
+    fun aRaisedRowAskingForTheDosageGoesToTheAmountDialog() {
+        takenAt(pastEvent(1, at(today, 8, 0), askForAmount = true))
+        confirmTime(8 * 60 + 30)
+
+        val request = amountRequests(at(today, 8, 30)).single()
+        assertEquals(1, runBlocking { request.reminderEventId() })
+        verifyBlocking(commandBus, never()) { markReminderEvents(any(), any(), anyOrNull()) }
+    }
+
+    @Test
+    fun aSkippedRowAskingForTheDosageGoesToTheAmountDialog() {
+        takenAt(pastEvent(1, at(today, 8, 0), askForAmount = true, status = ReminderEvent.ReminderStatus.SKIPPED))
+        confirmTime(8 * 60 + 30)
+
+        val request = amountRequests(at(today, 8, 30)).single()
+        assertEquals(1, runBlocking { request.reminderEventId() })
+        verifyBlocking(commandBus, never()) { markReminderEvents(any(), any(), anyOrNull()) }
+    }
+
+    @Test
+    fun aMixedSelectionMarksThePlainDosesOnceAndAsksForTheOther() {
+        actionsVisitor.startVisit(Button.TAKEN_AT).use {
+            actionsVisitor.visit(pastEvent(1, at(today, 8, 0)))
+            actionsVisitor.visit(pastEvent(2, at(today, 8, 0)))
+            actionsVisitor.visit(pastEvent(3, at(today, 8, 0), askForAmount = true))
+        }
+        idle()
+        confirmTime(8 * 60 + 15)
+
+        verifyBlocking(commandBus) { markReminderEvents(listOf(1, 2), ReminderEvent.ReminderStatus.TAKEN, at(today, 8, 15)) }
+        assertEquals(listOf(3), amountRequests(at(today, 8, 15)).map { runBlocking { it.reminderEventId() } })
+    }
+
+    @Test
+    fun cancellingThePickerAsksForNoAmount() {
+        val scheduledReminder = askingScheduledReminder("Vitamin X 500 mg", at(today, 8, 30))
+
+        actionsVisitor.startVisit(Button.TAKEN_AT).use {
+            actionsVisitor.visit(pastEvent(1, at(today, 8, 0), askForAmount = true))
+            actionsVisitor.visit(scheduledReminder)
+        }
+        idle()
+
+        verifyBlocking(variableAmountHandler, never()) { takeWithAmounts(any(), any(), anyOrNull()) }
+        verifyBlocking(reminderEventCreator, never()) { getOrCreateReminderEvent(any(), any()) }
+    }
+
+    @Test
+    fun amountDialogsFollowTheVisitOrder() {
+        actionsVisitor.startVisit(Button.TAKEN_AT).use {
+            actionsVisitor.visit(pastEvent(1, at(today, 8, 0), askForAmount = true, medicineName = "Medicine A"))
+            actionsVisitor.visit(askingScheduledReminder("Medicine B", at(today, 8, 0)))
+            actionsVisitor.visit(pastEvent(2, at(today, 8, 0), askForAmount = true, medicineName = "Medicine C"))
+        }
+        idle()
+        confirmTime(8 * 60 + 15)
+
+        assertEquals(listOf("Medicine A", "Medicine B", "Medicine C"), amountRequests(at(today, 8, 15)).map { it.medicineName })
+    }
+
+    private fun amountRequests(takenTime: Instant): List<VariableAmountHandler.AmountRequest> {
+        val captor = argumentCaptor<List<VariableAmountHandler.AmountRequest>>()
+        verifyBlocking(variableAmountHandler) { takeWithAmounts(eq(activity), captor.capture(), eq(takenTime)) }
+        return captor.firstValue
+    }
+
+    private fun askingScheduledReminder(medicineName: String, timestamp: Instant) = ScheduledReminder(
+        Medicine.default().copy(name = medicineName),
+        Reminder.default().copy(amount = "2", variableAmount = true),
+        timestamp
+    )
+
     private fun takenAt(pastReminderEvent: PastReminderEvent) {
         actionsVisitor.startVisit(Button.TAKEN_AT).use {
             actionsVisitor.visit(pastReminderEvent)
@@ -371,10 +489,23 @@ class ActionsVisitorTakenAtTest {
         }
     }
 
-    private fun pastEvent(id: Int, remindedTimestamp: Instant) = PastReminderEvent(
+    private fun pastEvent(
+        id: Int,
+        remindedTimestamp: Instant,
+        askForAmount: Boolean = false,
+        status: ReminderEvent.ReminderStatus = ReminderEvent.ReminderStatus.RAISED,
+        medicineName: String = "",
+    ) = PastReminderEvent(
         preferencesDataSource,
         persistentDataDataSource,
         timeAccess,
-        ReminderEvent.default().copy(reminderEventId = id, reminderId = id, remindedTimestamp = remindedTimestamp),
+        ReminderEvent.default().copy(
+            reminderEventId = id,
+            reminderId = id,
+            remindedTimestamp = remindedTimestamp,
+            askForAmount = askForAmount,
+            status = status,
+            medicineName = medicineName,
+        ),
     )
 }

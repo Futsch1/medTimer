@@ -85,6 +85,8 @@ class TextInputDialogBuilder(
                 cancelCallback?.cancel()
                 dialog.dismiss()
             }
+            // Back and a tap outside cancel too, so a caller waiting for an answer always gets one.
+            .setOnCancelListener { cancelCallback?.cancel() }
             .apply {
                 titleString?.let { setTitle(it) }
             }.create()

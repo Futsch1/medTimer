@@ -12,6 +12,7 @@ import com.futsch1.medtimer.core.domain.repository.MedicineRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderEventRepository
 import com.futsch1.medtimer.core.domain.repository.ReminderRepository
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
+import com.futsch1.medtimer.feature.ui.overview.VariableAmountHandler
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,6 +80,7 @@ class ActionsVisitorReRaiseTest {
             commandBus,
             mock<TakenTimePicker>(),
             timeAccess,
+            mock<VariableAmountHandler>(),
             CoroutineScope(testDispatcher)
         )
     }
