@@ -107,6 +107,10 @@
     <string name="delete">Usuń</string>
     <string name="cancel">Anuluj</string>
     <string name="confirm">Potwierdź</string>
+    <string name="taken_at">Przyjęto o…</string>
+    <string name="taken_time_in_future">Czas przyjęcia nie może być w przyszłości</string>
+    <string name="taken_on_date">Przyjęto %1$s</string>
+    <string name="change_date">Zmień datę</string>
     <string name="are_you_sure_delete_reminder">Czy na pewno chcesz usunąć to przypomnienie?</string>
     <string name="app_version">Wersja aplikacji</string>
     <string name="are_you_sure_delete_events">Spowoduje to trwałe usunięcie całej historii leków. Tej operacji nie można cofnąć.</string>

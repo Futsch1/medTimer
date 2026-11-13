@@ -14,6 +14,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
@@ -212,6 +213,39 @@ class NotificationTest : MedTimerTestBase() {
         dialogs.enterTextAndConfirm("Test variable amount again")
 
         overview.assertEventContains("Test variable amount again")
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun takenAtAsksForTheAmountOfAVariableDose() {
+        val reminderTime = laterToday()
+        seed.medicine(TEST_MED) { reminder("1", reminderTime, variableAmount = true) }
+        seed.medicine(TEST_MED_2) { reminder("1", reminderTime) }
+
+        navigation.toOverview()
+        // Without a combined notification a long click selects one dose, so a tap adds the other one
+        overview.longClickEvent(0)
+        overview.clickEvent(1)
+        overview.assertSelectionCount(2)
+        overview.clickSelectionAction(R.string.taken_at)
+
+        val takenTime = earlierToday()
+        pickers.pickTime(takenTime)
+        enterVariableAmount(TEST_MED, "10")
+
+        overview.assertEventState(0, R.string.taken)
+        overview.assertEventState(1, R.string.taken)
+
+        val takenInstant = LocalDate.now().atTime(takenTime).atZone(ZoneId.systemDefault()).toInstant()
+        val takenTimeString = timeFormatter().toTimeString(takenInstant)
+        val takenDateString = timeFormatter().toDateString(takenInstant)
+        eventEditor.forEventContaining(TEST_MED) {
+            assertAmount("10")
+            assertTakenAt(takenTimeString, takenDateString)
+        }
+        eventEditor.forEventContaining(TEST_MED_2) {
+            assertTakenAt(takenTimeString, takenDateString)
+        }
     }
 
     @Test

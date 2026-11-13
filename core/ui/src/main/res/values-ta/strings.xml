@@ -90,6 +90,10 @@
     <string name="ok">சரி</string>
     <string name="cancel">ரத்துசெய்</string>
     <string name="confirm">உறுதிப்படுத்தவும்</string>
+    <string name="taken_at">எடுத்த நேரம்…</string>
+    <string name="taken_time_in_future">எடுத்த நேரம் எதிர்காலத்தில் இருக்க முடியாது</string>
+    <string name="taken_on_date">%1$s அன்று எடுக்கப்பட்டது</string>
+    <string name="change_date">தேதியை மாற்று</string>
     <string name="are_you_sure_delete_medicine">மருந்தை நீக்குவது உறுதி?</string>
     <string name="no_reminders">நினைவூட்டல்கள் இல்லை</string>
     <string name="version">பதிப்பு %s</string>

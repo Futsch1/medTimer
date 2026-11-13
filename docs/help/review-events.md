@@ -14,6 +14,10 @@ A reminder that was snoozed past midnight still opens on its original day.
 If the active filters or the tag filter would hide the reminder, they are cleared.
 If the reminder's event was deleted in the meantime, tapping the notification removes it.
 
+## Log a dose that you took earlier
+
+If you took a dose but log it later, tap the event's icon on **Overview** and choose **Taken at…**. A long press on **Taken** in that menu opens the same picker. Pick the time when you really took the dose. To pick another day, choose **Change date**; future days cannot be picked. A time in the future is not accepted. The history then shows the picked time, and interval and linked reminders count from it. **Taken at…** also works for a selection of doses, and all of them get the same time. If a reminder asks for the dosage when taken, MedTimer asks for the amount after the time, once for each such dose. Cancel the amount to leave that dose as it was.
+
 ## Correct a recorded event
 
 On **Overview**, tap the event's icon to update its status. To edit event details, tap the event's data to open its

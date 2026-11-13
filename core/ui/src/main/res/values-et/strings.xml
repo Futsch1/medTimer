@@ -48,6 +48,10 @@
     <string name="ok">Sobib</string>
     <string name="cancel">Katkesta</string>
     <string name="confirm">Kinnita</string>
+    <string name="taken_at">Võetud kell…</string>
+    <string name="taken_time_in_future">Võtmise aeg ei saa olla tulevikus</string>
+    <string name="taken_on_date">Võetud %1$s</string>
+    <string name="change_date">Muuda kuupäeva</string>
     <string name="are_you_sure_delete_medicine">Kas oled kindel, et soovid selle ravimi kustutada?</string>
     <string name="no_reminders">Ühtegi meeldetuletust pole seadistatud</string>
     <string name="version">Versioon %s</string>

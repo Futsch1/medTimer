@@ -79,6 +79,10 @@
     <string name="dosage">劑量</string>
     <string name="cancel">取消</string>
     <string name="confirm">確定</string>
+    <string name="taken_at">服用時間…</string>
+    <string name="taken_time_in_future">服用時間不能晚於目前時間</string>
+    <string name="taken_on_date">服用日期：%1$s</string>
+    <string name="change_date">變更日期</string>
     <string name="are_you_sure_delete_medicine">您確定要刪除此藥品嗎？</string>
     <string name="no_reminders">未設定提醒</string>
     <string name="version">版本 %s</string>

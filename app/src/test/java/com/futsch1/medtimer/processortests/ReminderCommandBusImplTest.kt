@@ -20,6 +20,7 @@ import org.junit.Test
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
@@ -86,7 +87,7 @@ class ReminderCommandBusImplTest {
             var inside = 0
             var maxInside = 0
             notificationProcessor.stub {
-                onBlocking { processReminderEventsInNotification(any(), any()) } doSuspendableAnswer {
+                onBlocking { processReminderEventsInNotification(any(), any(), anyOrNull()) } doSuspendableAnswer {
                     inside++
                     maxInside = maxOf(maxInside, inside)
                     gate.await()

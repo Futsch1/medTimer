@@ -84,6 +84,10 @@
     <string name="ok">Tamam</string>
     <string name="cancel">İptal</string>
     <string name="confirm">Onayla</string>
+    <string name="taken_at">Alınma saati…</string>
+    <string name="taken_time_in_future">Alınma zamanı gelecekte olamaz</string>
+    <string name="taken_on_date">Alınma tarihi: %1$s</string>
+    <string name="change_date">Tarihi değiştir</string>
     <string name="are_you_sure_delete_medicine">İlacı silmek istediğinizden emin misiniz?</string>
     <string name="no_reminders">Hiç hatırlatıcı ayarlanmadı</string>
     <string name="version">Versiyon %s</string>

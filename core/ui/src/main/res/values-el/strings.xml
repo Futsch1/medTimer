@@ -84,6 +84,10 @@
     <string name="ok">Εντάξει</string>
     <string name="cancel">Άκυρο</string>
     <string name="confirm">Επιβεβαίωση</string>
+    <string name="taken_at">Ελήφθη στις…</string>
+    <string name="taken_time_in_future">Η ώρα λήψης δεν μπορεί να είναι στο μέλλον</string>
+    <string name="taken_on_date">Ελήφθη στις %1$s</string>
+    <string name="change_date">Αλλαγή ημερομηνίας</string>
     <string name="are_you_sure_delete_medicine">Σίγουρα θέλετε να διαγράψετε αυτή την αγωγή;</string>
     <string name="no_reminders">Δεν έχουν οριστεί υπενθυμίσεις</string>
     <string name="version">Έκδοση %s</string>
