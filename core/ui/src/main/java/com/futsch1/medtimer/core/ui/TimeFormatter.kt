@@ -152,18 +152,18 @@ class TimeFormatter @Inject constructor(
      * @return Seconds since epoch of date/time
      */
     fun stringToInstant(dateTimeString: String): Instant? {
-        val dateTimeComponents = dateTimeString.split(" ".toRegex(), limit = 2).toTypedArray()
-        if (dateTimeComponents.size != 2) {
+        val separatorIndex = dateTimeString.lastIndexOf(' ')
+        if (separatorIndex <= 0 || separatorIndex == dateTimeString.lastIndex) {
             return null
         }
 
-        val date = stringToLocalDate(dateTimeComponents[0]) ?: return null
-        val minutes = timeStringToMinutes(dateTimeComponents[1])
+        val date = stringToLocalDate(dateTimeString.substring(0, separatorIndex)) ?: return null
+        val minutes = timeStringToMinutes(dateTimeString.substring(separatorIndex + 1))
         if (minutes == -1) {
             return null
         }
 
-        return TimeHelper.changeInstantDate(TimeHelper.instantFromDateAndMinutes(minutes, LocalDate.now()), date)
+        return TimeHelper.instantFromDateAndMinutes(minutes, date)
     }
 
     private fun getLocale(): Locale {

@@ -22,6 +22,8 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Locale
 import kotlin.test.assertEquals
 
@@ -115,5 +117,19 @@ class TimeHelperTest {
         val original = LocalDate.of(2023, 1, 2)
         val formatted = timeFormatter.localDateToString(original)
         assertEquals(original, timeFormatter.stringToLocalDate(formatted))
+    }
+
+    @Test
+    fun `should round-trip locale-formatted date and time without changing the date`() {
+        val context = RuntimeEnvironment.getApplication()
+        val preferences = MutableStateFlow(UserPreferences.default())
+        Mockito.`when`(mockPreferenceDataSource.preferences).thenReturn(preferences)
+        val timeFormatter = TimeFormatter(context, mockPreferenceDataSource)
+        val original = LocalDateTime.of(2026, 11, 18, 14, 35)
+
+        val formatted = timeFormatter.toDateTimeString(original)
+        val parsed = timeFormatter.stringToInstant(formatted)
+
+        assertEquals(original, parsed?.atZone(ZoneId.systemDefault())?.toLocalDateTime())
     }
 }
