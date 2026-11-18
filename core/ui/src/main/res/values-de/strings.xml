@@ -84,6 +84,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="confirm">Bestätigen</string>
+    <string name="taken_at">Eingenommen um…</string>
+    <string name="taken_time_in_future">Die Einnahmezeit darf nicht in der Zukunft liegen</string>
+    <string name="taken_on_date">Eingenommen am %1$s</string>
+    <string name="change_date">Datum ändern</string>
     <string name="are_you_sure_delete_medicine">Medikament wirklich löschen?</string>
     <string name="no_reminders">Keine Erinnerungen</string>
     <string name="version">Version %s</string>

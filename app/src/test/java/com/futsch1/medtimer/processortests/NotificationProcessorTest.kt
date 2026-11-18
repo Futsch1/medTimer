@@ -165,6 +165,27 @@ class NotificationProcessorTest {
     }
 
     @Test
+    fun backdatedTakenRecordsTheSuppliedTime() {
+        testReminderContext.instant = Instant.ofEpochSecond(10)
+        val reminderNotificationData = fillWithOneReminder(testReminderContext)
+        testReminderContext.repositoryFakes.reminderEvents[0].notificationId = 1
+        testReminderContext.notificationManagerFake.add(1, reminderEventIds = intArrayOf(1))
+
+        runBlocking {
+            notificationProcessor.processReminderEventsInNotification(
+                reminderNotificationData.reminderEventIds.toList(),
+                ReminderEvent.ReminderStatus.TAKEN,
+                Instant.ofEpochSecond(4)
+            )
+        }
+
+        assertEquals(ReminderEventEntity.ReminderEntityStatus.TAKEN, testReminderContext.repositoryFakes.reminderEvents[0].status)
+        // The supplied time wins over the current time
+        assertEquals(4, testReminderContext.repositoryFakes.reminderEvents[0].processedTimestamp)
+        verify(testReminderContext.notificationManagerFake.mock, times(1)).cancel(1)
+    }
+
+    @Test
     fun takenClearsPendingLocationSnooze() {
         testReminderContext.instant = Instant.ofEpochSecond(10)
         val reminderNotificationData = fillWithOneReminder(testReminderContext)

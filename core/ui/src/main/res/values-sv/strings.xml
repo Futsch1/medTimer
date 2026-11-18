@@ -99,6 +99,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="confirm">Godkänn</string>
+    <string name="taken_at">Tagen kl.…</string>
+    <string name="taken_time_in_future">Tiden för intag kan inte ligga i framtiden</string>
+    <string name="taken_on_date">Tagen %1$s</string>
+    <string name="change_date">Ändra datum</string>
     <string name="are_you_sure_delete_medicine">Är du säker på att du vill ta bort den här läkemedlet?</string>
     <string name="no_reminders">Inga påminnelser satta</string>
     <string name="version">Version %s</string>

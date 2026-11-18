@@ -4,6 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.Placeable
@@ -84,6 +89,7 @@ private val ARC_EXIT_DURATION = 220.milliseconds
 /** Display order top-to-bottom; buttons not visible for a given event are simply skipped. */
 private val ARC_BUTTON_TOP_TO_BOTTOM_ORDER = listOf(
     Button.TAKEN,
+    Button.TAKEN_AT,
     Button.SKIPPED,
     Button.ACKNOWLEDGED,
     Button.RERAISE,
@@ -231,7 +237,15 @@ private fun ArcActionButtons(
                     enter = fadeIn(MaterialTheme.motionScheme.defaultEffectsSpec()),
                     exit = fadeOut(MaterialTheme.motionScheme.defaultEffectsSpec()),
                 ) {
-                    SmallFloatingActionButton(onClick = { onAction(button) }) {
+                    val longPressAlternative = button.longPressAlternative?.takeIf { it in buttons }
+                    SmallFloatingActionButton(
+                        onClick = { onAction(button) },
+                        modifier = if (longPressAlternative != null) {
+                            Modifier.onLongPressInstead { onAction(longPressAlternative) }
+                        } else {
+                            Modifier
+                        },
+                    ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -288,6 +302,29 @@ private fun ArcActionButtons(
     }
 }
 
+
+/**
+ * Adds a long press to a button that only knows a tap. The gesture is watched in the initial pass,
+ * before the button sees it. Once the long press fires, the rest of the gesture is consumed, so the
+ * button sees a cancelled press and does not also report a tap.
+ */
+private fun Modifier.onLongPressInstead(onLongPress: () -> Unit): Modifier = pointerInput(onLongPress) {
+    awaitEachGesture {
+        awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+        var released = false
+        withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
+            waitForUpOrCancellation(PointerEventPass.Initial)
+            released = true
+        }
+        if (!released) {
+            onLongPress()
+            do {
+                val event = awaitPointerEvent(PointerEventPass.Initial)
+                event.changes.forEach { it.consume() }
+            } while (event.changes.any { it.pressed })
+        }
+    }
+}
 
 /** Each button's measured [placeable], with its arc anchor point (the near/start edge it grows from). */
 private data class ArcTarget(val startX: Float, val centerY: Float, val placeable: Placeable)

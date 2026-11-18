@@ -76,6 +76,10 @@ A record that a scheduled reminder reached a terminal state for a given medicine
 The two Reminder Event states the Analysis feature aggregates and visualizes.
 _Avoid_: done/dismissed, completed/missed.
 
+**Taken time**:
+The `processedTimestamp` of a Taken reminder event: the time the dose was really taken. It can differ from the time the dose was logged. `Taken at...` records a picked time, and never a time in the future. Without a picked time, the event records the time of logging.
+_Avoid_: processed time (in user-facing text), log time.
+
 **Tag filter**:
 A global filter on medicines by tag. The Reminder Table respects it; Charts do not; the Calendar
 filters by a single selected medicine instead.

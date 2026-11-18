@@ -80,6 +80,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Annuller</string>
     <string name="confirm">Bekræft</string>
+    <string name="taken_at">Taget kl.…</string>
+    <string name="taken_time_in_future">Tidspunktet for indtagelse kan ikke ligge i fremtiden</string>
+    <string name="taken_on_date">Taget den %1$s</string>
+    <string name="change_date">Skift dato</string>
     <string name="are_you_sure_delete_medicine">Er du sikker på, at du vil slette medicinen?</string>
     <string name="no_reminders">Ingen påmindelser angivet</string>
     <string name="version">Version %s</string>

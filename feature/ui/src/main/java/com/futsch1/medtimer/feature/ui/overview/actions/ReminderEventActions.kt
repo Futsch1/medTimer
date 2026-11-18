@@ -24,6 +24,7 @@ class ReminderEventActions(
         } else {
             if (event.state != OverviewState.TAKEN) {
                 visibleButtons.add(Button.TAKEN)
+                visibleButtons.add(Button.TAKEN_AT)
             }
             if (event.state != OverviewState.SKIPPED && !event.cannotBeSkipped) {
                 visibleButtons.add(Button.SKIPPED)
