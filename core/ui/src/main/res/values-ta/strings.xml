@@ -90,6 +90,7 @@
     <string name="ok">சரி</string>
     <string name="cancel">ரத்துசெய்</string>
     <string name="confirm">உறுதிப்படுத்தவும்</string>
+    <string name="confirm_all">அனைத்தையும் உறுதிப்படுத்தவும்</string>
     <string name="are_you_sure_delete_medicine">மருந்தை நீக்குவது உறுதி?</string>
     <string name="no_reminders">நினைவூட்டல்கள் இல்லை</string>
     <string name="version">பதிப்பு %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">அवलோக்கில் நேரம் எடுத்துக்கொண்டது காட்டப்பட்டது</string>
     <string name="show_reminded_time_in_overview">மேலோட்டத்தில் நினைவூட்டல் நேரத்தைக் காட்டு</string>
     <string name="show_stock_changes_in_overview">மேலோட்டத்தில் கையிருப்பு மாற்றங்களைக் காட்டு</string>
+    <string name="group_overview_events">மேலோட்டத்தில் உள்ளீடுகளை நினைவூட்டல் நேரப்படி குழுவாக்கு</string>
     <string name="expiration_settings">காலாவதி அமைப்புகள்</string>
     <string name="remind_days_before_expiration">காலாவதியாகும் நாட்களுக்கு முன் நினைவூட்டு</string>
     <string name="medicine_stock_settings">மருந்து இருப்பு அமைப்புகள்</string>

@@ -14,6 +14,14 @@ A reminder that was snoozed past midnight still opens on its original day.
 If the active filters or the tag filter would hide the reminder, they are cleared.
 If the reminder's event was deleted in the meantime, tapping the notification removes it.
 
+## Doses at the same time
+
+On **Overview**, the doses that share one reminder time show together in one card under that time. A single dose has no time header. Taken doses keep their place in the card. Long-press a dose to select every dose of its card. To show every dose in its own card, turn off **Group entries by reminder time in overview** in **Display settings**. This setting does not change notifications. To get one notification for the doses of one time, turn on **Combine same time notifications**.
+
+The time header offers **Confirm all**, which marks every open dose of that time as taken with one tap. Doses that are already taken or skipped keep their state and time. The three-dot button next to it opens the actions for the whole group, for example **Skipped** or **Reschedule reminder**. An action that does not apply to every dose of the group does not show.
+
+Taken and skipped doses show faded, with the medicine name struck through. They stay in their place in the list.
+
 ## Correct a recorded event
 
 On **Overview**, tap the event's icon to update its status. To edit event details, tap the event's data to open its

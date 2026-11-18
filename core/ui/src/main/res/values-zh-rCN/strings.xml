@@ -79,6 +79,7 @@
     <string name="ok">完成</string>
     <string name="cancel">取消</string>
     <string name="confirm">确认</string>
+    <string name="confirm_all">全部确认</string>
     <string name="are_you_sure_delete_medicine">确定删除该药品吗？</string>
     <string name="no_reminders">未设置用药提醒</string>
     <string name="version">版本 %s</string>
@@ -293,6 +294,7 @@
     <string name="show_taken_time_in_overview">在概览中显示服药时间</string>
     <string name="show_reminded_time_in_overview">在概览中显示提醒时间</string>
     <string name="show_stock_changes_in_overview">在概览中显示库存变化</string>
+    <string name="group_overview_events">在概览中按提醒时间对条目分组</string>
     <string name="expiration_settings">到期设置</string>
     <string name="remind_days_before_expiration">在到期前几天提醒</string>
     <string name="medicine_stock_settings">药品库存设置</string>

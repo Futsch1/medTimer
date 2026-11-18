@@ -89,6 +89,7 @@
     <string name="ok">הבנתי</string>
     <string name="cancel">ביטול</string>
     <string name="confirm">אישור</string>
+    <string name="confirm_all">אישור הכול</string>
     <string name="are_you_sure_delete_medicine">האם אתם בטוחים שאתם רוצים למחוק את התרופה?</string>
     <string name="no_reminders">לא הוגדרו התראות</string>
     <string name="version">גרסה %s</string>
@@ -306,6 +307,7 @@
     <string name="show_taken_time_in_overview">הצג את שעת הנטילה בסקירה הכללית</string>
     <string name="show_reminded_time_in_overview">הצג את זמן התזכורת בסקירה הכללית</string>
     <string name="show_stock_changes_in_overview">הצג שינויים במלאי בסקירה הכללית</string>
+    <string name="group_overview_events">קבץ רשומות לפי זמן התזכורת בסקירה הכללית</string>
     <string name="expiration_settings">הגדרות תפוגה</string>
     <string name="remind_days_before_expiration">תזכורת ימים לפני תפוגה</string>
     <string name="medicine_stock_settings">הגדרות מלאי תרופות</string>

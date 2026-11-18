@@ -183,6 +183,21 @@ class PreferencesDataSourceTest {
     }
 
     @Test
+    fun `groupOverviewEvents defaults to grouped and reads the stored value`() {
+        assertEquals(true, dataSource.preferences.value.groupOverviewEvents)
+        sharedPreferences.edit().putBoolean(PreferencesDataSource.GROUP_OVERVIEW_EVENTS, false).commit()
+        assertEquals(false, dataSource.preferences.value.groupOverviewEvents)
+    }
+
+    @Test
+    fun `combineNotifications defaults to off and does not follow the grouping setting`() {
+        assertEquals(false, dataSource.preferences.value.combineNotifications)
+        sharedPreferences.edit().putBoolean(PreferencesDataSource.COMBINE_NOTIFICATIONS, true).commit()
+        assertEquals(true, dataSource.preferences.value.combineNotifications)
+        assertEquals(true, dataSource.preferences.value.groupOverviewEvents)
+    }
+
+    @Test
     fun `theme parses all variants`() {
         data class Case(val setup: () -> Unit, val expected: ThemeSetting)
         listOf(

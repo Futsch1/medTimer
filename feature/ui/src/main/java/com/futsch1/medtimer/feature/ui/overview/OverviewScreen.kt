@@ -50,12 +50,13 @@ import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.actions.MultipleActions
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewGroup
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
+import com.futsch1.medtimer.feature.ui.overview.model.groupOverviewEvents
 import com.google.gson.Gson
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.time.Duration
@@ -104,7 +105,7 @@ fun OverviewScreen(
         },
         onEnterSelectionMode = { event ->
             viewModel.selection.enterSelectionMode()
-            if (viewModel.state.combineNotifications) {
+            if (viewModel.state.groupByReminderTime) {
                 viewModel.selectSameTimeEvents(event)
             } else {
                 viewModel.selection.toggleSelection(event)
@@ -150,11 +151,11 @@ fun OverviewScreen(
     topBarActions: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Keep the event payload separate from the animation key. The selected day changes before
+    // Keep the group payload separate from the animation key. The selected day changes before
     // its asynchronous event query completes, so the incoming composition must be able to update
-    // its events without starting another day transition.
-    val dayContents = remember { mutableStateMapOf<LocalDate, ImmutableList<OverviewEvent>>() }
-    dayContents[state.day] = state.events
+    // its groups without starting another day transition.
+    val dayContents = remember { mutableStateMapOf<LocalDate, ImmutableList<OverviewGroup>>() }
+    dayContents[state.day] = state.groups
     val rangeStart = remember { LocalDate.now().minusYears(3) }
     val rangeEnd = maxOf(state.simulatedThrough, LocalDate.now().plusDays(DEFAULT_SIMULATION_DAYS))
 
@@ -262,11 +263,11 @@ fun OverviewScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) { content ->
                     OverviewEventList(
-                        events = dayContents[content] ?: persistentListOf(),
+                        groups = dayContents[content] ?: persistentListOf(),
                         selection = selection,
                         onEventClick = onEventClick,
                         onEnterSelectionMode = onEnterSelectionMode,
-                        onAction = { button, event -> onAction(button, listOf(event)) },
+                        onAction = onAction,
                         // The day sliding out keeps its list until the transition ends; only the selected day scrolls.
                         scrollTargetEventIds = if (content == state.day) state.scrollTargetEventIds else persistentSetOf(),
                         onScrolledToTarget = onScrolledToTarget,
@@ -357,7 +358,7 @@ private fun rememberPreviewEvents(): List<OverviewEvent> {
 @Composable
 private fun OverviewScreenPreview() {
     val state = remember { MutableOverviewScreenState() }
-    state.events = rememberPreviewEvents().toPersistentList()
+    state.groups = groupOverviewEvents(rememberPreviewEvents(), groupByReminderTime = true)
     val selection = remember { SelectionListController<OverviewEvent> { it.id } }
     MedTimerTheme {
         Surface {

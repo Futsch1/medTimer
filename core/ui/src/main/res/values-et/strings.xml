@@ -48,6 +48,7 @@
     <string name="ok">Sobib</string>
     <string name="cancel">Katkesta</string>
     <string name="confirm">Kinnita</string>
+    <string name="confirm_all">Kinnita kõik</string>
     <string name="are_you_sure_delete_medicine">Kas oled kindel, et soovid selle ravimi kustutada?</string>
     <string name="no_reminders">Ühtegi meeldetuletust pole seadistatud</string>
     <string name="version">Versioon %s</string>
@@ -302,6 +303,7 @@
     <string name="show_taken_time_in_overview">Näita ülevaates võtmise aega</string>
     <string name="show_reminded_time_in_overview">Näita ülevaates meeldetuletuse aega</string>
     <string name="show_stock_changes_in_overview">Näita ülevaates laoseisu muutusi</string>
+    <string name="group_overview_events">Rühmita ülevaates kirjed meeldetuletuse aja järgi</string>
     <string name="remind_days_before_expiration">Meeldetuletuse päevi enne aegumist</string>
     <string name="successfully_created_reminder">Uue meeldetuletuse lisamine õnnestus</string>
     <string name="create_out_of_stock_reminder">Lisa varude lõppemise meeldetuletus</string>

@@ -22,13 +22,14 @@ import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import com.futsch1.medtimer.feature.ui.overview.model.SimulatedReminderEvent
+import com.futsch1.medtimer.feature.ui.overview.model.groupOverviewEvents
+import com.futsch1.medtimer.feature.ui.overview.model.overviewEventOrder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -184,9 +185,12 @@ class OverviewViewModel @AssistedInject constructor(
 
     init {
         selection.bind(viewModelScope, overviewEvents)
-        overviewEvents.onEach { state.events = it.toPersistentList() }.launchIn(viewModelScope)
+        // overviewEvents re-emits on every preference change, so the grouping follows the setting.
+        overviewEvents.onEach {
+            state.groups = groupOverviewEvents(it, preferencesDataSource.preferences.value.groupOverviewEvents)
+        }.launchIn(viewModelScope)
         simulatedRemindersRepository.simulatedThrough.onEach { state.simulatedThrough = it }.launchIn(viewModelScope)
-        preferencesDataSource.preferences.onEach { state.combineNotifications = it.combineNotifications }
+        preferencesDataSource.preferences.onEach { state.groupByReminderTime = it.groupOverviewEvents }
             .launchIn(viewModelScope)
         combine(preferencesDataSource.preferences, persistentDataDataSource.data) { _, _ -> }
             .onEach { refreshWarnings() }
@@ -254,9 +258,10 @@ class OverviewViewModel @AssistedInject constructor(
         filterState.update { it.copy(activeFilters = filters) }
     }
 
-    /** Long-pressing one event selects every event scheduled for the same time. */
+    /** Long-pressing one event selects every event of its group, so the selection matches the card on screen. */
     fun selectSameTimeEvents(event: OverviewEvent) {
-        selection.items.filter { it.timestamp == event.timestamp }.forEach(selection::toggleSelection)
+        state.groups.firstOrNull { group -> group.events.any { it.id == event.id } }
+            ?.events?.forEach(selection::toggleSelection)
     }
 
     fun refreshWarnings() {
@@ -313,7 +318,7 @@ class OverviewViewModel @AssistedInject constructor(
             }
         }
 
-        return filteredOverviewEvents.sortedWith(compareBy<OverviewEvent> { it.timestamp }.thenBy { it.id })
+        return filteredOverviewEvents.sortedWith(overviewEventOrder)
     }
 
     private fun isOverviewEventVisible(

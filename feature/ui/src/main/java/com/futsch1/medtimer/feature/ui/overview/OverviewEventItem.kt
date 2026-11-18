@@ -10,15 +10,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -38,6 +43,7 @@ import com.futsch1.medtimer.feature.ui.overview.actions.Button
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewEventContent
 import com.futsch1.medtimer.feature.ui.overview.model.OverviewState
 import com.futsch1.medtimer.feature.ui.overview.model.StockChange
+import com.futsch1.medtimer.feature.ui.overview.model.isResolved
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -48,6 +54,8 @@ internal val EVENT_STATE_BUTTON_SIZE = 48.dp
 internal val EVENT_STATE_BUTTON_MARGIN = 8.dp
 
 internal val EVENT_SPACING = 12.dp
+
+private const val RESOLVED_ALPHA = 0.6f
 
 /** Horizontal centre of the state buttons, which the list draws its connecting pills along. */
 internal val RAIL_CENTER_X = EVENT_STATE_BUTTON_MARGIN + EVENT_STATE_BUTTON_SIZE / 2
@@ -60,6 +68,28 @@ internal val RAIL_PILL_RESTING_HEIGHT = RAIL_PILL_WIDTH * 2
  */
 internal val RAIL_INSET =
     (EVENT_SPACING + EVENT_STATE_BUTTON_MARGIN * 2 - RAIL_PILL_RESTING_HEIGHT) / 2
+
+/**
+ * Where a row sits in its group. The rows of one group stack without a gap, so each one rounds
+ * only its outer corners and the group reads as one card.
+ */
+enum class OverviewGroupPosition {
+    ONLY,
+    FIRST,
+    MIDDLE,
+    LAST;
+
+    val isGroupStart: Boolean get() = this == ONLY || this == FIRST
+
+    companion object {
+        fun of(index: Int, size: Int): OverviewGroupPosition = when {
+            size == 1 -> ONLY
+            index == 0 -> FIRST
+            index == size - 1 -> LAST
+            else -> MIDDLE
+        }
+    }
+}
 
 @Composable
 @SuppressWarnings("kotlin:S107")
@@ -76,6 +106,7 @@ fun OverviewEventItem(
     onEnterSelectionMode: () -> Unit,
     onAction: (Button) -> Unit,
     modifier: Modifier = Modifier,
+    position: OverviewGroupPosition = OverviewGroupPosition.ONLY,
     onRailAnchor: (Float) -> Unit = {},
 ) {
     val containerColor = eventContainerColor(isSelected)
@@ -83,7 +114,9 @@ fun OverviewEventItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 64.dp),
+            .defaultMinSize(minHeight = 64.dp)
+            // A taken or skipped dose recedes but keeps its place, with grouping on or off.
+            .alpha(if (state.isResolved) RESOLVED_ALPHA else 1f),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -105,16 +138,24 @@ fun OverviewEventItem(
             onClick = onClick,
             onToggleSelection = onToggleSelection,
             onEnterSelectionMode = onEnterSelectionMode,
+            shape = groupRowShape(position),
             colors = CardDefaults.cardColors(containerColor = containerColor),
             modifier = Modifier
                 .testTag(OverviewTestTags.EVENT_CARD)
         ) {
+            if (!position.isGroupStart) {
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp, end = 8.dp),
             ) {
                 EventContent(
                     content = content,
+                    strikeThrough = state.isResolved,
                     modifier = Modifier
                         .weight(1f)
                         .testTag(OverviewTestTags.EVENT_TEXT),
@@ -209,7 +250,19 @@ private fun OverviewEventItemPreviewBase(color: Int?, isSelected: Boolean, withI
 }
 
 @Composable
+private fun groupRowShape(position: OverviewGroupPosition): Shape {
+    val shape = MaterialTheme.shapes.medium
+    val square = CornerSize(0.dp)
+    return when (position) {
+        OverviewGroupPosition.ONLY -> shape
+        OverviewGroupPosition.FIRST -> shape.copy(bottomStart = square, bottomEnd = square)
+        OverviewGroupPosition.MIDDLE -> RectangleShape
+        OverviewGroupPosition.LAST -> shape.copy(topStart = square, topEnd = square)
+    }
+}
+
+@Composable
 private fun eventContainerColor(isSelected: Boolean) =
     if (isSelected) MaterialTheme.colorScheme.secondaryContainer
-    else MaterialTheme.colorScheme.surfaceContainer
+    else MaterialTheme.colorScheme.surfaceContainerHighest
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -55,7 +56,7 @@ import com.futsch1.medtimer.core.ui.R as CoreUiR
 private val DETAIL_ICON_SIZE = 16.dp
 
 @Composable
-internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Modifier) {
+internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Modifier, strikeThrough: Boolean = false) {
     val time = content.time?.let { rememberFormattedTime(it, content.useRelativeTime) }
     val takenTime =
         content.takenTime?.let {
@@ -117,7 +118,8 @@ internal fun EventContent(content: OverviewEventContent, modifier: Modifier = Mo
         Crossfade(content.medicineName to content.dose, animationSpec = fadeSpec) { (medicineName, dose) ->
             Text(
                 buildAnnotatedString {
-                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    val decoration = if (strikeThrough) TextDecoration.LineThrough else null
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, textDecoration = decoration)) {
                         append(medicineName)
                     }
                     if (dose.isNotEmpty()) append(" ($dose)")

@@ -89,6 +89,7 @@
     <string name="ok">VALIDER</string>
     <string name="cancel">Annuler</string>
     <string name="confirm">Confirmer</string>
+    <string name="confirm_all">Tout confirmer</string>
     <string name="are_you_sure_delete_medicine">Êtes-vous sûr de supprimer le médicament ?</string>
     <string name="no_reminders">Aucun rappel défini</string>
     <string name="version">Version %s</string>
@@ -306,6 +307,7 @@
     <string name="show_taken_time_in_overview">Afficher l\'heure de prise dans l\'aperçu</string>
     <string name="show_reminded_time_in_overview">Afficher l\'heure du rappel dans l\'aperçu</string>
     <string name="show_stock_changes_in_overview">Afficher les changements de stock dans l\'aperçu</string>
+    <string name="group_overview_events">Regrouper les entrées par heure de rappel dans l\'aperçu</string>
     <string name="expiration_settings">Paramètres d\'expiration</string>
     <string name="remind_days_before_expiration">Rappel jours avant l\'expiration</string>
     <string name="medicine_stock_settings">Paramètres du stock</string>

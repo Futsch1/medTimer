@@ -48,6 +48,7 @@ class BackupMapperTest {
             showTakenTimeInOverview = false,
             showRemindedTimeInOverview = true,
             showStockChangesInOverview = false,
+            groupOverviewEvents = false,
             systemLocale = true,
             theme = ThemeSetting.ALTERNATIVE,
             hideMedicineName = true,
@@ -84,6 +85,7 @@ class BackupMapperTest {
         assertEquals(false, backup.showTakenTimeInOverview)
         assertEquals(true, backup.showRemindedTimeInOverview)
         assertEquals(false, backup.showStockChangesInOverview)
+        assertEquals(false, backup.groupOverviewEvents)
         assertEquals(true, backup.systemLocale)
         assertEquals("ALTERNATIVE", backup.theme)
         assertEquals(true, backup.hideMedicineName)
@@ -125,6 +127,7 @@ class BackupMapperTest {
         assertEquals(true, backup.showTakenTimeInOverview)
         assertEquals(true, backup.showRemindedTimeInOverview)
         assertEquals(true, backup.showStockChangesInOverview)
+        assertEquals(true, backup.groupOverviewEvents)
         assertEquals(false, backup.systemLocale)
         assertEquals("DEFAULT", backup.theme)
         assertEquals(false, backup.hideMedicineName)
@@ -252,6 +255,7 @@ class BackupMapperTest {
             combineNotifications = true,
             useRelativeDateTime = true,
             showTakenTimeInOverview = false,
+            groupOverviewEvents = false,
             systemLocale = true,
             theme = "ALTERNATIVE",
             hideMedicineName = true,
@@ -288,6 +292,7 @@ class BackupMapperTest {
         assertEquals(true, p.combineNotifications)
         assertEquals(true, p.useRelativeDateTime)
         assertEquals(false, p.showTakenTimeInOverview)
+        assertEquals(false, p.groupOverviewEvents)
         assertEquals(true, p.systemLocale)
         assertEquals(ThemeSetting.ALTERNATIVE, p.theme)
         assertEquals(true, p.hideMedicineName)
@@ -318,6 +323,7 @@ class BackupMapperTest {
         )
 
         ds.saveHomeLocation(HomeLocation(1.0, 2.0, 100f))
+        ds.putBoolean(PreferencesDataSource.GROUP_OVERVIEW_EVENTS, false)
 
         val backup = SettingsBackup(
             weekendStartTimeMinutes = 0, weekendEndTimeMinutes = 540,
@@ -340,6 +346,27 @@ class BackupMapperTest {
         backup.applyTo(ds)
 
         assertNull(ds.preferences.value.homeLocation)
+        // A backup from before the setting existed restores the default
+        assertEquals(true, ds.preferences.value.groupOverviewEvents)
+    }
+
+    @Test
+    fun `applyTo groups overview events when a backup holds null for the setting`() {
+        val freshPrefs = ApplicationProvider.getApplicationContext<Context>()
+            .getSharedPreferences("test_apply_null_grouping", Context.MODE_PRIVATE)
+        freshPrefs.edit().clear().commit()
+        val ds = PreferencesDataSource(
+            freshPrefs,
+            CoroutineScope(Dispatchers.Unconfined),
+            GsonBuilder().create()
+        )
+        ds.putBoolean(PreferencesDataSource.GROUP_OVERVIEW_EVENTS, false)
+
+        // Gson leaves fields that are missing in older backups null
+        UserPreferences.default().toSettingsBackup().copy(groupOverviewEvents = null).applyTo(ds)
+
+        assertEquals(true, ds.preferences.value.groupOverviewEvents)
+        assertEquals(false, ds.preferences.value.combineNotifications)
     }
 
     @Test
@@ -371,6 +398,7 @@ class BackupMapperTest {
             combineNotifications = true,
             useRelativeDateTime = false,
             showTakenTimeInOverview = false,
+            groupOverviewEvents = false,
             systemLocale = true,
             theme = ThemeSetting.ALTERNATIVE,
             hideMedicineName = false,
@@ -407,6 +435,7 @@ class BackupMapperTest {
         assertEquals(original.combineNotifications, result.combineNotifications)
         assertEquals(original.useRelativeDateTime, result.useRelativeDateTime)
         assertEquals(original.showTakenTimeInOverview, result.showTakenTimeInOverview)
+        assertEquals(original.groupOverviewEvents, result.groupOverviewEvents)
         assertEquals(original.systemLocale, result.systemLocale)
         assertEquals(original.theme, result.theme)
         assertEquals(original.hideMedicineName, result.hideMedicineName)

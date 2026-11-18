@@ -3,6 +3,7 @@
     <string name="help_english_only">Hjelpen er for øyeblikket bare tilgjengelig på engelsk.</string>
     <string name="show_reminded_time_in_overview">Vis påminnelsestidspunkt i oversikten</string>
     <string name="show_stock_changes_in_overview">Vis lagerendringer i oversikten</string>
+    <string name="group_overview_events">Grupper oppføringer etter påminnelsestidspunkt i oversikten</string>
     <string name="expiration_date">Utløpsdato</string>
     <string name="production_date">Produksjonsdato</string>
     <string name="skipped">Hoppet over</string>
@@ -28,6 +29,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Avbryt</string>
     <string name="confirm">Bekreft</string>
+    <string name="confirm_all">Bekreft alle</string>
     <string name="are_you_sure_delete_medicine">Er du sikker på at du vil slette dette legemiddelet?</string>
     <string name="no_reminders">Ingen påminnelser satt</string>
     <string name="expiration_settings">Innstillinger for utløpsdato</string>

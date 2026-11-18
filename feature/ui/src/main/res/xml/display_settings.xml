@@ -20,6 +20,11 @@
         app:key="use_relative_date_time" />
     <SwitchPreferenceCompat
         android:defaultValue="true"
+        android:title="@string/group_overview_events"
+        app:singleLineTitle="false"
+        app:key="group_overview_events" />
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
         android:title="@string/show_taken_time_in_overview"
         app:singleLineTitle="false"
         app:key="show_taken_time_in_overview" />

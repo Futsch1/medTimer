@@ -84,6 +84,7 @@
     <string name="ok">Rendben</string>
     <string name="cancel">Mégsem</string>
     <string name="confirm">Megerősít</string>
+    <string name="confirm_all">Összes megerősítése</string>
     <string name="are_you_sure_delete_medicine">Biztos törölni szeretnéd a gyógyszert?</string>
     <string name="no_reminders">Nincs emlékeztető beállítva</string>
     <string name="version">Verzió %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">Az elvett idő áttekintése</string>
     <string name="show_reminded_time_in_overview">Emlékeztetési idő megjelenítése az áttekintésben</string>
     <string name="show_stock_changes_in_overview">Készletváltozások megjelenítése az áttekintésben</string>
+    <string name="group_overview_events">Bejegyzések csoportosítása emlékeztetési idő szerint az áttekintésben</string>
     <string name="expiration_settings">Lejárati beállítások</string>
     <string name="remind_days_before_expiration">Emlékeztetés napokkal a lejárat előtt</string>
     <string name="medicine_stock_settings">Gyógyszerkészlet beállításai</string>

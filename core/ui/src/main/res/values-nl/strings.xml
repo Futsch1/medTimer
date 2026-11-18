@@ -84,6 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Annuleren</string>
     <string name="confirm">Bevestigen</string>
+    <string name="confirm_all">Alles bevestigen</string>
     <string name="are_you_sure_delete_medicine">Wil je de behandeling verwijderen?</string>
     <string name="no_reminders">Geen herinneringen</string>
     <string name="version">Versie %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">Toon tijdstip van inname in overzicht</string>
     <string name="show_reminded_time_in_overview">Herinneringstijd in overzicht tonen</string>
     <string name="show_stock_changes_in_overview">Voorraadwijzigingen in overzicht tonen</string>
+    <string name="group_overview_events">Items in overzicht groeperen op herinneringstijd</string>
     <string name="expiration_settings">Instellingen voor vervaldatum</string>
     <string name="remind_days_before_expiration">Herinner dagen voor vervaldatum</string>
     <string name="medicine_stock_settings">Instellingen medicijnvoorraad</string>

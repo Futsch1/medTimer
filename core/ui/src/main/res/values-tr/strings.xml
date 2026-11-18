@@ -84,6 +84,7 @@
     <string name="ok">Tamam</string>
     <string name="cancel">İptal</string>
     <string name="confirm">Onayla</string>
+    <string name="confirm_all">Tümünü onayla</string>
     <string name="are_you_sure_delete_medicine">İlacı silmek istediğinizden emin misiniz?</string>
     <string name="no_reminders">Hiç hatırlatıcı ayarlanmadı</string>
     <string name="version">Versiyon %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">Özet olarak geçen süreyi göster</string>
     <string name="show_reminded_time_in_overview">Genel bakışta hatırlatma zamanını göster</string>
     <string name="show_stock_changes_in_overview">Genel bakışta stok değişikliklerini göster</string>
+    <string name="group_overview_events">Genel bakışta girişleri hatırlatma zamanına göre grupla</string>
     <string name="expiration_settings">Son kullanma ayarları</string>
     <string name="remind_days_before_expiration">Son kullanma tarihinden önceki günleri hatırlat</string>
     <string name="medicine_stock_settings">İlaç stok ayarları</string>

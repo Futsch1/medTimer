@@ -40,7 +40,7 @@ class OverviewEventListSwipeTest {
                         },
                 ) {
                     OverviewEventList(
-                        events = persistentListOf(),
+                        groups = persistentListOf(),
                         selection = SelectionListController { it.id },
                         onEventClick = {},
                         onEnterSelectionMode = {},

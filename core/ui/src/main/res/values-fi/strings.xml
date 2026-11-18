@@ -84,6 +84,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Peruuta</string>
     <string name="confirm">Vahvista</string>
+    <string name="confirm_all">Vahvista kaikki</string>
     <string name="are_you_sure_delete_medicine">Haluatko varmasti poistaa lääkkeen?</string>
     <string name="no_reminders">Ei muistutuksia</string>
     <string name="version">Versio %s</string>
@@ -300,6 +301,7 @@
     <string name="show_taken_time_in_overview">Näytä kuluva aika yleiskatsauksessa</string>
     <string name="show_reminded_time_in_overview">Näytä muistutusaika yleiskatsauksessa</string>
     <string name="show_stock_changes_in_overview">Näytä varastomuutokset yleiskatsauksessa</string>
+    <string name="group_overview_events">Ryhmittele merkinnät muistutusajan mukaan yleiskatsauksessa</string>
     <string name="expiration_settings">Vanhentumisasetukset</string>
     <string name="remind_days_before_expiration">Muistuta päiviä ennen vanhenemista</string>
     <string name="medicine_stock_settings">Lääkevaraston asetukset</string>

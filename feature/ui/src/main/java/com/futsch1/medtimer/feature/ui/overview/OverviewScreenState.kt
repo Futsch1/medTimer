@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.futsch1.medtimer.core.domain.model.OverviewFilter
-import com.futsch1.medtimer.feature.ui.overview.model.OverviewEvent
+import com.futsch1.medtimer.feature.ui.overview.model.OverviewGroup
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
@@ -15,8 +15,8 @@ interface OverviewScreenState {
     val day: LocalDate
     val simulatedThrough: LocalDate
     val activeFilters: ImmutableSet<OverviewFilter>
-    val combineNotifications: Boolean
-    val events: ImmutableList<OverviewEvent>
+    val groupByReminderTime: Boolean
+    val groups: ImmutableList<OverviewGroup>
     val warnings: OverviewWarnings
 
     /** Events of [day] the list scrolls to once they are listed; empty when there is nothing to scroll to. */
@@ -27,8 +27,8 @@ class MutableOverviewScreenState : OverviewScreenState {
     override var day: LocalDate by mutableStateOf(LocalDate.now())
     override var simulatedThrough: LocalDate by mutableStateOf(LocalDate.now())
     override var activeFilters by mutableStateOf<ImmutableSet<OverviewFilter>>(persistentSetOf())
-    override var combineNotifications by mutableStateOf(false)
-    override var events by mutableStateOf<ImmutableList<OverviewEvent>>(persistentListOf())
+    override var groupByReminderTime by mutableStateOf(false)
+    override var groups by mutableStateOf<ImmutableList<OverviewGroup>>(persistentListOf())
     override val warnings = MutableOverviewWarnings()
     override var scrollTargetEventIds by mutableStateOf<ImmutableSet<Int>>(persistentSetOf())
 }
