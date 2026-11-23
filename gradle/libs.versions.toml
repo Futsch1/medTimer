@@ -5,7 +5,7 @@ hilt = "2.60.1"
 navigation-safe-args = "2.10.2"
 hilt-navigation-compose = "1.4.0"
 room-plugin = "2.8.5"
-triplet-play = "4.1.1"
+triplet-play = "4.1.2"
 sonarqube = "7.3.0.8198"
 ksp = "2.3.14"
 
