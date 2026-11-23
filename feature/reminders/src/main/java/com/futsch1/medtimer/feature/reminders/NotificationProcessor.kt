@@ -41,7 +41,11 @@ class NotificationProcessor @Inject constructor(
     private val persistentDataDataSource: PersistentDataDataSource,
     private val timeAccess: TimeAccess
 ) {
-    suspend fun processReminderEventsInNotification(reminderEventIds: List<Int>, status: ReminderEvent.ReminderStatus) {
+    suspend fun processReminderEventsInNotification(
+        reminderEventIds: List<Int>,
+        status: ReminderEvent.ReminderStatus,
+        processedTime: Instant? = null
+    ) {
         Log.d(LogTags.REMINDER, "Process reminder events in notification $reminderEventIds")
         val reminderEventsToUpdate = mutableListOf<ReminderEvent>()
         for (reminderEventId in reminderEventIds) {
@@ -54,7 +58,7 @@ class NotificationProcessor @Inject constructor(
             }
         }
 
-        setReminderEventStatus(status, reminderEventsToUpdate)
+        setReminderEventStatus(status, reminderEventsToUpdate, processedTime)
 
     }
 
@@ -119,8 +123,16 @@ class NotificationProcessor @Inject constructor(
         }
     }
 
-    suspend fun setReminderEventStatus(status: ReminderEvent.ReminderStatus, reminderEvents: List<ReminderEvent>) {
-        val processedTime = timeAccess.now()
+    /**
+     * The one place that records a status change. [processedTime] backdates the change, for a dose
+     * logged after the fact: the event row and the stock change both carry that instant.
+     */
+    suspend fun setReminderEventStatus(
+        status: ReminderEvent.ReminderStatus,
+        reminderEvents: List<ReminderEvent>,
+        processedTime: Instant? = null
+    ) {
+        val processedTime = processedTime ?: timeAccess.now()
 
         val reminderEvents = reminderEvents.map { reminderEvent ->
             val status =

@@ -84,6 +84,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Annuleren</string>
     <string name="confirm">Bevestigen</string>
+    <string name="taken_at">Ingenomen om…</string>
+    <string name="taken_time_in_future">Het innametijdstip kan niet in de toekomst liggen</string>
+    <string name="taken_on_date">Ingenomen op %1$s</string>
+    <string name="change_date">Datum wijzigen</string>
     <string name="are_you_sure_delete_medicine">Wil je de behandeling verwijderen?</string>
     <string name="no_reminders">Geen herinneringen</string>
     <string name="version">Versie %s</string>

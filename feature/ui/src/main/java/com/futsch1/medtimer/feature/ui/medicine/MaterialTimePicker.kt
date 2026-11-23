@@ -23,7 +23,7 @@ internal fun showMaterialTimePicker(
         onTimeSelected(LocalTime.of(minutes / 60, minutes % 60))
     }
     val picker = if (force24Hour) {
-        factory.create(time, titleText, TimeFormat.CLOCK_24H, onPositiveButtonClick)
+        factory.create(time, titleText, TimeFormat.CLOCK_24H, onPositiveButtonClick = onPositiveButtonClick)
     } else {
         factory.create(time, titleText, onPositiveButtonClick = onPositiveButtonClick)
     }

@@ -16,6 +16,7 @@ class ScheduledReminderActions(
             visibleButtons.add(Button.RESCHEDULE)
         } else {
             visibleButtons.add(Button.TAKEN)
+            visibleButtons.add(Button.TAKEN_AT)
             if (!simulatedReminderEvent.cannotBeSkipped) {
                 visibleButtons.add(Button.SKIPPED)
             }
