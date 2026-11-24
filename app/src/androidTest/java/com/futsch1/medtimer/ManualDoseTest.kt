@@ -7,7 +7,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.LocalDate
 import java.time.ZoneId
 
 private const val TEST_13_ = "Test (13)"
@@ -65,7 +64,7 @@ class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun manualDoseUsesSelectedOverviewDate() {
-        val selectedDay = LocalDate.of(2025, 7, 30)
+        val selectedDay = frozenToday().minusDays(1)
         seed.medicine("Test")
         navigation.toOverview()
         overview.selectDay(selectedDay)
