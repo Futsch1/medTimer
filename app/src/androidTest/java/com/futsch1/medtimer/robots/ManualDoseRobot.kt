@@ -11,7 +11,7 @@ import com.futsch1.medtimer.feature.ui.overview.manualDose.ManualDoseTestTags
 class ManualDoseRobot(
     private val ui: ComposeUi,
     private val overview: OverviewRobot,
-    private val pickers: MaterialPickers,
+    private val pickers: ComposePickers,
 ) {
     private val dialog get() = ui.scope(ManualDoseTestTags.DIALOG)
     private val medicineList get() = dialog.scope(ManualDoseTestTags.MEDICINE_LIST)
@@ -78,9 +78,11 @@ class ManualDoseRobot(
 
     /** Opens the time picker and accepts its prefilled time captured when the dialog opened. */
     fun confirmTime() {
-        dialog.click(hasTestTag(ManualDoseTestTags.ENTER_TIME))
+        openTimePicker()
         pickers.confirmTime()
     }
+
+    fun openTimePicker() = dialog.click(hasTestTag(ManualDoseTestTags.ENTER_TIME))
 
     fun assertRecentDoseOffered(medicine: String, amount: String) {
         ensureRecentDoseVisible(medicine, amount)

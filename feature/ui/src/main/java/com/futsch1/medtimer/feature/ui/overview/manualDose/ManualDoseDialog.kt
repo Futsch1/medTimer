@@ -1,7 +1,5 @@
 package com.futsch1.medtimer.feature.ui.overview.manualDose
 
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -35,10 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,12 +44,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.fragment.app.FragmentActivity
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.futsch1.medtimer.core.common.helpers.LocaleContextAccessor
-import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.domain.model.Medicine
 import com.futsch1.medtimer.core.ui.R
+import com.futsch1.medtimer.core.ui.component.MedTimerTimePickerDialog
 import com.futsch1.medtimer.core.ui.component.MedicineSwatch
 import com.futsch1.medtimer.core.ui.preview.MedTimerPreview
 import com.futsch1.medtimer.core.ui.rememberMedicineIcon
@@ -59,12 +56,6 @@ import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
-
-private tailrec fun Context.findFragmentActivity(): FragmentActivity = when (this) {
-    is FragmentActivity -> this
-    is ContextWrapper -> baseContext.findFragmentActivity()
-    else -> error("Manual dose time picker requires a FragmentActivity host")
-}
 
 object ManualDoseTestTags {
     const val DIALOG = "manual_dose_dialog"
@@ -89,16 +80,13 @@ object ManualDoseTestTags {
 
 @Composable
 fun ManualDoseDialog(
-    viewModel: ManualDoseViewModel,
-    onSearch: (String) -> Unit,
-    onSelectMedicineEntry: (ManualDoseMedicineEntry) -> Unit,
-    onSelectAmount: (String) -> Unit,
-    onLogManualDose: (LocalTime?) -> Unit,
-    onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
-    onStepBack: () -> Unit,
+    onLogged: (ManualDoseSaveResult) -> Unit,
     onDismissDialog: () -> Unit,
+    viewModel: ManualDoseViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle(initialValue = ManualDoseState())
+    var showTimePicker by rememberSaveable { mutableStateOf(false) }
+    val onLogManualDose: (LocalTime?) -> Unit = { time -> viewModel.selectTimeAndLog(time, onLogged) }
 
     Dialog(
         onDismissRequest = onDismissDialog,
@@ -110,13 +98,25 @@ fun ManualDoseDialog(
         DialogContent(
             state = state,
             searchQuery = viewModel.searchQuery,
-            onSearch = onSearch,
-            onSelectMedicineEntry = onSelectMedicineEntry,
-            onSelectAmount = onSelectAmount,
+            onSearch = viewModel::search,
+            onSelectMedicineEntry = { viewModel.selectMedicineEntry(it) },
+            onSelectAmount = viewModel::selectAmount,
             onLogManualDose = onLogManualDose,
-            onLogRecentDose = onLogRecentDose,
-            onStepBack = onStepBack,
+            onLogRecentDose = { dose -> viewModel.logRecentDose(dose, onLogged) },
+            onEnterTime = { showTimePicker = true },
+            onStepBack = viewModel::goOneStepBack,
             onDismissDialog = onDismissDialog,
+        )
+    }
+
+    if (showTimePicker) {
+        MedTimerTimePickerDialog(
+            initialTime = LocalTime.now(),
+            onConfirm = { time ->
+                showTimePicker = false
+                onLogManualDose(time)
+            },
+            onDismissRequest = { showTimePicker = false },
         )
     }
 }
@@ -130,6 +130,7 @@ private fun DialogContent(
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (LocalTime?) -> Unit,
     onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
+    onEnterTime: () -> Unit,
     onStepBack: () -> Unit,
     onDismissDialog: () -> Unit,
 ) {
@@ -180,6 +181,7 @@ private fun DialogContent(
                     onSelectAmount = onSelectAmount,
                     onLogManualDose = onLogManualDose,
                     onLogRecentDose = onLogRecentDose,
+                    onEnterTime = onEnterTime,
                 )
             }
 
@@ -219,8 +221,8 @@ private fun ColumnScope.DoseStepContent(
     onSelectAmount: (String) -> Unit,
     onLogManualDose: (LocalTime?) -> Unit,
     onLogRecentDose: (ManualDoseMedicineWithAmountEntry) -> Unit,
+    onEnterTime: () -> Unit,
 ) {
-    val context = LocalContext.current
     when (state.step) {
         ManualDoseStep.MEDICINE -> {
             Column {
@@ -278,15 +280,7 @@ private fun ColumnScope.DoseStepContent(
             }
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth().testTag(ManualDoseTestTags.ENTER_TIME),
-                onClick = {
-                    val pickerFactory = TimePickerDialogFactory(LocaleContextAccessor(context))
-                    pickerFactory.create(LocalTime.now()) { minutes ->
-                        onLogManualDose(LocalTime.ofSecondOfDay(minutes * 60L))
-                    }.show(
-                        context.findFragmentActivity().supportFragmentManager,
-                        TimePickerDialogFactory.DIALOG_TAG,
-                    )
-                },
+                onClick = onEnterTime,
             ) {
                 Text(stringResource(R.string.log_at_another_time))
             }
@@ -721,6 +715,7 @@ private fun ManualDosePreview(step: ManualDoseStep) {
                 onSelectAmount = {},
                 onLogManualDose = {},
                 onLogRecentDose = {},
+                onEnterTime = {},
                 onStepBack = {},
                 onDismissDialog = {},
             )

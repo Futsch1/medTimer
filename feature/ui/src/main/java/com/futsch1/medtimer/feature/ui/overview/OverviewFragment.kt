@@ -62,6 +62,7 @@ class OverviewFragment : Fragment() {
         }
     )
 
+    // The same instance ManualDoseDialog gets from hiltViewModel(): both use this fragment as the owner.
     private val manualDoseViewModel: ManualDoseViewModel by viewModels()
     // The same instance RescheduleDialog gets from hiltViewModel(): both use this fragment as the owner.
     private val rescheduleViewModel: RescheduleViewModel by viewModels()
@@ -112,32 +113,8 @@ class OverviewFragment : Fragment() {
 
                 if (showManualDoseDialog.value) {
                     ManualDoseDialog(
-                        viewModel = manualDoseViewModel,
-                        onSearch = {
-                            manualDoseViewModel.search(it)
-                        },
-                        onSelectMedicineEntry = {
-                            manualDoseViewModel.selectMedicineEntry(it)
-                        },
-                        onSelectAmount = {
-                            manualDoseViewModel.selectAmount(it)
-                        },
-                        onLogManualDose = { time ->
-                            manualDoseViewModel.selectTimeAndLog(time) { result ->
-                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
-                            }
-                        },
-                        onLogRecentDose = { dose ->
-                            manualDoseViewModel.logRecentDose(dose) { result ->
-                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
-                            }
-                        },
-                        onStepBack = {
-                            manualDoseViewModel.goOneStepBack()
-                        },
-                        onDismissDialog = {
-                            showManualDoseDialog.value = false
-                        }
+                        onLogged = { result -> handleManualDoseResult(result) { showManualDoseDialog.value = false } },
+                        onDismissDialog = { showManualDoseDialog.value = false },
                     )
                 }
 
