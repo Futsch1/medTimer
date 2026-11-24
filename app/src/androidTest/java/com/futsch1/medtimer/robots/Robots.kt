@@ -13,6 +13,7 @@ class Robots(rule: ComposeTestRule) {
 
     val dialogs = DialogRobot(ui)
     val pickers = MaterialPickers()
+    val composePickers = ComposePickers(ui)
     val preferences = PreferenceScreenRobot(ui, dialogs)
     val navigation = NavigationRobot(ui)
     val menus = MenuRobot(ui)

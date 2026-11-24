@@ -78,6 +78,7 @@ abstract class MedTimerTestBase {
 
     protected val dialogs get() = robots.dialogs
     protected val pickers get() = robots.pickers
+    protected val composePickers get() = robots.composePickers
     protected val preferences get() = robots.preferences
     protected val navigation get() = robots.navigation
     protected val menus get() = robots.menus
