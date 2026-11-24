@@ -63,9 +63,6 @@ class MedicinesFragment : Fragment() {
     @Inject
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
 
-    @Inject
-    lateinit var tagsFragmentFactory: com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment.Factory
-
     private lateinit var appOptionsActions: AppOptionsActions
     private val appOptionsViewModel: AppOptionsViewModel by viewModels()
     private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
@@ -104,7 +101,6 @@ class MedicinesFragment : Fragment() {
                                 actions = appOptionsActions,
                                 optionsViewModel = appOptionsViewModel,
                                 tagFilterViewModel = tagFilterViewModel,
-                                tagsFragmentFactory = tagsFragmentFactory,
                             )
                         },
                     )

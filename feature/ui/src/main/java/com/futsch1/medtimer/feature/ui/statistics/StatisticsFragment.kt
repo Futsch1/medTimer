@@ -20,7 +20,6 @@ import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
 import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.futsch1.medtimer.feature.ui.overview.EditEventSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,9 +34,6 @@ class StatisticsFragment : Fragment() {
 
     @Inject
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
-
-    @Inject
-    lateinit var tagsFragmentFactory: TagsFragment.Factory
 
     private lateinit var appOptionsActions: AppOptionsActions
 
@@ -63,7 +59,6 @@ class StatisticsFragment : Fragment() {
                                 actions = appOptionsActions,
                                 optionsViewModel = appOptionsViewModel,
                                 tagFilterViewModel = tagFilterViewModel,
-                                tagsFragmentFactory = tagsFragmentFactory,
                                 showTagFilter = false,
                             )
                         },

@@ -6,9 +6,17 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -17,15 +25,19 @@ import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
 import com.futsch1.medtimer.core.common.helpers.createCalendarEventIntent
 import com.futsch1.medtimer.core.domain.model.Medicine
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.MedicineStringFormatter
 import com.futsch1.medtimer.core.ui.TimeFormatter
+import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import com.futsch1.medtimer.feature.reminders.api.SimulatedReminders
 import com.futsch1.medtimer.feature.reminders.api.command.ReminderCommandBus
 import com.futsch1.medtimer.feature.ui.AppOptionsActions
 import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.R
+import com.futsch1.medtimer.feature.ui.medicine.NewReminderViewModel
 import com.futsch1.medtimer.feature.ui.medicine.advancedReminderPreferences.DateEditHandler
 import com.futsch1.medtimer.feature.ui.medicine.dialogs.NewReminderStockDialog
+import com.futsch1.medtimer.feature.ui.medicine.dialogs.startStockReminder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -52,9 +64,6 @@ class StockSettingsFragment : MedicinePreferences(
     private lateinit var appOptionsActions: AppOptionsActions
 
     @Inject
-    lateinit var newReminderStockDialogFactory: NewReminderStockDialog.Factory
-
-    @Inject
     lateinit var dateEditHandler: DateEditHandler
 
     @Inject
@@ -70,9 +79,43 @@ class StockSettingsFragment : MedicinePreferences(
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
+    // The same instance NewReminderStockDialog gets from hiltViewModel(): both use this fragment as the owner.
+    private val newReminderViewModel: NewReminderViewModel by viewModels()
+
+    /** The medicine's unit while the stock reminder dialog is open, `null` while it is closed. */
+    private var stockReminderDialogUnit by mutableStateOf<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appOptionsActions = appOptionsActionsFactory.create(this)
+        stockReminderDialogUnit = savedInstanceState?.getString(STATE_STOCK_REMINDER_DIALOG_UNIT)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Hosts the Compose dialog inside this fragment's view, so it shares the fragment's lifecycle and view models.
+        (view as ViewGroup).addView(
+            ComposeView(requireContext()).apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MedTimerTheme {
+                        stockReminderDialogUnit?.let { unit ->
+                            NewReminderStockDialog(
+                                medicineUnit = unit,
+                                onCreated = ::stockReminderCreated,
+                                onDismiss = { stockReminderDialogUnit = null },
+                            )
+                        }
+                    }
+                }
+            },
+            ViewGroup.LayoutParams(0, 0)
+        )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_STOCK_REMINDER_DIALOG_UNIT, stockReminderDialogUnit)
     }
 
     override val customOnClick: Map<String, (FragmentActivity, Preference) -> Unit>
@@ -96,12 +139,8 @@ class StockSettingsFragment : MedicinePreferences(
                 dataStore.putLong("production_date", 0)
                 dataStore.putLong("expiration_date", 0)
             },
-            "create_out_of_stock_reminder" to { activity, _ ->
-                showCreateNewReminderStockDialog(activity)
-            },
-            "create_expiration_date_reminder" to { activity, _ ->
-                showCreateNewReminderExpirationDateDialog(activity)
-            }
+            "create_out_of_stock_reminder" to { _, _ -> showStockReminderDialog(ReminderType.OUT_OF_STOCK) },
+            "create_expiration_date_reminder" to { _, _ -> showStockReminderDialog(ReminderType.EXPIRATION_DATE) }
         )
 
     override fun onStart() {
@@ -196,12 +235,19 @@ class StockSettingsFragment : MedicinePreferences(
         applicationScope.launch { commandBus.processRefill(medicineId) }
     }
 
-    private fun showCreateNewReminderStockDialog(activity: FragmentActivity) {
-        newReminderStockDialogFactory.create(activity, dataStore.modelData, true)
+    private fun showStockReminderDialog(type: ReminderType) {
+        val medicine = dataStore.modelData
+        newReminderViewModel.startStockReminder(medicine, type)
+        stockReminderDialogUnit = MedicineHelper.getUnit(medicine)
     }
 
-    private fun showCreateNewReminderExpirationDateDialog(activity: FragmentActivity) {
-        newReminderStockDialogFactory.create(activity, dataStore.modelData, false)
+    private fun stockReminderCreated() {
+        Toast.makeText(requireContext(), com.futsch1.medtimer.core.ui.R.string.successfully_created_reminder, Toast.LENGTH_LONG).show()
+        stockReminderDialogUnit = null
+    }
+
+    private companion object {
+        const val STATE_STOCK_REMINDER_DIALOG_UNIT = "stockReminderDialogUnit"
     }
 }
 

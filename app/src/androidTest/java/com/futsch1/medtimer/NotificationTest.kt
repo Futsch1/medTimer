@@ -446,7 +446,7 @@ class NotificationTest : MedTimerTestBase() {
         overview.clickEventState(0)
         overview.clickAction(R.string.reschedule_reminder)
 
-        pickers.pickTime(earlierToday())
+        composePickers.pickTime(earlierToday())
 
         notifications.assertPosted(TEST_MED)
     }

@@ -78,6 +78,7 @@ abstract class MedTimerTestBase {
 
     protected val dialogs get() = robots.dialogs
     protected val pickers get() = robots.pickers
+    protected val composePickers get() = robots.composePickers
     protected val preferences get() = robots.preferences
     protected val navigation get() = robots.navigation
     protected val menus get() = robots.menus
@@ -108,6 +109,12 @@ abstract class MedTimerTestBase {
     protected fun timeFormatter(): TimeFormatter {
         val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
         return EntryPointAccessors.fromApplication(context, TimeFormatterEntryPoint::class.java).timeFormatter()
+    }
+
+    /** Recreates the activity the way a configuration change such as rotation does. */
+    protected fun recreateActivity() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { baristaRule.activityTestRule.activity.recreate() }
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
     }
 
     /** The frozen instant the app itself sees for the duration of this test, as a time of day. */

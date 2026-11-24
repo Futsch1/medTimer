@@ -62,6 +62,33 @@ class TagTest : MedTimerTestBase() {
 
     @Test
     @AllowFlaky(attempts = 3)
+    fun tagDialogsStayOpenWhenTheActivityIsRecreated() {
+        seed.medicine("Test")
+        medicines.clickItem(0)
+
+        tags.inMedicineTags {
+            add(NEW_TAG)
+            recreateActivity()
+            assertChecked(NEW_TAG)
+            startAdding(ANOTHER_TAG)
+            recreateActivity()
+            confirmAdding(ANOTHER_TAG)
+            assertChecked(ANOTHER_TAG)
+        }
+
+        medicines.showList()
+        tags.inFilter {
+            toggle(NEW_TAG)
+            recreateActivity()
+            assertChecked(NEW_TAG)
+            assertNotChecked(ANOTHER_TAG)
+        }
+        medicines.assertNameContains("Test")
+        tags.inFilter { toggle(NEW_TAG) }
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
     fun activateAndOverviewVisibility() {
         // Tag before any dose is raised: a reminder event keeps the tags its medicine had when it was raised.
         val test = seed.medicine("Test")

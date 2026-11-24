@@ -4,9 +4,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.futsch1.medtimer.core.common.di.ApplicationScope
 import com.futsch1.medtimer.core.common.helpers.DoseAmountParser
-import com.futsch1.medtimer.core.common.helpers.TimeHelper
-import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
-import com.futsch1.medtimer.core.datastore.PreferencesDataSource
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.domain.model.ScheduledReminder
 import com.futsch1.medtimer.core.domain.repository.MedicineRepository
@@ -20,24 +17,22 @@ import com.futsch1.medtimer.feature.ui.helpers.DeleteHelper
 import com.futsch1.medtimer.feature.ui.overview.model.PastReminderEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import javax.inject.Inject
 
 class ActionsVisitor @Inject constructor(
     private val reminderEventRepository: ReminderEventRepository,
     private val medicineRepository: MedicineRepository,
     private val reminderRepository: ReminderRepository,
-    private val timePickerDialogFactory: TimePickerDialogFactory,
     private val fragmentActivity: FragmentActivity,
     private val reminderEventCreator: ReminderEventCreator,
-    private val preferencesDataSource: PreferencesDataSource,
     private val commandBus: ReminderCommandBus,
     @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private val visitScheduledReminder: MutableList<ScheduledReminder> = mutableListOf()
     private val visitedPastReminderEvents: MutableList<PastReminderEvent> = mutableListOf()
+
+    /** Receives the events to reschedule; the time is picked by the UI. */
+    var onRescheduleRequested: (RescheduleRequest) -> Unit = {}
 
     fun startVisit(button: Button): AutoCloseable {
         visitScheduledReminder.clear()
@@ -59,7 +54,9 @@ class ActionsVisitor @Inject constructor(
 
     private suspend fun complete(button: Button) {
         if (button == Button.RESCHEDULE) {
-            rescheduleReminders()
+            if (visitScheduledReminder.isNotEmpty() || visitedPastReminderEvents.isNotEmpty()) {
+                onRescheduleRequested(RescheduleRequest(visitScheduledReminder.toList(), visitedPastReminderEvents.toList()))
+            }
         } else {
             for (scheduledReminder in visitScheduledReminder) {
                 when (button) {
@@ -84,53 +81,6 @@ class ActionsVisitor @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun rescheduleReminders() {
-        if (visitedPastReminderEvents.isEmpty() && visitScheduledReminder.isEmpty()) {
-            return
-        }
-
-        val remindedInstant = Instant.ofEpochSecond(
-            visitedPastReminderEvents.firstOrNull()?.timestamp
-                ?: visitScheduledReminder.first().timestamp.epochSecond
-        )
-
-        val localDateTime = LocalDateTime.ofInstant(remindedInstant, ZoneId.systemDefault())
-        timePickerDialogFactory
-            .create(localDateTime.toLocalTime()) { minutes ->
-                val newReminderTime = TimeHelper.changeTimeMinutes(remindedInstant, minutes)
-
-                fragmentActivity.lifecycleScope.launch {
-                    val pendingReminderEvents = visitScheduledReminder.map { scheduledReminder ->
-                        reminderEventCreator.resolvePending(scheduledReminder, newReminderTime.epochSecond)
-                    } + visitedPastReminderEvents.map { pastReminderEvent ->
-                        pastReminderEvent.reminderEvent.copy(remindedTimestamp = newReminderTime)
-                    }
-                    val newReminderEvents = reminderEventRepository.upsertMany(pendingReminderEvents)
-
-                    applicationScope.launch { commandBus.scheduleNextNotification() }
-
-                    if (preferencesDataSource.preferences.value.combineNotifications) {
-                        requestShowReminders(newReminderEvents, newReminderTime)
-                    } else {
-                        newReminderEvents.forEach {
-                            requestShowReminders(listOf(it), newReminderTime)
-                        }
-                    }
-                }
-            }.show(fragmentActivity.supportFragmentManager, TimePickerDialogFactory.DIALOG_TAG)
-    }
-
-    private fun requestShowReminders(reminderEvents: List<ReminderEvent>, remindInstant: Instant) {
-        val reminderIds = reminderEvents.map { it.reminderId }
-        val reminderEventIds = reminderEvents.map { it.reminderEventId }
-        val reminderNotificationData = ReminderNotificationData.fromArrays(
-            reminderIds,
-            reminderEventIds,
-            remindInstant
-        )
-        applicationScope.launch { commandBus.showReminderNotification(reminderNotificationData) }
     }
 
     private fun processTakenOrSkipped(reminderEvent: ReminderEvent, taken: Boolean) {

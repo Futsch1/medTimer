@@ -22,7 +22,6 @@ import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
 import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
@@ -49,9 +48,6 @@ class OverviewFragment : Fragment() {
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
 
     @Inject
-    lateinit var tagsFragmentFactory: TagsFragment.Factory
-
-    @Inject
     lateinit var overviewDayRequests: OverviewDayRequests
 
     private lateinit var appOptionsActions: AppOptionsActions
@@ -66,7 +62,10 @@ class OverviewFragment : Fragment() {
         }
     )
 
+    // The same instance ManualDoseDialog gets from hiltViewModel(): both use this fragment as the owner.
     private val manualDoseViewModel: ManualDoseViewModel by viewModels()
+    // The same instance RescheduleDialog gets from hiltViewModel(): both use this fragment as the owner.
+    private val rescheduleViewModel: RescheduleViewModel by viewModels()
 
     private val appStoppedObserver = object : DefaultLifecycleObserver {
         override fun onStop(owner: LifecycleOwner) {
@@ -78,6 +77,7 @@ class OverviewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionsVisitor.onRescheduleRequested = rescheduleViewModel::request
         appOptionsActions = appOptionsActionsFactory.create(this)
         requireActivity().lifecycle.addObserver(appStoppedObserver)
     }
@@ -107,41 +107,18 @@ class OverviewFragment : Fragment() {
                             actions = appOptionsActions,
                             optionsViewModel = appOptionsViewModel,
                             tagFilterViewModel = tagFilterViewModel,
-                            tagsFragmentFactory = tagsFragmentFactory,
                         )
                     },
                 )
 
                 if (showManualDoseDialog.value) {
                     ManualDoseDialog(
-                        viewModel = manualDoseViewModel,
-                        onSearch = {
-                            manualDoseViewModel.search(it)
-                        },
-                        onSelectMedicineEntry = {
-                            manualDoseViewModel.selectMedicineEntry(it)
-                        },
-                        onSelectAmount = {
-                            manualDoseViewModel.selectAmount(it)
-                        },
-                        onLogManualDose = { time ->
-                            manualDoseViewModel.selectTimeAndLog(time) { result ->
-                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
-                            }
-                        },
-                        onLogRecentDose = { dose ->
-                            manualDoseViewModel.logRecentDose(dose) { result ->
-                                handleManualDoseResult(result) { showManualDoseDialog.value = false }
-                            }
-                        },
-                        onStepBack = {
-                            manualDoseViewModel.goOneStepBack()
-                        },
-                        onDismissDialog = {
-                            showManualDoseDialog.value = false
-                        }
+                        onLogged = { result -> handleManualDoseResult(result) { showManualDoseDialog.value = false } },
+                        onDismissDialog = { showManualDoseDialog.value = false },
                     )
                 }
+
+                RescheduleDialog()
             }
         }
     }

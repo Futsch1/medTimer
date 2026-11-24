@@ -2,7 +2,6 @@ package com.futsch1.medtimer.feature.ui.overview.actions
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.futsch1.medtimer.core.common.helpers.TimePickerDialogFactory
 import com.futsch1.medtimer.core.common.time.TimeAccess
 import com.futsch1.medtimer.core.datastore.PersistentDataDataSource
 import com.futsch1.medtimer.core.datastore.PreferencesDataSource
@@ -50,7 +49,6 @@ class ActionsVisitorReRaiseTest {
     private val reminderEventRepository: ReminderEventRepository = mock()
     private val medicineRepository: MedicineRepository = mock()
     private val reminderRepository: ReminderRepository = mock()
-    private val timePickerDialogFactory: TimePickerDialogFactory = mock()
     private val reminderEventCreator: ReminderEventCreator = mock()
     private val preferencesDataSource: PreferencesDataSource = mock()
     private val persistentDataDataSource: PersistentDataDataSource = mock()
@@ -72,10 +70,8 @@ class ActionsVisitorReRaiseTest {
             reminderEventRepository,
             medicineRepository,
             reminderRepository,
-            timePickerDialogFactory,
             activity,
             reminderEventCreator,
-            preferencesDataSource,
             commandBus,
             CoroutineScope(testDispatcher)
         )

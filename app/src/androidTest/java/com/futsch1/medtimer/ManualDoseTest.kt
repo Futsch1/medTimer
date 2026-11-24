@@ -4,11 +4,13 @@ import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.domain.model.ReminderEvent
 import com.futsch1.medtimer.core.ui.R
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.LocalDate
 import java.time.ZoneId
+import kotlin.time.Duration.Companion.seconds
 
 private const val TEST_13_ = "Test (13)"
 private const val GINSENG = "Ginseng (200mg)"
@@ -65,7 +67,7 @@ class ManualDoseTest : MedTimerTestBase() {
     @Test
     @AllowFlaky(attempts = 3)
     fun manualDoseUsesSelectedOverviewDate() {
-        val selectedDay = LocalDate.of(2025, 7, 30)
+        val selectedDay = frozenToday().minusDays(1)
         seed.medicine("Test")
         navigation.toOverview()
         overview.selectDay(selectedDay)
@@ -78,6 +80,33 @@ class ManualDoseTest : MedTimerTestBase() {
             }
         }
         assertEquals(selectedDay, event.remindedTimestamp.atZone(ZoneId.systemDefault()).toLocalDate())
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun manualDoseTimePickerSurvivesActivityRecreation() {
+        val doseTime = earlierToday().withSecond(0).withNano(0)
+        navigation.toOverview()
+
+        manualDose.inPicker {
+            chooseCustom("Test")
+            enterAmount("2")
+            openTimePicker()
+        }
+        recreateActivity()
+        composePickers.pickTime(doseTime)
+
+        val event = runBlocking {
+            withTimeout(15.seconds) {
+                var logged: ReminderEvent? = null
+                while (logged == null) {
+                    logged = reminderEventRepository.getAllWithoutDeleted().singleOrNull { it.medicineName == "Test" }
+                    if (logged == null) delay(200)
+                }
+                logged
+            }
+        }
+        assertEquals(doseTime, event.remindedTimestamp.atZone(ZoneId.systemDefault()).toLocalTime())
     }
 
     @Test
