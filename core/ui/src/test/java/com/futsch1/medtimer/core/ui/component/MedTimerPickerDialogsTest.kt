@@ -1,13 +1,19 @@
 package com.futsch1.medtimer.core.ui.component
 
 import android.provider.Settings
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.TextUnit
 import androidx.test.core.app.ApplicationProvider
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme
 import org.junit.Rule
@@ -78,6 +84,25 @@ class MedTimerPickerDialogsTest {
         composeTestRule.onNodeWithText("OK").performClick()
 
         assertEquals(LocalTime.of(21, 45), pickedTime)
+    }
+
+    @Test
+    fun `hours and minutes keep their size when switching to keyboard mode`() {
+        setTimeFormat("24")
+        // 37 is not on the hour dial, so only the minute selector shows it.
+        showTimePicker(LocalTime.of(8, 37))
+        val dialSize = fontSizeOf(composeTestRule.onAllNodesWithText("37", useUnmergedTree = true).onFirst())
+
+        composeTestRule.onNodeWithContentDescription("Switch to text input mode").performClick()
+        val inputSize = fontSizeOf(composeTestRule.onNode(hasSetTextAction() and hasContentDescription("for minutes", substring = true)))
+
+        assertEquals(dialSize, inputSize)
+    }
+
+    private fun fontSizeOf(node: SemanticsNodeInteraction): TextUnit {
+        val layouts = mutableListOf<TextLayoutResult>()
+        node.fetchSemanticsNode().config[SemanticsActions.GetTextLayoutResult].action?.invoke(layouts)
+        return layouts.single().layoutInput.style.fontSize
     }
 
     @Test

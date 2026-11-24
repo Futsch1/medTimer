@@ -3,6 +3,7 @@ package com.futsch1.medtimer.core.ui.component
 import android.text.format.DateFormat
 import androidx.annotation.StringRes
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
@@ -81,7 +82,11 @@ fun MedTimerTimePickerDialog(
         if (displayMode == TimePickerDisplayMode.Picker) {
             TimePicker(state = state)
         } else {
-            TimeInput(state = state)
+            // TimeInput sets its fields in displayMedium while the dial uses displayLarge;
+            // match the dial so switching modes keeps the size.
+            MaterialTheme(typography = MaterialTheme.typography.copy(displayMedium = MaterialTheme.typography.displayLarge)) {
+                TimeInput(state = state)
+            }
         }
     }
 }
