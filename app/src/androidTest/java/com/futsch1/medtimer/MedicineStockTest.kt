@@ -3,13 +3,19 @@ package com.futsch1.medtimer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.futsch1.medtimer.core.common.helpers.MedicineHelper
+import com.futsch1.medtimer.core.domain.model.ReminderType
 import com.futsch1.medtimer.core.ui.R
 import com.futsch1.medtimer.utilities.scheduleRemindersNow
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalDate
 import java.util.Calendar
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @HiltAndroidTest
 class MedicineStockTest : MedTimerTestBase() {
@@ -163,6 +169,27 @@ class MedicineStockTest : MedTimerTestBase() {
             medicineEditor.assertInvalidInputDisplayed()
             medicineEditor.cancelReminderDialog()
         }
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun stockReminderDialogSurvivesActivityRecreation() {
+        val medicineId = seed.medicine("Test")
+        medicines.clickItem(0)
+
+        medicineEditor.inStockSettings {
+            preferences.click(R.string.create_expiration_date_reminder)
+            medicineEditor.setReminderInput(R.string.remind_days_before_expiration, "7")
+            recreateActivity()
+            medicineEditor.clickCreateReminder()
+        }
+
+        val reminder = runBlocking {
+            withTimeout(15.seconds) { reminderRepository.getAllFlow(medicineId).first { it.isNotEmpty() } }
+        }.single()
+        assertEquals(ReminderType.EXPIRATION_DATE, reminder.reminderType)
+        // The dialog stores the days before expiration as an epoch day.
+        assertEquals(LocalDate.ofEpochDay(7), reminder.periodStart)
     }
 
     @Test
