@@ -1,6 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.futsch1.medtimer.core.ui.theme.MedTimerTheme

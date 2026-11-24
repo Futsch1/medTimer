@@ -2,7 +2,6 @@ package com.futsch1.medtimer.feature.ui.medicine
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
 import androidx.compose.foundation.layout.FlexAlignItems
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
@@ -138,7 +137,6 @@ private fun MedicineHeader(medicine: MedicineScreenItem) {
     )
 }
 
-@OptIn(ExperimentalFlexBoxApi::class)
 @Composable
 private fun MedicineTags(tags: List<String>) {
     if (tags.isEmpty()) return
