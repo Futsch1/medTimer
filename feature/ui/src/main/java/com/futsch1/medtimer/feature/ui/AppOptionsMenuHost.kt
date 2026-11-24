@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.futsch1.medtimer.core.common.helpers.safeStartActivity
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagDataFromPreferences
 import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.futsch1.medtimer.core.ui.R as CoreUiR
@@ -31,7 +30,6 @@ fun RowScope.AppOptionsMenuHost(
     actions: AppOptionsActions,
     optionsViewModel: AppOptionsViewModel,
     tagFilterViewModel: TagFilterViewModel,
-    tagsFragmentFactory: TagsFragment.Factory,
     showTagFilter: Boolean = true,
 ) {
     val context = LocalContext.current
@@ -43,8 +41,7 @@ fun RowScope.AppOptionsMenuHost(
         hasTags = showTagFilter && hasAnyTags,
         tagsSelected = tagsSelected,
         onOpenTagFilter = {
-            tagsFragmentFactory.create(TagDataFromPreferences(fragment))
-                .show(fragment.parentFragmentManager, "tags")
+            TagsFragment.forFilter().show(fragment.parentFragmentManager, "tags")
         },
         onOpenSettings = {
             runCatching { fragment.findNavController().navigate(R.id.action_global_preferencesFragment) }

@@ -110,6 +110,12 @@ abstract class MedTimerTestBase {
         return EntryPointAccessors.fromApplication(context, TimeFormatterEntryPoint::class.java).timeFormatter()
     }
 
+    /** Recreates the activity the way a configuration change such as rotation does. */
+    protected fun recreateActivity() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { baristaRule.activityTestRule.activity.recreate() }
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+    }
+
     /** The frozen instant the app itself sees for the duration of this test, as a time of day. */
     private fun frozenNow(): LocalTime = timeAccess.now().atZone(timeAccess.systemZone()).toLocalTime()
 

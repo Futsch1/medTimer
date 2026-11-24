@@ -28,7 +28,6 @@ import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
 import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.maltaisn.icondialog.IconDialog
 import com.maltaisn.icondialog.IconDialogSettings
 import com.maltaisn.icondialog.data.Icon
@@ -87,9 +86,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
     @Inject
     lateinit var reminderRepository: ReminderRepository
 
-    @Inject
-    lateinit var tagsFragmentFactory: TagsFragment.Factory
-
     private lateinit var appOptionsActions: AppOptionsActions
     private val appOptionsViewModel: AppOptionsViewModel by viewModels()
     private val tagFilterViewModel: TagFilterViewModel by activityViewModels()
@@ -125,7 +121,6 @@ class EditMedicineFragment : Fragment(), IconDialog.Callback {
                                     actions = appOptionsActions,
                                     optionsViewModel = appOptionsViewModel,
                                     tagFilterViewModel = tagFilterViewModel,
-                                    tagsFragmentFactory = tagsFragmentFactory,
                                     showTagFilter = false
                                 )
                             },

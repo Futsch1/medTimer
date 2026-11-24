@@ -9,23 +9,20 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.futsch1.medtimer.feature.ui.R
-import com.futsch1.medtimer.feature.ui.helpers.TextInputDialogBuilder
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.button.MaterialButton
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/**
+ * Edits the tags of one medicine, or the tag filter when no medicine is given. The data provider is
+ * built from the arguments, so the system can restore the dialog after a configuration change.
+ */
+@AndroidEntryPoint
+class TagsFragment : DialogFragment() {
 
-class TagsFragment @AssistedInject constructor(
-    @Assisted private val tagDataProvider: TagDataProvider
-) :
-    DialogFragment() {
-
-    @AssistedFactory
-    fun interface Factory {
-        fun create(tagDataProvider: TagDataProvider): TagsFragment
-    }
+    @Inject
+    lateinit var tagDataFromMedicineFactory: TagDataFromMedicine.Factory
 
     private lateinit var recyclerView: RecyclerView
 
@@ -33,28 +30,35 @@ class TagsFragment @AssistedInject constructor(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
+    ): View = inflater.inflate(R.layout.dialog_fragment_tags, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Providers collect on the view lifecycle, which exists only from here on.
+        val tagDataProvider = createTagDataProvider()
 
         recyclerView = view.findViewById(R.id.tags)
         recyclerView.layoutManager = FlexboxLayoutManager(requireContext())
         recyclerView.adapter = tagDataProvider.getAdapter()
 
-        val okButton = view.findViewById<MaterialButton>(R.id.ok)
-        okButton.setOnClickListener {
+        view.findViewById<MaterialButton>(R.id.ok).setOnClickListener {
             dismiss()
         }
 
-        setupAddTag(view)
+        setupAddTag(view, tagDataProvider)
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         recyclerView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             requireView().post { if (isAdded) capDialogHeight(requireView()) }
+        }
+    }
+
+    private fun createTagDataProvider(): TagDataProvider {
+        val args = requireArguments()
+        return if (args.containsKey(ARG_MEDICINE_ID)) {
+            tagDataFromMedicineFactory.create(this, args.getInt(ARG_MEDICINE_ID))
+        } else {
+            TagDataFromPreferences(this)
         }
     }
 
@@ -70,7 +74,7 @@ class TagsFragment @AssistedInject constructor(
         requireDialog().window!!.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
-    private fun setupAddTag(view: View) {
+    private fun setupAddTag(view: View, tagDataProvider: TagDataProvider) {
         val addTagButton = view.findViewById<MaterialButton>(R.id.addTag)
         if (!tagDataProvider.canAddTag()) {
             addTagButton.visibility = View.GONE
@@ -79,15 +83,21 @@ class TagsFragment @AssistedInject constructor(
 
         addTagButton.visibility = View.VISIBLE
         addTagButton.setOnClickListener {
-            TextInputDialogBuilder(requireContext())
-                .title(com.futsch1.medtimer.core.ui.R.string.add_tag)
-                .hint(com.futsch1.medtimer.core.ui.R.string.name)
-                .textSink { tagName: String? ->
-                    if (!tagName.isNullOrBlank()) {
-                        tagDataProvider.addTag(tagName)
-                    }
-                }
-                .show()
+            AddTagDialogFragment().show(childFragmentManager, AddTagDialogFragment.TAG)
         }
+        childFragmentManager.setFragmentResultListener(AddTagDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, result ->
+            val tagName = result.getString(AddTagDialogFragment.RESULT_NAME)
+            if (!tagName.isNullOrBlank()) {
+                tagDataProvider.addTag(tagName)
+            }
+        }
+    }
+
+    companion object {
+        private const val ARG_MEDICINE_ID = "medicineId"
+
+        fun forMedicine(medicineId: Int) = TagsFragment().apply { arguments = Bundle().apply { putInt(ARG_MEDICINE_ID, medicineId) } }
+
+        fun forFilter() = TagsFragment().apply { arguments = Bundle() }
     }
 }

@@ -35,9 +35,17 @@ class TagsRobot(
     }
 
     fun add(name: String) {
-        onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.addTag)).perform(ViewActions.click())
-        dialogs.enterTextAndConfirm(name)
+        startAdding(name)
+        confirmAdding(name)
     }
+
+    /** Opens the add dialog and types [name] without confirming it. */
+    fun startAdding(name: String) {
+        onView(ViewMatchers.withId(com.futsch1.medtimer.feature.ui.R.id.addTag)).perform(ViewActions.click())
+        dialogs.enterText(name)
+    }
+
+    fun confirmAdding(name: String) = dialogs.confirm(expectedInput = name)
 
     fun toggle(name: String) = chip(name).perform(ViewActions.click())
 

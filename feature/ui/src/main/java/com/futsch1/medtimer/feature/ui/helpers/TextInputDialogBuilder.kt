@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.setPadding
 import com.futsch1.medtimer.core.common.helpers.dpToPx
 import com.futsch1.medtimer.core.common.helpers.showSoftKeyboard
@@ -52,6 +53,11 @@ class TextInputDialogBuilder(
     fun inputType(inputType: Int) = apply { this.inputType = inputType }
 
     fun show() {
+        create().show()
+    }
+
+    /** Builds the dialog without showing it, for hosting in a [androidx.fragment.app.DialogFragment]. */
+    fun create(): AlertDialog {
         check(!hasBeenShown) { "TextInputDialogBuilder can only be used once" }
 
         hasBeenShown = true
@@ -76,7 +82,7 @@ class TextInputDialogBuilder(
             addView(editText)
         }
 
-        val dialog = MaterialAlertDialogBuilder(context)
+        return MaterialAlertDialogBuilder(context)
             .setView(textInputLayout)
             .setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
                 editText.text?.let { textSink?.consumeText(it.toString()) }
@@ -88,8 +94,6 @@ class TextInputDialogBuilder(
             .apply {
                 titleString?.let { setTitle(it) }
             }.create()
-
-        dialog.show()
     }
 
     private fun createTextInputLayout(context: Context): TextInputLayout {

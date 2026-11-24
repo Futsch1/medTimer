@@ -22,7 +22,6 @@ import com.futsch1.medtimer.feature.ui.AppOptionsActionsFactory
 import com.futsch1.medtimer.feature.ui.AppOptionsMenuHost
 import com.futsch1.medtimer.feature.ui.AppOptionsViewModel
 import com.futsch1.medtimer.feature.ui.TagFilterViewModel
-import com.futsch1.medtimer.feature.ui.medicine.tags.TagsFragment
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsFactory
 import com.futsch1.medtimer.feature.ui.overview.actions.ActionsVisitor
 import com.futsch1.medtimer.feature.ui.overview.actions.Button
@@ -47,9 +46,6 @@ class OverviewFragment : Fragment() {
 
     @Inject
     lateinit var appOptionsActionsFactory: AppOptionsActionsFactory
-
-    @Inject
-    lateinit var tagsFragmentFactory: TagsFragment.Factory
 
     @Inject
     lateinit var overviewDayRequests: OverviewDayRequests
@@ -107,7 +103,6 @@ class OverviewFragment : Fragment() {
                             actions = appOptionsActions,
                             optionsViewModel = appOptionsViewModel,
                             tagFilterViewModel = tagFilterViewModel,
-                            tagsFragmentFactory = tagsFragmentFactory,
                         )
                     },
                 )
