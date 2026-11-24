@@ -25,7 +25,7 @@ When Compose lands, the stack will be:
   BOM-managed and hand-pinned Compose versions.
 - **Material 3 Expressive** — the design system. Delivered via `androidx.compose.material3:material3` (the Expressive
   components and `MaterialExpressiveTheme`
-  ship in the same artifact).
+  ship in the same artifact, stable since `material3` 1.5.0 and versioned by the BOM).
   `MedTimerTheme` wraps `MaterialExpressiveTheme`, not the classic `MaterialTheme`. Do not pull in Material 2 alongside
   it.
 - **Hilt + Compose** (`androidx.hilt:hilt-navigation-compose`) — obtain ViewModels via `hiltViewModel()`.

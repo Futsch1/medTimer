@@ -72,7 +72,7 @@ private val OUTLINE_WIDTH = 1.dp
 private val LABEL_START = 12.dp
 private val LABEL_GAP_PADDING = 4.dp
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun OverviewFilterRow(
     activeFilters: Set<OverviewFilter>,

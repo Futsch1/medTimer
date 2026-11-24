@@ -2,7 +2,6 @@ package com.futsch1.medtimer
 
 import android.graphics.Rect
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.isImeVisible
@@ -43,7 +42,6 @@ import com.futsch1.medtimer.feature.ui.R as FeatureUiR
  * keyboard insets arrive in one step, and a NestedScrollView then keeps a scroll position that leaves the
  * focused field underneath the keyboard. From API 30 on it already stays in view; this is then a no-op.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun KeepFocusedViewAboveKeyboard() {
     val view = LocalView.current

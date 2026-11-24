@@ -12,7 +12,9 @@ plugins {
 
 android {
     namespace = "com.futsch1.medtimer"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) { minorApiLevel = 1 }
+    }
 
     defaultConfig {
         applicationId = "com.futsch1.medtimer"

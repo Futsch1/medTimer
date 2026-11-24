@@ -6,7 +6,9 @@ plugins {
 
 android {
     namespace = "com.futsch1.medtimer.core.datastore"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) { minorApiLevel = 1 }
+    }
 
     defaultConfig {
         minSdk = 28

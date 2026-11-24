@@ -1,7 +1,6 @@
 package com.futsch1.medtimer.feature.ui.overview
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListDefaults
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
@@ -82,7 +82,6 @@ var overviewEventListCacheWindowEnabled = true
 /** Test seam: the jump to the next upcoming event leaves the rows above it uncomposed, so index-based tests miss them. */
 var overviewEventListScrollToNowEnabled = true
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OverviewEventList(
     events: ImmutableList<OverviewEvent>,
@@ -98,10 +97,11 @@ fun OverviewEventList(
     val railAnchors = remember { mutableStateMapOf<Int, Float>() }
     var listTop by remember { mutableFloatStateOf(0f) }
     val overscrollEffect = rememberOverscrollEffect()
-    val listState = if (overviewEventListCacheWindowEnabled) {
-        rememberLazyListState(cacheWindow = LazyLayoutCacheWindow(ahead = 200.dp, behind = 200.dp))
+    val listState = rememberLazyListState()
+    val cacheWindow = if (overviewEventListCacheWindowEnabled) {
+        remember { LazyLayoutCacheWindow(ahead = 200.dp, behind = 200.dp) }
     } else {
-        rememberLazyListState()
+        LazyListDefaults.cacheWindow(listState)
     }
     InitialScrollEffect(listState, events, scrollTargetEventIds, onScrolledToTarget)
 
@@ -110,6 +110,7 @@ fun OverviewEventList(
         verticalArrangement = Arrangement.spacedBy(EVENT_SPACING),
         contentPadding = PaddingValues(bottom = FAB_CLEARANCE),
         overscrollEffect = overscrollEffect?.withoutVisualEffect(),
+        cacheWindow = cacheWindow,
         modifier = modifier
             .fillMaxHeight()
             .fillMaxWidth()
