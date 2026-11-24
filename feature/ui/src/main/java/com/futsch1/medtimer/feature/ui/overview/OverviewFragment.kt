@@ -63,6 +63,8 @@ class OverviewFragment : Fragment() {
     )
 
     private val manualDoseViewModel: ManualDoseViewModel by viewModels()
+    // The same instance RescheduleDialog gets from hiltViewModel(): both use this fragment as the owner.
+    private val rescheduleViewModel: RescheduleViewModel by viewModels()
 
     private val appStoppedObserver = object : DefaultLifecycleObserver {
         override fun onStop(owner: LifecycleOwner) {
@@ -74,6 +76,7 @@ class OverviewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionsVisitor.onRescheduleRequested = rescheduleViewModel::request
         appOptionsActions = appOptionsActionsFactory.create(this)
         requireActivity().lifecycle.addObserver(appStoppedObserver)
     }
@@ -137,6 +140,8 @@ class OverviewFragment : Fragment() {
                         }
                     )
                 }
+
+                RescheduleDialog()
             }
         }
     }

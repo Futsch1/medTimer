@@ -437,7 +437,7 @@ class ReminderTest : MedTimerTestBase() {
         overview.clickSelectionAction(R.string.reschedule_reminder)
 
         val rescheduleTime = laterToday()
-        pickers.pickTime(rescheduleTime)
+        composePickers.pickTime(rescheduleTime)
 
         val timeString = timeFormatter().minutesToTimeString(rescheduleTime.hour * 60 + rescheduleTime.minute)
         overview.assertEventState(0, R.string.please_wait)
@@ -455,6 +455,23 @@ class ReminderTest : MedTimerTestBase() {
 
         overview.assertEventState(1, R.string.taken)
         overview.assertEventTextContains(1, timeString)
+    }
+
+    @Test
+    @AllowFlaky(attempts = 3)
+    fun reschedulePickerSurvivesActivityRecreation() {
+        seed.medicine(TEST_MED) { reminder("1", laterToday()) }
+
+        navigation.toOverview()
+        overview.clickEventState(0)
+        overview.clickAction(R.string.reschedule_reminder)
+
+        recreateActivity()
+
+        val rescheduleTime = laterToday(offset = 3.hours)
+        composePickers.pickTime(rescheduleTime)
+
+        overview.assertEventTextContains(0, timeFormatter().minutesToTimeString(rescheduleTime.hour * 60 + rescheduleTime.minute))
     }
 
     private class CyclicReminderInfo(
